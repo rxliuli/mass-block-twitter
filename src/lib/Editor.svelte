@@ -3,14 +3,7 @@
   import { blockUser, getUserRecords, UserRecord } from './api'
   import { store } from './store.svelte'
 
-  const { users } = $props<{
-    users: string[]
-  }>()
   let processMessage = $state('')
-
-  onMount(() => {
-    store.value = users.join('\n')
-  })
 
   async function onBlock() {
     const userRecords = getUserRecords()

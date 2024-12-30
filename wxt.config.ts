@@ -7,7 +7,8 @@ export default defineConfig({
   modules: ['@wxt-dev/module-svelte'],
   manifest: {
     name: 'Mass Block Twitter',
-    description: 'Mass Block Twitter Spam Users',
+    description:
+      'Mass Block Twitter - Efficiently block multiple spam accounts on Twitter/X with just a few clicks.',
     permissions: ['contextMenus', 'scripting'],
     web_accessible_resources: [
       {

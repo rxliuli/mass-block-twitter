@@ -1,10 +1,45 @@
 # Mass Block Twitter
 
-大规模屏蔽 Twitter Spam 用户。
+![logo](./src/public/icon/128.png)
 
-## 使用
+Mass Block Twitter - Efficiently block multiple spam accounts on Twitter/X with just a few clicks.
 
-1. 安装扩展
-2. 右键菜单 **Scan and Block**
-3. 在编辑器中检查是否存在不希望屏蔽的用户，或者直接复制其他人[整理好的 JSON](https://gist.github.com/rxliuli/b601c52a21c8f4bae7a9f21f2b9f4303)
-4. 点击 Block
+<img width="1280" alt="image" src="https://github.com/user-attachments/assets/9ef8deb8-1ec4-4a62-a3de-65169a2e2553" />
+<img width="1280" alt="image" src="https://github.com/user-attachments/assets/34e8b970-1a3a-4c10-89d5-80fd875bbaf4" />
+<img width="1280" alt="image" src="https://github.com/user-attachments/assets/76ca081e-c23d-40c6-834e-a8403542ed6b" />
+
+
+This extension helps you quickly block multiple Twitter/X spam accounts in bulk.
+
+Key Features:
+
+- Simple right-click menu to scan and block users
+- Preview accounts before blocking
+- Support importing block lists from JSON
+- Easy to use interface
+- Helps maintain a cleaner Twitter timeline
+
+How to use:
+
+1. Install the extension
+2. Right-click and select "Scan and Block"
+3. Review the accounts in the editor
+4. Click "Block" to block selected accounts
+
+Perfect for:
+
+- Blocking spam accounts
+- Maintaining a better Twitter experience
+- Managing unwanted followers
+- Importing block lists from other users
+
+Privacy & Security:
+
+- Minimal permissions required
+- No data collection
+- Open source
+
+Note: This extension requires access to twitter.com to function properly.
+
+**Privacy Policy URL**:
+<https://rxliuli.com/webstore/privacy>

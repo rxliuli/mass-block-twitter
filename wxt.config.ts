@@ -8,13 +8,14 @@ export default defineConfig({
   manifest: {
     name: 'Mass Block Twitter',
     description: 'Mass Block Twitter Spam Users',
-    permissions: ['contextMenus'],
+    permissions: ['contextMenus', 'scripting'],
     web_accessible_resources: [
       {
-        resources: ['/inject.js'],
+        resources: ['/inject.js', '/scan.js'],
         matches: ['<all_urls>'],
       },
     ],
+    host_permissions: ['https://x.com/**'],
   },
   runner: {
     disabled: true,

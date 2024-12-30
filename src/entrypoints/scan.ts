@@ -1,3 +1,4 @@
+import { blockUser } from '@/lib/api'
 import Editor from '@/lib/Editor.svelte'
 import { store } from '@/lib/store.svelte'
 import { mount } from 'svelte'

@@ -31,6 +31,7 @@
     "wxt": "^0.19.13"
   },
   "dependencies": {
+    "@webext-core/messaging": "^2.1.0",
     "file-saver": "^2.0.5",
     "lodash-es": "^4.17.21",
     "zod": "^3.24.1"

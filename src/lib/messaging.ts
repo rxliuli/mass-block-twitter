@@ -4,5 +4,5 @@ interface ProtocolMap {
   show(): void
 }
 
-export const { sendMessage, onMessage } =
+export const { sendMessage, onMessage, removeAllListeners } =
   defineExtensionMessaging<ProtocolMap>()

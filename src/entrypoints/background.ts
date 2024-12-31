@@ -1,3 +1,5 @@
+import { sendMessage } from '$lib/messaging'
+
 export default defineBackground(() => {
   browser.contextMenus.create({
     id: 'scan',
@@ -6,16 +8,13 @@ export default defineBackground(() => {
   })
 
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
-    if (info.menuItemId === 'import') {
-      console.log('import')
-      return
-    }
     if (info.menuItemId === 'scan') {
-      await browser.scripting.executeScript({
-        target: { tabId: tab?.id! },
-        world: 'MAIN',
-        files: ['/scan.js'],
-      })
+      // await browser.scripting.executeScript({
+      //   target: { tabId: tab?.id! },
+      //   world: 'MAIN',
+      //   files: ['/scan.js'],
+      // })
+      await sendMessage('show', undefined, tab!.id)
       return
     }
   })

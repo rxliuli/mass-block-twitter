@@ -1,5 +1,3 @@
-import { parseHeadersText } from './utils'
-
 export function normalizeUrl(url: string | URL | Request) {
   if (typeof url === 'string') {
     return url
@@ -106,56 +104,62 @@ export function interceptXHR(...middlewares: Middleware[]) {
   XMLHttpRequest.prototype.send = async function (
     body?: Document | XMLHttpRequestBodyInit | null,
   ) {
+    let originResponse: Response | undefined
+    const originRequest = new Request(this.__request__.open![1], {
+      method: this.__request__.open![0],
+      headers: this.__request__.setRequestHeader,
+      body: body as any,
+    })
     const c: Context = {
-      req: new Request(this.__request__.open![1], {
-        method: this.__request__.open![0],
-        headers: this.__request__.setRequestHeader,
-        body: body as any,
-      }),
+      req: originRequest,
       res: new Response(),
     }
-    await handleRequest(
-      [
-        ...middlewares,
-        async (c) => {
-          pureOpen.apply(this, [
-            c.req.method,
-            c.req.url,
-            ...this.__request__.open!.slice(2),
-          ] as any)
-          this.__request__.setRequestHeader?.forEach(([name, value]) => {
-            pureSetRequestHeader.apply(this, [name, value])
-          })
-          this.__request__.addEventListener
-            ?.filter(([type]) => type !== 'load')
-            .forEach(([type, listener, options]) => {
-              pureAddEventListener.apply(this, [type, listener as any, options])
-            })
-          await new Promise<void>((resolve, reject) => {
-            pureAddEventListener.apply(this, [
-              'load',
-              (_ev) => {
-                c.res = xhrToResponse(this)
-                resolve()
-              },
-            ])
-            pureAddEventListener.apply(this, [
-              'error',
-              (_ev) => {
-                reject(new Error(this.status + ' ' + this.statusText))
-              },
-            ])
-            if (c.req.body) {
-              pureSend.apply(this, [c.req.body as any])
-            } else {
-              pureSend.apply(this)
-            }
-          })
-        },
-      ],
-      c,
-    )
-    const xhr = await responseToXHR(c.res, this.responseType)
+    const middleware: Middleware = async (c) => {
+      pureOpen.apply(this, [
+        c.req.method,
+        c.req.url,
+        ...this.__request__.open!.slice(2),
+      ] as any)
+      this.__request__.setRequestHeader?.forEach(([name, value]) => {
+        pureSetRequestHeader.apply(this, [name, value])
+      })
+      this.__request__.addEventListener
+        ?.filter(([type]) => type !== 'load')
+        .forEach(([type, listener, options]) => {
+          pureAddEventListener.apply(this, [type, listener as any, options])
+        })
+      let sendBody = body
+      if (c.req !== originRequest) {
+        throw new Error('interceptXHR: body is not supported')
+        // sendBody = await c.req.text()
+      }
+      await new Promise<void>((resolve, reject) => {
+        pureAddEventListener.apply(this, [
+          'load',
+          (_ev) => {
+            c.res = xhrToResponse(this)
+            originResponse = c.res
+            resolve()
+          },
+        ])
+        pureAddEventListener.apply(this, [
+          'error',
+          (_ev) => {
+            reject(new Error(this.status + ' ' + this.statusText))
+          },
+        ])
+        if (c.req.body) {
+          pureSend.apply(this, [sendBody])
+        } else {
+          pureSend.apply(this)
+        }
+      })
+    }
+    await handleRequest([...middlewares, middleware], c)
+    const xhr =
+      c.res === originResponse
+        ? this
+        : await responseToXHR(c.res, this.responseType)
     this.__request__.addEventListener
       ?.filter(([type]) => type === 'load')
       .forEach(([_type, listener, _options]) => {
@@ -223,4 +227,15 @@ async function responseToXHR(
   })
 
   return xhr
+}
+
+function parseHeadersText(text: string) {
+  return text
+    .split('\r\n')
+    .filter((header) => header)
+    .reduce((acc, current) => {
+      const [key, value] = current.split(': ')
+      acc[key] = value
+      return acc
+    }, {} as Record<string, string>)
 }

@@ -8,6 +8,7 @@ const browserIncludes = [
 
 export default defineWorkspace([
   {
+    extends: 'vitest.config.ts',
     test: {
       // an example of file based convention,
       // you don't have to follow it
@@ -18,6 +19,7 @@ export default defineWorkspace([
     },
   },
   {
+    extends: 'vitest.config.ts',
     test: {
       // an example of file based convention,
       // you don't have to follow it

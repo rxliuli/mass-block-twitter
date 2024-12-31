@@ -1,5 +1,6 @@
 import { mount, unmount } from 'svelte'
 import App from './app.svelte'
+import './app.css'
 
 export default defineContentScript({
   matches: ['https://x.com/**'],

@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { extractObjects } from './utils'
+import { extractObjects } from './util/extractObjects'
+import { User } from './db'
 
 export async function blockUser(userId: string) {
   if (!userId) {
@@ -17,19 +18,15 @@ export async function blockUser(userId: string) {
   })
 }
 
-export function parseUserRecords(json: any): UserRecord[] {
-  const users: UserRecord[] = []
+export function parseUserRecords(json: any): User[] {
+  const users: User[] = []
   const userSchema = z.object({
     id: z.number(),
-    name: z.string(),
-    screen_name: z.string(),
-    location: z.string().nullable(),
-    description: z.string().nullable(),
-    followers_count: z.number().int(),
-    friends_count: z.number().int(),
-    verified: z.boolean(),
-    created_at: z.string(),
     blocking: z.boolean().optional(),
+    screen_name: z.string(),
+    name: z.string(),
+    description: z.string().optional(),
+    profile_image_url_https: z.string().optional(),
   })
   users.push(
     ...(
@@ -37,18 +34,29 @@ export function parseUserRecords(json: any): UserRecord[] {
         json,
         (obj) => userSchema.safeParse(obj).success,
       ) as (typeof userSchema._type)[]
-    ).map((it) => ({
-      id: it.id.toString(),
-      screen_name: it.screen_name,
-      blocking: it.blocking ?? false,
-    })),
+    ).map(
+      (it) =>
+        ({
+          id: it.id.toString(),
+          screen_name: it.screen_name,
+          blocking: it.blocking ?? false,
+          name: it.name,
+          description: it.description,
+          profile_image_url: it.profile_image_url_https,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        } satisfies User),
+    ),
   )
   const timelineUserSchema = z.object({
     __typename: z.literal('User'),
     rest_id: z.string(),
     legacy: z.object({
-      screen_name: z.string(),
       blocking: z.boolean().optional(),
+      screen_name: z.string(),
+      name: z.string(),
+      description: z.string().optional(),
+      profile_image_url_https: z.string().optional(),
     }),
   })
   users.push(
@@ -57,11 +65,19 @@ export function parseUserRecords(json: any): UserRecord[] {
         json,
         (obj) => timelineUserSchema.safeParse(obj).success,
       ) as (typeof timelineUserSchema._type)[]
-    ).map((it) => ({
-      id: it.rest_id,
-      screen_name: it.legacy.screen_name,
-      blocking: it.legacy.blocking ?? false,
-    })),
+    ).map(
+      (it) =>
+        ({
+          id: it.rest_id,
+          blocking: it.legacy.blocking ?? false,
+          screen_name: it.legacy.screen_name,
+          name: it.legacy.name,
+          description: it.legacy.description,
+          profile_image_url: it.legacy.profile_image_url_https,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        } satisfies User),
+    ),
   )
   return users
 }
@@ -70,22 +86,4 @@ export interface UserRecord {
   id: string
   screen_name: string
   blocking: boolean
-}
-
-export function updateUserRecords(users: UserRecord[]) {
-  const cache = JSON.parse(localStorage.getItem('userRecords') ?? '{}')
-  localStorage.setItem(
-    'userRecords',
-    JSON.stringify(
-      users.reduce((acc, it) => {
-        acc[it.screen_name] = it
-        return acc
-      }, cache),
-    ),
-  )
-}
-
-export function getUserRecords(): Record<string, UserRecord> {
-  const cache = JSON.parse(localStorage.getItem('userRecords') ?? '{}')
-  return cache
 }

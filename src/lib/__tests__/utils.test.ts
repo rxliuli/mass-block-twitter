@@ -1,4 +1,4 @@
-import { extractObjects } from '../utils'
+import { extractObjects } from '$lib/util/extractObjects'
 import { it, expect, describe } from 'vitest'
 import all from './assets/all.json'
 import timeline from './assets/timeline.json'

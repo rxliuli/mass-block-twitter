@@ -1,4 +1,5 @@
 import { defineConfig } from 'wxt'
+import path from 'path'
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -12,7 +13,7 @@ export default defineConfig({
     permissions: ['contextMenus', 'scripting'],
     web_accessible_resources: [
       {
-        resources: ['/inject.js', '/scan.js'],
+        resources: ['/inject.js'],
         matches: ['<all_urls>'],
       },
     ],
@@ -21,4 +22,11 @@ export default defineConfig({
   runner: {
     disabled: true,
   },
+  vite: () => ({
+    resolve: {
+      alias: {
+        $lib: path.resolve('./src/lib'),
+      },
+    },
+  }),
 })

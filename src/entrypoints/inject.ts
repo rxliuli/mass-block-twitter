@@ -1,5 +1,6 @@
-import { parseUserRecords, updateUserRecords } from '@/lib/api'
-import { interceptFetch, interceptXHR, Middleware } from '@/lib/interceptors'
+import { parseUserRecords } from '$lib/api'
+import { dbApi } from '$lib/db'
+import { interceptFetch, interceptXHR, Middleware } from '$lib/interceptors'
 
 export default defineUnlistedScript(async () => {
   const middleware: Middleware = async (c, next) => {
@@ -14,7 +15,8 @@ export default defineUnlistedScript(async () => {
       const json = await c.res.json()
       const users = parseUserRecords(json)
       if (users.length > 0) {
-        updateUserRecords(users)
+        await dbApi.users.record(users)
+        // updateUserRecords(users)
       }
     }
   }

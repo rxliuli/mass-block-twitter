@@ -1,29 +1,23 @@
 import { parseUserRecords, updateUserRecords } from '@/lib/api'
-import {
-  interceptFetch,
-  InterceptOptions,
-  interceptXHR,
-} from '@/lib/interceptors'
+import { interceptFetch, interceptXHR, Middleware } from '@/lib/interceptors'
 
 export default defineUnlistedScript(async () => {
-  const proxy: InterceptOptions = {
-    async response(req, res) {
-      if (req.headers.get('authorization')) {
-        localStorage.setItem(
-          'requestHeaders',
-          JSON.stringify([...req.headers.entries()]),
-        )
+  const middleware: Middleware = async (c, next) => {
+    await next()
+    if (c.req.headers.get('authorization')) {
+      localStorage.setItem(
+        'requestHeaders',
+        JSON.stringify([...c.req.headers.entries()]),
+      )
+    }
+    if (c.res.headers.get('content-type')?.includes('application/json')) {
+      const json = await c.res.json()
+      const users = parseUserRecords(json)
+      if (users.length > 0) {
+        updateUserRecords(users)
       }
-      if (res.headers.get('content-type')?.includes('application/json')) {
-        const json = await res.json()
-        const users = parseUserRecords(json)
-        if (users.length > 0) {
-          updateUserRecords(users)
-        }
-      }
-      return res
-    },
+    }
   }
-  interceptFetch(proxy)
-  interceptXHR(proxy)
+  interceptFetch(middleware)
+  interceptXHR(middleware)
 })

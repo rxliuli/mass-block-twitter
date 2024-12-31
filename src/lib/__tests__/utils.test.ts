@@ -5,7 +5,8 @@ import timeline from './assets/timeline.json'
 import { z } from 'zod'
 import { parseUserRecords } from '../api'
 import allSpam from './assets/all-spam.json'
-import { difference, get, uniq } from 'lodash-es'
+import { get, uniq } from 'lodash-es'
+
 describe('extractObjects', () => {
   it('extractObjects 1', () => {
     const json = {
@@ -67,13 +68,5 @@ describe('parseUserRecords', () => {
         ).map((it) => it.legacy.screen_name),
       ).length,
     ).eq(uniq(parseUserRecords(allSpam).map((it) => it.screen_name)).length)
-    console.log(
-      JSON.stringify(
-        uniq(parseUserRecords(allSpam)).map((it) => ({
-          ...it,
-          blocking: false,
-        })),
-      ),
-    )
   })
 })

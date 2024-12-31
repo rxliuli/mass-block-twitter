@@ -13,6 +13,7 @@ stats.html
 stats-*.json
 .wxt
 web-ext.config.ts
+__screenshots__
 
 # Editor directories and files
 .vscode/*

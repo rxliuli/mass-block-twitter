@@ -41,11 +41,14 @@
     "wxt": "^0.19.13"
   },
   "dependencies": {
+    "@json2csv/plainjs": "^7.0.6",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "@tanstack/svelte-query": "^5.62.9",
     "@tanstack/table-core": "^8.20.5",
     "@webext-core/messaging": "^2.1.0",
+    "csv": "^6.3.11",
+    "csv-parse": "^5.6.0",
     "file-saver": "^2.0.5",
     "idb": "^8.0.1",
     "lodash-es": "^4.17.21",

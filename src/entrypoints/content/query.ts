@@ -10,27 +10,30 @@ import { toast } from 'svelte-sonner'
 export function userQuery() {
   return createQuery({
     queryKey: ['users'],
-    queryFn: () => dbApi.users.getAll(),
+    queryFn: async () => dbApi.users.getAll(),
   })
 }
 
-export function userMutation<TData, TError, TVariables, TContext>() {
+export function userBlockMutation<TData, TError, TVariables, TContext>() {
   const queryClient = useQueryClient()
   const mutation = createMutation({
     mutationFn: async (users: User[]) => {
       let success = 0
-      toast.loading('Blocking users...')
+      const loadingId = toast.loading('Blocking users...')
       for (let i = 0; i < users.length; i++) {
         const it = users[i]
         try {
           await blockUser(it.id)
-          await dbApi.users.block(it.id)
-          toast.loading(`[${i + 1}/${users.length}] blocking ${it.name}...`)
+          await dbApi.users.block(it)
+          toast.loading(`[${i + 1}/${users.length}] blocking ${it.name}...`, {
+            id: loadingId,
+          })
           success++
         } catch {
           toast.error(`[${i + 1}/${users.length}] blocking ${it.name} failed`)
         }
       }
+      toast.dismiss(loadingId)
       toast.success(
         `${success} users blocked, ${users.length - success} failed`,
         {

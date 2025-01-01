@@ -35,9 +35,14 @@ export async function initDB() {
 export class UserDAO {
   // 获取所有用户
   async getAll(): Promise<User[]> {
-    return (await dbStore.idb.getAll('users')).sort((a, b) =>
-      b.created_at.localeCompare(a.created_at),
-    )
+    const users = await dbStore.idb.getAll('users')
+    return users.sort((a, b) => {
+      if (b.created_at && b.created_at) {
+        return b.created_at.localeCompare(a.created_at)
+      } else {
+        return 0
+      }
+    })
   }
   // 记录查询过的用户
   async record(users: User[]): Promise<void> {
@@ -46,15 +51,15 @@ export class UserDAO {
     ])
   }
   // block 特定用户
-  async block(id: string): Promise<void> {
-    const user = await dbStore.idb.get('users', id)
-    if (!user) {
-      return
-    }
+  async block(user: User): Promise<void> {
     await dbStore.idb.put(
       'users',
-      { ...user, blocking: true, updated_at: new Date().toISOString() },
-      id,
+      {
+        ...user,
+        blocking: true,
+        updated_at: new Date().toISOString(),
+      },
+      user.id,
     )
   }
 }

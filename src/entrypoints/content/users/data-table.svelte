@@ -38,7 +38,16 @@
     columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: 'includesString',
+    globalFilterFn: (row, id, value) => {
+      const s = String(row.original[id as keyof typeof row.original])
+      if (s.includes(value)) {
+        return true
+      }
+      if (new RegExp(value).test(s)) {
+        return true
+      }
+      return false
+    },
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: (updater) => {
       if (typeof updater === 'function') {
@@ -76,7 +85,7 @@
 </script>
 
 <div class="rounded-md w-full overflow-x-auto h-full flex flex-col">
-  <div class="flex items-center py-4">
+  <div class="flex items-center py-4 gap-2">
     <Input
       placeholder="Search..."
       value={globalFilter}

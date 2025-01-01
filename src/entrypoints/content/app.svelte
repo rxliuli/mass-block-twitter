@@ -6,7 +6,7 @@
   import { Toaster } from '$lib/components/ui/sonner/index.js'
   import { ModeWatcher } from 'mode-watcher'
 
-  let open = $state(true)
+  let open = $state(false)
 
   onMount(() => {
     onMessage('show', () => {

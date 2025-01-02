@@ -29,12 +29,10 @@ export type DBStore = {
 export async function initDB() {
   dbStore.idb = await openDB<MyDB>('mass-db', 6, {
     async upgrade(db, oldVersion, newVersion, transaction) {
-      const users = transaction.objectStore('users')
+      const usersStore = db.createObjectStore('users')
 
       // 检查当前数据库版本，然后执行相应的升级操作。
       if (oldVersion < 6) {
-        const usersStore = transaction.objectStore('users')
-
         // 收集所有的 screen_name 用于检查重复
         const allScreenNames = new Map<string, IDBValidKey>()
 

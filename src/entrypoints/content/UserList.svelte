@@ -39,8 +39,13 @@
         ],
       }) as User[]
     ).slice(1)
+    const allUsers = await dbApi.users.getAll()
+    const allIds = new Set(
+      allUsers.filter((it) => it.blocking).map((it) => it.id),
+    )
+    const newUsers = users.filter((it) => !allIds.has(it.id))
     await dbApi.users.record(
-      users.map(
+      newUsers.map(
         (it) =>
           ({
             ...it,
@@ -50,7 +55,10 @@
           }) as User,
       ),
     )
-    await $mutation.mutateAsync(users)
+    await $mutation.mutateAsync(newUsers)
+    toast.info(
+      `Imported ${newUsers.length} users, ignored ${users.length - newUsers.length} users`,
+    )
   }
 </script>
 

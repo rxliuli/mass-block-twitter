@@ -9,7 +9,6 @@ import DataTableBlocking from './data-table-blocking.svelte'
 export const columns: ColumnDef<User>[] = [
   {
     id: 'select',
-    enableGlobalFilter: false,
     header: ({ table }) =>
       renderComponent(Checkbox, {
         checked: table.getIsAllPageRowsSelected(),

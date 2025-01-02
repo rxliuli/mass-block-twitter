@@ -5,6 +5,7 @@ import {
   createQuery,
   useQueryClient,
 } from '@tanstack/svelte-query'
+import { serializeError } from 'serialize-error'
 import { toast } from 'svelte-sonner'
 
 export function userQuery() {
@@ -18,24 +19,29 @@ export function userBlockMutation<TData, TError, TVariables, TContext>() {
   const queryClient = useQueryClient()
   const mutation = createMutation({
     mutationFn: async (users: User[]) => {
-      let success = 0
+      let failed: string[] = []
       const loadingId = toast.loading('Blocking users...')
       for (let i = 0; i < users.length; i++) {
         const it = users[i]
         try {
-          await blockUser(it.id)
-          await dbApi.users.block(it)
           toast.loading(`[${i + 1}/${users.length}] blocking ${it.name}...`, {
             id: loadingId,
           })
-          success++
-        } catch {
-          toast.error(`[${i + 1}/${users.length}] blocking ${it.name} failed`)
+          await blockUser(it.id)
+          await dbApi.users.block(it)
+        } catch (e) {
+          failed.push(it.name)
+          console.log(`blocking ${it.name} failed`, e)
+          toast.error(`[${i + 1}/${users.length}] blocking ${it.name} failed`, {
+            description: serializeError(e).message,
+          })
         }
       }
       toast.dismiss(loadingId)
       toast.success(
-        `${success} users blocked, ${users.length - success} failed`,
+        `${users.length - failed.length} users blocked, ${
+          failed.length
+        } failed`,
         {
           duration: 5000,
         },

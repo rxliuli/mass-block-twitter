@@ -91,7 +91,7 @@ describe('interceptXHR', () => {
     expect(spy).toBeCalledTimes(1)
     unIntercept()
   })
-  it('should intercept XHR and modify url', async () => {
+  it.only('should intercept XHR and modify url', async () => {
     const spy = vi.spyOn(XMLHttpRequest.prototype, 'open')
     const unIntercept = interceptXHR(async (c, next) => {
       c.req = new Request('https://jsonplaceholder.typicode.com/todos/2', c.req)

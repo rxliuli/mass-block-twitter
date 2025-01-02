@@ -7,7 +7,7 @@ export async function blockUser(userId: string) {
     throw new Error('userId is required')
   }
   const headers = JSON.parse(localStorage.getItem('requestHeaders') ?? '{}')
-  await fetch('https://x.com/i/api/1.1/blocks/create.json', {
+  const r = await fetch('https://x.com/i/api/1.1/blocks/create.json', {
     headers: headers,
     referrer: 'https://x.com/',
     referrerPolicy: 'strict-origin-when-cross-origin',
@@ -16,12 +16,15 @@ export async function blockUser(userId: string) {
     mode: 'cors',
     credentials: 'include',
   })
+  if (!r.ok) {
+    throw new Error(r.statusText)
+  }
 }
 
 export function parseUserRecords(json: any): User[] {
   const users: User[] = []
   const userSchema = z.object({
-    id: z.number(),
+    id_str: z.string(),
     blocking: z.boolean().optional(),
     screen_name: z.string(),
     name: z.string(),
@@ -37,7 +40,7 @@ export function parseUserRecords(json: any): User[] {
     ).map(
       (it) =>
         ({
-          id: it.id.toString(),
+          id: it.id_str,
           screen_name: it.screen_name,
           blocking: it.blocking ?? false,
           name: it.name,

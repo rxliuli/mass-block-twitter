@@ -41,6 +41,9 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
+      serialize-error:
+        specifier: ^11.0.3
+        version: 11.0.3
       zod:
         specifier: ^3.24.1
         version: 3.24.1

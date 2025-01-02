@@ -52,6 +52,7 @@
     "file-saver": "^2.0.5",
     "idb": "^8.0.1",
     "lodash-es": "^4.17.21",
+    "serialize-error": "^11.0.3",
     "zod": "^3.24.1"
   }
 }

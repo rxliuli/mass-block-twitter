@@ -9,6 +9,8 @@
   import { fileSelector } from '$lib/util/fileSelector'
   import { parse } from 'csv-parse/browser/esm/sync'
   import { toast } from 'svelte-sonner'
+  import { DownloadIcon, ImportIcon, ShieldBan } from 'lucide-svelte'
+  import TableExtraButton from '$lib/components/logic/TableExtraButton.svelte'
 
   const query = userQuery()
   const mutation = userMutation()
@@ -64,7 +66,7 @@
 
 <DataTable queryData={$query} {columns}>
   {#snippet extra(table)}
-    <Button
+    <TableExtraButton
       onclick={async () => {
         const users = table
           .getFilteredSelectedRowModel()
@@ -72,10 +74,14 @@
           .filter((it) => !it.blocking)
         await $mutation.mutateAsync({ users, action: 'block' })
       }}
+      text="Block Selected"
     >
-      Block Selected
-    </Button>
-    <Button
+      {#snippet icon()}
+        <ShieldBan color={'red'} class="w-4 h-4" />
+      {/snippet}
+    </TableExtraButton>
+    <TableExtraButton
+      text="Unblock Selected"
       onclick={async () => {
         const users = table
           .getFilteredSelectedRowModel()
@@ -84,18 +90,27 @@
         await $mutation.mutateAsync({ users, action: 'unblock' })
       }}
     >
-      Unblock Selected
-    </Button>
-    <Button
+      {#snippet icon()}
+        <ShieldBan color={'gray'} class="w-4 h-4" />
+      {/snippet}
+    </TableExtraButton>
+    <TableExtraButton
       onclick={() => {
         const users = table
           .getFilteredSelectedRowModel()
           .rows.map((row) => row.original)
         onExport(users)
       }}
+      text="Export Selected"
     >
-      Export Selected
-    </Button>
-    <Button onclick={onImportBlockList}>Import Block List</Button>
+      {#snippet icon()}
+        <DownloadIcon class="w-4 h-4" />
+      {/snippet}
+    </TableExtraButton>
+    <TableExtraButton onclick={onImportBlockList} text="Import Block List">
+      {#snippet icon()}
+        <ImportIcon class="w-4 h-4" />
+      {/snippet}
+    </TableExtraButton>
   {/snippet}
 </DataTable>

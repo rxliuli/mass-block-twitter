@@ -90,7 +90,7 @@
       placeholder="Search..."
       value={globalFilter}
       oninput={(e) => table.setGlobalFilter(String(e.currentTarget.value))}
-      class="max-w-sm"
+      class="flex-1"
     />
     {@render extra(table)}
   </div>

@@ -18,4 +18,7 @@ export default defineBackground(() => {
       return
     }
   })
+  browser.action.onClicked.addListener(async (tab) => {
+    await sendMessage('show', undefined, tab!.id)
+  })
 })

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button'
   import { dbApi, type User } from '$lib/db'
-  import { userBlockMutation, userQuery } from './query'
+  import { userMutation, userQuery } from './query'
   import { columns } from './users/columns'
   import DataTable from './users/data-table.svelte'
   import { saveAs } from 'file-saver'
@@ -11,7 +11,7 @@
   import { toast } from 'svelte-sonner'
 
   const query = userQuery()
-  const mutation = userBlockMutation()
+  const mutation = userMutation()
 
   function onExport(users: User[]) {
     const parser = new Parser({
@@ -55,7 +55,7 @@
           }) as User,
       ),
     )
-    await $mutation.mutateAsync(newUsers)
+    await $mutation.mutateAsync({ users: newUsers, action: 'block' })
     toast.info(
       `Imported ${newUsers.length} users, ignored ${users.length - newUsers.length} users`,
     )
@@ -70,10 +70,21 @@
           .getFilteredSelectedRowModel()
           .rows.map((row) => row.original)
           .filter((it) => !it.blocking)
-        await $mutation.mutateAsync(users)
+        await $mutation.mutateAsync({ users, action: 'block' })
       }}
     >
       Block Selected
+    </Button>
+    <Button
+      onclick={async () => {
+        const users = table
+          .getFilteredSelectedRowModel()
+          .rows.map((row) => row.original)
+          .filter((it) => it.blocking)
+        await $mutation.mutateAsync({ users, action: 'unblock' })
+      }}
+    >
+      Unblock Selected
     </Button>
     <Button
       onclick={() => {

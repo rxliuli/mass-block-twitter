@@ -97,6 +97,18 @@ export class UserDAO {
       user.id,
     )
   }
+  // unblock 特定用户
+  async unblock(user: User): Promise<void> {
+    await dbStore.idb.put(
+      'users',
+      {
+        ...user,
+        blocking: false,
+        updated_at: new Date().toISOString(),
+      },
+      user.id,
+    )
+  }
 }
 
 function wrap<T extends object>(obj: T): T {

@@ -21,6 +21,25 @@ export async function blockUser(userId: string) {
   }
 }
 
+export async function unblockUser(userId: string) {
+  if (!userId) {
+    throw new Error('userId is required')
+  }
+  const headers = JSON.parse(localStorage.getItem('requestHeaders') ?? '{}')
+  const r = await fetch('https://x.com/i/api/1.1/blocks/destroy.json', {
+    headers: headers,
+    referrer: 'https://x.com/cryptocishanjia',
+    referrerPolicy: 'strict-origin-when-cross-origin',
+    body: 'user_id=' + userId,
+    method: 'POST',
+    mode: 'cors',
+    credentials: 'include',
+  })
+  if (!r.ok) {
+    throw new Error(r.statusText)
+  }
+}
+
 export function parseUserRecords(json: any): User[] {
   const users: User[] = []
   const userSchema = z.object({

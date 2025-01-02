@@ -1,4 +1,4 @@
-import { blockUser } from '$lib/api'
+import { blockUser, unblockUser } from '$lib/api'
 import { dbApi, User } from '$lib/db'
 import {
   createMutation,
@@ -15,34 +15,53 @@ export function userQuery() {
   })
 }
 
-export function userBlockMutation<TData, TError, TVariables, TContext>() {
+export function userMutation() {
   const queryClient = useQueryClient()
   const mutation = createMutation({
-    mutationFn: async (users: User[]) => {
-      let failed: string[] = []
-      const loadingId = toast.loading('Blocking users...')
+    mutationFn: async ({
+      users,
+      action,
+    }: {
+      users: User[]
+      action: 'block' | 'unblock'
+    }) => {
+      let failedNames: string[] = []
+      const loadingId = toast.loading(
+        action === 'block' ? 'Blocking users...' : 'Unblocking users...',
+      )
       for (let i = 0; i < users.length; i++) {
         const it = users[i]
+        const blockingText = action === 'block' ? 'blocking' : 'unblocking'
         try {
-          toast.loading(`[${i + 1}/${users.length}] blocking ${it.name}...`, {
-            id: loadingId,
-          })
-          await blockUser(it.id)
-          await dbApi.users.block(it)
+          toast.loading(
+            `[${i + 1}/${users.length}] ${blockingText} ${it.name}...`,
+            { id: loadingId },
+          )
+          if (action === 'block') {
+            await blockUser(it.id)
+            await dbApi.users.block(it)
+          } else {
+            await unblockUser(it.id)
+            await dbApi.users.unblock(it)
+          }
         } catch (e) {
-          failed.push(it.name)
-          console.log(`blocking ${it.name} failed`, e)
-          toast.error(`[${i + 1}/${users.length}] blocking ${it.name} failed`, {
-            description: serializeError(e).message,
-          })
+          failedNames.push(it.name)
+          console.log(`${blockingText} ${it.id} ${it.name} failed`, e)
+          toast.error(
+            `[${i + 1}/${users.length}] ${blockingText} ${it.name} failed`,
+            {
+              description: serializeError(e).message,
+            },
+          )
         }
       }
       toast.dismiss(loadingId)
       toast.success(
-        `${users.length - failed.length} users blocked, ${
-          failed.length
-        } failed`,
+        `${users.length - failedNames.length} users ${
+          action === 'block' ? 'blocked' : 'unblocked'
+        }, ${failedNames.length} failed`,
         {
+          description: failedNames.join(', '),
           duration: 5000,
         },
       )

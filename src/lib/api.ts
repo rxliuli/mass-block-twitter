@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { extractObjects } from './util/extractObjects'
-import { User } from './db'
+import { dbApi, User } from './db'
+import { matchByKeyword } from './util/matchByKeyword'
 
 export async function blockUser(userId: string) {
   if (!userId) {
@@ -108,4 +109,43 @@ export interface UserRecord {
   id: string
   screen_name: string
   blocking: boolean
+}
+
+export async function autoBlockUsers(users: User[]) {
+  const keywordStr = localStorage.getItem('blockKeywords')
+  if (!keywordStr || keywordStr.length === 0) {
+    console.log('No keywords to block')
+    return
+  }
+  const keywords = keywordStr
+    .split('\n')
+    .map((it) => it.trim())
+    .filter((it) => it.length > 0)
+  const filteredUsers = users.filter((it) =>
+    keywords.some((keyword) =>
+      matchByKeyword(it.screen_name, keyword) ||
+      matchByKeyword(it.name, keyword) ||
+      it.description
+        ? matchByKeyword(it.description ?? '', keyword)
+        : false,
+    ),
+  )
+  const success: string[] = []
+  const failed: string[] = []
+  for (const user of filteredUsers) {
+    if (user.blocking) {
+      continue
+    }
+    try {
+      const isBlocking = await dbApi.users.isBlocking(user.id)
+      if (isBlocking) {
+        continue
+      }
+      await blockUser(user.id)
+      success.push(user.screen_name)
+    } catch (e) {
+      failed.push(user.screen_name)
+    }
+  }
+  console.log(`Blocked ${success.join(', ')}, failed ${failed.join(', ')}`)
 }

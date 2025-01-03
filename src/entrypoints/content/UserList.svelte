@@ -9,8 +9,15 @@
   import { fileSelector } from '$lib/util/fileSelector'
   import { parse } from 'csv-parse/browser/esm/sync'
   import { toast } from 'svelte-sonner'
-  import { DownloadIcon, ImportIcon, ShieldBan } from 'lucide-svelte'
+  import {
+    DownloadIcon,
+    ImportIcon,
+    SettingsIcon,
+    ShieldBan,
+  } from 'lucide-svelte'
   import TableExtraButton from '$lib/components/logic/TableExtraButton.svelte'
+  import { router } from './route.svelte'
+  import * as Dialog from '$lib/components/ui/dialog'
 
   const query = userQuery()
   const mutation = userMutation()
@@ -64,6 +71,9 @@
   }
 </script>
 
+<Dialog.Header class="mb-0">
+  <Dialog.Title>Record Users</Dialog.Title>
+</Dialog.Header>
 <DataTable queryData={$query} {columns}>
   {#snippet extra(table)}
     <TableExtraButton
@@ -112,5 +122,12 @@
         <ImportIcon class="w-4 h-4" />
       {/snippet}
     </TableExtraButton>
+    <Button
+      variant="outline"
+      size="icon"
+      onclick={() => (router.path = '/settings')}
+    >
+      <SettingsIcon class="w-4 h-4" />
+    </Button>
   {/snippet}
 </DataTable>

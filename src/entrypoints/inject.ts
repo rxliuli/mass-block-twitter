@@ -1,6 +1,9 @@
-import { parseUserRecords } from '$lib/api'
+import { autoBlockUsers, parseUserRecords } from '$lib/api'
 import { dbApi } from '$lib/db'
 import { interceptFetch, interceptXHR, Middleware } from '$lib/interceptors'
+import { uniqBy } from 'lodash-es'
+import { mount } from 'svelte'
+import { toast, Toaster } from 'svelte-sonner'
 
 export default defineUnlistedScript(async () => {
   const middleware: Middleware = async (c, next) => {
@@ -13,13 +16,28 @@ export default defineUnlistedScript(async () => {
     }
     if (c.res.headers.get('content-type')?.includes('application/json')) {
       const json = await c.res.json()
-      const users = parseUserRecords(json)
+      const users = uniqBy(parseUserRecords(json), 'id')
       if (users.length > 0) {
         await dbApi.users.record(users)
-        // updateUserRecords(users)
+        await autoBlockUsers(users)
       }
     }
   }
   interceptFetch(middleware)
   interceptXHR(middleware)
+
+  createToaster()
+  toast('Hello, world!')
 })
+
+function createToaster() {
+  const toaster = document.createElement('div')
+  toaster.id = 'toaster'
+  document.body.appendChild(toaster)
+  mount(Toaster, {
+    target: toaster,
+    props: {
+      richColors: true,
+    },
+  })
+}

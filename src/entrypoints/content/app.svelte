@@ -5,6 +5,8 @@
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
   import { Toaster } from '$lib/components/ui/sonner/index.js'
   import { ModeWatcher } from 'mode-watcher'
+  import { router } from './route.svelte'
+  import SettingsView from './SettingsView.svelte'
 
   let open = $state(false)
 
@@ -18,6 +20,18 @@
   })
 
   const queryClient = new QueryClient()
+
+  router.routes = [
+    {
+      path: '/',
+      component: UserList,
+    },
+    {
+      path: '/settings',
+      component: SettingsView,
+    },
+  ]
+  const route = $derived(router.routes.find((it) => router.path === it.path))
 </script>
 
 <QueryClientProvider client={queryClient}>
@@ -30,10 +44,9 @@
           ?.shadowRoot?.querySelector('body')!,
       }}
     >
-      <Dialog.Header class="mb-0">
-        <Dialog.Title>Record Users</Dialog.Title>
-      </Dialog.Header>
-      <UserList />
+      {#if route}
+        <route.component />
+      {/if}
     </Dialog.Content>
   </Dialog.Root>
 </QueryClientProvider>

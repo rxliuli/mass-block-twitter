@@ -1,5 +1,4 @@
 import { DBSchema, IDBPDatabase, openDB } from 'idb'
-import { groupBy, inRange, sortBy, uniqBy } from 'lodash-es'
 
 export const dbStore: DBStore = {} as any
 
@@ -70,6 +69,11 @@ export class UserDAO {
   async getAll(): Promise<User[]> {
     const users = await dbStore.idb.getAll('users')
     return sortUsers(users)
+  }
+  // 获取所有 blocking 用户
+  async isBlocking(id: string): Promise<boolean> {
+    const user = await dbStore.idb.get('users', id)
+    return user?.blocking ?? false
   }
   // 记录查询过的用户
   async record(users: User[]): Promise<void> {

@@ -8,7 +8,6 @@
     type SortingState,
     type Table as TableCore,
   } from '@tanstack/table-core'
-  import { debounce } from 'lodash-es'
   import {
     createSvelteTable,
     FlexRender,
@@ -17,6 +16,7 @@
   import { Input } from '$lib/components/ui/input'
   import { type QueryObserverResult } from '@tanstack/svelte-query'
   import { type Snippet } from 'svelte'
+  import { matchByKeyword } from '$lib/util/matchByKeyword'
 
   type DataTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[]
@@ -40,13 +40,7 @@
     getFilteredRowModel: getFilteredRowModel(),
     globalFilterFn: (row, id, value) => {
       const s = String(row.original[id as keyof typeof row.original])
-      if (s.includes(value)) {
-        return true
-      }
-      if (new RegExp(value).test(s)) {
-        return true
-      }
-      return false
+      return matchByKeyword(s, value)
     },
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: (updater) => {

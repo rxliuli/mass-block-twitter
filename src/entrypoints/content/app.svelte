@@ -23,7 +23,7 @@
 <QueryClientProvider client={queryClient}>
   <Dialog.Root {open} controlledOpen={true} onOpenChange={(v) => (open = v)}>
     <Dialog.Content
-      class="min-w-full h-screen flex flex-col"
+      class="min-w-full h-screen h-[100dvh] flex flex-col"
       portalProps={{
         to: document
           .querySelector('mass-block-twitter')

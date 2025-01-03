@@ -1,7 +1,7 @@
 import { autoBlockUsers, parseUserRecords } from '$lib/api'
 import { dbApi } from '$lib/db'
 import { interceptFetch, interceptXHR, Middleware } from '$lib/interceptors'
-import { uniqBy } from 'lodash-es'
+import { differenceBy, uniqBy } from 'lodash-es'
 import { mount } from 'svelte'
 import { toast, Toaster } from 'svelte-sonner'
 
@@ -19,7 +19,6 @@ export default defineUnlistedScript(async () => {
       const users = uniqBy(parseUserRecords(json), 'id')
       if (users.length > 0) {
         await dbApi.users.record(users)
-        await autoBlockUsers(users)
       }
     }
   }

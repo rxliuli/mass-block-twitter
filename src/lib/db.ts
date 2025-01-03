@@ -71,9 +71,9 @@ export class UserDAO {
     return sortUsers(users)
   }
   // 获取所有 blocking 用户
-  async isBlocking(id: string): Promise<boolean> {
+  async exists(id: string): Promise<boolean> {
     const user = await dbStore.idb.get('users', id)
-    return user?.blocking ?? false
+    return !!user
   }
   // 记录查询过的用户
   async record(users: User[]): Promise<void> {

@@ -111,41 +111,52 @@ export interface UserRecord {
   blocking: boolean
 }
 
-export async function autoBlockUsers(users: User[]) {
+export async function autoBlockUsers(
+  users: User[],
+): Promise<User[]> {
   const keywordStr = localStorage.getItem('blockKeywords')
   if (!keywordStr || keywordStr.length === 0) {
     console.log('No keywords to block')
-    return
+    return []
   }
   const keywords = keywordStr
     .split('\n')
     .map((it) => it.trim())
     .filter((it) => it.length > 0)
   const filteredUsers = users.filter((it) =>
-    keywords.some((keyword) =>
-      matchByKeyword(it.screen_name, keyword) ||
-      matchByKeyword(it.name, keyword) ||
-      it.description
-        ? matchByKeyword(it.description ?? '', keyword)
-        : false,
+    keywords.some(
+      (keyword) =>
+        matchByKeyword(it.screen_name, keyword) ||
+        matchByKeyword(it.name, keyword) ||
+        (it.description
+          ? matchByKeyword(it.description ?? '', keyword)
+          : false),
     ),
   )
-  const success: string[] = []
-  const failed: string[] = []
+  if (filteredUsers.length === 0) {
+    console.log('No users to block')
+    return []
+  }
+  let blockedUsers: User[] = []
   for (const user of filteredUsers) {
     if (user.blocking) {
       continue
     }
     try {
-      const isBlocking = await dbApi.users.isBlocking(user.id)
-      if (isBlocking) {
+      const exists = await dbApi.users.exists(user.id)
+      if (exists) {
         continue
       }
       await blockUser(user.id)
-      success.push(user.screen_name)
-    } catch (e) {
-      failed.push(user.screen_name)
-    }
+      await dbApi.users.block(user)
+      blockedUsers.push(user)
+    } catch (e) {}
   }
-  console.log(`Blocked ${success.join(', ')}, failed ${failed.join(', ')}`)
+  console.debug(
+    `Blocked ${blockedUsers.length} users, failed ${
+      filteredUsers.length - blockedUsers.length
+    } users`,
+  )
+
+  return blockedUsers
 }

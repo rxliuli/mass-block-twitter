@@ -5,6 +5,7 @@ import { Checkbox } from '$lib/components/ui/checkbox'
 import { User } from '$lib/db'
 import DataTableAvatar from './data-table-avatar.svelte'
 import DataTableBlocking from './data-table-blocking.svelte'
+import DataTableBlockingButton from './data-table-blocking-button.svelte'
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -50,7 +51,10 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: 'blocking',
-    header: 'Blocking',
+    header: ({ column }) =>
+      renderComponent(DataTableBlockingButton, {
+        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+      }),
     cell: ({ row }) => {
       return renderComponent(DataTableBlocking, { ...row.original })
     },

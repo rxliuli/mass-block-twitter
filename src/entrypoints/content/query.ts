@@ -38,7 +38,7 @@ export function userMutation() {
             { id: loadingId },
           )
           if (action === 'block') {
-            await blockUser(it.id)
+            await blockUser(it)
             await dbApi.users.block(it)
           } else {
             await unblockUser(it.id)

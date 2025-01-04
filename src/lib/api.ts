@@ -3,16 +3,19 @@ import { extractObjects } from './util/extractObjects'
 import { dbApi, User } from './db'
 import { matchByKeyword } from './util/matchByKeyword'
 
-export async function blockUser(userId: string) {
-  if (!userId) {
+export async function blockUser(user: Pick<User, 'id' | 'screen_name'>) {
+  if (!user.id || !user.screen_name) {
     throw new Error('userId is required')
   }
-  const headers = JSON.parse(localStorage.getItem('requestHeaders') ?? '{}')
+  const headers = new Headers(JSON.parse(
+    localStorage.getItem('requestHeaders') ?? '{}',
+  ))
+  headers.set('content-type', 'application/x-www-form-urlencoded')
   const r = await fetch('https://x.com/i/api/1.1/blocks/create.json', {
-    headers: headers,
-    referrer: 'https://x.com/',
+    headers,
+    referrer: location.href,
     referrerPolicy: 'strict-origin-when-cross-origin',
-    body: 'user_id=' + userId,
+    body: 'user_id=' + user.id,
     method: 'POST',
     mode: 'cors',
     credentials: 'include',
@@ -111,9 +114,7 @@ export interface UserRecord {
   blocking: boolean
 }
 
-export async function autoBlockUsers(
-  users: User[],
-): Promise<User[]> {
+export async function autoBlockUsers(users: User[]): Promise<User[]> {
   const keywordStr = localStorage.getItem('blockKeywords')
   if (!keywordStr || keywordStr.length === 0) {
     console.log('No keywords to block')
@@ -143,12 +144,13 @@ export async function autoBlockUsers(
       continue
     }
     try {
-      const exists = await dbApi.users.exists(user.id)
-      if (exists) {
+      const isBlocking = await dbApi.users.isBlocking(user.id)
+      if (isBlocking) {
         continue
       }
-      await blockUser(user.id)
+      console.debug(`Blocking ${user.screen_name}`)
       await dbApi.users.block(user)
+      await blockUser(user)
       blockedUsers.push(user)
     } catch (e) {}
   }

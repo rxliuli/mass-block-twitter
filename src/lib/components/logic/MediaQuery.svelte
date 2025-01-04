@@ -20,7 +20,6 @@
 
   function addNewListener(query: string) {
     mql = window.matchMedia(query)
-    console.log('mql.matches', mql.matches)
     mqlListener = (v) => (matches = v.matches)
     mql.addEventListener('change', mqlListener)
     matches = mql.matches

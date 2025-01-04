@@ -18,7 +18,10 @@ export interface MyDB extends DBSchema {
   users: {
     key: string
     value: User
-    indexes: { screen_name_index: string }
+    indexes: {
+      screen_name_index: string
+      updated_at_index: string
+    }
   }
 }
 
@@ -27,10 +30,15 @@ export type DBStore = {
 }
 
 export async function initDB() {
-  dbStore.idb = await openDB<MyDB>('mass-db', 9, {
+  dbStore.idb = await openDB<MyDB>('mass-db', 10, {
     async upgrade(db, oldVersion, newVersion, transaction) {
       if (!db.objectStoreNames.contains('users')) {
-        db.createObjectStore('users')
+        // init users store
+        const userStore = db.createObjectStore('users')
+        userStore.createIndex('updated_at_index', 'updated_at')
+        userStore.createIndex('screen_name_index', 'screen_name', {
+          unique: true,
+        })
       } else {
         const usersStore = transaction.objectStore('users')
         if (oldVersion < 6) {
@@ -60,6 +68,9 @@ export async function initDB() {
             cursor = await cursor.continue()
           }
         }
+        if (oldVersion < 10) {
+          usersStore.createIndex('updated_at_index', 'updated_at')
+        }
       }
     },
   })
@@ -77,9 +88,21 @@ function sortUsers(users: User[]) {
 
 export class UserDAO {
   // 获取所有用户
-  async getAll(): Promise<User[]> {
-    const users = await dbStore.idb.getAll('users')
-    return sortUsers(users)
+  async getAll(limit: number = 1000): Promise<User[]> {
+    let cursor = await dbStore.idb
+      .transaction('users', 'readonly')
+      .store.index('updated_at_index')
+      .openCursor(null, 'prev')
+    const users: User[] = []
+    while (cursor) {
+      users.push(cursor.value)
+      cursor = await cursor.continue()
+      limit--
+      if (limit <= 0) {
+        break
+      }
+    }
+    return users
   }
   // 获取所有 blocking 用户
   async isBlocking(id: string): Promise<boolean> {

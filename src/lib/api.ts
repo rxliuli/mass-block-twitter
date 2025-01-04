@@ -7,9 +7,9 @@ export async function blockUser(user: Pick<User, 'id' | 'screen_name'>) {
   if (!user.id || !user.screen_name) {
     throw new Error('userId is required')
   }
-  const headers = new Headers(JSON.parse(
-    localStorage.getItem('requestHeaders') ?? '{}',
-  ))
+  const headers = new Headers(
+    JSON.parse(localStorage.getItem('requestHeaders') ?? '{}'),
+  )
   headers.set('content-type', 'application/x-www-form-urlencoded')
   const r = await fetch('https://x.com/i/api/1.1/blocks/create.json', {
     headers,
@@ -49,6 +49,7 @@ export function parseUserRecords(json: any): User[] {
   const userSchema = z.object({
     id_str: z.string(),
     blocking: z.boolean().optional(),
+    following: z.boolean().optional(),
     screen_name: z.string(),
     name: z.string(),
     description: z.string().optional(),
@@ -66,6 +67,7 @@ export function parseUserRecords(json: any): User[] {
           id: it.id_str,
           screen_name: it.screen_name,
           blocking: it.blocking ?? false,
+          following: it.following ?? false,
           name: it.name,
           description: it.description,
           profile_image_url: it.profile_image_url_https,
@@ -79,6 +81,7 @@ export function parseUserRecords(json: any): User[] {
     rest_id: z.string(),
     legacy: z.object({
       blocking: z.boolean().optional(),
+      following: z.boolean().optional(),
       screen_name: z.string(),
       name: z.string(),
       description: z.string().optional(),
@@ -96,6 +99,7 @@ export function parseUserRecords(json: any): User[] {
         ({
           id: it.rest_id,
           blocking: it.legacy.blocking ?? false,
+          following: it.legacy.following ?? false,
           screen_name: it.legacy.screen_name,
           name: it.legacy.name,
           description: it.legacy.description,
@@ -117,7 +121,7 @@ export interface UserRecord {
 export async function autoBlockUsers(users: User[]): Promise<User[]> {
   const keywordStr = localStorage.getItem('blockKeywords')
   if (!keywordStr || keywordStr.length === 0) {
-    console.log('No keywords to block')
+    console.debug('No keywords to block')
     return []
   }
   const keywords = keywordStr
@@ -135,12 +139,12 @@ export async function autoBlockUsers(users: User[]): Promise<User[]> {
     ),
   )
   if (filteredUsers.length === 0) {
-    console.log('No users to block')
+    console.debug('No users to block')
     return []
   }
   let blockedUsers: User[] = []
   for (const user of filteredUsers) {
-    if (user.blocking) {
+    if (user.following || user.blocking) {
       continue
     }
     try {

@@ -5,6 +5,7 @@ export const dbStore: DBStore = {} as any
 export interface User {
   id: string
   blocking: boolean
+  following?: boolean
   screen_name: string
   name: string
   description?: string
@@ -26,29 +27,39 @@ export type DBStore = {
 }
 
 export async function initDB() {
-  dbStore.idb = await openDB<MyDB>('mass-db', 6, {
+  dbStore.idb = await openDB<MyDB>('mass-db', 9, {
     async upgrade(db, oldVersion, newVersion, transaction) {
-      const usersStore = db.createObjectStore('users')
-
-      // 检查当前数据库版本，然后执行相应的升级操作。
-      if (oldVersion < 6) {
-        // 收集所有的 screen_name 用于检查重复
-        const allScreenNames = new Map<string, IDBValidKey>()
-
-        // 打开游标遍历所有用户
-        let cursor = await usersStore.openCursor()
-        while (cursor) {
-          const user: User = cursor.value
-          if (allScreenNames.has(user.screen_name)) {
-            await cursor.delete()
-          } else {
-            allScreenNames.set(user.screen_name, cursor.key)
+      if (!db.objectStoreNames.contains('users')) {
+        db.createObjectStore('users')
+      } else {
+        const usersStore = transaction.objectStore('users')
+        if (oldVersion < 6) {
+          const allScreenNames = new Map<string, IDBValidKey>()
+          let cursor = await usersStore.openCursor()
+          while (cursor) {
+            const user: User = cursor.value
+            if (allScreenNames.has(user.screen_name)) {
+              await cursor.delete()
+            } else {
+              allScreenNames.set(user.screen_name, cursor.key)
+            }
+            cursor = await cursor.continue()
           }
-          cursor = await cursor.continue()
+          usersStore.createIndex('screen_name_index', 'screen_name', {
+            unique: true,
+          })
         }
-        usersStore.createIndex('screen_name_index', 'screen_name', {
-          unique: true,
-        })
+        if (oldVersion < 9) {
+          let cursor = await usersStore.openCursor()
+          while (cursor) {
+            const user: User = cursor.value
+            if (!user.following) {
+              user.following = false
+            }
+            cursor.update(user)
+            cursor = await cursor.continue()
+          }
+        }
       }
     },
   })

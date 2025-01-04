@@ -4,7 +4,7 @@
   import UserList from './UserList.svelte'
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
   import { Toaster } from '$lib/components/ui/sonner/index.js'
-  import { ModeWatcher } from 'mode-watcher'
+  import { ModeWatcher, mode } from 'mode-watcher'
   import { router } from './route.svelte'
   import SettingsView from './SettingsView.svelte'
 
@@ -32,6 +32,17 @@
     },
   ]
   const route = $derived(router.routes.find((it) => router.path === it.path))
+
+  // TODO https://github.com/svecosystem/mode-watcher/issues/104
+  $effect(() => {
+    const root = document
+      .querySelector('mass-block-twitter')
+      ?.shadowRoot?.querySelector('html')
+    const current = $mode
+    if (root) {
+      root.className = `color-scheme: ${current}`
+    }
+  })
 </script>
 
 <QueryClientProvider client={queryClient}>

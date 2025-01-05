@@ -11,6 +11,9 @@ importers:
       '@json2csv/plainjs':
         specifier: ^7.0.6
         version: 7.0.6
+      '@rxliuli/vista':
+        specifier: file:libs/rxliuli-vista-0.1.0.tgz
+        version: file:libs/rxliuli-vista-0.1.0.tgz
       '@tailwindcss/forms':
         specifier: ^0.5.9
         version: 0.5.9(tailwindcss@3.4.17)
@@ -687,6 +690,10 @@ packages:
     resolution: {integrity: sha512-+10CMg9vt1MoHj6x1pxyjPSMjHTIlqs8/tBztXvPAx24SKs9jwVnKqHJumlH/IzhaPUaj3T6T6wfZr8okdXaIg==}
     cpu: [x64]
     os: [win32]
+
+  '@rxliuli/vista@file:libs/rxliuli-vista-0.1.0.tgz':
+    resolution: {integrity: sha512-XW/oD12d2a7+hSkS6dot/n+iIPn88FaGIMb1Bv67KrEmNu8AEOKKo4JYags84lnlNeuPwLut6IHVtTz6JM5yDg==, tarball: file:libs/rxliuli-vista-0.1.0.tgz}
+    version: 0.1.0
 
   '@sindresorhus/is@5.6.0':
     resolution: {integrity: sha512-TV7t8GKYaJWsn00tFDqBw8+Uqmr8A0fRU1tvTQhyZzGv0sJCGRQL3JGMI3ucuKo3XIZdUP+Lx7/gh2t3lewy7g==}
@@ -2537,6 +2544,10 @@ packages:
     resolution: {integrity: sha512-2G2y++21dhj2R7iHAdd0FIzjGwuKZld+7Pl/bTU6YIkrC2ZMbVUjm+luj6A6V34Rv9XfKJDKpTWu9W4Gse1D9g==}
     engines: {node: '>=14.16'}
 
+  serialize-error@12.0.0:
+    resolution: {integrity: sha512-ZYkZLAvKTKQXWuh5XpBw7CdbSzagarX39WyZ2H07CDLC5/KfsRGlIXV8d4+tfqX1M7916mRqR1QfNHSij+c9Pw==}
+    engines: {node: '>=18'}
+
   set-value@4.1.0:
     resolution: {integrity: sha512-zTEg4HL0RwVrqcWs3ztF+x1vkxfm0lP+MQQFPiMJTKVceBwEV0A569Ou8l9IYQG8jOZdMVI1hGsc0tmeD2o/Lw==}
     engines: {node: '>=11.0'}
@@ -3537,6 +3548,10 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.29.1':
     optional: true
+
+  '@rxliuli/vista@file:libs/rxliuli-vista-0.1.0.tgz':
+    dependencies:
+      serialize-error: 12.0.0
 
   '@sindresorhus/is@5.6.0': {}
 
@@ -5421,6 +5436,10 @@ snapshots:
   serialize-error@11.0.3:
     dependencies:
       type-fest: 2.19.0
+
+  serialize-error@12.0.0:
+    dependencies:
+      type-fest: 4.31.0
 
   set-value@4.1.0:
     dependencies:

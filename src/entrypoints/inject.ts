@@ -1,13 +1,10 @@
 import { autoBlockUsers, parseUserRecords } from '$lib/api'
 import { dbApi } from '$lib/db'
-import { interceptFetch, interceptXHR, Middleware } from '$lib/interceptors'
 import { differenceBy, uniqBy } from 'lodash-es'
-import user from 'lucide-svelte/icons/user'
-import { mount } from 'svelte'
-import { toast, Toaster } from 'svelte-sonner'
+import { Vista, Middleware } from '@rxliuli/vista'
 
-export default defineUnlistedScript(async () => {
-  const middleware: Middleware = async (c, next) => {
+function twitterMiddleware(): Middleware {
+  return async (c, next) => {
     await next()
     if (c.req.headers.get('authorization')) {
       localStorage.setItem(
@@ -23,22 +20,15 @@ export default defineUnlistedScript(async () => {
         await dbApi.users.record(differenceBy(users, blockedUsers, 'id'))
       }
     }
+    if (c.req.url === 'https://x.com/i/api/1.1/jot/client_event.json') {
+      c.res = new Response(
+        JSON.stringify({ success: true, test: 'a' }, null, 2),
+        c.res,
+      )
+    }
   }
-  interceptFetch(middleware)
-  interceptXHR(middleware)
-
-  createToaster()
-  toast('Hello, world!')
-})
-
-function createToaster() {
-  const toaster = document.createElement('div')
-  toaster.id = 'toaster'
-  document.body.appendChild(toaster)
-  mount(Toaster, {
-    target: toaster,
-    props: {
-      richColors: true,
-    },
-  })
 }
+
+export default defineUnlistedScript(async () => {
+  new Vista().use(twitterMiddleware()).intercept()
+})

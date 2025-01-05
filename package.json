@@ -41,6 +41,7 @@
     "wxt": "^0.19.13"
   },
   "dependencies": {
+    "@rxliuli/vista": "file:libs/rxliuli-vista-0.1.0.tgz",
     "@json2csv/plainjs": "^7.0.6",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",

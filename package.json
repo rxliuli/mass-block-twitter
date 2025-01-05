@@ -13,6 +13,8 @@
     "zip:firefox": "wxt zip -b firefox",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "test": "vitest run",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
     "postinstall": "wxt prepare"
   },
   "devDependencies": {
@@ -37,12 +39,13 @@
     "tailwindcss-animate": "^1.0.7",
     "tslib": "^2.8.1",
     "typescript": "^5.6.3",
+    "vitepress": "^1.5.0",
     "vitest": "^2.1.8",
     "wxt": "^0.19.13"
   },
   "dependencies": {
-    "@rxliuli/vista": "file:libs/rxliuli-vista-0.1.0.tgz",
     "@json2csv/plainjs": "^7.0.6",
+    "@rxliuli/vista": "file:libs/rxliuli-vista-0.1.0.tgz",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "@tanstack/svelte-query": "^5.62.9",

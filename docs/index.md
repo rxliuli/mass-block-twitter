@@ -1,6 +1,9 @@
----
-title: Mass Block Twitter
----
+<!-- markdownlint-disable MD033 MD041 -->
+<script setup>
+import Sponsor from './components/Sponsor.vue'
+</script>
+
+# Mass Block Twitter
 
 Effortlessly manage spam Twitter/X accounts with our powerful bulk blocking tool.
 
@@ -49,3 +52,4 @@ Get started now and take control of your Twitter experience! 🌟
 
 [Refund Policy](./refund.md)
 
+<Sponsor />

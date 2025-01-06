@@ -45,7 +45,8 @@
   },
   "dependencies": {
     "@json2csv/plainjs": "^7.0.6",
-    "@rxliuli/vista": "file:libs/rxliuli-vista-0.1.0.tgz",
+    "@paddle/paddle-js": "^1.3.3",
+    "@rxliuli/vista": "^0.1.1",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "@tanstack/svelte-query": "^5.62.9",

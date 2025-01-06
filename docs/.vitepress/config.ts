@@ -9,7 +9,6 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/rxliuli/mass-block-twitter' },
     ],
-    
   },
   markdown: {
     breaks: true,

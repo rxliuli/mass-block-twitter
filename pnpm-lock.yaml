@@ -11,9 +11,12 @@ importers:
       '@json2csv/plainjs':
         specifier: ^7.0.6
         version: 7.0.6
+      '@paddle/paddle-js':
+        specifier: ^1.3.3
+        version: 1.3.3
       '@rxliuli/vista':
-        specifier: file:libs/rxliuli-vista-0.1.0.tgz
-        version: file:libs/rxliuli-vista-0.1.0.tgz
+        specifier: ^0.1.1
+        version: 0.1.1
       '@tailwindcss/forms':
         specifier: ^0.5.9
         version: 0.5.9(tailwindcss@3.4.17)
@@ -672,6 +675,9 @@ packages:
   '@open-draft/until@2.1.0':
     resolution: {integrity: sha512-U69T3ItWHvLwGg5eJ0n3I62nWuE6ilHlmz7zM0npLBRvPRd7e6NYmg54vvRtP5mZG7kZqZCFVdsTWo7BPtBujg==}
 
+  '@paddle/paddle-js@1.3.3':
+    resolution: {integrity: sha512-kdH2einQ/NfgRkXVscdb1yqutREgMF6LwFli9Zv7by+Ck2zjaOZNYYtfko7twfPI3zcwHvWBSLd/XGbx7Kwiow==}
+
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
@@ -795,9 +801,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rxliuli/vista@file:libs/rxliuli-vista-0.1.0.tgz':
-    resolution: {integrity: sha512-1uPwXKmVvwYY2S04pG9ghUeLZLQVUB5nGaeFcSdER0dn7VESxF/Io0D+OK9pN/2GTNSgYUY7/llhYEN47LJJRw==, tarball: file:libs/rxliuli-vista-0.1.0.tgz}
-    version: 0.1.0
+  '@rxliuli/vista@0.1.1':
+    resolution: {integrity: sha512-K4qsJRxoZo3RPHMo3+NT4TMQvy17sXcjNDKzmlJrhcsr58S9CalD27RuvLh3Y6h90CIjIeima35+OnweIC/Dhg==}
 
   '@shikijs/core@1.26.1':
     resolution: {integrity: sha512-yeo7sG+WZQblKPclUOKRPwkv1PyoHYkJ4gP9DzhFJbTdueKR7wYTI1vfF/bFi1NTgc545yG/DzvVhZgueVOXMA==}
@@ -2887,10 +2892,6 @@ packages:
     resolution: {integrity: sha512-2G2y++21dhj2R7iHAdd0FIzjGwuKZld+7Pl/bTU6YIkrC2ZMbVUjm+luj6A6V34Rv9XfKJDKpTWu9W4Gse1D9g==}
     engines: {node: '>=14.16'}
 
-  serialize-error@12.0.0:
-    resolution: {integrity: sha512-ZYkZLAvKTKQXWuh5XpBw7CdbSzagarX39WyZ2H07CDLC5/KfsRGlIXV8d4+tfqX1M7916mRqR1QfNHSij+c9Pw==}
-    engines: {node: '>=18'}
-
   set-value@4.1.0:
     resolution: {integrity: sha512-zTEg4HL0RwVrqcWs3ztF+x1vkxfm0lP+MQQFPiMJTKVceBwEV0A569Ou8l9IYQG8jOZdMVI1hGsc0tmeD2o/Lw==}
     engines: {node: '>=11.0'}
@@ -4023,6 +4024,8 @@ snapshots:
 
   '@open-draft/until@2.1.0': {}
 
+  '@paddle/paddle-js@1.3.3': {}
+
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
@@ -4105,9 +4108,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.29.1':
     optional: true
 
-  '@rxliuli/vista@file:libs/rxliuli-vista-0.1.0.tgz':
-    dependencies:
-      serialize-error: 12.0.0
+  '@rxliuli/vista@0.1.1': {}
 
   '@shikijs/core@1.26.1':
     dependencies:
@@ -6283,10 +6284,6 @@ snapshots:
   serialize-error@11.0.3:
     dependencies:
       type-fest: 2.19.0
-
-  serialize-error@12.0.0:
-    dependencies:
-      type-fest: 4.31.0
 
   set-value@4.1.0:
     dependencies:

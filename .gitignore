@@ -14,8 +14,8 @@ stats-*.json
 .wxt
 web-ext.config.ts
 __screenshots__
-.vitepress/cache
-.vitepress/dist
+docs/.vitepress/cache
+docs/.vitepress/dist
 
 # Editor directories and files
 .vscode/*

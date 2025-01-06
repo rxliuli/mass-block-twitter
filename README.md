@@ -5,12 +5,13 @@
 Effortlessly manage spam Twitter/X accounts with our powerful bulk blocking tool.
 
 <img width="1280" alt="image" src="https://github.com/user-attachments/assets/5acbb16b-45de-4d95-996e-a3ecc51b701d" />
+
 🚫 Mass Twitter Blocker: One-Click Spam Protection
 
-✨ Key Features:
-• One-click open filter view through right-click menu or extension icon
-• Preview accounts before taking action
-• Import/Export block lists for easy sharing
+✨ Key Features: \
+• One-click open filter view through right-click menu or extension icon \
+• Preview accounts before taking action \
+• Import/Export block lists for easy sharing \
 • Clean, intuitive interface
 
 🔧 Simple to Use:

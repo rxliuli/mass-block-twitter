@@ -1,11 +1,8 @@
-<!-- markdownlint-disable MD033 MD041 -->
-<script setup>
-import Sponsor from './components/Sponsor.vue'
-</script>
-
 # Mass Block Twitter
 
 Effortlessly manage spam Twitter/X accounts with our powerful bulk blocking tool.
+
+[Install from Web Store](https://chromewebstore.google.com/detail/eaghpebepefbcadjdppjjopoagckdhej)
 
 <img width="1280" alt="image" src="https://github.com/user-attachments/assets/5acbb16b-45de-4d95-996e-a3ecc51b701d" />
 🚫 Mass Twitter Blocker: One-Click Spam Protection
@@ -52,4 +49,4 @@ Get started now and take control of your Twitter experience! 🌟
 
 [Refund Policy](./refund.md)
 
-<Sponsor />
+[Sponsor](./sponsor.md)

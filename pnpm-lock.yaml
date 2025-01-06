@@ -796,7 +796,7 @@ packages:
     os: [win32]
 
   '@rxliuli/vista@file:libs/rxliuli-vista-0.1.0.tgz':
-    resolution: {integrity: sha512-DD+VXvdb8c9N0YVZQHG6jHnDCR7mAqgjS8IK1LpXwvJWAreR+Ki1S8TBg4GzM34sbHTeLKhtYwjdpWcYZtmq+Q==, tarball: file:libs/rxliuli-vista-0.1.0.tgz}
+    resolution: {integrity: sha512-1uPwXKmVvwYY2S04pG9ghUeLZLQVUB5nGaeFcSdER0dn7VESxF/Io0D+OK9pN/2GTNSgYUY7/llhYEN47LJJRw==, tarball: file:libs/rxliuli-vista-0.1.0.tgz}
     version: 0.1.0
 
   '@shikijs/core@1.26.1':

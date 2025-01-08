@@ -16,6 +16,7 @@ web-ext.config.ts
 __screenshots__
 docs/.vitepress/cache
 docs/.vitepress/dist
+.env.local
 
 # Editor directories and files
 .vscode/*

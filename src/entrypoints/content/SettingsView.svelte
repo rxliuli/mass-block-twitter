@@ -28,4 +28,10 @@
     value={keywords}
     oninput={onInput}
   />
+  <!-- <div>
+    <p>If you like this plugin, you can buy me a coffee.</p>
+    <a href="https://mass-block-twitter.rxliuli.com/sponsor.html"
+      >☕️ Buy me a coffee</a
+    >
+  </div> -->
 </div>

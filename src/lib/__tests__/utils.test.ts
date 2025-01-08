@@ -1,11 +1,12 @@
 import { extractObjects } from '$lib/util/extractObjects'
-import { it, expect, describe } from 'vitest'
+import { it, expect, describe, vi } from 'vitest'
 import all from './assets/all.json'
 import timeline from './assets/timeline.json'
 import { z } from 'zod'
 import { parseUserRecords } from '../api'
 import allSpam from './assets/all-spam.json'
-import { get, uniq } from 'lodash-es'
+import { get, omit, uniq } from 'lodash-es'
+import notificationsSpam from './assets/notifications-spam.json'
 
 describe('extractObjects', () => {
   it('extractObjects 1', () => {
@@ -58,15 +59,25 @@ describe('parseUserRecords', () => {
   it('parse timeline', () => {
     const users = parseUserRecords(timeline)
     expect(users).length(20)
+    expect(
+      users.map((it) => omit(it, 'created_at', 'updated_at')),
+    ).toMatchSnapshot()
   })
 
   it('parse all-spam', () => {
+    const users = parseUserRecords(allSpam)
+    expect(users.map((it) => it.name).some((it) => it.includes('比特币'))).true
     expect(
-      uniq(
-        extractObjects(allSpam, (it) =>
-          get(it, 'legacy.name')?.startsWith('比特币'),
-        ).map((it) => it.legacy.screen_name),
-      ).length,
-    ).eq(uniq(parseUserRecords(allSpam).map((it) => it.screen_name)).length)
+      users.map((it) => omit(it, 'created_at', 'updated_at')),
+    ).toMatchSnapshot()
+  })
+
+  it('parse notifications-spam', () => {
+    const users = parseUserRecords(notificationsSpam)
+    expect(users.map((it) => it.name).some((it) => it.includes('比特币'))).true
+    expect(users.map((it) => it.name).some((it) => it.includes('币圈'))).true
+    expect(
+      users.map((it) => omit(it, 'created_at', 'updated_at')),
+    ).toMatchSnapshot()
   })
 })

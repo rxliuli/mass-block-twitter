@@ -48,12 +48,12 @@ export function parseUserRecords(json: any): User[] {
   const users: User[] = []
   const userSchema = z.object({
     id_str: z.string(),
-    blocking: z.boolean().optional(),
-    following: z.boolean().optional(),
+    blocking: z.boolean().optional().nullable(),
+    following: z.boolean().optional().nullable(),
     screen_name: z.string(),
     name: z.string(),
-    description: z.string().optional(),
-    profile_image_url_https: z.string().optional(),
+    description: z.string().optional().nullable(),
+    profile_image_url_https: z.string().optional().nullable(),
   })
   users.push(
     ...(
@@ -69,8 +69,8 @@ export function parseUserRecords(json: any): User[] {
           blocking: it.blocking ?? false,
           following: it.following ?? false,
           name: it.name,
-          description: it.description,
-          profile_image_url: it.profile_image_url_https,
+          description: it.description ?? undefined,
+          profile_image_url: it.profile_image_url_https ?? undefined,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         } satisfies User),
@@ -80,12 +80,12 @@ export function parseUserRecords(json: any): User[] {
     __typename: z.literal('User'),
     rest_id: z.string(),
     legacy: z.object({
-      blocking: z.boolean().optional(),
-      following: z.boolean().optional(),
+      blocking: z.boolean().optional().nullable(),
+      following: z.boolean().optional().nullable(),
       screen_name: z.string(),
       name: z.string(),
-      description: z.string().optional(),
-      profile_image_url_https: z.string().optional(),
+      description: z.string().optional().nullable(),
+      profile_image_url_https: z.string().optional().nullable(),
     }),
   })
   users.push(
@@ -102,8 +102,8 @@ export function parseUserRecords(json: any): User[] {
           following: it.legacy.following ?? false,
           screen_name: it.legacy.screen_name,
           name: it.legacy.name,
-          description: it.legacy.description,
-          profile_image_url: it.legacy.profile_image_url_https,
+          description: it.legacy.description ?? undefined,
+          profile_image_url: it.legacy.profile_image_url_https ?? undefined,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         } satisfies User),

@@ -1,4 +1,5 @@
 import { mount, unmount } from 'svelte'
+import { wait } from '@liuli-util/async'
 import App from './app.svelte'
 import './app.css'
 
@@ -10,6 +11,7 @@ export default defineContentScript({
   async main(ctx) {
     await injectScript('/inject.js')
 
+    await wait(() => !!document.body)
     const ui = await createShadowRootUi(ctx, {
       name: 'mass-block-twitter',
       position: 'inline',

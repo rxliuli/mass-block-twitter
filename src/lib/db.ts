@@ -113,12 +113,12 @@ export class UserDAO {
   async record(users: User[]): Promise<void> {
     await Promise.all([
       ...users.map(async (it) => {
-        const keys = await dbStore.idb.getAllKeysFromIndex(
-          'users',
-          'screen_name_index',
-          it.screen_name,
-        )
-        await Promise.all(keys.map((id) => dbStore.idb.delete('users', id)))
+        // const keys = await dbStore.idb.getAllKeysFromIndex(
+        //   'users',
+        //   'screen_name_index',
+        //   it.screen_name,
+        // )
+        // await Promise.all(keys.map((id) => dbStore.idb.delete('users', id)))
         await dbStore.idb.put('users', it, it.id)
       }),
     ])

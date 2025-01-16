@@ -17,9 +17,13 @@ export default defineContentScript({
       position: 'inline',
       anchor: 'body',
       onMount: (container) => {
-        mount(App, {
-          target: container,
-        })
+        const shadowDOM = document
+          .querySelector('mass-block-twitter')
+          ?.shadowRoot?.querySelector('body')
+        if (!shadowDOM) {
+          throw new Error('mass-block-twitter not found')
+        }
+        mount(App, { target: shadowDOM })
       },
       onRemove: (app) => {
         unmount(App)

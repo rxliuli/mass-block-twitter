@@ -1,12 +1,13 @@
 import { extractObjects } from '$lib/util/extractObjects'
-import { it, expect, describe, vi } from 'vitest'
+import { it, expect, describe } from 'vitest'
 import all from './assets/all.json'
 import timeline from './assets/timeline.json'
 import { z } from 'zod'
 import { parseUserRecords } from '../api'
 import allSpam from './assets/all-spam.json'
-import { get, omit, uniq } from 'lodash-es'
+import { omit, pick } from 'lodash-es'
 import notificationsSpam from './assets/notifications-spam.json'
+import profile from './assets/ProfileSpotlightsQuery.json'
 
 describe('extractObjects', () => {
   it('extractObjects 1', () => {
@@ -79,5 +80,15 @@ describe('parseUserRecords', () => {
     expect(
       users.map((it) => omit(it, 'created_at', 'updated_at')),
     ).toMatchSnapshot()
+  })
+
+  it('parse profile', () => {
+    const users = parseUserRecords(profile)
+    expect(users).length(1)
+    expect(pick(users[0], 'id', 'name', 'screen_name')).toEqual({
+      id: '1575013182686777344',
+      name: '比特币矿机',
+      screen_name: 'bitmain_miner',
+    })
   })
 })

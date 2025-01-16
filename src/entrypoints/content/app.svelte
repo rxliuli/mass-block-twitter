@@ -1,12 +1,14 @@
 <script lang="ts">
-  import * as Dialog from '$lib/components/ui/dialog'
   import { onMessage, removeAllListeners } from '$lib/messaging'
-  import UserList from './UserList.svelte'
+  import UserList from './pages/users/page.svelte'
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
   import { Toaster } from '$lib/components/ui/sonner/index.js'
   import { ModeWatcher, mode } from 'mode-watcher'
-  import { router } from './route.svelte'
-  import SettingsView from './SettingsView.svelte'
+  import { router } from '$lib/route.svelte'
+  import SettingsView from './pages/settings/page.svelte'
+  import { cn } from '$lib/utils'
+  import { XIcon } from 'lucide-svelte'
+  import Button from '$lib/components/ui/button/button.svelte'
 
   let open = $state(false)
 
@@ -46,20 +48,25 @@
 </script>
 
 <QueryClientProvider client={queryClient}>
-  <Dialog.Root {open} controlledOpen={true} onOpenChange={(v) => (open = v)}>
-    <Dialog.Content
-      class="min-w-full h-screen h-[100dvh] flex flex-col"
-      portalProps={{
-        to: document
-          .querySelector('mass-block-twitter')
-          ?.shadowRoot?.querySelector('body')!,
-      }}
+  <div
+    id="mass-block-twitter"
+    class={cn(
+      'fixed w-full top-0 left-0 h-screen h-[100dvh] flex flex-col bg-background p-6',
+      open ? 'block' : 'hidden',
+    )}
+  >
+    {#if route}
+      <route.component />
+    {/if}
+    <Button
+      variant="ghost"
+      size="icon"
+      class="absolute top-0 right-0"
+      onclick={() => (open = false)}
     >
-      {#if route}
-        <route.component />
-      {/if}
-    </Dialog.Content>
-  </Dialog.Root>
+      <XIcon class="w-4 h-4" />
+    </Button>
+  </div>
 </QueryClientProvider>
 
 <ModeWatcher />

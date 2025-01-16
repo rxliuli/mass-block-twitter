@@ -53,6 +53,18 @@ importers:
       serialize-error:
         specifier: ^11.0.3
         version: 11.0.3
+      svelte-dnd-action:
+        specifier: ^0.9.54
+        version: 0.9.54(svelte@5.16.0)
+      svelte-legos:
+        specifier: ^0.2.5
+        version: 0.2.5(svelte@5.16.0)
+      svelte-tiny-virtual-list:
+        specifier: ^2.1.2
+        version: 2.1.2
+      virtua:
+        specifier: ^0.39.3
+        version: 0.39.3(svelte@5.16.0)(vue@3.5.13(typescript@5.7.2))
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -79,8 +91,8 @@ importers:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
       bits-ui:
-        specifier: 1.0.0-next.76
-        version: 1.0.0-next.76(svelte@5.16.0)
+        specifier: 1.0.0-next.77
+        version: 1.0.0-next.77(svelte@5.16.0)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1249,8 +1261,8 @@ packages:
   birpc@0.2.19:
     resolution: {integrity: sha512-5WeXXAvTmitV1RqJFppT5QtUiz2p1mRSYU000Jkft5ZUCLJIk4uQriYNO50HknxKwM6jd8utNc66K1qGIwwWBQ==}
 
-  bits-ui@1.0.0-next.76:
-    resolution: {integrity: sha512-BtTBlAQgdtA7l1V2EarM2QJlD8pkH4DAKACjCy4KMIVWMXdg15BGwALoXw1IWk4Xe4nCXI5Bz+lIB6nSgrzo6Q==}
+  bits-ui@1.0.0-next.77:
+    resolution: {integrity: sha512-IV0AyVEvsRkXv4s/fl4iea5E9W2b9EBf98s9mRMKMc1xHxM9MmtM2r6MZMqftHQ/c+gHTIt3A9EKuTlh7uay8w==}
     engines: {node: '>=18', pnpm: '>=8.7.0'}
     peerDependencies:
       svelte: ^5.11.0
@@ -1339,6 +1351,9 @@ packages:
 
   caniuse-lite@1.0.30001690:
     resolution: {integrity: sha512-5ExiE3qQN6oF8Clf8ifIDcMRCRE/dMGcETG/XGMD8/XiXm6HXQgQTh1yZYLXXpSOsEUlJm1Xr7kGULZTuGtP/w==}
+
+  canvas-confetti@1.9.3:
+    resolution: {integrity: sha512-rFfTURMvmVEX1gyXFgn5QMn81bYk70qa0HLzcIOSVEyl57n6o9ItHeBtUSWdvKAPY0xlvBHno4/v3QPrT83q9g==}
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -2704,6 +2719,13 @@ packages:
     resolution: {integrity: sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
 
+  prism-svelte@0.5.0:
+    resolution: {integrity: sha512-db91Bf3pRGKDPz1lAqLFSJXeW13mulUJxhycysFpfXV5MIK7RgWWK2E5aPAa71s8TCzQUXxF5JOV42/iOs6QkA==}
+
+  prismjs@1.29.0:
+    resolution: {integrity: sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==}
+    engines: {node: '>=6'}
+
   process-nextick-args@2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
 
@@ -3079,10 +3101,23 @@ packages:
       svelte: ^4.0.0 || ^5.0.0-next.0
       typescript: '>=5.0.0'
 
+  svelte-dnd-action@0.9.54:
+    resolution: {integrity: sha512-Hue0e449cd3WOASOeawFhEDUb6WFz6QyMVzuEd2RCWhzUAZS6PvOCLZeJyDkx4uKgYve9PR08yzTlEV0oKaH8A==}
+    peerDependencies:
+      svelte: '>=3.23.0 || ^5.0.0-next.0'
+
+  svelte-legos@0.2.5:
+    resolution: {integrity: sha512-r4HbLYripCLECgraqJMvsykW/8FaPBd1hLkt3ejJzJRfhhOnCgGTo6lJT27qrestDFbiIASQV3xOnjRr/D6cGw==}
+    peerDependencies:
+      svelte: ^4.0.0
+
   svelte-sonner@0.3.28:
     resolution: {integrity: sha512-K3AmlySeFifF/cKgsYNv5uXqMVNln0NBAacOYgmkQStLa/UoU0LhfAACU6Gr+YYC8bOCHdVmFNoKuDbMEsppJg==}
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.1
+
+  svelte-tiny-virtual-list@2.1.2:
+    resolution: {integrity: sha512-jeP/WMvgFUR4mYXHGPiCexjX5DuzSO+3xzHNhxfcsFyy+uYPtnqI5UGb383swpzQAyXB0OBqYfzpYihD/5gxnA==}
 
   svelte-toolbelt@0.7.0:
     resolution: {integrity: sha512-i/Tv4NwAWWqJnK5H0F8y/ubDnogDYlwwyzKhrspTUFzrFuGnYshqd2g4/R43ds841wmaFiSW/HsdsdWhPOlrAA==}
@@ -3288,6 +3323,26 @@ packages:
 
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
+
+  virtua@0.39.3:
+    resolution: {integrity: sha512-Ep3aiJXSGPm1UUniThr5mGDfG0upAleP7pqQs5mvvCgM1wPhII1ZKa7eNCWAJRLkC+InpXKokKozyaaj/aMYOQ==}
+    peerDependencies:
+      react: '>=16.14.0'
+      react-dom: '>=16.14.0'
+      solid-js: '>=1.0'
+      svelte: '>=5.0'
+      vue: '>=3.2'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      solid-js:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
 
   vite-node@2.1.8:
     resolution: {integrity: sha512-uPAwSr57kYjAUux+8E2j0q0Fxpn8M9VoyfGiRI8Kfktz9NcYMCenwY5RnZxnF1WTu3TGiYipirIzacLL3VVGFg==}
@@ -4597,7 +4652,7 @@ snapshots:
 
   birpc@0.2.19: {}
 
-  bits-ui@1.0.0-next.76(svelte@5.16.0):
+  bits-ui@1.0.0-next.77(svelte@5.16.0):
     dependencies:
       '@floating-ui/core': 1.6.8
       '@floating-ui/dom': 1.6.12
@@ -4712,6 +4767,8 @@ snapshots:
   camelcase@7.0.1: {}
 
   caniuse-lite@1.0.30001690: {}
+
+  canvas-confetti@1.9.3: {}
 
   ccount@2.0.1: {}
 
@@ -6069,6 +6126,10 @@ snapshots:
       ansi-styles: 5.2.0
       react-is: 17.0.2
 
+  prism-svelte@0.5.0: {}
+
+  prismjs@1.29.0: {}
+
   process-nextick-args@2.0.1: {}
 
   promise-toolbox@0.21.0:
@@ -6474,9 +6535,22 @@ snapshots:
     transitivePeerDependencies:
       - picomatch
 
+  svelte-dnd-action@0.9.54(svelte@5.16.0):
+    dependencies:
+      svelte: 5.16.0
+
+  svelte-legos@0.2.5(svelte@5.16.0):
+    dependencies:
+      canvas-confetti: 1.9.3
+      prism-svelte: 0.5.0
+      prismjs: 1.29.0
+      svelte: 5.16.0
+
   svelte-sonner@0.3.28(svelte@5.16.0):
     dependencies:
       svelte: 5.16.0
+
+  svelte-tiny-virtual-list@2.1.2: {}
 
   svelte-toolbelt@0.7.0(svelte@5.16.0):
     dependencies:
@@ -6722,6 +6796,11 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
+
+  virtua@0.39.3(svelte@5.16.0)(vue@3.5.13(typescript@5.7.2)):
+    optionalDependencies:
+      svelte: 5.16.0
+      vue: 3.5.13(typescript@5.7.2)
 
   vite-node@2.1.8(@types/node@22.10.2):
     dependencies:

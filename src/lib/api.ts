@@ -128,15 +128,13 @@ export async function autoBlockUsers(users: User[]): Promise<User[]> {
     .split('\n')
     .map((it) => it.trim())
     .filter((it) => it.length > 0)
-  const filteredUsers = users.filter((it) =>
-    keywords.some(
-      (keyword) =>
-        matchByKeyword(it.screen_name, keyword) ||
-        matchByKeyword(it.name, keyword) ||
-        (it.description
-          ? matchByKeyword(it.description ?? '', keyword)
-          : false),
-    ),
+  const filteredUsers = users.filter(
+    (it) =>
+      !it.following &&
+      !it.blocking &&
+      keywords.some((keyword) =>
+        matchByKeyword(keyword, [it.screen_name, it.name, it.description]),
+      ),
   )
   if (filteredUsers.length === 0) {
     console.debug('No users to block')
@@ -144,9 +142,6 @@ export async function autoBlockUsers(users: User[]): Promise<User[]> {
   }
   let blockedUsers: User[] = []
   for (const user of filteredUsers) {
-    if (user.following || user.blocking) {
-      continue
-    }
     try {
       const isBlocking = await dbApi.users.isBlocking(user.id)
       if (isBlocking) {

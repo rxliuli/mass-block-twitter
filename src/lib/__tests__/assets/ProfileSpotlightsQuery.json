@@ -1,0 +1,25 @@
+{
+  "data": {
+      "user_result_by_screen_name": {
+          "result": {
+              "__typename": "User",
+              "legacy": {
+                  "blocking": false,
+                  "blocked_by": false,
+                  "protected": false,
+                  "following": false,
+                  "followed_by": false,
+                  "name": "比特币矿机",
+                  "screen_name": "bitmain_miner"
+              },
+              "rest_id": "1575013182686777344",
+              "is_verified_organization": false,
+              "profilemodules": {
+                  "v1": []
+              },
+              "id": "VXNlcjoxNTc1MDEzMTgyNjg2Nzc3MzQ0"
+          },
+          "id": "VXNlclJlc3VsdHM6MTU3NTAxMzE4MjY4Njc3NzM0NA=="
+      }
+  }
+}

@@ -27,6 +27,11 @@ export default defineConfig({
       },
     },
     host_permissions: ['https://x.com/**'],
+    browser_specific_settings: {
+      gecko: {
+        id: 'mass-block-twitter@rxliuli.com',
+      },
+    },
   },
   runner: {
     disabled: true,

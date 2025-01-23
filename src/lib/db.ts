@@ -1,4 +1,5 @@
 import { DBSchema, IDBPDatabase, openDB } from 'idb'
+import { omitBy, pickBy } from 'lodash-es'
 
 export const dbStore: DBStore = {} as any
 
@@ -76,16 +77,6 @@ export async function initDB() {
   })
 }
 
-function sortUsers(users: User[]) {
-  return users.sort((a, b) => {
-    if (b.created_at && b.created_at) {
-      return b.created_at.localeCompare(a.created_at)
-    } else {
-      return 0
-    }
-  })
-}
-
 export class UserDAO {
   // 获取所有用户
   async getAll(limit: number = 1000): Promise<User[]> {
@@ -113,13 +104,12 @@ export class UserDAO {
   async record(users: User[]): Promise<void> {
     await Promise.all([
       ...users.map(async (it) => {
-        // const keys = await dbStore.idb.getAllKeysFromIndex(
-        //   'users',
-        //   'screen_name_index',
-        //   it.screen_name,
-        // )
-        // await Promise.all(keys.map((id) => dbStore.idb.delete('users', id)))
-        await dbStore.idb.put('users', it, it.id)
+        const u = await dbStore.idb.get('users', it.id)
+        await dbStore.idb.put(
+          'users',
+          { ...u, ...(pickBy(it, (it) => !!it) as User) },
+          it.id,
+        )
       }),
     ])
   }

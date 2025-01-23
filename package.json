@@ -65,5 +65,10 @@
     "svelte-tiny-virtual-list": "^2.1.2",
     "virtua": "^0.39.3",
     "zod": "^3.24.1"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "lodash-es": "patches/lodash-es.patch"
+    }
   }
 }

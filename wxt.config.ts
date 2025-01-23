@@ -6,6 +6,7 @@ export default defineConfig({
   srcDir: 'src',
   extensionApi: 'chrome',
   modules: ['@wxt-dev/module-svelte'],
+  manifestVersion: 3,
   manifest: {
     name: 'Mass Block Twitter',
     description:

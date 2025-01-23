@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  lodash-es:
+    hash: bac4fi2larraukbjueqxrzimd4
+    path: patches/lodash-es.patch
+
 importers:
 
   .:
@@ -52,7 +57,7 @@ importers:
         version: 6.2.1
       lodash-es:
         specifier: ^4.17.21
-        version: 4.17.21
+        version: 4.17.21(patch_hash=bac4fi2larraukbjueqxrzimd4)
       serialize-error:
         specifier: ^11.0.3
         version: 11.0.3
@@ -5653,7 +5658,7 @@ snapshots:
 
   locate-character@3.0.0: {}
 
-  lodash-es@4.17.21: {}
+  lodash-es@4.17.21(patch_hash=bac4fi2larraukbjueqxrzimd4): {}
 
   lodash.camelcase@4.3.0: {}
 

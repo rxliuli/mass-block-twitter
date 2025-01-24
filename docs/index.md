@@ -48,5 +48,3 @@ Get started now and take control of your Twitter experience! 🌟
 [Privacy Policy](./privacy.md)
 
 [Refund Policy](./refund.md)
-
-[Sponsor](./sponsor.md)

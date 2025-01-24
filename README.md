@@ -1,6 +1,6 @@
 # Mass Block Twitter
 
-![logo](./src/public/icon/128.png)
+[![Available from Chrome Webstore](docs/public/chrome.png)](https://chromewebstore.google.com/detail/mass-block-twitter/eaghpebepefbcadjdppjjopoagckdhej) [![Available from Firefox Add-ons](docs/public/firefox.png)](https://addons.mozilla.org/firefox/addon/mass-block-twitter/)
 
 Effortlessly manage spam Twitter/X accounts with our powerful bulk blocking tool.
 
@@ -15,6 +15,7 @@ Effortlessly manage spam Twitter/X accounts with our powerful bulk blocking tool
 • Clean, intuitive interface
 
 🔧 Simple to Use:
+
 1. Install extension
 2. Right-click or tap extension icon to "Scan and Block"
 3. Review and select accounts
@@ -45,5 +46,3 @@ Effortlessly manage spam Twitter/X accounts with our powerful bulk blocking tool
 Note: Requires x.com access to function.
 
 Get started now and take control of your Twitter experience! 🌟
-
-

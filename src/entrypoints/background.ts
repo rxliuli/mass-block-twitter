@@ -1,24 +1,38 @@
-import { sendMessage } from '$lib/messaging'
+import { SERVER_URL } from '$lib/constants'
+import { onMessage, sendMessage } from '$lib/messaging'
 
 export default defineBackground(() => {
-  browser.contextMenus.create({
-    id: 'scan',
-    title: 'Scan and Block',
-    contexts: ['page'],
+  browser.runtime.onInstalled.addListener(() => {
+    browser.contextMenus.create({
+      id: 'scan',
+      title: 'Scan and Block',
+      contexts: ['page'],
+    })
   })
 
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId === 'scan') {
-      // await browser.scripting.executeScript({
-      //   target: { tabId: tab?.id! },
-      //   world: 'MAIN',
-      //   files: ['/scan.js'],
-      // })
       await sendMessage('show', undefined, tab!.id)
       return
     }
   })
   browser.action.onClicked.addListener(async (tab) => {
     await sendMessage('show', undefined, tab!.id)
+  })
+  onMessage('fetchSpamUsers', async () =>
+    fetch(`${SERVER_URL}/spam-users`).then((res) => res.json()),
+  )
+  onMessage('spamReport', async (ev) => {
+    // console.log('spamReport background script', ev.data)
+    const resp = await fetch(`${SERVER_URL}/spam-users`, {
+      method: 'POST',
+      body: JSON.stringify(ev.data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    if (!resp.ok) {
+      throw new Error('Failed to report spam' + resp.statusText)
+    }
   })
 })

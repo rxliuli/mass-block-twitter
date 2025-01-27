@@ -3,11 +3,22 @@ import { it, expect, describe } from 'vitest'
 import all from './assets/all.json'
 import timeline from './assets/timeline.json'
 import { z } from 'zod'
-import { parseUserRecords } from '../api'
+import {
+  filterTweets,
+  parseTweets,
+  parseUserRecords,
+  tweetScheam,
+} from '../api'
 import allSpam from './assets/all-spam.json'
-import { omit, pick } from 'lodash-es'
+import { difference, omit, pick } from 'lodash-es'
 import notificationsSpam from './assets/notifications-spam.json'
 import profile from './assets/ProfileSpotlightsQuery.json'
+import HomeTimeline from './assets/HomeTimeline.json'
+import TweetDetail from './assets/TweetDetail.json'
+import TweetDetail2 from './assets/TweetDetail2.json'
+import TweetDetail3 from './assets/TweetDetail3.json'
+import UserTweetsAndReplies from './assets/UserTweetsAndReplies.json'
+import UserTweets from './assets/UserTweets.json'
 
 describe('extractObjects', () => {
   it('extractObjects 1', () => {
@@ -90,5 +101,155 @@ describe('parseUserRecords', () => {
       name: '比特币矿机',
       screen_name: 'bitmain_miner',
     })
+  })
+})
+
+describe('matchObject', () => {
+  it('match object in detail', () => {
+    const schema = z.object({
+      type: z.literal('TimelineAddEntries'),
+      entries: z.array(
+        z.object({
+          entryId: z.string(),
+          sortIndex: z.string(),
+          content: z.object({}),
+        }),
+      ),
+    })
+    const [result] = extractObjects(
+      TweetDetail,
+      (it) => schema.safeParse(it).success,
+    ) as (typeof schema._type)[]
+    expect(result.entries).length(12)
+  })
+})
+
+describe('parseTweets', () => {
+  it('parseTweets for timeline', () => {
+    const tweets = parseTweets(HomeTimeline)
+    expect(tweets).length(46)
+    expect(
+      tweets.map((it) => ({
+        ...it,
+        user: omit(it.user, 'updated_at'),
+      })),
+    ).toMatchSnapshot()
+  })
+  it('parseTweets for detail 1', () => {
+    const tweets = parseTweets(TweetDetail)
+    const matched =
+      JSON.stringify(TweetDetail).split('"__typename":"Tweet"').length - 1
+    const expected = extractObjects(
+      TweetDetail,
+      (it) =>
+        z
+          .object({
+            __typename: z.literal('Tweet').optional(),
+            rest_id: z.string(),
+            legacy: z.object({
+              full_text: z.string(),
+            }),
+          })
+          .safeParse(it).success,
+    ).map((it) => it.rest_id)
+    expect(expected).length(matched)
+    expect(tweets).length(matched)
+    expect(
+      tweets.map((it) => ({
+        ...it,
+        user: omit(it.user, 'updated_at'),
+      })),
+    ).toMatchSnapshot()
+  })
+  it('parseTweets for detail 2', () => {
+    const tweets = parseTweets(TweetDetail2)
+    const matched = JSON.stringify(TweetDetail2).split('"tweet":{').length - 1
+    const expected = extractObjects(
+      TweetDetail2,
+      (it) =>
+        z
+          .object({
+            __typename: z.literal('Tweet').optional(),
+            rest_id: z.string(),
+            legacy: z.object({
+              full_text: z.string(),
+            }),
+          })
+          .safeParse(it).success,
+    ).map((it) => it.rest_id)
+    expect(expected).length(matched)
+    expect(tweets).length(matched)
+    expect(
+      tweets.map((it) => ({
+        ...it,
+        user: omit(it.user, 'updated_at'),
+      })),
+    ).toMatchSnapshot()
+  })
+  it('parseTweets for detail 3', () => {
+    const tweets = parseTweets(TweetDetail3)
+    expect(tweets).length(2)
+    expect(
+      tweets.map((it) => ({
+        ...it,
+        user: omit(it.user, 'updated_at'),
+      })),
+    ).toMatchSnapshot()
+  })
+  it('parseTweets for user tweets and replies', () => {
+    const tweets = parseTweets(UserTweetsAndReplies)
+    const matched =
+      JSON.stringify(UserTweetsAndReplies).split('"__typename":"Tweet"')
+        .length - 1
+    const expected = extractObjects(
+      UserTweetsAndReplies,
+      (it) =>
+        z
+          .object({
+            __typename: z.literal('Tweet'),
+            rest_id: z.string(),
+          })
+          .safeParse(it).success,
+    ).map((it) => it.rest_id)
+    expect(expected).length(matched)
+    expect(tweets).length(matched - 2)
+    expect(
+      tweets.map((it) => ({
+        ...it,
+        user: omit(it.user, 'updated_at'),
+      })),
+    ).toMatchSnapshot()
+  })
+  it('parseTweets for user tweets only', () => {
+    const tweets = parseTweets(UserTweets)
+    const matched =
+      JSON.stringify(UserTweets).split('"__typename":"Tweet"').length - 1
+    const expected = extractObjects(
+      UserTweets,
+      (it) =>
+        z
+          .object({
+            __typename: z.literal('Tweet'),
+            rest_id: z.string(),
+          })
+          .safeParse(it).success,
+    ).map((it) => it.rest_id)
+    expect(expected).length(matched)
+    expect(tweets).length(matched)
+    expect(
+      tweets.map((it) => ({
+        ...it,
+        user: omit(it.user, 'updated_at'),
+      })),
+    ).toMatchSnapshot()
+  })
+})
+
+describe('filterTweets', () => {
+  it('filterTweets for detail', () => {
+    const spamTweetIds = ['1883173115230134610']
+    const json = filterTweets(TweetDetail, (it) => spamTweetIds.includes(it.id))
+    const tweets = parseTweets(json)
+    expect(tweets.some((it) => spamTweetIds.includes(it.id))).false
   })
 })

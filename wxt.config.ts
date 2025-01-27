@@ -1,7 +1,13 @@
 import { defineConfig } from 'wxt'
 import path from 'path'
 
-// See https://wxt.dev/api/config.html
+const host_permissions = [
+  'https://x.com/**',
+  'https://mass-block-twitter-server.rxliuli.com/',
+]
+if (process.env.NODE_ENV === 'development') {
+  host_permissions.push('http://localhost:8787/**')
+}
 export default defineConfig({
   srcDir: 'src',
   extensionApi: 'chrome',
@@ -26,7 +32,7 @@ export default defineConfig({
         '128': 'icon/128.png',
       },
     },
-    host_permissions: ['https://x.com/**'],
+    host_permissions,
     browser_specific_settings: {
       gecko: {
         id: 'mass-block-twitter@rxliuli.com',
@@ -35,6 +41,16 @@ export default defineConfig({
   },
   runner: {
     disabled: true,
+  },
+  hooks: {
+    'build:manifestGenerated': (wxt, manifest) => {
+      manifest.content_scripts ??= []
+      manifest.content_scripts.push({
+        // Build extension once to see where your CSS get's written to
+        css: ['assets/style.css'],
+        matches: ['https://x.com/**'],
+      })
+    },
   },
   vite: () => ({
     resolve: {

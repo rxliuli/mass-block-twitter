@@ -2,6 +2,8 @@ import { mount, unmount } from 'svelte'
 import { wait } from '@liuli-util/async'
 import App from './app.svelte'
 import './app.css'
+import { sendMessage } from '$lib/messaging'
+import { set } from 'idb-keyval'
 
 export default defineContentScript({
   matches: ['https://x.com/**'],
@@ -10,6 +12,8 @@ export default defineContentScript({
   cssInjectionMode: 'ui',
   async main(ctx) {
     await injectScript('/inject.js')
+
+    refreshSpamUsers()
 
     await wait(() => !!document.body)
     const ui = await createShadowRootUi(ctx, {
@@ -32,5 +36,16 @@ export default defineContentScript({
 
     // 4. Mount the UI
     ui.mount()
+
+    window.addEventListener('SpamReportRequest', (event) => {
+      const request = (event as CustomEvent).detail
+      // console.log('spamReport isolation content script', request)
+      sendMessage('spamReport', request)
+    })
   },
 })
+
+export async function refreshSpamUsers(): Promise<void> {
+  const spamUsers = await sendMessage('fetchSpamUsers', undefined)
+  await set('spamUsers', spamUsers)
+}

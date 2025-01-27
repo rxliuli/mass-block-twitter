@@ -1,0 +1,28 @@
+name = "mass-block-twitter-server"
+main = "src/index.ts"
+compatibility_date = "2025-01-24"
+
+# compatibility_flags = [ "nodejs_compat" ]
+
+[vars]
+APP_ENV = "production"
+
+# [[kv_namespaces]]
+# binding = "MY_KV_NAMESPACE"
+# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# [[r2_buckets]]
+# binding = "MY_BUCKET"
+# bucket_name = "my-bucket"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mass-block-twitter"
+database_id = "30a33a44-9313-407c-a2c6-6dd1e1f598c4"
+
+# [ai]
+# binding = "AI"
+
+[observability]
+enabled = true
+head_sampling_rate = 1

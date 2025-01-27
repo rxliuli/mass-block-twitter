@@ -1,5 +1,5 @@
 {
-  "name": "mass-block-twitter",
+  "name": "@mass-block-twitter/extension",
   "description": "Mass Block Twitter Spam Users",
   "private": true,
   "version": "0.7.2",
@@ -44,10 +44,11 @@
     "wxt": "^0.19.13"
   },
   "dependencies": {
+    "@mass-block-twitter/server": "workspace:^",
     "@json2csv/plainjs": "^7.0.6",
     "@liuli-util/async": "^3.7.0",
     "@paddle/paddle-js": "^1.3.3",
-    "@rxliuli/vista": "^0.1.3",
+    "@rxliuli/vista": "^0.2.0",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "@tanstack/svelte-query": "^5.62.9",
@@ -58,11 +59,14 @@
     "file-saver": "^2.0.5",
     "idb": "^8.0.1",
     "idb-keyval": "^6.2.1",
+    "just-map-object": "^2.3.0",
     "lodash-es": "^4.17.21",
     "serialize-error": "^11.0.3",
     "svelte-dnd-action": "^0.9.54",
     "svelte-legos": "^0.2.5",
     "svelte-tiny-virtual-list": "^2.1.2",
+    "toad-cache": "^3.7.0",
+    "urlpattern-polyfill": "^10.0.0",
     "virtua": "^0.39.3",
     "zod": "^3.24.1"
   },

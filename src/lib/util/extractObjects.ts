@@ -5,7 +5,6 @@ export function extractObjects(json: any, matcher: (obj: any) => boolean) {
 	function traverse(obj: any) {
 		if (matcher(obj)) {
 			results.push(obj)
-			return
 		}
 		for (let key in obj) {
 			if (typeof obj[key] === 'object') {

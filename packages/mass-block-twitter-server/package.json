@@ -1,0 +1,29 @@
+{
+  "name": "@mass-block-twitter/server",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1",
+  "exports": {
+    ".": "./src/lib.ts"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
+    "prisma:generate": "prisma migrate diff --from-empty --to-schema-datamodel ./prisma/schema.prisma --script --output migrations/0001_init.sql",
+    "prisma:migrate": "wrangler d1 migrations apply mass-block-twitter --local && prisma generate"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.4.2",
+    "@prisma/adapter-d1": "^6.2.1",
+    "@prisma/client": "^6.2.1",
+    "hono": "^4.6.18",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250109.0",
+    "just-sort-by": "^3.2.0",
+    "prisma": "^6.2.1",
+    "vitest": "^3.0.4",
+    "wrangler": "^3.105.1"
+  }
+}

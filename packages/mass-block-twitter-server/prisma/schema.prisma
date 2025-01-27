@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"] // change from default
+}
+
+datasource db {
+  provider = "sqlite" // d1 is sql base database
+  url      = env("DATABASE_URL")
+}
+
+// Create a simple model database
+model User {
+  id               String    @id @default(uuid())
+  screenName       String
+  name             String
+  description      String?
+  profileImageUrl  String?
+  accountCreatedAt DateTime?
+  spamReportCount  Int       @default(0)
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Tweet      Tweet[]
+  spamUser   SpamReport[] @relation("SpamUser")
+  reportUser SpamReport[] @relation("ReportUser")
+}
+
+model Tweet {
+  id              String       @id @default(uuid())
+  text            String
+  media           Json?
+  publishedAt     DateTime
+  userId          String
+  user            User         @relation(fields: [userId], references: [id])
+  SpamReport      SpamReport[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  spamReportCount Int          @default(0)
+}
+
+enum PageType {
+  timeline
+  tweetDetail
+  other
+}
+
+model SpamReport {
+  id           String   @id @default(uuid())
+  spamUser     User     @relation("SpamUser", fields: [spamUserId], references: [id])
+  spamUserId   String
+  reportUser   User     @relation("ReportUser", fields: [reportUserId], references: [id])
+  reportUserId String
+  spamTweet    Tweet    @relation(fields: [spamTweetId], references: [id])
+  spamTweetId  String
+  pageType     PageType
+  pageUrl      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([spamUserId, reportUserId, spamTweetId])
+  @@index([spamUserId, reportUserId])
+  @@index([spamUserId])
+  @@index([reportUserId])
+  @@index([createdAt])
+}

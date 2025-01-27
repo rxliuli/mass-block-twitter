@@ -1,0 +1,1653 @@
+{
+  "data": {
+    "threaded_conversation_with_injections_v2": {
+      "instructions": [
+        {
+          "type": "TimelineAddEntries",
+          "entries": [
+            {
+              "entryId": "tweet-1883445865710240006",
+              "sortIndex": "7339926171144535801",
+              "content": {
+                "entryType": "TimelineTimelineItem",
+                "__typename": "TimelineTimelineItem",
+                "itemContent": {
+                  "itemType": "TimelineTweet",
+                  "__typename": "TimelineTweet",
+                  "tweet_results": {
+                    "result": {
+                      "__typename": "TweetWithVisibilityResults",
+                      "tweet": {
+                        "rest_id": "1883445865710240006",
+                        "has_birdwatch_notes": false,
+                        "core": {
+                          "user_results": {
+                            "result": {
+                              "__typename": "User",
+                              "id": "VXNlcjo5MTYwMjQzMzMzNzc2MDE1Mzk=",
+                              "rest_id": "916024333377601539",
+                              "affiliates_highlighted_label": {},
+                              "has_graduated_access": true,
+                              "parody_commentary_fan_label": "None",
+                              "is_blue_verified": true,
+                              "profile_image_shape": "Circle",
+                              "legacy": {
+                                "following": false,
+                                "can_dm": false,
+                                "can_media_tag": true,
+                                "created_at": "Thu Oct 05 19:36:34 +0000 2017",
+                                "default_profile": true,
+                                "default_profile_image": false,
+                                "description": "YC Dev \uD83D\uDE80 | Building In Public\uD83D\uDCA1\n\nEffortless text capture → https://t.co/xmrSuxAHJg ✨\nGive your website a badge → https://t.co/Aa6arAMga9 \uD83E\uDD47",
+                                "entities": {
+                                  "description": {
+                                    "urls": [
+                                      {
+                                        "display_url": "textcapture.app",
+                                        "expanded_url": "https://textcapture.app",
+                                        "url": "https://t.co/xmrSuxAHJg",
+                                        "indices": [58, 81]
+                                      },
+                                      {
+                                        "display_url": "badgemy.app",
+                                        "expanded_url": "https://badgemy.app",
+                                        "url": "https://t.co/Aa6arAMga9",
+                                        "indices": [112, 135]
+                                      }
+                                    ]
+                                  },
+                                  "url": {
+                                    "urls": [
+                                      {
+                                        "display_url": "indiepa.ge/auden",
+                                        "expanded_url": "https://indiepa.ge/auden",
+                                        "url": "https://t.co/jWL1jCl1E7",
+                                        "indices": [0, 23]
+                                      }
+                                    ]
+                                  }
+                                },
+                                "fast_followers_count": 0,
+                                "favourites_count": 1120,
+                                "followers_count": 215,
+                                "friends_count": 277,
+                                "has_custom_timelines": false,
+                                "is_translator": false,
+                                "listed_count": 6,
+                                "location": "Say hi! :)",
+                                "media_count": 87,
+                                "name": "Auden Pierce",
+                                "normal_followers_count": 215,
+                                "pinned_tweet_ids_str": ["1877686869770813504"],
+                                "possibly_sensitive": false,
+                                "profile_banner_url": "https://pbs.twimg.com/profile_banners/916024333377601539/1737810154",
+                                "profile_image_url_https": "https://pbs.twimg.com/profile_images/1883143259951599616/jA0dD0Ir_normal.jpg",
+                                "profile_interstitial_type": "",
+                                "screen_name": "auden_pierce",
+                                "statuses_count": 400,
+                                "translator_type": "none",
+                                "url": "https://t.co/jWL1jCl1E7",
+                                "verified": false,
+                                "want_retweets": false,
+                                "withheld_in_countries": []
+                              },
+                              "professional": {
+                                "rest_id": "1824574612656517250",
+                                "professional_type": "Creator",
+                                "category": [
+                                  {
+                                    "id": 1059,
+                                    "name": "Engineer",
+                                    "icon_name": "IconBriefcaseStroke"
+                                  }
+                                ]
+                              },
+                              "tipjar_settings": {}
+                            }
+                          }
+                        },
+                        "card": {
+                          "rest_id": "https://t.co/4TdugLoj4i",
+                          "legacy": {
+                            "binding_values": [
+                              {
+                                "key": "photo_image_full_size_large",
+                                "value": {
+                                  "image_value": {
+                                    "height": 419,
+                                    "width": 800,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=800x419"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "thumbnail_image",
+                                "value": {
+                                  "image_value": {
+                                    "height": 147,
+                                    "width": 280,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=280x150"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "description",
+                                "value": {
+                                  "string_value": "OCR tool for macOS",
+                                  "type": "STRING"
+                                }
+                              },
+                              {
+                                "key": "domain",
+                                "value": {
+                                  "string_value": "www.textcapture.app",
+                                  "type": "STRING"
+                                }
+                              },
+                              {
+                                "key": "thumbnail_image_large",
+                                "value": {
+                                  "image_value": {
+                                    "height": 315,
+                                    "width": 600,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=600x600"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "summary_photo_image_small",
+                                "value": {
+                                  "image_value": {
+                                    "height": 202,
+                                    "width": 386,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=386x202"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "thumbnail_image_original",
+                                "value": {
+                                  "image_value": {
+                                    "height": 630,
+                                    "width": 1200,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=orig"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "photo_image_full_size_small",
+                                "value": {
+                                  "image_value": {
+                                    "height": 202,
+                                    "width": 386,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=386x202"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "summary_photo_image_large",
+                                "value": {
+                                  "image_value": {
+                                    "height": 419,
+                                    "width": 800,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=800x419"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "thumbnail_image_small",
+                                "value": {
+                                  "image_value": {
+                                    "height": 76,
+                                    "width": 144,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=144x144"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "creator",
+                                "value": {
+                                  "type": "USER",
+                                  "user_value": {
+                                    "id_str": "916024333377601539",
+                                    "path": []
+                                  }
+                                }
+                              },
+                              {
+                                "key": "thumbnail_image_x_large",
+                                "value": {
+                                  "image_value": {
+                                    "height": 630,
+                                    "width": 1200,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=png&name=2048x2048_2_exp"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "photo_image_full_size_original",
+                                "value": {
+                                  "image_value": {
+                                    "height": 630,
+                                    "width": 1200,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=orig"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "vanity_url",
+                                "value": {
+                                  "scribe_key": "vanity_url",
+                                  "string_value": "textcapture.app",
+                                  "type": "STRING"
+                                }
+                              },
+                              {
+                                "key": "photo_image_full_size",
+                                "value": {
+                                  "image_value": {
+                                    "height": 314,
+                                    "width": 600,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=600x314"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "thumbnail_image_color",
+                                "value": {
+                                  "image_color_value": {
+                                    "palette": [
+                                      {
+                                        "rgb": {
+                                          "blue": 239,
+                                          "green": 239,
+                                          "red": 239
+                                        },
+                                        "percentage": 31.53
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 53,
+                                          "green": 11,
+                                          "red": 34
+                                        },
+                                        "percentage": 25.82
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 87,
+                                          "green": 99,
+                                          "red": 253
+                                        },
+                                        "percentage": 11.56
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 36,
+                                          "green": 89,
+                                          "red": 2
+                                        },
+                                        "percentage": 8.08
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 49,
+                                          "green": 50,
+                                          "red": 33
+                                        },
+                                        "percentage": 6.09
+                                      }
+                                    ]
+                                  },
+                                  "type": "IMAGE_COLOR"
+                                }
+                              },
+                              {
+                                "key": "title",
+                                "value": {
+                                  "string_value": "TextCapture",
+                                  "type": "STRING"
+                                }
+                              },
+                              {
+                                "key": "summary_photo_image_color",
+                                "value": {
+                                  "image_color_value": {
+                                    "palette": [
+                                      {
+                                        "rgb": {
+                                          "blue": 239,
+                                          "green": 239,
+                                          "red": 239
+                                        },
+                                        "percentage": 31.53
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 53,
+                                          "green": 11,
+                                          "red": 34
+                                        },
+                                        "percentage": 25.82
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 87,
+                                          "green": 99,
+                                          "red": 253
+                                        },
+                                        "percentage": 11.56
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 36,
+                                          "green": 89,
+                                          "red": 2
+                                        },
+                                        "percentage": 8.08
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 49,
+                                          "green": 50,
+                                          "red": 33
+                                        },
+                                        "percentage": 6.09
+                                      }
+                                    ]
+                                  },
+                                  "type": "IMAGE_COLOR"
+                                }
+                              },
+                              {
+                                "key": "summary_photo_image_x_large",
+                                "value": {
+                                  "image_value": {
+                                    "height": 630,
+                                    "width": 1200,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=png&name=2048x2048_2_exp"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "summary_photo_image",
+                                "value": {
+                                  "image_value": {
+                                    "height": 314,
+                                    "width": 600,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=600x314"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "photo_image_full_size_color",
+                                "value": {
+                                  "image_color_value": {
+                                    "palette": [
+                                      {
+                                        "rgb": {
+                                          "blue": 239,
+                                          "green": 239,
+                                          "red": 239
+                                        },
+                                        "percentage": 31.53
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 53,
+                                          "green": 11,
+                                          "red": 34
+                                        },
+                                        "percentage": 25.82
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 87,
+                                          "green": 99,
+                                          "red": 253
+                                        },
+                                        "percentage": 11.56
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 36,
+                                          "green": 89,
+                                          "red": 2
+                                        },
+                                        "percentage": 8.08
+                                      },
+                                      {
+                                        "rgb": {
+                                          "blue": 49,
+                                          "green": 50,
+                                          "red": 33
+                                        },
+                                        "percentage": 6.09
+                                      }
+                                    ]
+                                  },
+                                  "type": "IMAGE_COLOR"
+                                }
+                              },
+                              {
+                                "key": "photo_image_full_size_x_large",
+                                "value": {
+                                  "image_value": {
+                                    "height": 630,
+                                    "width": 1200,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=png&name=2048x2048_2_exp"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              },
+                              {
+                                "key": "card_url",
+                                "value": {
+                                  "scribe_key": "card_url",
+                                  "string_value": "https://t.co/4TdugLoj4i",
+                                  "type": "STRING"
+                                }
+                              },
+                              {
+                                "key": "summary_photo_image_original",
+                                "value": {
+                                  "image_value": {
+                                    "height": 630,
+                                    "width": 1200,
+                                    "url": "https://pbs.twimg.com/card_img/1882044814121721857/fkTMnuYv?format=jpg&name=orig"
+                                  },
+                                  "type": "IMAGE"
+                                }
+                              }
+                            ],
+                            "card_platform": {
+                              "platform": {
+                                "audience": {
+                                  "name": "production"
+                                },
+                                "device": {
+                                  "name": "Swift",
+                                  "version": "12"
+                                }
+                              }
+                            },
+                            "name": "summary_large_image",
+                            "url": "https://t.co/4TdugLoj4i",
+                            "user_refs_results": [
+                              {
+                                "result": {
+                                  "__typename": "User",
+                                  "id": "VXNlcjo5MTYwMjQzMzMzNzc2MDE1Mzk=",
+                                  "rest_id": "916024333377601539",
+                                  "affiliates_highlighted_label": {},
+                                  "has_graduated_access": true,
+                                  "parody_commentary_fan_label": "None",
+                                  "is_blue_verified": true,
+                                  "profile_image_shape": "Circle",
+                                  "legacy": {
+                                    "following": false,
+                                    "can_dm": false,
+                                    "can_media_tag": true,
+                                    "created_at": "Thu Oct 05 19:36:34 +0000 2017",
+                                    "default_profile": true,
+                                    "default_profile_image": false,
+                                    "description": "YC Dev \uD83D\uDE80 | Building In Public\uD83D\uDCA1\n\nEffortless text capture → https://t.co/xmrSuxAHJg ✨\nGive your website a badge → https://t.co/Aa6arAMga9 \uD83E\uDD47",
+                                    "entities": {
+                                      "description": {
+                                        "urls": [
+                                          {
+                                            "display_url": "textcapture.app",
+                                            "expanded_url": "https://textcapture.app",
+                                            "url": "https://t.co/xmrSuxAHJg",
+                                            "indices": [58, 81]
+                                          },
+                                          {
+                                            "display_url": "badgemy.app",
+                                            "expanded_url": "https://badgemy.app",
+                                            "url": "https://t.co/Aa6arAMga9",
+                                            "indices": [112, 135]
+                                          }
+                                        ]
+                                      },
+                                      "url": {
+                                        "urls": [
+                                          {
+                                            "display_url": "indiepa.ge/auden",
+                                            "expanded_url": "https://indiepa.ge/auden",
+                                            "url": "https://t.co/jWL1jCl1E7",
+                                            "indices": [0, 23]
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "fast_followers_count": 0,
+                                    "favourites_count": 1120,
+                                    "followers_count": 215,
+                                    "friends_count": 277,
+                                    "has_custom_timelines": false,
+                                    "is_translator": false,
+                                    "listed_count": 6,
+                                    "location": "Say hi! :)",
+                                    "media_count": 87,
+                                    "name": "Auden Pierce",
+                                    "normal_followers_count": 215,
+                                    "pinned_tweet_ids_str": [
+                                      "1877686869770813504"
+                                    ],
+                                    "possibly_sensitive": false,
+                                    "profile_banner_url": "https://pbs.twimg.com/profile_banners/916024333377601539/1737810154",
+                                    "profile_image_url_https": "https://pbs.twimg.com/profile_images/1883143259951599616/jA0dD0Ir_normal.jpg",
+                                    "profile_interstitial_type": "",
+                                    "screen_name": "auden_pierce",
+                                    "statuses_count": 400,
+                                    "translator_type": "none",
+                                    "url": "https://t.co/jWL1jCl1E7",
+                                    "verified": false,
+                                    "want_retweets": false,
+                                    "withheld_in_countries": []
+                                  },
+                                  "professional": {
+                                    "rest_id": "1824574612656517250",
+                                    "professional_type": "Creator",
+                                    "category": [
+                                      {
+                                        "id": 1059,
+                                        "name": "Engineer",
+                                        "icon_name": "IconBriefcaseStroke"
+                                      }
+                                    ]
+                                  },
+                                  "tipjar_settings": {}
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "unmention_data": {},
+                        "edit_control": {
+                          "edit_tweet_ids": ["1883445865710240006"],
+                          "editable_until_msecs": "1737887061000",
+                          "is_edit_eligible": true,
+                          "edits_remaining": "5"
+                        },
+                        "is_translatable": false,
+                        "views": {
+                          "count": "10",
+                          "state": "EnabledWithCount"
+                        },
+                        "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                        "note_tweet": {
+                          "is_expandable": true,
+                          "note_tweet_results": {
+                            "result": {
+                              "id": "Tm90ZVR3ZWV0OjE4ODM0NDU4NjU2MzQ4NDA1NzY=",
+                              "text": "https://t.co/wVd0VLDUzs v2 is live!\n\nSpecial v2 launch deal: $0.99 for util 300 users (82 spots left). Would really appreciate you leaving a review on the App Store!\n\nWhat's new? Introducing AI Text Extraction:\n- Handle text indentations and spacing ✨\n- Detect emojis \uD83E\uDD29\n- Support all major languages \uD83C\uDE02️\n\nLocal mode has also been improved:\n- Support more languages \uD83C\uDDFA\uD83C\uDDF8\uD83C\uDDEB\uD83C\uDDF7\uD83C\uDDEE\uD83C\uDDF9\uD83C\uDDE9\uD83C\uDDEA\uD83C\uDDEA\uD83C\uDDF8\uD83C\uDDE7\uD83C\uDDF7\uD83C\uDDE8\uD83C\uDDF3\uD83C\uDDF9\uD83C\uDDFC\uD83C\uDDE8\uD83C\uDDF3\uD83C\uDDED\uD83C\uDDF0\uD83C\uDDF0\uD83C\uDDF7\uD83C\uDDEF\uD83C\uDDF5\uD83C\uDDF7\uD83C\uDDFA\uD83C\uDDFA\uD83C\uDDE6\uD83C\uDDF9\uD83C\uDDED\uD83C\uDDFB\uD83C\uDDF3\uD83C\uDDF8\uD83C\uDDE6\uD83C\uDDF8\uD83C\uDDE6",
+                              "entity_set": {
+                                "hashtags": [],
+                                "symbols": [],
+                                "urls": [
+                                  {
+                                    "display_url": "textcapture.app",
+                                    "expanded_url": "http://textcapture.app",
+                                    "url": "https://t.co/wVd0VLDUzs",
+                                    "indices": [0, 23]
+                                  }
+                                ],
+                                "user_mentions": []
+                              },
+                              "richtext": {
+                                "richtext_tags": []
+                              },
+                              "media": {
+                                "inline_media": []
+                              }
+                            }
+                          }
+                        },
+                        "community_results": {
+                          "result": {
+                            "__typename": "Community",
+                            "id_str": "1493446837214187523",
+                            "viewer_relationship": {
+                              "moderation_state": {
+                                "__typename": "CommunityUserDefaultModerationState"
+                              }
+                            }
+                          }
+                        },
+                        "community_relationship": {
+                          "id": "VHdlZXRDb21tdW5pdHlSZWxhdGlvbnNoaXA6MTg4MzQ0NTg2NTcxMDI0MDAwNg==",
+                          "rest_id": "1883445865710240006",
+                          "moderation_state": {},
+                          "actions": {
+                            "pin_action_result": {
+                              "__typename": "CommunityTweetPinActionUnavailable"
+                            },
+                            "unpin_action_result": {
+                              "__typename": "CommunityTweetUnpinActionUnavailable"
+                            }
+                          }
+                        },
+                        "author_community_relationship": {
+                          "community_results": {
+                            "result": {
+                              "__typename": "Community",
+                              "id_str": "1493446837214187523",
+                              "name": "Build in Public",
+                              "description": "Share what you're working on. Get feedback. Help each other move forward. No self-promotion.",
+                              "created_at": 1644900447551,
+                              "question": "What are you working on?",
+                              "search_tags": [
+                                "buildinpublic",
+                                "buildinginpublic",
+                                "builtinpublic"
+                              ],
+                              "is_nsfw": false,
+                              "primary_community_topic": {
+                                "topic_id": "603",
+                                "topic_name": "Entrepreneurship"
+                              },
+                              "actions": {
+                                "delete_action_result": {
+                                  "__typename": "CommunityDeleteActionUnavailable",
+                                  "reason": "Unavailable"
+                                },
+                                "join_action_result": {
+                                  "__typename": "CommunityJoinActionUnavailable",
+                                  "reason": "ViewerIsMember",
+                                  "message": "You are already a member."
+                                },
+                                "leave_action_result": {
+                                  "__typename": "CommunityLeaveAction"
+                                },
+                                "pin_action_result": {
+                                  "__typename": "CommunityTweetPinActionUnavailable"
+                                }
+                              },
+                              "admin_results": {
+                                "result": {
+                                  "__typename": "User",
+                                  "id": "VXNlcjo2NDE2MzM=",
+                                  "rest_id": "641633",
+                                  "affiliates_highlighted_label": {},
+                                  "has_graduated_access": true,
+                                  "parody_commentary_fan_label": "None",
+                                  "is_blue_verified": true,
+                                  "profile_image_shape": "Circle",
+                                  "legacy": {
+                                    "following": false,
+                                    "can_dm": false,
+                                    "can_media_tag": false,
+                                    "created_at": "Mon Jan 15 23:55:33 +0000 2007",
+                                    "default_profile": false,
+                                    "default_profile_image": false,
+                                    "description": "\uD83D\uDEA7 https://t.co/aMZ4K3a24s \uD83C\uDFE0 https://t.co/1KH3Ex4dcT \uD83D\uDCF7 https://t.co/9oGFRe7ugH \uD83D\uDC34 https://t.co/80DsPhFw6c \uD83D\uDE80 https://t.co/sxmNUGTr0X \uD83D\uDCE3 https://t.co/oPODwYDwSS \uD83D\uDCBC https://t.co/leziY50W1F",
+                                    "entities": {
+                                      "description": {
+                                        "urls": [
+                                          {
+                                            "display_url": "wip.co",
+                                            "expanded_url": "http://wip.co",
+                                            "url": "https://t.co/aMZ4K3a24s",
+                                            "indices": [2, 25]
+                                          },
+                                          {
+                                            "display_url": "roomai.com",
+                                            "expanded_url": "http://roomai.com",
+                                            "url": "https://t.co/1KH3Ex4dcT",
+                                            "indices": [28, 51]
+                                          },
+                                          {
+                                            "display_url": "m-u-l-t-i-v-e-r-s-e.com",
+                                            "expanded_url": "http://m-u-l-t-i-v-e-r-s-e.com",
+                                            "url": "https://t.co/9oGFRe7ugH",
+                                            "indices": [54, 77]
+                                          },
+                                          {
+                                            "display_url": "handle.horse",
+                                            "expanded_url": "http://handle.horse",
+                                            "url": "https://t.co/80DsPhFw6c",
+                                            "indices": [80, 103]
+                                          },
+                                          {
+                                            "display_url": "betalist.com",
+                                            "expanded_url": "http://betalist.com",
+                                            "url": "https://t.co/sxmNUGTr0X",
+                                            "indices": [106, 129]
+                                          },
+                                          {
+                                            "display_url": "submit.co",
+                                            "expanded_url": "http://submit.co",
+                                            "url": "https://t.co/oPODwYDwSS",
+                                            "indices": [132, 155]
+                                          },
+                                          {
+                                            "display_url": "startup.jobs",
+                                            "expanded_url": "http://startup.jobs",
+                                            "url": "https://t.co/leziY50W1F",
+                                            "indices": [158, 181]
+                                          }
+                                        ]
+                                      },
+                                      "url": {
+                                        "urls": [
+                                          {
+                                            "display_url": "wip.co/@marc",
+                                            "expanded_url": "https://wip.co/@marc",
+                                            "url": "https://t.co/QVn818RKxY",
+                                            "indices": [0, 23]
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "fast_followers_count": 0,
+                                    "favourites_count": 31621,
+                                    "followers_count": 65456,
+                                    "friends_count": 588,
+                                    "has_custom_timelines": true,
+                                    "is_translator": false,
+                                    "listed_count": 1084,
+                                    "location": "",
+                                    "media_count": 4282,
+                                    "name": "Marc Köhlbrugge",
+                                    "normal_followers_count": 65456,
+                                    "pinned_tweet_ids_str": [
+                                      "1841811237761659211"
+                                    ],
+                                    "possibly_sensitive": false,
+                                    "profile_banner_url": "https://pbs.twimg.com/profile_banners/641633/1699032526",
+                                    "profile_image_url_https": "https://pbs.twimg.com/profile_images/1857124042433572864/iMivVaYP_normal.jpg",
+                                    "profile_interstitial_type": "",
+                                    "screen_name": "marckohlbrugge",
+                                    "statuses_count": 45818,
+                                    "translator_type": "none",
+                                    "url": "https://t.co/QVn818RKxY",
+                                    "verified": false,
+                                    "want_retweets": false,
+                                    "withheld_in_countries": []
+                                  },
+                                  "professional": {
+                                    "rest_id": "1458256691506683904",
+                                    "professional_type": "Creator",
+                                    "category": []
+                                  },
+                                  "tipjar_settings": {
+                                    "is_enabled": true,
+                                    "bitcoin_handle": "3EMubU2C3GVwAJwxhf4tmci1tJyLZKV7Za",
+                                    "ethereum_handle": "0xcb44375bA55a072A8A43452F9F6F1e24AEbf4666"
+                                  },
+                                  "super_follow_eligible": true
+                                }
+                              },
+                              "creator_results": {
+                                "result": {
+                                  "__typename": "User",
+                                  "id": "VXNlcjo2NDE2MzM=",
+                                  "rest_id": "641633",
+                                  "affiliates_highlighted_label": {},
+                                  "has_graduated_access": true,
+                                  "parody_commentary_fan_label": "None",
+                                  "is_blue_verified": true,
+                                  "profile_image_shape": "Circle",
+                                  "legacy": {
+                                    "following": false,
+                                    "can_dm": false,
+                                    "can_media_tag": false,
+                                    "created_at": "Mon Jan 15 23:55:33 +0000 2007",
+                                    "default_profile": false,
+                                    "default_profile_image": false,
+                                    "description": "\uD83D\uDEA7 https://t.co/aMZ4K3a24s \uD83C\uDFE0 https://t.co/1KH3Ex4dcT \uD83D\uDCF7 https://t.co/9oGFRe7ugH \uD83D\uDC34 https://t.co/80DsPhFw6c \uD83D\uDE80 https://t.co/sxmNUGTr0X \uD83D\uDCE3 https://t.co/oPODwYDwSS \uD83D\uDCBC https://t.co/leziY50W1F",
+                                    "entities": {
+                                      "description": {
+                                        "urls": [
+                                          {
+                                            "display_url": "wip.co",
+                                            "expanded_url": "http://wip.co",
+                                            "url": "https://t.co/aMZ4K3a24s",
+                                            "indices": [2, 25]
+                                          },
+                                          {
+                                            "display_url": "roomai.com",
+                                            "expanded_url": "http://roomai.com",
+                                            "url": "https://t.co/1KH3Ex4dcT",
+                                            "indices": [28, 51]
+                                          },
+                                          {
+                                            "display_url": "m-u-l-t-i-v-e-r-s-e.com",
+                                            "expanded_url": "http://m-u-l-t-i-v-e-r-s-e.com",
+                                            "url": "https://t.co/9oGFRe7ugH",
+                                            "indices": [54, 77]
+                                          },
+                                          {
+                                            "display_url": "handle.horse",
+                                            "expanded_url": "http://handle.horse",
+                                            "url": "https://t.co/80DsPhFw6c",
+                                            "indices": [80, 103]
+                                          },
+                                          {
+                                            "display_url": "betalist.com",
+                                            "expanded_url": "http://betalist.com",
+                                            "url": "https://t.co/sxmNUGTr0X",
+                                            "indices": [106, 129]
+                                          },
+                                          {
+                                            "display_url": "submit.co",
+                                            "expanded_url": "http://submit.co",
+                                            "url": "https://t.co/oPODwYDwSS",
+                                            "indices": [132, 155]
+                                          },
+                                          {
+                                            "display_url": "startup.jobs",
+                                            "expanded_url": "http://startup.jobs",
+                                            "url": "https://t.co/leziY50W1F",
+                                            "indices": [158, 181]
+                                          }
+                                        ]
+                                      },
+                                      "url": {
+                                        "urls": [
+                                          {
+                                            "display_url": "wip.co/@marc",
+                                            "expanded_url": "https://wip.co/@marc",
+                                            "url": "https://t.co/QVn818RKxY",
+                                            "indices": [0, 23]
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "fast_followers_count": 0,
+                                    "favourites_count": 31621,
+                                    "followers_count": 65456,
+                                    "friends_count": 588,
+                                    "has_custom_timelines": true,
+                                    "is_translator": false,
+                                    "listed_count": 1084,
+                                    "location": "",
+                                    "media_count": 4282,
+                                    "name": "Marc Köhlbrugge",
+                                    "normal_followers_count": 65456,
+                                    "pinned_tweet_ids_str": [
+                                      "1841811237761659211"
+                                    ],
+                                    "possibly_sensitive": false,
+                                    "profile_banner_url": "https://pbs.twimg.com/profile_banners/641633/1699032526",
+                                    "profile_image_url_https": "https://pbs.twimg.com/profile_images/1857124042433572864/iMivVaYP_normal.jpg",
+                                    "profile_interstitial_type": "",
+                                    "screen_name": "marckohlbrugge",
+                                    "statuses_count": 45818,
+                                    "translator_type": "none",
+                                    "url": "https://t.co/QVn818RKxY",
+                                    "verified": false,
+                                    "want_retweets": false,
+                                    "withheld_in_countries": []
+                                  },
+                                  "professional": {
+                                    "rest_id": "1458256691506683904",
+                                    "professional_type": "Creator",
+                                    "category": []
+                                  },
+                                  "tipjar_settings": {
+                                    "is_enabled": true,
+                                    "bitcoin_handle": "3EMubU2C3GVwAJwxhf4tmci1tJyLZKV7Za",
+                                    "ethereum_handle": "0xcb44375bA55a072A8A43452F9F6F1e24AEbf4666"
+                                  },
+                                  "super_follow_eligible": true
+                                }
+                              },
+                              "invites_result": {
+                                "__typename": "CommunityInvites",
+                                "remaining_invite_count": 10,
+                                "users_to_invite_slice": {
+                                  "items": [],
+                                  "slice_info": {}
+                                }
+                              },
+                              "join_policy": "Open",
+                              "invites_policy": "MemberInvitesAllowed",
+                              "is_pinned": true,
+                              "members_facepile_results": [
+                                {
+                                  "result": {
+                                    "__typename": "User",
+                                    "id": "VXNlcjo2NDE2MzM=",
+                                    "rest_id": "641633",
+                                    "affiliates_highlighted_label": {},
+                                    "has_graduated_access": true,
+                                    "parody_commentary_fan_label": "None",
+                                    "is_blue_verified": true,
+                                    "profile_image_shape": "Circle",
+                                    "legacy": {
+                                      "following": false,
+                                      "can_dm": false,
+                                      "can_media_tag": false,
+                                      "created_at": "Mon Jan 15 23:55:33 +0000 2007",
+                                      "default_profile": false,
+                                      "default_profile_image": false,
+                                      "description": "\uD83D\uDEA7 https://t.co/aMZ4K3a24s \uD83C\uDFE0 https://t.co/1KH3Ex4dcT \uD83D\uDCF7 https://t.co/9oGFRe7ugH \uD83D\uDC34 https://t.co/80DsPhFw6c \uD83D\uDE80 https://t.co/sxmNUGTr0X \uD83D\uDCE3 https://t.co/oPODwYDwSS \uD83D\uDCBC https://t.co/leziY50W1F",
+                                      "entities": {
+                                        "description": {
+                                          "urls": [
+                                            {
+                                              "display_url": "wip.co",
+                                              "expanded_url": "http://wip.co",
+                                              "url": "https://t.co/aMZ4K3a24s",
+                                              "indices": [2, 25]
+                                            },
+                                            {
+                                              "display_url": "roomai.com",
+                                              "expanded_url": "http://roomai.com",
+                                              "url": "https://t.co/1KH3Ex4dcT",
+                                              "indices": [28, 51]
+                                            },
+                                            {
+                                              "display_url": "m-u-l-t-i-v-e-r-s-e.com",
+                                              "expanded_url": "http://m-u-l-t-i-v-e-r-s-e.com",
+                                              "url": "https://t.co/9oGFRe7ugH",
+                                              "indices": [54, 77]
+                                            },
+                                            {
+                                              "display_url": "handle.horse",
+                                              "expanded_url": "http://handle.horse",
+                                              "url": "https://t.co/80DsPhFw6c",
+                                              "indices": [80, 103]
+                                            },
+                                            {
+                                              "display_url": "betalist.com",
+                                              "expanded_url": "http://betalist.com",
+                                              "url": "https://t.co/sxmNUGTr0X",
+                                              "indices": [106, 129]
+                                            },
+                                            {
+                                              "display_url": "submit.co",
+                                              "expanded_url": "http://submit.co",
+                                              "url": "https://t.co/oPODwYDwSS",
+                                              "indices": [132, 155]
+                                            },
+                                            {
+                                              "display_url": "startup.jobs",
+                                              "expanded_url": "http://startup.jobs",
+                                              "url": "https://t.co/leziY50W1F",
+                                              "indices": [158, 181]
+                                            }
+                                          ]
+                                        },
+                                        "url": {
+                                          "urls": [
+                                            {
+                                              "display_url": "wip.co/@marc",
+                                              "expanded_url": "https://wip.co/@marc",
+                                              "url": "https://t.co/QVn818RKxY",
+                                              "indices": [0, 23]
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "fast_followers_count": 0,
+                                      "favourites_count": 31621,
+                                      "followers_count": 65456,
+                                      "friends_count": 588,
+                                      "has_custom_timelines": true,
+                                      "is_translator": false,
+                                      "listed_count": 1084,
+                                      "location": "",
+                                      "media_count": 4282,
+                                      "name": "Marc Köhlbrugge",
+                                      "normal_followers_count": 65456,
+                                      "pinned_tweet_ids_str": [
+                                        "1841811237761659211"
+                                      ],
+                                      "possibly_sensitive": false,
+                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/641633/1699032526",
+                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1857124042433572864/iMivVaYP_normal.jpg",
+                                      "profile_interstitial_type": "",
+                                      "screen_name": "marckohlbrugge",
+                                      "statuses_count": 45818,
+                                      "translator_type": "none",
+                                      "url": "https://t.co/QVn818RKxY",
+                                      "verified": false,
+                                      "want_retweets": false,
+                                      "withheld_in_countries": []
+                                    },
+                                    "professional": {
+                                      "rest_id": "1458256691506683904",
+                                      "professional_type": "Creator",
+                                      "category": []
+                                    },
+                                    "tipjar_settings": {
+                                      "is_enabled": true,
+                                      "bitcoin_handle": "3EMubU2C3GVwAJwxhf4tmci1tJyLZKV7Za",
+                                      "ethereum_handle": "0xcb44375bA55a072A8A43452F9F6F1e24AEbf4666"
+                                    },
+                                    "super_follow_eligible": true
+                                  }
+                                },
+                                {
+                                  "result": {
+                                    "__typename": "User",
+                                    "id": "VXNlcjoxNTQzMzIwMg==",
+                                    "rest_id": "15433202",
+                                    "affiliates_highlighted_label": {},
+                                    "has_graduated_access": true,
+                                    "parody_commentary_fan_label": "None",
+                                    "is_blue_verified": false,
+                                    "profile_image_shape": "Circle",
+                                    "legacy": {
+                                      "following": false,
+                                      "can_dm": false,
+                                      "can_media_tag": true,
+                                      "created_at": "Mon Jul 14 22:21:30 +0000 2008",
+                                      "default_profile": false,
+                                      "default_profile_image": false,
+                                      "description": "Genre Expert & Marketing Strategist | Trends & cultural analyst| Pop Culture, Asia, & Tech Expert | @betalist @imaginefff @kaboom_festival | Queen of Horror",
+                                      "entities": {
+                                        "description": {
+                                          "urls": []
+                                        },
+                                        "url": {
+                                          "urls": [
+                                            {
+                                              "display_url": "rabiasitabi.com/online",
+                                              "expanded_url": "https://rabiasitabi.com/online",
+                                              "url": "https://t.co/M2mxMmhKYl",
+                                              "indices": [0, 23]
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "fast_followers_count": 0,
+                                      "favourites_count": 53298,
+                                      "followers_count": 2690,
+                                      "friends_count": 1103,
+                                      "has_custom_timelines": true,
+                                      "is_translator": false,
+                                      "listed_count": 148,
+                                      "location": "Earth",
+                                      "media_count": 2161,
+                                      "name": "Rabia l the Cultured Curator",
+                                      "normal_followers_count": 2690,
+                                      "pinned_tweet_ids_str": [],
+                                      "possibly_sensitive": false,
+                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/15433202/1650993384",
+                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1398441060473487362/n4rRxlfo_normal.jpg",
+                                      "profile_interstitial_type": "",
+                                      "screen_name": "RPISH",
+                                      "statuses_count": 28946,
+                                      "translator_type": "regular",
+                                      "url": "https://t.co/M2mxMmhKYl",
+                                      "verified": false,
+                                      "want_retweets": false,
+                                      "withheld_in_countries": []
+                                    },
+                                    "professional": {
+                                      "rest_id": "1470929147954446338",
+                                      "professional_type": "Creator",
+                                      "category": [
+                                        {
+                                          "id": 958,
+                                          "name": "Entrepreneur",
+                                          "icon_name": "IconBriefcaseStroke"
+                                        }
+                                      ]
+                                    },
+                                    "tipjar_settings": {
+                                      "is_enabled": true
+                                    }
+                                  }
+                                },
+                                {
+                                  "result": {
+                                    "__typename": "User",
+                                    "id": "VXNlcjoxMTIxMjY5Mg==",
+                                    "rest_id": "11212692",
+                                    "affiliates_highlighted_label": {},
+                                    "has_graduated_access": true,
+                                    "parody_commentary_fan_label": "None",
+                                    "is_blue_verified": false,
+                                    "profile_image_shape": "Circle",
+                                    "legacy": {
+                                      "following": false,
+                                      "can_dm": false,
+                                      "can_media_tag": true,
+                                      "created_at": "Sun Dec 16 03:35:32 +0000 2007",
+                                      "default_profile": false,
+                                      "default_profile_image": false,
+                                      "description": "\uD83D\uDEA7 We're community of makers helping each other stay accountable. Tweets by @marckohlbrugge ✨",
+                                      "entities": {
+                                        "description": {
+                                          "urls": []
+                                        },
+                                        "url": {
+                                          "urls": [
+                                            {
+                                              "display_url": "wip.co",
+                                              "expanded_url": "https://wip.co",
+                                              "url": "https://t.co/suhCo2WUbO",
+                                              "indices": [0, 23]
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "fast_followers_count": 0,
+                                      "favourites_count": 354,
+                                      "followers_count": 4390,
+                                      "friends_count": 1,
+                                      "has_custom_timelines": true,
+                                      "is_translator": false,
+                                      "listed_count": 69,
+                                      "location": "",
+                                      "media_count": 72,
+                                      "name": "\uD83D\uDEA7 WIP",
+                                      "normal_followers_count": 4390,
+                                      "pinned_tweet_ids_str": [
+                                        "1656687920944939009"
+                                      ],
+                                      "possibly_sensitive": false,
+                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/11212692/1589486067",
+                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1142795908221952001/QdBqHhdn_normal.jpg",
+                                      "profile_interstitial_type": "",
+                                      "screen_name": "wip",
+                                      "statuses_count": 519,
+                                      "translator_type": "none",
+                                      "url": "https://t.co/suhCo2WUbO",
+                                      "verified": false,
+                                      "want_retweets": false,
+                                      "withheld_in_countries": []
+                                    },
+                                    "professional": {
+                                      "rest_id": "1458598231273885700",
+                                      "professional_type": "Business",
+                                      "category": [
+                                        {
+                                          "id": 1009,
+                                          "name": "Community",
+                                          "icon_name": "IconBriefcaseStroke"
+                                        }
+                                      ]
+                                    },
+                                    "tipjar_settings": {}
+                                  }
+                                },
+                                {
+                                  "result": {
+                                    "__typename": "User",
+                                    "id": "VXNlcjoyNzI5NzA1MDQw",
+                                    "rest_id": "2729705040",
+                                    "affiliates_highlighted_label": {},
+                                    "has_graduated_access": true,
+                                    "parody_commentary_fan_label": "None",
+                                    "is_blue_verified": true,
+                                    "profile_image_shape": "Circle",
+                                    "legacy": {
+                                      "following": false,
+                                      "can_dm": false,
+                                      "can_media_tag": true,
+                                      "created_at": "Wed Aug 13 15:45:57 +0000 2014",
+                                      "default_profile": false,
+                                      "default_profile_image": false,
+                                      "description": "Use hashtag #buildinpublic to share what you're working on and discover other makers. We'll retweet your most interesting tweets \uD83D\uDE4C – Made by @marckohlbrugge",
+                                      "entities": {
+                                        "description": {
+                                          "urls": []
+                                        },
+                                        "url": {
+                                          "urls": [
+                                            {
+                                              "display_url": "buildinpublic.com",
+                                              "expanded_url": "https://buildinpublic.com",
+                                              "url": "https://t.co/yFEvPzT7HE",
+                                              "indices": [0, 23]
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "fast_followers_count": 0,
+                                      "favourites_count": 422,
+                                      "followers_count": 36537,
+                                      "friends_count": 1,
+                                      "has_custom_timelines": true,
+                                      "is_translator": false,
+                                      "listed_count": 131,
+                                      "location": "",
+                                      "media_count": 68,
+                                      "name": "#buildinpublic",
+                                      "normal_followers_count": 36537,
+                                      "pinned_tweet_ids_str": [
+                                        "1808257098284691683"
+                                      ],
+                                      "possibly_sensitive": false,
+                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/2729705040/1626456446",
+                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1416201794200477700/Kasb_zJv_normal.jpg",
+                                      "profile_interstitial_type": "",
+                                      "screen_name": "buildinpublic",
+                                      "statuses_count": 3841,
+                                      "translator_type": "none",
+                                      "url": "https://t.co/yFEvPzT7HE",
+                                      "verified": false,
+                                      "want_retweets": false,
+                                      "withheld_in_countries": []
+                                    },
+                                    "professional": {
+                                      "rest_id": "1680704238253404168",
+                                      "professional_type": "Business",
+                                      "category": [
+                                        {
+                                          "id": 1009,
+                                          "name": "Community",
+                                          "icon_name": "IconBriefcaseStroke"
+                                        }
+                                      ]
+                                    },
+                                    "tipjar_settings": {
+                                      "is_enabled": true
+                                    }
+                                  }
+                                },
+                                {
+                                  "result": {
+                                    "__typename": "User",
+                                    "id": "VXNlcjoyMDY3NzMzOTY=",
+                                    "rest_id": "206773396",
+                                    "affiliates_highlighted_label": {},
+                                    "has_graduated_access": true,
+                                    "parody_commentary_fan_label": "None",
+                                    "is_blue_verified": false,
+                                    "profile_image_shape": "Circle",
+                                    "legacy": {
+                                      "following": false,
+                                      "can_dm": false,
+                                      "can_media_tag": true,
+                                      "created_at": "Sat Oct 23 17:49:21 +0000 2010",
+                                      "default_profile": false,
+                                      "default_profile_image": false,
+                                      "description": "\uD83C\uDFD5️ Digital Nomad ✨ Founder of @EuphoryaHQ \uD83D\uDC8D Wife of @ByNoorAsyikin",
+                                      "entities": {
+                                        "description": {
+                                          "urls": []
+                                        },
+                                        "url": {
+                                          "urls": [
+                                            {
+                                              "display_url": "fajarsiddiq.com",
+                                              "expanded_url": "https://fajarsiddiq.com",
+                                              "url": "https://t.co/DRXHU7Wtbx",
+                                              "indices": [0, 23]
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "fast_followers_count": 0,
+                                      "favourites_count": 62752,
+                                      "followers_count": 16602,
+                                      "friends_count": 1527,
+                                      "has_custom_timelines": true,
+                                      "is_translator": false,
+                                      "listed_count": 200,
+                                      "location": "\uD83C\uDF0F Remotely",
+                                      "media_count": 5714,
+                                      "name": "Fajar Siddiq",
+                                      "normal_followers_count": 16602,
+                                      "pinned_tweet_ids_str": [
+                                        "1880926387252683038"
+                                      ],
+                                      "possibly_sensitive": false,
+                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/206773396/1737017177",
+                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1873286532947427330/y1Y8f660_normal.jpg",
+                                      "profile_interstitial_type": "",
+                                      "screen_name": "fajarsiddiqFS",
+                                      "statuses_count": 51774,
+                                      "translator_type": "none",
+                                      "url": "https://t.co/DRXHU7Wtbx",
+                                      "verified": false,
+                                      "want_retweets": false,
+                                      "withheld_in_countries": []
+                                    },
+                                    "professional": {
+                                      "rest_id": "1461260221922172935",
+                                      "professional_type": "Creator",
+                                      "category": [
+                                        {
+                                          "id": 958,
+                                          "name": "Entrepreneur",
+                                          "icon_name": "IconBriefcaseStroke"
+                                        }
+                                      ]
+                                    },
+                                    "tipjar_settings": {
+                                      "is_enabled": true,
+                                      "bitcoin_handle": "bc1qx2hgr9n3a86yjkq8ax8mn4htepp3ya85uj2av5",
+                                      "patreon_handle": ""
+                                    }
+                                  }
+                                }
+                              ],
+                              "moderator_count": 7,
+                              "member_count": 79291,
+                              "role": "Member",
+                              "rules": [
+                                {
+                                  "rest_id": "1493447542045958144",
+                                  "name": "Share what you're working on",
+                                  "description": "Don't be scared to share unfinished work"
+                                },
+                                {
+                                  "rest_id": "1493448150169755648",
+                                  "name": "Screenshots, screencasts, drafts, etc",
+                                  "description": "Visual tweets tend to grab people's attention"
+                                },
+                                {
+                                  "rest_id": "1836095088465781029",
+                                  "name": "No self-promotion",
+                                  "description": "Don't ask for upvotes or advertise your products/services."
+                                },
+                                {
+                                  "rest_id": "1836095194716066104",
+                                  "name": "Stay on-topic",
+                                  "description": "Only post about building in public. No politics or other off-topic posts. There are other communities for that."
+                                },
+                                {
+                                  "rest_id": "1836095002557944207",
+                                  "name": "No engagement farming",
+                                  "description": "If your goal is to get replies, likes, etc, don’t post it here. Don’t ask super generic questions like “what’s everyone working on?”"
+                                },
+                                {
+                                  "rest_id": "1836094745590059481",
+                                  "name": "Use a personal account",
+                                  "description": "No company accounts. No logos. Use your own name. No promotion or URLs in your name."
+                                }
+                              ],
+                              "custom_banner_media": {
+                                "media_info": {
+                                  "color_info": {
+                                    "palette": [
+                                      {
+                                        "rgb": {
+                                          "red": 248,
+                                          "green": 229,
+                                          "blue": 29
+                                        },
+                                        "percentage": 42.75
+                                      },
+                                      {
+                                        "rgb": {
+                                          "red": 0,
+                                          "green": 0,
+                                          "blue": 1
+                                        },
+                                        "percentage": 42.45
+                                      },
+                                      {
+                                        "rgb": {
+                                          "red": 142,
+                                          "green": 130,
+                                          "blue": 17
+                                        },
+                                        "percentage": 8.38
+                                      },
+                                      {
+                                        "rgb": {
+                                          "red": 65,
+                                          "green": 60,
+                                          "blue": 8
+                                        },
+                                        "percentage": 6.42
+                                      }
+                                    ]
+                                  },
+                                  "original_img_url": "https://pbs.twimg.com/community_banner_img/1493450357598343170/Bn1T2fUi?format=jpg&name=orig",
+                                  "original_img_width": 805,
+                                  "original_img_height": 322,
+                                  "salient_rect": {
+                                    "left": 403,
+                                    "top": 161,
+                                    "width": 1,
+                                    "height": 1
+                                  }
+                                }
+                              },
+                              "default_banner_media": {
+                                "media_info": {
+                                  "color_info": {
+                                    "palette": [
+                                      {
+                                        "rgb": {
+                                          "red": 255,
+                                          "green": 141,
+                                          "blue": 1
+                                        },
+                                        "percentage": 41.45
+                                      },
+                                      {
+                                        "rgb": {
+                                          "red": 255,
+                                          "green": 181,
+                                          "blue": 2
+                                        },
+                                        "percentage": 29.76
+                                      },
+                                      {
+                                        "rgb": {
+                                          "red": 145,
+                                          "green": 224,
+                                          "blue": 254
+                                        },
+                                        "percentage": 13.19
+                                      },
+                                      {
+                                        "rgb": {
+                                          "red": 255,
+                                          "green": 115,
+                                          "blue": 0
+                                        },
+                                        "percentage": 7.58
+                                      },
+                                      {
+                                        "rgb": {
+                                          "red": 177,
+                                          "green": 214,
+                                          "blue": 196
+                                        },
+                                        "percentage": 2.9
+                                      }
+                                    ]
+                                  },
+                                  "original_img_url": "https://pbs.twimg.com/media/FECP77VVgAURxGe.jpg",
+                                  "original_img_width": 1200,
+                                  "original_img_height": 480
+                                }
+                              },
+                              "viewer_relationship": {
+                                "moderation_state": {
+                                  "__typename": "CommunityUserDefaultModerationState"
+                                }
+                              },
+                              "join_requests_result": {
+                                "__typename": "CommunityJoinRequestsUnavailable"
+                              }
+                            }
+                          },
+                          "role": "Member",
+                          "user_results": {
+                            "result": {
+                              "__typename": "User",
+                              "id": "VXNlcjo5MTYwMjQzMzMzNzc2MDE1Mzk=",
+                              "rest_id": "916024333377601539",
+                              "affiliates_highlighted_label": {},
+                              "has_graduated_access": true,
+                              "parody_commentary_fan_label": "None",
+                              "is_blue_verified": true,
+                              "profile_image_shape": "Circle",
+                              "legacy": {
+                                "following": false,
+                                "can_dm": false,
+                                "can_media_tag": true,
+                                "created_at": "Thu Oct 05 19:36:34 +0000 2017",
+                                "default_profile": true,
+                                "default_profile_image": false,
+                                "description": "YC Dev \uD83D\uDE80 | Building In Public\uD83D\uDCA1\n\nEffortless text capture → https://t.co/xmrSuxAHJg ✨\nGive your website a badge → https://t.co/Aa6arAMga9 \uD83E\uDD47",
+                                "entities": {
+                                  "description": {
+                                    "urls": [
+                                      {
+                                        "display_url": "textcapture.app",
+                                        "expanded_url": "https://textcapture.app",
+                                        "url": "https://t.co/xmrSuxAHJg",
+                                        "indices": [58, 81]
+                                      },
+                                      {
+                                        "display_url": "badgemy.app",
+                                        "expanded_url": "https://badgemy.app",
+                                        "url": "https://t.co/Aa6arAMga9",
+                                        "indices": [112, 135]
+                                      }
+                                    ]
+                                  },
+                                  "url": {
+                                    "urls": [
+                                      {
+                                        "display_url": "indiepa.ge/auden",
+                                        "expanded_url": "https://indiepa.ge/auden",
+                                        "url": "https://t.co/jWL1jCl1E7",
+                                        "indices": [0, 23]
+                                      }
+                                    ]
+                                  }
+                                },
+                                "fast_followers_count": 0,
+                                "favourites_count": 1120,
+                                "followers_count": 215,
+                                "friends_count": 277,
+                                "has_custom_timelines": false,
+                                "is_translator": false,
+                                "listed_count": 6,
+                                "location": "Say hi! :)",
+                                "media_count": 87,
+                                "name": "Auden Pierce",
+                                "normal_followers_count": 215,
+                                "pinned_tweet_ids_str": ["1877686869770813504"],
+                                "possibly_sensitive": false,
+                                "profile_banner_url": "https://pbs.twimg.com/profile_banners/916024333377601539/1737810154",
+                                "profile_image_url_https": "https://pbs.twimg.com/profile_images/1883143259951599616/jA0dD0Ir_normal.jpg",
+                                "profile_interstitial_type": "",
+                                "screen_name": "auden_pierce",
+                                "statuses_count": 400,
+                                "translator_type": "none",
+                                "url": "https://t.co/jWL1jCl1E7",
+                                "verified": false,
+                                "want_retweets": false,
+                                "withheld_in_countries": []
+                              },
+                              "professional": {
+                                "rest_id": "1824574612656517250",
+                                "professional_type": "Creator",
+                                "category": [
+                                  {
+                                    "id": 1059,
+                                    "name": "Engineer",
+                                    "icon_name": "IconBriefcaseStroke"
+                                  }
+                                ]
+                              },
+                              "tipjar_settings": {}
+                            }
+                          }
+                        },
+                        "legacy": {
+                          "bookmark_count": 0,
+                          "bookmarked": false,
+                          "created_at": "Sun Jan 26 09:24:21 +0000 2025",
+                          "conversation_id_str": "1883445865710240006",
+                          "display_text_range": [0, 271],
+                          "entities": {
+                            "hashtags": [],
+                            "symbols": [],
+                            "timestamps": [],
+                            "urls": [
+                              {
+                                "display_url": "textcapture.app",
+                                "expanded_url": "http://textcapture.app",
+                                "url": "https://t.co/4TdugLoj4i",
+                                "indices": [0, 23]
+                              }
+                            ],
+                            "user_mentions": []
+                          },
+                          "favorite_count": 0,
+                          "favorited": false,
+                          "full_text": "https://t.co/4TdugLoj4i v2 is live!\n\nSpecial v2 launch deal: $0.99 for util 300 users (82 spots left). Would really appreciate you leaving a review on the App Store!\n\nWhat's new? Introducing AI Text Extraction:\n- Handle text indentations and spacing ✨\n- Detect emojis \uD83E\uDD29\n-",
+                          "is_quote_status": false,
+                          "lang": "en",
+                          "possibly_sensitive": false,
+                          "possibly_sensitive_editable": true,
+                          "quote_count": 0,
+                          "reply_count": 0,
+                          "retweet_count": 0,
+                          "retweeted": false,
+                          "user_id_str": "916024333377601539",
+                          "id_str": "1883445865710240006"
+                        },
+                        "quick_promote_eligibility": {
+                          "eligibility": "IneligibleNotProfessional"
+                        }
+                      },
+                      "limitedActionResults": {
+                        "limited_actions": [
+                          {
+                            "action": "PinToProfile",
+                            "prompt": {
+                              "__typename": "BasicLimitedActionPrompt",
+                              "headline": {
+                                "text": "You cannot pin",
+                                "entities": []
+                              },
+                              "subtext": {
+                                "text": "You cannot pin this post to your profile",
+                                "entities": []
+                              }
+                            }
+                          },
+                          {
+                            "action": "Embed",
+                            "prompt": {
+                              "__typename": "BasicLimitedActionPrompt",
+                              "headline": {
+                                "text": "You cannot embed",
+                                "entities": []
+                              },
+                              "subtext": {
+                                "text": "You cannot embed this post",
+                                "entities": []
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "tweetDisplayType": "Tweet",
+                  "hasModeratedReplies": false
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "TimelineTerminateTimeline",
+          "direction": "Top"
+        }
+      ]
+    }
+  }
+}

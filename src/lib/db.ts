@@ -1,5 +1,5 @@
 import { DBSchema, IDBPDatabase, openDB } from 'idb'
-import { omitBy, pickBy } from 'lodash-es'
+import { pickBy } from 'lodash-es'
 
 export const dbStore: DBStore = {} as any
 
@@ -11,8 +11,22 @@ export interface User {
   name: string
   description?: string
   profile_image_url?: string
+  created_at?: string
+  updated_at: string // add to idb time
+}
+
+export type TweetMediaType = 'photo' | 'video' | 'animated_gif'
+
+export interface Tweet {
+  id: string
+  text: string
+  media?: {
+    url: string
+    type: TweetMediaType
+  }[]
+  user_id: string
   created_at: string
-  updated_at: string
+  updated_at: string // add to idb time
 }
 
 export interface MyDB extends DBSchema {
@@ -24,6 +38,13 @@ export interface MyDB extends DBSchema {
       updated_at_index: string
     }
   }
+  tweets: {
+    key: string
+    value: Tweet
+    indexes: {
+      user_id_index: string
+    }
+  }
 }
 
 export type DBStore = {
@@ -31,15 +52,17 @@ export type DBStore = {
 }
 
 export async function initDB() {
-  dbStore.idb = await openDB<MyDB>('mass-db', 10, {
+  dbStore.idb = await openDB<MyDB>('mass-db', 11, {
     async upgrade(db, oldVersion, newVersion, transaction) {
-      if (!db.objectStoreNames.contains('users')) {
+      if (db.objectStoreNames.length === 0) {
         // init users store
         const userStore = db.createObjectStore('users')
         userStore.createIndex('updated_at_index', 'updated_at')
         userStore.createIndex('screen_name_index', 'screen_name', {
           unique: true,
         })
+        const tweetsStore = db.createObjectStore('tweets')
+        tweetsStore.createIndex('user_id_index', 'user_id')
       } else {
         const usersStore = transaction.objectStore('users')
         if (oldVersion < 6) {
@@ -72,6 +95,10 @@ export async function initDB() {
         if (oldVersion < 10) {
           usersStore.createIndex('updated_at_index', 'updated_at')
         }
+        if (oldVersion < 11) {
+          const tweetsStore = db.createObjectStore('tweets')
+          tweetsStore.createIndex('user_id_index', 'user_id')
+        }
       }
     },
   })
@@ -94,6 +121,9 @@ export class UserDAO {
       }
     }
     return users
+  }
+  async get(id: string): Promise<User | undefined> {
+    return dbStore.idb.get('users', id)
   }
   // 获取所有 blocking 用户
   async isBlocking(id: string): Promise<boolean> {
@@ -139,6 +169,19 @@ export class UserDAO {
   }
 }
 
+class TweetDAO {
+  async record(tweets: Tweet[]): Promise<void> {
+    await Promise.all(
+      tweets.map(async (it) => {
+        await dbStore.idb.put('tweets', it, it.id)
+      }),
+    )
+  }
+  async get(id: string): Promise<Tweet | undefined> {
+    return dbStore.idb.get('tweets', id)
+  }
+}
+
 function wrap<T extends object>(obj: T): T {
   return new Proxy<T>({} as any, {
     get(_, p) {
@@ -160,4 +203,7 @@ function wrap<T extends object>(obj: T): T {
 
 export const dbApi = {
   users: wrap(new UserDAO()),
+  tweets: wrap(new TweetDAO()),
 }
+
+Reflect.set(globalThis, 'dbApi', dbApi)

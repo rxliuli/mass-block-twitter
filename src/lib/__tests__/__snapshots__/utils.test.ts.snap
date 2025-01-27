@@ -1,5 +1,3395 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`parseTweets > parseTweets for detail 1`] = `
+[
+  {
+    "created_at": "2025-01-25T15:20:32.000Z",
+    "id": "1883173115230134610",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJf-AmaIAA5er1.jpg",
+      },
+    ],
+    "text": "这钱真能给到孩子，那多少钱我也认了。
+你睁眼看看，现在日本给孩子吃的都是什么鸡巴玩意儿。
+什么こども家庭庁年间预算7万亿日元，平摊到一个纳税人身上快10万日元就给孩子喂了屎。
+丢人不丢人呐？ https://t.co/3gobJQAbuD",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-03-26T14:18:40.000Z",
+      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。https://t.co/zwDurJQwha宫司🥳私信回复较慢（一般周三周六晚上回复）",
+      "following": false,
+      "id": "1507723638249713664",
+      "name": "月半",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1529606141545545728/ufDWA7bY_normal.jpg",
+      "screen_name": "yuebanzhu",
+    },
+  },
+  {
+    "created_at": "2025-01-24T21:03:20.000Z",
+    "id": "1882896992017465643",
+    "text": "@yuebanzhu 换句话说，只要黑在日本想方设法造个孩子，出于所谓人权考量就不能依法驱逐了，等于变相获得永居权，还要由你这样的纳税大户来间接抚养？这公平吗？",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-08-03T08:54:10.000Z",
+      "description": "🇨🇿🇵🇱🇪🇪🇬🇪🇬🇧🇺🇸🇱🇹🇫🇷🇦🇺🇰🇷🇱🇻🇫🇮🇸🇪🇦🇹🇳🇱🇧🇪🇸🇮🇦🇿🇨🇦🇮🇹🇯🇵🇩🇪🇬🇷🇩🇰🇧🇬🇳🇿🇹🇼🇦🇱🇪🇸🇵🇹🇲🇪🇲🇰🇮🇸🇹🇳🇰🇪🇱🇺🇭🇷",
+      "following": false,
+      "id": "1422480626389712898",
+      "name": "蒼の聖典(Lazy)🇺🇦🇮🇱🇳🇫",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1513409165783625731/ta_uh0ZY_normal.jpg",
+      "screen_name": "lazy_Hemis",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:52:55.000Z",
+    "id": "1883181263605174363",
+    "text": "@yuebanzhu 吃这些东西我真怀疑蛋白质摄入够么...生长发育期的能量消耗很大啊...",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-11-27T12:04:55.000Z",
+      "description": "大食い/旅行/生活/退勤bot",
+      "following": true,
+      "id": "1067388797426393088",
+      "name": "セセリア",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1841732589306155008/dblieZa4_normal.jpg",
+      "screen_name": "Ceceliasama23",
+    },
+  },
+  {
+    "created_at": "2024-12-19T02:46:29.000Z",
+    "id": "1869575000291987895",
+    "text": "培育蜘蛛子來殺時間吧
+
+等級提升太神啦",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-05-15T05:50:47.000Z",
+      "description": "Kumoko's coming back. 🕷🕸️
+A dungeon RPG based on the anime "So I'm a Spider, So What?"!
+Discord：https://t.co/xjaSarTarG
+#SpiderRotL #SoImASpider",
+      "following": false,
+      "id": "1790620708743360512",
+      "name": "So I'm a Spider, So What? Ruler of the Labyrinth",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1805421500641820672/ZUBAgnhP_normal.jpg",
+      "screen_name": "kumoko_laby_en",
+    },
+  },
+  {
+    "created_at": "2025-01-25T16:30:08.000Z",
+    "id": "1883190629930557596",
+    "text": "@yuebanzhu 饭菜还能添么？  如果可以自由打菜的话，感觉还行啊",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-02-24T09:59:45.000Z",
+      "description": "如有移民问题可以私信，只能力所能及回答。",
+      "following": false,
+      "id": "1629058457222656001",
+      "name": "澳洲护士卡子弟",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1648533563825082369/SW0QqoYh_normal.jpg",
+      "screen_name": "nursenika1840",
+    },
+  },
+  {
+    "created_at": "2025-01-25T16:36:57.000Z",
+    "id": "1883192344599724449",
+    "text": "@nursenika1840 添是不可能了",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-03-26T14:18:40.000Z",
+      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。https://t.co/zwDurJQwha宫司🥳私信回复较慢（一般周三周六晚上回复）",
+      "following": false,
+      "id": "1507723638249713664",
+      "name": "月半",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1529606141545545728/ufDWA7bY_normal.jpg",
+      "screen_name": "yuebanzhu",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:22:25.000Z",
+    "id": "1883173585298358422",
+    "text": "@yuebanzhu 这孩子长大不得营养不良😅",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-08-11T01:00:16.000Z",
+      "description": "🚪：nvda，tmc股票一股，专注生活，我爱你们所有人！倾倒生活垃圾🗑️ 会fo所有爱的人 我好失败，小号@zaoyudexiawu",
+      "following": false,
+      "id": "1557532219014807553",
+      "name": "藻魚📗⬜️🎌",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1559545871368593410/z245OHaJ_normal.jpg",
+      "screen_name": "zaoyuyou",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:31:25.000Z",
+    "id": "1883175851522773368",
+    "text": "@yuebanzhu 少子化是問題，各種抖機靈寄生空手套白狼吃現成的也絕對是問題",
+    "user": {
+      "blocking": false,
+      "created_at": "2020-07-13T06:17:05.000Z",
+      "description": "",
+      "following": false,
+      "id": "1282559611187290113",
+      "name": "Erik Tang エリック",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1593891933155643392/h4uU80iW_normal.jpg",
+      "screen_name": "ErikTang8",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:41:45.000Z",
+    "id": "1883178452297400439",
+    "text": "@yuebanzhu 比我幼儿园吃的还差。",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-05-07T16:27:09.000Z",
+      "description": "music producer&photographer
+PM me on instagram ✉️
+https://t.co/jYpgMIVDT2",
+      "following": false,
+      "id": "1522976249173450759",
+      "name": "喵了个咪的",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1637786167621070849/PM6I1hNO_normal.jpg",
+      "screen_name": "bocchi1chan",
+    },
+  },
+  {
+    "created_at": "2025-01-26T00:55:38.000Z",
+    "id": "1883317842550100478",
+    "text": "@yuebanzhu 这就是典型的做了婊子还在立牌坊！到现在为止，日本的义务教育的饭钱是收取孩子爹娘的钱！
+穷地方政府不想掏钱，又没办法多收取爹娘的钱，所以就这么忽悠下一代😁
+23区去年才4-50%的区不收饭钱了
+吃的啥，说实话，真不知道😁",
+    "user": {
+      "blocking": false,
+      "created_at": "2010-06-05T11:10:09.000Z",
+      "description": "いつの時代も、金は人を狂わせる",
+      "following": false,
+      "id": "152214500",
+      "name": "Steve",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1347751137470910465/G3b59b5N_normal.jpg",
+      "screen_name": "gwdkaku",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:23:25.000Z",
+    "id": "1883173839691305205",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJgoH6aAAEKva1.jpg",
+      },
+    ],
+    "text": "@yuebanzhu https://t.co/c4cqViZqUl",
+    "user": {
+      "blocking": false,
+      "created_at": "2016-04-24T02:16:53.000Z",
+      "description": "財經博主。https://t.co/jkd99Engoh 離岸業務付費諮詢。120美金起步。0xd523c439939DD7E1fea567f6Bb45eE36FCF061cA",
+      "following": false,
+      "id": "724059505529487360",
+      "name": "山口大國主(北九州老實創業中）",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1830200606302048258/1d3VEIQG_normal.jpg",
+      "screen_name": "okuninushi2016",
+    },
+  },
+  {
+    "created_at": "2025-01-25T23:38:54.000Z",
+    "id": "1883298530049310968",
+    "text": "@yuebanzhu 生育率还是太高了",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-10-03T00:02:16.000Z",
+      "description": "愛、勇気、ラッキー、感謝",
+      "following": false,
+      "id": "1444452659717570561",
+      "name": "信平(カブタック)",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1813229559808204803/o4v_7vuR_normal.jpg",
+      "screen_name": "zakku_27",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:27:37.000Z",
+    "id": "1883174897410888070",
+    "text": "@yuebanzhu 额……说实话不如几年前在微博看到的某个山区小学的午餐。。。那个不精致但是份量足够。。。",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-06-21T08:48:23.000Z",
+      "description": "",
+      "following": false,
+      "id": "1804073774335299591",
+      "name": "sask77229",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1804074665280966658/XwVvkOd8_normal.jpg",
+      "screen_name": "sask77229",
+    },
+  },
+]
+`;
+
+exports[`parseTweets > parseTweets for detail 1 1`] = `
+[
+  {
+    "created_at": "2025-01-25T15:20:32.000Z",
+    "id": "1883173115230134610",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJf-AmaIAA5er1.jpg",
+      },
+    ],
+    "text": "这钱真能给到孩子，那多少钱我也认了。
+你睁眼看看，现在日本给孩子吃的都是什么鸡巴玩意儿。
+什么こども家庭庁年间预算7万亿日元，平摊到一个纳税人身上快10万日元就给孩子喂了屎。
+丢人不丢人呐？ https://t.co/3gobJQAbuD",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-03-26T14:18:40.000Z",
+      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。https://t.co/zwDurJQwha宫司🥳私信回复较慢（一般周三周六晚上回复）",
+      "following": false,
+      "id": "1507723638249713664",
+      "name": "月半",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1529606141545545728/ufDWA7bY_normal.jpg",
+      "screen_name": "yuebanzhu",
+    },
+  },
+  {
+    "created_at": "2025-01-24T21:03:20.000Z",
+    "id": "1882896992017465643",
+    "text": "@yuebanzhu 换句话说，只要黑在日本想方设法造个孩子，出于所谓人权考量就不能依法驱逐了，等于变相获得永居权，还要由你这样的纳税大户来间接抚养？这公平吗？",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-08-03T08:54:10.000Z",
+      "description": "🇨🇿🇵🇱🇪🇪🇬🇪🇬🇧🇺🇸🇱🇹🇫🇷🇦🇺🇰🇷🇱🇻🇫🇮🇸🇪🇦🇹🇳🇱🇧🇪🇸🇮🇦🇿🇨🇦🇮🇹🇯🇵🇩🇪🇬🇷🇩🇰🇧🇬🇳🇿🇹🇼🇦🇱🇪🇸🇵🇹🇲🇪🇲🇰🇮🇸🇹🇳🇰🇪🇱🇺🇭🇷",
+      "following": false,
+      "id": "1422480626389712898",
+      "name": "蒼の聖典(Lazy)🇺🇦🇮🇱🇳🇫",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1513409165783625731/ta_uh0ZY_normal.jpg",
+      "screen_name": "lazy_Hemis",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:52:55.000Z",
+    "id": "1883181263605174363",
+    "text": "@yuebanzhu 吃这些东西我真怀疑蛋白质摄入够么...生长发育期的能量消耗很大啊...",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-11-27T12:04:55.000Z",
+      "description": "大食い/旅行/生活/退勤bot",
+      "following": true,
+      "id": "1067388797426393088",
+      "name": "セセリア",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1841732589306155008/dblieZa4_normal.jpg",
+      "screen_name": "Ceceliasama23",
+    },
+  },
+  {
+    "created_at": "2024-12-19T02:46:29.000Z",
+    "id": "1869575000291987895",
+    "text": "培育蜘蛛子來殺時間吧
+
+等級提升太神啦",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-05-15T05:50:47.000Z",
+      "description": "Kumoko's coming back. 🕷🕸️
+A dungeon RPG based on the anime "So I'm a Spider, So What?"!
+Discord：https://t.co/xjaSarTarG
+#SpiderRotL #SoImASpider",
+      "following": false,
+      "id": "1790620708743360512",
+      "name": "So I'm a Spider, So What? Ruler of the Labyrinth",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1805421500641820672/ZUBAgnhP_normal.jpg",
+      "screen_name": "kumoko_laby_en",
+    },
+  },
+  {
+    "created_at": "2025-01-25T16:30:08.000Z",
+    "id": "1883190629930557596",
+    "text": "@yuebanzhu 饭菜还能添么？  如果可以自由打菜的话，感觉还行啊",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-02-24T09:59:45.000Z",
+      "description": "如有移民问题可以私信，只能力所能及回答。",
+      "following": false,
+      "id": "1629058457222656001",
+      "name": "澳洲护士卡子弟",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1648533563825082369/SW0QqoYh_normal.jpg",
+      "screen_name": "nursenika1840",
+    },
+  },
+  {
+    "created_at": "2025-01-25T16:36:57.000Z",
+    "id": "1883192344599724449",
+    "text": "@nursenika1840 添是不可能了",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-03-26T14:18:40.000Z",
+      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。https://t.co/zwDurJQwha宫司🥳私信回复较慢（一般周三周六晚上回复）",
+      "following": false,
+      "id": "1507723638249713664",
+      "name": "月半",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1529606141545545728/ufDWA7bY_normal.jpg",
+      "screen_name": "yuebanzhu",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:22:25.000Z",
+    "id": "1883173585298358422",
+    "text": "@yuebanzhu 这孩子长大不得营养不良😅",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-08-11T01:00:16.000Z",
+      "description": "🚪：nvda，tmc股票一股，专注生活，我爱你们所有人！倾倒生活垃圾🗑️ 会fo所有爱的人 我好失败，小号@zaoyudexiawu",
+      "following": false,
+      "id": "1557532219014807553",
+      "name": "藻魚📗⬜️🎌",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1559545871368593410/z245OHaJ_normal.jpg",
+      "screen_name": "zaoyuyou",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:31:25.000Z",
+    "id": "1883175851522773368",
+    "text": "@yuebanzhu 少子化是問題，各種抖機靈寄生空手套白狼吃現成的也絕對是問題",
+    "user": {
+      "blocking": false,
+      "created_at": "2020-07-13T06:17:05.000Z",
+      "description": "",
+      "following": false,
+      "id": "1282559611187290113",
+      "name": "Erik Tang エリック",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1593891933155643392/h4uU80iW_normal.jpg",
+      "screen_name": "ErikTang8",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:41:45.000Z",
+    "id": "1883178452297400439",
+    "text": "@yuebanzhu 比我幼儿园吃的还差。",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-05-07T16:27:09.000Z",
+      "description": "music producer&photographer
+PM me on instagram ✉️
+https://t.co/jYpgMIVDT2",
+      "following": false,
+      "id": "1522976249173450759",
+      "name": "喵了个咪的",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1637786167621070849/PM6I1hNO_normal.jpg",
+      "screen_name": "bocchi1chan",
+    },
+  },
+  {
+    "created_at": "2025-01-26T00:55:38.000Z",
+    "id": "1883317842550100478",
+    "text": "@yuebanzhu 这就是典型的做了婊子还在立牌坊！到现在为止，日本的义务教育的饭钱是收取孩子爹娘的钱！
+穷地方政府不想掏钱，又没办法多收取爹娘的钱，所以就这么忽悠下一代😁
+23区去年才4-50%的区不收饭钱了
+吃的啥，说实话，真不知道😁",
+    "user": {
+      "blocking": false,
+      "created_at": "2010-06-05T11:10:09.000Z",
+      "description": "いつの時代も、金は人を狂わせる",
+      "following": false,
+      "id": "152214500",
+      "name": "Steve",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1347751137470910465/G3b59b5N_normal.jpg",
+      "screen_name": "gwdkaku",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:23:25.000Z",
+    "id": "1883173839691305205",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJgoH6aAAEKva1.jpg",
+      },
+    ],
+    "text": "@yuebanzhu https://t.co/c4cqViZqUl",
+    "user": {
+      "blocking": false,
+      "created_at": "2016-04-24T02:16:53.000Z",
+      "description": "財經博主。https://t.co/jkd99Engoh 離岸業務付費諮詢。120美金起步。0xd523c439939DD7E1fea567f6Bb45eE36FCF061cA",
+      "following": false,
+      "id": "724059505529487360",
+      "name": "山口大國主(北九州老實創業中）",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1830200606302048258/1d3VEIQG_normal.jpg",
+      "screen_name": "okuninushi2016",
+    },
+  },
+  {
+    "created_at": "2025-01-25T23:38:54.000Z",
+    "id": "1883298530049310968",
+    "text": "@yuebanzhu 生育率还是太高了",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-10-03T00:02:16.000Z",
+      "description": "愛、勇気、ラッキー、感謝",
+      "following": false,
+      "id": "1444452659717570561",
+      "name": "信平(カブタック)",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1813229559808204803/o4v_7vuR_normal.jpg",
+      "screen_name": "zakku_27",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:27:37.000Z",
+    "id": "1883174897410888070",
+    "text": "@yuebanzhu 额……说实话不如几年前在微博看到的某个山区小学的午餐。。。那个不精致但是份量足够。。。",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-06-21T08:48:23.000Z",
+      "description": "",
+      "following": false,
+      "id": "1804073774335299591",
+      "name": "sask77229",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1804074665280966658/XwVvkOd8_normal.jpg",
+      "screen_name": "sask77229",
+    },
+  },
+]
+`;
+
+exports[`parseTweets > parseTweets for detail 2 1`] = `
+[
+  {
+    "created_at": "2025-01-26T09:24:21.000Z",
+    "id": "1883445865710240006",
+    "text": "https://t.co/4TdugLoj4i v2 is live!
+
+Special v2 launch deal: $0.99 for util 300 users (82 spots left). Would really appreciate you leaving a review on the App Store!
+
+What's new? Introducing AI Text Extraction:
+- Handle text indentations and spacing ✨
+- Detect emojis 🤩
+-",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-10-05T19:36:34.000Z",
+      "description": "YC Dev 🚀 | Building In Public💡
+
+Effortless text capture → https://t.co/xmrSuxAHJg ✨
+Give your website a badge → https://t.co/Aa6arAMga9 🥇",
+      "following": false,
+      "id": "916024333377601539",
+      "name": "Auden Pierce",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883143259951599616/jA0dD0Ir_normal.jpg",
+      "screen_name": "auden_pierce",
+    },
+  },
+]
+`;
+
+exports[`parseTweets > parseTweets for detail 3 1`] = `
+[
+  {
+    "created_at": "2025-01-26T18:51:59.000Z",
+    "id": "1883588715861413893",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiPZ9GGaEAAluBt.jpg",
+      },
+    ],
+    "text": "https://t.co/7Q78qGrTKN",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-09-03T06:31:41.000Z",
+      "description": "你好, 我是hsn! 避难所: @hsn8086xe | 注: 推文内容仅供娱乐,真假自辨!",
+      "following": false,
+      "id": "1433678976564662273",
+      "name": "hsn",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1881530651159179264/61qPk38t_normal.jpg",
+      "screen_name": "hsn8086",
+    },
+  },
+  {
+    "created_at": "2025-01-27T03:37:20.000Z",
+    "id": "1883720922370310290",
+    "media": [
+      {
+        "type": "animated_gif",
+        "url": "https://pbs.twimg.com/tweet_video_thumb/GiRSMHlboAA7HYX.jpg",
+      },
+    ],
+    "text": "@hsn8086 https://t.co/8lCWFoddY1",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-08-08T07:59:06.000Z",
+      "description": "You can be happy every day.",
+      "following": false,
+      "id": "1821456047988690944",
+      "name": "Blue",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883133865474359296/KfGJfVBz_normal.jpg",
+      "screen_name": "pulto1515",
+    },
+  },
+]
+`;
+
+exports[`parseTweets > parseTweets for timeline 1`] = `
+[
+  {
+    "created_at": "2025-01-25T14:11:28.000Z",
+    "id": "1883155733203877940",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJQIJSbIAA-IHg.jpg",
+      },
+    ],
+    "text": "Open-R1: DeepSeek-R1大模型开源复现计划
+
+概述：HuggingFace 发布的完全开放的项目，旨在分三步(知识蒸馏、强化学习、多阶段训练)复现 DeepSeek-R1 的完整训练流程，让更多人能理解和使用这套技术方案
+
+项目分三个主要步骤：
+· 步骤 1: 通过从 DeepSeek-R1 中提取高质量的推理语料，复现 R1-Distill https://t.co/JPlVUqbvwD",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-11-23T04:44:15.000Z",
+      "description": "Focused on Prompt Engineering, RAG, and Agents. 
+Sharing AI papers, news, apps, open-source projects.
+
+ex Microsoft MVP (2014-2022)
+
+📢 公众号: AI 启蒙小伙伴",
+      "following": false,
+      "id": "1727548535816724480",
+      "name": "meng shao",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1764498070841233408/qeTwfeW8_normal.jpg",
+      "screen_name": "shao__meng",
+    },
+  },
+  {
+    "created_at": "2025-01-25T13:19:26.000Z",
+    "id": "1883142636820676965",
+    "text": "We are reproducing the full DeepSeek R1 data and training pipeline so everybody can use their recipe. Instead of doing it in secret we can do it together in the open!
+
+🧪 Step 1: replicate the R1-Distill models by distilling a high-quality reasoning corpus from DeepSeek-R1.
+
+🧠",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-08-14T22:21:16.000Z",
+      "description": "🤗 LLM whisperer @huggingface
+📖 Co-author of "NLP with Transformers" book
+💥 Ex-particle physicist
+🤘 Occasional guitarist
+🇦🇺🇬🇧🇨🇱🇿🇦 in 🇨🇭",
+      "following": false,
+      "id": "1029493180704714753",
+      "name": "Lewis Tunstall",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1097405296543236096/gS2C7RIq_normal.jpg",
+      "screen_name": "_lewtun",
+    },
+  },
+  {
+    "created_at": "2025-01-17T06:08:02.000Z",
+    "id": "1880134969504457066",
+    "text": "培育蜘蛛子來殺時間吧
+
+等級提升太神啦",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-05-15T05:50:47.000Z",
+      "description": "Kumoko's coming back. 🕷🕸️
+A dungeon RPG based on the anime "So I'm a Spider, So What?"!
+Discord：https://t.co/xjaSarTarG
+#SpiderRotL #SoImASpider",
+      "following": false,
+      "id": "1790620708743360512",
+      "name": "So I'm a Spider, So What? Ruler of the Labyrinth",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1805421500641820672/ZUBAgnhP_normal.jpg",
+      "screen_name": "kumoko_laby_en",
+    },
+  },
+  {
+    "created_at": "2025-01-25T17:20:27.000Z",
+    "id": "1883203289585717593",
+    "text": "我长得好丑😭",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-01-17T09:00:17.000Z",
+      "description": "@maru__fama (i don’t actively follow",
+      "following": false,
+      "id": "1615272749207015424",
+      "name": "adsrehcaerp",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1881692932337545216/WTVE1gPI_normal.jpg",
+      "screen_name": "preachersad",
+    },
+  },
+  {
+    "created_at": "2025-01-25T11:17:39.000Z",
+    "id": "1883111988970365351",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiIoX2BagAALHsL.jpg",
+      },
+    ],
+    "text": "https://t.co/PWCCyj8clA",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-01-18T13:27:19.000Z",
+      "description": "月刊少女",
+      "following": false,
+      "id": "1483430738800574465",
+      "name": "夢乃狸",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1677444444612853760/5cmTyfgy_normal.jpg",
+      "screen_name": "nyannyanO228",
+    },
+  },
+  {
+    "created_at": "2025-01-25T17:59:03.000Z",
+    "id": "1883213006005490010",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiKEP8UaMAA1iGJ.jpg",
+      },
+    ],
+    "text": "https://t.co/XSxRGe3AmJ",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-09-03T06:31:41.000Z",
+      "description": "你好, 我是hsn! 避难所: @hsn8086xe | 注: 推文内容仅供娱乐,真假自辨!",
+      "following": false,
+      "id": "1433678976564662273",
+      "name": "hsn",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1881530651159179264/61qPk38t_normal.jpg",
+      "screen_name": "hsn8086",
+    },
+  },
+  {
+    "created_at": "2025-01-25T03:02:00.000Z",
+    "id": "1882987254764703953",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiGu4gkbgAEK9p7.jpg",
+      },
+    ],
+    "text": "❤️‍🩹❤️‍🩹❤️‍🩹 https://t.co/UOVKWudJxT",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-11-07T01:26:14.000Z",
+      "description": "🐈‍⬛ ゲーミングぴんくねこみみ概念 
+🎨 AI+drawing, analogue 
+🎮️ Steam, FF14, PoE2 
+
+▶️ fanart #おねんねあーと 
+▶️ https://t.co/EMlnRMM9vv
+▶️ https://t.co/p7WQPW8Aw5",
+      "following": false,
+      "id": "1589428860432834560",
+      "name": "りんねおねんね🐱💤",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1706555482771734528/xPhPttLr_normal.jpg",
+      "screen_name": "llrinnell",
+    },
+  },
+  {
+    "created_at": "2024-08-15T21:46:00.000Z",
+    "id": "1824200895648669753",
+    "text": "Supercharge your Gmail with AI ✨",
+    "user": {
+      "blocking": false,
+      "created_at": "2020-05-14T21:27:31.000Z",
+      "description": "AI-native email for business. Supercharge your team's productivity with advanced AI & real-time collaboration. @ShortwaveStatus for service updates",
+      "following": false,
+      "id": "1261045324518273031",
+      "name": "Shortwave",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1788456513172123648/-9SWQq6c_normal.jpg",
+      "screen_name": "Shortwave",
+    },
+  },
+  {
+    "created_at": "2025-01-25T09:21:25.000Z",
+    "id": "1883082737684480431",
+    "text": "“AMD宣布，已将新的DeepSeek-V3模型集成到Instinct MI300X GPU上，该模型旨在与SGLang一起实现最佳性能。DeepSeek-V3针对Al推理进行了优化。” //可以啊，DeepSeek挺牛逼的，居然被AMD看上了……👀
+
+ref: https://t.co/uGurvXfWRq",
+    "user": {
+      "blocking": false,
+      "created_at": "2008-11-19T09:11:24.000Z",
+      "description": "构成：30%生活，20%ACG，20%技术，15%查证，10%股市，5%政治。 
+PGP：https://t.co/tE5FodMBh0，
+Bitcoin：1DvdCDjUJ4bnqDgyzTAQ2xabw6ChRnQ9Sy，
+BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
+      "following": false,
+      "id": "17482838",
+      "name": "陈少举 （🦣 @chenshaoju@acg.mn ）",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1596840714251313152/7mOJ-w4O_normal.jpg",
+      "screen_name": "chenshaoju",
+    },
+  },
+  {
+    "created_at": "2025-01-24T18:02:22.000Z",
+    "id": "1882851449991737473",
+    "text": "Excited to share that AMD has integrated the new DeepSeek-V3 model on Instinct MI300X GPUs, designed for peak performance with SGLang. DeepSeek-V3 is optimized for AI inferencing. Special thanks to the DeepSeek and SGLang teams for their close collaboration!",
+    "user": {
+      "blocking": false,
+      "created_at": "2008-05-21T22:14:12.000Z",
+      "description": "together we advance_",
+      "following": false,
+      "id": "14861876",
+      "name": "AMD",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1534988679076368384/In8IVKDB_normal.png",
+      "screen_name": "AMD",
+    },
+  },
+  {
+    "created_at": "2025-01-25T16:28:51.000Z",
+    "id": "1883190307690614795",
+    "text": "😓 为什么我的时间线上一直有一个人持之以恒、锲而不舍地发着帖想要唱衰 deepseek R1
+
+从 “有没有专家来说说是不是真的牛逼？” 到 “希望大家不要把他吹过了”
+
+😓 我的建议是自己不太懂的东西不要乱评论 ...",
+    "user": {
+      "blocking": false,
+      "created_at": "2020-06-05T04:07:26.000Z",
+      "description": "Loving 琳琳/ Chinese / Frontend / 或许可以看看 Vue Vine https://t.co/slT87ROPvZ / 参与 Vue.js +Vite+Rollup 中文文档译制 / Valorant / Socialist",
+      "following": false,
+      "id": "1268756263715827712",
+      "name": "River · 沈青川",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1638155232743145474/itEmsOV5_normal.jpg",
+      "screen_name": "Shenqingchuan",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:11:10.000Z",
+    "id": "1883155657974780240",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJP8m7aoAA-IyW.jpg",
+      },
+    ],
+    "text": "HuggingFace 刚开源了个项目叫 Open-R1, 旨在复现 DeepSeek-R1
+
+地址：https://t.co/Ve5qM8iM2d https://t.co/zaIbLesjd8",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-12-08T02:07:30.000Z",
+      "description": "A coder, road bike rider, server fortune teller, electronic waste collector, co-founder of KCORES, ex-director at IllaSoft, KingsoftOffice, Juejin.",
+      "following": false,
+      "id": "1071224721046261760",
+      "name": "karminski-牙医",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1071225168360427520/2tY0hY6b_normal.jpg",
+      "screen_name": "karminski3",
+    },
+  },
+  {
+    "created_at": "2025-01-25T18:07:29.000Z",
+    "id": "1883215125550866788",
+    "text": "我混的最好的同学就是本科毕业就工作了的
+
+现在都是正科副处，房价暴涨之前上了车，解决了终身大事
+
+次好的同学是读了硕的，基本上现在也都买了房安了家
+
+最垃圾的就是一起读博的，错过了黄金年代，基本上现在都在租房给人打工
+
+不得不承认，真的是知识改变命运啊",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-12-16T05:16:33.000Z",
+      "description": "伊利诺伊大学克莱登分校（ICCU）PhR",
+      "following": false,
+      "id": "941899828501430273",
+      "name": "润学唯一博导（Tenure Track非走即生）",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1667110608389668866/sFBmI9hq_normal.jpg",
+      "screen_name": "RunnerOfPhil",
+    },
+  },
+  {
+    "created_at": "2024-05-27T12:02:40.000Z",
+    "id": "1795063065328628063",
+    "media": [
+      {
+        "type": "video",
+        "url": "https://pbs.twimg.com/ext_tw_video_thumb/1795061154949320704/pu/img/nPjJoqOxDjy4s5XL.jpg",
+      },
+    ],
+    "text": "✨Hello Live2D Riggers and VTubers!✨
+
+nizima LIVE is the official Live2D Vtuber app. We've invited professional Live2D creator Soulty to introduce the app's features and explain why she uses it. If you're interested, you can download the free trial here! https://t.co/AQzxFSjMCf https://t.co/qn6biVxftM",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-05-31T05:28:21.000Z",
+      "description": "🪄Live2D's Official VTuber App🪄
+
+Live2D公式のVTuber向けトラッキングアプリ「nizima LIVE」公式アカウントです。たまに公式キャラの虹丸イブが発信を行います🍬
+
+公式サイト ➭ https://t.co/xkMQznHONa
+Discord ➭ https://t.co/cY3mXa0ABd",
+      "following": false,
+      "id": "1663779361940705280",
+      "name": "nizima LIVE - Live2D公式VTuberアプリ",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1684757645348204544/ISTF8YAi_normal.jpg",
+      "screen_name": "nizimaLIVE",
+    },
+  },
+  {
+    "created_at": "2025-01-25T11:22:11.000Z",
+    "id": "1883113128596304263",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/Gh4ycVKbgAAWRpl.jpg",
+      },
+    ],
+    "text": "RT @sakura_oriko: 1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨ https://t.co/EkDPlUFF21",
+    "user": {
+      "blocking": false,
+      "created_at": "2014-09-01T12:07:34.000Z",
+      "description": "イラストレーター・漫画家。メルヘンファンタジーな世界観を描きます ◆個人画集『Fluffy』 ◆ちゃおプラス『ふしぎな猫のまちメルティア』 ②巻 #猫メル ◆ 『#すいんぐ』 全⑤巻『#四つ子ぐらし』絵⑲巻・漫画④巻◆新作著書1/31発売！｜リンク集▶︎https://t.co/el37bL8pUc #おりこ糖",
+      "following": true,
+      "id": "2784005456",
+      "name": "佐倉おりこ🍀猫メル２巻発売中＆アイデア帳1/31発売！",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1681929870048366592/RuJMwjV__normal.jpg",
+      "screen_name": "sakura_oriko",
+    },
+  },
+  {
+    "created_at": "2025-01-22T09:27:43.000Z",
+    "id": "1881997161384349713",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/Gh4ycVKbgAAWRpl.jpg",
+      },
+    ],
+    "text": "1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨ https://t.co/EkDPlUFF21",
+    "user": {
+      "blocking": false,
+      "created_at": "2014-09-01T12:07:34.000Z",
+      "description": "イラストレーター・漫画家。メルヘンファンタジーな世界観を描きます ◆個人画集『Fluffy』 ◆ちゃおプラス『ふしぎな猫のまちメルティア』 ②巻 #猫メル ◆ 『#すいんぐ』 全⑤巻『#四つ子ぐらし』絵⑲巻・漫画④巻◆新作著書1/31発売！｜リンク集▶︎https://t.co/el37bL8pUc #おりこ糖",
+      "following": true,
+      "id": "2784005456",
+      "name": "佐倉おりこ🍀猫メル２巻発売中＆アイデア帳1/31発売！",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1681929870048366592/RuJMwjV__normal.jpg",
+      "screen_name": "sakura_oriko",
+    },
+  },
+  {
+    "created_at": "2025-01-26T01:32:06.000Z",
+    "id": "1883327017095159909",
+    "text": "Today I bust my head doing data cleaning using Python string methods.
+
+I could've asked ChatGPT or Cursor to do it for me, but I'm learning Python and wanted to challenge myself.
+
+Am I the only one who makes their projects harder just to learn the skills?",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-12-06T16:09:52.000Z",
+      "description": "Documenting my progress as a digital entrepreneur | AI Automations, Software Development, and Growth",
+      "following": false,
+      "id": "1732432047333916672",
+      "name": "Gabriel Andino",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883251871327916032/D1wfF0p0_normal.jpg",
+      "screen_name": "gabandinop",
+    },
+  },
+  {
+    "created_at": "2025-01-25T19:03:31.000Z",
+    "id": "1883229230227665128",
+    "text": "说明半个小时，Cursor 写出来的应用，拿到国区第一，巧合不可复制",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-02-17T20:04:50.000Z",
+      "description": "Building next-gen apps for you",
+      "following": false,
+      "id": "1626674002969382912",
+      "name": "Mike Chong (WildCat 野猫) 🏔️🌟 @洛星",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1772305782815485953/ubYGJGtp_normal.jpg",
+      "screen_name": "WildCat_zh",
+    },
+  },
+  {
+    "created_at": "2025-01-25T05:23:34.000Z",
+    "id": "1883022883578171482",
+    "text": "OpenAI 招前端工程师，年薪 $245K – $385K + Offers Equity。
+如果 OpenAI 都还在招前端工程师，那说明 AI 替代程序员还早……",
+    "user": {
+      "blocking": false,
+      "created_at": "2007-04-02T03:42:14.000Z",
+      "description": "Prompt Engineer, dedicated to learning and disseminating knowledge about AI, software engineering, and engineering management.",
+      "following": true,
+      "id": "3178231",
+      "name": "宝玉",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/561086911561736192/6_g58vEs_normal.jpeg",
+      "screen_name": "dotey",
+    },
+  },
+  {
+    "created_at": "2025-01-25T17:41:18.000Z",
+    "id": "1883208540061622404",
+    "text": "蒸馏这个词确实让人迷惑，感觉是从一份混合液中蒸馏出一种纯净水（从模型A中提取出了A1），实际完全不是这个意思，更应该翻译成“教学”。",
+    "user": {
+      "blocking": false,
+      "created_at": "2013-08-09T10:31:29.000Z",
+      "description": "产品经理，主发AI相关信息，个人维护的AI资讯日报↓",
+      "following": false,
+      "id": "1657474831",
+      "name": "Gorden Sun",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1522159828231409664/GPpXyPT1_normal.jpg",
+      "screen_name": "Gorden_Sun",
+    },
+  },
+  {
+    "created_at": "2025-01-25T13:57:39.000Z",
+    "id": "1883152254641082413",
+    "text": "所以我说学界取得这个蒸馏术语，就取得不太好。
+
+外行一听就有自己的小理解了",
+    "user": {
+      "blocking": false,
+      "created_at": "2010-02-22T04:48:14.000Z",
+      "description": "喜欢一切美好的事物。目前聚焦在大模型领域。",
+      "following": false,
+      "id": "116355740",
+      "name": "九原客",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1509120377816969223/qzJBlcuS_normal.jpg",
+      "screen_name": "9hills",
+    },
+  },
+  {
+    "created_at": "2025-01-17T07:30:00.000Z",
+    "id": "1880155597854920998",
+    "text": "3月24日の申請から「#2025年旅券（#パスポート）」の発給が開始！
+偽造・変造対策が強化され、顔写真ページがプラスチック製に変わります。
+#現在お持ちのパスポートは有効期間まで使えます #パスポくん #旅券",
+    "user": {
+      "blocking": false,
+      "created_at": "2011-05-23T10:17:04.000Z",
+      "description": "外務省の公式アカウントです。外交に関する新着情報を中心に発信しております。｜英語版（English）@MofaJapan_en
+｜外務省ソーシャルメディア一覧： https://t.co/2VDfT2CifR",
+      "following": false,
+      "id": "303730149",
+      "name": "外務省",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1082102533454102528/HXpr1ZEl_normal.jpg",
+      "screen_name": "MofaJapan_jp",
+    },
+  },
+  {
+    "created_at": "2025-01-26T01:37:47.000Z",
+    "id": "1883328449382908284",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiLsn-hWIAAJAoA.jpg",
+      },
+    ],
+    "text": "Programming gave me purpose , how about you ? https://t.co/gksun0A815",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-12-10T05:21:23.000Z",
+      "description": "BACKEND ENGINEER",
+      "following": false,
+      "id": "1866352325348003841",
+      "name": "Lucky LK , The Backend Guy",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1867763871567482880/75vcdum4_normal.jpg",
+      "screen_name": "luckylkonoja",
+    },
+  },
+  {
+    "created_at": "2025-01-25T10:57:47.000Z",
+    "id": "1883106988349071564",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiIj0fYakAArvKd.jpg",
+      },
+    ],
+    "text": "来拍个合影
+#复刻字体设计 https://t.co/2mzmg7eJ4Y",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-05-29T00:50:58.000Z",
+      "description": "中文排版孔雀计划·字谈字畅播客。排版者、设计者、研究者、译者、编辑、主播、演奏者。",
+      "following": false,
+      "id": "1398441654189662214",
+      "name": "Eric Liu 𝕏 🦚",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1398442096260882434/8YLsYD48_normal.jpg",
+      "screen_name": "Kongque_Chinese",
+    },
+  },
+  {
+    "created_at": "2025-01-25T10:51:21.000Z",
+    "id": "1883105370434081269",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiIiStZbwAAov7P.jpg",
+      },
+    ],
+    "text": "#ブルアカ  
+プラナ https://t.co/3aoujXWJgl",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-10-01T12:13:34.000Z",
+      "description": "【ラセリ/라세리 】
+イラスト 
+💌contact→06laseri01@gmail.com",
+      "following": false,
+      "id": "1841089030181814272",
+      "name": "LASERI",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1865031482194169857/kfoGfL3D_normal.jpg",
+      "screen_name": "06laseri01",
+    },
+  },
+  {
+    "created_at": "2025-01-25T12:48:13.000Z",
+    "id": "1883134783305171236",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiI9GIXXoAAzSEp.jpg",
+      },
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiI9GhfXMAA44Pk.jpg",
+      },
+    ],
+    "text": "好耶是方便面！加了自己烤的脆皮培根卷里脊肉和好多配菜ww
+
+其实方便面还好，之前看到0.7欧一袋顺手买了点，加的肉和菜有3欧了。其实吃起来和中国版没区别qwq https://t.co/BYRfkQgBWC",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-02-19T13:48:07.000Z",
+      "description": "诶…谢谢你来看我🥳 | 一个超级社恐的小透明👻 | 普通的EE大学生🎓 | 日常推，不建政🚫 | 包容每一种立场💕 | 希望和大家成为好朋友🥺 | 温暖对待每个友善的人，欢迎贴贴🤗 | 想要给世界带来更多可爱🥰 | 愿我们能从彼此的话语中获得力量(。•ω•。)ノ♡ | ❤@LittleKittyya",
+      "following": false,
+      "id": "965583779380129792",
+      "name": "Mario",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1857012441302827009/JQqCInfU_normal.jpg",
+      "screen_name": "mario_2333",
+    },
+  },
+  {
+    "created_at": "2024-08-17T00:27:00.000Z",
+    "id": "1824603801061560477",
+    "text": "歷史紀錄片《秦始皇》以史籍文獻、文物遺蹟為依據，追溯秦始皇的一生事蹟，展現周秦之交一段波瀾壯闊的歷史。
+
+整部紀錄片共計12集，每集時長約20分鐘，講述兩千多年前，秦始皇統一六國、建立大一統王朝的輝煌功績。
+
+#乾淨世界 #秦始皇 #秦朝 #紀錄片 #歷史英雄 #中國傳統文化",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-10-21T04:32:37.000Z",
+      "description": "乾淨世界致力於加強人與人之間的善意、尊重和信任。非成癮演算法，優先推薦有價值的內容。保護言論自由，保護隱私，無需註冊下載應用、分享和發表評論。",
+      "following": false,
+      "id": "1715586749819437056",
+      "name": "乾淨世界",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1838298632103034880/XiEwkj-c_normal.jpg",
+      "screen_name": "GanJingWorldzh",
+    },
+  },
+  {
+    "created_at": "2025-01-26T01:06:17.000Z",
+    "id": "1883320522760741081",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiLmCNwbsAAMMFA.jpg",
+      },
+    ],
+    "text": "大早上：拿铁＋摩卡＋文拉法辛
+今天我跟世界必须疯一个 https://t.co/pceSmn6pLv",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-08-16T09:20:50.000Z",
+      "description": "",
+      "following": true,
+      "id": "897749985361444866",
+      "name": "文学少女安德烈",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1872624201796059137/lL6g5Rby_normal.jpg",
+      "screen_name": "woaishuji",
+    },
+  },
+  {
+    "created_at": "2025-01-25T13:18:36.000Z",
+    "id": "1883142426245894475",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJDtEoa4AAf8tP.jpg",
+      },
+    ],
+    "text": "angel Alya #ロシデレ https://t.co/nPLvL4718S",
+    "user": {
+      "blocking": false,
+      "created_at": "2012-03-03T02:54:22.000Z",
+      "description": "イラストレーター🥯ライトノベル「時々ボソッとロシア語でデレる隣のアーリャさん」 Vtuber「ペトラ・グリン」「博衣こより」「五十嵐梨花」「杏戸ゆげ」 FANBOX→https://t.co/d9cjUE8TXJ 最新画集→https://t.co/FsSS6ndUUv",
+      "following": false,
+      "id": "512712234",
+      "name": "ももこ🍑大阪個展1/29～2/14",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1871787639541772288/eXma9Tj9_normal.jpg",
+      "screen_name": "momoco_haru",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:43:45.000Z",
+    "id": "1883163856845054174",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJXbeQaYAEVd2S.jpg",
+      },
+    ],
+    "text": "#angelicpretty Melty Berry Princess JSK 🍓
+给大家拜个早年啦~祝各位蛇年大吉！
+📷: @YazawaBunny 
+#lolitafashion #sweetlolita https://t.co/DaopgI2K7S",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-09-10T01:28:09.000Z",
+      "description": "🌟请叫咱Uzuki或者卯月！💼湾区普通打工人及Lo汉=ω= 👗日常高强度穿Lo选手~ 🎀甜玼最高！🚫色色打咩x 禁止转载禁止盗图！在奇奇怪怪地方发现咱的照片都不是本人(·•᷄ࡇ•᷅ ）💖努力让自己变得更加可爱_8(:3 」∠ )_ 请多指教！以及欢迎走进我的世界www",
+      "following": false,
+      "id": "1436139332528586779",
+      "name": "HimeUzuki",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1622858246708162560/QwEnDc8U_normal.jpg",
+      "screen_name": "HimeUzuki",
+    },
+  },
+  {
+    "created_at": "2025-01-24T20:41:00.000Z",
+    "id": "1882891372866531358",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiE5G14asAAB-Rv.jpg",
+      },
+    ],
+    "text": "apparently this is not an "acceptable excuse" 🙄 https://t.co/ELJJlmJFxo",
+    "user": {
+      "blocking": false,
+      "created_at": "2020-01-14T01:56:34.000Z",
+      "description": "is your site slow? https://t.co/LZNgAoDlch | founder @milliondotjs, alum @hackclub",
+      "following": false,
+      "id": "1216901847673229313",
+      "name": "Aiden Bai",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1652572951282343936/BXVLE8nu_normal.jpg",
+      "screen_name": "aidenybai",
+    },
+  },
+  {
+    "created_at": "2025-01-10T14:18:51.000Z",
+    "id": "1877721770767319092",
+    "text": "Freedom &amp; joy at Phuket Island Rehab top luxury addiction rehab for your addiction recovery journey,
+
+We are ready when you are.  Join us at Phuket Island Rehab in Thailand and reclaim your life.",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-12-19T20:47:36.000Z",
+      "description": "🌴 Phuket Island Rehab 🌊 | Founded in 2023 by Dr. Ponlawat. Personalized addiction & mental health care, combining excellence & compassion. Serene Phuket",
+      "following": false,
+      "id": "1869847019277406208",
+      "name": "phuket Island Rehab",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1876387456318390272/IRUuKaUs_normal.jpg",
+      "screen_name": "phuketisland24",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:20:32.000Z",
+    "id": "1883173115230134610",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJf-AmaIAA5er1.jpg",
+      },
+    ],
+    "text": "这钱真能给到孩子，那多少钱我也认了。
+你睁眼看看，现在日本给孩子吃的都是什么鸡巴玩意儿。
+什么こども家庭庁年间预算7万亿日元，平摊到一个纳税人身上快10万日元就给孩子喂了屎。
+丢人不丢人呐？ https://t.co/3gobJQAbuD",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-03-26T14:18:40.000Z",
+      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。https://t.co/zwDurJQwha宫司🥳私信回复较慢（一般周三周六晚上回复）",
+      "following": false,
+      "id": "1507723638249713664",
+      "name": "月半",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1529606141545545728/ufDWA7bY_normal.jpg",
+      "screen_name": "yuebanzhu",
+    },
+  },
+  {
+    "created_at": "2025-01-24T21:03:20.000Z",
+    "id": "1882896992017465643",
+    "text": "@yuebanzhu 换句话说，只要黑在日本想方设法造个孩子，出于所谓人权考量就不能依法驱逐了，等于变相获得永居权，还要由你这样的纳税大户来间接抚养？这公平吗？",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-08-03T08:54:10.000Z",
+      "description": "🇨🇿🇵🇱🇪🇪🇬🇪🇬🇧🇺🇸🇱🇹🇫🇷🇦🇺🇰🇷🇱🇻🇫🇮🇸🇪🇦🇹🇳🇱🇧🇪🇸🇮🇦🇿🇨🇦🇮🇹🇯🇵🇩🇪🇬🇷🇩🇰🇧🇬🇳🇿🇹🇼🇦🇱🇪🇸🇵🇹🇲🇪🇲🇰🇮🇸🇹🇳🇰🇪🇱🇺🇭🇷",
+      "following": false,
+      "id": "1422480626389712898",
+      "name": "蒼の聖典(Lazy)🇺🇦🇮🇱🇳🇫",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1513409165783625731/ta_uh0ZY_normal.jpg",
+      "screen_name": "lazy_Hemis",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:52:55.000Z",
+    "id": "1883181263605174363",
+    "text": "@yuebanzhu 吃这些东西我真怀疑蛋白质摄入够么...生长发育期的能量消耗很大啊...",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-11-27T12:04:55.000Z",
+      "description": "大食い/旅行/生活/退勤bot",
+      "following": true,
+      "id": "1067388797426393088",
+      "name": "セセリア",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1841732589306155008/dblieZa4_normal.jpg",
+      "screen_name": "Ceceliasama23",
+    },
+  },
+  {
+    "created_at": "2025-01-25T03:24:03.000Z",
+    "id": "1882992803233591465",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiG7-bvbsAAccXa.jpg",
+      },
+    ],
+    "text": "😁😁😁好久没发做的饭了。 https://t.co/0lttSIyadm",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-07-27T23:45:26.000Z",
+      "description": "个人博客：https://t.co/fGVztYtBQS。",
+      "following": false,
+      "id": "1552439937198587904",
+      "name": "ききよし",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1773164373248479232/xSR3ZxIW_normal.jpg",
+      "screen_name": "shuqing8964",
+    },
+  },
+  {
+    "created_at": "2025-01-25T11:09:12.000Z",
+    "id": "1883109864832127088",
+    "text": "This guy thinks deepseek r1, which had pver 100 authors, more then any ive seen on a meta paper and maybe even more than i saw on gpt4 technical report - thinks that they are claiming they are a “small group” of ai engineers?",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-02-25T19:25:11.000Z",
+      "description": "Cofounder and Head of Post Training @NousResearch, prev @StabilityAI
+Github: https://t.co/LZwHTUFwPq
+HuggingFace: https://t.co/sN2FFU8PVE",
+      "following": false,
+      "id": "1365020011123773442",
+      "name": "Teknium (e/λ)",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1642401912648777728/2KFikPsE_normal.jpg",
+      "screen_name": "Teknium1",
+    },
+  },
+  {
+    "created_at": "2025-01-24T18:57:08.000Z",
+    "id": "1882865234765058403",
+    "text": "What's more likely? 
+
+1 - small group of AI engineers at @deepseek_ai figures out how to beat all of the top researchers in the world as a side project
+
+2 - Chinese government has 100k GPUs they shouldn't have and releases open source models claiming $6m training cost as a psyop",
+    "user": {
+      "blocking": false,
+      "created_at": "2008-06-18T00:32:26.000Z",
+      "description": "Co-Founder @ElectricCapital; Investor @anchorage @bitwise @boomaero @cruise @deel @dydx @nearprotocol @newfronthq @notionhq @magiceden @pulley; views are my own",
+      "following": false,
+      "id": "15152173",
+      "name": "Avichal - Electric ϟ Capital",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/902647890840920064/IzSKaY1c_normal.jpg",
+      "screen_name": "avichal",
+    },
+  },
+  {
+    "created_at": "2025-01-26T00:55:34.000Z",
+    "id": "1883317825487638616",
+    "text": "@Teknium1 I think they included cooks and bus driver at their company no?",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-01-19T02:34:47.000Z",
+      "description": "Backend/Infrastructure engineer.
+
+Let's make AI even cooler.",
+      "following": true,
+      "id": "954180304343715840",
+      "name": "子萱 - e/acc",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1182317342887305216/BFVLlBvC_normal.jpg",
+      "screen_name": "llennchan2003",
+    },
+  },
+  {
+    "created_at": "2024-11-14T09:21:15.000Z",
+    "id": "1856990771922309514",
+    "text": "暴雪VPN
+加速器必备，免费安全，翻墙无压力
+
+稳定5年服务源自新加坡VPN供应商
+
+免费节点，无日志，不记录用户隐私，顶级数据加密，伪装图标使您在互联网上安全冲浪。🏄‍♂️
+
+嵌入可直连chatgpt，支持3.5&amp;4版本，点开即用📱
+
+🌍多国家节点，多设备共享，Andriod, iOS, Windows版本，欢迎下载使用！
+#vpn",
+    "user": {
+      "blocking": false,
+      "created_at": "2020-11-20T10:14:59.000Z",
+      "description": "超过5年稳定服务-新加坡顶尖科技技术 供全球使用的 #VPN 🌏永久免费使用，高速稳定，不限流量。 一账户共享多设备！支持Chatgpt！ We do professional to improving your network security and privacy.",
+      "following": false,
+      "id": "1329729771396231170",
+      "name": "暴雪vpn",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1329730044592152577/Fwun6H1t_normal.png",
+      "screen_name": "bxvpn",
+    },
+  },
+  {
+    "created_at": "2025-01-25T04:58:30.000Z",
+    "id": "1883016575235789282",
+    "text": "RT @zhanghaili0610: Huge congrats on the launch! 🎉 Thrilled to see Refly enter the open-source world. Powered by @LangChainAI 🦜🕸️ and LangG…",
+    "user": {
+      "blocking": false,
+      "created_at": "2016-12-07T11:45:38.000Z",
+      "description": "Building the context-aware, collaborative AI Native canvas for content creation → https://t.co/u3zni4yOrS, ex @tiktok_us",
+      "following": true,
+      "id": "806464682823282688",
+      "name": "Tom Huang",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1033199673035522048/WI-JLSAc_normal.jpg",
+      "screen_name": "tuturetom",
+    },
+  },
+  {
+    "created_at": "2025-01-24T13:57:24.000Z",
+    "id": "1882789803449876645",
+    "text": "Huge congrats on the launch! 🎉 Thrilled to see Refly enter the open-source world. Powered by @LangChainAI 🦜🕸️ and LangGraph.js for next-level AI capabilities — the possibilities are endless. Can’t wait to dive in! 🚀🔥🎉",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-05-11T04:49:46.000Z",
+      "description": "@LangChainAI Ambassador, @KubeSphere Ambassador, @CloudNativeFdn @openfunctiondev TOC Member.",
+      "following": false,
+      "id": "1524250283521368064",
+      "name": "Harry Zhang",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1524250387892506624/JdxlpAT2_normal.jpg",
+      "screen_name": "zhanghaili0610",
+    },
+  },
+  {
+    "created_at": "2025-01-24T09:42:05.000Z",
+    "id": "1882725553071120594",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiDI1tibMAAPD4K.jpg",
+      },
+    ],
+    "text": "After 7 months of development, 1 month of beta testing, and 77,376 lines of code! ⚡️Refly is now officially open source! 🔥🚀 
+
+Since day one, Refly has aspired to become a world-class open-source project alongside Docker and K8S! Our mission is to create the best AI-native https://t.co/nIuS3DNoZl",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-12-31T01:19:27.000Z",
+      "description": "The open-source AI native creation engine, powered by free-form canvas.
+
+GitHub: https://t.co/MNhI3qf8M7
+Discord: https://t.co/HFvxnoFRvr",
+      "following": false,
+      "id": "1873901546179883008",
+      "name": "Refly.AI",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1873903604400349190/9WdES8qd_normal.jpg",
+      "screen_name": "reflyai",
+    },
+  },
+  {
+    "created_at": "2025-01-25T09:31:06.000Z",
+    "id": "1883085175988556027",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiIP_A_akAAB724.jpg",
+      },
+    ],
+    "text": "崩壊:スターレイル / 開拓者 星 https://t.co/zcsznxg5lv",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-10-28T21:54:22.000Z",
+      "description": "𝖢𝗈𝗌𝗉𝗅𝖺𝗒 ｜𝖧𝗈𝖸𝗈. 𝗏𝖺𝗅𝗈",
+      "following": false,
+      "id": "1586114142213394432",
+      "name": "ㅋュ",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1879463133561200640/Conwttfv_normal.jpg",
+      "screen_name": "uu_cos",
+    },
+  },
+  {
+    "created_at": "2025-01-25T09:00:00.000Z",
+    "id": "1883077348578173377",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiIIwBpa0AA0b0g.jpg",
+      },
+    ],
+    "text": "百合園セイア
+#ブルアカ #BlueArchive https://t.co/Pf5CrczwOv",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-02-23T02:37:38.000Z",
+      "description": "ブルーアーカイブ🩵💙🩵💙All illustrations I post are generated by Stable diffusion(AI)+ Photoshop drawing, Please be careful if you don't like AI art. I love kawaii.",
+      "following": false,
+      "id": "1628584790692876288",
+      "name": "RInCA",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1742495911065120768/KeIzCvpQ_normal.jpg",
+      "screen_name": "Rinca_ba",
+    },
+  },
+  {
+    "created_at": "2025-01-25T13:29:44.000Z",
+    "id": "1883145230683406810",
+    "text": "02年家里人说不养我了，谁能收留我一段时间，我会想办法打工然后卷款跑路，包联系不上的",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-12-08T16:19:28.000Z",
+      "description": "02年社畜 | 🏳️‍⚧️ | B端产品画图狗 ，正在努力生活 | 请多指教哦~ | 未来：@nieniebuding 姐姐：@ny3a_is_a_cat",
+      "following": false,
+      "id": "1468616147339968513",
+      "name": "SorrowRain",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1845416012168167424/-jdJXRxv_normal.jpg",
+      "screen_name": "0xSorrowRain",
+    },
+  },
+]
+`;
+
+exports[`parseTweets > parseTweets for user profile 1`] = `
+[
+  {
+    "created_at": "2025-01-25T15:20:32.000Z",
+    "id": "1883173115230134610",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJf-AmaIAA5er1.jpg",
+      },
+    ],
+    "text": "这钱真能给到孩子，那多少钱我也认了。
+你睁眼看看，现在日本给孩子吃的都是什么鸡巴玩意儿。
+什么こども家庭庁年间预算7万亿日元，平摊到一个纳税人身上快10万日元就给孩子喂了屎。
+丢人不丢人呐？ https://t.co/3gobJQAbuD",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-03-26T14:18:40.000Z",
+      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。https://t.co/zwDurJQwha宫司🥳私信回复较慢（一般周三周六晚上回复）",
+      "following": false,
+      "id": "1507723638249713664",
+      "name": "月半",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1529606141545545728/ufDWA7bY_normal.jpg",
+      "screen_name": "yuebanzhu",
+    },
+  },
+  {
+    "created_at": "2025-01-24T21:03:20.000Z",
+    "id": "1882896992017465643",
+    "text": "@yuebanzhu 换句话说，只要黑在日本想方设法造个孩子，出于所谓人权考量就不能依法驱逐了，等于变相获得永居权，还要由你这样的纳税大户来间接抚养？这公平吗？",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-08-03T08:54:10.000Z",
+      "description": "🇨🇿🇵🇱🇪🇪🇬🇪🇬🇧🇺🇸🇱🇹🇫🇷🇦🇺🇰🇷🇱🇻🇫🇮🇸🇪🇦🇹🇳🇱🇧🇪🇸🇮🇦🇿🇨🇦🇮🇹🇯🇵🇩🇪🇬🇷🇩🇰🇧🇬🇳🇿🇹🇼🇦🇱🇪🇸🇵🇹🇲🇪🇲🇰🇮🇸🇹🇳🇰🇪🇱🇺🇭🇷",
+      "following": false,
+      "id": "1422480626389712898",
+      "name": "蒼の聖典(Lazy)🇺🇦🇮🇱🇳🇫",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1513409165783625731/ta_uh0ZY_normal.jpg",
+      "screen_name": "lazy_Hemis",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:52:55.000Z",
+    "id": "1883181263605174363",
+    "text": "@yuebanzhu 吃这些东西我真怀疑蛋白质摄入够么...生长发育期的能量消耗很大啊...",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-11-27T12:04:55.000Z",
+      "description": "大食い/旅行/生活/退勤bot",
+      "following": true,
+      "id": "1067388797426393088",
+      "name": "セセリア",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1841732589306155008/dblieZa4_normal.jpg",
+      "screen_name": "Ceceliasama23",
+    },
+  },
+  {
+    "created_at": "2024-12-19T02:46:29.000Z",
+    "id": "1869575000291987895",
+    "text": "培育蜘蛛子來殺時間吧
+
+等級提升太神啦",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-05-15T05:50:47.000Z",
+      "description": "Kumoko's coming back. 🕷🕸️
+A dungeon RPG based on the anime "So I'm a Spider, So What?"!
+Discord：https://t.co/xjaSarTarG
+#SpiderRotL #SoImASpider",
+      "following": false,
+      "id": "1790620708743360512",
+      "name": "So I'm a Spider, So What? Ruler of the Labyrinth",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1805421500641820672/ZUBAgnhP_normal.jpg",
+      "screen_name": "kumoko_laby_en",
+    },
+  },
+  {
+    "created_at": "2025-01-25T16:30:08.000Z",
+    "id": "1883190629930557596",
+    "text": "@yuebanzhu 饭菜还能添么？  如果可以自由打菜的话，感觉还行啊",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-02-24T09:59:45.000Z",
+      "description": "如有移民问题可以私信，只能力所能及回答。",
+      "following": false,
+      "id": "1629058457222656001",
+      "name": "澳洲护士卡子弟",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1648533563825082369/SW0QqoYh_normal.jpg",
+      "screen_name": "nursenika1840",
+    },
+  },
+  {
+    "created_at": "2025-01-25T16:36:57.000Z",
+    "id": "1883192344599724449",
+    "text": "@nursenika1840 添是不可能了",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-03-26T14:18:40.000Z",
+      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。https://t.co/zwDurJQwha宫司🥳私信回复较慢（一般周三周六晚上回复）",
+      "following": false,
+      "id": "1507723638249713664",
+      "name": "月半",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1529606141545545728/ufDWA7bY_normal.jpg",
+      "screen_name": "yuebanzhu",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:22:25.000Z",
+    "id": "1883173585298358422",
+    "text": "@yuebanzhu 这孩子长大不得营养不良😅",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-08-11T01:00:16.000Z",
+      "description": "🚪：nvda，tmc股票一股，专注生活，我爱你们所有人！倾倒生活垃圾🗑️ 会fo所有爱的人 我好失败，小号@zaoyudexiawu",
+      "following": false,
+      "id": "1557532219014807553",
+      "name": "藻魚📗⬜️🎌",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1559545871368593410/z245OHaJ_normal.jpg",
+      "screen_name": "zaoyuyou",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:31:25.000Z",
+    "id": "1883175851522773368",
+    "text": "@yuebanzhu 少子化是問題，各種抖機靈寄生空手套白狼吃現成的也絕對是問題",
+    "user": {
+      "blocking": false,
+      "created_at": "2020-07-13T06:17:05.000Z",
+      "description": "",
+      "following": false,
+      "id": "1282559611187290113",
+      "name": "Erik Tang エリック",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1593891933155643392/h4uU80iW_normal.jpg",
+      "screen_name": "ErikTang8",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:41:45.000Z",
+    "id": "1883178452297400439",
+    "text": "@yuebanzhu 比我幼儿园吃的还差。",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-05-07T16:27:09.000Z",
+      "description": "music producer&photographer
+PM me on instagram ✉️
+https://t.co/jYpgMIVDT2",
+      "following": false,
+      "id": "1522976249173450759",
+      "name": "喵了个咪的",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1637786167621070849/PM6I1hNO_normal.jpg",
+      "screen_name": "bocchi1chan",
+    },
+  },
+  {
+    "created_at": "2025-01-26T00:55:38.000Z",
+    "id": "1883317842550100478",
+    "text": "@yuebanzhu 这就是典型的做了婊子还在立牌坊！到现在为止，日本的义务教育的饭钱是收取孩子爹娘的钱！
+穷地方政府不想掏钱，又没办法多收取爹娘的钱，所以就这么忽悠下一代😁
+23区去年才4-50%的区不收饭钱了
+吃的啥，说实话，真不知道😁",
+    "user": {
+      "blocking": false,
+      "created_at": "2010-06-05T11:10:09.000Z",
+      "description": "いつの時代も、金は人を狂わせる",
+      "following": false,
+      "id": "152214500",
+      "name": "Steve",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1347751137470910465/G3b59b5N_normal.jpg",
+      "screen_name": "gwdkaku",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:23:25.000Z",
+    "id": "1883173839691305205",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJgoH6aAAEKva1.jpg",
+      },
+    ],
+    "text": "@yuebanzhu https://t.co/c4cqViZqUl",
+    "user": {
+      "blocking": false,
+      "created_at": "2016-04-24T02:16:53.000Z",
+      "description": "財經博主。https://t.co/jkd99Engoh 離岸業務付費諮詢。120美金起步。0xd523c439939DD7E1fea567f6Bb45eE36FCF061cA",
+      "following": false,
+      "id": "724059505529487360",
+      "name": "山口大國主(北九州老實創業中）",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1830200606302048258/1d3VEIQG_normal.jpg",
+      "screen_name": "okuninushi2016",
+    },
+  },
+  {
+    "created_at": "2025-01-25T23:38:54.000Z",
+    "id": "1883298530049310968",
+    "text": "@yuebanzhu 生育率还是太高了",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-10-03T00:02:16.000Z",
+      "description": "愛、勇気、ラッキー、感謝",
+      "following": false,
+      "id": "1444452659717570561",
+      "name": "信平(カブタック)",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1813229559808204803/o4v_7vuR_normal.jpg",
+      "screen_name": "zakku_27",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:27:37.000Z",
+    "id": "1883174897410888070",
+    "text": "@yuebanzhu 额……说实话不如几年前在微博看到的某个山区小学的午餐。。。那个不精致但是份量足够。。。",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-06-21T08:48:23.000Z",
+      "description": "",
+      "following": false,
+      "id": "1804073774335299591",
+      "name": "sask77229",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1804074665280966658/XwVvkOd8_normal.jpg",
+      "screen_name": "sask77229",
+    },
+  },
+]
+`;
+
+exports[`parseTweets > parseTweets for user tweets and replies 1`] = `
+[
+  {
+    "created_at": "2025-01-26T02:52:54.000Z",
+    "id": "1883347352976843148",
+    "text": "再评论deepseek要捅马蜂窝了，最后说下：
+
+我理解deepseek提供了了一条更快实现O-1复刻路径。推理端变更便宜，落后的都可以用。但是对行业没有冲击，不涉及训练端
+
+抄也要会抄，抄的一样或更好。但是不是看了结果差不多，就说人家大成本训练出这条路的反而没价值了",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-04-29T01:01:34.000Z",
+      "description": "Ex-Goldman Sachs Asia FICC Exec & Co-founder of Zen Family Office. Now diving into crypto, exploring blockchain's potential",
+      "following": false,
+      "id": "858124064476479488",
+      "name": "Herman Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1765746894008102912/8X9HsTj8_normal.jpg",
+      "screen_name": "ShanghaoJin",
+    },
+  },
+  {
+    "created_at": "2025-01-26T02:49:37.000Z",
+    "id": "1883346528397590546",
+    "text": "@JundeMorsenWu 那么，幻方这条路是谁趟出来的呢？
+
+OpenAI不告诉你怎么re-inforce learning，幻方都不知道怎么蒸馏模型。这个路是OpenAI一遍遍试出来的，幻方“拿来用”，成本低不是太正常了么？
+
+当然找个成本低的方式抄一个o-1能抄得好、抄得快还是很值得称赞的。但是拿来对比试出来的人就很扯淡了",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-04-29T01:01:34.000Z",
+      "description": "Ex-Goldman Sachs Asia FICC Exec & Co-founder of Zen Family Office. Now diving into crypto, exploring blockchain's potential",
+      "following": false,
+      "id": "858124064476479488",
+      "name": "Herman Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1765746894008102912/8X9HsTj8_normal.jpg",
+      "screen_name": "ShanghaoJin",
+    },
+  },
+  {
+    "created_at": "2025-01-26T02:56:50.000Z",
+    "id": "1883348342622830634",
+    "text": "@ShanghaoJin 还是华为一如既往的操作手段
+把自己吹成后来者居上
+直到某天被人掐脖子。。。",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-02-25T12:18:50.000Z",
+      "description": "",
+      "following": false,
+      "id": "967735636269572098",
+      "name": "Young",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1866063984333639680/KLBl3aL0_normal.jpg",
+      "screen_name": "syang2045",
+    },
+  },
+  {
+    "created_at": "2025-01-26T03:07:27.000Z",
+    "id": "1883351014927200505",
+    "text": "@syang2045 @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-26T02:57:24.000Z",
+    "id": "1883348486592266476",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiL_dQAakAAU9cF.jpg",
+      },
+    ],
+    "text": "@ShanghaoJin https://t.co/z6jSO6LCNJ",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-01-24T04:44:12.000Z",
+      "description": "我叫林猪头，🏳️‍🌈，吐槽番……想遇到点有趣的灵魂",
+      "following": false,
+      "id": "1485473406749491203",
+      "name": "林",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1882209710629105664/bySy1MuI_normal.jpg",
+      "screen_name": "linzhutou404",
+    },
+  },
+  {
+    "created_at": "2025-01-26T03:07:22.000Z",
+    "id": "1883350994899320836",
+    "text": "@linzhutou404 @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-26T03:01:04.000Z",
+    "id": "1883349407439138839",
+    "text": "@ShanghaoJin 我覺得對行業衝擊很大，AI版Temu",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-02-18T03:44:39.000Z",
+      "description": "",
+      "following": false,
+      "id": "965069525132521473",
+      "name": "Man By the Sea",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1269706055275016193/j_1Ptk1m_normal.jpg",
+      "screen_name": "Manchesea",
+    },
+  },
+  {
+    "created_at": "2025-01-26T03:07:13.000Z",
+    "id": "1883350956534075902",
+    "text": "@Manchesea @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T12:50:04.000Z",
+    "id": "1883135245148717450",
+    "text": "不要把deepseek拿去跟GPT做比较，是不可同日而语的东西
+
+Hugging face上这种论文、垂直模型多如牛毛。市场关注亮点不过是中国在“没有”算力卡成本很低也能训练出效果差不多的模型。且说中国真没囤H100么？
+
+deepseek是个工程方法，大厂不屑于做，浪费精力做这个模型能力要落后对手",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-04-29T01:01:34.000Z",
+      "description": "Ex-Goldman Sachs Asia FICC Exec & Co-founder of Zen Family Office. Now diving into crypto, exploring blockchain's potential",
+      "following": false,
+      "id": "858124064476479488",
+      "name": "Herman Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1765746894008102912/8X9HsTj8_normal.jpg",
+      "screen_name": "ShanghaoJin",
+    },
+  },
+  {
+    "created_at": "2025-01-24T06:40:02.000Z",
+    "id": "1882679738789216456",
+    "text": "你听说过什么叫“蒸馏”么？说个大白话：
+
+就是拿人家算出来的模型参数，跳过所有数据清洗、训练，做最后一程。其实没有任何创新
+
+好像人家证明了π=3.14，他拿结果去算了圆面积。让他再自己去证明算一个e，他又抓瞎了",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-04-29T01:01:34.000Z",
+      "description": "Ex-Goldman Sachs Asia FICC Exec & Co-founder of Zen Family Office. Now diving into crypto, exploring blockchain's potential",
+      "following": false,
+      "id": "858124064476479488",
+      "name": "Herman Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1765746894008102912/8X9HsTj8_normal.jpg",
+      "screen_name": "ShanghaoJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T12:54:09.000Z",
+    "id": "1883136276335145013",
+    "text": "@ShanghaoJin 已经够nvda 跌的了",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-02-06T13:13:49.000Z",
+      "description": "",
+      "following": false,
+      "id": "1358041158815870976",
+      "name": "Charles",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1358041278206799877/50nFmi_J_normal.jpg",
+      "screen_name": "Charles48717364",
+    },
+  },
+  {
+    "created_at": "2025-01-25T16:13:48.000Z",
+    "id": "1883186517298040851",
+    "text": "@Charles48717364 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T02:00:22.000Z",
+    "id": "1882971745344491595",
+    "text": "ASML放开我觉得影响没那么大
+
+记者们总喜欢搞一个“大新闻”，但是EUV光源是美国军控的不可能对中国开放
+
+DUV中国已经堆积如山多，过度投资多的发毛没人用了。现在要盘（承包运营）一个DUV厂，可以申请退税，不需要考虑折旧，只需要把每年1.2%的利息给付了就行",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-04-29T01:01:34.000Z",
+      "description": "Ex-Goldman Sachs Asia FICC Exec & Co-founder of Zen Family Office. Now diving into crypto, exploring blockchain's potential",
+      "following": false,
+      "id": "858124064476479488",
+      "name": "Herman Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1765746894008102912/8X9HsTj8_normal.jpg",
+      "screen_name": "ShanghaoJin",
+    },
+  },
+  {
+    "created_at": "2025-01-09T03:50:03.000Z",
+    "id": "1877201139436843456",
+    "text": "只要不制裁到位，1-2年内中国还会把成熟制程芯片全部卷死",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-04-29T01:01:34.000Z",
+      "description": "Ex-Goldman Sachs Asia FICC Exec & Co-founder of Zen Family Office. Now diving into crypto, exploring blockchain's potential",
+      "following": false,
+      "id": "858124064476479488",
+      "name": "Herman Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1765746894008102912/8X9HsTj8_normal.jpg",
+      "screen_name": "ShanghaoJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T08:11:29.000Z",
+    "id": "1883065140624683421",
+    "text": "@ShanghaoJin Asml er gonna be weak",
+    "user": {
+      "blocking": false,
+      "created_at": "2016-09-08T23:37:03.000Z",
+      "description": "buy tech, long tech, research tech alpha. Dont dick around blindly.
+I share my trade ideas and opinion free and glad to hear your ideas otherwise shut f*ck up.",
+      "following": false,
+      "id": "774028806956912640",
+      "name": "Diyas.Σίσυφος",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1845937219254865924/rKcAS-Rh_normal.jpg",
+      "screen_name": "diyas_1989",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:59:27.000Z",
+    "id": "1883167805882945809",
+    "text": "@diyas_1989 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T07:29:55.000Z",
+    "id": "1883054680127004972",
+    "text": "@ShanghaoJin 记者们总搞“大新闻”，EUV是军控，不会开放。DUV堆积如山，过剩得离谱，盘厂申请退税，利息付了就行。",
+    "user": {
+      "blocking": true,
+      "created_at": "2020-11-06T03:32:23.000Z",
+      "description": "24小时不间断｜全球热点｜欧美时讯｜政经金融｜英推精华｜提升中推高度｜高度决定视野，眼光决定财富",
+      "following": false,
+      "id": "1324555157279961089",
+      "name": "OFFICIAL NEWS",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1811928600297242625/EqEkVkLn_normal.jpg",
+      "screen_name": "OfficialNewsWin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:59:24.000Z",
+    "id": "1883167796684820961",
+    "text": "@OfficialNewsWin @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T02:04:36.000Z",
+    "id": "1882972808474701957",
+    "text": "@ShanghaoJin 搞一个大新闻，马上让我看到了长者的样子。😂",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-12-24T02:32:52.000Z",
+      "description": "“我不会爱任何一个民族、任何一个集体——不爱任何一个国家、任何一个阶级，不爱这一切。我‘只’爱我的朋友，我所知道、所信仰的惟一一种爱。”",
+      "following": false,
+      "id": "1606477772565598208",
+      "name": "大寶劍闖江湖",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1814452389182877697/AXpMY77m_normal.jpg",
+      "screen_name": "liangJiao8",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:59:22.000Z",
+    "id": "1883167787889365114",
+    "text": "@liangJiao8 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-24T17:47:41.000Z",
+    "id": "1882847756454351091",
+    "text": "解释下文“短期预期太满”
+
+不是盈利预期问题，除了TSLA/AAPL考卷不会太难看，而是云厂需要回答：23-24年CapEx 50%+增加后，毛利如何、25年CapEx如何定调？
+
+怎么答4Q季报这道送命题，将影响全市场
+
+A. 毛利可见增加，继续投资
+B. 押注AI，无脑投
+C. 考虑毛利，降低ROI增速",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-04-29T01:01:34.000Z",
+      "description": "Ex-Goldman Sachs Asia FICC Exec & Co-founder of Zen Family Office. Now diving into crypto, exploring blockchain's potential",
+      "following": false,
+      "id": "858124064476479488",
+      "name": "Herman Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1765746894008102912/8X9HsTj8_normal.jpg",
+      "screen_name": "ShanghaoJin",
+    },
+  },
+  {
+    "created_at": "2025-01-24T09:51:06.000Z",
+    "id": "1882727821178757273",
+    "text": "维持之前观点，1Q再上一层楼不容易
+
+Goog/MSFT/NV/AMZN大概率inline～beat。但是预期太满了，幅度也不一定够
+
+TSLA/AAPL很难及格
+
+这个位置偏鸡肋了，还是那句话：不要满仓～",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-04-29T01:01:34.000Z",
+      "description": "Ex-Goldman Sachs Asia FICC Exec & Co-founder of Zen Family Office. Now diving into crypto, exploring blockchain's potential",
+      "following": false,
+      "id": "858124064476479488",
+      "name": "Herman Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1765746894008102912/8X9HsTj8_normal.jpg",
+      "screen_name": "ShanghaoJin",
+    },
+  },
+  {
+    "created_at": "2025-01-24T18:11:00.000Z",
+    "id": "1882853625845928402",
+    "text": "@ShanghaoJin 当初吹过的牛，现在含着泪也要吹完。",
+    "user": {
+      "blocking": false,
+      "created_at": "2010-05-10T17:30:05.000Z",
+      "description": "田园人",
+      "following": false,
+      "id": "142356825",
+      "name": "拿葱那个大婶儿",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1881778458335801344/NkzaKT8T_normal.jpg",
+      "screen_name": "joedhammer",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:59:20.000Z",
+    "id": "1883167780016636201",
+    "text": "@joedhammer @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-24T18:08:47.000Z",
+    "id": "1882853067684720830",
+    "text": "@ShanghaoJin I hope that servers’ demand for ASICs will be cross-verified during Amazon’s Q4 earnings call, even though the current price of $MRVL&amp; $AVGO is not entirely reasonable to me.😂😂",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-06-24T15:15:54.000Z",
+      "description": "",
+      "following": false,
+      "id": "1540352972617572354",
+      "name": "sometimes naive",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1626121453853904897/2xGrMQcc_normal.jpg",
+      "screen_name": "cliupsic",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:59:19.000Z",
+    "id": "1883167772525666381",
+    "text": "@cliupsic @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-24T20:12:05.000Z",
+    "id": "1882884094302019940",
+    "text": "@ShanghaoJin 短期预期太满：市场对公司未来表现期待过高，可能导致失望。",
+    "user": {
+      "blocking": true,
+      "created_at": "2020-11-06T03:32:23.000Z",
+      "description": "24小时不间断｜全球热点｜欧美时讯｜政经金融｜英推精华｜提升中推高度｜高度决定视野，眼光决定财富",
+      "following": false,
+      "id": "1324555157279961089",
+      "name": "OFFICIAL NEWS",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1811928600297242625/EqEkVkLn_normal.jpg",
+      "screen_name": "OfficialNewsWin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:59:17.000Z",
+    "id": "1883167765496004622",
+    "text": "@OfficialNewsWin @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T02:46:51.000Z",
+    "id": "1882983442792755242",
+    "text": "我都不知道该怎么评论这个“deep sick”了
+
+这可不是我发明的哦",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-04-29T01:01:34.000Z",
+      "description": "Ex-Goldman Sachs Asia FICC Exec & Co-founder of Zen Family Office. Now diving into crypto, exploring blockchain's potential",
+      "following": false,
+      "id": "858124064476479488",
+      "name": "Herman Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1765746894008102912/8X9HsTj8_normal.jpg",
+      "screen_name": "ShanghaoJin",
+    },
+  },
+  {
+    "created_at": "2025-01-24T15:36:22.000Z",
+    "id": "1882814711823217046",
+    "text": "@ShanghaoJin Open AI都不开源的，你看deep sick完全开源谁抄谁呀？",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-12-29T14:05:41.000Z",
+      "description": "资深易学顾问，玄学运筹转运！  叩泰玄都省天师大教主张真人府下拜受太上正一盟威经籙依格 奏充玉局治祭酒上清司命玉府左卿五雷斩 邪使兼领点校城隍司 鬼神功过同知雷霆都司事",
+      "following": false,
+      "id": "1476192642564120576",
+      "name": "玄门上品",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1476725990609268737/L4MQE0rp_normal.jpg",
+      "screen_name": "suanguaa",
+    },
+  },
+  {
+    "created_at": "2025-01-25T09:08:50.000Z",
+    "id": "1883079571454808187",
+    "text": "@ShanghaoJin deep sick fantasy",
+    "user": {
+      "blocking": false,
+      "created_at": "2011-05-08T05:31:21.000Z",
+      "description": "",
+      "following": false,
+      "id": "295000464",
+      "name": "組織もう決めた",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1545969226317705217/qoWU6Q0T_normal.jpg",
+      "screen_name": "allaboutgamble",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:59:15.000Z",
+    "id": "1883167758424371517",
+    "text": "@allaboutgamble @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T03:02:45.000Z",
+    "id": "1882987445706494140",
+    "text": "@ShanghaoJin 能给我你电报的链接吗？",
+    "user": {
+      "blocking": false,
+      "created_at": "2016-09-30T09:15:44.000Z",
+      "description": "",
+      "following": false,
+      "id": "781784582425341952",
+      "name": "Mangal Thakur",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1881494437651685377/jCpYZIu__normal.jpg",
+      "screen_name": "MangalT44107774",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:59:12.000Z",
+    "id": "1883167746537750881",
+    "text": "@MangalT44107774 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T04:11:58.000Z",
+    "id": "1883004861161275570",
+    "text": "@ShanghaoJin 老中骨子里可太喜欢这种“弯道超车”了，建议信这东西的，先想想你一时抖机灵，能不能跑赢你头顶姥爷三代走草地的积累吧",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-11-21T18:58:53.000Z",
+      "description": "",
+      "following": false,
+      "id": "1727038824671264768",
+      "name": "Lyric Roach",
+      "profile_image_url": "https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png",
+      "screen_name": "lyric47749",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:59:10.000Z",
+    "id": "1883167735141843133",
+    "text": "@lyric47749 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T12:57:58.000Z",
+    "id": "1883137237124264367",
+    "text": "@ShanghaoJin Have ever heard Ilya just said Pre-training is hitting the wall a few months ago? Data distill from big model is a great strategy to accelerate training especially when your competitors start to focus on reasoning capabilities.",
+    "user": {
+      "blocking": false,
+      "created_at": "2019-02-11T18:22:48.000Z",
+      "description": "No Bio",
+      "following": false,
+      "id": "1095025372914053120",
+      "name": "Macro_Lin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1877702741306507264/0CbIskr3_normal.jpg",
+      "screen_name": "LinQingV",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:59:07.000Z",
+    "id": "1883167724668674524",
+    "text": "@LinQingV @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T13:00:39.000Z",
+    "id": "1883137909236367734",
+    "text": "@ShanghaoJin There is no point to waste compute resources on pre-training stage of LLM model.",
+    "user": {
+      "blocking": false,
+      "created_at": "2019-02-11T18:22:48.000Z",
+      "description": "No Bio",
+      "following": false,
+      "id": "1095025372914053120",
+      "name": "Macro_Lin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1877702741306507264/0CbIskr3_normal.jpg",
+      "screen_name": "LinQingV",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:59:06.000Z",
+    "id": "1883167717232091467",
+    "text": "@LinQingV @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2025-01-25T12:51:55.000Z",
+    "id": "1883135713052704996",
+    "text": "@ShanghaoJin J35吊打一切地球武器。",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-12-24T02:32:52.000Z",
+      "description": "“我不会爱任何一个民族、任何一个集体——不爱任何一个国家、任何一个阶级，不爱这一切。我‘只’爱我的朋友，我所知道、所信仰的惟一一种爱。”",
+      "following": false,
+      "id": "1606477772565598208",
+      "name": "大寶劍闖江湖",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1814452389182877697/AXpMY77m_normal.jpg",
+      "screen_name": "liangJiao8",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:58:27.000Z",
+    "id": "1883167556086964382",
+    "text": "@liangJiao8 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
+
+所有的交易指令和決策會在公開之前先與群組成員分享。
+
+名額僅限 8,000  人，趕快加入 ⤵️
+
+https://t.co/66kk5cUv1v",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2022-02-28T18:07:29.000Z",
+    "id": "1498359213000921089",
+    "text": "RT @R183342664: คืนนี้แตกกับคู่เทพ
+@69fun
+https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2022-02-28T14:33:47.000Z",
+    "id": "1498305435048509445",
+    "text": "คืนนี้แตกกับคู่เทพ
+@69fun
+https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-02-28T13:07:27.000Z",
+      "description": "",
+      "following": false,
+      "id": "1498283636218789891",
+      "name": "R1",
+      "profile_image_url": "https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png",
+      "screen_name": "R183342664",
+    },
+  },
+]
+`;
+
+exports[`parseTweets > parseTweets for user tweets only 1`] = `
+[
+  {
+    "created_at": "2022-02-28T18:07:29.000Z",
+    "id": "1498359213000921089",
+    "text": "RT @R183342664: คืนนี้แตกกับคู่เทพ
+@69fun
+https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-06-28T22:29:36.000Z",
+      "description": "",
+      "following": false,
+      "id": "1409640060740194309",
+      "name": "Hcnmon Jin",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1883165201400569856/fj6XyjO9_normal.jpg",
+      "screen_name": "ShanqhacJin",
+    },
+  },
+  {
+    "created_at": "2022-02-28T14:33:47.000Z",
+    "id": "1498305435048509445",
+    "text": "คืนนี้แตกกับคู่เทพ
+@69fun
+https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-02-28T13:07:27.000Z",
+      "description": "",
+      "following": false,
+      "id": "1498283636218789891",
+      "name": "R1",
+      "profile_image_url": "https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png",
+      "screen_name": "R183342664",
+    },
+  },
+]
+`;
+
+exports[`parseTweetsForTimeline 1`] = `
+[
+  {
+    "created_at": "2025-01-25T14:11:28.000Z",
+    "id": "1883155733203877940",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJQIJSbIAA-IHg.jpg",
+      },
+    ],
+    "text": "Open-R1: DeepSeek-R1大模型开源复现计划
+
+概述：HuggingFace 发布的完全开放的项目，旨在分三步(知识蒸馏、强化学习、多阶段训练)复现 DeepSeek-R1 的完整训练流程，让更多人能理解和使用这套技术方案
+
+项目分三个主要步骤：
+· 步骤 1: 通过从 DeepSeek-R1 中提取高质量的推理语料，复现 R1-Distill https://t.co/JPlVUqbvwD",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-11-23T04:44:15.000Z",
+      "description": "Focused on Prompt Engineering, RAG, and Agents. 
+Sharing AI papers, news, apps, open-source projects.
+
+ex Microsoft MVP (2014-2022)
+
+📢 公众号: AI 启蒙小伙伴",
+      "following": false,
+      "id": "1727548535816724480",
+      "name": "meng shao",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1764498070841233408/qeTwfeW8_normal.jpg",
+      "screen_name": "shao__meng",
+    },
+  },
+  {
+    "created_at": "2025-01-25T13:19:26.000Z",
+    "id": "1883142636820676965",
+    "text": "We are reproducing the full DeepSeek R1 data and training pipeline so everybody can use their recipe. Instead of doing it in secret we can do it together in the open!
+
+🧪 Step 1: replicate the R1-Distill models by distilling a high-quality reasoning corpus from DeepSeek-R1.
+
+🧠",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-08-14T22:21:16.000Z",
+      "description": "🤗 LLM whisperer @huggingface
+📖 Co-author of "NLP with Transformers" book
+💥 Ex-particle physicist
+🤘 Occasional guitarist
+🇦🇺🇬🇧🇨🇱🇿🇦 in 🇨🇭",
+      "following": false,
+      "id": "1029493180704714753",
+      "name": "Lewis Tunstall",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1097405296543236096/gS2C7RIq_normal.jpg",
+      "screen_name": "_lewtun",
+    },
+  },
+  {
+    "created_at": "2025-01-17T06:08:02.000Z",
+    "id": "1880134969504457066",
+    "text": "培育蜘蛛子來殺時間吧
+
+等級提升太神啦",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-05-15T05:50:47.000Z",
+      "description": "Kumoko's coming back. 🕷🕸️
+A dungeon RPG based on the anime "So I'm a Spider, So What?"!
+Discord：https://t.co/xjaSarTarG
+#SpiderRotL #SoImASpider",
+      "following": false,
+      "id": "1790620708743360512",
+      "name": "So I'm a Spider, So What? Ruler of the Labyrinth",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1805421500641820672/ZUBAgnhP_normal.jpg",
+      "screen_name": "kumoko_laby_en",
+    },
+  },
+  {
+    "created_at": "2025-01-25T17:20:27.000Z",
+    "id": "1883203289585717593",
+    "text": "我长得好丑😭",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-01-17T09:00:17.000Z",
+      "description": "@maru__fama (i don’t actively follow",
+      "following": false,
+      "id": "1615272749207015424",
+      "name": "adsrehcaerp",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1881692932337545216/WTVE1gPI_normal.jpg",
+      "screen_name": "preachersad",
+    },
+  },
+  {
+    "created_at": "2025-01-25T11:17:39.000Z",
+    "id": "1883111988970365351",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiIoX2BagAALHsL.jpg",
+      },
+    ],
+    "text": "https://t.co/PWCCyj8clA",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-01-18T13:27:19.000Z",
+      "description": "月刊少女",
+      "following": false,
+      "id": "1483430738800574465",
+      "name": "夢乃狸",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1677444444612853760/5cmTyfgy_normal.jpg",
+      "screen_name": "nyannyanO228",
+    },
+  },
+  {
+    "created_at": "2025-01-25T17:59:03.000Z",
+    "id": "1883213006005490010",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiKEP8UaMAA1iGJ.jpg",
+      },
+    ],
+    "text": "https://t.co/XSxRGe3AmJ",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-09-03T06:31:41.000Z",
+      "description": "你好, 我是hsn! 避难所: @hsn8086xe | 注: 推文内容仅供娱乐,真假自辨!",
+      "following": false,
+      "id": "1433678976564662273",
+      "name": "hsn",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1881530651159179264/61qPk38t_normal.jpg",
+      "screen_name": "hsn8086",
+    },
+  },
+  {
+    "created_at": "2025-01-25T03:02:00.000Z",
+    "id": "1882987254764703953",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiGu4gkbgAEK9p7.jpg",
+      },
+    ],
+    "text": "❤️‍🩹❤️‍🩹❤️‍🩹 https://t.co/UOVKWudJxT",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-11-07T01:26:14.000Z",
+      "description": "🐈‍⬛ ゲーミングぴんくねこみみ概念 
+🎨 AI+drawing, analogue 
+🎮️ Steam, FF14, PoE2 
+
+▶️ fanart #おねんねあーと 
+▶️ https://t.co/EMlnRMM9vv
+▶️ https://t.co/p7WQPW8Aw5",
+      "following": false,
+      "id": "1589428860432834560",
+      "name": "りんねおねんね🐱💤",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1706555482771734528/xPhPttLr_normal.jpg",
+      "screen_name": "llrinnell",
+    },
+  },
+  {
+    "created_at": "2024-08-15T21:46:00.000Z",
+    "id": "1824200895648669753",
+    "text": "Supercharge your Gmail with AI ✨",
+    "user": {
+      "blocking": false,
+      "created_at": "2020-05-14T21:27:31.000Z",
+      "description": "AI-native email for business. Supercharge your team's productivity with advanced AI & real-time collaboration. @ShortwaveStatus for service updates",
+      "following": false,
+      "id": "1261045324518273031",
+      "name": "Shortwave",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1788456513172123648/-9SWQq6c_normal.jpg",
+      "screen_name": "Shortwave",
+    },
+  },
+  {
+    "created_at": "2025-01-25T09:21:25.000Z",
+    "id": "1883082737684480431",
+    "text": "“AMD宣布，已将新的DeepSeek-V3模型集成到Instinct MI300X GPU上，该模型旨在与SGLang一起实现最佳性能。DeepSeek-V3针对Al推理进行了优化。” //可以啊，DeepSeek挺牛逼的，居然被AMD看上了……👀
+
+ref: https://t.co/uGurvXfWRq",
+    "user": {
+      "blocking": false,
+      "created_at": "2008-11-19T09:11:24.000Z",
+      "description": "构成：30%生活，20%ACG，20%技术，15%查证，10%股市，5%政治。 
+PGP：https://t.co/tE5FodMBh0，
+Bitcoin：1DvdCDjUJ4bnqDgyzTAQ2xabw6ChRnQ9Sy，
+BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
+      "following": false,
+      "id": "17482838",
+      "name": "陈少举 （🦣 @chenshaoju@acg.mn ）",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1596840714251313152/7mOJ-w4O_normal.jpg",
+      "screen_name": "chenshaoju",
+    },
+  },
+  {
+    "created_at": "2025-01-24T18:02:22.000Z",
+    "id": "1882851449991737473",
+    "text": "Excited to share that AMD has integrated the new DeepSeek-V3 model on Instinct MI300X GPUs, designed for peak performance with SGLang. DeepSeek-V3 is optimized for AI inferencing. Special thanks to the DeepSeek and SGLang teams for their close collaboration!",
+    "user": {
+      "blocking": false,
+      "created_at": "2008-05-21T22:14:12.000Z",
+      "description": "together we advance_",
+      "following": false,
+      "id": "14861876",
+      "name": "AMD",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1534988679076368384/In8IVKDB_normal.png",
+      "screen_name": "AMD",
+    },
+  },
+  {
+    "created_at": "2025-01-25T16:28:51.000Z",
+    "id": "1883190307690614795",
+    "text": "😓 为什么我的时间线上一直有一个人持之以恒、锲而不舍地发着帖想要唱衰 deepseek R1
+
+从 “有没有专家来说说是不是真的牛逼？” 到 “希望大家不要把他吹过了”
+
+😓 我的建议是自己不太懂的东西不要乱评论 ...",
+    "user": {
+      "blocking": false,
+      "created_at": "2020-06-05T04:07:26.000Z",
+      "description": "Loving 琳琳/ Chinese / Frontend / 或许可以看看 Vue Vine https://t.co/slT87ROPvZ / 参与 Vue.js +Vite+Rollup 中文文档译制 / Valorant / Socialist",
+      "following": false,
+      "id": "1268756263715827712",
+      "name": "River · 沈青川",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1638155232743145474/itEmsOV5_normal.jpg",
+      "screen_name": "Shenqingchuan",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:11:10.000Z",
+    "id": "1883155657974780240",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJP8m7aoAA-IyW.jpg",
+      },
+    ],
+    "text": "HuggingFace 刚开源了个项目叫 Open-R1, 旨在复现 DeepSeek-R1
+
+地址：https://t.co/Ve5qM8iM2d https://t.co/zaIbLesjd8",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-12-08T02:07:30.000Z",
+      "description": "A coder, road bike rider, server fortune teller, electronic waste collector, co-founder of KCORES, ex-director at IllaSoft, KingsoftOffice, Juejin.",
+      "following": false,
+      "id": "1071224721046261760",
+      "name": "karminski-牙医",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1071225168360427520/2tY0hY6b_normal.jpg",
+      "screen_name": "karminski3",
+    },
+  },
+  {
+    "created_at": "2025-01-25T18:07:29.000Z",
+    "id": "1883215125550866788",
+    "text": "我混的最好的同学就是本科毕业就工作了的
+
+现在都是正科副处，房价暴涨之前上了车，解决了终身大事
+
+次好的同学是读了硕的，基本上现在也都买了房安了家
+
+最垃圾的就是一起读博的，错过了黄金年代，基本上现在都在租房给人打工
+
+不得不承认，真的是知识改变命运啊",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-12-16T05:16:33.000Z",
+      "description": "伊利诺伊大学克莱登分校（ICCU）PhR",
+      "following": false,
+      "id": "941899828501430273",
+      "name": "润学唯一博导（Tenure Track非走即生）",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1667110608389668866/sFBmI9hq_normal.jpg",
+      "screen_name": "RunnerOfPhil",
+    },
+  },
+  {
+    "created_at": "2024-05-27T12:02:40.000Z",
+    "id": "1795063065328628063",
+    "media": [
+      {
+        "type": "video",
+        "url": "https://pbs.twimg.com/ext_tw_video_thumb/1795061154949320704/pu/img/nPjJoqOxDjy4s5XL.jpg",
+      },
+    ],
+    "text": "✨Hello Live2D Riggers and VTubers!✨
+
+nizima LIVE is the official Live2D Vtuber app. We've invited professional Live2D creator Soulty to introduce the app's features and explain why she uses it. If you're interested, you can download the free trial here! https://t.co/AQzxFSjMCf https://t.co/qn6biVxftM",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-05-31T05:28:21.000Z",
+      "description": "🪄Live2D's Official VTuber App🪄
+
+Live2D公式のVTuber向けトラッキングアプリ「nizima LIVE」公式アカウントです。たまに公式キャラの虹丸イブが発信を行います🍬
+
+公式サイト ➭ https://t.co/xkMQznHONa
+Discord ➭ https://t.co/cY3mXa0ABd",
+      "following": false,
+      "id": "1663779361940705280",
+      "name": "nizima LIVE - Live2D公式VTuberアプリ",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1684757645348204544/ISTF8YAi_normal.jpg",
+      "screen_name": "nizimaLIVE",
+    },
+  },
+  {
+    "created_at": "2025-01-25T11:22:11.000Z",
+    "id": "1883113128596304263",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/Gh4ycVKbgAAWRpl.jpg",
+      },
+    ],
+    "text": "RT @sakura_oriko: 1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨ https://t.co/EkDPlUFF21",
+    "user": {
+      "blocking": false,
+      "created_at": "2014-09-01T12:07:34.000Z",
+      "description": "イラストレーター・漫画家。メルヘンファンタジーな世界観を描きます ◆個人画集『Fluffy』 ◆ちゃおプラス『ふしぎな猫のまちメルティア』 ②巻 #猫メル ◆ 『#すいんぐ』 全⑤巻『#四つ子ぐらし』絵⑲巻・漫画④巻◆新作著書1/31発売！｜リンク集▶︎https://t.co/el37bL8pUc #おりこ糖",
+      "following": true,
+      "id": "2784005456",
+      "name": "佐倉おりこ🍀猫メル２巻発売中＆アイデア帳1/31発売！",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1681929870048366592/RuJMwjV__normal.jpg",
+      "screen_name": "sakura_oriko",
+    },
+  },
+  {
+    "created_at": "2025-01-22T09:27:43.000Z",
+    "id": "1881997161384349713",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/Gh4ycVKbgAAWRpl.jpg",
+      },
+    ],
+    "text": "1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨ https://t.co/EkDPlUFF21",
+    "user": {
+      "blocking": false,
+      "created_at": "2014-09-01T12:07:34.000Z",
+      "description": "イラストレーター・漫画家。メルヘンファンタジーな世界観を描きます ◆個人画集『Fluffy』 ◆ちゃおプラス『ふしぎな猫のまちメルティア』 ②巻 #猫メル ◆ 『#すいんぐ』 全⑤巻『#四つ子ぐらし』絵⑲巻・漫画④巻◆新作著書1/31発売！｜リンク集▶︎https://t.co/el37bL8pUc #おりこ糖",
+      "following": true,
+      "id": "2784005456",
+      "name": "佐倉おりこ🍀猫メル２巻発売中＆アイデア帳1/31発売！",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1681929870048366592/RuJMwjV__normal.jpg",
+      "screen_name": "sakura_oriko",
+    },
+  },
+  {
+    "created_at": "2025-01-25T19:03:31.000Z",
+    "id": "1883229230227665128",
+    "text": "说明半个小时，Cursor 写出来的应用，拿到国区第一，巧合不可复制",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-02-17T20:04:50.000Z",
+      "description": "Building next-gen apps for you",
+      "following": false,
+      "id": "1626674002969382912",
+      "name": "Mike Chong (WildCat 野猫) 🏔️🌟 @洛星",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1772305782815485953/ubYGJGtp_normal.jpg",
+      "screen_name": "WildCat_zh",
+    },
+  },
+  {
+    "created_at": "2025-01-25T05:23:34.000Z",
+    "id": "1883022883578171482",
+    "text": "OpenAI 招前端工程师，年薪 $245K – $385K + Offers Equity。
+如果 OpenAI 都还在招前端工程师，那说明 AI 替代程序员还早……",
+    "user": {
+      "blocking": false,
+      "created_at": "2007-04-02T03:42:14.000Z",
+      "description": "Prompt Engineer, dedicated to learning and disseminating knowledge about AI, software engineering, and engineering management.",
+      "following": true,
+      "id": "3178231",
+      "name": "宝玉",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/561086911561736192/6_g58vEs_normal.jpeg",
+      "screen_name": "dotey",
+    },
+  },
+  {
+    "created_at": "2025-01-25T17:41:18.000Z",
+    "id": "1883208540061622404",
+    "text": "蒸馏这个词确实让人迷惑，感觉是从一份混合液中蒸馏出一种纯净水（从模型A中提取出了A1），实际完全不是这个意思，更应该翻译成“教学”。",
+    "user": {
+      "blocking": false,
+      "created_at": "2013-08-09T10:31:29.000Z",
+      "description": "产品经理，主发AI相关信息，个人维护的AI资讯日报↓",
+      "following": false,
+      "id": "1657474831",
+      "name": "Gorden Sun",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1522159828231409664/GPpXyPT1_normal.jpg",
+      "screen_name": "Gorden_Sun",
+    },
+  },
+  {
+    "created_at": "2025-01-25T13:57:39.000Z",
+    "id": "1883152254641082413",
+    "text": "所以我说学界取得这个蒸馏术语，就取得不太好。
+
+外行一听就有自己的小理解了",
+    "user": {
+      "blocking": false,
+      "created_at": "2010-02-22T04:48:14.000Z",
+      "description": "喜欢一切美好的事物。目前聚焦在大模型领域。",
+      "following": false,
+      "id": "116355740",
+      "name": "九原客",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1509120377816969223/qzJBlcuS_normal.jpg",
+      "screen_name": "9hills",
+    },
+  },
+  {
+    "created_at": "2025-01-17T07:30:00.000Z",
+    "id": "1880155597854920998",
+    "text": "3月24日の申請から「#2025年旅券（#パスポート）」の発給が開始！
+偽造・変造対策が強化され、顔写真ページがプラスチック製に変わります。
+#現在お持ちのパスポートは有効期間まで使えます #パスポくん #旅券",
+    "user": {
+      "blocking": false,
+      "created_at": "2011-05-23T10:17:04.000Z",
+      "description": "外務省の公式アカウントです。外交に関する新着情報を中心に発信しております。｜英語版（English）@MofaJapan_en
+｜外務省ソーシャルメディア一覧： https://t.co/2VDfT2CifR",
+      "following": false,
+      "id": "303730149",
+      "name": "外務省",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1082102533454102528/HXpr1ZEl_normal.jpg",
+      "screen_name": "MofaJapan_jp",
+    },
+  },
+  {
+    "created_at": "2025-01-25T10:57:47.000Z",
+    "id": "1883106988349071564",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiIj0fYakAArvKd.jpg",
+      },
+    ],
+    "text": "来拍个合影
+#复刻字体设计 https://t.co/2mzmg7eJ4Y",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-05-29T00:50:58.000Z",
+      "description": "中文排版孔雀计划·字谈字畅播客。排版者、设计者、研究者、译者、编辑、主播、演奏者。",
+      "following": false,
+      "id": "1398441654189662214",
+      "name": "Eric Liu 𝕏 🦚",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1398442096260882434/8YLsYD48_normal.jpg",
+      "screen_name": "Kongque_Chinese",
+    },
+  },
+  {
+    "created_at": "2025-01-25T10:51:21.000Z",
+    "id": "1883105370434081269",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiIiStZbwAAov7P.jpg",
+      },
+    ],
+    "text": "#ブルアカ  
+プラナ https://t.co/3aoujXWJgl",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-10-01T12:13:34.000Z",
+      "description": "【ラセリ/라세리 】
+イラスト 
+💌contact→06laseri01@gmail.com",
+      "following": false,
+      "id": "1841089030181814272",
+      "name": "LASERI",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1865031482194169857/kfoGfL3D_normal.jpg",
+      "screen_name": "06laseri01",
+    },
+  },
+  {
+    "created_at": "2025-01-25T12:48:13.000Z",
+    "id": "1883134783305171236",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiI9GIXXoAAzSEp.jpg",
+      },
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiI9GhfXMAA44Pk.jpg",
+      },
+    ],
+    "text": "好耶是方便面！加了自己烤的脆皮培根卷里脊肉和好多配菜ww
+
+其实方便面还好，之前看到0.7欧一袋顺手买了点，加的肉和菜有3欧了。其实吃起来和中国版没区别qwq https://t.co/BYRfkQgBWC",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-02-19T13:48:07.000Z",
+      "description": "诶…谢谢你来看我🥳 | 一个超级社恐的小透明👻 | 普通的EE大学生🎓 | 日常推，不建政🚫 | 包容每一种立场💕 | 希望和大家成为好朋友🥺 | 温暖对待每个友善的人，欢迎贴贴🤗 | 想要给世界带来更多可爱🥰 | 愿我们能从彼此的话语中获得力量(。•ω•。)ノ♡ | ❤@LittleKittyya",
+      "following": false,
+      "id": "965583779380129792",
+      "name": "Mario",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1857012441302827009/JQqCInfU_normal.jpg",
+      "screen_name": "mario_2333",
+    },
+  },
+  {
+    "created_at": "2024-08-17T00:27:00.000Z",
+    "id": "1824603801061560477",
+    "text": "歷史紀錄片《秦始皇》以史籍文獻、文物遺蹟為依據，追溯秦始皇的一生事蹟，展現周秦之交一段波瀾壯闊的歷史。
+
+整部紀錄片共計12集，每集時長約20分鐘，講述兩千多年前，秦始皇統一六國、建立大一統王朝的輝煌功績。
+
+#乾淨世界 #秦始皇 #秦朝 #紀錄片 #歷史英雄 #中國傳統文化",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-10-21T04:32:37.000Z",
+      "description": "乾淨世界致力於加強人與人之間的善意、尊重和信任。非成癮演算法，優先推薦有價值的內容。保護言論自由，保護隱私，無需註冊下載應用、分享和發表評論。",
+      "following": false,
+      "id": "1715586749819437056",
+      "name": "乾淨世界",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1838298632103034880/XiEwkj-c_normal.jpg",
+      "screen_name": "GanJingWorldzh",
+    },
+  },
+  {
+    "created_at": "2025-01-26T01:06:17.000Z",
+    "id": "1883320522760741081",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiLmCNwbsAAMMFA.jpg",
+      },
+    ],
+    "text": "大早上：拿铁＋摩卡＋文拉法辛
+今天我跟世界必须疯一个 https://t.co/pceSmn6pLv",
+    "user": {
+      "blocking": false,
+      "created_at": "2017-08-16T09:20:50.000Z",
+      "description": "",
+      "following": true,
+      "id": "897749985361444866",
+      "name": "文学少女安德烈",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1872624201796059137/lL6g5Rby_normal.jpg",
+      "screen_name": "woaishuji",
+    },
+  },
+  {
+    "created_at": "2025-01-25T13:18:36.000Z",
+    "id": "1883142426245894475",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJDtEoa4AAf8tP.jpg",
+      },
+    ],
+    "text": "angel Alya #ロシデレ https://t.co/nPLvL4718S",
+    "user": {
+      "blocking": false,
+      "created_at": "2012-03-03T02:54:22.000Z",
+      "description": "イラストレーター🥯ライトノベル「時々ボソッとロシア語でデレる隣のアーリャさん」 Vtuber「ペトラ・グリン」「博衣こより」「五十嵐梨花」「杏戸ゆげ」 FANBOX→https://t.co/d9cjUE8TXJ 最新画集→https://t.co/FsSS6ndUUv",
+      "following": false,
+      "id": "512712234",
+      "name": "ももこ🍑大阪個展1/29～2/14",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1871787639541772288/eXma9Tj9_normal.jpg",
+      "screen_name": "momoco_haru",
+    },
+  },
+  {
+    "created_at": "2025-01-25T14:43:45.000Z",
+    "id": "1883163856845054174",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJXbeQaYAEVd2S.jpg",
+      },
+    ],
+    "text": "#angelicpretty Melty Berry Princess JSK 🍓
+给大家拜个早年啦~祝各位蛇年大吉！
+📷: @YazawaBunny 
+#lolitafashion #sweetlolita https://t.co/DaopgI2K7S",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-09-10T01:28:09.000Z",
+      "description": "🌟请叫咱Uzuki或者卯月！💼湾区普通打工人及Lo汉=ω= 👗日常高强度穿Lo选手~ 🎀甜玼最高！🚫色色打咩x 禁止转载禁止盗图！在奇奇怪怪地方发现咱的照片都不是本人(·•᷄ࡇ•᷅ ）💖努力让自己变得更加可爱_8(:3 」∠ )_ 请多指教！以及欢迎走进我的世界www",
+      "following": false,
+      "id": "1436139332528586779",
+      "name": "HimeUzuki",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1622858246708162560/QwEnDc8U_normal.jpg",
+      "screen_name": "HimeUzuki",
+    },
+  },
+  {
+    "created_at": "2025-01-24T20:41:00.000Z",
+    "id": "1882891372866531358",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiE5G14asAAB-Rv.jpg",
+      },
+    ],
+    "text": "apparently this is not an "acceptable excuse" 🙄 https://t.co/ELJJlmJFxo",
+    "user": {
+      "blocking": false,
+      "created_at": "2020-01-14T01:56:34.000Z",
+      "description": "is your site slow? https://t.co/LZNgAoDlch | founder @milliondotjs, alum @hackclub",
+      "following": false,
+      "id": "1216901847673229313",
+      "name": "Aiden Bai",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1652572951282343936/BXVLE8nu_normal.jpg",
+      "screen_name": "aidenybai",
+    },
+  },
+  {
+    "created_at": "2025-01-10T14:18:51.000Z",
+    "id": "1877721770767319092",
+    "text": "Freedom &amp; joy at Phuket Island Rehab top luxury addiction rehab for your addiction recovery journey,
+
+We are ready when you are.  Join us at Phuket Island Rehab in Thailand and reclaim your life.",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-12-19T20:47:36.000Z",
+      "description": "🌴 Phuket Island Rehab 🌊 | Founded in 2023 by Dr. Ponlawat. Personalized addiction & mental health care, combining excellence & compassion. Serene Phuket",
+      "following": false,
+      "id": "1869847019277406208",
+      "name": "phuket Island Rehab",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1876387456318390272/IRUuKaUs_normal.jpg",
+      "screen_name": "phuketisland24",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:20:32.000Z",
+    "id": "1883173115230134610",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiJf-AmaIAA5er1.jpg",
+      },
+    ],
+    "text": "这钱真能给到孩子，那多少钱我也认了。
+你睁眼看看，现在日本给孩子吃的都是什么鸡巴玩意儿。
+什么こども家庭庁年间预算7万亿日元，平摊到一个纳税人身上快10万日元就给孩子喂了屎。
+丢人不丢人呐？ https://t.co/3gobJQAbuD",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-03-26T14:18:40.000Z",
+      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。https://t.co/zwDurJQwha宫司🥳私信回复较慢（一般周三周六晚上回复）",
+      "following": false,
+      "id": "1507723638249713664",
+      "name": "月半",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1529606141545545728/ufDWA7bY_normal.jpg",
+      "screen_name": "yuebanzhu",
+    },
+  },
+  {
+    "created_at": "2025-01-24T21:03:20.000Z",
+    "id": "1882896992017465643",
+    "text": "@yuebanzhu 换句话说，只要黑在日本想方设法造个孩子，出于所谓人权考量就不能依法驱逐了，等于变相获得永居权，还要由你这样的纳税大户来间接抚养？这公平吗？",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-08-03T08:54:10.000Z",
+      "description": "🇨🇿🇵🇱🇪🇪🇬🇪🇬🇧🇺🇸🇱🇹🇫🇷🇦🇺🇰🇷🇱🇻🇫🇮🇸🇪🇦🇹🇳🇱🇧🇪🇸🇮🇦🇿🇨🇦🇮🇹🇯🇵🇩🇪🇬🇷🇩🇰🇧🇬🇳🇿🇹🇼🇦🇱🇪🇸🇵🇹🇲🇪🇲🇰🇮🇸🇹🇳🇰🇪🇱🇺🇭🇷",
+      "following": false,
+      "id": "1422480626389712898",
+      "name": "蒼の聖典(Lazy)🇺🇦🇮🇱🇳🇫",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1513409165783625731/ta_uh0ZY_normal.jpg",
+      "screen_name": "lazy_Hemis",
+    },
+  },
+  {
+    "created_at": "2025-01-25T15:52:55.000Z",
+    "id": "1883181263605174363",
+    "text": "@yuebanzhu 吃这些东西我真怀疑蛋白质摄入够么...生长发育期的能量消耗很大啊...",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-11-27T12:04:55.000Z",
+      "description": "大食い/旅行/生活/退勤bot",
+      "following": true,
+      "id": "1067388797426393088",
+      "name": "セセリア",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1841732589306155008/dblieZa4_normal.jpg",
+      "screen_name": "Ceceliasama23",
+    },
+  },
+  {
+    "created_at": "2025-01-25T03:24:03.000Z",
+    "id": "1882992803233591465",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiG7-bvbsAAccXa.jpg",
+      },
+    ],
+    "text": "😁😁😁好久没发做的饭了。 https://t.co/0lttSIyadm",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-07-27T23:45:26.000Z",
+      "description": "个人博客：https://t.co/fGVztYtBQS。",
+      "following": false,
+      "id": "1552439937198587904",
+      "name": "ききよし",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1773164373248479232/xSR3ZxIW_normal.jpg",
+      "screen_name": "shuqing8964",
+    },
+  },
+  {
+    "created_at": "2025-01-25T11:09:12.000Z",
+    "id": "1883109864832127088",
+    "text": "This guy thinks deepseek r1, which had pver 100 authors, more then any ive seen on a meta paper and maybe even more than i saw on gpt4 technical report - thinks that they are claiming they are a “small group” of ai engineers?",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-02-25T19:25:11.000Z",
+      "description": "Cofounder and Head of Post Training @NousResearch, prev @StabilityAI
+Github: https://t.co/LZwHTUFwPq
+HuggingFace: https://t.co/sN2FFU8PVE",
+      "following": false,
+      "id": "1365020011123773442",
+      "name": "Teknium (e/λ)",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1642401912648777728/2KFikPsE_normal.jpg",
+      "screen_name": "Teknium1",
+    },
+  },
+  {
+    "created_at": "2025-01-24T18:57:08.000Z",
+    "id": "1882865234765058403",
+    "text": "What's more likely? 
+
+1 - small group of AI engineers at @deepseek_ai figures out how to beat all of the top researchers in the world as a side project
+
+2 - Chinese government has 100k GPUs they shouldn't have and releases open source models claiming $6m training cost as a psyop",
+    "user": {
+      "blocking": false,
+      "created_at": "2008-06-18T00:32:26.000Z",
+      "description": "Co-Founder @ElectricCapital; Investor @anchorage @bitwise @boomaero @cruise @deel @dydx @nearprotocol @newfronthq @notionhq @magiceden @pulley; views are my own",
+      "following": false,
+      "id": "15152173",
+      "name": "Avichal - Electric ϟ Capital",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/902647890840920064/IzSKaY1c_normal.jpg",
+      "screen_name": "avichal",
+    },
+  },
+  {
+    "created_at": "2025-01-26T00:55:34.000Z",
+    "id": "1883317825487638616",
+    "text": "@Teknium1 I think they included cooks and bus driver at their company no?",
+    "user": {
+      "blocking": false,
+      "created_at": "2018-01-19T02:34:47.000Z",
+      "description": "Backend/Infrastructure engineer.
+
+Let's make AI even cooler.",
+      "following": true,
+      "id": "954180304343715840",
+      "name": "子萱 - e/acc",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1182317342887305216/BFVLlBvC_normal.jpg",
+      "screen_name": "llennchan2003",
+    },
+  },
+  {
+    "created_at": "2024-11-14T09:21:15.000Z",
+    "id": "1856990771922309514",
+    "text": "暴雪VPN
+加速器必备，免费安全，翻墙无压力
+
+稳定5年服务源自新加坡VPN供应商
+
+免费节点，无日志，不记录用户隐私，顶级数据加密，伪装图标使您在互联网上安全冲浪。🏄‍♂️
+
+嵌入可直连chatgpt，支持3.5&amp;4版本，点开即用📱
+
+🌍多国家节点，多设备共享，Andriod, iOS, Windows版本，欢迎下载使用！
+#vpn",
+    "user": {
+      "blocking": false,
+      "created_at": "2020-11-20T10:14:59.000Z",
+      "description": "超过5年稳定服务-新加坡顶尖科技技术 供全球使用的 #VPN 🌏永久免费使用，高速稳定，不限流量。 一账户共享多设备！支持Chatgpt！ We do professional to improving your network security and privacy.",
+      "following": false,
+      "id": "1329729771396231170",
+      "name": "暴雪vpn",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1329730044592152577/Fwun6H1t_normal.png",
+      "screen_name": "bxvpn",
+    },
+  },
+  {
+    "created_at": "2025-01-25T04:58:30.000Z",
+    "id": "1883016575235789282",
+    "text": "RT @zhanghaili0610: Huge congrats on the launch! 🎉 Thrilled to see Refly enter the open-source world. Powered by @LangChainAI 🦜🕸️ and LangG…",
+    "user": {
+      "blocking": false,
+      "created_at": "2016-12-07T11:45:38.000Z",
+      "description": "Building the context-aware, collaborative AI Native canvas for content creation → https://t.co/u3zni4yOrS, ex @tiktok_us",
+      "following": true,
+      "id": "806464682823282688",
+      "name": "Tom Huang",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1033199673035522048/WI-JLSAc_normal.jpg",
+      "screen_name": "tuturetom",
+    },
+  },
+  {
+    "created_at": "2025-01-24T13:57:24.000Z",
+    "id": "1882789803449876645",
+    "text": "Huge congrats on the launch! 🎉 Thrilled to see Refly enter the open-source world. Powered by @LangChainAI 🦜🕸️ and LangGraph.js for next-level AI capabilities — the possibilities are endless. Can’t wait to dive in! 🚀🔥🎉",
+    "user": {
+      "blocking": false,
+      "created_at": "2022-05-11T04:49:46.000Z",
+      "description": "@LangChainAI Ambassador, @KubeSphere Ambassador, @CloudNativeFdn @openfunctiondev TOC Member.",
+      "following": false,
+      "id": "1524250283521368064",
+      "name": "Harry Zhang",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1524250387892506624/JdxlpAT2_normal.jpg",
+      "screen_name": "zhanghaili0610",
+    },
+  },
+  {
+    "created_at": "2025-01-24T09:42:05.000Z",
+    "id": "1882725553071120594",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiDI1tibMAAPD4K.jpg",
+      },
+    ],
+    "text": "After 7 months of development, 1 month of beta testing, and 77,376 lines of code! ⚡️Refly is now officially open source! 🔥🚀 
+
+Since day one, Refly has aspired to become a world-class open-source project alongside Docker and K8S! Our mission is to create the best AI-native https://t.co/nIuS3DNoZl",
+    "user": {
+      "blocking": false,
+      "created_at": "2024-12-31T01:19:27.000Z",
+      "description": "The open-source AI native creation engine, powered by free-form canvas.
+
+GitHub: https://t.co/MNhI3qf8M7
+Discord: https://t.co/HFvxnoFRvr",
+      "following": false,
+      "id": "1873901546179883008",
+      "name": "Refly.AI",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1873903604400349190/9WdES8qd_normal.jpg",
+      "screen_name": "reflyai",
+    },
+  },
+  {
+    "created_at": "2025-01-25T09:00:00.000Z",
+    "id": "1883077348578173377",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GiIIwBpa0AA0b0g.jpg",
+      },
+    ],
+    "text": "百合園セイア
+#ブルアカ #BlueArchive https://t.co/Pf5CrczwOv",
+    "user": {
+      "blocking": false,
+      "created_at": "2023-02-23T02:37:38.000Z",
+      "description": "ブルーアーカイブ🩵💙🩵💙All illustrations I post are generated by Stable diffusion(AI)+ Photoshop drawing, Please be careful if you don't like AI art. I love kawaii.",
+      "following": false,
+      "id": "1628584790692876288",
+      "name": "RInCA",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1742495911065120768/KeIzCvpQ_normal.jpg",
+      "screen_name": "Rinca_ba",
+    },
+  },
+  {
+    "created_at": "2025-01-25T13:29:44.000Z",
+    "id": "1883145230683406810",
+    "text": "02年家里人说不养我了，谁能收留我一段时间，我会想办法打工然后卷款跑路，包联系不上的",
+    "user": {
+      "blocking": false,
+      "created_at": "2021-12-08T16:19:28.000Z",
+      "description": "02年社畜 | 🏳️‍⚧️ | B端产品画图狗 ，正在努力生活 | 请多指教哦~ | 未来：@nieniebuding 姐姐：@ny3a_is_a_cat",
+      "following": false,
+      "id": "1468616147339968513",
+      "name": "SorrowRain",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1845416012168167424/-jdJXRxv_normal.jpg",
+      "screen_name": "0xSorrowRain",
+    },
+  },
+]
+`;
+
 exports[`parseUserRecords > parse all-spam 1`] = `
 [
   {

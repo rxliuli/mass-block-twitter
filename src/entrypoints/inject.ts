@@ -5,13 +5,20 @@ import {
   parseUserRecords,
 } from '$lib/api'
 import { dbApi } from '$lib/db'
-import { difference, differenceBy, omit, uniqBy } from 'lodash-es'
+import {
+  debounce,
+  difference,
+  differenceBy,
+  omit,
+  throttle,
+  uniqBy,
+} from 'lodash-es'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { wait } from '@liuli-util/async'
 import { addBlockButton, alertWarning, extractTweet } from '$lib/observe'
 import css from './style.css?raw'
 import { injectCSS } from '$lib/injectCSS'
-import 'urlpattern-polyfill'
+import { URLPattern } from 'urlpattern-polyfill'
 import { getSpamUsers } from '$lib/shared'
 
 function blockClientEvent(): Middleware {
@@ -84,7 +91,7 @@ function handleTweets(): Middleware {
         )
         const spamUsers = await getSpamUsers()
         const spamTweetIds: string[] = []
-        // console.log('tweets', tweets)
+        console.log('tweets', tweets)
         tweets.forEach(async (it) => {
           // Don't block following users
           if (it.user.following) {
@@ -126,6 +133,9 @@ function handleTweets(): Middleware {
 }
 
 async function processTweetElement(tweetElement: HTMLElement) {
+  if (tweetElement.dataset.spamScanned === 'true') {
+    return
+  }
   const { tweetId } = extractTweet(tweetElement)
   const tweet = await dbApi.tweets.get(tweetId)
   if (!tweet) {
@@ -140,6 +150,14 @@ async function processTweetElement(tweetElement: HTMLElement) {
   if (reportSpamTweetIds.has(tweetId)) {
     alertWarning(tweetElement, tweet)
   }
+  tweetElement.dataset.spamScanned = 'true'
+}
+
+function eachTweetElements() {
+  const elements = document.querySelectorAll(
+    '[data-testid="cellInnerDiv"]:has([data-testid="reply"]):not([data-spam-scanned="true"])',
+  ) as NodeListOf<HTMLElement>
+  elements.forEach(processTweetElement)
 }
 
 function observe() {
@@ -155,6 +173,7 @@ function observe() {
         ) {
           processTweetElement(node)
         }
+        throttle(eachTweetElements, 100)
       })
     })
   })

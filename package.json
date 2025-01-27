@@ -1,5 +1,5 @@
 {
-  "name": "@mass-block-twitter/extension",
+  "name": "mass-block-twitter",
   "description": "Mass Block Twitter Spam Users",
   "private": true,
   "version": "0.8.0",

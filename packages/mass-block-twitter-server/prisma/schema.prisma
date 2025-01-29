@@ -32,7 +32,7 @@ model User {
 }
 
 model Tweet {
-  id              String       @id @default(uuid())
+  id              String       @id
   text            String
   media           Json?
   publishedAt     DateTime

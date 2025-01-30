@@ -52,5 +52,13 @@ export default defineConfig({
         $lib: path.resolve('./src/lib'),
       },
     },
+    build: {
+      minify: false,
+      sourcemap: 'inline',
+      target: 'esnext',
+    },
+    esbuild: {
+      target: 'esnext',
+    },
   }),
 })

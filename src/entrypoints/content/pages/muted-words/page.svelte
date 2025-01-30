@@ -1,6 +1,5 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button'
-  import { Label } from '$lib/components/ui/label'
   import { localStorageAdapter, localStore } from '$lib/util/localStore'
   import { TrashIcon } from 'lucide-svelte'
 
@@ -26,7 +25,12 @@
 </script>
 
 <div>
-  <Label class="block mb-2">Block Keywords</Label>
+  <p class="text-sm text-gray-500 mb-2">
+    When you block keywords, posts containing these keywords will be hidden,
+    including tweets where the keywords appear in usernames, bios, or tweet
+    content. This applies to both timeline and replies.
+  </p>
+  <Button variant="secondary" onclick={onAddKeyword}>Add Keyword</Button>
   <ul class="flex flex-col gap-2">
     {#each $keywords as keyword, index}
       <li class="flex items-center justify-between gap-2">
@@ -41,5 +45,4 @@
       </li>
     {/each}
   </ul>
-  <Button variant="secondary" onclick={onAddKeyword}>Add Keyword</Button>
 </div>

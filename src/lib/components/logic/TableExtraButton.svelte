@@ -12,20 +12,20 @@
 
 <MediaQuery query="(max-width: 768px)">
   {#snippet children(matches)}
-    {#if matches}
-      <Button
-        onclick={props.onclick}
-        variant={'outline'}
-        size={'icon'}
-        title={props.text}
-      >
-        {@render props.icon()}
-      </Button>
-    {:else}
+    <!-- {#if matches} -->
+    <Button
+      onclick={props.onclick}
+      variant={'outline'}
+      size={'icon'}
+      title={props.text}
+    >
+      {@render props.icon()}
+    </Button>
+    <!-- {:else}
       <Button onclick={props.onclick}>
         {@render props.icon()}
         {props.text}
       </Button>
-    {/if}
+    {/if} -->
   {/snippet}
 </MediaQuery>

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { type User } from '$lib/db'
   import { userQuery } from '../../../../lib/query'
-  import PageHeader from '$lib/components/logic/PageHeader.svelte'
   import { renderComponent } from '$lib/components/ui/data-table'
   import AvatarWrapper from './components/AvatarWrapper.svelte'
   import DescriptionWrapper from './components/DescriptionWrapper.svelte'
@@ -65,7 +64,6 @@
 </script>
 
 <div class="h-full flex flex-col">
-  <PageHeader>Record Users</PageHeader>
   <UserActions {selectedRows}>
     {#snippet search()}
       <Input

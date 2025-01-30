@@ -8,12 +8,13 @@
 		class: className,
 		children,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
+	}: WithElementRef<HTMLAttributes<HTMLElement>> = $props();
 </script>
 
 <div
 	bind:this={ref}
-	class={cn("flex flex-col space-y-2 text-center sm:text-left", className)}
+	data-sidebar="footer"
+	class={cn("flex flex-col gap-2 p-2", className)}
 	{...restProps}
 >
 	{@render children?.()}

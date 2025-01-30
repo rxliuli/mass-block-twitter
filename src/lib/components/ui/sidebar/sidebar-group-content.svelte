@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { HTMLAttributes } from "svelte/elements";
-	import type { WithElementRef } from "bits-ui";
 	import { cn } from "$lib/utils.js";
+	import type { WithElementRef } from "bits-ui";
+	import type { HTMLAttributes } from "svelte/elements";
 
 	let {
 		ref = $bindable(null),
@@ -13,7 +13,8 @@
 
 <div
 	bind:this={ref}
-	class={cn("flex flex-col space-y-2 text-center sm:text-left", className)}
+	data-sidebar="group-content"
+	class={cn("w-full text-sm", className)}
 	{...restProps}
 >
 	{@render children?.()}

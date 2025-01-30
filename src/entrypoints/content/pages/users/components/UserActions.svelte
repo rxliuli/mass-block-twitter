@@ -13,7 +13,7 @@
   import { fileSelector } from '$lib/util/fileSelector'
   import { parse } from 'csv-parse/browser/esm/sync'
   import { Button } from '$lib/components/ui/button'
-  import { router } from '$lib/route.svelte'
+  import { router } from '$lib/components/logic/router/route.svelte'
   import { userMutation } from '$lib/query'
   import { Snippet } from 'svelte'
 

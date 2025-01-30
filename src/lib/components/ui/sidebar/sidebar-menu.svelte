@@ -1,20 +1,21 @@
 <script lang="ts">
+	import { cn } from "$lib/utils.js";
 	import type { WithElementRef } from "bits-ui";
 	import type { HTMLAttributes } from "svelte/elements";
-	import { cn } from "$lib/utils.js";
 
 	let {
 		ref = $bindable(null),
 		class: className,
 		children,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
+	}: WithElementRef<HTMLAttributes<HTMLUListElement>, HTMLUListElement> = $props();
 </script>
 
-<div
+<ul
 	bind:this={ref}
-	class={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)}
+	data-sidebar="menu"
+	class={cn("flex w-full min-w-0 flex-col gap-1", className)}
 	{...restProps}
 >
 	{@render children?.()}
-</div>
+</ul>

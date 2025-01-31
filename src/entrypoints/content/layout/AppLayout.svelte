@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as Sidebar from '$lib/components/ui/sidebar'
-  import { Snippet } from 'svelte'
+  import type { Snippet } from 'svelte'
   import AppSidebar from './AppSidebar.svelte'
   import { cn } from '$lib/utils'
   import { HomeIcon, MessageCircleOffIcon, SettingsIcon } from 'lucide-svelte'

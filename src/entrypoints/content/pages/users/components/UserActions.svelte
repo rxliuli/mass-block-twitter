@@ -13,7 +13,7 @@
   import { parse } from 'csv-parse/browser/esm/sync'
   import { Button } from '$lib/components/ui/button'
   import { userMutation } from '$lib/query'
-  import { Snippet } from 'svelte'
+  import { type Snippet } from 'svelte'
   import { groupBy } from 'lodash-es'
 
   const props: {

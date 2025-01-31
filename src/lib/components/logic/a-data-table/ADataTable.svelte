@@ -1,11 +1,8 @@
 <script lang="ts" generics="TData extends any">
   import * as Table from '$lib/components/ui/table'
-  import type { Component } from 'svelte'
-  import { cn } from '$lib/utils'
   import { Checkbox } from '../../ui/checkbox'
   import { difference, uniq } from 'lodash-es'
-  import { Column, Props } from './props'
-  import { Virtualizer } from 'virtua/svelte'
+  import type { Props } from './props'
   import { isComponent, isComponentConfig } from './utils'
 
   // @link https://ant.design/components/table
@@ -38,8 +35,6 @@
       )
     }
   }
-
-  let scrollRef: HTMLElement | undefined = $state()
 </script>
 
 <Table.Root class={props.class}>

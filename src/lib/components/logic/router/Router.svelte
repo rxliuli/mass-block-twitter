@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Route } from './types'
   import { router } from './route.svelte'
-  import { Snippet } from 'svelte'
+  import type { Snippet } from 'svelte'
 
   const {
     routes,

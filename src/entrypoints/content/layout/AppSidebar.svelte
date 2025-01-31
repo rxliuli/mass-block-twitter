@@ -14,13 +14,24 @@
   const content = $state(items.filter((it) => it.to === 'content'))
   const footer = $state(items.filter((it) => it.to === 'footer'))
   const sidebar = Sidebar.useSidebar()
+
+  function onClickMenuUrl(url: string) {
+    navigate(url)
+    if (sidebar.isMobile) {
+      sidebar.setOpenMobile(false)
+    }
+    console.log('onClickMenuUrl', url, sidebar.open)
+  }
 </script>
 
 <Sidebar.Root>
   <Sidebar.Header>
     <Sidebar.Menu>
-      <Sidebar.MenuItem class="flex justify-between">
-        <Sidebar.MenuButton onclick={() => navigate('/')}>
+      <Sidebar.MenuItem class="flex justify-between items-center">
+        <Sidebar.MenuButton
+          class="font-bold"
+          onclick={() => onClickMenuUrl('/')}
+        >
           Mass Block Twitter
         </Sidebar.MenuButton>
         {#if sidebar.isMobile}
@@ -42,7 +53,7 @@
                 href={item.url}
                 onclick={(ev) => {
                   ev.preventDefault()
-                  navigate(item.url)
+                  onClickMenuUrl(item.url)
                 }}
               >
                 <item.icon />
@@ -58,7 +69,7 @@
     <Sidebar.Menu>
       {#each footer as item (item.title)}
         <Sidebar.MenuItem>
-          <Sidebar.MenuButton onclick={() => navigate('/settings')}>
+          <Sidebar.MenuButton onclick={() => onClickMenuUrl('/settings')}>
             <item.icon />
             <span>{item.title}</span>
           </Sidebar.MenuButton>

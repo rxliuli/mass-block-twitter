@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { Context } from 'runed'
-  import { Snippet } from 'svelte'
+  import type { Snippet } from 'svelte'
   import { shadcnConfig } from './context'
 
   const props: { children?: Snippet; portal?: HTMLElement } = $props()

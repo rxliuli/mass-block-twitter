@@ -11,6 +11,9 @@ export interface User {
   name: string
   description?: string
   profile_image_url?: string
+  followers_count?: number
+  default_profile?: boolean
+  default_profile_image?: boolean
   created_at?: string
   updated_at: string // add to idb time
 }

@@ -20,7 +20,7 @@ export default defineBackground(() => {
     await sendMessage('show', undefined, tab!.id)
   })
   onMessage('fetchSpamUsers', async () =>
-    fetch(`${SERVER_URL}/spam-users`).then((res) => res.json()),
+    fetch(`${SERVER_URL}/spam-users-for-type`).then((res) => res.json()),
   )
   onMessage('spamReport', async (ev) => {
     // console.log('spamReport background script', ev.data)

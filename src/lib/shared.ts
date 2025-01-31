@@ -6,6 +6,9 @@ export async function getSpamUsers(): Promise<
 > {
   const spamUsers = ((await get('spamUsers')) ?? {}) as Record<string, number>
   return map(spamUsers, (_key, value) => {
+    if (typeof value === 'string') {
+      return value
+    }
     if (value > 10) {
       return 'spam'
     }

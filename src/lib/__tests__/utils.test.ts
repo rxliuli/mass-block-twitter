@@ -3,14 +3,9 @@ import { it, expect, describe } from 'vitest'
 import all from './assets/all.json'
 import timeline from './assets/timeline.json'
 import { z } from 'zod'
-import {
-  filterTweets,
-  parseTweets,
-  parseUserRecords,
-  tweetScheam,
-} from '../api'
+import { filterTweets, parseTweets, parseUserRecords } from '../api'
 import allSpam from './assets/all-spam.json'
-import { difference, omit, pick } from 'lodash-es'
+import { omit, pick } from 'lodash-es'
 import notificationsSpam from './assets/notifications-spam.json'
 import profile from './assets/ProfileSpotlightsQuery.json'
 import HomeTimeline from './assets/HomeTimeline.json'
@@ -19,6 +14,7 @@ import TweetDetail2 from './assets/TweetDetail2.json'
 import TweetDetail3 from './assets/TweetDetail3.json'
 import UserTweetsAndReplies from './assets/UserTweetsAndReplies.json'
 import UserTweets from './assets/UserTweets.json'
+import SearchTimeline from './assets/SearchTimeline.json'
 
 describe('extractObjects', () => {
   it('extractObjects 1', () => {
@@ -79,6 +75,7 @@ describe('parseUserRecords', () => {
   it('parse all-spam', () => {
     const users = parseUserRecords(allSpam)
     expect(users.map((it) => it.name).some((it) => it.includes('比特币'))).true
+    expect(users).length(201)
     expect(
       users.map((it) => omit(it, 'created_at', 'updated_at')),
     ).toMatchSnapshot()
@@ -249,6 +246,14 @@ describe('filterTweets', () => {
   it('filterTweets for detail', () => {
     const spamTweetIds = ['1883173115230134610']
     const json = filterTweets(TweetDetail, (it) => spamTweetIds.includes(it.id))
+    const tweets = parseTweets(json)
+    expect(tweets.some((it) => spamTweetIds.includes(it.id))).false
+  })
+  it('filterTweets for search timeline', () => {
+    const spamTweetIds = ['1885219025005314048']
+    const json = filterTweets(SearchTimeline, (it) =>
+      spamTweetIds.includes(it.id),
+    )
     const tweets = parseTweets(json)
     expect(tweets.some((it) => spamTweetIds.includes(it.id))).false
   })

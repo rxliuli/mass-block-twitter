@@ -2,15 +2,23 @@ import { z } from 'zod'
 import { extractObjects } from './util/extractObjects'
 import { dbApi, TweetMediaType, User } from './db'
 import { matchByKeyword } from './util/matchByKeyword'
-import { filter, get } from 'lodash-es'
+
+export function setRequestHeaders(headers: Headers) {
+  localStorage.setItem(
+    'requestHeaders',
+    JSON.stringify(Array.from(headers.entries())),
+  )
+}
+
+export function getRequestHeaders(): Headers {
+  return new Headers(JSON.parse(localStorage.getItem('requestHeaders') ?? '{}'))
+}
 
 export async function blockUser(user: Pick<User, 'id'>) {
   if (!user.id) {
     throw new Error('userId is required')
   }
-  const headers = new Headers(
-    JSON.parse(localStorage.getItem('requestHeaders') ?? '{}'),
-  )
+  const headers = getRequestHeaders()
   headers.set('content-type', 'application/x-www-form-urlencoded')
   const r = await fetch('https://x.com/i/api/1.1/blocks/create.json', {
     headers,
@@ -30,7 +38,7 @@ export async function unblockUser(userId: string) {
   if (!userId) {
     throw new Error('userId is required')
   }
-  const headers = JSON.parse(localStorage.getItem('requestHeaders') ?? '{}')
+  const headers = getRequestHeaders()
   const r = await fetch('https://x.com/i/api/1.1/blocks/destroy.json', {
     headers: headers,
     referrer: 'https://x.com/cryptocishanjia',
@@ -56,6 +64,9 @@ const timelineUserSchema = z.object({
     description: z.string().optional().nullable(),
     profile_image_url_https: z.string().optional().nullable(),
     created_at: z.string().optional(),
+    followers_count: z.number().optional(),
+    default_profile: z.boolean().optional(),
+    default_profile_image: z.boolean().optional(),
   }),
 })
 
@@ -72,6 +83,9 @@ function parseTimelineUser(tweetUser: typeof timelineUserSchema._type): User {
       ? new Date(tweetUser.legacy.created_at).toISOString()
       : undefined,
     updated_at: new Date().toISOString(),
+    followers_count: tweetUser.legacy.followers_count,
+    default_profile: tweetUser.legacy.default_profile,
+    default_profile_image: tweetUser.legacy.default_profile_image,
   }
 }
 
@@ -86,6 +100,9 @@ export function parseUserRecords(json: any): User[] {
     description: z.string().optional().nullable(),
     profile_image_url_https: z.string().optional().nullable(),
     created_at: z.string().optional(),
+    followers_count: z.number().optional(),
+    default_profile: z.boolean().optional(),
+    default_profile_image: z.boolean().optional(),
   })
   users.push(
     ...(
@@ -107,6 +124,9 @@ export function parseUserRecords(json: any): User[] {
             ? new Date(it.created_at).toISOString()
             : undefined,
           updated_at: new Date().toISOString(),
+          followers_count: it.followers_count,
+          default_profile: it.default_profile,
+          default_profile_image: it.default_profile_image,
         } satisfies User),
     ),
   )
@@ -128,8 +148,10 @@ export interface UserRecord {
   blocking: boolean
 }
 
+export const MUTED_WORDS_KEY = 'MASS_BLOCK_TWITTER_MUTED_WORDS'
+
 export async function autoBlockUsers(users: User[]): Promise<User[]> {
-  const keywordStr = localStorage.getItem('blockKeywords')
+  const keywordStr = localStorage.getItem(MUTED_WORDS_KEY)
   if (!keywordStr || keywordStr.length === 0) {
     console.debug('No keywords to block')
     return []
@@ -203,7 +225,7 @@ export const tweetScheam = z.object({
   }),
 })
 
-interface Tweet {
+export interface ParsedTweet {
   id: string
   text: string
   media?: {
@@ -214,14 +236,14 @@ interface Tweet {
   user: User
 }
 
-export function parseTweets(json: any): Tweet[] {
+export function parseTweets(json: any): ParsedTweet[] {
   return (
     extractObjects(
       json,
       (it) => tweetScheam.safeParse(it).success,
     ) as (typeof tweetScheam._type)[]
   ).map((it) => {
-    const tweet: Tweet = {
+    const tweet: ParsedTweet = {
       id: it.rest_id,
       text: it.legacy.full_text,
       created_at: new Date(it.legacy.created_at).toISOString(),
@@ -239,7 +261,7 @@ export function parseTweets(json: any): Tweet[] {
 
 export function filterTweets(
   json: any,
-  spamCondition: (tweet: Tweet) => boolean,
+  spamCondition: (tweet: ParsedTweet) => boolean,
 ) {
   const addEntriesSchema = z.object({
     type: z.literal('TimelineAddEntries'),
@@ -255,6 +277,9 @@ export function filterTweets(
     json,
     (it) => addEntriesSchema.safeParse(it).success,
   ) as (typeof addEntriesSchema._type)[]
+  if (!addEntries) {
+    return json
+  }
   addEntries.entries = addEntries.entries.filter((it) => {
     const tweets = parseTweets(it)
     let result = true
@@ -267,3 +292,4 @@ export function filterTweets(
   })
   return json
 }
+

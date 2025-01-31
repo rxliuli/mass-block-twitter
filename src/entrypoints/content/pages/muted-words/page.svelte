@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { MUTED_WORDS_KEY } from '$lib/api'
   import { Button } from '$lib/components/ui/button'
   import { localStorageAdapter, localStore } from '$lib/util/localStore'
   import { TrashIcon } from 'lucide-svelte'
 
   let keywords = localStore(
-    'MASS_BLOCK_TWITTER_BLOCK_KEYWORDS',
+    MUTED_WORDS_KEY,
     localStorage
       .getItem('blockKeywords')
       ?.split('\n')

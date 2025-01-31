@@ -1,18 +1,14 @@
 import {
   autoBlockUsers,
   filterTweets,
+  MUTED_WORDS_KEY,
+  ParsedTweet,
   parseTweets,
   parseUserRecords,
+  setRequestHeaders,
 } from '$lib/api'
 import { dbApi } from '$lib/db'
-import {
-  debounce,
-  difference,
-  differenceBy,
-  omit,
-  throttle,
-  uniqBy,
-} from 'lodash-es'
+import { differenceBy, omit, throttle, uniqBy } from 'lodash-es'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { wait } from '@liuli-util/async'
 import { addBlockButton, alertWarning, extractTweet } from '$lib/observe'
@@ -20,6 +16,16 @@ import css from './style.css?raw'
 import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'
 import { getSpamUsers } from '$lib/shared'
+import { matchByKeyword } from '$lib/util/matchByKeyword'
+import {
+  defaultProfileFilter,
+  mutedWordsFilter,
+  sharedSpamFilter,
+  spamContext,
+} from '$lib/filter'
+import { localStore } from '$lib/util/localStore'
+import { HIDE_SUSPICIOUS_ACCOUNTS_KEY } from '$lib/constants'
+import { getSettings } from '$lib/settings'
 
 function blockClientEvent(): Middleware {
   const pattern = new URLPattern(
@@ -46,10 +52,7 @@ function blockClientEvent(): Middleware {
 function loggerRequestHeaders(): Middleware {
   return async (c, next) => {
     if (c.req.headers.get('authorization')) {
-      localStorage.setItem(
-        'requestHeaders',
-        JSON.stringify([...c.req.headers.entries()]),
-      )
+      setRequestHeaders(c.req.headers)
     }
     await next()
   }
@@ -60,10 +63,9 @@ function loggerViewUsers(): Middleware {
     await next()
     if (c.res.headers.get('content-type')?.includes('application/json')) {
       const json = await c.res.clone().json()
-      const users = uniqBy(parseUserRecords(json), 'id')
+      const users = parseUserRecords(json)
       if (users.length > 0) {
-        const blockedUsers = await autoBlockUsers(users)
-        await dbApi.users.record(differenceBy(users, blockedUsers, 'id'))
+        await dbApi.users.record(users)
       }
     }
   }
@@ -73,15 +75,25 @@ const reportSpamTweetIds = new Set<string>()
 
 function handleTweets(): Middleware {
   const routes = [
-    'https://x.com/i/api/graphql/*/(HomeTimeline|TweetDetail|UserTweets|UserTweetsAndReplies|CommunityTweetsTimeline|HomeLatestTimeline)',
+    'https://x.com/i/api/graphql/*/(HomeTimeline|TweetDetail|UserTweets|UserTweetsAndReplies|CommunityTweetsTimeline|HomeLatestTimeline|SearchTimeline)',
     'https://x.com/i/api/2/notifications/all.json',
   ]
+  const filters = [mutedWordsFilter]
+  if (getSettings().hideSuspiciousAccounts) {
+    filters.push(defaultProfileFilter)
+  }
+  if (getSettings().hideSpamAccounts) {
+    filters.push(sharedSpamFilter)
+  }
   return async (c, next) => {
     await next()
     if (routes.some((it) => new URLPattern(it).test(c.req.url))) {
       try {
         const json = await c.res.clone().json()
         const tweets = parseTweets(json)
+        if (tweets.length === 0) {
+          return
+        }
         await dbApi.tweets.record(
           tweets.map((it) => ({
             ...omit(it, 'user'),
@@ -89,42 +101,38 @@ function handleTweets(): Middleware {
             user_id: it.user.id,
           })),
         )
-        const spamUsers = await getSpamUsers()
-        const spamTweetIds: string[] = []
         console.log('tweets', tweets)
+        spamContext.spamUsers = await getSpamUsers()
         tweets.forEach(async (it) => {
           // Don't block following users
           if (it.user.following) {
             return
           }
-          if (spamUsers[it.user.id]) {
-            switch (spamUsers[it.user.id]) {
-              case 'spam':
-                spamTweetIds.push(it.id)
-                break
+          if (spamContext.spamUsers[it.user.id]) {
+            switch (spamContext.spamUsers[it.user.id]) {
               case 'report':
                 reportSpamTweetIds.add(it.id)
                 break
             }
           }
         })
-        if (spamTweetIds.length > 0) {
-          const usedSpamTweetIds: string[] = []
-          const data = filterTweets(json, (it) => {
-            if (spamTweetIds.includes(it.id)) {
-              usedSpamTweetIds.push(it.id)
-              return true
-            }
+        const spamTweets: [string, ParsedTweet][] = []
+        const filteredTweets = filterTweets(json, (it) => {
+          if (it.user.following) {
             return false
-          })
-          c.res = new Response(JSON.stringify(data), c.res)
-          if (usedSpamTweetIds.length !== spamTweetIds.length) {
-            console.error('inject.ts: spam tweet ids not match', {
-              spamTweetIds,
-              usedSpamTweetIds,
-            })
           }
+          return filters.some((filter) => {
+            const r = filter(it)
+            if (r) {
+              spamTweets.push([filter.name, it])
+            }
+            return r
+          })
+        })
+        if (spamTweets.length > 0) {
+          console.log('spamTweets', spamTweets)
         }
+        c.res = new Response(JSON.stringify(filteredTweets), c.res)
       } catch (err) {
         console.error('tweets parse error', err)
       }
@@ -147,7 +155,7 @@ async function processTweetElement(tweetElement: HTMLElement) {
     return
   }
   addBlockButton(tweetElement, tweet)
-  if (reportSpamTweetIds.has(tweetId)) {
+  if (getSettings().hideSpamAccounts && reportSpamTweetIds.has(tweetId)) {
     alertWarning(tweetElement, tweet)
   }
   tweetElement.dataset.spamScanned = 'true'

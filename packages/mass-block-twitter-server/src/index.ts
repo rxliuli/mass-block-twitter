@@ -151,6 +151,7 @@ app
       return c.json({ success: true })
     },
   )
+  /** @deprecated Next Version Deprecated */
   .get('/spam-users', async (c) => {
     const prisma = await prismaClients.fetch(c.env.DB)
     const spamReportCounts = await prisma.user.findMany({
@@ -169,6 +170,26 @@ app
         acc[it.id] = it.spamReportCount
         return acc
       }, {} as Record<string, number>),
+    )
+  })
+  .get('/spam-users-for-type', async (c) => {
+    const prisma = await prismaClients.fetch(c.env.DB)
+    const spamReportCounts = await prisma.user.findMany({
+      select: {
+        id: true,
+        spamReportCount: true,
+      },
+      where: {
+        spamReportCount: {
+          gte: 1,
+        },
+      },
+    })
+    return c.json(
+      spamReportCounts.reduce((acc, it) => {
+        acc[it.id] = it.spamReportCount > 10 ? 'spam' : 'report'
+        return acc
+      }, {} as Record<string, 'report' | 'spam'>),
     )
   })
   .delete('/test/spam-users', async (c) => {

@@ -8,11 +8,10 @@
   import type { Column } from '$lib/components/logic/a-data-table'
   import { ADataTable } from '$lib/components/logic/a-data-table'
   import UserActions from './components/UserActions.svelte'
-  import { matchByKeyword } from '$lib/util/matchByKeyword'
   import { Input } from '$lib/components/ui/input'
-  import { Switch } from '$lib/components/ui/switch'
   import Label from '$lib/components/ui/label/label.svelte'
   import { filterUser } from './utils/filterUser'
+  import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 
   const query = userQuery()
 
@@ -76,14 +75,14 @@
   <div class="flex items-center gap-2">
     <Label class="flex items-center gap-2">
       <span>Show Blocking</span>
-      <Switch
+      <Checkbox
         checked={searchParams.showBlocking}
         onCheckedChange={(checked) => (searchParams.showBlocking = checked)}
       />
     </Label>
     <Label class="flex items-center gap-2">
       <span>Show Following</span>
-      <Switch
+      <Checkbox
         checked={searchParams.showFollowing}
         onCheckedChange={(checked) => (searchParams.showFollowing = checked)}
       />

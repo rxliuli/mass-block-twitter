@@ -13,7 +13,9 @@ export default defineContentScript({
   async main(ctx) {
     await injectScript('/inject.js')
 
-    refreshSpamUsers()
+    if (!import.meta.env.DEV) {
+      refreshSpamUsers()
+    }
 
     await wait(() => !!document.body)
     const ui = await createShadowRootUi(ctx, {

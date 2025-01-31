@@ -10,6 +10,9 @@
   import UserActions from './components/UserActions.svelte'
   import { matchByKeyword } from '$lib/util/matchByKeyword'
   import { Input } from '$lib/components/ui/input'
+  import { Switch } from '$lib/components/ui/switch'
+  import Label from '$lib/components/ui/label/label.svelte'
+  import { filterUser } from './utils/filterUser'
 
   const query = userQuery()
 
@@ -46,34 +49,46 @@
   ]
 
   let selectedRowKeys = $state<string[]>([])
-  let keyword = $state('')
+  let searchParams = $state({
+    keyword: '',
+    showBlocking: true,
+    showFollowing: false,
+  })
   const filteredData = $derived(
-    (keyword.trim()
-      ? $query.data?.filter((it) =>
-          matchByKeyword(keyword.trim(), [
-            it.screen_name,
-            it.name,
-            it.description,
-          ]),
-        )
-      : $query.data) ?? [],
+    $query.data?.filter((it) => filterUser(it, searchParams)) ?? [],
   )
   const selectedRows = $derived(
     filteredData.filter((it) => selectedRowKeys.includes(it.id)),
   )
 </script>
 
-<div class="h-full flex flex-col">
-  <UserActions {selectedRows}>
+<div class="h-[calc(100vh-3rem)] flex flex-col">
+  <UserActions {selectedRows} class="mb-2">
     {#snippet search()}
       <Input
         placeholder="Search..."
-        value={keyword}
-        oninput={(e) => (keyword = String(e.currentTarget.value))}
+        value={searchParams.keyword}
+        oninput={(e) => (searchParams.keyword = String(e.currentTarget.value))}
         class="flex-1"
       />
     {/snippet}
   </UserActions>
+  <div class="flex items-center gap-2">
+    <Label class="flex items-center gap-2">
+      <span>Show Blocking</span>
+      <Switch
+        checked={searchParams.showBlocking}
+        onCheckedChange={(checked) => (searchParams.showBlocking = checked)}
+      />
+    </Label>
+    <Label class="flex items-center gap-2">
+      <span>Show Following</span>
+      <Switch
+        checked={searchParams.showFollowing}
+        onCheckedChange={(checked) => (searchParams.showFollowing = checked)}
+      />
+    </Label>
+  </div>
   <ADataTable
     class="flex-1"
     {columns}

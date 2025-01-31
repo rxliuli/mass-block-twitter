@@ -64,6 +64,9 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21(patch_hash=bac4fi2larraukbjueqxrzimd4)
+      runed:
+        specifier: ^0.23.2
+        version: 0.23.2(svelte@5.16.0)
       serialize-error:
         specifier: ^11.0.3
         version: 11.0.3
@@ -3277,8 +3280,8 @@ packages:
     peerDependencies:
       svelte: ^5.7.0
 
-  runed@0.23.1:
-    resolution: {integrity: sha512-h1ZDmin0LBoSMEZxvHOJbCWsUBz4099cjI+/rQ4FZystgOq294s5Rh+OEeu9HIObc8XQQEya23eAhJeal0VBuA==}
+  runed@0.23.2:
+    resolution: {integrity: sha512-AhHCb5/B+YQW6ar1pzhGQOQy+byfjCH63ofuhrexSWwQKhC0EbQ60Z/wMYwETLo3ZubhwlNryxBt0seOMOrVFQ==}
     peerDependencies:
       svelte: ^5.7.0
 
@@ -5334,7 +5337,7 @@ snapshots:
       '@floating-ui/dom': 1.6.13
       '@internationalized/date': 3.7.0
       esm-env: 1.2.1
-      runed: 0.23.1(svelte@5.16.0)
+      runed: 0.23.2(svelte@5.16.0)
       svelte: 5.16.0
       svelte-toolbelt: 0.7.0(svelte@5.16.0)
 
@@ -7109,7 +7112,7 @@ snapshots:
       esm-env: 1.2.1
       svelte: 5.16.0
 
-  runed@0.23.1(svelte@5.16.0):
+  runed@0.23.2(svelte@5.16.0):
     dependencies:
       esm-env: 1.2.1
       svelte: 5.16.0

@@ -10,23 +10,39 @@
   import AppLayout from './layout/AppLayout.svelte'
   import { Button } from '$lib/components/ui/button'
   import { XIcon } from 'lucide-svelte'
+  import { ShadcnConfig } from '$lib/components/logic/config'
 
   let open = $state(false)
+
+  function openModal() {
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth
+    document.documentElement.style.setProperty(
+      '--scrollbar-width',
+      `${scrollbarWidth}px`,
+    )
+    document.body.classList.add('modal-open')
+  }
+
+  function closeModal() {
+    document.body.classList.remove('modal-open')
+  }
 
   onMount(() => {
     onMessage('show', () => {
       open = true
+      openModal()
     })
     return removeAllListeners
   })
 
   const queryClient = new QueryClient()
+  const root = document
+    .querySelector('mass-block-twitter')
+    ?.shadowRoot?.querySelector('body')!
 
   // TODO https://github.com/svecosystem/mode-watcher/issues/104
   $effect(() => {
-    const root = document
-      .querySelector('mass-block-twitter')
-      ?.shadowRoot?.querySelector('html')
     const current = $mode
     if (root) {
       root.className = `color-scheme: ${current}`
@@ -35,34 +51,39 @@
 </script>
 
 <QueryClientProvider client={queryClient}>
-  <Router
-    routes={[
-      {
-        path: '/',
-        component: UsersPage,
-      },
-      {
-        path: '/muted-words',
-        component: MutedWordsPage,
-      },
-      {
-        path: '/settings',
-        component: SettingsPage,
-      },
-    ]}
-  >
-    <AppLayout {open}>
-      <RouterView />
-      <Button
-        variant="ghost"
-        size="icon"
-        class="absolute top-0 right-0"
-        onclick={() => (open = false)}
-      >
-        <XIcon class="w-4 h-4" />
-      </Button>
-    </AppLayout>
-  </Router>
+  <ShadcnConfig portal={root}>
+    <Router
+      routes={[
+        {
+          path: '/',
+          component: UsersPage,
+        },
+        {
+          path: '/muted-words',
+          component: MutedWordsPage,
+        },
+        {
+          path: '/settings',
+          component: SettingsPage,
+        },
+      ]}
+    >
+      <AppLayout {open}>
+        <RouterView />
+        <Button
+          variant="ghost"
+          size="icon"
+          class="absolute top-0 right-0"
+          onclick={() => {
+            open = false
+            closeModal()
+          }}
+        >
+          <XIcon class="w-4 h-4" />
+        </Button>
+      </AppLayout>
+    </Router>
+  </ShadcnConfig>
 </QueryClientProvider>
 
 <ModeWatcher />

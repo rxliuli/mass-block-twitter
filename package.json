@@ -61,6 +61,7 @@
     "idb-keyval": "^6.2.1",
     "just-map-object": "^2.3.0",
     "lodash-es": "^4.17.21",
+    "runed": "^0.23.2",
     "serialize-error": "^11.0.3",
     "svelte-dnd-action": "^0.9.54",
     "svelte-legos": "^0.2.5",

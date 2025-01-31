@@ -5,6 +5,7 @@
   import type { HTMLAttributes } from 'svelte/elements'
   import { SIDEBAR_WIDTH_MOBILE } from './constants.js'
   import { useSidebar } from './context.svelte.js'
+  import { shadcnConfig } from '$lib/components/logic/config/context.js'
 
   let {
     ref = $bindable(null),
@@ -46,9 +47,7 @@
       style="--sidebar-width: {SIDEBAR_WIDTH_MOBILE};"
       {side}
       portalProps={{
-        to: (
-          document.querySelector('mass-block-twitter') as HTMLElement
-        ).shadowRoot?.querySelector('body')!,
+        to: shadcnConfig.get().portal,
       }}
     >
       <div class="flex h-full w-full flex-col">

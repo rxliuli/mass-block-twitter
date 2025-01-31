@@ -52,7 +52,7 @@ export type DBStore = {
 }
 
 export async function initDB() {
-  dbStore.idb = await openDB<MyDB>('mass-db', 11, {
+  dbStore.idb = await openDB<MyDB>('mass-db', 13, {
     async upgrade(db, oldVersion, newVersion, transaction) {
       if (db.objectStoreNames.length === 0) {
         // init users store

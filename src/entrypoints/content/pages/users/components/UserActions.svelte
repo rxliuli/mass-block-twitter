@@ -1,11 +1,10 @@
 <script lang="ts">
-  import TableExtraButton from '$lib/components/logic/TableExtraButton.svelte'
-  import { dbApi, User } from '$lib/db'
+  import { dbApi, type User } from '$lib/db'
   import {
-    ShieldBan,
     DownloadIcon,
     ImportIcon,
-    SettingsIcon,
+    ShieldCheckIcon,
+    ShieldBanIcon,
   } from 'lucide-svelte'
   import { Parser } from '@json2csv/plainjs'
   import saveAs from 'file-saver'
@@ -13,13 +12,14 @@
   import { fileSelector } from '$lib/util/fileSelector'
   import { parse } from 'csv-parse/browser/esm/sync'
   import { Button } from '$lib/components/ui/button'
-  import { router } from '$lib/components/logic/router/route.svelte'
   import { userMutation } from '$lib/query'
   import { Snippet } from 'svelte'
+  import { groupBy } from 'lodash-es'
 
   const props: {
     selectedRows: User[]
     search: Snippet
+    class?: string
   } = $props()
 
   const mutation = userMutation()
@@ -75,7 +75,17 @@
 
   function onBlock() {
     const users = props.selectedRows.filter((it) => !it.blocking)
-    $mutation.mutateAsync({ users, action: 'block' })
+    const grouped = groupBy(users, (it) => it.following)
+    let blockList: User[] = users
+    if (grouped.true.length > 0) {
+      const confirmed = confirm(
+        'You are trying to block following users, do you want to include them?',
+      )
+      if (!confirmed) {
+        blockList = grouped.false ?? []
+      }
+    }
+    $mutation.mutateAsync({ users: blockList, action: 'block' })
   }
 
   function onUnblock() {
@@ -84,33 +94,38 @@
   }
 </script>
 
-<div class="flex gap-2">
+<div class="flex gap-2 {props.class}">
   {@render props.search()}
-  <TableExtraButton onclick={onBlock} text="Block Selected">
-    {#snippet icon()}
-      <ShieldBan color={'red'} class="w-4 h-4" />
-    {/snippet}
-  </TableExtraButton>
-  <TableExtraButton onclick={onUnblock} text="Unblock Selected">
-    {#snippet icon()}
-      <ShieldBan color={'gray'} class="w-4 h-4" />
-    {/snippet}
-  </TableExtraButton>
-  <TableExtraButton onclick={onExport} text="Export Selected">
-    {#snippet icon()}
-      <DownloadIcon class="w-4 h-4" />
-    {/snippet}
-  </TableExtraButton>
-  <TableExtraButton onclick={onImportBlockList} text="Import Block List">
-    {#snippet icon()}
-      <ImportIcon class="w-4 h-4" />
-    {/snippet}
-  </TableExtraButton>
   <Button
-    variant="outline"
-    size="icon"
-    onclick={() => (router.path = '/settings')}
+    variant={'outline'}
+    size={'icon'}
+    title="Block Selected"
+    onclick={onBlock}
   >
-    <SettingsIcon class="w-4 h-4" />
+    <ShieldBanIcon color={'red'} class="w-4 h-4" />
+  </Button>
+  <Button
+    variant={'outline'}
+    size={'icon'}
+    title="Unblock Selected"
+    onclick={onUnblock}
+  >
+    <ShieldCheckIcon color={'gray'} class="w-4 h-4" />
+  </Button>
+  <Button
+    variant={'outline'}
+    size={'icon'}
+    title="Export Selected"
+    onclick={onExport}
+  >
+    <DownloadIcon class="w-4 h-4" />
+  </Button>
+  <Button
+    variant={'outline'}
+    size={'icon'}
+    title="Import Block List"
+    onclick={onImportBlockList}
+  >
+    <ImportIcon class="w-4 h-4" />
   </Button>
 </div>

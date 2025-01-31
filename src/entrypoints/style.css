@@ -36,7 +36,7 @@ div:has(> div > [data-testid='reply']) > div {
   max-width: fit-content;
 }
 
-body.modal-open {
+html.modal-open {
   overflow: hidden;
   padding-right: var(--scrollbar-width);
 }

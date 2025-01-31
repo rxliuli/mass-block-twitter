@@ -21,11 +21,11 @@
       '--scrollbar-width',
       `${scrollbarWidth}px`,
     )
-    document.body.classList.add('modal-open')
+    document.documentElement.classList.add('modal-open')
   }
 
   function closeModal() {
-    document.body.classList.remove('modal-open')
+    document.documentElement.classList.remove('modal-open')
   }
 
   onMount(() => {

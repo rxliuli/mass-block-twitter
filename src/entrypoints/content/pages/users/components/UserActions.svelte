@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { dbApi, type User } from '$lib/db'
+  import { dbApi, type Tweet, type User } from '$lib/db'
   import {
     DownloadIcon,
     ImportIcon,
@@ -15,6 +15,8 @@
   import { userMutation } from '$lib/query'
   import { type Snippet } from 'svelte'
   import { groupBy } from 'lodash-es'
+  import { extractTweet, removeTweets } from '$lib/observe'
+  import { AsyncArray } from '@liuli-util/async'
 
   const props: {
     selectedRows: User[]
@@ -73,11 +75,11 @@
     )
   }
 
-  function onBlock() {
+  async function onBlock() {
     const users = props.selectedRows.filter((it) => !it.blocking)
     const grouped = groupBy(users, (it) => it.following)
     let blockList: User[] = users
-    if (grouped.true.length > 0) {
+    if ((grouped.true ?? []).length > 0) {
       const confirmed = confirm(
         'You are trying to block following users, do you want to include them?',
       )
@@ -85,7 +87,21 @@
         blockList = grouped.false ?? []
       }
     }
-    $mutation.mutateAsync({ users: blockList, action: 'block' })
+    await $mutation.mutateAsync({ users: blockList, action: 'block' })
+    const elements = document.querySelectorAll(
+      '[data-testid="cellInnerDiv"]:has([data-testid="reply"])',
+    ) as NodeListOf<HTMLElement>
+    const blockUserIds = blockList.map((it) => it.id)
+    const tweets = await AsyncArray.map([...elements], async (it) => {
+      const { tweetId } = extractTweet(it)
+      const tweet = await dbApi.tweets.get(tweetId)
+      return tweet
+    })
+    const tweetsToRemove = tweets.filter(
+      (it) => it && blockUserIds.includes(it.user_id),
+    ) as Tweet[]
+    // console.log('tweetsToRemove', tweetsToRemove)
+    removeTweets(tweetsToRemove.map((it) => it.id))
   }
 
   function onUnblock() {

@@ -65,6 +65,7 @@ function loggerViewUsers(): Middleware {
       const json = await c.res.clone().json()
       const users = parseUserRecords(json)
       if (users.length > 0) {
+        // console.log('users', users)
         await dbApi.users.record(users)
       }
     }

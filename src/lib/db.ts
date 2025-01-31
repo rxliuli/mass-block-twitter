@@ -138,11 +138,11 @@ export class UserDAO {
     await Promise.all([
       ...users.map(async (it) => {
         const u = await dbStore.idb.get('users', it.id)
-        await dbStore.idb.put(
-          'users',
-          { ...u, ...(pickBy(it, (it) => !!it) as User) },
-          it.id,
-        )
+        const value = {
+          ...u,
+          ...(pickBy(it, (it) => it !== undefined && it !== null) as User),
+        }
+        await dbStore.idb.put('users', value, it.id)
       }),
     ])
   }

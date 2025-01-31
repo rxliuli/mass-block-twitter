@@ -28,6 +28,18 @@ export function extractTweet(tweetElement: HTMLElement): {
   }
 }
 
+export function removeTweets(tweetIds: string[]) {
+  const elements = document.querySelectorAll(
+    '[data-testid="cellInnerDiv"]:has([data-testid="reply"])',
+  ) as NodeListOf<HTMLElement>
+  elements.forEach((tweetElement) => {
+    const { tweetId } = extractTweet(tweetElement)
+    if (tweetIds.includes(tweetId)) {
+      tweetElement.remove()
+    }
+  })
+}
+
 export function addBlockButton(tweetElement: HTMLElement, tweet: Tweet) {
   const actionBar = tweetElement.querySelector('[role="group"]')
   if (actionBar) {

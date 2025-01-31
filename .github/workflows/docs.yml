@@ -1,10 +1,11 @@
-name: Build, Release, and Deploy
+name: Docs Generate
 
 on:
   push:
     branches: [main]
     paths:
       - 'docs/**'
+      - '.github/workflows/docs.yml'
   workflow_dispatch:
 
 permissions:
@@ -17,7 +18,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-release:
+  generate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -47,7 +48,7 @@ jobs:
         uses: actions/configure-pages@v3
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v4
         with:
           path: docs/.vitepress/dist
 

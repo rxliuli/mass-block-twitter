@@ -35,7 +35,8 @@ export function removeTweets(tweetIds: string[]) {
   elements.forEach((tweetElement) => {
     const { tweetId } = extractTweet(tweetElement)
     if (tweetIds.includes(tweetId)) {
-      tweetElement.remove()
+      // Hide tweets instead of removing them to avoid errors when Twitter itself tries to remove tweets
+      tweetElement.style.display = 'none'
     }
   })
 }
@@ -59,7 +60,7 @@ export function addBlockButton(tweetElement: HTMLElement, tweet: Tweet) {
         }),
       )
       await blockUser({ id: tweet.user_id })
-      tweetElement.remove()
+      tweetElement.style.display = 'none'
     })
     actionBar.appendChild(customButton)
   }

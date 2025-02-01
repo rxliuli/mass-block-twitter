@@ -1,14 +1,12 @@
 import {
-  autoBlockUsers,
   filterTweets,
-  MUTED_WORDS_KEY,
   ParsedTweet,
   parseTweets,
   parseUserRecords,
   setRequestHeaders,
 } from '$lib/api'
 import { dbApi } from '$lib/db'
-import { differenceBy, omit, throttle, uniqBy } from 'lodash-es'
+import { omit, throttle } from 'lodash-es'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { wait } from '@liuli-util/async'
 import { addBlockButton, alertWarning, extractTweet } from '$lib/observe'
@@ -16,15 +14,12 @@ import css from './style.css?raw'
 import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'
 import { getSpamUsers } from '$lib/shared'
-import { matchByKeyword } from '$lib/util/matchByKeyword'
 import {
   defaultProfileFilter,
   mutedWordsFilter,
   sharedSpamFilter,
   spamContext,
 } from '$lib/filter'
-import { localStore } from '$lib/util/localStore'
-import { HIDE_SUSPICIOUS_ACCOUNTS_KEY } from '$lib/constants'
 import { getSettings } from '$lib/settings'
 
 function blockClientEvent(): Middleware {

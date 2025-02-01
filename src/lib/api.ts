@@ -150,50 +150,6 @@ export interface UserRecord {
 
 export const MUTED_WORDS_KEY = 'MASS_BLOCK_TWITTER_MUTED_WORDS'
 
-export async function autoBlockUsers(users: User[]): Promise<User[]> {
-  const keywordStr = localStorage.getItem(MUTED_WORDS_KEY)
-  if (!keywordStr || keywordStr.length === 0) {
-    console.debug('No keywords to block')
-    return []
-  }
-  const keywords = keywordStr
-    .split('\n')
-    .map((it) => it.trim())
-    .filter((it) => it.length > 0)
-  const filteredUsers = users.filter(
-    (it) =>
-      !it.following &&
-      !it.blocking &&
-      keywords.some((keyword) =>
-        matchByKeyword(keyword, [it.screen_name, it.name, it.description]),
-      ),
-  )
-  if (filteredUsers.length === 0) {
-    // console.debug('No users to block')
-    return []
-  }
-  let blockedUsers: User[] = []
-  for (const user of filteredUsers) {
-    try {
-      const isBlocking = await dbApi.users.isBlocking(user.id)
-      if (isBlocking) {
-        continue
-      }
-      console.debug(`Blocking ${user.screen_name}`)
-      await dbApi.users.block(user)
-      await blockUser(user)
-      blockedUsers.push(user)
-    } catch (e) {}
-  }
-  console.debug(
-    `Blocked ${blockedUsers.length} users, failed ${
-      filteredUsers.length - blockedUsers.length
-    } users`,
-  )
-
-  return blockedUsers
-}
-
 export const tweetScheam = z.object({
   __typename: z.literal('Tweet').optional(),
   rest_id: z.string(),
@@ -292,4 +248,3 @@ export function filterTweets(
   })
   return json
 }
-

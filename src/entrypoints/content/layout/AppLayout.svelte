@@ -49,12 +49,14 @@
 >
   <Sidebar.Provider class="h-full">
     <AppSidebar items={menuItems} />
-    <main class="h-full overflow-auto">
+    <main class="w-full h-full flex flex-col">
       <div class="flex items-center gap-2 mb-2">
         <Sidebar.Trigger />
         <h1 class="text-xl font-bold">{title}</h1>
       </div>
-      {@render children?.()}
+      <div class="flex-1 w-full overflow-auto">
+        {@render children?.()}
+      </div>
     </main>
   </Sidebar.Provider>
 </div>

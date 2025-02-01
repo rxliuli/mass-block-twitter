@@ -37,6 +37,6 @@ div:has(> div > [data-testid='reply']) > div {
 }
 
 html.modal-open {
-  overflow: hidden;
+  overflow: hidden !important;
   padding-right: var(--scrollbar-width);
 }

@@ -13,11 +13,17 @@
     localStorageAdapter(),
   )
   function onAddKeyword() {
-    const keyword = prompt('Enter a keyword to block')
+    const keyword = prompt('Enter a keywords to block, separated by commas')
     if (!keyword) {
       return
     }
-    $keywords = [...$keywords, keyword]
+    $keywords = [
+      ...$keywords,
+      ...keyword
+        .split(/[,，]/)
+        .map((it) => it.trim())
+        .filter((it) => !!it),
+    ]
   }
 
   function onDeleteKeyword(index: number) {

@@ -1,37 +1,52 @@
 import { MUTED_WORDS_KEY, ParsedTweet } from './api'
 import { matchByKeyword } from './util/matchByKeyword'
 
-export function mutedWordsFilter(tweet: ParsedTweet) {
-  const keywordStr = localStorage.getItem(MUTED_WORDS_KEY)
-  if (!keywordStr) {
-    return false
-  }
-  const keywords = JSON.parse(keywordStr) as string[]
-  if (keywords.length === 0) {
-    return false
-  }
-  return keywords.some((keyword) =>
-    matchByKeyword(keyword, [
-      tweet.user.screen_name,
-      tweet.user.name,
-      tweet.user.description,
-      tweet.text,
-    ]),
-  )
+interface TweetFilter {
+  name: string
+  isSpam: (tweet: ParsedTweet) => boolean
 }
 
-export function defaultProfileFilter(tweet: ParsedTweet) {
-  if (
-    ((typeof tweet.user.default_profile === 'boolean' &&
-      tweet.user.default_profile) ||
-      !tweet.user.description ||
-      (typeof tweet.user.default_profile_image === 'boolean' &&
-        tweet.user.default_profile_image)) &&
-    tweet.user.followers_count === 0
-  ) {
-    return true
+export function mutedWordsFilter(): TweetFilter {
+  return {
+    name: 'mutedWordsFilter',
+    isSpam: (tweet: ParsedTweet) => {
+      const keywordStr = localStorage.getItem(MUTED_WORDS_KEY)
+      if (!keywordStr) {
+        return false
+      }
+      const keywords = JSON.parse(keywordStr) as string[]
+      if (keywords.length === 0) {
+        return false
+      }
+      return keywords.some((keyword) =>
+        matchByKeyword(keyword, [
+          tweet.user.screen_name,
+          tweet.user.name,
+          tweet.user.description,
+          tweet.text,
+        ]),
+      )
+    },
   }
-  return false
+}
+
+export function defaultProfileFilter(): TweetFilter {
+  return {
+    name: 'defaultProfileFilter',
+    isSpam: (tweet: ParsedTweet) => {
+      if (
+        ((typeof tweet.user.default_profile === 'boolean' &&
+          tweet.user.default_profile) ||
+          !tweet.user.description ||
+          (typeof tweet.user.default_profile_image === 'boolean' &&
+            tweet.user.default_profile_image)) &&
+        tweet.user.followers_count === 0
+      ) {
+        return true
+      }
+      return false
+    },
+  }
 }
 
 export let spamContext: {
@@ -40,9 +55,14 @@ export let spamContext: {
   spamUsers: {},
 }
 
-export function sharedSpamFilter(tweet: ParsedTweet) {
-  if (spamContext.spamUsers[tweet.user.id] === 'spam') {
-    return true
+export function sharedSpamFilter(): TweetFilter {
+  return {
+    name: 'sharedSpamFilter',
+    isSpam: (tweet: ParsedTweet) => {
+      if (spamContext.spamUsers[tweet.user.id] === 'spam') {
+        return true
+      }
+      return false
+    },
   }
-  return false
 }

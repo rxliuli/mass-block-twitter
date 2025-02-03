@@ -74,12 +74,12 @@ function handleTweets(): Middleware {
     'https://x.com/i/api/graphql/*/(HomeTimeline|TweetDetail|UserTweets|UserTweetsAndReplies|CommunityTweetsTimeline|HomeLatestTimeline|SearchTimeline)',
     'https://x.com/i/api/2/notifications/all.json',
   ]
-  const filters = [mutedWordsFilter]
+  const filters = [mutedWordsFilter()]
   if (getSettings().hideSuspiciousAccounts) {
-    filters.push(defaultProfileFilter)
+    filters.push(defaultProfileFilter())
   }
   if (getSettings().hideSpamAccounts) {
-    filters.push(sharedSpamFilter)
+    filters.push(sharedSpamFilter())
   }
   return async (c, next) => {
     await next()
@@ -118,7 +118,7 @@ function handleTweets(): Middleware {
             return false
           }
           return filters.some((filter) => {
-            const r = filter(it)
+            const r = filter.isSpam(it)
             if (r) {
               spamTweets.push([filter.name, it])
             }

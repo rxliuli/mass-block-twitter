@@ -40,7 +40,7 @@
 </script>
 
 <SheetPrimitive.Portal {...portalProps}>
-	<SheetOverlay />
+	<SheetOverlay onclick={restProps.onclose} />
 	<SheetPrimitive.Content bind:ref class={cn(sheetVariants({ side }), className)} {...restProps}>
 		{@render children?.()}
 		<SheetPrimitive.Close

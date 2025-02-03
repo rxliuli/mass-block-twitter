@@ -49,6 +49,10 @@
       portalProps={{
         to: shadcnConfig.get().portal,
       }}
+      onclose={() =>
+        sidebar.openMobile
+          ? sidebar.setOpenMobile(false)
+          : sidebar.setOpen(false)}
     >
       <div class="flex h-full w-full flex-col">
         {@render children?.()}

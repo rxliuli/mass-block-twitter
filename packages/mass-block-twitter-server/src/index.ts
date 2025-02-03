@@ -173,6 +173,16 @@ app
     )
   })
   .get('/spam-users-for-type', async (c) => {
+    const spamUsersTime = await c.env.MY_KV.get('spamUsersTime')
+    if (!c.req.query('force') && spamUsersTime) {
+      const time = new Date(spamUsersTime)
+      if (Date.now() < time.getTime() + 1000 * 60 * 60 * 24) {
+        const spamUsers = await c.env.MY_KV.get('spamUsers')
+        if (spamUsers) {
+          return c.json(JSON.parse(spamUsers))
+        }
+      }
+    }
     const prisma = await prismaClients.fetch(c.env.DB)
     const spamReportCounts = await prisma.user.findMany({
       select: {
@@ -185,12 +195,13 @@ app
         },
       },
     })
-    return c.json(
-      spamReportCounts.reduce((acc, it) => {
-        acc[it.id] = it.spamReportCount > 10 ? 'spam' : 'report'
-        return acc
-      }, {} as Record<string, 'report' | 'spam'>),
-    )
+    const res = spamReportCounts.reduce((acc, it) => {
+      acc[it.id] = it.spamReportCount > 10 ? 'spam' : 'report'
+      return acc
+    }, {} as Record<string, 'spam' | 'report'>)
+    await c.env.MY_KV.put('spamUsers', JSON.stringify(res))
+    await c.env.MY_KV.put('spamUsersTime', new Date().toISOString())
+    return c.json(res)
   })
   .delete('/test/spam-users', async (c) => {
     if (c.env.APP_ENV !== 'development') {
@@ -200,6 +211,11 @@ app
     await prisma.spamReport.deleteMany()
     await prisma.tweet.deleteMany()
     await prisma.user.deleteMany()
+    await c.env.MY_KV.delete('spamUsers')
+    await c.env.MY_KV.delete('spamUsersTime')
+    return c.json({ success: true })
+  })
+  .get('/ping', async (c) => {
     return c.json({ success: true })
   })
 

@@ -1,4 +1,4 @@
-import { beforeEach, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { spamReportRequestSchema } from '../lib/request'
 import sortBy from 'just-sort-by'
 
@@ -65,4 +65,39 @@ it('should be duplicate spam report', async () => {
   expect(r2.ok).true
   const data = (await r2.json()) as { id: string; spamReportCount: number }[]
   expect(data).toEqual({ '1': 1 })
+})
+
+describe('should be get spam users for type', () => {
+  const getSpamUsers = async (force?: boolean) => {
+    const u = new URL('http://localhost:8787/spam-users-for-type')
+    if (force) {
+      u.searchParams.set('force', 'true')
+    }
+    const r = await fetch(u.toString())
+    expect(r.ok).true
+    return (await r.json()) as Record<string, 'spam' | 'report'>
+  }
+  it('should be get spam users for type', async () => {
+    expect((await add('2', '1', '2')).ok).true
+    expect((await add('3', '1', '3')).ok).true
+    expect(await getSpamUsers()).toEqual({ '2': 'report', '3': 'report' })
+    expect((await add('4', '1', '4')).ok).true
+    expect(await getSpamUsers()).toEqual({ '2': 'report', '3': 'report' })
+  })
+  it('should be get spam users for type with force', async () => {
+    expect((await add('2', '1', '2')).ok).true
+    expect(await getSpamUsers()).toEqual({ '2': 'report' })
+    expect((await add('3', '1', '3')).ok).true
+    expect(await getSpamUsers(true)).toEqual({ '2': 'report', '3': 'report' })
+    expect(await getSpamUsers()).toEqual({ '2': 'report', '3': 'report' })
+  })
+  it.skip('should be get spam users for type with expired cache', async () => {
+    vi.setSystemTime(new Date(1998, 11, 19))
+    expect((await add('2', '1', '2')).ok).true
+    expect(await getSpamUsers()).toEqual({ '2': 'report' })
+    expect((await add('3', '1', '3')).ok).true
+    expect(await getSpamUsers()).toEqual({ '2': 'report' })
+    vi.setSystemTime(Date.now() + 1000 * 60 * 60 * 24 + 1)
+    expect(await getSpamUsers()).toEqual({ '2': 'report', '3': 'report' })
+  })
 })

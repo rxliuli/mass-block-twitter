@@ -72,7 +72,7 @@
       />
     {/snippet}
   </UserActions>
-  <div class="flex items-center gap-2">
+  <div class="flex items-center gap-2 mb-2">
     <Label class="flex items-center gap-2">
       <span>Show Blocking</span>
       <Checkbox
@@ -97,5 +97,6 @@
       selectedRowKeys,
       onChange: (values) => (selectedRowKeys = values),
     }}
+    virtual
   />
 </div>

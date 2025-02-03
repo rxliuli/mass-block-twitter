@@ -1,5 +1,16 @@
-import { RenderComponentConfig } from '$lib/components/ui/data-table/render-helpers'
-import { Component } from 'svelte'
+import { type Component, type ComponentProps } from 'svelte'
+
+class RenderComponentConfig<TComponent extends Component> {
+  component: TComponent
+  props: ComponentProps<TComponent> | Record<string, never>
+  constructor(
+    component: TComponent,
+    props: ComponentProps<TComponent> | Record<string, never> = {},
+  ) {
+    this.component = component
+    this.props = props
+  }
+}
 
 export type Column<T> = {
   title: string
@@ -22,4 +33,5 @@ export type Props<TData> = {
   rowKey?: string
   class?: string
   rowSelection?: RowSelection<TData>
+  virtual?: boolean
 }

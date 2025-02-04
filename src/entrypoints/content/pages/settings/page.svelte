@@ -1,15 +1,24 @@
 <script lang="ts">
+  import { Button } from '$lib/components/ui/button'
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
   import Label from '$lib/components/ui/label/label.svelte'
   import { SETTINGS_KEY } from '$lib/constants'
+  import { dbApi } from '$lib/db'
   import { getSettings } from '$lib/settings'
   import { localStorageAdapter, localStore } from '$lib/util/localStore'
+  import { Trash2Icon } from 'lucide-svelte'
+  import { toast } from 'svelte-sonner'
 
   const settings = localStore(
     SETTINGS_KEY,
     getSettings(),
     localStorageAdapter(),
   )
+
+  async function onClearCache() {
+    await dbApi.clear()
+    toast.success('Cache cleared')
+  }
 </script>
 
 <div>
@@ -35,4 +44,20 @@
     </div>
     <Checkbox class="shrink-0" bind:checked={$settings.hideSpamAccounts} />
   </Label>
+  <div class="flex items-center gap-4 p-4 cursor-pointer">
+    <div class="flex-1">
+      <span class="block text-base font-medium">Clear All Cache</span>
+      <span class="block mt-1 text-sm text-gray-500">
+        Clear all cache data, including record users and tweets.
+      </span>
+    </div>
+    <Button
+      variant="ghost"
+      size="icon"
+      class="transform translate-x-2"
+      onclick={onClearCache}
+    >
+      <Trash2Icon />
+    </Button>
+  </div>
 </div>

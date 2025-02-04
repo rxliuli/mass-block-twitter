@@ -207,6 +207,8 @@ function wrap<T extends object>(obj: T): T {
 export const dbApi = {
   users: wrap(new UserDAO()),
   tweets: wrap(new TweetDAO()),
+  clear: async () => {
+    await dbStore.idb.clear('users')
+    await dbStore.idb.clear('tweets')
+  },
 }
-
-Reflect.set(globalThis, 'dbApi', dbApi)

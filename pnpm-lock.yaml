@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   lodash-es:
-    hash: bac4fi2larraukbjueqxrzimd4
+    hash: 7775b188f9f3f21a8066f136e65a713a26ce80a70a91cbabd887a5f3dca5f9c8
     path: patches/lodash-es.patch
 
 importers:
@@ -63,7 +63,7 @@ importers:
         version: 2.3.0
       lodash-es:
         specifier: ^4.17.21
-        version: 4.17.21(patch_hash=bac4fi2larraukbjueqxrzimd4)
+        version: 4.17.21(patch_hash=7775b188f9f3f21a8066f136e65a713a26ce80a70a91cbabd887a5f3dca5f9c8)
       runed:
         specifier: ^0.23.2
         version: 0.23.2(svelte@5.16.0)
@@ -194,7 +194,7 @@ importers:
         version: 6.2.1
       vitest:
         specifier: ^3.0.4
-        version: 3.0.4(@types/node@22.10.2)(@vitest/browser@2.1.8)(jiti@1.21.7)(msw@2.7.0(@types/node@22.10.2)(typescript@5.7.2))(yaml@2.7.0)
+        version: 3.0.4(@types/node@22.10.2)(@vitest/browser@2.1.8(@types/node@22.10.2)(playwright@1.49.1)(typescript@5.7.2)(vite@5.4.11(@types/node@22.10.2))(vitest@2.1.8))(jiti@1.21.7)(msw@2.7.0(@types/node@22.10.2)(typescript@5.7.2))(yaml@2.7.0)
       wrangler:
         specifier: ^3.105.1
         version: 3.105.1(@cloudflare/workers-types@4.20250124.3)
@@ -6580,7 +6580,7 @@ snapshots:
 
   locate-character@3.0.0: {}
 
-  lodash-es@4.17.21(patch_hash=bac4fi2larraukbjueqxrzimd4): {}
+  lodash-es@4.17.21(patch_hash=7775b188f9f3f21a8066f136e65a713a26ce80a70a91cbabd887a5f3dca5f9c8): {}
 
   lodash.camelcase@4.3.0: {}
 
@@ -8016,7 +8016,7 @@ snapshots:
       - supports-color
       - terser
 
-  vitest@3.0.4(@types/node@22.10.2)(@vitest/browser@2.1.8)(jiti@1.21.7)(msw@2.7.0(@types/node@22.10.2)(typescript@5.7.2))(yaml@2.7.0):
+  vitest@3.0.4(@types/node@22.10.2)(@vitest/browser@2.1.8(@types/node@22.10.2)(playwright@1.49.1)(typescript@5.7.2)(vite@5.4.11(@types/node@22.10.2))(vitest@2.1.8))(jiti@1.21.7)(msw@2.7.0(@types/node@22.10.2)(typescript@5.7.2))(yaml@2.7.0):
     dependencies:
       '@vitest/expect': 3.0.4
       '@vitest/mocker': 3.0.4(msw@2.7.0(@types/node@22.10.2)(typescript@5.7.2))(vite@6.0.11(@types/node@22.10.2)(jiti@1.21.7)(yaml@2.7.0))

@@ -49,7 +49,7 @@
 >
   <Sidebar.Provider class="h-full">
     <AppSidebar items={menuItems} />
-    <main class="w-full h-full flex flex-col">
+    <main class="w-full h-full flex flex-col overflow-auto">
       <div class="flex items-center gap-2 mb-2">
         <Sidebar.Trigger />
         <h1 class="text-xl font-bold">{title}</h1>

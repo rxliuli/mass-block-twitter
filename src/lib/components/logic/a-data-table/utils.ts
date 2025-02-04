@@ -1,4 +1,5 @@
-import { Component } from "svelte";
+import { Component } from 'svelte'
+import { RenderSnippetConfig } from './render-helpers'
 
 export function isComponent(value: any): value is Component {
   return (
@@ -11,4 +12,10 @@ export function isComponentConfig(
   value: any,
 ): value is { component: Component; props?: Record<string, any> } {
   return typeof value === 'object' && isComponent(value.component)
+}
+
+export function isSnippetConfig<TProps>(
+  value: any,
+): value is RenderSnippetConfig<TProps> {
+  return value instanceof RenderSnippetConfig
 }

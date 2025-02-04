@@ -2,12 +2,11 @@
   import { Checkbox } from '$lib/components/ui/checkbox'
   import { difference, uniq } from 'lodash-es'
   import type { Props } from './props'
-  import { isComponent, isComponentConfig } from './utils'
+  import { isComponent, isComponentConfig, isSnippetConfig } from './utils'
   import { getVirtualizedRange } from './virtual'
   import { cn } from '$lib/utils'
-  import { tick } from 'svelte'
+  import { onMount, tick } from 'svelte'
 
-  // @link https://ant.design/components/table
   const props: Props<TData> = $props()
 
   const allSelected = $derived(
@@ -40,17 +39,37 @@
 
   let tableRef = $state<HTMLElement>()
   let scrollTop = $state(0)
+  let itemHeight = $state(40)
+  let measuredHeights = $state<Record<number, number>>({})
+
+  $effect(() => {
+    measuredHeights = {}
+    itemHeight = 40
+  })
+
+  function handleTrMount(element: HTMLElement, globalIndex: number) {
+    const height = element.offsetHeight
+    if (measuredHeights[globalIndex] === undefined) {
+      measuredHeights[globalIndex] = height
+
+      const heights = Object.values(measuredHeights)
+      if (heights.length > 0) {
+        itemHeight = heights.reduce((sum, h) => sum + h, 0) / heights.length
+      }
+    }
+  }
 
   const rangeData = $derived.by(() => {
     if (!props.virtual) {
       return {
+        start: 0,
+        end: props.dataSource.length,
         data: props.dataSource,
         paddingTop: 0,
         paddingBottom: 0,
       }
     }
     const viewportHeight = tableRef?.clientHeight ?? window.innerHeight
-    const itemHeight = 42 // TODO magic number
     const count = props.dataSource.length
     const r = getVirtualizedRange({
       itemHeight,
@@ -92,13 +111,11 @@
   class={cn('max-h-screen overflow-auto', props.class)}
   onscroll={handleScroll}
 >
-  <table class={'table-auto border border-collapse border-gray-400 w-full'}>
-    <thead class="border border-gray-300 sticky top-0 bg-background z-10">
+  <table class={'table-auto border-b border-collapse border-gray-400 w-full'}>
+    <thead class="text-muted-foreground sticky top-0 bg-background z-10">
       <tr>
         {#if props.rowSelection}
-          <th
-            class="border border-gray-300 px-4 text-left whitespace-nowrap sticky left-0 bg-background"
-          >
+          <th class="table-cell selection">
             <Checkbox
               checked={allSelected}
               onCheckedChange={toggleAllSelection}
@@ -106,9 +123,7 @@
           </th>
         {/if}
         {#each props.columns as column (column.dataIndex)}
-          <th class="border border-gray-300 px-4 text-left whitespace-nowrap"
-            >{column.title}</th
-          >
+          <th class="table-cell">{column.title}</th>
         {/each}
       </tr>
     </thead>
@@ -117,13 +132,16 @@
       {#if props.virtual}
         <tr style="height: {rangeData.paddingTop}px"></tr>
       {/if}
-      {#each rangeData.data as row, index (row[props.rowKey as keyof TData] ?? index)}
-        <tr data-id={row[props.rowKey as keyof TData] as any}>
+      {#each rangeData.data as row, localIndex (row[props.rowKey as keyof TData] ?? localIndex)}
+        {@const globalIndex = rangeData.start + localIndex}
+        <tr
+          onload={(ev) => handleTrMount(ev.target as HTMLElement, globalIndex)}
+          data-id={row[props.rowKey as keyof TData] as any}
+          class="border-b border-gray-300 hover:bg-muted/50 group"
+        >
           {#if props.rowSelection}
             {@const key = row[props.rowKey as keyof TData] as any}
-            <td
-              class="border border-gray-300 px-4 whitespace-nowrap sticky left-0 bg-background"
-            >
+            <td class="table-cell selection">
               <Checkbox
                 checked={props.rowSelection.selectedRowKeys.includes(key)}
                 onCheckedChange={(checked) =>
@@ -132,17 +150,21 @@
             </td>
           {/if}
           {#each props.columns as column (column.dataIndex)}
-            <td class="border border-gray-300 px-4 whitespace-nowrap">
+            <td class="table-cell">
               {#if column.render}
                 {@const RenderResult = column.render(
                   row[column.dataIndex as keyof TData],
                   row,
-                  index,
+                  localIndex,
                 )}
                 {#if isComponentConfig(RenderResult)}
                   <RenderResult.component {...RenderResult.props} />
                 {:else if isComponent(RenderResult)}
                   <RenderResult />
+                {:else if isSnippetConfig(RenderResult)}
+                  {@const snippet = RenderResult.snippet}
+                  {@const params = RenderResult.params}
+                  {@render snippet(params)}
                 {:else}
                   {RenderResult}
                 {/if}
@@ -159,3 +181,12 @@
     </tbody>
   </table>
 </div>
+
+<style>
+  .table-cell {
+    @apply h-10 px-2 text-left align-middle  left-0 bg-background group-hover:bg-muted/50;
+  }
+  .table-cell.selection {
+    @apply sticky left-0;
+  }
+</style>

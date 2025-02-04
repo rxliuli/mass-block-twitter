@@ -61,7 +61,7 @@
   )
 </script>
 
-<div class="h-full flex flex-col">
+<div class="h-[calc(100%-3rem)] flex flex-col">
   <UserActions {selectedRows} class="mb-2">
     {#snippet search()}
       <Input

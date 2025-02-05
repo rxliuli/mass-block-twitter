@@ -15,8 +15,9 @@
 </script>
 
 <a href={`https://x.com/${screen_name}`} target="_blank">
-  <Avatar.Root>
+  <img {src} {alt} class="w-8 h-8 rounded-full max-w-8 max-h-8" />
+  <!-- <Avatar.Root>
     <Avatar.Image {src} {alt} />
     <Avatar.Fallback>{fallback}</Avatar.Fallback>
-  </Avatar.Root>
+  </Avatar.Root> -->
 </a>

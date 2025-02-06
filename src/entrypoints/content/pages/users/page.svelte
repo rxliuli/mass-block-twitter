@@ -74,7 +74,7 @@
   </UserActions>
   <div class="flex items-center gap-2 mb-2">
     <Label class="flex items-center gap-2">
-      <span>Show Blocking</span>
+      <span>Show Blocked</span>
       <Checkbox
         checked={searchParams.showBlocking}
         onCheckedChange={(checked) => (searchParams.showBlocking = checked)}

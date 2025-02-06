@@ -77,7 +77,7 @@ const reportSpamTweetIds = new Set<string>()
 
 function handleTweets(): Middleware {
   const routes = [
-    'https://x.com/i/api/graphql/*/(HomeTimeline|TweetDetail|UserTweets|UserTweetsAndReplies|CommunityTweetsTimeline|HomeLatestTimeline|SearchTimeline)',
+    'https://x.com/i/api/graphql/*/(HomeTimeline|TweetDetail|UserTweets|UserTweetsAndReplies|CommunityTweetsTimeline|HomeLatestTimeline|SearchTimeline|Bookmarks|ListLatestTweetsTimeline)',
     'https://x.com/i/api/2/notifications/all.json',
   ]
   const filters = [mutedWordsFilter()]

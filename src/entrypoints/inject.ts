@@ -9,7 +9,12 @@ import { dbApi } from '$lib/db'
 import { omit, throttle } from 'lodash-es'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { wait } from '@liuli-util/async'
-import { addBlockButton, alertWarning, extractTweet } from '$lib/observe'
+import {
+  addBlockButton,
+  alertWarning,
+  extractCurrentUserId,
+  extractTweet,
+} from '$lib/observe'
 import css from './style.css?raw'
 import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'
@@ -118,8 +123,9 @@ function handleTweets(): Middleware {
           }
         })
         const spamTweets: [string, ParsedTweet][] = []
+        const currentUserId = extractCurrentUserId()
         const filteredTweets = filterTweets(json, (it) => {
-          if (it.user.following) {
+          if (it.user.following || it.user.id === currentUserId) {
             return false
           }
           return filters.some((filter) => {

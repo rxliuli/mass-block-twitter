@@ -3,6 +3,7 @@
   import UsersPage from './pages/users/page.svelte'
   import MutedWordsPage from './pages/muted-words/page.svelte'
   import SettingsPage from './pages/settings/page.svelte'
+  import ProPage from './pages/pro/page.svelte'
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
   import { Toaster } from '$lib/components/ui/sonner/index.js'
   import { ModeWatcher, mode } from 'mode-watcher'
@@ -65,6 +66,10 @@
         {
           path: '/settings',
           component: SettingsPage,
+        },
+        {
+          path: '/pro',
+          component: ProPage,
         },
       ]}
     >

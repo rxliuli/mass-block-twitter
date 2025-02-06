@@ -3,7 +3,12 @@
   import type { Snippet } from 'svelte'
   import AppSidebar from './AppSidebar.svelte'
   import { cn } from '$lib/utils'
-  import { HomeIcon, MessageCircleOffIcon, SettingsIcon } from 'lucide-svelte'
+  import {
+    HomeIcon,
+    MessageCircleOffIcon,
+    SettingsIcon,
+    SparklesIcon,
+  } from 'lucide-svelte'
   import { router } from '$lib/components/logic/router/route.svelte'
   import type { MenuItem } from './types'
 

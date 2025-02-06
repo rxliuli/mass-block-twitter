@@ -2,47 +2,32 @@
 
 [![Available from Chrome Webstore](docs/public/chrome.png)](https://chromewebstore.google.com/detail/mass-block-twitter/eaghpebepefbcadjdppjjopoagckdhej) [![Available from Firefox Add-ons](docs/public/firefox.png)](https://addons.mozilla.org/firefox/addon/mass-block-twitter/) [![Available from Edge Add-ons](docs/public/edge.png)](https://microsoftedge.microsoft.com/addons/detail/jfmhejlgepjmbgeceljmdeimmdolfadf)
 
-Effortlessly manage spam Twitter/X accounts with our powerful bulk blocking tool.
+One-Click Solution to Clean Up Twitter/X Spam.
 
 <img width="1280" alt="image" src="https://github.com/user-attachments/assets/5acbb16b-45de-4d95-996e-a3ecc51b701d" />
 
-🚫 Mass Twitter Blocker: One-Click Spam Protection
+Tired of spam accounts cluttering your Twitter feed? I built this simple yet powerful tool that lets you detect and block multiple spam accounts with just one click.
 
-✨ Key Features: \
-• One-click open filter view through right-click menu or extension icon \
-• Preview accounts before taking action \
-• Import/Export block lists for easy sharing \
-• Clean, intuitive interface
+✨ Key Features
 
-🔧 Simple to Use:
+- 🔍 Smart scan and batch blocking of suspicious accounts
+- 📋 Import/export block lists for sharing
+- 👥 Shared blocklist based on community reports
+- ⚡ One-click instant blocking
+- 🔒 Auto-hide heavily reported accounts
+- 🎯 Enhanced keyword filtering (across profile/username/tweets)
+- 🛡️ Auto-hide suspicious accounts (no avatar/bio/followers)
+- 🔐 Zero data collection, 100% open source
 
-1. Install extension
-2. Right-click or tap extension icon to "Scan and Block"
-3. Review and select accounts
-4. Block with one click
+📥 Installation
 
-💪 Perfect For:
-• Eliminating spam accounts instantly
-• Managing unwanted followers
-• Sharing block lists with community
-• Creating a cleaner Twitter feed
-• Reversing accidental blocks
+- [Chrome Web Store](https://chromewebstore.google.com/detail/mass-block-twitter/eaghpebepefbcadjdppjjopoagckdhej)
+- [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/mass-block-twitter/)
+- [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/jfmhejlgepjmbgeceljmdeimmdolfadf)
 
-🛡️ Privacy First:
-• Minimal permissions
-• Zero data collection
-• 100% open source
-• Transparent operation
+Works on all major browsers, including mobile Kiwi browser.
 
 **Privacy Policy URL**:
 <https://rxliuli.com/webstore/privacy>
 
-⚡️ Benefits:
-• Save time with bulk actions
-• Improve your Twitter experience
-• Stay protected from spam
-• Maintain control of your feed
-
-Note: Requires x.com access to function.
-
-Get started now and take control of your Twitter experience! 🌟
+Give it a try and let me know what you think! 🙌

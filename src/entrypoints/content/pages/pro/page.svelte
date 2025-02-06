@@ -39,7 +39,7 @@
       pro: true,
     },
     {
-      name: '🔐 Zero data collection, 100% open source',
+      name: '🔐 100% open source',
       free: true,
       pro: true,
     },

@@ -29,7 +29,6 @@ Effortlessly manage spam Twitter/X accounts with our powerful bulk blocking tool
 
 🛡️ Privacy First:
 • Minimal permissions
-• Zero data collection
 • 100% open source
 • Transparent operation
 

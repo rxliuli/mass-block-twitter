@@ -17,7 +17,7 @@ Tired of spam accounts cluttering your Twitter feed? I built this simple yet pow
 - 🔒 Auto-hide heavily reported accounts
 - 🎯 Enhanced keyword filtering (across profile/username/tweets)
 - 🛡️ Auto-hide suspicious accounts (no avatar/bio/followers)
-- 🔐 Zero data collection, 100% open source
+- 🔐 100% open source
 
 📥 Installation
 

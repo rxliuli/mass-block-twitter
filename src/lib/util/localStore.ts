@@ -1,4 +1,4 @@
-import { type Writable, writable } from 'svelte/store'
+import { derived, type Writable, writable } from 'svelte/store'
 import { set, get } from 'idb-keyval'
 
 interface LocalStoreAdapter<T> {
@@ -8,18 +8,26 @@ interface LocalStoreAdapter<T> {
 
 export function localStore<T>(
   key: string,
-  initial: T,
+  initial: T | ((value?: T) => T),
   adapter: LocalStoreAdapter<T>,
 ): Writable<T> & {
   getValue(): Promise<T>
 } {
-  const { subscribe, set, update } = writable(initial)
+  const s1 = writable(
+    typeof initial === 'function' ? (initial as any)() : initial,
+  )
+  const { set, update } = s1
   const r = adapter.read(key)
   const init = (r: T | undefined | null) =>
     r !== null && r !== undefined && set(r)
   r instanceof Promise ? r.then(init) : init(r)
+  const store = derived(s1, ($value) =>
+    typeof initial === 'function'
+      ? (initial as any)($value)
+      : $value ?? initial,
+  )
   return {
-    subscribe,
+    subscribe: store.subscribe,
     set: (value) => {
       adapter.write(key, value)
       return set(value)
@@ -32,17 +40,17 @@ export function localStore<T>(
       })
     },
     async getValue() {
-      const r = (await adapter.read(key)) ?? initial
+      const r = await adapter.read(key)
       set(r)
-      return r
+      if (typeof initial === 'function') {
+        return (initial as any)(r)
+      }
+      return r ?? initial
     },
   }
 }
 
-export function indexedDBAdapter<T>(options: {
-  dbName: string
-  storeName: string
-}): LocalStoreAdapter<T> {
+export function indexedDBAdapter<T>(): LocalStoreAdapter<T> {
   return {
     write(key, value) {
       return set(key, value)

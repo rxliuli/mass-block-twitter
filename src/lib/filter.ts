@@ -1,4 +1,5 @@
 import { MUTED_WORDS_KEY, ParsedTweet } from './api'
+import { getSettings } from './settings'
 import { matchByKeyword } from './util/matchByKeyword'
 
 interface TweetFilter {
@@ -49,6 +50,14 @@ export function defaultProfileFilter(): TweetFilter {
   }
 }
 
+export function blueVerifiedFilter(): TweetFilter {
+  return {
+    name: 'blueVerifiedFilter',
+    isSpam: (tweet: ParsedTweet) => {
+      return !!tweet.user.is_blue_verified
+    },
+  }
+}
 export let spamContext: {
   spamUsers: Record<string, 'spam' | 'report'>
 } = {

@@ -3,6 +3,7 @@ import { SETTINGS_KEY } from './constants'
 export type Settings = {
   hideSuspiciousAccounts: boolean
   hideSpamAccounts: boolean
+  hideBlueVerifiedAccounts: boolean
 }
 
 function getLocalStorage<T>(key: string, defaultValue: T): T {
@@ -20,5 +21,6 @@ export function getSettings(): Settings {
   return getLocalStorage(SETTINGS_KEY, {
     hideSuspiciousAccounts: true,
     hideSpamAccounts: true,
+    hideBlueVerifiedAccounts: false,
   } as Settings)
 }

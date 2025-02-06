@@ -16,6 +16,7 @@ export interface User {
   default_profile_image?: boolean
   created_at?: string
   updated_at: string // add to idb time
+  is_blue_verified?: boolean
 }
 
 export type TweetMediaType = 'photo' | 'video' | 'animated_gif'

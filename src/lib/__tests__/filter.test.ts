@@ -27,10 +27,10 @@ describe('defaultProfileFilter', () => {
     }
   })
   it('should return true', () => {
-    expect(defaultProfileFilter(tweet)).true
+    expect(defaultProfileFilter().isSpam(tweet)).true
   })
   it('should return false', () => {
     tweet.user.followers_count = 1
-    expect(defaultProfileFilter(tweet)).false
+    expect(defaultProfileFilter().isSpam(tweet)).false
   })
 })

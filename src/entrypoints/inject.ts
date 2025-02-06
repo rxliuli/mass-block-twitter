@@ -15,6 +15,7 @@ import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'
 import { getSpamUsers } from '$lib/shared'
 import {
+  blueVerifiedFilter,
   defaultProfileFilter,
   mutedWordsFilter,
   sharedSpamFilter,
@@ -75,11 +76,15 @@ function handleTweets(): Middleware {
     'https://x.com/i/api/2/notifications/all.json',
   ]
   const filters = [mutedWordsFilter()]
-  if (getSettings().hideSuspiciousAccounts) {
+  const settings = getSettings()
+  if (settings.hideSuspiciousAccounts) {
     filters.push(defaultProfileFilter())
   }
-  if (getSettings().hideSpamAccounts) {
+  if (settings.hideSpamAccounts) {
     filters.push(sharedSpamFilter())
+  }
+  if (settings.hideBlueVerifiedAccounts) {
+    filters.push(blueVerifiedFilter())
   }
   return async (c, next) => {
     await next()

@@ -4,14 +4,14 @@
   import Label from '$lib/components/ui/label/label.svelte'
   import { SETTINGS_KEY } from '$lib/constants'
   import { dbApi } from '$lib/db'
-  import { getSettings } from '$lib/settings'
+  import { getSettings, type Settings } from '$lib/settings'
   import { localStorageAdapter, localStore } from '$lib/util/localStore'
-  import { Trash2Icon } from 'lucide-svelte'
+  import { BadgeCheckIcon, Trash2Icon } from 'lucide-svelte'
   import { toast } from 'svelte-sonner'
 
-  const settings = localStore(
+  const settings = localStore<Settings>(
     SETTINGS_KEY,
-    getSettings(),
+    (value) => ({ ...getSettings(), ...(value ?? {}) }),
     localStorageAdapter(),
   )
 
@@ -43,6 +43,20 @@
       </span>
     </div>
     <Checkbox class="shrink-0" bind:checked={$settings.hideSpamAccounts} />
+  </Label>
+  <Label class="flex items-center gap-4 p-4 cursor-pointer">
+    <div class="flex-1">
+      <span class="block text-base font-medium"
+        >Hide Blue Verified Accounts</span
+      >
+      <span class="block mt-1 text-sm text-gray-500">
+        Hide tweets from blue verified accounts, except those you follow.
+      </span>
+    </div>
+    <Checkbox
+      class="shrink-0"
+      bind:checked={$settings.hideBlueVerifiedAccounts}
+    />
   </Label>
   <div class="flex items-center gap-4 p-4 cursor-pointer">
     <div class="flex-1">

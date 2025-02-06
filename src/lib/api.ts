@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { extractObjects } from './util/extractObjects'
-import { dbApi, TweetMediaType, User } from './db'
-import { matchByKeyword } from './util/matchByKeyword'
+import { TweetMediaType, User } from './db'
 
 export function setRequestHeaders(headers: Headers) {
   localStorage.setItem(
@@ -56,6 +55,7 @@ export async function unblockUser(userId: string) {
 const timelineUserSchema = z.object({
   __typename: z.literal('User'),
   rest_id: z.string(),
+  is_blue_verified: z.boolean(),
   legacy: z.object({
     blocking: z.boolean().optional().nullable(),
     following: z.boolean().optional().nullable(),
@@ -86,6 +86,7 @@ function parseTimelineUser(tweetUser: typeof timelineUserSchema._type): User {
     followers_count: tweetUser.legacy.followers_count,
     default_profile: tweetUser.legacy.default_profile,
     default_profile_image: tweetUser.legacy.default_profile_image,
+    is_blue_verified: tweetUser.is_blue_verified,
   }
 }
 
@@ -103,6 +104,7 @@ export function parseUserRecords(json: any): User[] {
     followers_count: z.number().optional(),
     default_profile: z.boolean().optional(),
     default_profile_image: z.boolean().optional(),
+    ext_is_blue_verified: z.boolean(),
   })
   users.push(
     ...(
@@ -127,6 +129,7 @@ export function parseUserRecords(json: any): User[] {
           followers_count: it.followers_count,
           default_profile: it.default_profile,
           default_profile_image: it.default_profile_image,
+          is_blue_verified: it.ext_is_blue_verified,
         } satisfies User),
     ),
   )

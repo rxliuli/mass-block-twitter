@@ -1,25 +1,68 @@
 {
   "data": {
-      "user_result_by_screen_name": {
-          "result": {
-              "__typename": "User",
-              "legacy": {
-                  "blocking": false,
-                  "blocked_by": false,
-                  "protected": false,
-                  "following": false,
-                  "followed_by": false,
-                  "name": "比特币矿机",
-                  "screen_name": "bitmain_miner"
-              },
-              "rest_id": "1575013182686777344",
-              "is_verified_organization": false,
-              "profilemodules": {
-                  "v1": []
-              },
-              "id": "VXNlcjoxNTc1MDEzMTgyNjg2Nzc3MzQ0"
+    "user": {
+      "result": {
+        "__typename": "User",
+        "id": "VXNlcjoxNTc1MDEzMTgyNjg2Nzc3MzQ0",
+        "rest_id": "1575013182686777344",
+        "affiliates_highlighted_label": {},
+        "has_graduated_access": true,
+        "parody_commentary_fan_label": "None",
+        "is_blue_verified": false,
+        "profile_image_shape": "Circle",
+        "legacy": {
+          "blocking": true,
+          "following": false,
+          "can_dm": false,
+          "can_media_tag": true,
+          "created_at": "Wed Sep 28 06:43:07 +0000 2022",
+          "default_profile": true,
+          "default_profile_image": false,
+          "description": "",
+          "entities": {
+            "description": {
+              "urls": []
+            }
           },
-          "id": "VXNlclJlc3VsdHM6MTU3NTAxMzE4MjY4Njc3NzM0NA=="
+          "fast_followers_count": 0,
+          "favourites_count": 0,
+          "followers_count": 202,
+          "friends_count": 33,
+          "has_custom_timelines": false,
+          "is_translator": false,
+          "listed_count": 0,
+          "location": "",
+          "media_count": 21,
+          "name": "比特币矿机",
+          "normal_followers_count": 202,
+          "pinned_tweet_ids_str": [],
+          "possibly_sensitive": false,
+          "profile_banner_url": "https://pbs.twimg.com/profile_banners/1575013182686777344/1676355212",
+          "profile_image_url_https": "https://pbs.twimg.com/profile_images/1625377625421258752/NEPd80o__normal.jpg",
+          "profile_interstitial_type": "",
+          "screen_name": "bitmain_miner",
+          "statuses_count": 23,
+          "translator_type": "none",
+          "verified": false,
+          "want_retweets": false,
+          "withheld_in_countries": []
+        },
+        "tipjar_settings": {},
+        "legacy_extended_profile": {},
+        "is_profile_translatable": false,
+        "has_hidden_subscriptions_on_profile": false,
+        "verification_info": {
+          "is_identity_verified": false
+        },
+        "highlights_info": {
+          "can_highlight_tweets": false,
+          "highlighted_tweets": "0"
+        },
+        "user_seed_tweet_count": 0,
+        "premium_gifting_eligible": false,
+        "business_account": {},
+        "creator_subscriptions_count": 0
       }
+    }
   }
 }

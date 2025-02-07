@@ -2,31 +2,27 @@
 
 1. Refund Conditions
 
-   - Donations are voluntary and generally non-refundable
-   - Refund requests under special circumstances will be processed within 72 hours
+   - We offer a 30-day money-back guarantee for Pro upgrades. If you're not satisfied with the Pro features, you can request a refund within 30 days of purchase.
 
 2. Refund Process
 
    - Send refund requests to <rxliuli@gmail.com>
-   - Provide donation order number and reason for refund
+   - Provide your Pro subscription order number and reason for refund
    - Approved refunds will be processed through the original payment method
-
-3. Exceptions
-
-   - Refunds are available for duplicate payments or technical errors resulting in multiple charges
-   - Donations with obvious amount errors may be eligible for refund
+   - Upon refund, your account will be reverted to the free version with standard features
 
 Important Notes:
 
-- These policies may need to be adjusted according to your specific circumstances and legal requirements
-- It is recommended to consult legal professionals before implementation
+- Pro features will be immediately deactivated upon refund processing
+- Usage data during the Pro period will be retained but Pro-only features will become inaccessible
+- These policies may be adjusted according to specific circumstances and legal requirements
 - The developer reserves the right to modify these policies at any time
 
 These policies should be easily accessible through the extension's settings page or via direct links.
 
-By using this extension or making a donation, you acknowledge that you have read and agree to these terms, policies, and conditions.
+By upgrading to Pro, you acknowledge that you have read and agree to these terms, policies, and conditions.
 
 Contact:
-For any questions regarding these policies, please contact <rxliuli@gmail.com>.
+For any questions regarding these policies or Pro features, please contact <rxliuli@gmail.com>.
 
-Last Updated: 2025-01-05
+Last Updated: 2025-02-07

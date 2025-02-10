@@ -9,7 +9,7 @@ APP_ENV = "production"
 
 [[kv_namespaces]]
 binding = "MY_KV"
-id = "ae4a55b71f3d489ca723012e01bea9bc"
+id = "fdb2b670b220487f8f946be9ccdae4d2"
 preview_id = "797dd25df5064fafb449877cfbbc49c6"
 
 # [[r2_buckets]]

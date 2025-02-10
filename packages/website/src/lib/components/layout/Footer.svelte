@@ -23,9 +23,9 @@
       </p>
     </div>
     <div class="flex items-center gap-4">
-      <a href="/terms" class="text-sm underline">Terms of Service</a>
-      <a href="/privacy" class="text-sm underline">Privacy Policy</a>
-      <a href="/refund" class="text-sm underline">Refund Policy</a>
+      <a href="/docs/terms" class="text-sm underline">Terms of Service</a>
+      <a href="/docs/privacy" class="text-sm underline">Privacy Policy</a>
+      <a href="/docs/refund" class="text-sm underline">Refund Policy</a>
     </div>
   </div>
 </footer>

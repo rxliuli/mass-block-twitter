@@ -8,9 +8,7 @@
   },
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
-    "prisma:generate": "prisma migrate diff --from-empty --to-schema-datamodel ./prisma/schema.prisma --script --output migrations/0001_init.sql",
-    "prisma:migrate": "wrangler d1 migrations apply mass-block-twitter --local && prisma generate"
+    "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.2",

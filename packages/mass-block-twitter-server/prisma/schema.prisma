@@ -70,3 +70,32 @@ model SpamReport {
   @@index([reportUserId])
   @@index([createdAt])
 }
+
+model LocalUser {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String // sha256
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  lastLogin DateTime  @default(now())
+  Payment   Payment[]
+  isPro     Boolean   @default(false)
+}
+
+enum PaymentStatus {
+  pending
+  success
+  failed
+}
+
+model Payment {
+  id          String        @id @default(uuid())
+  localUserId String
+  localUser   LocalUser     @relation(fields: [localUserId], references: [id])
+  type        String
+  amount      Float
+  status      PaymentStatus
+  countryCode String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}

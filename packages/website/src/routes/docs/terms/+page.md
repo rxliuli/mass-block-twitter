@@ -2,7 +2,7 @@
 
 1. Service Description
 
-   - Mass Block Twitter is a Chrome browser extension designed to help users manage accounts on Twitter/X platform.
+   - Mass Block Twitter is a browser extension designed to help users manage accounts on Twitter/X platform.
    - This extension serves as a tool only and is not responsible for specific user actions.
 
 2. Usage Terms

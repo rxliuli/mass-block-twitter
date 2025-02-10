@@ -5,6 +5,7 @@ export type Bindings = {
   APP_ENV?: 'development' | 'production'
   PADDEL_API_URL: string
   PADDEL_API_KEY: string
+  RESEND_API_KEY: string
 }
 
 export interface TokenInfo {

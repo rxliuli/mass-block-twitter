@@ -28,12 +28,14 @@
         toast.success('Login successful, redirecting...')
         const data = (await resp.json()) as AuthInfo
         await setAuthInfo(data)
-        setTimeout(() => {
-          location.href = page.url.searchParams.get('redirect') ?? '/'
-        }, 3000)
       } else {
         toast.error('Login failed, please check your email and password')
       }
+    },
+    onSuccess() {
+      setTimeout(() => {
+        location.href = page.url.searchParams.get('redirect') ?? '/'
+      }, 1000)
     },
   })
 </script>

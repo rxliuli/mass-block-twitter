@@ -91,3 +91,9 @@ export const createHash = async (
   }
   return null
 }
+
+export const generateSecureCode = (length: number) => {
+  const array = new Uint32Array(1)
+  crypto.getRandomValues(array)
+  return (array[0] % Math.pow(10, length)).toString().padStart(length, '0')
+}

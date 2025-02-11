@@ -19,7 +19,7 @@
 {:else if $query.data}
   <DropdownMenu.Root>
     <DropdownMenu.Trigger>
-      <Button variant="ghost" size="icon">
+      <Button variant="ghost" size="icon" data-testid="profile-button">
         <UserIcon class="w-4 h-4" />
       </Button>
     </DropdownMenu.Trigger>
@@ -30,7 +30,15 @@
         </DropdownMenu.GroupHeading>
         <DropdownMenu.Separator />
         <DropdownMenu.Item>
-          <a href="/accounts/settings">Settings</a>
+          {#snippet child({ props })}
+            <a
+              href="/accounts/settings"
+              {...props}
+              class="{props.class} cursor-pointer"
+            >
+              Settings
+            </a>
+          {/snippet}
         </DropdownMenu.Item>
         <DropdownMenu.Item
           class="cursor-pointer"
@@ -45,6 +53,7 @@
   <a
     href="/accounts/login"
     class="mr-6 transition-colors hover:text-foreground/80"
+    data-testid="login-button"
   >
     Login
   </a>

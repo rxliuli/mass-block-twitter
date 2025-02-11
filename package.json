@@ -23,7 +23,7 @@
     "@vitest/browser": "^2.1.8",
     "@wxt-dev/module-svelte": "^2.0.0",
     "autoprefixer": "^10.4.20",
-    "bits-ui": "1.0.0-next.80",
+    "bits-ui": "1.0.0-next.94",
     "clsx": "^2.1.1",
     "fake-indexeddb": "^6.0.0",
     "happy-dom": "^17.0.0",

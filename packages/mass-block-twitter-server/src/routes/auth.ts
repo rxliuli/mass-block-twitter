@@ -12,7 +12,7 @@ const loginRequestSchema = z.object({
   password: z.string(),
 })
 
-interface AuthInfo {
+export interface AuthInfo {
   id: string
   email: string
   token: string

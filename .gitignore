@@ -17,6 +17,7 @@ __screenshots__
 docs/.vitepress/cache
 docs/.vitepress/dist
 .env.local
+.env.*.local
 
 # Editor directories and files
 .vscode/*

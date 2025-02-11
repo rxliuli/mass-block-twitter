@@ -76,3 +76,15 @@ export function localStorageAdapter<T>(): LocalStoreAdapter<T> {
     },
   }
 }
+
+export function browserStorageAdapter<T>(): LocalStoreAdapter<T> {
+  return {
+    async write(key, value) {
+      await browser.storage.local.set({ [key]: value })
+    },
+    async read(key) {
+      const r = await browser.storage.local.get(key)
+      return r[key] as T
+    },
+  }
+}

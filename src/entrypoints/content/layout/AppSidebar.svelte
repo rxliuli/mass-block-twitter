@@ -4,6 +4,7 @@
   import { Button } from '$lib/components/ui/button/index.js'
   import type { MenuItem } from './types'
   import { PanelLeftIcon } from 'lucide-svelte'
+  import AuthButton from './AuthButton.svelte'
 
   const {
     items,
@@ -20,7 +21,7 @@
     if (sidebar.isMobile) {
       sidebar.setOpenMobile(false)
     }
-    console.log('onClickMenuUrl', url, sidebar.open)
+    // console.log('onClickMenuUrl', url, sidebar.open)
   }
 </script>
 
@@ -67,6 +68,10 @@
   </Sidebar.Content>
   <Sidebar.Footer>
     <Sidebar.Menu>
+      <Sidebar.MenuItem>
+        <AuthButton />
+      </Sidebar.MenuItem>
+
       {#each footer as item (item.title)}
         <Sidebar.MenuItem>
           <Sidebar.MenuButton onclick={() => onClickMenuUrl('/settings')}>

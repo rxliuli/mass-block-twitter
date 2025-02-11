@@ -11,7 +11,7 @@ export default defineConfig({
       name: 'Mass Block Twitter',
       description:
         'Mass Block Twitter - Efficiently block multiple spam accounts on Twitter/X with just a few clicks.',
-      permissions: ['contextMenus', 'scripting'],
+      permissions: ['contextMenus', 'scripting', 'storage'],
       web_accessible_resources: [
         {
           resources: ['/inject.js'],
@@ -28,7 +28,8 @@ export default defineConfig({
       },
       host_permissions: [
         'https://x.com/**',
-        'https://mass-block-twitter-server.rxliuli.com/',
+        'https://mass-block-twitter-server.rxliuli.com/**',
+        'https://mass-block-twitter.rxliuli.com/**',
       ],
     }
     if (env.browser === 'firefox') {

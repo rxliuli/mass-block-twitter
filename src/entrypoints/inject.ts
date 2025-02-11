@@ -15,7 +15,7 @@ import {
   extractCurrentUserId,
   extractTweet,
 } from '$lib/observe'
-import css from './style.css?raw'
+import css from './style.css?inline'
 import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'
 import { getSpamUsers } from '$lib/shared'

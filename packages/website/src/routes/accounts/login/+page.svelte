@@ -5,9 +5,38 @@
   import * as Card from '$lib/components/ui/card'
   import { Input } from '$lib/components/ui/input'
   import { Label } from '$lib/components/ui/label'
-  import { setAuthInfo, type AuthInfo } from '@/components/auth/auth.svelte'
+  import {
+    getAuthInfo,
+    setAuthInfo,
+    type AuthInfo,
+  } from '@/components/auth/auth.svelte'
   import { createMutation } from '@tanstack/svelte-query'
+  import { onMount } from 'svelte'
   import { toast } from 'svelte-sonner'
+  import { get } from 'svelte/store'
+
+  function onPluginLoggedIn(authInfo: AuthInfo) {
+    document.dispatchEvent(
+      new CustomEvent('LoginSuccess', {
+        detail: authInfo,
+      }),
+    )
+    setTimeout(() => {
+      window.close()
+    }, 1000)
+  }
+
+  onMount(async () => {
+    if (page.url.searchParams.get('from') !== 'plugin') {
+      return
+    }
+    const authInfo = await getAuthInfo()
+    if (!authInfo) {
+      return
+    }
+    toast.success('Already logged in, redirecting...')
+    onPluginLoggedIn({ ...authInfo })
+  })
 
   const mutation = createMutation({
     mutationFn: async (event: SubmitEvent) => {
@@ -44,6 +73,10 @@
         }
         await setAuthInfo(data.data)
         toast.success('Login successful, redirecting...')
+        if (page.url.searchParams.get('from') === 'plugin') {
+          onPluginLoggedIn(data.data)
+          return
+        }
         setTimeout(() => {
           location.href = page.url.searchParams.get('redirect') ?? '/'
         }, 1000)

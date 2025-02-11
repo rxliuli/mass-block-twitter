@@ -72,14 +72,15 @@ model SpamReport {
 }
 
 model LocalUser {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  password  String // sha256
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  lastLogin DateTime  @default(now())
-  Payment   Payment[]
-  isPro     Boolean   @default(false)
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String // sha256
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLogin     DateTime  @default(now())
+  Payment       Payment[]
+  isPro         Boolean   @default(false)
+  emailVerified Boolean   @default(false)
 }
 
 enum PaymentStatus {

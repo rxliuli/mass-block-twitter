@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '$app/navigation'
   import { page } from '$app/state'
   import { Button } from '$lib/components/ui/button'
   import * as Card from '$lib/components/ui/card'
@@ -25,17 +26,30 @@
         },
       )
       if (resp.ok) {
+        const data = (await resp.json()) as
+          | {
+              code: 'success'
+              data: AuthInfo
+            }
+          | {
+              code: 'verify-email'
+            }
+        if (data.code === 'verify-email') {
+          const params = new URLSearchParams([
+            ...page.url.searchParams,
+            ['email', email as string],
+          ])
+          goto('/accounts/email-verify?' + params.toString())
+          return
+        }
+        await setAuthInfo(data.data)
         toast.success('Login successful, redirecting...')
-        const data = (await resp.json()) as AuthInfo
-        await setAuthInfo(data)
+        setTimeout(() => {
+          location.href = page.url.searchParams.get('redirect') ?? '/'
+        }, 1000)
       } else {
         toast.error('Login failed, please check your email and password')
       }
-    },
-    onSuccess() {
-      setTimeout(() => {
-        location.href = page.url.searchParams.get('redirect') ?? '/'
-      }, 1000)
     },
   })
 </script>

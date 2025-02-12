@@ -6,12 +6,14 @@ export type Bindings = {
   PADDEL_API_URL: string
   PADDEL_API_KEY: string
   RESEND_API_KEY: string
+
+  TEST_INIT_SQL: string
 }
 
 export interface TokenInfo {
   createdAt: string
   updatedAt: string
-  id: string
+  id: string // userId
   email: string
 }
 

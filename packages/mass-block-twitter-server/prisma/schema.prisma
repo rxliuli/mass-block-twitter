@@ -16,7 +16,7 @@ datasource db {
 
 // Create a simple model database
 model User {
-  id               String    @id @default(uuid())
+  id               String    @id
   screenName       String
   name             String
   description      String?
@@ -24,11 +24,13 @@ model User {
   accountCreatedAt DateTime?
   spamReportCount  Int       @default(0)
 
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  Tweet      Tweet[]
-  spamUser   SpamReport[] @relation("SpamUser")
-  reportUser SpamReport[] @relation("ReportUser")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Tweet       Tweet[]
+  spamUser    SpamReport[]  @relation("SpamUser")
+  reportUser  SpamReport[]  @relation("ReportUser")
+  ModList     ModList[]
+  ModListUser ModListUser[]
 }
 
 model Tweet {
@@ -72,15 +74,17 @@ model SpamReport {
 }
 
 model LocalUser {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  password      String // sha256
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  lastLogin     DateTime  @default(now())
-  Payment       Payment[]
-  isPro         Boolean   @default(false)
-  emailVerified Boolean   @default(false)
+  id                  String                @id @default(uuid())
+  email               String                @unique
+  password            String // sha256
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  lastLogin           DateTime              @default(now())
+  Payment             Payment[]
+  isPro               Boolean               @default(false)
+  emailVerified       Boolean               @default(false)
+  ModList             ModList[]
+  ModListSubscription ModListSubscription[]
 }
 
 enum PaymentStatus {
@@ -99,4 +103,44 @@ model Payment {
   countryCode String
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+}
+
+model ModList {
+  id                  String                @id // ulid https://github.com/ulid/spec
+  name                String
+  description         String?
+  iconUrl             String?
+  userCount           Int                   @default(0)
+  subscriptionCount   Int                   @default(0)
+  localUserId         String
+  localUser           LocalUser             @relation(fields: [localUserId], references: [id])
+  twitterUserId       String
+  twitterUser         User                  @relation(fields: [twitterUserId], references: [id])
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  ModListUser         ModListUser[]
+  ModListSubscription ModListSubscription[]
+
+  @@index([name])
+  @@index([description])
+}
+
+model ModListUser {
+  id            String   @id
+  modListId     String
+  modList       ModList  @relation(fields: [modListId], references: [id])
+  twitterUserId String
+  twitterUser   User     @relation(fields: [twitterUserId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ModListSubscription {
+  id          String    @id
+  modListId   String
+  modList     ModList   @relation(fields: [modListId], references: [id])
+  localUserId String
+  localUser   LocalUser @relation(fields: [localUserId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

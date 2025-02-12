@@ -211,8 +211,5 @@ twitter
     await c.env.MY_KV.delete('spamUsersTime')
     return c.json({ success: true })
   })
-  .get('/ping', async (c) => {
-    return c.json({ success: true })
-  })
 
 export { twitter }

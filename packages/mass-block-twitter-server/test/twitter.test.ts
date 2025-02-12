@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { spamReportRequestSchema } from '../lib/request'
+import { spamReportRequestSchema } from '../src/lib/request'
 import sortBy from 'just-sort-by'
 
 beforeEach(async () => {

@@ -1,13 +1,14 @@
 import { type Component } from 'svelte'
+import { computed } from './utils/rune.svelte'
 
-export interface Route {
+export interface RouteConfig {
   path: string
-  component: Component
+  component: Component | (() => Promise<{ default: Component }>)
 }
 
 export const router = $state<{
   path: string
-  routes: Route[]
+  routes: RouteConfig[]
   history: string[]
 }>({
   path: '/',
@@ -29,4 +30,21 @@ export function goBack() {
     router.path = router.history.at(-1)!
     router.history = router.history.slice(0, -1)
   }
+}
+
+interface Route {
+  path: string
+  search?: URLSearchParams
+  matched?: RouteConfig
+}
+
+export function useRoute(): Route {
+  return computed(() => {
+    const [path, search] = router.path.split('?')
+    return {
+      path: router.path,
+      search: search ? new URLSearchParams(search) : undefined,
+      matched: router.routes.find((it) => it.path === path),
+    }
+  })
 }

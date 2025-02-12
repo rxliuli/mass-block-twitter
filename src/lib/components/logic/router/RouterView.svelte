@@ -1,13 +1,24 @@
-<script lang="ts">
-  import { router } from './route.svelte'
+<svelte:options runes={true} />
 
-  const route = $derived(
-    router.routes.find((route) => route.path === router.path),
-  )
+<script lang="ts">
+  import { isComponent } from './utils/isComponent'
+  import { useRoute } from './route.svelte'
+
+  const route = useRoute()
 </script>
 
-{#if route}
-  <route.component />
+{#if route.matched}
+  {#if isComponent(route.matched.component)}
+    <route.matched.component />
+  {:else}
+    {#await route.matched.component()}
+      <div>Loading...</div>
+    {:then c}
+      <c.default />
+    {:catch error}
+      <div>Error: {error.message}</div>
+    {/await}
+  {/if}
 {:else}
   <div>404 Not Found</div>
 {/if}

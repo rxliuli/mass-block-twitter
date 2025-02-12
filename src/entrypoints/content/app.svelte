@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMessage, removeAllListeners } from '$lib/messaging'
   import UsersPage from './pages/users/page.svelte'
+  import ModListsPage from './pages/modlists/page.svelte'
   import MutedWordsPage from './pages/muted-words/page.svelte'
   import SettingsPage from './pages/settings/page.svelte'
   import ProPage from './pages/pro/page.svelte'
@@ -8,10 +9,12 @@
   import { Toaster } from '$lib/components/ui/sonner/index.js'
   import { ModeWatcher, mode } from 'mode-watcher'
   import { Router, RouterView } from '$lib/components/logic/router'
-  import AppLayout from './layout/AppLayout.svelte'
+  import AppLayout from '$lib/components/layout/AppLayout.svelte'
   import { Button } from '$lib/components/ui/button'
   import { XIcon } from 'lucide-svelte'
   import { ShadcnConfig } from '$lib/components/logic/config'
+  import ModListsUserPage from './pages/modlists/user/page.svelte'
+  import ModListsDetailPage from './pages/modlists/detail/page.svelte'
 
   let open = $state(false)
 
@@ -62,6 +65,18 @@
         {
           path: '/muted-words',
           component: MutedWordsPage,
+        },
+        {
+          path: '/modlists',
+          component: ModListsPage,
+        },
+        {
+          path: '/modlists/user',
+          component: ModListsUserPage,
+        },
+        {
+          path: '/modlists/detail',
+          component: ModListsDetailPage,
         },
         {
           path: '/settings',

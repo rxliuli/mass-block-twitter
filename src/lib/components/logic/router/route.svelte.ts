@@ -1,9 +1,32 @@
 import { type Component } from 'svelte'
 import { computed } from './utils/rune.svelte'
 
+interface AsyncComponent {
+  loader: () => Promise<{ default: Component }>
+  loadingComponent?: Component
+  errorComponent?: Component
+}
+
+interface AsyncComponentOptions {
+  loader: () => Promise<{ default: Component }>
+  loadingComponent?: Component
+  errorComponent?: Component
+}
+
+export function defineAsyncComponent(
+  source: (() => Promise<{ default: Component }>) | AsyncComponentOptions,
+): AsyncComponent {
+  if (typeof source === 'function') {
+    return {
+      loader: source,
+    }
+  }
+  return source
+}
+
 export interface RouteConfig {
   path: string
-  component: Component | (() => Promise<{ default: Component }>)
+  component: Component | AsyncComponent
 }
 
 export const router = $state<{

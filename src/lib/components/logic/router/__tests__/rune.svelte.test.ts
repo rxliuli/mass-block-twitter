@@ -1,7 +1,7 @@
-import { computed, reactive, ref } from '$lib/rune.svelte'
+import { computed, reactive, ref } from '$lib/utils/rune.svelte'
 import { describe, expect, it } from 'vitest'
 
-describe('useMemo', () => {
+describe('computed', () => {
   it('object', () => {
     let a = $state(1)
     let b = $state(2)
@@ -26,7 +26,7 @@ describe('useMemo', () => {
   })
 })
 
-describe('useState', () => {
+describe('reactive', () => {
   it('ref', () => {
     function useCounter() {
       const counter = ref(0)
@@ -65,5 +65,23 @@ describe('useState', () => {
     expect($state.snapshot(counter)).toEqual({ value: 0 })
     counter.value = 1
     expect($state.snapshot(counter)).toEqual({ value: 1 })
+  })
+  it('undefined', () => {
+    const c = $state<{ name: string; list: string[] }>({ name: '', list: [] })
+    function val() {
+      const state = $derived({
+        value: c.list.find((it) => it === c.name),
+      })
+      return {
+        get value() {
+          return state.value
+        },
+      }
+    }
+    const v = val()
+    expect(v.value).undefined
+    c.name = 'a'
+    c.list.push('a')
+    expect(v.value).toBe('a')
   })
 })

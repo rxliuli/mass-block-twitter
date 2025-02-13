@@ -5,6 +5,8 @@ import { prismaClients } from '../lib/prisma'
 import { HonoEnv, TokenInfo } from '../lib/bindings'
 import { generateSecureCode, sha256 } from '../lib/crypto'
 import { Resend } from 'resend'
+import { getTokenInfo } from '../middlewares/auth'
+
 const auth = new Hono<HonoEnv>()
 
 const loginRequestSchema = z.object({
@@ -150,11 +152,11 @@ auth
     })
   })
   .post('/logout', async (c) => {
-    const token = c.req.header('Authorization')
-    if (token) {
-      await c.env.MY_KV.delete(token)
+    const tokenInfo = await getTokenInfo(c)
+    if (tokenInfo) {
+      await c.env.MY_KV.delete(tokenInfo.token)
     }
-    return c.json({ message: 'success' })
+    return c.json({ code: 'success' })
   })
   .post(
     '/forgot-password',

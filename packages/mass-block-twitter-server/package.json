@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify"
+    "deploy": "wrangler deploy --minify",
+    "test": "vitest run"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.2",

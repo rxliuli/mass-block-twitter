@@ -16,21 +16,20 @@ datasource db {
 
 // Create a simple model database
 model User {
-  id               String    @id
+  id               String        @id
   screenName       String
   name             String
   description      String?
   profileImageUrl  String?
   accountCreatedAt DateTime?
-  spamReportCount  Int       @default(0)
-
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  Tweet       Tweet[]
-  spamUser    SpamReport[]  @relation("SpamUser")
-  reportUser  SpamReport[]  @relation("ReportUser")
-  ModList     ModList[]
-  ModListUser ModListUser[]
+  spamReportCount  Int           @default(0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  Tweet            Tweet[]
+  spamUser         SpamReport[]  @relation("SpamUser")
+  reportUser       SpamReport[]  @relation("ReportUser")
+  ModList          ModList[]
+  ModListUser      ModListUser[]
 }
 
 model Tweet {

@@ -1,18 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { spamReportRequestSchema } from '../src/lib/request'
-import sortBy from 'just-sort-by'
 import { createExecutionContext, env } from 'cloudflare:test'
 import app from '../src'
 import { HonoEnv } from '../src/lib/bindings'
 import { prismaClients } from '../src/lib/prisma'
 import { PrismaClient } from '@prisma/client'
-
-beforeEach(async () => {
-  const resp = await fetch('http://localhost:8787/test/spam-users', {
-    method: 'DELETE',
-  })
-  expect(resp.ok).true
-})
 
 let ctx: ExecutionContext
 let fetch: typeof app.request
@@ -54,7 +46,7 @@ async function add(spamUserId: string, reportUserId: string, tweetId: string) {
       page_type: 'timeline',
     },
   }
-  return await fetch('/spam-users-of-type', {
+  return fetch('/api/twitter/spam-users', {
     method: 'POST',
     body: JSON.stringify(spamReport),
     headers: {
@@ -63,34 +55,42 @@ async function add(spamUserId: string, reportUserId: string, tweetId: string) {
   })
 }
 
+async function getSpamUsers(): Promise<Record<string, number>> {
+  const users = await prisma.user.findMany({
+    where: { spamReportCount: { gt: 0 } },
+  })
+  return users.reduce((acc, user) => {
+    acc[user.id] = user.spamReportCount
+    return acc
+  }, {} as Record<string, number>)
+}
+
 it('should be able to report spam', async () => {
   expect((await add('1', '2', '1')).ok).true
   expect((await add('1', '2', '2')).ok).true
   expect((await add('1', '3', '1')).ok).true
   expect((await add('2', '3', '1')).ok).true
-  const r2 = await fetch('http://localhost:8787/spam-users', { method: 'GET' })
-  expect(r2.ok).true
-  const data = (await r2.json()) as { id: string; spamReportCount: number }[]
-  expect(data).toEqual({ '1': 2, 2: 1 })
+  const users = await getSpamUsers()
+  expect(users).toEqual({ '1': 2, '2': 1 })
 })
 
 it('should be duplicate spam report', async () => {
   expect((await add('1', '2', '1')).ok).true
   expect((await add('1', '2', '1')).ok).true
   expect((await add('1', '2', '1')).ok).true
-  const r2 = await fetch('http://localhost:8787/spam-users', { method: 'GET' })
-  expect(r2.ok).true
-  const data = (await r2.json()) as { id: string; spamReportCount: number }[]
-  expect(data).toEqual({ '1': 1 })
+  const users = await getSpamUsers()
+  expect(users).toEqual({ '1': 1 })
 })
 
 describe('should be get spam users for type', () => {
   const getSpamUsers = async (force?: boolean) => {
-    const u = new URL('http://localhost:8787/spam-users-for-type')
+    const params = new URLSearchParams()
     if (force) {
-      u.searchParams.set('force', 'true')
+      params.set('force', 'true')
     }
-    const r = await fetch(u.toString())
+    const r = await fetch(
+      `/api/twitter/spam-users-for-type?${params.toString()}`,
+    )
     expect(r.ok).true
     return (await r.json()) as Record<string, 'spam' | 'report'>
   }
@@ -108,7 +108,7 @@ describe('should be get spam users for type', () => {
     expect(await getSpamUsers(true)).toEqual({ '2': 'report', '3': 'report' })
     expect(await getSpamUsers()).toEqual({ '2': 'report', '3': 'report' })
   })
-  it.skip('should be get spam users for type with expired cache', async () => {
+  it('should be get spam users for type with expired cache', async () => {
     vi.setSystemTime(new Date(1998, 11, 19))
     expect((await add('2', '1', '2')).ok).true
     expect(await getSpamUsers()).toEqual({ '2': 'report' })

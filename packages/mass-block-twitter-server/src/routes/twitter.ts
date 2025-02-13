@@ -13,7 +13,6 @@ import { HonoEnv } from '../lib/bindings'
 const twitter = new Hono<HonoEnv>()
 
 twitter
-  .use(cors({ origin: 'x.com' }))
   .post(
     '/spam-users',
     zValidator('json', spamReportRequestSchema),
@@ -33,48 +32,37 @@ twitter
         userParams: typeof userSchema._type,
         isSpam: boolean,
       ) {
-        const user = await prisma.user.findFirst({
+        const r = await prisma.user.upsert({
           where: {
             id: userParams.id,
           },
+          update: {
+            screenName: userParams.screen_name,
+            name: userParams.name,
+            description: userParams.description,
+            profileImageUrl: userParams.profile_image_url,
+            accountCreatedAt: userParams.created_at
+              ? new Date(userParams.created_at)
+              : undefined,
+            updatedAt: new Date(),
+            spamReportCount: {
+              increment: isSpam && !isReportThisUser ? 1 : 0,
+            },
+          },
+          create: {
+            id: userParams.id,
+            screenName: userParams.screen_name,
+            name: userParams.name,
+            description: userParams.description,
+            profileImageUrl: userParams.profile_image_url,
+            accountCreatedAt: userParams.created_at
+              ? new Date(userParams.created_at)
+              : undefined,
+            spamReportCount: isSpam ? 1 : 0,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
         })
-        if (!user) {
-          await prisma.user.create({
-            data: {
-              id: userParams.id,
-              screenName: userParams.screen_name,
-              name: userParams.name,
-              description: userParams.description,
-              profileImageUrl: userParams.profile_image_url,
-              accountCreatedAt: userParams.created_at
-                ? new Date(userParams.created_at)
-                : undefined,
-              spamReportCount: isSpam ? 1 : 0,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          })
-        } else {
-          if (isSpam && !isReportThisUser) {
-            user.spamReportCount += 1
-          }
-          await prisma.user.update({
-            where: {
-              id: userParams.id,
-            },
-            data: {
-              ...user,
-              screenName: userParams.screen_name,
-              name: userParams.name,
-              description: userParams.description,
-              profileImageUrl: userParams.profile_image_url,
-              accountCreatedAt: userParams.created_at
-                ? new Date(userParams.created_at)
-                : undefined,
-              updatedAt: new Date(),
-            },
-          })
-        }
       }
       async function createOrUpdateTweet(
         tweetParams: typeof tweetSchema._type,
@@ -147,27 +135,6 @@ twitter
       return c.json({ success: true })
     },
   )
-  /** @deprecated Next Version Deprecated */
-  .get('/spam-users', async (c) => {
-    const prisma = await prismaClients.fetch(c.env.DB)
-    const spamReportCounts = await prisma.user.findMany({
-      select: {
-        id: true,
-        spamReportCount: true,
-      },
-      where: {
-        spamReportCount: {
-          gt: 0,
-        },
-      },
-    })
-    return c.json(
-      spamReportCounts.reduce((acc, it) => {
-        acc[it.id] = it.spamReportCount
-        return acc
-      }, {} as Record<string, number>),
-    )
-  })
   .get('/spam-users-for-type', async (c) => {
     const spamUsersTime = await c.env.MY_KV.get('spamUsersTime')
     if (!c.req.query('force') && spamUsersTime) {
@@ -180,6 +147,7 @@ twitter
       }
     }
     const prisma = await prismaClients.fetch(c.env.DB)
+    // TODO: use index
     const spamReportCounts = await prisma.user.findMany({
       select: {
         id: true,
@@ -198,18 +166,6 @@ twitter
     await c.env.MY_KV.put('spamUsers', JSON.stringify(res))
     await c.env.MY_KV.put('spamUsersTime', new Date().toISOString())
     return c.json(res)
-  })
-  .delete('/test/spam-users', async (c) => {
-    if (c.env.APP_ENV !== 'development') {
-      throw new HTTPException(403, { message: 'Forbidden' })
-    }
-    const prisma = await prismaClients.fetch(c.env.DB)
-    await prisma.spamReport.deleteMany()
-    await prisma.tweet.deleteMany()
-    await prisma.user.deleteMany()
-    await c.env.MY_KV.delete('spamUsers')
-    await c.env.MY_KV.delete('spamUsersTime')
-    return c.json({ success: true })
   })
 
 export { twitter }

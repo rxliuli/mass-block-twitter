@@ -1,6 +1,6 @@
 import { blockUser } from './api'
 import { dbApi, Tweet } from './db'
-import type { spamReportRequestSchema } from '@mass-block-twitter/server'
+import type { TwitterSpamReportRequest } from '@mass-block-twitter/server'
 
 export function extractCurrentUserId(): string | undefined {
   return /"id_str":"(\d*)"/.exec(document.body.innerHTML)?.[1]
@@ -68,7 +68,7 @@ export function addBlockButton(tweetElement: HTMLElement, tweet: Tweet) {
 
 async function extractSpamReportRequest(
   tweet: Tweet,
-): Promise<typeof spamReportRequestSchema._type> {
+): Promise<TwitterSpamReportRequest> {
   const reportUserId = extractCurrentUserId()
   if (!reportUserId) {
     throw new Error('reportUserId not found')

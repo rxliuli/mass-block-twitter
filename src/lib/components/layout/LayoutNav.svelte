@@ -1,7 +1,7 @@
 <script lang="ts">
   import { shadcnConfig } from '$lib/components/logic/config'
   import { Portal } from 'bits-ui'
-  import { Snippet } from 'svelte'
+  import { type Snippet } from 'svelte'
 
   const props: {
     children?: Snippet

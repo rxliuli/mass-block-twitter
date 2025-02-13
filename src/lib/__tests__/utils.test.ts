@@ -1,6 +1,7 @@
 import { extractObjects } from '$lib/util/extractObjects'
 import { it, expect, describe } from 'vitest'
 import all from './assets/all.json'
+import all2 from './assets/all2.json'
 import timeline from './assets/timeline.json'
 import { z } from 'zod'
 import { filterTweets, parseTweets, parseUserRecords } from '../api'
@@ -239,6 +240,14 @@ describe('parseTweets', () => {
         user: omit(it.user, 'updated_at'),
       })),
     ).toMatchSnapshot()
+  })
+  it.todo('parseTweets for all2', () => {
+    const tweets = parseTweets(all2)
+    console.log(tweets.map((it) => it.id))
+    // expect(tweets).length(10)
+    // expect(
+    //   tweets.map((it) => omit(it, 'created_at', 'updated_at')),
+    // ).toMatchSnapshot()
   })
 })
 

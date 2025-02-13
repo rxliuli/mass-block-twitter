@@ -27,12 +27,12 @@
       icon: UserIcon,
       to: 'content',
     },
-    // {
-    //   title: 'Moderation Lists',
-    //   url: '/modlists',
-    //   icon: UsersIcon,
-    //   to: 'content',
-    // },
+    {
+      title: 'Moderation Lists',
+      url: '/modlists',
+      icon: UsersIcon,
+      to: 'content',
+    },
     {
       title: 'Muted Words',
       url: '/muted-words',
@@ -67,7 +67,7 @@
   <Sidebar.Provider class="h-full">
     <AppSidebar items={menuItems} />
     <main class="w-full h-full flex flex-col overflow-auto">
-      <div class="flex items-center gap-2 mb-2">
+      <div class="flex items-center gap-2 mb-2 h-10">
         <Sidebar.Trigger />
         <h1 class="text-xl font-bold" id="layout-nav-title">
           {title ?? autoTitle}

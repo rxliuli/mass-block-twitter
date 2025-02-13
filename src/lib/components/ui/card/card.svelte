@@ -1,6 +1,6 @@
 <script lang="ts">
+	import type { WithElementRef } from "bits-ui";
 	import type { HTMLAttributes } from "svelte/elements";
-	import { type WithElementRef } from "bits-ui";
 	import { cn } from "$lib/utils.js";
 
 	let {
@@ -8,13 +8,13 @@
 		class: className,
 		children,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLSpanElement>> = $props();
+	}: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
 </script>
 
-<span
+<div
 	bind:this={ref}
-	class={cn("ml-auto text-xs tracking-widest opacity-60", className)}
+	class={cn("bg-card text-card-foreground rounded-lg border shadow-sm", className)}
 	{...restProps}
 >
 	{@render children?.()}
-</span>
+</div>

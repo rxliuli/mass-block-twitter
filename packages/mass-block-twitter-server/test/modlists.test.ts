@@ -1,13 +1,13 @@
 import { env, createExecutionContext } from 'cloudflare:test'
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import app from '../src'
-import { userSchema } from '../src/lib/request'
 import { HonoEnv, TokenInfo } from '../src/lib/bindings'
 import { prismaClients } from '../src/lib/prisma'
 import { ModList, ModListSubscription, ModListUser } from '@prisma/client'
 import {
   addTwitterUserSchema,
   createSchema,
+  ModListSubscribeRequest,
   removeSchema,
   subscribeSchema,
 } from '../src/routes/modlists'
@@ -173,7 +173,7 @@ describe('modlists', () => {
         method: 'POST',
         body: JSON.stringify({
           id: r1.data.id,
-        } satisfies typeof subscribeSchema._type),
+        } satisfies ModListSubscribeRequest),
         headers: {
           Authorization: 'test-token-2',
           'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ describe('modlists', () => {
         method: 'POST',
         body: JSON.stringify({
           id: modListId,
-        } satisfies typeof subscribeSchema._type),
+        } satisfies ModListSubscribeRequest),
         headers: {
           Authorization: 'test-token-1',
           'Content-Type': 'application/json',
@@ -248,7 +248,7 @@ describe('modlists', () => {
           method: 'POST',
           body: JSON.stringify({
             id: modListId,
-          } satisfies typeof subscribeSchema._type),
+          } satisfies ModListSubscribeRequest),
           headers: {
             Authorization: 'test-token-1',
             'Content-Type': 'application/json',

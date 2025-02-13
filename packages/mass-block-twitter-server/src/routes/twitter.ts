@@ -7,10 +7,12 @@ import {
   userSchema,
 } from '../lib/request'
 import { prismaClients } from '../lib/prisma'
-import { HTTPException } from 'hono/http-exception'
 import { HonoEnv } from '../lib/bindings'
+import { z } from 'zod'
 
 const twitter = new Hono<HonoEnv>()
+
+export type TwitterSpamReportRequest = z.infer<typeof spamReportRequestSchema>
 
 twitter
   .post(

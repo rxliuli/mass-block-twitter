@@ -14,6 +14,8 @@ export const subscribeSchema = z.object({
   id: z.string().describe('modlist id'),
 })
 
+export type ModListSubscribeRequest = z.infer<typeof subscribeSchema>
+
 export const createSchema = z.object({
   name: z.string().max(100),
   description: z.string().max(300).optional(),
@@ -21,14 +23,20 @@ export const createSchema = z.object({
   twitterUser: userSchema,
 })
 
+export type ModListCreateRequest = z.infer<typeof createSchema>
+
 export const removeSchema = z.object({
   id: z.string().describe('modlist id'),
 })
+
+export type ModListRemoveRequest = z.infer<typeof removeSchema>
 
 export const addTwitterUserSchema = z.object({
   modListId: z.string(),
   twitterUser: userSchema,
 })
+
+export type ModListAddTwitterUserRequest = z.infer<typeof addTwitterUserSchema>
 
 const removeTwitterUserSchema = z.object({
   id: z.string(),

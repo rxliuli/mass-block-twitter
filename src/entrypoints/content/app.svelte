@@ -13,7 +13,8 @@
   import { Button } from '$lib/components/ui/button'
   import { XIcon } from 'lucide-svelte'
   import { ShadcnConfig } from '$lib/components/logic/config'
-  import ModListsUserPage from './pages/modlists/user/page.svelte'
+  import ModListsCreatedPage from './pages/modlists/created/page.svelte'
+  import ModListsSubscribePage from './pages/modlists/subscribe/page.svelte'
   import ModListsDetailPage from './pages/modlists/detail/page.svelte'
 
   let open = $state(false)
@@ -57,6 +58,7 @@
 <QueryClientProvider client={queryClient}>
   <ShadcnConfig portal={root}>
     <Router
+      initialPath={import.meta.env.VITE_INITIAL_PATH}
       routes={[
         {
           path: '/',
@@ -71,8 +73,12 @@
           component: ModListsPage,
         },
         {
-          path: '/modlists/user',
-          component: ModListsUserPage,
+          path: '/modlists/created',
+          component: ModListsCreatedPage,
+        },
+        {
+          path: '/modlists/subscribe',
+          component: ModListsSubscribePage,
         },
         {
           path: '/modlists/detail',

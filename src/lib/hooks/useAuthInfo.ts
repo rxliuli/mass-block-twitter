@@ -5,6 +5,6 @@ export function useAuthInfo() {
   return localStore<AuthInfo | null>('authInfo', null, browserStorageAdapter())
 }
 
-export function getAuthInfo() {
-  return browser.storage.local.get('authInfo')
+export async function getAuthInfo() {
+  return await useAuthInfo().getValue()
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useAuthInfo, useLogout } from './auth.svelte'
+  import { useAuthInfo, useLogout, userState } from './auth.svelte'
   import Loading from '../ui/Loading.svelte'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import { UserIcon } from 'lucide-svelte'
@@ -16,7 +16,7 @@
   <div class="flex justify-center items-center h-full">
     <p class="text-red-500">Error: {$query.error.message}</p>
   </div>
-{:else if $query.data}
+{:else if userState.authInfo}
   <DropdownMenu.Root>
     <DropdownMenu.Trigger>
       <Button variant="ghost" size="icon" data-testid="profile-button">
@@ -26,7 +26,7 @@
     <DropdownMenu.Content>
       <DropdownMenu.Group>
         <DropdownMenu.GroupHeading>
-          {$query.data.email}
+          {userState.authInfo.email}
         </DropdownMenu.GroupHeading>
         <DropdownMenu.Separator />
         <DropdownMenu.Item>

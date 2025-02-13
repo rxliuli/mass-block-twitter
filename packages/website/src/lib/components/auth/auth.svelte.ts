@@ -1,7 +1,4 @@
-import {
-  createMutation,
-  createQuery,
-} from '@tanstack/svelte-query'
+import { createMutation, createQuery } from '@tanstack/svelte-query'
 
 export interface AuthInfo {
   id: string
@@ -30,6 +27,11 @@ export async function setAuthInfo(info: AuthInfo) {
   userState.authInfo = info
 }
 
+export function clearAuthInfo() {
+  localStorage.removeItem(authInfoKey)
+  userState.authInfo = undefined
+}
+
 export function useAuthInfo() {
   return createQuery({
     queryKey: ['authInfo'],
@@ -50,8 +52,7 @@ export function useLogout() {
       if (!resp.ok) {
         throw new Error('Failed to logout')
       }
-      localStorage.removeItem(authInfoKey)
-      userState.authInfo = undefined
+      clearAuthInfo()
       location.reload()
     },
   })

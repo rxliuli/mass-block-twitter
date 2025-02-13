@@ -6,14 +6,14 @@
   import { Input } from '$lib/components/ui/input'
   import { Label } from '$lib/components/ui/label'
   import {
+    clearAuthInfo,
     getAuthInfo,
     setAuthInfo,
     type AuthInfo,
   } from '@/components/auth/auth.svelte'
-  import { createMutation } from '@tanstack/svelte-query'
+  import { createMutation, useQueryClient } from '@tanstack/svelte-query'
   import { onMount } from 'svelte'
   import { toast } from 'svelte-sonner'
-  import { get } from 'svelte/store'
 
   function onPluginLoggedIn(authInfo: AuthInfo) {
     document.dispatchEvent(
@@ -32,6 +32,15 @@
     }
     const authInfo = await getAuthInfo()
     if (!authInfo) {
+      return
+    }
+    const resp = await fetch(
+      import.meta.env.VITE_API_URL + '/api/accounts/settings',
+      { headers: { Authorization: `Bearer ${authInfo.token}` } },
+    )
+    if (!resp.ok) {
+      clearAuthInfo()
+      // location.reload()
       return
     }
     toast.success('Already logged in, redirecting...')
@@ -111,7 +120,7 @@
           <div class="flex items-center">
             <Label for="password">Password</Label>
             <a
-              href="/accounts/reset-password"
+              href={'/accounts/reset-password'}
               class="ml-auto inline-block text-sm underline"
             >
               Forgot your password?

@@ -136,13 +136,17 @@ twitter
     },
   )
   .get('/spam-users-for-type', async (c) => {
-    const spamUsersTime = await c.env.MY_KV.get('spamUsersTime')
-    if (!c.req.query('force') && spamUsersTime) {
-      const time = new Date(spamUsersTime)
-      if (Date.now() < time.getTime() + 1000 * 60 * 60 * 24) {
+    const spamUsersExpireTime = await c.env.MY_KV.get('spamUsersExpireTime')
+    if (!c.req.query('force') && spamUsersExpireTime) {
+      const time = new Date(spamUsersExpireTime)
+      if (Date.now() < time.getTime()) {
         const spamUsers = await c.env.MY_KV.get('spamUsers')
         if (spamUsers) {
-          return c.json(JSON.parse(spamUsers))
+          return c.json(JSON.parse(spamUsers), {
+            headers: {
+              'Cache-Control': 'public, max-age=3600',
+            },
+          })
         }
       }
     }
@@ -164,7 +168,10 @@ twitter
       return acc
     }, {} as Record<string, 'spam' | 'report'>)
     await c.env.MY_KV.put('spamUsers', JSON.stringify(res))
-    await c.env.MY_KV.put('spamUsersTime', new Date().toISOString())
+    await c.env.MY_KV.put(
+      'spamUsersExpireTime',
+      new Date(Date.now() + +1000 * 60 * 60 * 24).toISOString(),
+    )
     return c.json(res)
   })
 

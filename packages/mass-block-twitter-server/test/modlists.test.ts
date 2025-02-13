@@ -123,12 +123,15 @@ describe('modlists', () => {
         'Content-Type': 'application/json',
       },
     })
-  const getModList = async (id: string) => {
-    const resp = await fetch('/api/modlists/get/' + id)
+  const getModList = async (id: string, token?: string) => {
+    const headers = token ? { Authorization: token } : undefined
+    const resp = await fetch('/api/modlists/get/' + id, { headers })
     expect(resp.ok).true
     return (await resp.json()) as {
       code: 'success'
-      data: ModList
+      data: ModList & {
+        subscribed: boolean
+      }
     }
   }
   describe('remove', () => {
@@ -165,7 +168,6 @@ describe('modlists', () => {
       expect(resp1.ok).true
       const r1 = (await resp1.json()) as { code: 'success'; data: ModList }
       expect(r1.data.id).not.undefined
-
       expect((await getModList(r1.data.id)).data.subscriptionCount).toBe(0)
       const resp2 = await fetch('/api/modlists/subscribe', {
         method: 'POST',
@@ -227,7 +229,7 @@ describe('modlists', () => {
         },
       })
       expect(resp2.ok).true
-      const resp3 = await fetch('/api/modlists/subscribe', {
+      const resp3 = await fetch('/api/modlists/subscribed', {
         headers: { Authorization: 'test-token-1' },
       })
       expect(resp3.ok).true
@@ -237,6 +239,8 @@ describe('modlists', () => {
       }
       expect(r3.data.length).toBe(1)
       expect(r3.data[0].modListId).toBe(modListId)
+      expect((await getModList(modListId, 'test-token-1')).data.subscribed).true
+      expect((await getModList(modListId)).data.subscribed).false
     })
     it('should not be able to subscribe to a modlist twice', async () => {
       const subscribe = () =>

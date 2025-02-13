@@ -108,7 +108,7 @@ model ModList {
   id                  String                @id // ulid https://github.com/ulid/spec
   name                String
   description         String?
-  iconUrl             String?
+  avatar              String?
   userCount           Int                   @default(0)
   subscriptionCount   Int                   @default(0)
   localUserId         String

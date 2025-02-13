@@ -6,6 +6,7 @@ import { prismaClients } from '../lib/prisma'
 import { ulid } from '../lib/ulid'
 import { userSchema } from '../lib/request'
 import { PrismaClient } from '@prisma/client'
+import { getTokenInfo } from '../middlewares/auth'
 
 const modlists = new Hono<HonoEnv>()
 
@@ -16,7 +17,7 @@ export const subscribeSchema = z.object({
 export const createSchema = z.object({
   name: z.string().max(100),
   description: z.string().max(300).optional(),
-  iconUrl: z.string().optional(),
+  avatar: z.string().optional(),
   twitterUser: userSchema,
 })
 
@@ -65,7 +66,7 @@ modlists
         id: ulid(),
         name: validated.name,
         description: validated.description,
-        iconUrl: validated.iconUrl,
+        avatar: validated.avatar,
         localUserId: tokenInfo.id,
         twitterUserId: validated.twitterUser.id,
       },
@@ -168,7 +169,7 @@ modlists
     ])
     return c.json({ code: 'success' })
   })
-  .get('/subscribe', async (c) => {
+  .get('/subscribed', async (c) => {
     const prisma = await prismaClients.fetch(c.env.DB)
     const tokenInfo = c.get('tokenInfo')
     const modList = await prisma.modListSubscription.findMany({
@@ -270,7 +271,19 @@ const modlistSearch = new Hono<HonoEnv>()
     if (!modList) {
       return c.json({ code: 'modListNotFound' }, 404)
     }
-    return c.json({ code: 'success', data: modList })
+    const tokenInfo = await getTokenInfo(c)
+    const subscribed = tokenInfo
+      ? (await prisma.modListSubscription.count({
+          where: { modListId: id, localUserId: tokenInfo.id },
+        })) > 0
+      : false
+    return c.json({
+      code: 'success',
+      data: {
+        ...modList,
+        subscribed,
+      },
+    })
   })
   // get modlist users by modlist id
   .get('/users', zValidator('query', userQuerySchema), async (c) => {

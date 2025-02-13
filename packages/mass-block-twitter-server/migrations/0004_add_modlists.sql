@@ -3,7 +3,7 @@ CREATE TABLE "ModList" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "description" TEXT,
-    "iconUrl" TEXT,
+    "avatar" TEXT,
     "userCount" INTEGER NOT NULL DEFAULT 0,
     "subscriptionCount" INTEGER NOT NULL DEFAULT 0,
     "localUserId" TEXT NOT NULL,

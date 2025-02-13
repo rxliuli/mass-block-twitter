@@ -18,7 +18,7 @@ app
   .route('/', twitter)
   .route('/api/twitter', twitter)
   .route('/api/auth', authRoutes)
-  .route('/api/modlists/search', modlistSearch)
+  .route('/api/modlists', modlistSearch)
   .use(auth())
   .route('/api/accounts', accounts)
   .route('/api/billing', billing)

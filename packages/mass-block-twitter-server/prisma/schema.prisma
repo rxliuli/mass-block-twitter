@@ -129,18 +129,22 @@ model ModListUser {
   id            String   @id
   modListId     String
   modList       ModList  @relation(fields: [modListId], references: [id])
-  twitterUserId String
+  twitterUserId String // spam twitter user id
   twitterUser   User     @relation(fields: [twitterUserId], references: [id])
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@unique([modListId, twitterUserId])
 }
 
 model ModListSubscription {
   id          String    @id
   modListId   String
   modList     ModList   @relation(fields: [modListId], references: [id])
-  localUserId String
+  localUserId String // subscriber local user id
   localUser   LocalUser @relation(fields: [localUserId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@unique([modListId, localUserId])
 }

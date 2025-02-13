@@ -41,3 +41,9 @@ CREATE INDEX "ModList_name_idx" ON "ModList"("name");
 
 -- CreateIndex
 CREATE INDEX "ModList_description_idx" ON "ModList"("description");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ModListUser_modListId_twitterUserId_key" ON "ModListUser"("modListId", "twitterUserId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ModListSubscription_modListId_localUserId_key" ON "ModListSubscription"("modListId", "localUserId");

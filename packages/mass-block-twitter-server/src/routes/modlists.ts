@@ -9,22 +9,22 @@ import { PrismaClient } from '@prisma/client'
 
 const modlists = new Hono<HonoEnv>()
 
-const subscribeSchema = z.object({
-  modListId: z.string(),
+export const subscribeSchema = z.object({
+  id: z.string().describe('modlist id'),
 })
 
-const createSchema = z.object({
+export const createSchema = z.object({
   name: z.string().max(100),
   description: z.string().max(300).optional(),
   iconUrl: z.string().optional(),
   twitterUser: userSchema,
 })
 
-const removeSchema = z.object({
-  id: z.string(),
+export const removeSchema = z.object({
+  id: z.string().describe('modlist id'),
 })
 
-const addTwitterUserSchema = z.object({
+export const addTwitterUserSchema = z.object({
   modListId: z.string(),
   twitterUser: userSchema,
 })
@@ -60,7 +60,7 @@ modlists
     const prisma = await prismaClients.fetch(c.env.DB)
     const tokenInfo = c.get('tokenInfo')
     await upsertUser(prisma, validated.twitterUser)
-    await prisma.modList.create({
+    const r = await prisma.modList.create({
       data: {
         id: ulid(),
         name: validated.name,
@@ -70,9 +70,9 @@ modlists
         twitterUserId: validated.twitterUser.id,
       },
     })
-    return c.json({ code: 'success' })
+    return c.json({ code: 'success', data: r })
   })
-  .delete('/create', zValidator('json', removeSchema), async (c) => {
+  .delete('/remove', zValidator('json', removeSchema), async (c) => {
     const validated = c.req.valid('json')
     const prisma = await prismaClients.fetch(c.env.DB)
     const tokenInfo = c.get('tokenInfo')
@@ -85,6 +85,16 @@ modlists
     if (modList.subscriptionCount > 0) {
       return c.json({ code: 'modListHasSubscriptions' }, 400)
     }
+    // TODO https://developers.cloudflare.com/d1/worker-api/d1-database/#batch
+    // await c.env.DB.batch([
+    //   c.env.DB.prepare('DELETE FROM modListUser WHERE modListId = ?').bind(
+    //     validated.id,
+    //   ),
+    //   c.env.DB.prepare(
+    //     'DELETE FROM modListSubscription WHERE modListId = ?',
+    //   ).bind(validated.id),
+    //   c.env.DB.prepare('DELETE FROM modList WHERE id = ?').bind(validated.id),
+    // ])
     await prisma.$transaction([
       prisma.modListUser.deleteMany({
         where: { modListId: validated.id },
@@ -98,26 +108,40 @@ modlists
     ])
     return c.json({ code: 'success' })
   })
+  .get('/created', async (c) => {
+    const prisma = await prismaClients.fetch(c.env.DB)
+    const tokenInfo = c.get('tokenInfo')
+    const modLists = await prisma.modList.findMany({
+      where: { localUserId: tokenInfo.id },
+    })
+    return c.json({ code: 'success', data: modLists })
+  })
   .post('/subscribe', zValidator('json', subscribeSchema), async (c) => {
     const validated = c.req.valid('json')
     const prisma = await prismaClients.fetch(c.env.DB)
     const tokenInfo = c.get('tokenInfo')
     const modList = await prisma.modList.findUnique({
-      where: { id: validated.modListId },
+      where: { id: validated.id },
     })
     if (!modList) {
       return c.json({ code: 'modListNotFound' }, 404)
+    }
+    const existingSubscription = await prisma.modListSubscription.count({
+      where: { modListId: validated.id, localUserId: tokenInfo.id },
+    })
+    if (existingSubscription > 0) {
+      return c.json({ code: 'alreadySubscribed' }, 400)
     }
     await prisma.$transaction([
       prisma.modListSubscription.create({
         data: {
           id: ulid(),
-          modListId: validated.modListId,
+          modListId: validated.id,
           localUserId: tokenInfo.id,
         },
       }),
       prisma.modList.update({
-        where: { id: validated.modListId },
+        where: { id: validated.id },
         data: { subscriptionCount: { increment: 1 } },
       }),
     ])
@@ -128,21 +152,29 @@ modlists
     const prisma = await prismaClients.fetch(c.env.DB)
     const tokenInfo = c.get('tokenInfo')
     const modList = await prisma.modList.findUnique({
-      where: { id: validated.modListId },
+      where: { id: validated.id },
     })
     if (!modList) {
       return c.json({ code: 'modListNotFound' }, 404)
     }
     await prisma.$transaction([
       prisma.modListSubscription.delete({
-        where: { id: validated.modListId, localUserId: tokenInfo.id },
+        where: { id: validated.id, localUserId: tokenInfo.id },
       }),
       prisma.modList.update({
-        where: { id: validated.modListId },
+        where: { id: validated.id },
         data: { subscriptionCount: { decrement: 1 } },
       }),
     ])
     return c.json({ code: 'success' })
+  })
+  .get('/subscribe', async (c) => {
+    const prisma = await prismaClients.fetch(c.env.DB)
+    const tokenInfo = c.get('tokenInfo')
+    const modList = await prisma.modListSubscription.findMany({
+      where: { localUserId: tokenInfo.id },
+    })
+    return c.json({ code: 'success', data: modList })
   })
   .post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
     const validated = c.req.valid('json')
@@ -154,13 +186,22 @@ modlists
     if (!modList) {
       return c.json({ code: 'modListNotFound' }, 404)
     }
+    const existingUser = await prisma.modListUser.count({
+      where: {
+        modListId: validated.modListId,
+        twitterUserId: validated.twitterUser.id,
+      },
+    })
+    if (existingUser > 0) {
+      return c.json({ code: 'userAlreadyInModList' }, 400)
+    }
     await upsertUser(prisma, validated.twitterUser)
     await prisma.$transaction([
       prisma.modListUser.create({
         data: {
           id: ulid(),
           modListId: validated.modListId,
-          userId: tokenInfo.id,
+          twitterUserId: validated.twitterUser.id,
         },
       }),
       prisma.modList.update({
@@ -175,14 +216,20 @@ modlists
     const prisma = await prismaClients.fetch(c.env.DB)
     const tokenInfo = c.get('tokenInfo')
     const modListUser = await prisma.modListUser.findUnique({
-      where: { id: validated.id, userId: tokenInfo.id },
+      where: { id: validated.id },
     })
     if (!modListUser) {
       return c.json({ code: 'modListUserNotFound' }, 404)
     }
+    const modList = await prisma.modList.findUnique({
+      where: { id: modListUser.modListId, localUserId: tokenInfo.id },
+    })
+    if (!modList) {
+      return c.json({ code: 'modListNotFound' }, 404)
+    }
     await prisma.$transaction([
       prisma.modListUser.delete({
-        where: { id: validated.id, userId: tokenInfo.id },
+        where: { id: validated.id },
       }),
       prisma.modList.update({
         where: { id: modListUser.modListId },
@@ -201,16 +248,44 @@ const searchSchema = z.object({
   filterBy: z.enum(['all', 'subscription']).optional(),
 })
 
-const modlistSearch = new Hono<HonoEnv>().get(
-  '/',
-  zValidator('query', searchSchema),
-  async (c) => {
+const userQuerySchema = z.object({
+  id: z.string(),
+})
+
+const modlistSearch = new Hono<HonoEnv>()
+  .get('/search', zValidator('query', searchSchema), async (c) => {
     const prisma = await prismaClients.fetch(c.env.DB)
     const modLists = await prisma.modList.findMany({
       orderBy: { updatedAt: 'desc' },
     })
     return c.json({ code: 'success', data: modLists })
-  },
-)
+  })
+  // get modlist metadata by id
+  .get('/get/:id', async (c) => {
+    const id = c.req.param('id')
+    const prisma = await prismaClients.fetch(c.env.DB)
+    const modList = await prisma.modList.findUnique({
+      where: { id },
+    })
+    if (!modList) {
+      return c.json({ code: 'modListNotFound' }, 404)
+    }
+    return c.json({ code: 'success', data: modList })
+  })
+  // get modlist users by modlist id
+  .get('/users', zValidator('query', userQuerySchema), async (c) => {
+    const validated = c.req.valid('query')
+    const prisma = await prismaClients.fetch(c.env.DB)
+    const modList = await prisma.modList.findUnique({
+      where: { id: validated.id },
+    })
+    if (!modList) {
+      return c.json({ code: 'modListNotFound' }, 404)
+    }
+    const modListUsers = await prisma.modListUser.findMany({
+      where: { modListId: validated.id },
+    })
+    return c.json({ code: 'success', data: modListUsers })
+  })
 
 export { modlists, modlistSearch }

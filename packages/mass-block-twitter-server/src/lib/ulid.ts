@@ -1,3 +1,3 @@
-import { ulidFactory } from 'ulid-workers'
+import { ulid } from 'ulidx'
 
-export const ulid = ulidFactory()
+export { ulid }

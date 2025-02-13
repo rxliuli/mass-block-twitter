@@ -1,12 +1,29 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { spamReportRequestSchema } from '../src/lib/request'
 import sortBy from 'just-sort-by'
+import { createExecutionContext, env } from 'cloudflare:test'
+import app from '../src'
+import { HonoEnv } from '../src/lib/bindings'
+import { prismaClients } from '../src/lib/prisma'
+import { PrismaClient } from '@prisma/client'
 
 beforeEach(async () => {
   const resp = await fetch('http://localhost:8787/test/spam-users', {
     method: 'DELETE',
   })
   expect(resp.ok).true
+})
+
+let ctx: ExecutionContext
+let fetch: typeof app.request
+let prisma: PrismaClient
+beforeEach(async () => {
+  const _env = env as HonoEnv['Bindings']
+  await _env.DB.prepare(_env.TEST_INIT_SQL).run()
+  prisma = await prismaClients.fetch(_env.DB)
+  ctx = createExecutionContext()
+  fetch = ((url: string, options: RequestInit) =>
+    app.request(url, options, env, ctx)) as typeof app.request
 })
 
 async function add(spamUserId: string, reportUserId: string, tweetId: string) {
@@ -37,7 +54,7 @@ async function add(spamUserId: string, reportUserId: string, tweetId: string) {
       page_type: 'timeline',
     },
   }
-  return await fetch('http://localhost:8787/spam-users', {
+  return await fetch('/spam-users-of-type', {
     method: 'POST',
     body: JSON.stringify(spamReport),
     headers: {

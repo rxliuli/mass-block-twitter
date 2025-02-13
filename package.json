@@ -43,6 +43,7 @@
     "wxt": "^0.19.13"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.5.0",
     "@json2csv/plainjs": "^7.0.6",
     "@liuli-util/async": "^3.7.0",
     "@mass-block-twitter/server": "workspace:^",
@@ -65,6 +66,7 @@
     "svelte-dnd-action": "^0.9.54",
     "svelte-legos": "^0.2.5",
     "svelte-tiny-virtual-list": "^2.1.2",
+    "svelte-toolbelt": "link:../svelte-toolbelt",
     "toad-cache": "^3.7.0",
     "urlpattern-polyfill": "^10.0.0",
     "virtua": "^0.39.3",
@@ -72,7 +74,8 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "lodash-es": "patches/lodash-es.patch"
+      "lodash-es": "patches/lodash-es.patch",
+      "svelte-toolbelt": "patches/svelte-toolbelt.patch"
     }
   },
   "packageManager": "pnpm@10.3.0+sha512.ee592eda8815a8a293c206bb0917c4bb0ff274c50def7cbc17be05ec641fc2d1b02490ce660061356bd0d126a4d7eb2ec8830e6959fb8a447571c631d5a2442d"

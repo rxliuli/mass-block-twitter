@@ -1,0 +1,25 @@
+diff --git a/dist/utils/use-ref-by-id.svelte.js b/dist/utils/use-ref-by-id.svelte.js
+index 1629d0ed5fedc12a3edc6e012a36b559dcc447b7..116857e41ec0008850a39f4167efa49339f0c6ef 100644
+--- a/dist/utils/use-ref-by-id.svelte.js
++++ b/dist/utils/use-ref-by-id.svelte.js
+@@ -1,5 +1,9 @@
+ import { watch } from "runed";
+ import { onDestroyEffect } from "./on-destroy-effect.svelte.js";
++import { getContext } from "svelte";
++function getRootNodeFromContext() {
++    return getContext("ShadcnConfig")?.portal;
++}
+ /**
+  * Finds the node with that ID and sets it to the boxed node.
+  * Reactive using `$effect` to ensure when the ID or deps change,
+@@ -7,8 +11,8 @@ import { onDestroyEffect } from "./on-destroy-effect.svelte.js";
+  */
+ export function useRefById({ id, ref, deps = () => true, onRefChange, getRootNode }) {
+     watch([() => id.current, deps], ([_id]) => {
+-        const rootNode = getRootNode?.() ?? document;
+-        const node = rootNode?.getElementById(_id);
++        const rootNode = getRootNode?.() ?? getRootNodeFromContext() ?? document;
++        const node = rootNode?.querySelector(`#${_id}`);
+         if (node)
+             ref.current = node;
+         else

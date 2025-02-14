@@ -1,11 +1,11 @@
 import { defineExtensionMessaging } from '@webext-core/messaging'
-import type { spamReportRequestSchema } from '@mass-block-twitter/server'
+import type { TwitterSpamReportRequest } from '@mass-block-twitter/server'
 
 interface ProtocolMap {
   show(): void
 
   fetchSpamUsers(): Record<string, number>
-  spamReport(request: typeof spamReportRequestSchema._type): void
+  spamReport(request: TwitterSpamReportRequest): void
 }
 
 export const { sendMessage, onMessage, removeAllListeners } =

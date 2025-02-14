@@ -3,7 +3,6 @@
   import { userQuery } from '../../../../lib/query'
   import { renderComponent } from '$lib/components/ui/data-table'
   import AvatarWrapper from './components/AvatarWrapper.svelte'
-  import DescriptionWrapper from './components/DescriptionWrapper.svelte'
   import BlockingWrapper from './components/BlockingWrapper.svelte'
   import type { Column } from '$lib/components/logic/a-data-table'
   import { ADataTable } from '$lib/components/logic/a-data-table'
@@ -12,6 +11,7 @@
   import Label from '$lib/components/ui/label/label.svelte'
   import { filterUser } from './utils/filterUser'
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
+  import TextWrapper from './components/TextWrapper.svelte'
 
   const query = userQuery()
 
@@ -33,6 +33,12 @@
     {
       title: 'Name',
       dataIndex: 'name',
+      render: (value) =>
+        renderComponent(TextWrapper, {
+          class: 'truncate',
+          title: value,
+          children: value,
+        }),
     },
     {
       title: 'Blocking',
@@ -43,7 +49,10 @@
       title: 'Description',
       dataIndex: 'description',
       render: (value) =>
-        renderComponent(DescriptionWrapper, { description: value }),
+        renderComponent(TextWrapper, {
+          class: 'text-sm truncate',
+          children: value,
+        }),
     },
   ]
 
@@ -61,7 +70,7 @@
   )
 </script>
 
-<div class="h-[calc(100%-3rem)] flex flex-col">
+<div class="flex flex-col">
   <UserActions {selectedRows} class="mb-2">
     {#snippet search()}
       <Input

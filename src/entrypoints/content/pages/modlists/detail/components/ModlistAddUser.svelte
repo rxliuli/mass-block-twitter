@@ -1,0 +1,212 @@
+<script lang="ts">
+  import { searchPeople } from '$lib/api'
+  import { shadcnConfig } from '$lib/components/logic/config'
+  import {
+    QueryError,
+    QueryLoading,
+    useLoading,
+  } from '$lib/components/logic/query'
+  import * as Avatar from '$lib/components/ui/avatar'
+  import { Button } from '$lib/components/ui/button'
+  import * as Command from '$lib/components/ui/command'
+  import * as Dialog from '$lib/components/ui/dialog'
+  import { SERVER_URL } from '$lib/constants'
+  import { type User } from '$lib/db'
+  import { getAuthInfo } from '$lib/hooks/useAuthInfo'
+  import {
+    createInfiniteQuery,
+    createMutation,
+    useQueryClient,
+  } from '@tanstack/svelte-query'
+  import { debounce } from 'lodash-es'
+  import type {
+    ModListUserCheckResponse,
+    TwitterUser,
+  } from '@mass-block-twitter/server'
+  import { produce } from 'immer'
+  import { toast } from 'svelte-sonner'
+
+  let {
+    open = $bindable(false),
+    modListId,
+    ...props
+  }: {
+    open: boolean
+    modListId: string
+    onAdd: (user: User) => Promise<void>
+    onRemove: (user: User) => Promise<void>
+  } = $props()
+
+  function onCancel() {
+    open = false
+    searchTerm = ''
+    $query.refetch()
+  }
+
+  const query = createInfiniteQuery({
+    queryKey: ['modlistAddUser', 'search'],
+    queryFn: async ({ pageParam }) => {
+      const term = searchTerm.trim()
+      if (!term) {
+        return {
+          cursor: undefined,
+          data: [],
+        }
+      }
+      const twitterPage = await searchPeople({
+        term,
+        count: 20,
+        cursor: pageParam,
+      })
+      const url = new URL(`${SERVER_URL}/api/modlists/user/check`)
+      url.searchParams.set('modListId', modListId)
+      url.searchParams.set(
+        'users',
+        JSON.stringify(twitterPage.data satisfies TwitterUser[]),
+      )
+      const resp = await fetch(url, {
+        headers: {
+          Authorization: 'Bearer ' + (await getAuthInfo())?.token,
+        },
+      })
+      const data = (await resp.json()) as ModListUserCheckResponse
+      return {
+        cursor: twitterPage.cursor,
+        data: twitterPage.data.map((it) => ({
+          ...it,
+          added: data[it.id],
+        })),
+      }
+    },
+    getNextPageParam: (lastPage) => lastPage.cursor,
+    initialPageParam: undefined as string | undefined,
+  })
+
+  const { loadings, withLoading } = useLoading()
+
+  const queryClient = useQueryClient()
+
+  function updateUser(userId: string, added: boolean) {
+    queryClient.setQueryData(
+      ['modlistAddUser', 'search'],
+      produce((old: typeof $query.data) => {
+        if (!old) {
+          return old
+        }
+        old.pages.forEach((page) => {
+          page.data.forEach((it) => {
+            if (it.id === userId) {
+              it.added = added
+            }
+          })
+        })
+        return old
+      }),
+    )
+  }
+
+  const addUserMutation = createMutation({
+    mutationFn: withLoading(
+      async (user: User) => {
+        await props.onAdd(user)
+        updateUser(user.id, true)
+      },
+      (user) => user.id,
+    ),
+    onError: () => {
+      toast.error('Failed to add user')
+    },
+  })
+  const removeUserMutation = createMutation({
+    mutationFn: withLoading(
+      async (user: User) => {
+        await props.onRemove(user)
+        updateUser(user.id, false)
+      },
+      (user) => user.id,
+    ),
+    onError: () => {
+      toast.error('Failed to remove user')
+    },
+  })
+
+  let isCompositionOn = $state(false)
+  let searchTerm = $state('')
+  const onSearch = debounce(() => {
+    if (isCompositionOn) {
+      return
+    }
+    $query.refetch()
+  }, 500)
+</script>
+
+<Dialog.Root bind:open>
+  <Dialog.Content
+    class="w-full max-w-[600px]"
+    portalProps={{ to: shadcnConfig.get().portal }}
+    trapFocus={false}
+  >
+    <Dialog.Header>
+      <Command.Root>
+        <Command.Input
+          autofocus
+          bind:value={searchTerm}
+          oninput={onSearch}
+          placeholder="Search for user"
+          oncompositionstart={() => (isCompositionOn = true)}
+          oncompositionend={() => (isCompositionOn = false)}
+        />
+      </Command.Root>
+    </Dialog.Header>
+    <div class="h-[60dvh] space-y-2 overflow-y-auto">
+      {#if $query.isFetching}
+        <QueryLoading />
+      {:else if $query.isError}
+        <QueryError description="Failed to search users" />
+      {/if}
+      {#if $query.data}
+        {@const users = $query.data?.pages.flatMap((page) => page.data) ?? []}
+        {#if users.length === 0}
+          <p>No results found for</p>
+        {/if}
+        {#each users as user (user.id)}
+          <div
+            class="flex items-center justify-between p-2 hover:bg-muted/50 rounded-lg"
+          >
+            <div class="flex items-center gap-3">
+              <Avatar.Root>
+                <Avatar.Image src={user.profile_image_url} title={user.name} />
+                <Avatar.Fallback>
+                  {user.name.slice(0, 2)}
+                </Avatar.Fallback>
+              </Avatar.Root>
+              <div class="flex flex-col">
+                <span class="text-sm font-medium truncate">{user.name}</span>
+                <span class="text-xs text-muted-foreground">
+                  @{user.screen_name}
+                </span>
+              </div>
+            </div>
+            <Button
+              variant="secondary"
+              size="sm"
+              onclick={() =>
+                user.added
+                  ? $removeUserMutation.mutate(user)
+                  : $addUserMutation.mutate(user)}
+              disabled={loadings[user.id]}
+            >
+              {user.added ? 'Remove' : 'Add'}
+            </Button>
+          </div>
+        {/each}
+      {/if}
+    </div>
+
+    <Dialog.Footer>
+      <Button class="w-full" variant="secondary" onclick={onCancel}>
+        Cancel
+      </Button>
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog.Root>

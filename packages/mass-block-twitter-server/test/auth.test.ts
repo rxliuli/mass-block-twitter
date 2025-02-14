@@ -3,7 +3,6 @@ import app from '../src'
 import { createExecutionContext, env } from 'cloudflare:test'
 import { HonoEnv, TokenInfo } from '../src/lib/bindings'
 import { prismaClients } from '../src/lib/prisma'
-import { getTokenInfo } from '../src/middlewares/auth'
 
 let ctx: ExecutionContext
 let fetch: typeof app.request

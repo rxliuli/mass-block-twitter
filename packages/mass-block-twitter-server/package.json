@@ -4,7 +4,7 @@
   "type": "module",
   "version": "0.0.1",
   "exports": {
-    ".": "./src/lib.ts"
+    ".": "./src/lib.d.ts"
   },
   "scripts": {
     "dev": "wrangler dev",

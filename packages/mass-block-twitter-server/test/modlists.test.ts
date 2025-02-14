@@ -3,18 +3,28 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import app from '../src'
 import { HonoEnv, TokenInfo } from '../src/lib/bindings'
 import { prismaClients } from '../src/lib/prisma'
-import { ModList, ModListSubscription, ModListUser } from '@prisma/client'
 import {
-  addTwitterUserSchema,
-  createSchema,
-  ModListSubscribeRequest,
-  removeSchema,
-  subscribeSchema,
+  ModList,
+  ModListSubscription,
+  ModListUser,
+  PrismaClient,
+} from '@prisma/client'
+import type {
+  ModListUserCheckResponse,
+  ModListAddTwitterUserRequest,
+  ModListCreateRequest,
+  ModListGetResponse,
+  ModListUpdateRequest,
+  ModListUsersResponse,
+  ModListGetCreatedResponse,
+  ModListSearchResponse,
 } from '../src/routes/modlists'
+import { TwitterUser } from '../src/routes/twitter'
 
 describe('modlists', () => {
   let ctx: ExecutionContext
   let fetch: typeof app.request
+  let prisma: PrismaClient
   beforeEach(async () => {
     const _env = env as HonoEnv['Bindings']
     await _env.MY_KV.put(
@@ -36,7 +46,7 @@ describe('modlists', () => {
       } satisfies TokenInfo),
     )
     await _env.DB.prepare(_env.TEST_INIT_SQL).run()
-    const prisma = await prismaClients.fetch(_env.DB)
+    prisma = await prismaClients.fetch(_env.DB)
     await prisma.localUser.createMany({
       data: [
         {
@@ -69,7 +79,7 @@ describe('modlists', () => {
       screen_name: 'test',
       name: 'test',
     },
-  } satisfies typeof createSchema._type
+  } satisfies ModListCreateRequest
   describe('create', () => {
     it('should be able to create a modlist', async () => {
       const resp1 = await fetch('/api/modlists/create', {
@@ -85,9 +95,9 @@ describe('modlists', () => {
       expect(r1.data.id).not.undefined
       const resp2 = await fetch('/api/modlists/search')
       expect(resp2.ok).true
-      const r2 = (await resp2.json()) as { code: 'success'; data: ModList[] }
-      expect(r2.data.length).toBe(1)
-      expect(r2.data[0].id).toBe(r1.data.id)
+      const r2 = (await resp2.json()) as ModListSearchResponse
+      expect(r2.length).toBe(1)
+      expect(r2[0].id).toBe(r1.data.id)
     })
     it('should be able to get created modlists', async () => {
       const getCreated = async () => {
@@ -95,10 +105,10 @@ describe('modlists', () => {
           headers: { Authorization: 'test-token-1' },
         })
         expect(resp1.ok).true
-        return (await resp1.json()) as { code: 'success'; data: ModList[] }
+        return (await resp1.json()) as ModListGetCreatedResponse
       }
       const r1 = await getCreated()
-      expect(r1.data.length).toBe(0)
+      expect(r1.length).toBe(0)
       const resp2 = await fetch('/api/modlists/create', {
         method: 'POST',
         body: JSON.stringify(newModList),
@@ -110,29 +120,60 @@ describe('modlists', () => {
       const r2 = (await resp2.json()) as { code: 'success'; data: ModList }
       expect(r2.data.id).not.undefined
       const r3 = await getCreated()
-      expect(r3.data.length).toBe(1)
-      expect(r3.data[0].id).toBe(r2.data.id)
+      expect(r3.length).toBe(1)
+      expect(r3[0].id).toBe(r2.data.id)
+    })
+  })
+  describe('update', () => {
+    let modListId: string
+    beforeEach(async () => {
+      const resp1 = await fetch('/api/modlists/create', {
+        method: 'POST',
+        body: JSON.stringify(newModList),
+        headers: {
+          Authorization: 'test-token-1',
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.ok).true
+      const r1 = (await resp1.json()) as { code: 'success'; data: ModList }
+      modListId = r1.data.id
+    })
+    it('should be able to update a modlist', async () => {
+      const resp1 = await fetch(`/api/modlists/update/${modListId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ name: 'test2' } satisfies ModListUpdateRequest),
+        headers: {
+          Authorization: 'test-token-1',
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.ok).true
+      const r1 = await getModList(modListId)
+      expect(r1.name).toBe('test2')
+    })
+    it('should not be able to update a modlist that is not created by the user', async () => {
+      const resp1 = await fetch(`/api/modlists/update/${modListId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ name: 'test2' } satisfies ModListUpdateRequest),
+        headers: {
+          Authorization: 'test-token-2',
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.status).toBe(404)
     })
   })
   const remove = (id: string) =>
-    fetch('/api/modlists/remove', {
+    fetch(`/api/modlists/remove/${id}`, {
       method: 'DELETE',
-      body: JSON.stringify({ id } as typeof removeSchema._type),
-      headers: {
-        Authorization: 'test-token-1',
-        'Content-Type': 'application/json',
-      },
+      headers: { Authorization: 'test-token-1' },
     })
   const getModList = async (id: string, token?: string) => {
     const headers = token ? { Authorization: token } : undefined
     const resp = await fetch('/api/modlists/get/' + id, { headers })
     expect(resp.ok).true
-    return (await resp.json()) as {
-      code: 'success'
-      data: ModList & {
-        subscribed: boolean
-      }
-    }
+    return (await resp.json()) as ModListGetResponse
   }
   describe('remove', () => {
     it('should be able to remove a modlist', async () => {
@@ -153,8 +194,8 @@ describe('modlists', () => {
       expect(resp3.ok).true
       const resp4 = await fetch('/api/modlists/search')
       expect(resp4.ok).true
-      const r4 = (await resp4.json()) as { code: 'success'; data: ModList[] }
-      expect(r4.data.length).toBe(0)
+      const r4 = (await resp4.json()) as ModListSearchResponse
+      expect(r4.length).toBe(0)
     })
     it('should be able to remove a modlist with subscriptions', async () => {
       const resp1 = await fetch('/api/modlists/create', {
@@ -168,19 +209,13 @@ describe('modlists', () => {
       expect(resp1.ok).true
       const r1 = (await resp1.json()) as { code: 'success'; data: ModList }
       expect(r1.data.id).not.undefined
-      expect((await getModList(r1.data.id)).data.subscriptionCount).toBe(0)
-      const resp2 = await fetch('/api/modlists/subscribe', {
+      expect((await getModList(r1.data.id)).subscriptionCount).toBe(0)
+      const resp2 = await fetch(`/api/modlists/subscribe/${r1.data.id}`, {
         method: 'POST',
-        body: JSON.stringify({
-          id: r1.data.id,
-        } satisfies ModListSubscribeRequest),
-        headers: {
-          Authorization: 'test-token-2',
-          'Content-Type': 'application/json',
-        },
+        headers: { Authorization: 'test-token-2' },
       })
       expect(resp2.ok).true
-      expect((await getModList(r1.data.id)).data.subscriptionCount).toBe(1)
+      expect((await getModList(r1.data.id)).subscriptionCount).toBe(1)
       const resp3 = await remove(r1.data.id)
       expect(resp3.ok).false
       expect(resp3.status).toBe(400)
@@ -218,15 +253,9 @@ describe('modlists', () => {
       modListId = r1.data.id
     })
     it('should be able to subscribe to a modlist', async () => {
-      const resp2 = await fetch('/api/modlists/subscribe', {
+      const resp2 = await fetch(`/api/modlists/subscribe/${modListId}`, {
         method: 'POST',
-        body: JSON.stringify({
-          id: modListId,
-        } satisfies ModListSubscribeRequest),
-        headers: {
-          Authorization: 'test-token-1',
-          'Content-Type': 'application/json',
-        },
+        headers: { Authorization: 'test-token-1' },
       })
       expect(resp2.ok).true
       const resp3 = await fetch('/api/modlists/subscribed', {
@@ -239,20 +268,14 @@ describe('modlists', () => {
       }
       expect(r3.data.length).toBe(1)
       expect(r3.data[0].modListId).toBe(modListId)
-      expect((await getModList(modListId, 'test-token-1')).data.subscribed).true
-      expect((await getModList(modListId)).data.subscribed).false
+      expect((await getModList(modListId, 'test-token-1')).subscribed).true
+      expect((await getModList(modListId)).subscribed).false
     })
     it('should not be able to subscribe to a modlist twice', async () => {
       const subscribe = () =>
-        fetch('/api/modlists/subscribe', {
+        fetch(`/api/modlists/subscribe/${modListId}`, {
           method: 'POST',
-          body: JSON.stringify({
-            id: modListId,
-          } satisfies ModListSubscribeRequest),
-          headers: {
-            Authorization: 'test-token-1',
-            'Content-Type': 'application/json',
-          },
+          headers: { Authorization: 'test-token-1' },
         })
       const resp1 = await subscribe()
       expect(resp1.ok).true
@@ -277,15 +300,12 @@ describe('modlists', () => {
     })
     it('should be able to add a user to a modlist', async () => {
       const getModListUsers = async (modListId: string) => {
-        const resp2 = await fetch('/api/modlists/users?id=' + modListId)
+        const resp2 = await fetch('/api/modlists/users/' + modListId)
         expect(resp2.ok).true
-        return (await resp2.json()) as {
-          code: 'success'
-          data: ModListUser[]
-        }
+        return (await resp2.json()) as ModListUsersResponse
       }
-      expect((await getModList(modListId)).data.userCount).toBe(0)
-      expect((await getModListUsers(modListId)).data.length).toBe(0)
+      expect((await getModList(modListId)).userCount).toBe(0)
+      expect((await getModListUsers(modListId)).length).toBe(0)
       const resp1 = await fetch('/api/modlists/user', {
         method: 'POST',
         body: JSON.stringify({
@@ -297,15 +317,15 @@ describe('modlists', () => {
             profile_image_url: 'test',
             created_at: new Date().toISOString(),
           },
-        } satisfies typeof addTwitterUserSchema._type),
+        } satisfies ModListAddTwitterUserRequest),
         headers: {
           Authorization: 'test-token-1',
           'Content-Type': 'application/json',
         },
       })
       expect(resp1.ok).true
-      expect((await getModList(modListId)).data.userCount).toBe(1)
-      expect((await getModListUsers(modListId)).data.length).toBe(1)
+      expect((await getModList(modListId)).userCount).toBe(1)
+      expect((await getModListUsers(modListId)).length).toBe(1)
     })
     it('should not be able to add a user to a modlist twice', async () => {
       const add = () =>
@@ -320,7 +340,7 @@ describe('modlists', () => {
               profile_image_url: 'test',
               created_at: new Date().toISOString(),
             },
-          } satisfies typeof addTwitterUserSchema._type),
+          } satisfies ModListAddTwitterUserRequest),
           headers: {
             Authorization: 'test-token-1',
             'Content-Type': 'application/json',
@@ -343,7 +363,7 @@ describe('modlists', () => {
             profile_image_url: 'test',
             created_at: new Date().toISOString(),
           },
-        } satisfies typeof addTwitterUserSchema._type),
+        } satisfies ModListAddTwitterUserRequest),
         headers: {
           Authorization: 'test-token-1',
           'Content-Type': 'application/json',
@@ -363,13 +383,49 @@ describe('modlists', () => {
             profile_image_url: 'test',
             created_at: new Date().toISOString(),
           },
-        } satisfies typeof addTwitterUserSchema._type),
+        } satisfies ModListAddTwitterUserRequest),
         headers: {
           Authorization: 'test-token-2',
           'Content-Type': 'application/json',
         },
       })
       expect(resp1.status).toBe(404)
+    })
+    it('should be able to check if a user is in a modlist', async () => {
+      const twittrUsers: TwitterUser[] = Array.from({ length: 10 }, (_, i) => ({
+        id: `123-${i}`,
+        screen_name: `test-${i}`,
+        name: `test-${i}`,
+        profile_image_url: `test-${i}`,
+        created_at: new Date().toISOString(),
+      }))
+      const getCheck = async () => {
+        const params = new URLSearchParams()
+        params.set('modListId', modListId)
+        params.set('users', JSON.stringify(twittrUsers))
+        const resp1 = await fetch(
+          '/api/modlists/user/check?' + params.toString(),
+          { headers: { Authorization: 'test-token-1' } },
+        )
+        expect(resp1.ok).true
+        return (await resp1.json()) as ModListUserCheckResponse
+      }
+      const r1 = await getCheck()
+      expect(Object.values(r1).every((it) => it === false)).true
+      const resp2 = await fetch('/api/modlists/user', {
+        method: 'POST',
+        body: JSON.stringify({
+          modListId,
+          twitterUser: twittrUsers[0],
+        } satisfies ModListAddTwitterUserRequest),
+        headers: {
+          Authorization: 'test-token-1',
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp2.ok).true
+      const r2 = await getCheck()
+      expect(r2[twittrUsers[0].id]).true
     })
   })
 })

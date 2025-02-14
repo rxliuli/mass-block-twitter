@@ -6,9 +6,11 @@
   import { Input } from '$lib/components/ui/input'
   import { Label } from '$lib/components/ui/label'
   import { Textarea } from '$lib/components/ui/textarea'
-  import type { ModList } from '@mass-block-twitter/server'
+  import { FileReader } from '$lib/util/FileReader'
+  import type { ModList } from 'packages/mass-block-twitter-server/src/lib'
   import { createMutation } from '@tanstack/svelte-query'
   import { UserRoundIcon } from 'lucide-svelte'
+  import { untrack } from 'svelte'
 
   let {
     open = $bindable(false),
@@ -28,6 +30,13 @@
     avatar: props.data?.avatar!,
   })
   let form = $state<HTMLFormElement>()
+  $effect(() => {
+    if (open) {
+      untrack(() => {
+        Object.assign(formState, props.data)
+      })
+    }
+  })
 
   const mutation = createMutation({
     mutationFn: async (event: SubmitEvent) => {
@@ -53,14 +62,11 @@
     fileInput?.click()
   }
 
-  function onFileChange(event: Event) {
+  async function onFileChange(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        formState.avatar = e.target?.result as string
-      }
-      reader.readAsDataURL(file)
+      const reader = new FileReader(file)
+      formState.avatar = await reader.readAsDataURL()
     }
   }
 </script>

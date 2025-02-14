@@ -5,128 +5,248 @@
     createQuery,
     useQueryClient,
   } from '@tanstack/svelte-query'
-  import type { ModList, ModListUser } from '@mass-block-twitter/server'
+  import type {
+    ModList,
+    ModListAddTwitterUserRequest,
+    ModListAddTwitterUserResponse,
+    ModListGetResponse,
+    ModListRemoveTwitterUserRequest,
+    ModListUpdateRequest,
+    ModListUsersResponse,
+  } from '@mass-block-twitter/server'
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import { Button } from '$lib/components/ui/button'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import {
     EllipsisIcon,
     PencilIcon,
-    ShareIcon,
     Trash2Icon,
+    UserPlusIcon,
   } from 'lucide-svelte'
   import { shadcnConfig } from '$lib/components/logic/config'
-  import { fakerZH_CN as faker } from '@faker-js/faker'
-  import { useAuthInfo } from '$lib/hooks/useAuthInfo'
+  import { getAuthInfo } from '$lib/hooks/useAuthInfo'
   import ModlistUser from './components/ModlistUser.svelte'
   import ModlistDesc from './components/ModlistDesc.svelte'
-  import { QueryError, QueryLoading } from '$lib/components/logic/query'
+  import {
+    QueryError,
+    QueryLoading,
+    useLoading,
+  } from '$lib/components/logic/query'
+  import { SERVER_URL } from '$lib/constants'
+  import ModListEdit from '../components/ModListEdit.svelte'
+  import { toast } from 'svelte-sonner'
+  import { goBack } from '$lib/components/logic/router/route.svelte'
+  import ModlistAddUser from './components/ModlistAddUser.svelte'
+  import { type User } from '$lib/db'
 
   const route = useRoute()
-  const authInfo = useAuthInfo()
 
   const metadata = createQuery({
     queryKey: ['modlistMetadata'],
     queryFn: async () => {
-      return {
-        id: route.search?.get('id') ?? '',
-        name: 'test',
-        description: 'test',
-        avatar: 'test',
-        userCount: 0,
-        subscriptionCount: 0,
-        localUserId: 'test',
-        twitterUserId: 'test',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        subscribed: false,
-        owner: false,
-        twitterScreenName: 'test',
-      } satisfies ModList & {
-        subscribed: boolean
-        owner: boolean
-        twitterScreenName: string
-      }
+      const authInfo = await getAuthInfo()
+      const resp = await fetch(
+        `${SERVER_URL}/api/modlists/get/${route.search?.get('id')}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authInfo?.token}`,
+          },
+        },
+      )
+      return (await resp.json()) as ModListGetResponse
     },
   })
-
-  const query = createQuery({
-    queryKey: ['modlistUser'],
-    queryFn: async () => {
-      return Array.from({ length: 100 }, () => ({
-        id: faker.string.uuid(),
-        twitterUserId: faker.string.uuid(),
-        createdAt: faker.date.recent(),
-        updatedAt: faker.date.recent(),
-        modListId: route.search?.get('id') ?? '',
-        screenName: faker.internet.username(),
-        name: faker.person.fullName(),
-        profileImageUrl: faker.image.avatar(),
-        description: faker.lorem.sentence(),
-      })) satisfies (ModListUser & {
-        screenName: string
-        name: string
-        profileImageUrl?: string
-        description?: string
-      })[]
-      // const res = await fetch(
-      //   `${SERVER_URL}/modlists/get/${route.search?.get('id')}`,
-      // )
-      // return res.json()
-    },
-  })
-
-  const queryClient = useQueryClient()
   const subscribeMutation = createMutation({
     mutationFn: async () => {
-      return {
-        success: true,
+      const authInfo = await getAuthInfo()
+      const resp = await fetch(
+        `${SERVER_URL}/api/modlists/subscribe/${route.search?.get('id')}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${authInfo?.token}`,
+          },
+        },
+      )
+      if (!resp.ok) {
+        throw resp
       }
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['modlistMetadata'] })
+      await $metadata.refetch()
+    },
+    onError: () => {
+      toast.error('Subscribe modlist failed')
     },
   })
   const unsubscribeMutation = createMutation({
     mutationFn: async () => {
-      return {
-        success: true,
+      const authInfo = await getAuthInfo()
+      const resp = await fetch(
+        `${SERVER_URL}/api/modlists/subscribe/${route.search?.get('id')}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${authInfo?.token}`,
+          },
+        },
+      )
+      if (!resp.ok) {
+        throw resp
       }
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['modlistMetadata'] })
+      await $metadata.refetch()
+    },
+    onError: () => {
+      toast.error('Unsubscribe modlist failed')
+    },
+  })
+  const deleteMutation = createMutation({
+    mutationFn: async () => {
+      const authInfo = await getAuthInfo()
+      const resp = await fetch(
+        `${SERVER_URL}/api/modlists/remove/${route.search?.get('id')}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${authInfo?.token}`,
+          },
+        },
+      )
+      if (!resp.ok) {
+        throw resp
+      }
+    },
+    onSuccess: async () => {
+      toast.success('Delete modlist success')
+      goBack()
+    },
+    onError: () => {
+      toast.error('Delete modlist failed')
+    },
+  })
+  let metadataEditOpen = $state(false)
+  function onOpenEdit() {
+    metadataEditOpen = true
+  }
+  const updateModlist = createMutation({
+    mutationFn: async (
+      modlist: Pick<ModList, 'name' | 'description' | 'avatar'>,
+    ) => {
+      const authInfo = await getAuthInfo()
+      const resp = await fetch(
+        `${SERVER_URL}/api/modlists/update/${route.search?.get('id')}`,
+        {
+          method: 'PUT',
+          body: JSON.stringify(modlist satisfies ModListUpdateRequest),
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${authInfo?.token}`,
+          },
+        },
+      )
+      if (!resp.ok) {
+        throw resp
+      }
+    },
+    onSuccess: async () => {
+      toast.success('Update modlist success')
+      await $metadata.refetch()
+    },
+    onError: () => {
+      toast.error('Update modlist failed')
     },
   })
 
-  const deleteMutation = createMutation({
-    mutationFn: async (id: string) => {
-      return {
-        success: true,
-      }
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['modlistUser'] })
+  const query = createQuery({
+    queryKey: ['modlistUsers'],
+    queryFn: async () => {
+      const authInfo = await getAuthInfo()
+      const resp = await fetch(
+        `${SERVER_URL}/api/modlists/users/${route.search?.get('id')}`,
+        {
+          headers: { Authorization: `Bearer ${authInfo?.token}` },
+        },
+      )
+      return (await resp.json()) as ModListUsersResponse
     },
   })
+  const queryClient = useQueryClient()
+  const addUserMutation = createMutation({
+    mutationFn: async (user: User) => {
+      const resp = await fetch(`${SERVER_URL}/api/modlists/user`, {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + (await getAuthInfo())?.token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          modListId: route.search?.get('id')!,
+          twitterUser: user,
+        } satisfies ModListAddTwitterUserRequest),
+      })
+      if (!resp.ok) {
+        throw new Error('Failed to add user')
+      }
+      const data = (await resp.json()) as ModListAddTwitterUserResponse
+      queryClient.setQueryData(
+        ['modlistUsers'],
+        (old: ModListUsersResponse) => [
+          data satisfies ModListUsersResponse[number],
+          ...old,
+        ],
+      )
+    },
+  })
+  const { loadings, withLoading } = useLoading()
+  const removeUserMutation = createMutation({
+    mutationFn: withLoading(
+      async (twitterUserId: string) => {
+        const resp = await fetch(`${SERVER_URL}/api/modlists/user`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: 'Bearer ' + (await getAuthInfo())?.token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            modListId: route.search?.get('id')!,
+            twitterUserId: twitterUserId,
+          } satisfies ModListRemoveTwitterUserRequest),
+        })
+        if (!resp.ok) {
+          throw new Error('Failed to remove user')
+        }
+        queryClient.setQueryData(
+          ['modlistUsers'],
+          (old: ModListUsersResponse) =>
+            old.filter((it) => it.id !== twitterUserId),
+        )
+      },
+      (twitterUserId) => twitterUserId,
+    ),
+  })
+  let userAddOpen = $state(false)
+  function onOpenUserAdd() {
+    userAddOpen = true
+  }
 </script>
 
 <LayoutNav title="Modlist Detail">
-  {#if $metadata.isLoading}
-    <QueryLoading />
-  {:else if $metadata.data?.subscribed}
+  {#if $metadata.data?.subscribed}
     <Button
       variant="destructive"
       onclick={() => $unsubscribeMutation.mutate()}
       disabled={$unsubscribeMutation.isPending}
     >
-      {$unsubscribeMutation.isPending ? 'Unsubscribing...' : 'Unsubscribe'}
+      Unsubscribe
     </Button>
   {:else}
     <Button
       onclick={() => $subscribeMutation.mutate()}
       disabled={$subscribeMutation.isPending}
     >
-      {$subscribeMutation.isPending ? 'Subscribing...' : 'Subscribe'}
+      Subscribe
     </Button>
   {/if}
   <DropdownMenu.Root>
@@ -142,13 +262,16 @@
           <ShareIcon />
         </DropdownMenu.Shortcut>
       </DropdownMenu.Item> -->
-      <DropdownMenu.Item>
+      <DropdownMenu.Item disabled={!$metadata.data?.owner} onclick={onOpenEdit}>
         Edit list details
         <DropdownMenu.Shortcut>
           <PencilIcon />
         </DropdownMenu.Shortcut>
       </DropdownMenu.Item>
-      <DropdownMenu.Item>
+      <DropdownMenu.Item
+        disabled={!$metadata.data?.owner}
+        onclick={() => $deleteMutation.mutate()}
+      >
         Delete list
         <DropdownMenu.Shortcut>
           <Trash2Icon />
@@ -161,25 +284,61 @@
 {#if $metadata.isLoading}
   <QueryLoading />
 {:else if $metadata.data}
-  <ModlistDesc modlist={$metadata.data} />
+  <ModlistDesc modlist={$metadata.data}>
+    {#snippet actions()}
+      <Button
+        variant="ghost"
+        class="text-blue-400 flex items-center gap-2"
+        onclick={onOpenUserAdd}
+      >
+        <UserPlusIcon class="h-4 w-4" />
+        Add people
+      </Button>
+    {/snippet}
+  </ModlistDesc>
 {:else}
   <QueryError description={'Load modlist detail failed'} />
 {/if}
 
 <div>
-  {#each $query.data ?? [] as user (user.id)}
-    <ModlistUser {user}>
-      {#snippet actions()}
-        {#if $metadata.data?.owner}
-          <Button
-            variant="destructive"
-            onclick={() => $deleteMutation.mutate(user.id)}
-            disabled={$deleteMutation.isPending}
-          >
-            {$deleteMutation.isPending ? 'Deleting...' : 'Delete'}
-          </Button>
-        {/if}
-      {/snippet}
-    </ModlistUser>
-  {/each}
+  {#if $query.isLoading}
+    <QueryLoading />
+  {:else if $query.error}
+    <QueryError description={'Load modlist users failed'} />
+  {:else}
+    {@const data = $query.data ?? []}
+    {#if data.length === 0}
+      <div class="text-center text-zinc-400">No users in this list</div>
+    {:else}
+      {#each data as user (user.id)}
+        <ModlistUser {user}>
+          {#snippet actions()}
+            {#if $metadata.data?.owner}
+              <Button
+                variant="secondary"
+                onclick={() => $removeUserMutation.mutate(user.id)}
+                disabled={loadings[user.id]}
+              >
+                Remove
+              </Button>
+            {/if}
+          {/snippet}
+        </ModlistUser>
+      {/each}
+    {/if}
+  {/if}
 </div>
+
+<ModListEdit
+  bind:open={metadataEditOpen}
+  title="Edit Moderation List"
+  data={$metadata.data}
+  onSave={$updateModlist.mutateAsync}
+/>
+
+<ModlistAddUser
+  bind:open={userAddOpen}
+  modListId={$metadata.data?.id ?? ''}
+  onAdd={$addUserMutation.mutateAsync}
+  onRemove={(user) => $removeUserMutation.mutateAsync(user.id)}
+/>

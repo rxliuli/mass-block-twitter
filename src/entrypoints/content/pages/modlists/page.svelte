@@ -3,7 +3,7 @@
   import * as Avatar from '$lib/components/ui/avatar'
   import { SERVER_URL } from '$lib/constants'
   import { createQuery } from '@tanstack/svelte-query'
-  import type { ModList } from '@mass-block-twitter/server'
+  import type { ModList } from 'packages/mass-block-twitter-server/src/lib'
   import { fakerZH_CN as faker } from '@faker-js/faker'
   import { Card } from '$lib/components/ui/card'
   import { QueryError, QueryLoading } from '$lib/components/logic/query'

@@ -8,38 +8,25 @@
   import type {
     ModList,
     ModListCreateRequest,
-  } from '@mass-block-twitter/server'
+    ModListGetCreatedResponse,
+  } from 'packages/mass-block-twitter-server/src/lib'
   import ModLists from '../components/ModLists.svelte'
   import ModListEdit from '../components/ModListEdit.svelte'
   import { SERVER_URL } from '$lib/constants'
   import { getAuthInfo } from '$lib/hooks/useAuthInfo'
   import { extractCurrentUserId } from '$lib/observe'
   import { dbApi } from '$lib/db'
-  import { pickBy } from 'lodash-es'
-
-  const route = useRoute()
-  const userId = $derived(route.search?.get('userId'))
 
   const query = createQuery({
     queryKey: ['modlists'],
     queryFn: async () => {
-      return Array.from({ length: 100 }, () => ({
-        id: faker.string.uuid(),
-        name: faker.lorem.words(5),
-        description: faker.lorem.paragraph(),
-        avatar: faker.image.url(),
-        userCount: faker.number.int({ min: 100, max: 1000 }),
-        subscriptionCount: faker.number.int({ min: 100, max: 1000 }),
-        localUserId: faker.string.uuid(),
-        twitterUserId: faker.string.uuid(),
-        createdAt: faker.date.recent(),
-        updatedAt: faker.date.recent(),
-      })) satisfies ModList[]
-      // const res = await fetch(`${SERVER_URL}/api/modlists/search`)
-      // return (await res.json()) as {
-      //   code: string
-      //   data: ModList[]
-      // }
+      const authInfo = await getAuthInfo()
+      const resp = await fetch(`${SERVER_URL}/api/modlists/created`, {
+        headers: {
+          Authorization: `Bearer ${authInfo?.token}`,
+        },
+      })
+      return (await resp.json()) as ModListGetCreatedResponse
     },
   })
 

@@ -4,7 +4,12 @@ import all from './assets/all.json'
 import all2 from './assets/all2.json'
 import timeline from './assets/timeline.json'
 import { z } from 'zod'
-import { filterTweets, parseTweets, parseUserRecords } from '../api'
+import {
+  filterTweets,
+  parseSearchPeople,
+  parseTweets,
+  parseUserRecords,
+} from '../api'
 import allSpam from './assets/all-spam.json'
 import { omit, pick } from 'lodash-es'
 import notificationsSpam from './assets/notifications-spam.json'
@@ -16,6 +21,8 @@ import TweetDetail3 from './assets/TweetDetail3.json'
 import UserTweetsAndReplies from './assets/UserTweetsAndReplies.json'
 import UserTweets from './assets/UserTweets.json'
 import SearchTimeline from './assets/SearchTimeline.json'
+import SearchTimelinePeople from './assets/SearchTimelinePeople.json'
+import SearchTimelinePeople2 from './assets/SearchTimelinePeople2.json'
 
 describe('extractObjects', () => {
   it('extractObjects 1', () => {
@@ -265,5 +272,33 @@ describe('filterTweets', () => {
     )
     const tweets = parseTweets(json)
     expect(tweets.some((it) => spamTweetIds.includes(it.id))).false
+  })
+})
+
+describe('parseSearchPeople', () => {
+  function extractCursor(json: any) {
+    const schema = z.object({
+      entryType: z.literal('TimelineTimelineCursor'),
+      value: z.string(),
+      cursorType: z.literal('Bottom'),
+    })
+    return (
+      extractObjects(json, (it) => schema.safeParse(it).success) as z.infer<
+        typeof schema
+      >[]
+    )[0].value
+  }
+
+  it('parseSearchPeople p1', async () => {
+    const r = parseSearchPeople(SearchTimelinePeople)
+    expect(r.data).length(20)
+    const cursor = extractCursor(SearchTimelinePeople)
+    expect(r.cursor).eq(cursor)
+  })
+  it('parseSearchPeople p2', async () => {
+    const r = parseSearchPeople(SearchTimelinePeople2)
+    expect(r.data).length(20)
+    const cursor = extractCursor(SearchTimelinePeople2)
+    expect(r.cursor).eq(cursor)
   })
 })

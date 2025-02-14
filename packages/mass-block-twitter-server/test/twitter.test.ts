@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { spamReportRequestSchema } from '../src/lib/request'
 import { createExecutionContext, env } from 'cloudflare:test'
 import app from '../src'
 import { HonoEnv } from '../src/lib/bindings'
 import { prismaClients } from '../src/lib/prisma'
 import { PrismaClient } from '@prisma/client'
+import type { TwitterSpamReportRequest } from '../src/routes/twitter'
 
 let ctx: ExecutionContext
 let fetch: typeof app.request
@@ -19,7 +19,7 @@ beforeEach(async () => {
 })
 
 async function add(spamUserId: string, reportUserId: string, tweetId: string) {
-  const spamReport: typeof spamReportRequestSchema._type = {
+  const spamReport: TwitterSpamReportRequest = {
     spamUser: {
       id: spamUserId,
       screen_name: `test ${spamUserId}`,

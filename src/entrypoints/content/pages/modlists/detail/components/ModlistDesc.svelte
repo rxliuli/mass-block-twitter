@@ -1,15 +1,11 @@
 <script lang="ts">
   import * as Avatar from '$lib/components/ui/avatar'
-  import { Button } from '$lib/components/ui/button'
-  import type { ModList } from '@mass-block-twitter/server'
-  import { UserPlusIcon } from 'lucide-svelte'
+  import type { ModListGetResponse } from 'packages/mass-block-twitter-server/src/lib'
+  import type {  Snippet } from 'svelte'
 
   const props: {
-    modlist: ModList & {
-      subscribed: boolean
-      owner: boolean
-      twitterScreenName: string
-    }
+    modlist: ModListGetResponse
+    actions: Snippet
   } = $props()
 </script>
 
@@ -30,7 +26,7 @@
           <p class="text-zinc-400">
             Moderation list by {props.modlist.owner
               ? 'you'
-              : props.modlist.twitterScreenName}
+              : `(@${props.modlist.twitterUser.screenName})`}
           </p>
         </div>
       </div>
@@ -39,10 +35,7 @@
       {props.modlist.description}
     </p>
     <div class="flex justify-end">
-      <Button variant="ghost" class="text-blue-400 flex items-center gap-2">
-        <UserPlusIcon class="h-4 w-4" />
-        Add people
-      </Button>
+      {@render props.actions()}
     </div>
   </div>
 </div>

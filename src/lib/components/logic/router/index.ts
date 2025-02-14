@@ -1,4 +1,10 @@
 export { default as Router } from './Router.svelte'
 export { default as RouterView } from './RouterView.svelte'
 export { default as RouterLink } from './RouterLink.svelte'
-export { navigate, router, useRoute, defineAsyncComponent, type RouteConfig } from './route.svelte'
+export {
+  navigate,
+  router,
+  useRoute,
+  defineAsyncComponent,
+  type RouteConfig,
+} from './route.svelte'

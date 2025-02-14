@@ -1,5 +1,4 @@
 import { Hono } from 'hono'
-import { cors } from 'hono/cors'
 import { zValidator } from '@hono/zod-validator'
 import {
   spamReportRequestSchema,
@@ -13,6 +12,8 @@ import { z } from 'zod'
 const twitter = new Hono<HonoEnv>()
 
 export type TwitterSpamReportRequest = z.infer<typeof spamReportRequestSchema>
+
+export type TwitterUser = z.infer<typeof userSchema>
 
 twitter
   .post(

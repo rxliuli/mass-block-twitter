@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { getAuthInfo, useAuthInfo } from '$lib/hooks/useAuthInfo'
+  import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { openLoginWindow } from '$lib/util/openLoginWindow'
   import { toast } from 'svelte-sonner'
   import * as Sidebar from '$lib/components/ui/sidebar/index.js'
   import { UserIcon } from 'lucide-svelte'
   import { Badge } from '$lib/components/ui/badge'
   import * as DropdownMenu from '../ui/dropdown-menu'
-  import { Button } from '../ui/button'
   import { shadcnConfig } from '../logic/config'
   import { createMutation } from '@tanstack/svelte-query'
   import { SERVER_URL } from '$lib/constants'
@@ -26,6 +25,7 @@
       if (!info) {
         return
       }
+      authInfo.value = info
       clearInterval(interval)
       toast.success('Login successful')
     }, 1000) as unknown as number
@@ -45,12 +45,12 @@
     mutationFn: async () => {
       const resp = await fetch(SERVER_URL + '/api/auth/logout', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${$authInfo?.token}` },
+        headers: { Authorization: `Bearer ${authInfo.value?.token}` },
       })
       if (!resp.ok) {
         throw new Error('Failed to logout')
       }
-      authInfo.set(null)
+      authInfo.value = null
     },
     onSuccess: () => {
       toast.success('Logged out')
@@ -58,13 +58,13 @@
   })
 </script>
 
-{#if $authInfo}
+{#if authInfo.value}
   <DropdownMenu.Root>
     <DropdownMenu.Trigger>
       <Sidebar.MenuButton>
         <UserIcon />
-        <span class="truncate">{$authInfo.email}</span>
-        {#if $authInfo.isPro}
+        <span class="truncate">{authInfo.value.email}</span>
+        {#if authInfo.value.isPro}
           <Badge variant="outline">pro</Badge>
         {/if}
       </Sidebar.MenuButton>

@@ -10,6 +10,7 @@
     ModListAddTwitterUserRequest,
     ModListAddTwitterUserResponse,
     ModListGetResponse,
+    ModListRemoveErrorResponse,
     ModListRemoveTwitterUserRequest,
     ModListUpdateRequest,
     ModListUsersResponse,
@@ -24,7 +25,7 @@
     UserPlusIcon,
   } from 'lucide-svelte'
   import { shadcnConfig } from '$lib/components/logic/config'
-  import { getAuthInfo } from '$lib/hooks/useAuthInfo'
+  import { getAuthInfo, useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import ModlistUser from './components/ModlistUser.svelte'
   import ModlistDesc from './components/ModlistDesc.svelte'
   import {
@@ -98,7 +99,7 @@
     onSuccess: async () => {
       await $metadata.refetch()
     },
-    onError: () => {
+    onError: async (error) => {
       toast.error('Unsubscribe modlist failed')
     },
   })
@@ -122,7 +123,18 @@
       toast.success('Delete modlist success')
       goBack()
     },
-    onError: () => {
+    onError: async (error) => {
+      if (error instanceof Response) {
+        const data = (await error.json()) as ModListRemoveErrorResponse
+        if (data.code === 'modListNotFound') {
+          toast.error('Modlist not found')
+          return
+        }
+        if (data.code === 'modListHasSubscriptions') {
+          toast.error('Modlist has subscriptions')
+          return
+        }
+      }
       toast.error('Delete modlist failed')
     },
   })
@@ -198,6 +210,12 @@
         ],
       )
     },
+    onSuccess: () => {
+      toast.success('Added to list')
+    },
+    onError: () => {
+      toast.error('Add to list failed')
+    },
   })
   const { loadings, withLoading } = useLoading()
   const removeUserMutation = createMutation({
@@ -225,26 +243,33 @@
       },
       (twitterUserId) => twitterUserId,
     ),
+    onSuccess: () => {
+      toast.success('Removed from list')
+    },
+    onError: () => {
+      toast.error('Remove from list failed')
+    },
   })
   let userAddOpen = $state(false)
-  function onOpenUserAdd() {
+  async function onOpenUserAdd() {
     userAddOpen = true
   }
+  const authInfo = useAuthInfo()
 </script>
 
-<LayoutNav title="Modlist Detail">
+<LayoutNav title="Moderation Lists Detail">
   {#if $metadata.data?.subscribed}
     <Button
       variant="destructive"
       onclick={() => $unsubscribeMutation.mutate()}
-      disabled={$unsubscribeMutation.isPending}
+      disabled={!authInfo.value || $unsubscribeMutation.isPending}
     >
       Unsubscribe
     </Button>
   {:else}
     <Button
       onclick={() => $subscribeMutation.mutate()}
-      disabled={$subscribeMutation.isPending}
+      disabled={!authInfo.value || $subscribeMutation.isPending}
     >
       Subscribe
     </Button>
@@ -281,26 +306,27 @@
   </DropdownMenu.Root>
 </LayoutNav>
 
-{#if $metadata.isLoading}
-  <QueryLoading />
-{:else if $metadata.data}
-  <ModlistDesc modlist={$metadata.data}>
-    {#snippet actions()}
-      <Button
-        variant="ghost"
-        class="text-blue-400 flex items-center gap-2"
-        onclick={onOpenUserAdd}
-      >
-        <UserPlusIcon class="h-4 w-4" />
-        Add people
-      </Button>
-    {/snippet}
-  </ModlistDesc>
-{:else}
-  <QueryError description={'Load modlist detail failed'} />
-{/if}
+<div class="max-w-3xl mx-auto">
+  {#if $metadata.isLoading}
+    <QueryLoading />
+  {:else if $metadata.data}
+    <ModlistDesc modlist={$metadata.data}>
+      {#snippet actions()}
+        <Button
+          variant="ghost"
+          class="text-blue-400 flex items-center gap-2"
+          onclick={onOpenUserAdd}
+          disabled={!authInfo.value}
+        >
+          <UserPlusIcon class="h-4 w-4" />
+          Add people
+        </Button>
+      {/snippet}
+    </ModlistDesc>
+  {:else}
+    <QueryError description={'Load modlist detail failed'} />
+  {/if}
 
-<div>
   {#if $query.isLoading}
     <QueryLoading />
   {:else if $query.error}
@@ -310,21 +336,26 @@
     {#if data.length === 0}
       <div class="text-center text-zinc-400">No users in this list</div>
     {:else}
-      {#each data as user (user.id)}
-        <ModlistUser {user}>
-          {#snippet actions()}
-            {#if $metadata.data?.owner}
-              <Button
-                variant="secondary"
-                onclick={() => $removeUserMutation.mutate(user.id)}
-                disabled={loadings[user.id]}
-              >
-                Remove
-              </Button>
-            {/if}
-          {/snippet}
-        </ModlistUser>
-      {/each}
+      <div class="divide-y">
+        {#each data as user (user.id)}
+          <ModlistUser {user}>
+            {#snippet actions()}
+              {#if $metadata.data?.owner}
+                <Button
+                  variant="secondary"
+                  onclick={(ev) => {
+                    ev.preventDefault()
+                    $removeUserMutation.mutate(user.id)
+                  }}
+                  disabled={loadings[user.id]}
+                >
+                  Remove
+                </Button>
+              {/if}
+            {/snippet}
+          </ModlistUser>
+        {/each}
+      </div>
     {/if}
   {/if}
 </div>

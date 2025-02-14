@@ -12,7 +12,7 @@
   import * as Dialog from '$lib/components/ui/dialog'
   import { SERVER_URL } from '$lib/constants'
   import { type User } from '$lib/db'
-  import { getAuthInfo } from '$lib/hooks/useAuthInfo'
+  import { getAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import {
     createInfiniteQuery,
     createMutation,
@@ -169,37 +169,41 @@
         {#if users.length === 0}
           <p>No results found for</p>
         {/if}
-        {#each users as user (user.id)}
-          <div
-            class="flex items-center justify-between p-2 hover:bg-muted/50 rounded-lg"
-          >
-            <div class="flex items-center gap-3">
+        <div class="divide-y">
+          {#each users as user (user.id)}
+            <div
+              class="flex items-center gap-3 p-2 hover:bg-muted/50 rounded-lg"
+            >
               <Avatar.Root>
                 <Avatar.Image src={user.profile_image_url} title={user.name} />
                 <Avatar.Fallback>
                   {user.name.slice(0, 2)}
                 </Avatar.Fallback>
               </Avatar.Root>
-              <div class="flex flex-col">
-                <span class="text-sm font-medium truncate">{user.name}</span>
-                <span class="text-xs text-muted-foreground">
+              <div class="flex-1 overflow-x-hidden">
+                <div class="text-sm font-medium overflow-x-hidden truncate">
+                  {user.name}
+                </div>
+                <div
+                  class="text-xs text-muted-foreground overflow-x-hidden truncate"
+                >
                   @{user.screen_name}
-                </span>
+                </div>
               </div>
+              <Button
+                variant="secondary"
+                size="sm"
+                onclick={() =>
+                  user.added
+                    ? $removeUserMutation.mutate(user)
+                    : $addUserMutation.mutate(user)}
+                disabled={loadings[user.id]}
+              >
+                {user.added ? 'Remove' : 'Add'}
+              </Button>
             </div>
-            <Button
-              variant="secondary"
-              size="sm"
-              onclick={() =>
-                user.added
-                  ? $removeUserMutation.mutate(user)
-                  : $addUserMutation.mutate(user)}
-              disabled={loadings[user.id]}
-            >
-              {user.added ? 'Remove' : 'Add'}
-            </Button>
-          </div>
-        {/each}
+          {/each}
+        </div>
       {/if}
     </div>
 

@@ -88,6 +88,9 @@ export const removeSchema = z.object({
   id: z.string().describe('modlist id'),
 })
 export type ModListRemoveRequest = z.infer<typeof removeSchema>
+export type ModListRemoveErrorResponse = {
+  code: 'modListNotFound' | 'modListHasSubscriptions'
+}
 modlists.delete('/remove/:id', zValidator('param', removeSchema), async (c) => {
   const validated = c.req.valid('param')
   const prisma = await prismaClients.fetch(c.env.DB)
@@ -137,77 +140,100 @@ modlists.get('/created', async (c) => {
 })
 
 export const subscribeSchema = z.object({
-  id: z.string().describe('modlist id'),
+  modListId: z.string().describe('modlist id'),
 })
 
 export type ModListSubscribeRequest = z.infer<typeof subscribeSchema>
 
+export type ModListSubscribeResponse = ModList[]
+
 modlists
-  .post('/subscribe/:id', zValidator('param', subscribeSchema), async (c) => {
-    const validated = c.req.valid('param')
-    const prisma = await prismaClients.fetch(c.env.DB)
-    const tokenInfo = c.get('tokenInfo')
-    const modList = await prisma.modList.findUnique({
-      where: { id: validated.id },
-    })
-    if (!modList) {
-      return c.json({ code: 'modListNotFound' }, 404)
-    }
-    const existingSubscription = await prisma.modListSubscription.count({
-      where: { modListId: validated.id, localUserId: tokenInfo.id },
-    })
-    if (existingSubscription > 0) {
-      return c.json({ code: 'alreadySubscribed' }, 400)
-    }
-    await prisma.$transaction([
-      prisma.modListSubscription.create({
-        data: {
-          id: ulid(),
-          modListId: validated.id,
-          localUserId: tokenInfo.id,
+  .post(
+    '/subscribe/:modListId',
+    zValidator('param', subscribeSchema),
+    async (c) => {
+      const validated = c.req.valid('param')
+      const prisma = await prismaClients.fetch(c.env.DB)
+      const tokenInfo = c.get('tokenInfo')
+      const modList = await prisma.modList.findUnique({
+        where: { id: validated.modListId },
+      })
+      if (!modList) {
+        return c.json({ code: 'modListNotFound' }, 404)
+      }
+      const existingSubscription = await prisma.modListSubscription.findUnique({
+        where: {
+          modListId_localUserId: {
+            modListId: validated.modListId,
+            localUserId: tokenInfo.id,
+          },
         },
-      }),
-      prisma.modList.update({
-        where: { id: validated.id },
-        data: { subscriptionCount: { increment: 1 } },
-      }),
-    ])
-    return c.json({ code: 'success' })
-  })
-  .delete('/subscribe/:id', zValidator('param', subscribeSchema), async (c) => {
-    const validated = c.req.valid('param')
-    const prisma = await prismaClients.fetch(c.env.DB)
-    const tokenInfo = c.get('tokenInfo')
-    const modList = await prisma.modList.findUnique({
-      where: { id: validated.id },
-    })
-    if (!modList) {
-      return c.json({ code: 'modListNotFound' }, 404)
-    }
-    const existingSubscription = await prisma.modListSubscription.findFirst({
-      where: { modListId: validated.id, localUserId: tokenInfo.id },
-    })
-    if (!existingSubscription) {
-      return c.json({ code: 'notSubscribed' }, 400)
-    }
-    await prisma.$transaction([
-      prisma.modListSubscription.delete({
-        where: { id: existingSubscription.id },
-      }),
-      prisma.modList.update({
-        where: { id: validated.id },
-        data: { subscriptionCount: { decrement: 1 } },
-      }),
-    ])
-    return c.json({ code: 'success' })
-  })
+      })
+      if (existingSubscription) {
+        return c.json({ code: 'alreadySubscribed' }, 400)
+      }
+      await prisma.$transaction([
+        prisma.modListSubscription.create({
+          data: {
+            id: ulid(),
+            modListId: validated.modListId,
+            localUserId: tokenInfo.id,
+          },
+        }),
+        prisma.modList.update({
+          where: { id: validated.modListId },
+          data: { subscriptionCount: { increment: 1 } },
+        }),
+      ])
+      return c.json({ code: 'success' })
+    },
+  )
+  .delete(
+    '/subscribe/:modListId',
+    zValidator('param', subscribeSchema),
+    async (c) => {
+      const validated = c.req.valid('param')
+      const prisma = await prismaClients.fetch(c.env.DB)
+      const tokenInfo = c.get('tokenInfo')
+      const modList = await prisma.modList.findUnique({
+        where: { id: validated.modListId },
+      })
+      if (!modList) {
+        return c.json({ code: 'modListNotFound' }, 404)
+      }
+      const existingSubscription = await prisma.modListSubscription.findUnique({
+        where: {
+          modListId_localUserId: {
+            modListId: validated.modListId,
+            localUserId: tokenInfo.id,
+          },
+        },
+      })
+      if (!existingSubscription) {
+        return c.json({ code: 'notSubscribed' }, 400)
+      }
+      await prisma.$transaction([
+        prisma.modListSubscription.delete({
+          where: { id: existingSubscription.id },
+        }),
+        prisma.modList.update({
+          where: { id: validated.modListId },
+          data: { subscriptionCount: { decrement: 1 } },
+        }),
+      ])
+      return c.json({ code: 'success' })
+    },
+  )
   .get('/subscribed', async (c) => {
     const prisma = await prismaClients.fetch(c.env.DB)
     const tokenInfo = c.get('tokenInfo')
     const modList = await prisma.modListSubscription.findMany({
+      select: {
+        modList: true,
+      },
       where: { localUserId: tokenInfo.id },
     })
-    return c.json({ code: 'success', data: modList })
+    return c.json<ModListSubscribeResponse>(modList.map((it) => it.modList))
   })
 
 export const addTwitterUserSchema = z.object({

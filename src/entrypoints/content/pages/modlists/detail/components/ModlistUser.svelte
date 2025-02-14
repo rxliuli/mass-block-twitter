@@ -16,8 +16,10 @@
   } = $props()
 </script>
 
-<div
-  class="w-full max-w-2xl p-4 rounded-lg bg-zinc-950 grid grid-cols-[auto_1fr_auto] gap-3"
+<a
+  href={`https://twitter.com/${user.screenName}`}
+  target="_blank"
+  class="w-full p-4 rounded-lg bg-zinc-950 grid grid-cols-[auto_1fr_auto] gap-3"
 >
   <Avatar class="h-12 w-12">
     <AvatarImage src={user.profileImageUrl} alt={user.name} />
@@ -35,4 +37,4 @@
       {user.description}
     </p>
   </div>
-</div>
+</a>

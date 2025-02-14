@@ -18,6 +18,7 @@ import type {
   ModListUsersResponse,
   ModListGetCreatedResponse,
   ModListSearchResponse,
+  ModListSubscribeResponse,
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 
@@ -262,12 +263,9 @@ describe('modlists', () => {
         headers: { Authorization: 'test-token-1' },
       })
       expect(resp3.ok).true
-      const r3 = (await resp3.json()) as {
-        code: 'success'
-        data: ModListSubscription[]
-      }
-      expect(r3.data.length).toBe(1)
-      expect(r3.data[0].modListId).toBe(modListId)
+      const r3 = (await resp3.json()) as ModListSubscribeResponse
+      expect(r3.length).toBe(1)
+      expect(r3[0].id).toBe(modListId)
       expect((await getModList(modListId, 'test-token-1')).subscribed).true
       expect((await getModList(modListId)).subscribed).false
     })

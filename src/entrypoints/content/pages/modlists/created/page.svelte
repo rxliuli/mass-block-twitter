@@ -1,8 +1,6 @@
 <script lang="ts">
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
-  import { useRoute } from '$lib/components/logic/router'
   import { Button } from '$lib/components/ui/button'
-  import { fakerZH_CN as faker } from '@faker-js/faker'
   import { createMutation, createQuery } from '@tanstack/svelte-query'
   import { toast } from 'svelte-sonner'
   import type {
@@ -13,12 +11,12 @@
   import ModLists from '../components/ModLists.svelte'
   import ModListEdit from '../components/ModListEdit.svelte'
   import { SERVER_URL } from '$lib/constants'
-  import { getAuthInfo } from '$lib/hooks/useAuthInfo'
+  import { getAuthInfo, useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { extractCurrentUserId } from '$lib/observe'
   import { dbApi } from '$lib/db'
 
   const query = createQuery({
-    queryKey: ['modlists'],
+    queryKey: ['modlists', 'created'],
     queryFn: async () => {
       const authInfo = await getAuthInfo()
       const resp = await fetch(`${SERVER_URL}/api/modlists/created`, {
@@ -85,10 +83,12 @@
       toast.error('Failed to create modlist')
     },
   })
+
+  const authInfo = useAuthInfo()
 </script>
 
 <LayoutNav title="My Moderation Lists">
-  <Button onclick={onOpenModal}>Create</Button>
+  <Button onclick={onOpenModal} disabled={!authInfo.value}>Create</Button>
 </LayoutNav>
 
 <ModLists query={$query} />

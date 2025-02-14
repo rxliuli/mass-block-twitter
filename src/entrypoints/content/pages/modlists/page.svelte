@@ -1,55 +1,47 @@
 <script lang="ts">
   import { navigate, RouterLink } from '$lib/components/logic/router'
-  import * as Avatar from '$lib/components/ui/avatar'
   import { SERVER_URL } from '$lib/constants'
   import { createQuery } from '@tanstack/svelte-query'
-  import type { ModList } from 'packages/mass-block-twitter-server/src/lib'
-  import { fakerZH_CN as faker } from '@faker-js/faker'
-  import { Card } from '$lib/components/ui/card'
-  import { QueryError, QueryLoading } from '$lib/components/logic/query'
+  import type { ModListSearchResponse } from '@mass-block-twitter/server'
   import Button from '$lib/components/ui/button/button.svelte'
   import ModLists from './components/ModLists.svelte'
-  import ModListEdit from './components/ModListEdit.svelte'
+  import { getAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
+  import { toast } from 'svelte-sonner'
 
   const query = createQuery({
     queryKey: ['modlists'],
     queryFn: async () => {
-      return Array.from({ length: 100 }, () => ({
-        id: faker.string.uuid(),
-        name: faker.lorem.words(5),
-        description: faker.lorem.paragraph(),
-        avatar: faker.image.url(),
-        userCount: faker.number.int({ min: 100, max: 1000 }),
-        subscriptionCount: faker.number.int({ min: 100, max: 1000 }),
-        localUserId: faker.string.uuid(),
-        twitterUserId: faker.string.uuid(),
-        createdAt: faker.date.recent(),
-        updatedAt: faker.date.recent(),
-      })) satisfies ModList[]
-      // const res = await fetch(`${SERVER_URL}/api/modlists/search`)
-      // return (await res.json()) as {
-      //   code: string
-      //   data: ModList[]
-      // }
+      const resp = await fetch(`${SERVER_URL}/api/modlists/search`)
+      if (!resp.ok) {
+        throw resp
+      }
+      return (await resp.json()) as ModListSearchResponse
     },
   })
 
-  function onGotoDetail(id: string) {
-    navigate(`/modlists/detail?id=${id}`)
+  async function onGotoCreated() {
+    const authInfo = await getAuthInfo()
+    if (!authInfo) {
+      toast.info('Please login to view your created modlists')
+      return
+    }
+    navigate(`/modlists/created?userId=${authInfo.id}`)
   }
-
+  async function onGotoSubscribed() {
+    const authInfo = await getAuthInfo()
+    if (!authInfo) {
+      toast.info('Please login to view your subscribed modlists')
+      return
+    }
+    navigate('/modlists/subscribe')
+  }
 </script>
 
 <header>
   <nav class="flex gap-2">
-    <RouterLink href="/modlists/created">
-      <Button variant="secondary">Created</Button>
-    </RouterLink>
-    <RouterLink href="/modlists/subscribe">
-      <Button variant="secondary">Subscribed</Button>
-    </RouterLink>
+    <Button variant="secondary" onclick={onGotoCreated}>Created</Button>
+    <Button variant="secondary" onclick={onGotoSubscribed}>Subscribed</Button>
   </nav>
 </header>
 
 <ModLists query={$query} />
-

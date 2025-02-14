@@ -42,3 +42,7 @@ export const spamReportRequestSchema = z.object({
   reportUser: userSchema,
   context: contextSchema,
 })
+
+export type ErrorResponse<T = string> = {
+  code: T
+}

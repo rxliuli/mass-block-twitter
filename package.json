@@ -5,6 +5,7 @@
   "version": "0.11.0",
   "type": "module",
   "scripts": {
+    "init-all": "pnpm run -r init",
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox",
     "build": "wxt build",

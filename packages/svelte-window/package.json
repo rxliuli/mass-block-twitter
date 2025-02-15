@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "init": "pnpm build",
     "dev": "vite dev",
     "build": "vite build && npm run prepack",
     "preview": "vite preview",

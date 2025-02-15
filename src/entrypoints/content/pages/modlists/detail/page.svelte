@@ -364,7 +364,9 @@
         {#if $query.data}
           {@const users = $query.data.pages.flatMap((it) => it.data) ?? []}
           {#if users.length === 0}
-            <div class="text-center text-zinc-400">No users in this list</div>
+            {#if !$query.isFetching}
+              <div class="text-center text-zinc-400">No users in this list</div>
+            {/if}
           {:else}
             <List
               data={users}

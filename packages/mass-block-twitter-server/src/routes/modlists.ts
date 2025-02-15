@@ -3,11 +3,10 @@ import { HonoEnv } from '../lib/bindings'
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 import { prismaClients } from '../lib/prisma'
-import { ulid } from '../lib/ulid'
+import { ulid } from 'ulidx'
 import { userSchema } from '../lib/request'
-import { ModList, ModListUser, PrismaClient, User } from '@prisma/client'
+import { ModList, PrismaClient, User } from '@prisma/client'
 import { getTokenInfo } from '../middlewares/auth'
-import { groupBy, map } from 'lodash-es'
 
 const modlists = new Hono<HonoEnv>()
 
@@ -248,21 +247,24 @@ modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
   const validated = c.req.valid('json')
   const prisma = await prismaClients.fetch(c.env.DB)
   const tokenInfo = c.get('tokenInfo')
-  const modList = await prisma.modList.findUnique({
-    where: { id: validated.modListId, localUserId: tokenInfo.id },
-  })
-  if (!modList) {
-    return c.json({ code: 'modListNotFound' }, 404)
-  }
-  const existingUser = await prisma.modListUser.findUnique({
+  const result = await prisma.modList.findUnique({
     where: {
-      modListId_twitterUserId: {
-        modListId: validated.modListId,
-        twitterUserId: validated.twitterUser.id,
+      id: validated.modListId,
+      localUserId: tokenInfo.id,
+    },
+    include: {
+      ModListUser: {
+        where: {
+          twitterUserId: validated.twitterUser.id,
+        },
+        take: 1,
       },
     },
   })
-  if (existingUser) {
+  if (!result) {
+    return c.json({ code: 'modListNotFound' }, 404)
+  }
+  if (result.ModListUser.length > 0) {
     return c.json({ code: 'userAlreadyInModList' }, 400)
   }
   await upsertUser(prisma, validated.twitterUser)
@@ -303,31 +305,35 @@ modlists.delete(
     const prisma = await prismaClients.fetch(c.env.DB)
     const tokenInfo = c.get('tokenInfo')
     const modList = await prisma.modList.findUnique({
-      where: { id: validated.modListId, localUserId: tokenInfo.id },
+      where: {
+        id: validated.modListId,
+        localUserId: tokenInfo.id,
+      },
+      include: {
+        ModListUser: {
+          where: {
+            twitterUserId: validated.twitterUserId,
+          },
+          take: 1,
+        },
+      },
     })
     if (!modList) {
       return c.json({ code: 'modListNotFound' }, 404)
     }
-    const modListUser = await prisma.modListUser.findUnique({
-      where: {
-        modListId_twitterUserId: {
-          modListId: validated.modListId,
-          twitterUserId: validated.twitterUserId,
-        },
-      },
-    })
-    if (!modListUser) {
+    if (modList.ModListUser.length === 0) {
       return c.json({ code: 'modListUserNotFound' }, 404)
     }
     await prisma.$transaction([
       prisma.modListUser.delete({
-        where: { id: modListUser.id },
+        where: { id: modList.ModListUser[0].id },
       }),
       prisma.modList.update({
         where: { id: validated.modListId },
         data: { userCount: { decrement: 1 } },
       }),
     ])
+
     return c.json({ code: 'success' })
   },
 )
@@ -359,7 +365,8 @@ modlists.get('/user/check', zValidator('query', checkUserSchema), async (c) => {
   if (!modList) {
     return c.json({ code: 'modListNotFound' }, 404)
   }
-  await prisma.$transaction(validated.users.map((it) => upsertUser(prisma, it)))
+  // TODO need to upsert users for cloudflare queue async
+  // await prisma.$transaction(validated.users.map((it) => upsertUser(prisma, it)))
   const subscriptions = await prisma.modListUser.findMany({
     select: { twitterUserId: true },
     where: {

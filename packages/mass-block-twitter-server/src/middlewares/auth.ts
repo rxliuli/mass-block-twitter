@@ -23,12 +23,15 @@ export async function getTokenInfo(
 
 export function auth(): MiddlewareHandler<HonoEnv> {
   return async (c, next) => {
+    // TODO temp
+    if (c.req.url === '/api/modlists/search') {
+      return next()
+    }
     const tokenInfo = await getTokenInfo(c)
     if (!tokenInfo) {
       c.res = c.json({ error: 'Unauthorized' }, 401)
       return
     }
-    
     c.set('tokenInfo', tokenInfo)
     return next()
   }

@@ -7,7 +7,7 @@ import { accounts } from './routes/accounts'
 import { billing } from './routes/billing'
 import { HonoEnv } from './lib/bindings'
 import { modlists, modlistSearch } from './routes/modlists'
-import { ulid } from './lib/ulid'
+import { ulid } from 'ulidx'
 
 const app = new Hono<HonoEnv>()
 

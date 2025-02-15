@@ -4,8 +4,15 @@ import { z } from 'zod'
 import { prismaClients } from '../lib/prisma'
 import { HonoEnv, TokenInfo } from '../lib/bindings'
 import { generateSecureCode, sha256 } from '../lib/crypto'
-import { Resend } from 'resend'
 import { getTokenInfo } from '../middlewares/auth'
+
+type CreateEmailOptions = {
+  from: string
+  to: string
+  subject: string
+  html: string
+  text: string
+}
 
 const auth = new Hono<HonoEnv>()
 
@@ -40,6 +47,26 @@ const sendVerifyEmailRequestSchema = z.object({
   email: z.string().email(),
 })
 
+async function sendEmail(
+  token: string,
+  options: CreateEmailOptions,
+): Promise<{ error?: any }> {
+  const resp = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(options),
+  })
+  if (!resp.ok) {
+    return {
+      error: await resp.json(),
+    }
+  }
+  return await resp.json()
+}
+
 async function sendVerifyEmail(c: Context<HonoEnv>, email: string) {
   let code = await c.env.MY_KV.get('verify-email-' + email)
   if (code) {
@@ -48,8 +75,7 @@ async function sendVerifyEmail(c: Context<HonoEnv>, email: string) {
     })
   }
   code = generateSecureCode(4)
-  const resend = new Resend(c.env.RESEND_API_KEY)
-  const sendResult = await resend.emails.send({
+  const sendResult = await sendEmail(c.env.RESEND_API_KEY, {
     from: 'Mass Block Twitter <support@rxliuli.com>',
     to: email,
     subject: 'Verify Email',
@@ -177,12 +203,11 @@ auth
         console.log('user not found', validated.email)
         return c.json({ message: 'success' })
       }
-      const resend = new Resend(c.env.RESEND_API_KEY)
       const code = generateSecureCode(4)
       if (!code) {
         return c.json({ message: 'failed to generate code' }, 500)
       }
-      const sendResult = await resend.emails.send({
+      const sendResult = await sendEmail(c.env.RESEND_API_KEY, {
         from: 'Mass Block Twitter <support@rxliuli.com>',
         to: validated.email,
         subject: 'Reset Password',

@@ -21,6 +21,7 @@ import type {
   ModListSubscribeResponse,
   ModListUsersRequest,
   ModListSubscribedUserResponse,
+  ModListRemoveTwitterUserRequest,
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 
@@ -339,12 +340,12 @@ describe('modlists', () => {
       const r1 = (await resp1.json()) as { code: 'success'; data: ModList }
       modListId = r1.data.id
     })
+    const getModListUsers = async (modListId: string) => {
+      const resp2 = await fetch('/api/modlists/users?modListId=' + modListId)
+      expect(resp2.ok).true
+      return (await resp2.json()) as ModListUsersPageResponse
+    }
     it('should be able to add a user to a modlist', async () => {
-      const getModListUsers = async (modListId: string) => {
-        const resp2 = await fetch('/api/modlists/users?modListId=' + modListId)
-        expect(resp2.ok).true
-        return (await resp2.json()) as ModListUsersPageResponse
-      }
       expect((await getModList(modListId)).userCount).toBe(0)
       expect((await getModListUsers(modListId)).data.length).toBe(0)
       const resp1 = await fetch('/api/modlists/user', {
@@ -499,6 +500,50 @@ describe('modlists', () => {
         cursor: r2.cursor,
       })
       expect(r3.data).length(0)
+    })
+    it('should not be able to add a user to a modlist twice', async () => {
+      await addUserToModList(
+        {
+          id: 'twitter-user-1',
+          screen_name: 'test-user-1',
+          name: 'test-user-1',
+        },
+        modListId,
+      )
+      await expect(
+        addUserToModList(
+          {
+            id: 'twitter-user-1',
+            screen_name: 'test-user-1',
+            name: 'test-user-1',
+          },
+          modListId,
+        ),
+      ).rejects.toThrow()
+    })
+    it('should be able to remove a user from a modlist', async () => {
+      await addUserToModList(
+        {
+          id: 'twitter-user-1',
+          screen_name: 'test-user-1',
+          name: 'test-user-1',
+        },
+        modListId,
+      )
+      expect((await getModListUsers(modListId)).data.length).toBe(1)
+      const resp1 = await fetch('/api/modlists/user', {
+        method: 'DELETE',
+        body: JSON.stringify({
+          modListId,
+          twitterUserId: 'twitter-user-1',
+        } satisfies ModListRemoveTwitterUserRequest),
+        headers: {
+          Authorization: 'test-token-1',
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.ok).true
+      expect((await getModListUsers(modListId)).data.length).toBe(0)
     })
   })
 })

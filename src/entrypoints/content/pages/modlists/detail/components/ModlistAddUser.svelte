@@ -176,7 +176,9 @@
       {#if $query.data}
         {@const users = $query.data?.pages.flatMap((page) => page.data) ?? []}
         {#if users.length === 0}
-          <p>No results found for</p>
+          {#if !$query.isFetching}
+            <div class="text-center text-zinc-400">No results found for</div>
+          {/if}
         {/if}
         <AutoSizer>
           {#snippet child({ height })}

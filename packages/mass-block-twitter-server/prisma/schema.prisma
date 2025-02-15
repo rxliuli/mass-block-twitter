@@ -104,6 +104,11 @@ model Payment {
   updatedAt   DateTime      @updatedAt
 }
 
+enum ModListVisibility {
+  public
+  protected
+}
+
 model ModList {
   id                  String                @id // ulid https://github.com/ulid/spec
   name                String
@@ -112,6 +117,7 @@ model ModList {
   userCount           Int                   @default(0)
   subscriptionCount   Int                   @default(0)
   localUserId         String
+  visibility          ModListVisibility     @default(public)
   localUser           LocalUser             @relation(fields: [localUserId], references: [id])
   twitterUserId       String
   twitterUser         User                  @relation(fields: [twitterUserId], references: [id])

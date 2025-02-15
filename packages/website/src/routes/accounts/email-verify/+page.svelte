@@ -6,7 +6,11 @@
   import { createMutation } from '@tanstack/svelte-query'
   import { page } from '$app/state'
   import { toast } from 'svelte-sonner'
-  import { setAuthInfo, type AuthInfo } from '@/components/auth/auth.svelte'
+  import {
+    onPluginLoggedIn,
+    setAuthInfo,
+    type AuthInfo,
+  } from '@/components/auth/auth.svelte'
 
   const email = page.url.searchParams.get('email')
 
@@ -25,6 +29,8 @@
       if (!resp.ok) {
         throw new Error('Failed to send email')
       }
+    },
+    onSuccess: () => {
       toast.success('Email sent')
     },
     onError: () => {
@@ -55,6 +61,10 @@
         data: AuthInfo
       }
       await setAuthInfo(r.data)
+      if (page.url.searchParams.get('from') === 'plugin') {
+        onPluginLoggedIn({ ...r.data })
+        return
+      }
       toast.success('Email verified, redirecting...')
       setTimeout(() => {
         location.href = page.url.searchParams.get('redirect') ?? '/'

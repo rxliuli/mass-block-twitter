@@ -8,6 +8,7 @@
   import {
     clearAuthInfo,
     getAuthInfo,
+    onPluginLoggedIn,
     setAuthInfo,
     type AuthInfo,
   } from '@/components/auth/auth.svelte'
@@ -15,16 +16,6 @@
   import { onMount } from 'svelte'
   import { toast } from 'svelte-sonner'
 
-  function onPluginLoggedIn(authInfo: AuthInfo) {
-    document.dispatchEvent(
-      new CustomEvent('LoginSuccess', {
-        detail: authInfo,
-      }),
-    )
-    setTimeout(() => {
-      window.close()
-    }, 1000)
-  }
 
   onMount(async () => {
     if (page.url.searchParams.get('from') !== 'plugin') {

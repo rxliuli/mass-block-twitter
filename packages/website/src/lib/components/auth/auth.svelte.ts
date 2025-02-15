@@ -57,3 +57,14 @@ export function useLogout() {
     },
   })
 }
+
+export function onPluginLoggedIn(authInfo: AuthInfo) {
+  document.dispatchEvent(
+    new CustomEvent('LoginSuccess', {
+      detail: authInfo,
+    }),
+  )
+  setTimeout(() => {
+    window.close()
+  }, 1000)
+}

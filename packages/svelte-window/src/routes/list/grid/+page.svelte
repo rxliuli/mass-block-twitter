@@ -1,6 +1,5 @@
 <script>
-  import { List } from '$lib'
-  import AutoSizer from '$lib/AutoSizer.svelte'
+  import { AutoSizer, List } from '$lib'
   import { faker } from '@faker-js/faker'
 
   const data = $state(

@@ -12,6 +12,8 @@
     <a href="/list/auto-size">List - Auto Size</a>
     <a href="/list/infinite">List - Infinite</a>
     <a href="/list/grid">List - Grid</a>
+    <a href="/list/variable">List - Variable</a>
+    <a href="/list/dynamic-infinite">List - Dynamic Infinite</a>
   </header>
   <main class="flex-1">
     <QueryClientProvider client={queryClient}>

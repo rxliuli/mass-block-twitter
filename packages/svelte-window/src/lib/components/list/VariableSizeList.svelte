@@ -1,7 +1,7 @@
 <script lang="ts" generics="T extends any[]">
-  import type { Snippet } from 'svelte'
+  import { type Snippet } from 'svelte'
   import type { HTMLAttributes, UIEventHandler } from 'svelte/elements'
-  import { getVirtualizedRange } from './virtual'
+  import { getVirtualizedRange } from '../../utils/virtual'
 
   let {
     data,
@@ -10,6 +10,7 @@
     height,
     grid,
     child,
+    dynamic,
     ...props
   }: {
     data: T
@@ -21,14 +22,56 @@
       gutter?: number | string
     }
     child: Snippet<[T[number]]>
+    dynamic?: boolean
   } & HTMLAttributes<HTMLElement> = $props()
 
   let scrollTop = $state(0)
+  let containerRef = $state<HTMLElement>()
+  let _measuredHeights = $state<Record<number, number>>({})
+  $effect(() => {
+    if (!containerRef || !dynamic) {
+      return
+    }
+    function onRectItems() {
+      if (!containerRef) {
+        return
+      }
+      const items = containerRef.childNodes
+      items.forEach((it) => {
+        const el = it as HTMLElement
+        const height = el.getBoundingClientRect
+          ? el.getBoundingClientRect().height
+          : el.scrollHeight
+        if (!el.dataset) {
+          return
+        }
+        const globalIndex = Number.parseInt(el.dataset.globalIndex ?? '')
+        if (Number.isInteger(globalIndex)) {
+          _measuredHeights[globalIndex] = height
+        }
+      })
+    }
+    const observer = new MutationObserver(() =>
+      requestAnimationFrame(onRectItems),
+    )
+    requestAnimationFrame(onRectItems)
+    observer.observe(containerRef, {
+      childList: true,
+      subtree: true,
+    })
+    return () => observer.disconnect()
+  })
+  const getItemHeight = (index: number) => {
+    if (!dynamic) {
+      return itemHeight
+    }
+    return _measuredHeights[index] ?? itemHeight
+  }
   const rangeData = $derived.by(() => {
     const viewportHeight = height
     const count = data.length
     const r = getVirtualizedRange({
-      itemHeight,
+      itemHeight: getItemHeight,
       count,
       viewportHeight,
       top: scrollTop,
@@ -40,7 +83,7 @@
     }
   })
 
-  const handleScroll: UIEventHandler<HTMLElement> = (event) => {
+  const onScroll: UIEventHandler<HTMLElement> = (event) => {
     const target = event.target as HTMLElement
     const top = target.scrollTop
     requestAnimationFrame(() => {
@@ -78,13 +121,17 @@
 
 <div
   {...props}
-  onscroll={handleScroll}
+  onscroll={onScroll}
   class={props.class}
   style={style.container}
+  bind:this={containerRef}
 >
   <div style={style.paddingTop}></div>
-  {#each rangeData.data as item (item[itemKey])}
-    <div style="height: {itemHeight}px">
+  {#each rangeData.data as item, index (item[itemKey])}
+    <div
+      style={!dynamic ? `height: ${getItemHeight(index)}px` : ''}
+      data-global-index={rangeData.start + index}
+    >
       {@render child(item)}
     </div>
   {/each}

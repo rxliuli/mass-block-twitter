@@ -7,6 +7,7 @@ CREATE TABLE "ModList" (
     "userCount" INTEGER NOT NULL DEFAULT 0,
     "subscriptionCount" INTEGER NOT NULL DEFAULT 0,
     "localUserId" TEXT NOT NULL,
+    "visibility" TEXT NOT NULL DEFAULT 'public',
     "twitterUserId" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,

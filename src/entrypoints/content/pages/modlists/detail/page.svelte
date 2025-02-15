@@ -41,6 +41,7 @@
   import ModlistAddUser from './components/ModlistAddUser.svelte'
   import { type User } from '$lib/db'
   import { produce } from 'immer'
+  import { AutoSizer, List } from '@rxliuli/svelte-window'
 
   const route = useRoute()
 
@@ -208,12 +209,14 @@
         throw new Error('Failed to add user')
       }
       const data = (await resp.json()) as ModListAddTwitterUserResponse
+      if (!$query.data) {
+        await $query.refetch()
+        return
+      }
       queryClient.setQueryData(
         ['modlistUsers'],
         produce((old: typeof $query.data) => {
-          old?.pages.forEach((page) => {
-            page.data.push(data)
-          })
+          old?.pages[0]?.data.unshift(data)
         }),
       )
     },
@@ -265,6 +268,20 @@
     userAddOpen = true
   }
   const authInfo = useAuthInfo()
+
+  function onScroll(event: UIEvent) {
+    const target = event.target as HTMLElement
+    const scrollTop = target.scrollTop
+    const clientHeight = target.clientHeight
+    const scrollHeight = target.scrollHeight
+    if (Math.abs(scrollHeight - scrollTop - clientHeight) <= 1) {
+      requestAnimationFrame(() => {
+        if ($query.hasNextPage) {
+          $query.fetchNextPage()
+        }
+      })
+    }
+  }
 </script>
 
 <LayoutNav title="Moderation Lists Detail">
@@ -316,7 +333,7 @@
   </DropdownMenu.Root>
 </LayoutNav>
 
-<div class="max-w-3xl mx-auto">
+<div class="max-w-3xl mx-auto h-full flex flex-col">
   {#if $metadata.isLoading}
     <QueryLoading />
   {:else if $metadata.data}
@@ -337,38 +354,54 @@
     <QueryError description={'Load modlist detail failed'} />
   {/if}
 
-  {#if $query.data}
-    {@const users = $query.data.pages.flatMap((it) => it.data) ?? []}
-    {#if users.length === 0}
-      <div class="text-center text-zinc-400">No users in this list</div>
-    {:else}
-      <div class="divide-y">
-        {#each users as user (user.id)}
-          <ModlistUser {user}>
-            {#snippet actions()}
-              {#if $metadata.data?.owner}
-                <Button
-                  variant="secondary"
-                  onclick={(ev) => {
-                    ev.preventDefault()
-                    $removeUserMutation.mutate(user.id)
-                  }}
-                  disabled={loadings[user.id]}
-                >
-                  Remove
-                </Button>
-              {/if}
-            {/snippet}
-          </ModlistUser>
-        {/each}
-      </div>
-    {/if}
-  {/if}
-  {#if $query.isLoading}
-    <QueryLoading />
-  {:else if $query.error}
-    <QueryError description={'Load modlist users failed'} />
-  {/if}
+  <div class="flex-1 overflow-y-hidden">
+    <AutoSizer>
+      {#snippet child({ height })}
+        {#if $query.data}
+          {@const users = $query.data.pages.flatMap((it) => it.data) ?? []}
+          {#if users.length === 0}
+            <div class="text-center text-zinc-400">No users in this list</div>
+          {:else}
+            <List
+              data={users}
+              itemKey="id"
+              itemHeight={100}
+              {height}
+              class="divide-y"
+              dynamic
+              onscroll={onScroll}
+            >
+              {#snippet child(item)}
+                <ModlistUser user={item}>
+                  {#snippet actions()}
+                    {#if $metadata.data?.owner}
+                      <Button
+                        variant="secondary"
+                        onclick={(ev) => {
+                          ev.preventDefault()
+                          $removeUserMutation.mutate(item.id)
+                        }}
+                        disabled={loadings[item.id]}
+                      >
+                        Remove
+                      </Button>
+                    {/if}
+                  {/snippet}
+                </ModlistUser>
+              {/snippet}
+            </List>
+          {/if}
+        {/if}
+      {/snippet}
+    </AutoSizer>
+    <div class="sticky bottom-0">
+      {#if $query.isFetching}
+        <QueryLoading class="h-auto" />
+      {:else if $query.error}
+        <QueryError description={'Load modlist users failed'} />
+      {/if}
+    </div>
+  </div>
 </div>
 
 <ModListEdit

@@ -7,8 +7,6 @@ export type {
   ModListRemoveRequest,
   ModListRemoveErrorResponse,
   ModListSubscribeRequest,
-  ModListSubscribeErrorResponse,
-  ModListUnsubscribeErrorResponse,
   ModListAddTwitterUserRequest,
   ModListAddTwitterUserResponse,
   ModListGetCreatedResponse,
@@ -18,6 +16,7 @@ export type {
   ModListUserCheckResponse,
   ModListRemoveTwitterUserRequest,
   ModListUsersResponse,
+  ModListUsersPageResponse,
   ModListSearchResponse,
   ModListSubscribeResponse,
 } from './routes/modlists'

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { useRoute } from '$lib/components/logic/router'
   import {
+    createInfiniteQuery,
     createMutation,
     createQuery,
     useQueryClient,
@@ -13,7 +14,7 @@
     ModListRemoveErrorResponse,
     ModListRemoveTwitterUserRequest,
     ModListUpdateRequest,
-    ModListUsersResponse,
+    ModListUsersPageResponse,
   } from '@mass-block-twitter/server'
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import { Button } from '$lib/components/ui/button'
@@ -39,6 +40,7 @@
   import { goBack } from '$lib/components/logic/router/route.svelte'
   import ModlistAddUser from './components/ModlistAddUser.svelte'
   import { type User } from '$lib/db'
+  import { produce } from 'immer'
 
   const route = useRoute()
 
@@ -171,18 +173,22 @@
     },
   })
 
-  const query = createQuery({
+  const query = createInfiniteQuery({
     queryKey: ['modlistUsers'],
-    queryFn: async () => {
+    queryFn: async ({ pageParam }) => {
       const authInfo = await getAuthInfo()
-      const resp = await fetch(
-        `${SERVER_URL}/api/modlists/users/${route.search?.get('id')}`,
-        {
-          headers: { Authorization: `Bearer ${authInfo?.token}` },
-        },
-      )
-      return (await resp.json()) as ModListUsersResponse
+      const url = new URL(`${SERVER_URL}/api/modlists/users`)
+      url.searchParams.set('modListId', route.search?.get('id')!)
+      if (pageParam) {
+        url.searchParams.set('cursor', pageParam)
+      }
+      const resp = await fetch(url, {
+        headers: { Authorization: `Bearer ${authInfo?.token}` },
+      })
+      return (await resp.json()) as ModListUsersPageResponse
     },
+    getNextPageParam: (lastPage) => lastPage.cursor,
+    initialPageParam: undefined as string | undefined,
   })
   const queryClient = useQueryClient()
   const addUserMutation = createMutation({
@@ -204,10 +210,11 @@
       const data = (await resp.json()) as ModListAddTwitterUserResponse
       queryClient.setQueryData(
         ['modlistUsers'],
-        (old: ModListUsersResponse) => [
-          data satisfies ModListUsersResponse[number],
-          ...old,
-        ],
+        produce((old: typeof $query.data) => {
+          old?.pages.forEach((page) => {
+            page.data.push(data)
+          })
+        }),
       )
     },
     onSuccess: () => {
@@ -237,8 +244,11 @@
         }
         queryClient.setQueryData(
           ['modlistUsers'],
-          (old: ModListUsersResponse) =>
-            old.filter((it) => it.id !== twitterUserId),
+          produce((old: typeof $query.data) => {
+            old?.pages.forEach((page) => {
+              page.data = page.data.filter((it) => it.id !== twitterUserId)
+            })
+          }),
         )
       },
       (twitterUserId) => twitterUserId,
@@ -327,17 +337,13 @@
     <QueryError description={'Load modlist detail failed'} />
   {/if}
 
-  {#if $query.isLoading}
-    <QueryLoading />
-  {:else if $query.error}
-    <QueryError description={'Load modlist users failed'} />
-  {:else}
-    {@const data = $query.data ?? []}
-    {#if data.length === 0}
+  {#if $query.data}
+    {@const users = $query.data.pages.flatMap((it) => it.data) ?? []}
+    {#if users.length === 0}
       <div class="text-center text-zinc-400">No users in this list</div>
     {:else}
       <div class="divide-y">
-        {#each data as user (user.id)}
+        {#each users as user (user.id)}
           <ModlistUser {user}>
             {#snippet actions()}
               {#if $metadata.data?.owner}
@@ -357,6 +363,11 @@
         {/each}
       </div>
     {/if}
+  {/if}
+  {#if $query.isLoading}
+    <QueryLoading />
+  {:else if $query.error}
+    <QueryError description={'Load modlist users failed'} />
   {/if}
 </div>
 

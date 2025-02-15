@@ -436,16 +436,22 @@ const search = new Hono<HonoEnv>()
 
 const usersSchema = z.object({
   modListId: z.string(),
+  cursor: z.string().optional(),
+  limit: z.coerce.number().optional().catch(20),
 })
 export type ModListUsersRequest = z.infer<typeof usersSchema>
 export type ModListUsersResponse = Pick<
   User,
   'id' | 'screenName' | 'name' | 'profileImageUrl' | 'description'
 >[]
+export type ModListUsersPageResponse = {
+  data: ModListUsersResponse
+  cursor: string
+}
 search
   // get modlist users by modlist id
-  .get('/users/:modListId', zValidator('param', usersSchema), async (c) => {
-    const validated = c.req.valid('param')
+  .get('/users', zValidator('query', usersSchema), async (c) => {
+    const validated = c.req.valid('query')
     const prisma = await prismaClients.fetch(c.env.DB)
     const modList = await prisma.modList.findUnique({
       where: { id: validated.modListId },
@@ -455,6 +461,7 @@ search
     }
     const modListUsers = await prisma.modListUser.findMany({
       select: {
+        id: true,
         twitterUser: {
           select: {
             id: true,
@@ -469,10 +476,14 @@ search
       orderBy: {
         createdAt: 'desc',
       },
+      take: validated.limit ?? 20,
+      cursor: validated.cursor ? { id: validated.cursor } : undefined,
+      skip: validated.cursor ? 1 : 0,
     })
-    return c.json(
-      modListUsers.map((it) => it.twitterUser) satisfies ModListUsersResponse,
-    )
+    return c.json({
+      data: modListUsers.map((it) => it.twitterUser),
+      cursor: modListUsers[modListUsers.length - 1]?.id,
+    } satisfies ModListUsersPageResponse)
   })
 
 export { modlists, search as modlistSearch }

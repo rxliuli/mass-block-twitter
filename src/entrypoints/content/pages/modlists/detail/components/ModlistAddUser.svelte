@@ -25,7 +25,7 @@
   } from '@mass-block-twitter/server'
   import { produce } from 'immer'
   import { toast } from 'svelte-sonner'
-
+  import { AutoSizer, List } from '@rxliuli/svelte-window'
   let {
     open = $bindable(false),
     modListId,
@@ -138,6 +138,20 @@
     }
     $query.refetch()
   }, 500)
+
+  function onScroll(event: UIEvent) {
+    const target = event.target as HTMLElement
+    const scrollTop = target.scrollTop
+    const clientHeight = target.clientHeight
+    const scrollHeight = target.scrollHeight
+    if (Math.abs(scrollHeight - scrollTop - clientHeight) <= 1) {
+      requestAnimationFrame(() => {
+        if ($query.hasNextPage) {
+          $query.fetchNextPage()
+        }
+      })
+    }
+  }
 </script>
 
 <Dialog.Root bind:open>
@@ -159,52 +173,68 @@
       </Command.Root>
     </Dialog.Header>
     <div class="h-[60dvh] space-y-2 overflow-y-auto">
-      {#if $query.isFetching}
-        <QueryLoading />
-      {:else if $query.isError}
-        <QueryError description="Failed to search users" />
-      {/if}
       {#if $query.data}
         {@const users = $query.data?.pages.flatMap((page) => page.data) ?? []}
         {#if users.length === 0}
           <p>No results found for</p>
         {/if}
-        <div class="divide-y">
-          {#each users as user (user.id)}
-            <div
-              class="flex items-center gap-3 p-2 hover:bg-muted/50 rounded-lg"
+        <AutoSizer>
+          {#snippet child({ height })}
+            <List
+              data={users}
+              itemKey={'id'}
+              itemHeight={54}
+              class="divide-y"
+              {height}
+              onscroll={onScroll}
             >
-              <Avatar.Root>
-                <Avatar.Image src={user.profile_image_url} title={user.name} />
-                <Avatar.Fallback>
-                  {user.name.slice(0, 2)}
-                </Avatar.Fallback>
-              </Avatar.Root>
-              <div class="flex-1 overflow-x-hidden">
-                <div class="text-sm font-medium overflow-x-hidden truncate">
-                  {user.name}
-                </div>
+              {#snippet child(user)}
                 <div
-                  class="text-xs text-muted-foreground overflow-x-hidden truncate"
+                  class="flex items-center gap-3 p-2 hover:bg-muted/50 rounded-lg"
                 >
-                  @{user.screen_name}
+                  <Avatar.Root>
+                    <Avatar.Image
+                      src={user.profile_image_url}
+                      title={user.name}
+                    />
+                    <Avatar.Fallback>
+                      {user.name.slice(0, 2)}
+                    </Avatar.Fallback>
+                  </Avatar.Root>
+                  <div class="flex-1 overflow-x-hidden">
+                    <div class="text-sm font-medium overflow-x-hidden truncate">
+                      {user.name}
+                    </div>
+                    <div
+                      class="text-xs text-muted-foreground overflow-x-hidden truncate"
+                    >
+                      @{user.screen_name}
+                    </div>
+                  </div>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onclick={() =>
+                      user.added
+                        ? $removeUserMutation.mutate(user)
+                        : $addUserMutation.mutate(user)}
+                    disabled={loadings[user.id]}
+                  >
+                    {user.added ? 'Remove' : 'Add'}
+                  </Button>
                 </div>
-              </div>
-              <Button
-                variant="secondary"
-                size="sm"
-                onclick={() =>
-                  user.added
-                    ? $removeUserMutation.mutate(user)
-                    : $addUserMutation.mutate(user)}
-                disabled={loadings[user.id]}
-              >
-                {user.added ? 'Remove' : 'Add'}
-              </Button>
-            </div>
-          {/each}
-        </div>
+              {/snippet}
+            </List>
+          {/snippet}
+        </AutoSizer>
       {/if}
+      <div class="sticky bottom-0">
+        {#if $query.isFetching}
+          <QueryLoading class="h-auto" />
+        {:else if $query.isError}
+          <QueryError description="Failed to search users" />
+        {/if}
+      </div>
     </div>
 
     <Dialog.Footer>

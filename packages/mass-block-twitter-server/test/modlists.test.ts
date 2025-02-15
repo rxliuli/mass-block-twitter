@@ -15,10 +15,11 @@ import type {
   ModListCreateRequest,
   ModListGetResponse,
   ModListUpdateRequest,
-  ModListUsersResponse,
+  ModListUsersPageResponse,
   ModListGetCreatedResponse,
   ModListSearchResponse,
   ModListSubscribeResponse,
+  ModListUsersRequest,
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 
@@ -298,12 +299,12 @@ describe('modlists', () => {
     })
     it('should be able to add a user to a modlist', async () => {
       const getModListUsers = async (modListId: string) => {
-        const resp2 = await fetch('/api/modlists/users/' + modListId)
+        const resp2 = await fetch('/api/modlists/users?modListId=' + modListId)
         expect(resp2.ok).true
-        return (await resp2.json()) as ModListUsersResponse
+        return (await resp2.json()) as ModListUsersPageResponse
       }
       expect((await getModList(modListId)).userCount).toBe(0)
-      expect((await getModListUsers(modListId)).length).toBe(0)
+      expect((await getModListUsers(modListId)).data.length).toBe(0)
       const resp1 = await fetch('/api/modlists/user', {
         method: 'POST',
         body: JSON.stringify({
@@ -323,7 +324,7 @@ describe('modlists', () => {
       })
       expect(resp1.ok).true
       expect((await getModList(modListId)).userCount).toBe(1)
-      expect((await getModListUsers(modListId)).length).toBe(1)
+      expect((await getModListUsers(modListId)).data.length).toBe(1)
     })
     it('should not be able to add a user to a modlist twice', async () => {
       const add = () =>
@@ -424,6 +425,52 @@ describe('modlists', () => {
       expect(resp2.ok).true
       const r2 = await getCheck()
       expect(r2[twittrUsers[0].id]).true
+    })
+    it('should be able to get modlist users with cursor', async () => {
+      const addUserToModList = async (twitterUser: TwitterUser) => {
+        const resp1 = await fetch('/api/modlists/user', {
+          method: 'POST',
+          body: JSON.stringify({
+            modListId,
+            twitterUser,
+          } satisfies ModListAddTwitterUserRequest),
+          headers: {
+            Authorization: 'test-token-1',
+            'Content-Type': 'application/json',
+          },
+        })
+        expect(resp1.ok).true
+      }
+      const list = Array.from({ length: 10 }, (_, i) => ({
+        id: `123-${i}`,
+        screen_name: `test-${i}`,
+        name: `test-${i}`,
+        profile_image_url: `test-${i}`,
+        created_at: new Date().toISOString(),
+      }))
+      await Promise.all(list.map(addUserToModList))
+      const getModListUsers = async (options: ModListUsersRequest) => {
+        const resp2 = await fetch(
+          '/api/modlists/users?' +
+            new URLSearchParams(options as any).toString(),
+        )
+        expect(resp2.ok).true
+        return (await resp2.json()) as ModListUsersPageResponse
+      }
+      const r1 = await getModListUsers({ modListId, limit: 1 })
+      expect(r1.data).length(1)
+      const r2 = await getModListUsers({
+        modListId,
+        limit: 10,
+        cursor: r1.cursor,
+      })
+      expect(r2.data).length(9)
+      const r3 = await getModListUsers({
+        modListId,
+        limit: 10,
+        cursor: r2.cursor,
+      })
+      expect(r3.data).length(0)
     })
   })
 })

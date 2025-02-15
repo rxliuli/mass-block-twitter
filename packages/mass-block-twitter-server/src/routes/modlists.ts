@@ -7,6 +7,7 @@ import { ulid } from '../lib/ulid'
 import { userSchema } from '../lib/request'
 import { ModList, ModListUser, PrismaClient, User } from '@prisma/client'
 import { getTokenInfo } from '../middlewares/auth'
+import { groupBy, map } from 'lodash-es'
 
 const modlists = new Hono<HonoEnv>()
 
@@ -348,9 +349,7 @@ const checkUserSchema = z.object({
 })
 
 export type ModListUserCheckRequest = z.infer<typeof checkUserSchema>
-
 export type ModListUserCheckResponse = Record<string, boolean>
-
 modlists.get('/user/check', zValidator('query', checkUserSchema), async (c) => {
   const validated = c.req.valid('query')
   const prisma = await prismaClients.fetch(c.env.DB)
@@ -376,6 +375,44 @@ modlists.get('/user/check', zValidator('query', checkUserSchema), async (c) => {
       acc[it.id] = existsIds.has(it.id)
       return acc
     }, {} as ModListUserCheckResponse),
+  )
+})
+
+export type ModListSubscribedUserResponse = {
+  modListId: string
+  twitterUserIds: string[]
+}[]
+modlists.get('/subscribed/users', async (c) => {
+  const prisma = await prismaClients.fetch(c.env.DB)
+  const tokenInfo = c.get('tokenInfo')
+  const modLists = await prisma.modListSubscription.findMany({
+    where: { localUserId: tokenInfo.id, modList: { userCount: { gt: 0 } } },
+    include: {
+      modList: {
+        include: {
+          ModListUser: {
+            select: { twitterUserId: true },
+          },
+        },
+      },
+    },
+  })
+  const resp = c.json<ModListSubscribedUserResponse>(
+    modLists.map((it) => ({
+      modListId: it.modList.id,
+      twitterUserIds: it.modList.ModListUser.map((it) => it.twitterUserId),
+    })),
+  )
+  return c.json<ModListSubscribedUserResponse>(
+    modLists.map((it) => ({
+      modListId: it.modList.id,
+      twitterUserIds: it.modList.ModListUser.map((it) => it.twitterUserId),
+    })),
+    {
+      headers: {
+        'Cache-Control': 'public, max-age=3600',
+      },
+    },
   )
 })
 

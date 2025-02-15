@@ -1,5 +1,10 @@
 import { SERVER_URL } from '$lib/constants'
+import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
 import { onMessage, sendMessage } from '$lib/messaging'
+import {
+  AuthInfo,
+  ModListSubscribedUserResponse,
+} from '@mass-block-twitter/server'
 
 export default defineBackground(() => {
   browser.runtime.onInstalled.addListener(() => {
@@ -36,5 +41,45 @@ export default defineBackground(() => {
     if (!resp.ok) {
       throw new Error('Failed to report spam' + resp.statusText)
     }
+  })
+  type JsonError = {
+    code: number
+    message: string
+  }
+  onMessage('fetchModListSubscribedUsers', async (ev) => {
+    const token = (
+      await browser.storage.local.get<{ authInfo: AuthInfo | null }>('authInfo')
+    ).authInfo?.token
+    if (!token) {
+      throw {
+        code: 401,
+        message: 'Unauthorized',
+      } as JsonError
+    }
+    const resp = await fetch(`${SERVER_URL}/api/modlists/subscribed/users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Cache-Control': 'no-cache',
+      },
+    })
+    if (!resp.ok) {
+      if (resp.status === 401) {
+        throw {
+          code: 401,
+          message: 'Unauthorized',
+        } as JsonError
+      }
+      throw {
+        code: resp.status,
+        message: 'Failed to fetch mod list subscribed users',
+      } as JsonError
+    }
+    const r = (await resp.json()) as ModListSubscribedUserResponse
+    return r.reduce((acc, it) => {
+      it.twitterUserIds.forEach((id) => {
+        acc[id] = it.modListId
+      })
+      return acc
+    }, {} as Record<string, string>)
   })
 })

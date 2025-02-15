@@ -19,4 +19,5 @@ export type {
   ModListUsersPageResponse,
   ModListSearchResponse,
   ModListSubscribeResponse,
+  ModListSubscribedUserResponse,
 } from './routes/modlists'

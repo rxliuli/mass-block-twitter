@@ -46,6 +46,24 @@
   </Label>
   <Label class="flex items-center gap-4 p-4 cursor-pointer">
     <div class="flex-1">
+      <span class="block text-base font-medium">Hide Mute Words</span>
+      <span class="block mt-1 text-sm text-gray-500">
+        Hide tweets that contain muted words.
+      </span>
+    </div>
+    <Checkbox class="shrink-0" bind:checked={$settings.hideMutedWords} />
+  </Label>
+  <Label class="flex items-center gap-4 p-4 cursor-pointer">
+    <div class="flex-1">
+      <span class="block text-base font-medium">Hide Mod List Accounts</span>
+      <span class="block mt-1 text-sm text-gray-500">
+        Hide tweets from accounts that are subscribed to a mod list.
+      </span>
+    </div>
+    <Checkbox class="shrink-0" bind:checked={$settings.hideModListAccounts} />
+  </Label>
+  <Label class="flex items-center gap-4 p-4 cursor-pointer">
+    <div class="flex-1">
       <span class="block text-base font-medium"
         >Hide Blue Verified Accounts</span
       >

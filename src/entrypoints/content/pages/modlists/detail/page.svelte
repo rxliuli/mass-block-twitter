@@ -42,6 +42,7 @@
   import { type User } from '$lib/db'
   import { produce } from 'immer'
   import { AutoSizer, List } from '@rxliuli/svelte-window'
+  import { refreshModListSubscribedUsers } from '$lib/content'
 
   const route = useRoute()
 
@@ -60,6 +61,7 @@
       return (await resp.json()) as ModListGetResponse
     },
   })
+
   const subscribeMutation = createMutation({
     mutationFn: async () => {
       const authInfo = await getAuthInfo()
@@ -78,6 +80,7 @@
     },
     onSuccess: async () => {
       await $metadata.refetch()
+      refreshModListSubscribedUsers(true)
     },
     onError: () => {
       toast.error('Subscribe modlist failed')
@@ -101,6 +104,7 @@
     },
     onSuccess: async () => {
       await $metadata.refetch()
+      refreshModListSubscribedUsers(true)
     },
     onError: async (error) => {
       toast.error('Unsubscribe modlist failed')

@@ -2,7 +2,7 @@ import { MUTED_WORDS_KEY, ParsedTweet } from './api'
 import { getSettings } from './settings'
 import { matchByKeyword } from './util/matchByKeyword'
 
-interface TweetFilter {
+export interface TweetFilter {
   name: string
   isSpam: (tweet: ParsedTweet) => boolean
 }
@@ -60,8 +60,11 @@ export function blueVerifiedFilter(): TweetFilter {
 }
 export let spamContext: {
   spamUsers: Record<string, 'spam' | 'report'>
+  // key is twitter user id, value is modlist id
+  modlistUsers: Record<string, string>
 } = {
   spamUsers: {},
+  modlistUsers: {},
 }
 
 export function sharedSpamFilter(): TweetFilter {
@@ -69,6 +72,18 @@ export function sharedSpamFilter(): TweetFilter {
     name: 'sharedSpamFilter',
     isSpam: (tweet: ParsedTweet) => {
       if (spamContext.spamUsers[tweet.user.id] === 'spam') {
+        return true
+      }
+      return false
+    },
+  }
+}
+
+export function modListFilter(): TweetFilter {
+  return {
+    name: 'modListFilter',
+    isSpam: (tweet: ParsedTweet) => {
+      if (spamContext.modlistUsers[tweet.user.id]) {
         return true
       }
       return false

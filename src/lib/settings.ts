@@ -4,6 +4,8 @@ export type Settings = {
   hideSuspiciousAccounts: boolean
   hideSpamAccounts: boolean
   hideBlueVerifiedAccounts: boolean
+  hideMutedWords: boolean
+  hideModListAccounts: boolean
 }
 
 function getLocalStorage<T>(key: string, defaultValue: T): T {
@@ -21,6 +23,8 @@ export function getSettings(): Settings {
   return getLocalStorage(SETTINGS_KEY, {
     hideSuspiciousAccounts: true,
     hideSpamAccounts: true,
+    hideMutedWords: true,
+    hideModListAccounts: true,
     hideBlueVerifiedAccounts: false,
   } as Settings)
 }

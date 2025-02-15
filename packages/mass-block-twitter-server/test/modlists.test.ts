@@ -20,6 +20,7 @@ import type {
   ModListSearchResponse,
   ModListSubscribeResponse,
   ModListUsersRequest,
+  ModListSubscribedUserResponse,
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 
@@ -177,6 +178,23 @@ describe('modlists', () => {
     expect(resp.ok).true
     return (await resp.json()) as ModListGetResponse
   }
+  const addUserToModList = async (
+    twitterUser: TwitterUser,
+    modListId: string,
+  ) => {
+    const resp1 = await fetch('/api/modlists/user', {
+      method: 'POST',
+      body: JSON.stringify({
+        modListId,
+        twitterUser,
+      } satisfies ModListAddTwitterUserRequest),
+      headers: {
+        Authorization: 'test-token-1',
+        'Content-Type': 'application/json',
+      },
+    })
+    expect(resp1.ok).true
+  }
   describe('remove', () => {
     it('should be able to remove a modlist', async () => {
       const resp1 = await remove('123')
@@ -280,6 +298,30 @@ describe('modlists', () => {
       expect(resp1.ok).true
       const resp2 = await subscribe()
       expect(resp2.status).toBe(400)
+    })
+    const getSubscribedUsers = async (force?: boolean) => {
+      const resp1 = await fetch(`/api/modlists/subscribed/users`, {
+        headers: { Authorization: 'test-token-1' },
+      })
+      expect(resp1.ok).true
+      return (await resp1.json()) as ModListSubscribedUserResponse
+    }
+    it('should be able to get subscribed users', async () => {
+      const resp1 = await fetch(`/api/modlists/subscribe/${modListId}`, {
+        method: 'POST',
+        headers: { Authorization: 'test-token-1' },
+      })
+      expect(resp1.ok).true
+      expect(await getSubscribedUsers()).length(0)
+      await addUserToModList(
+        {
+          id: 'twitter-user-1',
+          screen_name: 'test-user-1',
+          name: 'test-user-1',
+        },
+        modListId,
+      )
+      expect(await getSubscribedUsers()).length(1)
     })
   })
   describe('user', () => {
@@ -427,20 +469,6 @@ describe('modlists', () => {
       expect(r2[twittrUsers[0].id]).true
     })
     it('should be able to get modlist users with cursor', async () => {
-      const addUserToModList = async (twitterUser: TwitterUser) => {
-        const resp1 = await fetch('/api/modlists/user', {
-          method: 'POST',
-          body: JSON.stringify({
-            modListId,
-            twitterUser,
-          } satisfies ModListAddTwitterUserRequest),
-          headers: {
-            Authorization: 'test-token-1',
-            'Content-Type': 'application/json',
-          },
-        })
-        expect(resp1.ok).true
-      }
       const list = Array.from({ length: 10 }, (_, i) => ({
         id: `123-${i}`,
         screen_name: `test-${i}`,
@@ -448,7 +476,7 @@ describe('modlists', () => {
         profile_image_url: `test-${i}`,
         created_at: new Date().toISOString(),
       }))
-      await Promise.all(list.map(addUserToModList))
+      await Promise.all(list.map((it) => addUserToModList(it, modListId)))
       const getModListUsers = async (options: ModListUsersRequest) => {
         const resp2 = await fetch(
           '/api/modlists/users?' +

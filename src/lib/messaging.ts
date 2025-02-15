@@ -6,6 +6,7 @@ interface ProtocolMap {
 
   fetchSpamUsers(): Record<string, number>
   spamReport(request: TwitterSpamReportRequest): void
+  fetchModListSubscribedUsers(force?: boolean): Record<string, string>
 }
 
 export const { sendMessage, onMessage, removeAllListeners } =

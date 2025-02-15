@@ -18,13 +18,19 @@ import {
 import css from './style.css?inline'
 import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'
-import { getSpamUsers } from '$lib/shared'
+import {
+  getModListSubscribedUsers,
+  getSpamUsers,
+  refershSpamContext,
+} from '$lib/shared'
 import {
   blueVerifiedFilter,
   defaultProfileFilter,
+  modListFilter,
   mutedWordsFilter,
   sharedSpamFilter,
   spamContext,
+  TweetFilter,
 } from '$lib/filter'
 import { getSettings } from '$lib/settings'
 
@@ -80,8 +86,14 @@ function handleTweets(): Middleware {
     'https://x.com/i/api/graphql/*/(HomeTimeline|TweetDetail|UserTweets|UserTweetsAndReplies|CommunityTweetsTimeline|HomeLatestTimeline|SearchTimeline|Bookmarks|ListLatestTweetsTimeline)',
     'https://x.com/i/api/2/notifications/all.json',
   ]
-  const filters = [mutedWordsFilter()]
+  const filters: TweetFilter[] = []
   const settings = getSettings()
+  if (settings.hideMutedWords) {
+    filters.push(mutedWordsFilter())
+  }
+  if (settings.hideModListAccounts) {
+    filters.push(modListFilter())
+  }
   if (settings.hideSuspiciousAccounts) {
     filters.push(defaultProfileFilter())
   }
@@ -108,7 +120,7 @@ function handleTweets(): Middleware {
           })),
         )
         console.log('tweets', tweets)
-        spamContext.spamUsers = await getSpamUsers()
+        await refershSpamContext()
         tweets.forEach(async (it) => {
           // Don't block following users
           if (it.user.following) {
@@ -208,4 +220,9 @@ export default defineUnlistedScript(async () => {
     .intercept()
   await wait(() => !!document.body)
   observe()
+
+  document.addEventListener('RefreshModListSubscribedUsers', async () => {
+    await refershSpamContext()
+    console.log('RefreshModListSubscribedUsers from dashboard', spamContext)
+  })
 })

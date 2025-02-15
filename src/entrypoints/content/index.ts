@@ -3,7 +3,7 @@ import { wait } from '@liuli-util/async'
 import App from './app.svelte'
 import './app.css'
 import { sendMessage } from '$lib/messaging'
-import { set } from 'idb-keyval'
+import { refreshModListSubscribedUsers, refreshSpamUsers } from '$lib/content'
 
 export default defineContentScript({
   matches: ['https://x.com/**'],
@@ -14,6 +14,7 @@ export default defineContentScript({
     await injectScript('/inject.js')
 
     refreshSpamUsers()
+    refreshModListSubscribedUsers()
 
     await wait(() => !!document.body)
     const ui = await createShadowRootUi(ctx, {
@@ -44,8 +45,3 @@ export default defineContentScript({
     })
   },
 })
-
-export async function refreshSpamUsers(): Promise<void> {
-  const spamUsers = await sendMessage('fetchSpamUsers', undefined)
-  await set('spamUsers', spamUsers)
-}

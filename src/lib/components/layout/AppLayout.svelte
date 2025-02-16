@@ -4,14 +4,22 @@
   import AppSidebar from './AppSidebar.svelte'
   import { cn } from '$lib/utils'
   import {
+    ArrowLeftIcon,
     MessageCircleOffIcon,
     SettingsIcon,
     UserIcon,
     UsersIcon,
   } from 'lucide-svelte'
-  import { router } from '$lib/components/logic/router/route.svelte'
+  import {
+    goBack,
+    navigate,
+    router,
+    useRoute,
+  } from '$lib/components/logic/router'
   import type { MenuItem } from './types'
   import { setContext } from 'svelte'
+  import { Button } from '../ui/button'
+
   let {
     open,
     children,
@@ -59,6 +67,19 @@
       title = val
     },
   })
+
+  const route = useRoute()
+  const isTopLevel = $derived(
+    !route.matched?.path ||
+      menuItems.some((it) => route.matched?.path === it.url),
+  )
+  function safeGoBack() {
+    if (router.history.length > 0) {
+      goBack()
+    } else {
+      navigate('/')
+    }
+  }
 </script>
 
 <div
@@ -72,8 +93,14 @@
     <AppSidebar items={menuItems} />
     <main class="w-full h-[calc(100%-3rem)] flex flex-col overflow-auto">
       <div class="flex items-center gap-2 mb-2 h-10">
-        <Sidebar.Trigger />
-        <h1 class="text-xl font-bold" id="layout-nav-title">
+        {#if isTopLevel}
+          <Sidebar.Trigger />
+        {:else}
+          <Button variant="link" size="icon" onclick={safeGoBack}>
+            <ArrowLeftIcon class="w-4 h-4" />
+          </Button>
+        {/if}
+        <h1 class="text-xl font-bold truncate flex-1" id="layout-nav-title">
           {title ?? autoTitle}
         </h1>
         <div class="ml-auto" id="layout-nav-extra"></div>

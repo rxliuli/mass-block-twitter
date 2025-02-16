@@ -7,4 +7,5 @@ export {
   useRoute,
   defineAsyncComponent,
   type RouteConfig,
+  goBack,
 } from './route.svelte'

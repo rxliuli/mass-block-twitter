@@ -38,6 +38,7 @@ export const createSchema = z.object({
   twitterUser: userSchema,
 })
 export type ModListCreateRequest = z.infer<typeof createSchema>
+export type ModListCreateResponse = ModList
 modlists.post('/create', zValidator('json', createSchema), async (c) => {
   const validated = c.req.valid('json')
   const prisma = await prismaClients.fetch(c.env.DB)
@@ -53,7 +54,7 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
       twitterUserId: validated.twitterUser.id,
     },
   })
-  return c.json({ code: 'success', data: r })
+  return c.json(r)
 })
 
 const updateSchema = z.object({

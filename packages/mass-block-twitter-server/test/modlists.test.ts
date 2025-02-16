@@ -22,6 +22,7 @@ import type {
   ModListUsersRequest,
   ModListSubscribedUserResponse,
   ModListRemoveTwitterUserRequest,
+  ModListCreateResponse,
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 
@@ -95,13 +96,13 @@ describe('modlists', () => {
         },
       })
       expect(resp1.ok).true
-      const r1 = (await resp1.json()) as { code: 'success'; data: ModList }
-      expect(r1.data.id).not.undefined
+      const r1 = (await resp1.json()) as ModListCreateResponse
+      expect(r1.id).not.undefined
       const resp2 = await fetch('/api/modlists/search')
       expect(resp2.ok).true
       const r2 = (await resp2.json()) as ModListSearchResponse
       expect(r2.length).toBe(1)
-      expect(r2[0].id).toBe(r1.data.id)
+      expect(r2[0].id).toBe(r1.id)
     })
     it('should be able to get created modlists', async () => {
       const getCreated = async () => {
@@ -121,11 +122,11 @@ describe('modlists', () => {
           'Content-Type': 'application/json',
         },
       })
-      const r2 = (await resp2.json()) as { code: 'success'; data: ModList }
-      expect(r2.data.id).not.undefined
+      const r2 = (await resp2.json()) as ModListCreateResponse
+      expect(r2.id).not.undefined
       const r3 = await getCreated()
       expect(r3.length).toBe(1)
-      expect(r3[0].id).toBe(r2.data.id)
+      expect(r3[0].id).toBe(r2.id)
     })
   })
   describe('update', () => {
@@ -140,8 +141,8 @@ describe('modlists', () => {
         },
       })
       expect(resp1.ok).true
-      const r1 = (await resp1.json()) as { code: 'success'; data: ModList }
-      modListId = r1.data.id
+      const r1 = (await resp1.json()) as ModListCreateResponse
+      modListId = r1.id
     })
     it('should be able to update a modlist', async () => {
       const resp1 = await fetch(`/api/modlists/update/${modListId}`, {
@@ -209,9 +210,9 @@ describe('modlists', () => {
         },
       })
       expect(resp2.ok).true
-      const r2 = (await resp2.json()) as { code: 'success'; data: ModList }
-      expect(r2.data.id).not.undefined
-      const resp3 = await remove(r2.data.id)
+      const r2 = (await resp2.json()) as ModListCreateResponse
+      expect(r2.id).not.undefined
+      const resp3 = await remove(r2.id)
       expect(resp3.ok).true
       const resp4 = await fetch('/api/modlists/search')
       expect(resp4.ok).true
@@ -228,16 +229,16 @@ describe('modlists', () => {
         },
       })
       expect(resp1.ok).true
-      const r1 = (await resp1.json()) as { code: 'success'; data: ModList }
-      expect(r1.data.id).not.undefined
-      expect((await getModList(r1.data.id)).subscriptionCount).toBe(0)
-      const resp2 = await fetch(`/api/modlists/subscribe/${r1.data.id}`, {
+      const r1 = (await resp1.json()) as ModListCreateResponse
+      expect(r1.id).not.undefined
+      expect((await getModList(r1.id)).subscriptionCount).toBe(0)
+      const resp2 = await fetch(`/api/modlists/subscribe/${r1.id}`, {
         method: 'POST',
         headers: { Authorization: 'test-token-2' },
       })
       expect(resp2.ok).true
-      expect((await getModList(r1.data.id)).subscriptionCount).toBe(1)
-      const resp3 = await remove(r1.data.id)
+      expect((await getModList(r1.id)).subscriptionCount).toBe(1)
+      const resp3 = await remove(r1.id)
       expect(resp3.ok).false
       expect(resp3.status).toBe(400)
     })
@@ -251,9 +252,9 @@ describe('modlists', () => {
         },
       })
       expect(resp1.ok).true
-      const r1 = (await resp1.json()) as { code: 'success'; data: ModList }
-      expect(r1.data.id).not.undefined
-      const resp2 = await remove(r1.data.id)
+      const r1 = (await resp1.json()) as ModListCreateResponse
+      expect(r1.id).not.undefined
+      const resp2 = await remove(r1.id)
       expect(resp2.ok).false
       expect(resp2.status).toBe(404)
     })
@@ -270,8 +271,8 @@ describe('modlists', () => {
         },
       })
       expect(resp1.ok).true
-      const r1 = (await resp1.json()) as { code: 'success'; data: ModList }
-      modListId = r1.data.id
+      const r1 = (await resp1.json()) as ModListCreateResponse
+      modListId = r1.id
     })
     it('should be able to subscribe to a modlist', async () => {
       const resp2 = await fetch(`/api/modlists/subscribe/${modListId}`, {
@@ -337,8 +338,8 @@ describe('modlists', () => {
         },
       })
       expect(resp1.ok).true
-      const r1 = (await resp1.json()) as { code: 'success'; data: ModList }
-      modListId = r1.data.id
+      const r1 = (await resp1.json()) as ModListCreateResponse
+      modListId = r1.id
     })
     const getModListUsers = async (modListId: string) => {
       const resp2 = await fetch('/api/modlists/users?modListId=' + modListId)

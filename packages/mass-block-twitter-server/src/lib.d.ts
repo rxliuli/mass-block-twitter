@@ -3,6 +3,7 @@ export type { ModList, ModListUser, ModListSubscription } from '@prisma/client'
 export type { TwitterUser, TwitterSpamReportRequest } from './routes/twitter'
 export type {
   ModListCreateRequest,
+  ModListCreateResponse,
   ModListUpdateRequest,
   ModListRemoveRequest,
   ModListRemoveErrorResponse,

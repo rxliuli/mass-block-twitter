@@ -68,9 +68,7 @@
   </Sidebar.Content>
   <Sidebar.Footer>
     <Sidebar.Menu>
-      <Sidebar.MenuItem>
-        <AuthButton />
-      </Sidebar.MenuItem>
+      <AuthButton />
 
       {#each footer as item (item.title)}
         <Sidebar.MenuItem>

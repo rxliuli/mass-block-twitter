@@ -70,13 +70,15 @@
 {#if authInfo.value}
   <DropdownMenu.Root>
     <DropdownMenu.Trigger>
-      <Sidebar.MenuButton>
-        <UserIcon />
-        <span class="truncate">{authInfo.value.email}</span>
-        {#if authInfo.value.isPro}
-          <Badge variant="outline">pro</Badge>
-        {/if}
-      </Sidebar.MenuButton>
+      <Sidebar.MenuItem>
+        <Sidebar.MenuButton>
+          <UserIcon />
+          <span class="truncate">{authInfo.value.email}</span>
+          {#if authInfo.value.isPro}
+            <Badge variant="outline">pro</Badge>
+          {/if}
+        </Sidebar.MenuButton>
+      </Sidebar.MenuItem>
     </DropdownMenu.Trigger>
     <DropdownMenu.Content portalProps={{ to: shadcnConfig.get().portal }}>
       <DropdownMenu.Item onclick={onGotoSettings}>Profile</DropdownMenu.Item>
@@ -86,8 +88,10 @@
     </DropdownMenu.Content>
   </DropdownMenu.Root>
 {:else}
-  <Sidebar.MenuButton onclick={onLogin}>
-    <UserIcon />
-    <span>Login</span>
-  </Sidebar.MenuButton>
+  <Sidebar.MenuItem onclick={onLogin}>
+    <Sidebar.MenuButton>
+      <UserIcon />
+      <span>Login</span>
+    </Sidebar.MenuButton>
+  </Sidebar.MenuItem>
 {/if}

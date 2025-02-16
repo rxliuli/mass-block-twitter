@@ -8,6 +8,8 @@
   import { getAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { toast } from 'svelte-sonner'
   import { crossFetch } from '$lib/query'
+  import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
+  import ModListCreator from './components/ModListCreator.svelte'
 
   const query = createQuery({
     queryKey: ['modlists'],
@@ -38,10 +40,14 @@
   }
 </script>
 
+<LayoutNav title="Moderation Lists">
+  <ModListCreator onCreated={() => $query.refetch()} />
+</LayoutNav>
+
 <header>
-  <nav class="flex gap-2">
-    <Button variant="secondary" onclick={onGotoCreated}>Created</Button>
-    <Button variant="secondary" onclick={onGotoSubscribed}>Subscribed</Button>
+  <nav>
+    <Button variant="link" onclick={onGotoCreated}>Created</Button>
+    <Button variant="link" onclick={onGotoSubscribed}>Subscribed</Button>
   </nav>
 </header>
 

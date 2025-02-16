@@ -14,12 +14,13 @@
   import { getAuthInfo, useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { extractCurrentUserId } from '$lib/observe'
   import { dbApi } from '$lib/db'
+  import { crossFetch } from '$lib/query'
 
   const query = createQuery({
     queryKey: ['modlists', 'created'],
     queryFn: async () => {
       const authInfo = await getAuthInfo()
-      const resp = await fetch(`${SERVER_URL}/api/modlists/created`, {
+      const resp = await crossFetch(`${SERVER_URL}/api/modlists/created`, {
         headers: {
           Authorization: `Bearer ${authInfo?.token}`,
         },
@@ -47,7 +48,7 @@
       if (!twitterUser) {
         throw new Error('User not found, please login again.')
       }
-      const resp = await fetch(`${SERVER_URL}/api/modlists/create`, {
+      const resp = await crossFetch(`${SERVER_URL}/api/modlists/create`, {
         method: 'POST',
         body: JSON.stringify({
           name: modList.name,

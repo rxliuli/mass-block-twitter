@@ -43,6 +43,7 @@
   import { produce } from 'immer'
   import { AutoSizer, List } from '@rxliuli/svelte-window'
   import { refreshModListSubscribedUsers } from '$lib/content'
+  import { crossFetch } from '$lib/query'
 
   const route = useRoute()
 
@@ -50,7 +51,7 @@
     queryKey: ['modlistMetadata'],
     queryFn: async () => {
       const authInfo = await getAuthInfo()
-      const resp = await fetch(
+      const resp = await crossFetch(
         `${SERVER_URL}/api/modlists/get/${route.search?.get('id')}`,
         {
           headers: {
@@ -65,7 +66,7 @@
   const subscribeMutation = createMutation({
     mutationFn: async () => {
       const authInfo = await getAuthInfo()
-      const resp = await fetch(
+      const resp = await crossFetch(
         `${SERVER_URL}/api/modlists/subscribe/${route.search?.get('id')}`,
         {
           method: 'POST',
@@ -89,7 +90,7 @@
   const unsubscribeMutation = createMutation({
     mutationFn: async () => {
       const authInfo = await getAuthInfo()
-      const resp = await fetch(
+      const resp = await crossFetch(
         `${SERVER_URL}/api/modlists/subscribe/${route.search?.get('id')}`,
         {
           method: 'DELETE',
@@ -113,7 +114,7 @@
   const deleteMutation = createMutation({
     mutationFn: async () => {
       const authInfo = await getAuthInfo()
-      const resp = await fetch(
+      const resp = await crossFetch(
         `${SERVER_URL}/api/modlists/remove/${route.search?.get('id')}`,
         {
           method: 'DELETE',
@@ -154,7 +155,7 @@
       modlist: Pick<ModList, 'name' | 'description' | 'avatar'>,
     ) => {
       const authInfo = await getAuthInfo()
-      const resp = await fetch(
+      const resp = await crossFetch(
         `${SERVER_URL}/api/modlists/update/${route.search?.get('id')}`,
         {
           method: 'PUT',
@@ -187,7 +188,7 @@
       if (pageParam) {
         url.searchParams.set('cursor', pageParam)
       }
-      const resp = await fetch(url, {
+      const resp = await crossFetch(url, {
         headers: { Authorization: `Bearer ${authInfo?.token}` },
       })
       return (await resp.json()) as ModListUsersPageResponse
@@ -198,7 +199,7 @@
   const queryClient = useQueryClient()
   const addUserMutation = createMutation({
     mutationFn: async (user: User) => {
-      const resp = await fetch(`${SERVER_URL}/api/modlists/user`, {
+      const resp = await crossFetch(`${SERVER_URL}/api/modlists/user`, {
         method: 'POST',
         headers: {
           Authorization: 'Bearer ' + (await getAuthInfo())?.token,
@@ -235,7 +236,7 @@
   const removeUserMutation = createMutation({
     mutationFn: withLoading(
       async (twitterUserId: string) => {
-        const resp = await fetch(`${SERVER_URL}/api/modlists/user`, {
+        const resp = await crossFetch(`${SERVER_URL}/api/modlists/user`, {
           method: 'DELETE',
           headers: {
             Authorization: 'Bearer ' + (await getAuthInfo())?.token,

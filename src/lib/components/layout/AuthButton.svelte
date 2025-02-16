@@ -9,6 +9,7 @@
   import { shadcnConfig } from '../logic/config'
   import { createMutation } from '@tanstack/svelte-query'
   import { SERVER_URL } from '$lib/constants'
+  import { crossFetch } from '$lib/query'
 
   const authInfo = useAuthInfo()
 
@@ -37,13 +38,21 @@
     }
   })
 
+  onMount(() => {
+    const onTokenExpired = () => {
+      authInfo.value = null
+    }
+    document.addEventListener('TokenExpired', onTokenExpired)
+    return () => document.removeEventListener('TokenExpired', onTokenExpired)
+  })
+
   function onGotoSettings() {
     window.open(webUrl + '/accounts/settings', '_blank')
   }
 
   const logoutMutation = createMutation({
     mutationFn: async () => {
-      const resp = await fetch(SERVER_URL + '/api/auth/logout', {
+      const resp = await crossFetch(SERVER_URL + '/api/auth/logout', {
         method: 'POST',
         headers: { Authorization: `Bearer ${authInfo.value?.token}` },
       })

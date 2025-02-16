@@ -8,6 +8,14 @@ import {
 import { serializeError } from 'serialize-error'
 import { toast } from 'svelte-sonner'
 
+export const crossFetch: typeof fetch = async (url, options) => {
+  const resp = await fetch(url, options)
+  if (resp.status === 401) {
+    document.dispatchEvent(new Event('TokenExpired'))
+  }
+  return resp
+}
+
 export function userQuery() {
   return createQuery({
     queryKey: ['users'],

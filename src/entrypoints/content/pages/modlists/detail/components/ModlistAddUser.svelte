@@ -26,6 +26,7 @@
   import { produce } from 'immer'
   import { toast } from 'svelte-sonner'
   import { AutoSizer, List } from '@rxliuli/svelte-window'
+  import { crossFetch } from '$lib/query'
   let {
     open = $bindable(false),
     modListId,
@@ -64,7 +65,7 @@
         'users',
         JSON.stringify(twitterPage.data satisfies TwitterUser[]),
       )
-      const resp = await fetch(url, {
+      const resp = await crossFetch(url, {
         headers: {
           Authorization: 'Bearer ' + (await getAuthInfo())?.token,
         },

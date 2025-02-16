@@ -9,10 +9,23 @@ export async function refreshSpamUsers(): Promise<void> {
 export async function refreshModListSubscribedUsers(
   force?: boolean,
 ): Promise<void> {
-  const modListSubscribedUsers = await sendMessage(
-    'fetchModListSubscribedUsers',
-    force,
-  )
-  await set('modListSubscribedUsers', modListSubscribedUsers)
-  document.dispatchEvent(new Event('RefreshModListSubscribedUsers'))
+  try {
+    const modListSubscribedUsers = await sendMessage(
+      'fetchModListSubscribedUsers',
+      force,
+    )
+    await set('modListSubscribedUsers', modListSubscribedUsers)
+    document.dispatchEvent(new Event('RefreshModListSubscribedUsers'))
+  } catch (error) {
+    if (
+      typeof error === 'object' &&
+      error &&
+      'code' in error &&
+      error.code === 401
+    ) {
+      document.dispatchEvent(new Event('TokenExpired'))
+      return
+    }
+    throw error
+  }
 }

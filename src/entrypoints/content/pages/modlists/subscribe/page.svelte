@@ -5,12 +5,13 @@
   import { getAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { SERVER_URL } from '$lib/constants'
   import type { ModListSubscribeResponse } from '@mass-block-twitter/server'
+  import { crossFetch } from '$lib/query'
 
   const query = createQuery({
     queryKey: ['modlists', 'subscribed'],
     queryFn: async () => {
       const authInfo = await getAuthInfo()
-      const resp = await fetch(`${SERVER_URL}/api/modlists/subscribed`, {
+      const resp = await crossFetch(`${SERVER_URL}/api/modlists/subscribed`, {
         headers: {
           Authorization: `Bearer ${authInfo?.token}`,
         },

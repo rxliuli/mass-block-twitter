@@ -7,11 +7,12 @@
   import ModLists from './components/ModLists.svelte'
   import { getAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { toast } from 'svelte-sonner'
+  import { crossFetch } from '$lib/query'
 
   const query = createQuery({
     queryKey: ['modlists'],
     queryFn: async () => {
-      const resp = await fetch(`${SERVER_URL}/api/modlists/search`)
+      const resp = await crossFetch(`${SERVER_URL}/api/modlists/search`)
       if (!resp.ok) {
         throw resp
       }

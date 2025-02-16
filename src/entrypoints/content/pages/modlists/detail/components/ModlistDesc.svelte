@@ -23,9 +23,14 @@
           {props.modlist.name}
         </h1>
         <p class="text-zinc-400">
-          Moderation list by {props.modlist.owner
-            ? 'you'
-            : `(@${props.modlist.twitterUser.screenName})`}
+          Moderation list by
+          <a
+            href={`https://x.com/${props.modlist.twitterUser.screenName}`}
+            target="_blank"
+            class="text-blue-500"
+          >
+            @{props.modlist.twitterUser.screenName}
+          </a>
         </p>
       </div>
     </div>

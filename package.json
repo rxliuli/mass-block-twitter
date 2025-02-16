@@ -2,7 +2,7 @@
   "name": "mass-block-twitter",
   "description": "Mass Block Twitter Spam Users",
   "private": true,
-  "version": "0.12.1",
+  "version": "0.12.2",
   "type": "module",
   "scripts": {
     "init-all": "pnpm run -r init",

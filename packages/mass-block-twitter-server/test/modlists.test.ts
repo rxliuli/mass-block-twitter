@@ -1,14 +1,4 @@
-import { env, createExecutionContext } from 'cloudflare:test'
 import { beforeEach, describe, expect, it } from 'vitest'
-import app from '../src'
-import { HonoEnv, TokenInfo } from '../src/lib/bindings'
-import { prismaClients } from '../src/lib/prisma'
-import {
-  ModList,
-  ModListSubscription,
-  ModListUser,
-  PrismaClient,
-} from '@prisma/client'
 import type {
   ModListUserCheckResponse,
   ModListAddTwitterUserRequest,
@@ -25,57 +15,10 @@ import type {
   ModListCreateResponse,
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
+import { initCloudflareTest } from './utils'
 
 describe('modlists', () => {
-  let ctx: ExecutionContext
-  let fetch: typeof app.request
-  let prisma: PrismaClient
-  beforeEach(async () => {
-    const _env = env as HonoEnv['Bindings']
-    await _env.MY_KV.put(
-      'test-token-1',
-      JSON.stringify({
-        id: 'test-user-1',
-        email: '1@test.com',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      } satisfies TokenInfo),
-    )
-    await _env.MY_KV.put(
-      'test-token-2',
-      JSON.stringify({
-        id: 'test-user-2',
-        email: '2@test.com',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      } satisfies TokenInfo),
-    )
-    await _env.DB.prepare(_env.TEST_INIT_SQL).run()
-    prisma = await prismaClients.fetch(_env.DB)
-    await prisma.localUser.createMany({
-      data: [
-        {
-          id: 'test-user-1',
-          email: '1@test.com',
-          password: 'test',
-          emailVerified: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          id: 'test-user-2',
-          email: '2@test.com',
-          password: 'test',
-          emailVerified: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-      ],
-    })
-    ctx = createExecutionContext()
-    fetch = ((url: string, options: RequestInit) =>
-      app.request(url, options, env, ctx)) as typeof app.request
-  })
+  initCloudflareTest()
   const newModList = {
     name: 'test',
     description: 'test',

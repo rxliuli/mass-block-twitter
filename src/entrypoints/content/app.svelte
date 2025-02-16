@@ -17,7 +17,7 @@
   import ModListsSubscribePage from './pages/modlists/subscribe/page.svelte'
   import ModListsDetailPage from './pages/modlists/detail/page.svelte'
 
-  let open = $state(false)
+  let open = $state(true)
 
   function openModal() {
     const scrollbarWidth =

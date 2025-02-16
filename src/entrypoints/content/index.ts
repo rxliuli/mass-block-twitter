@@ -2,8 +2,9 @@ import { mount, unmount } from 'svelte'
 import { wait } from '@liuli-util/async'
 import App from './app.svelte'
 import './app.css'
-import { sendMessage } from '$lib/messaging'
+import { onMessage, sendMessage } from '$lib/messaging'
 import { refreshModListSubscribedUsers, refreshSpamUsers } from '$lib/content'
+import { PublicPath } from 'wxt/browser'
 
 export default defineContentScript({
   matches: ['https://x.com/**'],
@@ -16,27 +17,27 @@ export default defineContentScript({
     refreshSpamUsers()
     refreshModListSubscribedUsers()
 
-    await wait(() => !!document.body)
-    const ui = await createShadowRootUi(ctx, {
-      name: 'mass-block-twitter',
-      position: 'inline',
-      anchor: 'body',
-      onMount: (container) => {
-        const shadowDOM = document
-          .querySelector('mass-block-twitter')
-          ?.shadowRoot?.querySelector('body')
-        if (!shadowDOM) {
-          throw new Error('mass-block-twitter not found')
-        }
-        mount(App, { target: shadowDOM })
-      },
-      onRemove: (app) => {
-        unmount(App)
-      },
+    const removeListener = onMessage('show', async () => {
+      const ui = await createShadowRootUi(ctx, {
+        name: 'mass-block-twitter',
+        position: 'inline',
+        anchor: 'body',
+        onMount: () => {
+          const shadowDOM = document
+            .querySelector('mass-block-twitter')
+            ?.shadowRoot?.querySelector('body')
+          if (!shadowDOM) {
+            throw new Error('mass-block-twitter not found')
+          }
+          mount(App, { target: shadowDOM })
+        },
+        onRemove: () => {
+          unmount(App)
+        },
+      })
+      ui.mount()
+      removeListener()
     })
-
-    // 4. Mount the UI
-    ui.mount()
 
     window.addEventListener('SpamReportRequest', (event) => {
       const request = (event as CustomEvent).detail

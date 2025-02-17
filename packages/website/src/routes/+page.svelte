@@ -13,7 +13,7 @@
     {
       icon: '📋',
       title: 'Moderation Lists',
-      desc: 'Create and subscribe to moderation lists',
+      desc: '',
     },
     {
       icon: '👥',
@@ -64,14 +64,19 @@
     <div class="flex justify-center gap-4 mb-12">
       <a
         href="https://chromewebstore.google.com/detail/mass-block-twitter/eaghpebepefbcadjdppjjopoagckdhej"
+        target="_blank"
       >
         <img src="/chrome.png" alt="Chrome Web Store" class="h-12" />
       </a>
-      <a href="https://addons.mozilla.org/firefox/addon/mass-block-twitter/">
+      <a
+        href="https://addons.mozilla.org/firefox/addon/mass-block-twitter/"
+        target="_blank"
+      >
         <img src="/firefox.png" alt="Firefox Add-ons" class="h-12" />
       </a>
       <a
         href="https://microsoftedge.microsoft.com/addons/detail/jfmhejlgepjmbgeceljmdeimmdolfadf"
+        target="_blank"
       >
         <img src="/edge.png" alt="Edge Add-ons" class="h-12" />
       </a>

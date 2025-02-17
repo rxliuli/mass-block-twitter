@@ -348,7 +348,7 @@
           variant="ghost"
           class="text-blue-400 flex items-center gap-2"
           onclick={onOpenUserAdd}
-          disabled={!authInfo.value}
+          disabled={!$metadata.data.owner}
         >
           <UserPlusIcon class="h-4 w-4" />
           Add people

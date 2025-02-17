@@ -20,6 +20,7 @@
   } from '@tanstack/svelte-query'
   import { debounce } from 'lodash-es'
   import type {
+    ModListUserCheckPostRequest,
     ModListUserCheckResponse,
     TwitterUser,
   } from '@mass-block-twitter/server'
@@ -59,16 +60,16 @@
         count: 20,
         cursor: pageParam,
       })
-      const url = new URL(`${SERVER_URL}/api/modlists/user/check`)
-      url.searchParams.set('modListId', modListId)
-      url.searchParams.set(
-        'users',
-        JSON.stringify(twitterPage.data satisfies TwitterUser[]),
-      )
-      const resp = await crossFetch(url, {
+      const resp = await crossFetch(`${SERVER_URL}/api/modlists/user/check`, {
+        method: 'POST',
         headers: {
           Authorization: 'Bearer ' + (await getAuthInfo())?.token,
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          modListId,
+          users: twitterPage.data,
+        } satisfies ModListUserCheckPostRequest),
       })
       const data = (await resp.json()) as ModListUserCheckResponse
       return {

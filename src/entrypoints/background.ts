@@ -15,14 +15,30 @@ export default defineBackground(() => {
     })
   })
 
+  async function onShow(tabId?: number) {
+    if (!tabId) {
+      return
+    }
+    const res = await browser.permissions.contains({
+      permissions: ['declarativeNetRequest'],
+    })
+    if (!res) {
+      await browser.permissions.request({
+        permissions: ['declarativeNetRequest'],
+      })
+      return
+    }
+    await sendMessage('show', undefined, tabId)
+  }
+
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId === 'scan') {
-      await sendMessage('show', undefined, tab!.id)
+      onShow(tab?.id)
       return
     }
   })
   browser.action.onClicked.addListener(async (tab) => {
-    await sendMessage('show', undefined, tab!.id)
+    onShow(tab?.id)
   })
   onMessage('fetchSpamUsers', async () =>
     fetch(`${SERVER_URL}/api/twitter/spam-users-for-type`).then((res) =>

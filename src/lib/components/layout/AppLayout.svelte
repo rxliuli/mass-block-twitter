@@ -35,16 +35,12 @@
       icon: UserIcon,
       to: 'content',
     },
-    ...(import.meta.env.FIREFOX
-      ? []
-      : [
-          {
-            title: 'Moderation Lists',
-            url: '/modlists',
-            icon: UsersIcon,
-            to: 'content',
-          } satisfies MenuItem,
-        ]),
+    {
+      title: 'Moderation Lists',
+      url: '/modlists',
+      icon: UsersIcon,
+      to: 'content',
+    },
     {
       title: 'Muted Words',
       url: '/muted-words',

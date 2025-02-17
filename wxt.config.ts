@@ -38,9 +38,16 @@ export default defineConfig({
           id: 'mass-block-twitter@rxliuli.com',
         },
       }
-    }
-    if (process.env.NODE_ENV === 'development') {
-      manifest.host_permissions!.push('http://localhost:8787/**')
+      manifest.permissions!.push('declarativeNetRequest')
+      manifest.declarative_net_request = {
+        rule_resources: [
+          {
+            id: 'ruleset',
+            enabled: true,
+            path: 'rules.json',
+          },
+        ],
+      }
     }
     return manifest
   },

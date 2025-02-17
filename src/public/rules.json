@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "condition": {
+      "urlFilter": "https://x.com/**",
+      "excludedResourceTypes": []
+    },
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [
+        { "header": "h2", "operation": "set", "value": "v2" },
+        { "header": "h3", "operation": "set", "value": "v3" }
+      ],
+      "responseHeaders": [
+        { "header": "h2", "operation": "set", "value": "v2" },
+        {
+          "header": "content-security-policy",
+          "operation": "remove"
+        }
+      ]
+    }
+  }
+]

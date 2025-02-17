@@ -16,6 +16,10 @@
   import ModListsCreatedPage from './pages/modlists/created/page.svelte'
   import ModListsSubscribePage from './pages/modlists/subscribe/page.svelte'
   import ModListsDetailPage from './pages/modlists/detail/page.svelte'
+  import { toast } from 'svelte-sonner'
+  toast.success('test', {
+    dismissable: true,
+  })
 
   let open = $state(true)
 
@@ -113,4 +117,4 @@
 </QueryClientProvider>
 
 <ModeWatcher />
-<Toaster richColors />
+<Toaster richColors closeButton />

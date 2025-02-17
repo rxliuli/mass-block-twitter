@@ -4,7 +4,7 @@
 
 One-Click Solution to Clean Up Twitter/X Spam.
 
-<img width="1280" alt="image" src="https://github.com/user-attachments/assets/5acbb16b-45de-4d95-996e-a3ecc51b701d" />
+![image](https://github.com/user-attachments/assets/a8c5a700-c294-4b14-a58c-b56f96147906)
 
 Tired of spam accounts cluttering your Twitter feed? I built this simple yet powerful tool that lets you detect and block multiple spam accounts with just one click.
 

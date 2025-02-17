@@ -11,6 +11,13 @@
   import { createMutation } from '@tanstack/svelte-query'
   import { UserRoundIcon } from 'lucide-svelte'
   import { untrack } from 'svelte'
+  import * as RadioGroup from '$lib/components/ui/radio-group'
+  import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
+
+  type FormData = Pick<
+    ModList,
+    'name' | 'description' | 'avatar' | 'visibility'
+  >
 
   let {
     open = $bindable(false),
@@ -18,22 +25,22 @@
   }: {
     open: boolean
     title: string
-    data?: Pick<ModList, 'name' | 'description' | 'avatar'>
-    onSave: (
-      modList: Pick<ModList, 'name' | 'description' | 'avatar'>,
-    ) => Promise<void>
+    data?: FormData
+    onSave: (modList: FormData) => Promise<void>
   } = $props()
 
-  let formState = $state<Pick<ModList, 'name' | 'description' | 'avatar'>>({
+  let formState = $state<FormData>({
     name: props.data?.name!,
     description: props.data?.description!,
     avatar: props.data?.avatar!,
+    visibility: props.data?.visibility ?? 'public',
   })
   let form = $state<HTMLFormElement>()
   $effect(() => {
     if (open) {
       untrack(() => {
         Object.assign(formState, props.data)
+        formState.visibility = props.data?.visibility ?? 'public'
       })
     }
   })
@@ -45,7 +52,8 @@
         form?.reportValidity()
         return
       }
-      // console.log('formState', formState)
+      const formData = new FormData(form)
+      formState.visibility = formData.get('visibility') as ModList['visibility']
       await props.onSave($state.snapshot(formState))
       onCancel()
     },
@@ -69,6 +77,8 @@
       formState.avatar = await reader.readAsDataURL()
     }
   }
+
+  const authInfo = useAuthInfo()
 </script>
 
 <Dialog.Root bind:open>
@@ -121,6 +131,24 @@
           rows={4}
           bind:value={formState.description}
         />
+      </div>
+      <div class={authInfo.value?.isPro ? 'block' : 'hidden'}>
+        <Label for="visibility" class="block mb-2">Visibility</Label>
+        <RadioGroup.Root
+          id="visibility"
+          name="visibility"
+          bind:value={formState.visibility}
+          class="flex gap-2"
+        >
+          <div class="flex items-center space-x-2">
+            <RadioGroup.Item value="public" id="visibility-public" />
+            <Label for="visibility-public">Public</Label>
+          </div>
+          <div class="flex items-center space-x-2">
+            <RadioGroup.Item value="protected" id="visibility-protected" />
+            <Label for="visibility-protected">Protected</Label>
+          </div>
+        </RadioGroup.Root>
       </div>
     </form>
     <Dialog.Footer>

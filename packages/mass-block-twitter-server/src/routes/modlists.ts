@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { prismaClients } from '../lib/prisma'
 import { ulid } from 'ulidx'
 import { userSchema } from '../lib/request'
-import { ModList, PrismaClient, User } from '@prisma/client'
+import { ModList, ModListVisibility, PrismaClient, User } from '@prisma/client'
 import { getTokenInfo } from '../middlewares/auth'
 
 const modlists = new Hono<HonoEnv>()
@@ -36,6 +36,7 @@ export const createSchema = z.object({
   description: z.string().max(300).optional(),
   avatar: z.string().optional(),
   twitterUser: userSchema,
+  visibility: z.enum(['public', 'protected']).optional(),
 })
 export type ModListCreateRequest = z.infer<typeof createSchema>
 export type ModListCreateResponse = ModList
@@ -52,6 +53,7 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
       avatar: validated.avatar,
       localUserId: tokenInfo.id,
       twitterUserId: validated.twitterUser.id,
+      visibility: validated.visibility,
     },
   })
   return c.json(r)
@@ -61,6 +63,7 @@ const updateSchema = z.object({
   name: z.string().max(100),
   description: z.string().max(300).nullable().optional(),
   avatar: z.string().nullable().optional(),
+  visibility: z.enum(['public', 'protected']).optional(),
 })
 export type ModListUpdateRequest = z.infer<typeof updateSchema>
 modlists.put('/update/:id', zValidator('json', updateSchema), async (c) => {
@@ -80,6 +83,7 @@ modlists.put('/update/:id', zValidator('json', updateSchema), async (c) => {
       name: validated.name,
       description: validated.description,
       avatar: validated.avatar,
+      visibility: validated.visibility,
     },
   })
   return c.json({ code: 'success' })
@@ -434,6 +438,23 @@ const searchSchema = z.object({
 })
 
 export type ModListSearchResponse = ModList[]
+
+const search = new Hono<HonoEnv>().get(
+  '/search',
+  zValidator('query', searchSchema),
+  async (c) => {
+    const _validated = c.req.valid('query')
+    const prisma = await prismaClients.fetch(c.env.DB)
+    const modLists = await prisma.modList.findMany({
+      orderBy: { updatedAt: 'desc' },
+      where: {
+        visibility: 'public',
+      },
+    })
+    return c.json<ModListSearchResponse>(modLists)
+  },
+)
+
 export type ModListGetResponse = ModList & {
   subscribed: boolean
   owner: boolean
@@ -442,16 +463,7 @@ export type ModListGetResponse = ModList & {
 export type ModListGetErrorResponse = {
   code: 'modListNotFound'
 }
-
-const search = new Hono<HonoEnv>()
-  .get('/search', zValidator('query', searchSchema), async (c) => {
-    const _validated = c.req.valid('query')
-    const prisma = await prismaClients.fetch(c.env.DB)
-    const modLists = await prisma.modList.findMany({
-      orderBy: { updatedAt: 'desc' },
-    })
-    return c.json<ModListSearchResponse>(modLists)
-  })
+search
   // get modlist metadata by id
   .get('/get/:id', async (c) => {
     const id = c.req.param('id')

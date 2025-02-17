@@ -3,7 +3,11 @@ import { wait } from '@liuli-util/async'
 import App from './app.svelte'
 import './app.css'
 import { onMessage, sendMessage } from '$lib/messaging'
-import { refreshModListSubscribedUsers, refreshSpamUsers } from '$lib/content'
+import {
+  refreshAuthInfo,
+  refreshModListSubscribedUsers,
+  refreshSpamUsers,
+} from '$lib/content'
 import { PublicPath } from 'wxt/browser'
 
 export default defineContentScript({
@@ -16,6 +20,7 @@ export default defineContentScript({
 
     refreshSpamUsers()
     refreshModListSubscribedUsers()
+    refreshAuthInfo()
 
     const removeListener = onMessage('show', async () => {
       const ui = await createShadowRootUi(ctx, {

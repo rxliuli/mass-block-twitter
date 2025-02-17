@@ -71,6 +71,44 @@ describe('modlists', () => {
       expect(r3.length).toBe(1)
       expect(r3[0].id).toBe(r2.id)
     })
+    it('create a protected modlist', async () => {
+      const resp1 = await fetch('/api/modlists/create', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...newModList,
+          visibility: 'protected',
+        } satisfies ModListCreateRequest),
+        headers: {
+          Authorization: 'test-token-1',
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.ok).true
+      const r1 = (await resp1.json()) as ModListCreateResponse
+      expect((await getModList(r1.id)).visibility).toBe('protected')
+      const r2 = (await (
+        await fetch('/api/modlists/search')
+      ).json()) as ModListSearchResponse
+      expect(r2).length(0)
+      const resp3 = await fetch('/api/modlists/update/' + r1.id, {
+        method: 'PUT',
+        body: JSON.stringify({
+          name: 'test2',
+          visibility: 'public',
+        } satisfies ModListUpdateRequest),
+        headers: {
+          Authorization: 'test-token-1',
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp3.ok).true
+      expect((await getModList(r1.id)).visibility).toBe('public')
+      const r4 = (await (
+        await fetch('/api/modlists/search')
+      ).json()) as ModListSearchResponse
+      expect(r4.length).toBe(1)
+      expect(r4[0].id).toBe(r1.id)
+    })
   })
   describe('update', () => {
     let modListId: string

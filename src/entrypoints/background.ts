@@ -19,14 +19,16 @@ export default defineBackground(() => {
     if (!tabId) {
       return
     }
-    const res = await browser.permissions.contains({
-      permissions: ['declarativeNetRequest'],
-    })
-    if (!res) {
-      await browser.permissions.request({
+    if (import.meta.env.FIREFOX) {
+      const res = await browser.permissions.contains({
         permissions: ['declarativeNetRequest'],
       })
-      return
+      if (!res) {
+        await browser.permissions.request({
+          permissions: ['declarativeNetRequest'],
+        })
+        return
+      }
     }
     await sendMessage('show', undefined, tabId)
   }

@@ -13,6 +13,7 @@ import type {
   ModListSubscribedUserResponse,
   ModListRemoveTwitterUserRequest,
   ModListCreateResponse,
+  ModListUserCheckPostRequest,
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
@@ -424,13 +425,17 @@ describe('modlists', () => {
         created_at: new Date().toISOString(),
       }))
       const getCheck = async () => {
-        const params = new URLSearchParams()
-        params.set('modListId', modListId)
-        params.set('users', JSON.stringify(twittrUsers))
-        const resp1 = await fetch(
-          '/api/modlists/user/check?' + params.toString(),
-          { headers: { Authorization: 'test-token-1' } },
-        )
+        const resp1 = await fetch('/api/modlists/user/check', {
+          method: 'POST',
+          headers: {
+            Authorization: 'test-token-1',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            modListId,
+            users: twittrUsers,
+          } satisfies ModListUserCheckPostRequest),
+        })
         expect(resp1.ok).true
         return (await resp1.json()) as ModListUserCheckResponse
       }

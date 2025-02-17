@@ -8,12 +8,14 @@ import { billing } from './routes/billing'
 import { HonoEnv } from './lib/bindings'
 import { modlists, modlistSearch } from './routes/modlists'
 import { ulid } from 'ulidx'
+import { errorHandler } from './middlewares/error'
 
 const app = new Hono<HonoEnv>()
 
 app
   .use(cors({ origin: '*' }))
-  .get('/ping', (c) => c.json(ulid()))
+  .use(errorHandler())
+  .get('/ulid', (c) => c.json(ulid()))
   // TODO: remove this once we have a proper domain
   .route('/', twitter)
   .route('/api/twitter', twitter)

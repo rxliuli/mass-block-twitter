@@ -1,4 +1,4 @@
-import { Hono } from 'hono'
+import { Context, Hono } from 'hono'
 import { HonoEnv } from '../lib/bindings'
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
@@ -361,15 +361,8 @@ const checkUserSchema = z.object({
 
 export type ModListUserCheckRequest = z.infer<typeof checkUserSchema>
 export type ModListUserCheckResponse = Record<string, boolean>
-modlists.get('/user/check', zValidator('query', checkUserSchema), async (c) => {
-  const validated = c.req.valid('query')
+async function checkUsers(c: Context, validated: ModListUserCheckPostRequest) {
   const prisma = await prismaClients.fetch(c.env.DB)
-  const modList = await prisma.modList.findUnique({
-    where: { id: validated.modListId },
-  })
-  if (!modList) {
-    return c.json({ code: 'modListNotFound' }, 404)
-  }
   // TODO need to upsert users for cloudflare queue async
   // await prisma.$transaction(validated.users.map((it) => upsertUser(prisma, it)))
   const subscriptions = await prisma.modListUser.findMany({
@@ -388,7 +381,23 @@ modlists.get('/user/check', zValidator('query', checkUserSchema), async (c) => {
       return acc
     }, {} as ModListUserCheckResponse),
   )
+}
+// TODO deprecated
+modlists.get('/user/check', zValidator('query', checkUserSchema), async (c) => {
+  return checkUsers(c, c.req.valid('query'))
 })
+const checkUserPostSchema = z.object({
+  modListId: z.string(),
+  users: z.array(z.object({ id: z.string() })),
+})
+export type ModListUserCheckPostRequest = z.infer<typeof checkUserPostSchema>
+modlists.post(
+  '/user/check',
+  zValidator('json', checkUserPostSchema),
+  async (c) => {
+    return checkUsers(c, c.req.valid('json'))
+  },
+)
 
 export type ModListSubscribedUserResponse = {
   modListId: string

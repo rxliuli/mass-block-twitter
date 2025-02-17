@@ -19,12 +19,14 @@
       <a href="/" class="font-bold transition-colors hover:text-foreground/80">
         {siteMetadata.title}
       </a>
-      <a href="/docs" class="transition-colors hover:text-foreground/80">
+      <!-- wait for docs -->
+      <!-- <a href="/docs" class="transition-colors hover:text-foreground/80">
         Docs
-      </a>
-      <a href="/pricing" class="transition-colors hover:text-foreground/80">
+      </a> -->
+      <!-- wait for paddle review -->
+      <!-- <a href="/pricing" class="transition-colors hover:text-foreground/80">
         Pricing
-      </a>
+      </a> -->
     </nav>
     <div class="flex-1"></div>
     <AuthButton />

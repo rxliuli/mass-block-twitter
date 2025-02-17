@@ -54,7 +54,11 @@
           <p class="font-bold">Email</p>
           <p class="text-gray-400">{$query.data.email}</p>
         </div>
-        <div class="flex justify-between gap-4 items-center">
+        <div
+          class="flex justify-between gap-4 items-center {$query.data.isPro
+            ? 'block'
+            : 'hidden'}"
+        >
           <p class="font-bold">Is Pro</p>
           <p class="text-gray-400">{$query.data.isPro ? 'Yes' : 'No'}</p>
         </div>

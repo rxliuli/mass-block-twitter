@@ -12,8 +12,8 @@
     },
     {
       icon: '📋',
-      title: 'Import/Export',
-      desc: 'Share block lists with others',
+      title: 'Moderation Lists',
+      desc: 'Create and subscribe to moderation lists',
     },
     {
       icon: '👥',
@@ -100,7 +100,8 @@
   </section>
 
   <!-- Pro Features Section -->
-  <section class="py-20">
+  <!-- TODO wait for paddle review -->
+  <!-- <section class="py-20">
     <div class="container mx-auto px-4">
       <h2 class="text-3xl font-bold text-center mb-12">Pro Features</h2>
       <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -115,5 +116,5 @@
         <UpgradeToPro size="lg" />
       </div>
     </div>
-  </section>
+  </section> -->
 </main>

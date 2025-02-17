@@ -9,9 +9,14 @@
   import UserActions from './components/UserActions.svelte'
   import { Input } from '$lib/components/ui/input'
   import Label from '$lib/components/ui/label/label.svelte'
-  import { filterUser } from './utils/filterUser'
+  import { filterUser, type SearchParams } from './utils/filterUser'
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
   import TextWrapper from './components/TextWrapper.svelte'
+  import VerifiedWrapper from './components/VerifiedWrapper.svelte'
+  import * as RadioGroup from '$lib/components/ui/radio-group'
+  import * as Select from '$lib/components/ui/select'
+  import { shadcnConfig } from '$lib/components/logic/config'
+  import SelectFilter from './components/SelectFilter.svelte'
 
   const query = userQuery()
 
@@ -35,7 +40,7 @@
       dataIndex: 'name',
       render: (value) =>
         renderComponent(TextWrapper, {
-          class: 'truncate',
+          class: 'w-40 truncate',
           title: value,
           children: value,
         }),
@@ -44,6 +49,11 @@
       title: 'Blocking',
       dataIndex: 'blocking',
       render: (value) => renderComponent(BlockingWrapper, { blocking: value }),
+    },
+    {
+      title: 'Verified',
+      dataIndex: 'is_blue_verified',
+      render: (value) => renderComponent(VerifiedWrapper, { verified: value }),
     },
     {
       title: 'Description',
@@ -57,10 +67,14 @@
   ]
 
   let selectedRowKeys = $state<string[]>([])
-  let searchParams = $state({
+  let searchParams = $state<SearchParams>({
     keyword: '',
-    showBlocking: true,
-    showFollowing: false,
+    filterBlocking: 'all',
+    filterVerified: 'all',
+    filterFollowing: 'all',
+  })
+  $effect(() => {
+    console.log('searchParams', $state.snapshot(searchParams))
   })
   const filteredData = $derived(
     $query.data?.filter((it) => filterUser(it, searchParams)) ?? [],
@@ -68,9 +82,25 @@
   const selectedRows = $derived(
     filteredData.filter((it) => selectedRowKeys.includes(it.id)),
   )
+
+  const filterVerifiedOptions = [
+    { value: 'all', label: 'All' },
+    { value: 'verified', label: 'Verified' },
+    { value: 'unverified', label: 'Unverified' },
+  ]
+  const filterBlockingOptions = [
+    { value: 'all', label: 'All' },
+    { value: 'blocked', label: 'Blocked' },
+    { value: 'unblocked', label: 'Unblocked' },
+  ]
+  const showFollowingOptions = [
+    { value: 'all', label: 'All' },
+    { value: 'following', label: 'Following' },
+    { value: 'notFollowing', label: 'Not Following' },
+  ]
 </script>
 
-<div class="flex flex-col">
+<div class="h-full flex flex-col">
   <UserActions {selectedRows} class="mb-2">
     {#snippet search()}
       <Input
@@ -81,21 +111,23 @@
       />
     {/snippet}
   </UserActions>
-  <div class="flex items-center gap-2 mb-2">
-    <Label class="flex items-center gap-2">
-      <span>Show Blocked</span>
-      <Checkbox
-        checked={searchParams.showBlocking}
-        onCheckedChange={(checked) => (searchParams.showBlocking = checked)}
-      />
-    </Label>
-    <Label class="flex items-center gap-2">
-      <span>Show Following</span>
-      <Checkbox
-        checked={searchParams.showFollowing}
-        onCheckedChange={(checked) => (searchParams.showFollowing = checked)}
-      />
-    </Label>
+  <div class="hidden md:flex items-center gap-2 mb-2">
+    <SelectFilter
+      label="Filter Blocking"
+      options={filterBlockingOptions}
+      bind:value={searchParams.filterBlocking}
+    />
+    <SelectFilter
+      label="Filter Verified"
+      options={filterVerifiedOptions}
+      bind:value={searchParams.filterVerified}
+    />
+    <SelectFilter
+      label="Filter Following"
+      options={showFollowingOptions}
+      bind:value={searchParams.filterFollowing}
+      class="w-36"
+    />
   </div>
   <ADataTable
     class="flex-1"

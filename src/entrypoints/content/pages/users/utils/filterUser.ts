@@ -1,10 +1,11 @@
 import { User } from '$lib/db'
 import { matchByKeyword } from '$lib/util/matchByKeyword'
 
-type SearchParams = {
+export type SearchParams = {
   keyword: string
-  showBlocking: boolean
-  showFollowing: boolean
+  filterBlocking: 'all' | 'blocked' | 'unblocked'
+  filterVerified: 'all' | 'verified' | 'unverified'
+  filterFollowing: 'all' | 'following' | 'notFollowing'
 }
 
 export function filterUser(user: User, searchParams: SearchParams) {
@@ -19,10 +20,22 @@ export function filterUser(user: User, searchParams: SearchParams) {
   ) {
     return false
   }
-  if (!searchParams.showBlocking && user.blocking) {
+  if (searchParams.filterBlocking === 'blocked' && !user.blocking) {
     return false
   }
-  if (!searchParams.showFollowing && user.following) {
+  if (searchParams.filterBlocking === 'unblocked' && user.blocking) {
+    return false
+  }
+  if (searchParams.filterFollowing === 'following' && !user.following) {
+    return false
+  }
+  if (searchParams.filterFollowing === 'notFollowing' && user.following) {
+    return false
+  }
+  if (searchParams.filterVerified === 'verified' && !user.is_blue_verified) {
+    return false
+  }
+  if (searchParams.filterVerified === 'unverified' && user.is_blue_verified) {
     return false
   }
   return true

@@ -23,6 +23,24 @@
 
   let open = $state(true)
 
+  function lockScroll() {
+    document.documentElement.style.overflow = 'hidden'
+    document.documentElement.style.marginRight = '0px'
+  }
+
+  function unlockScroll() {
+    document.documentElement.style.overflow = 'auto scroll'
+    document.documentElement.style.marginRight = ''
+  }
+
+  $effect(() => {
+    if (open) {
+      lockScroll()
+    } else {
+      unlockScroll()
+    }
+  })
+
   function openModal() {
     const scrollbarWidth =
       window.innerWidth - document.documentElement.clientWidth

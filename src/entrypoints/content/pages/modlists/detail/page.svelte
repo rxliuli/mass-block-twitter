@@ -48,7 +48,7 @@
   const route = useRoute()
 
   const metadata = createQuery({
-    queryKey: ['modlistMetadata'],
+    queryKey: ['modlistMetadata', route.search?.get('id')],
     queryFn: async () => {
       const authInfo = await getAuthInfo()
       const resp = await crossFetch(
@@ -180,7 +180,7 @@
   })
 
   const query = createInfiniteQuery({
-    queryKey: ['modlistUsers'],
+    queryKey: ['modlistUsers', route.search?.get('id')],
     queryFn: async ({ pageParam }) => {
       const authInfo = await getAuthInfo()
       const url = new URL(`${SERVER_URL}/api/modlists/users`)

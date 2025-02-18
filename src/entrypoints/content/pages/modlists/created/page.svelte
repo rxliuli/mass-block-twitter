@@ -1,7 +1,7 @@
 <script lang="ts">
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import { createQuery } from '@tanstack/svelte-query'
-  import type { ModListGetCreatedResponse } from 'packages/mass-block-twitter-server/src/lib'
+  import type { ModListGetCreatedResponse } from '@mass-block-twitter/server'
   import ModLists from '../components/ModLists.svelte'
   import { SERVER_URL } from '$lib/constants'
   import { getAuthInfo } from '$lib/hooks/useAuthInfo.svelte'

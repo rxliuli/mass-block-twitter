@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as Avatar from '$lib/components/ui/avatar'
-  import type { ModListGetResponse } from 'packages/mass-block-twitter-server/src/lib'
+  import type { ModListGetResponse } from '@mass-block-twitter/server'
   import type { Snippet } from 'svelte'
 
   const props: {

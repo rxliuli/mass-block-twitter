@@ -7,7 +7,7 @@
   import { Label } from '$lib/components/ui/label'
   import { Textarea } from '$lib/components/ui/textarea'
   import { FileReader } from '$lib/util/FileReader'
-  import type { ModList } from 'packages/mass-block-twitter-server/src/lib'
+  import type { ModList } from '@mass-block-twitter/server'
   import { createMutation } from '@tanstack/svelte-query'
   import { UserRoundIcon } from 'lucide-svelte'
   import { untrack } from 'svelte'

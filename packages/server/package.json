@@ -7,6 +7,7 @@
     ".": "./src/lib.d.ts"
   },
   "scripts": {
+    "init": "pnpm prisma generate",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
     "test": "vitest run"

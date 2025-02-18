@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.2",
-    "@prisma/adapter-d1": "^6.2.1",
-    "@prisma/client": "^6.2.1",
+    "@prisma/adapter-d1": "6.2.1",
+    "@prisma/client": "6.2.1",
     "hono": "^4.6.18",
     "ulid-workers": "^2.1.0",
     "ulidx": "^2.4.1",
@@ -25,7 +25,7 @@
     "@cloudflare/workers-types": "^4.20250109.0",
     "just-sort-by": "^3.2.0",
     "miniflare": "^3.20250204.0",
-    "prisma": "^6.2.1",
+    "prisma": "6.2.1",
     "vitest": "2.1.8",
     "wrangler": "^3.105.1"
   }

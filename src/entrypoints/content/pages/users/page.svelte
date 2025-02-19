@@ -8,15 +8,11 @@
   import { ADataTable } from '$lib/components/logic/a-data-table'
   import UserActions from './components/UserActions.svelte'
   import { Input } from '$lib/components/ui/input'
-  import Label from '$lib/components/ui/label/label.svelte'
   import { filterUser, type SearchParams } from './utils/filterUser'
-  import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
   import TextWrapper from './components/TextWrapper.svelte'
   import VerifiedWrapper from './components/VerifiedWrapper.svelte'
-  import * as RadioGroup from '$lib/components/ui/radio-group'
-  import * as Select from '$lib/components/ui/select'
-  import { shadcnConfig } from '$lib/components/logic/config'
   import SelectFilter from './components/SelectFilter.svelte'
+  import { type LabelValue } from './components/SelectFilter.types'
 
   const query = userQuery()
 
@@ -34,6 +30,12 @@
     {
       title: 'Screen Name',
       dataIndex: 'screen_name',
+      render: (value) =>
+        renderComponent(TextWrapper, {
+          class: 'w-40 truncate',
+          title: value,
+          children: value,
+        }),
     },
     {
       title: 'Name',
@@ -69,9 +71,9 @@
   let selectedRowKeys = $state<string[]>([])
   let searchParams = $state<SearchParams>({
     keyword: '',
-    filterBlocking: 'all',
+    filterBlocking: 'unblocked',
     filterVerified: 'all',
-    filterFollowing: 'all',
+    filterFollowing: 'notFollowing',
   })
   $effect(() => {
     console.log('searchParams', $state.snapshot(searchParams))
@@ -83,17 +85,17 @@
     filteredData.filter((it) => selectedRowKeys.includes(it.id)),
   )
 
-  const filterVerifiedOptions = [
+  const filterVerifiedOptions: LabelValue[] = [
     { value: 'all', label: 'All' },
     { value: 'verified', label: 'Verified' },
     { value: 'unverified', label: 'Unverified' },
   ]
-  const filterBlockingOptions = [
+  const filterBlockingOptions: LabelValue[] = [
     { value: 'all', label: 'All' },
     { value: 'blocked', label: 'Blocked' },
     { value: 'unblocked', label: 'Unblocked' },
   ]
-  const showFollowingOptions = [
+  const showFollowingOptions: LabelValue[] = [
     { value: 'all', label: 'All' },
     { value: 'following', label: 'Following' },
     { value: 'notFollowing', label: 'Not Following' },

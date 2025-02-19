@@ -3,6 +3,7 @@
   import { Label } from '$lib/components/ui/label'
   import { shadcnConfig } from '$lib/components/logic/config'
   import { cn } from '$lib/utils'
+  import { type LabelValue } from './SelectFilter.types'
 
   let {
     options,
@@ -10,10 +11,7 @@
     label,
     class: className,
   }: {
-    options: {
-      value: string
-      label: string
-    }[]
+    options: LabelValue[]
     value: string
     label: string
     class?: string

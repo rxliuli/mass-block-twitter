@@ -27,3 +27,4 @@ export type {
   ModListSubscribedUserResponse,
   ModListUserCheckPostRequest,
 } from './routes/modlists'
+export type { CheckoutCompleteRequest } from './routes/billing'

@@ -54,6 +54,7 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
       localUserId: tokenInfo.id,
       twitterUserId: validated.twitterUser.id,
       visibility: validated.visibility,
+      subscriptionCount: 0,
     },
   })
   return c.json(r)
@@ -109,26 +110,19 @@ modlists.delete('/remove/:id', zValidator('param', removeSchema), async (c) => {
   if (modList.subscriptionCount > 0) {
     return c.json({ code: 'modListHasSubscriptions' }, 400)
   }
-  // TODO https://developers.cloudflare.com/d1/worker-api/d1-database/#batch
-  // await c.env.DB.batch([
-  //   c.env.DB.prepare('DELETE FROM modListUser WHERE modListId = ?').bind(
-  //     validated.id,
-  //   ),
-  //   c.env.DB.prepare(
-  //     'DELETE FROM modListSubscription WHERE modListId = ?',
-  //   ).bind(validated.id),
-  //   c.env.DB.prepare('DELETE FROM modList WHERE id = ?').bind(validated.id),
+  // await prisma.$transaction([
+  //   prisma.modListUser.deleteMany({
+  //     where: { modListId: validated.id },
+  //   }),
+  //   prisma.modList.delete({
+  //     where: { id: validated.id, localUserId: tokenInfo.id },
+  //   }),
   // ])
-  await prisma.$transaction([
-    prisma.modListUser.deleteMany({
-      where: { modListId: validated.id },
-    }),
-    prisma.modListSubscription.deleteMany({
-      where: { modListId: validated.id },
-    }),
-    prisma.modList.delete({
-      where: { id: validated.id, localUserId: tokenInfo.id },
-    }),
+  await c.env.DB.batch([
+    c.env.DB.prepare('DELETE FROM modListUser WHERE modListId = ?').bind(
+      validated.id,
+    ),
+    c.env.DB.prepare('DELETE FROM modList WHERE id = ?').bind(validated.id),
   ])
   return c.json({ code: 'success' })
 })
@@ -177,18 +171,32 @@ modlists
       if (existingSubscription) {
         return c.json({ code: 'alreadySubscribed' }, 400)
       }
-      await prisma.$transaction([
-        prisma.modListSubscription.create({
-          data: {
-            id: ulid(),
-            modListId: validated.modListId,
-            localUserId: tokenInfo.id,
-          },
-        }),
-        prisma.modList.update({
-          where: { id: validated.modListId },
-          data: { subscriptionCount: { increment: 1 } },
-        }),
+      // await prisma.$transaction([
+      //   prisma.modListSubscription.create({
+      //     data: {
+      //       id: ulid(),
+      //       modListId: validated.modListId,
+      //       localUserId: tokenInfo.id,
+      //     },
+      //   }),
+      //   prisma.modList.update({
+      //     where: { id: validated.modListId },
+      //     data: { subscriptionCount: { increment: 1 } },
+      //   }),
+      // ])
+       await c.env.DB.batch([
+        c.env.DB.prepare(
+          'INSERT INTO modListSubscription (id, modListId, localUserId, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)',
+        ).bind(
+          ulid(),
+          validated.modListId,
+          tokenInfo.id,
+          new Date().toISOString(),
+          new Date().toISOString(),
+        ),
+        c.env.DB.prepare(
+          'UPDATE modList SET subscriptionCount = subscriptionCount + 1 WHERE id = ?',
+        ).bind(validated.modListId),
       ])
       return c.json({ code: 'success' })
     },
@@ -217,14 +225,22 @@ modlists
       if (!existingSubscription) {
         return c.json({ code: 'notSubscribed' }, 400)
       }
-      await prisma.$transaction([
-        prisma.modListSubscription.delete({
-          where: { id: existingSubscription.id },
-        }),
-        prisma.modList.update({
-          where: { id: validated.modListId },
-          data: { subscriptionCount: { decrement: 1 } },
-        }),
+      // await prisma.$transaction([
+      //   prisma.modListSubscription.delete({
+      //     where: { id: existingSubscription.id },
+      //   }),
+      //   prisma.modList.update({
+      //     where: { id: validated.modListId },
+      //     data: { subscriptionCount: { decrement: 1 } },
+      //   }),
+      // ])
+      await c.env.DB.batch([
+        c.env.DB.prepare('DELETE FROM modListSubscription WHERE id = ?').bind(
+          existingSubscription.id,
+        ),
+        c.env.DB.prepare(
+          'UPDATE modList SET subscriptionCount = subscriptionCount - 1 WHERE id = ?',
+        ).bind(validated.modListId),
       ])
       return c.json({ code: 'success' })
     },
@@ -273,18 +289,32 @@ modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
     return c.json({ code: 'userAlreadyInModList' }, 400)
   }
   await upsertUser(prisma, validated.twitterUser)
-  await prisma.$transaction([
-    prisma.modListUser.create({
-      data: {
-        id: ulid(),
-        modListId: validated.modListId,
-        twitterUserId: validated.twitterUser.id,
-      },
-    }),
-    prisma.modList.update({
-      where: { id: validated.modListId },
-      data: { userCount: { increment: 1 } },
-    }),
+  // await prisma.$transaction([
+  //   prisma.modListUser.create({
+  //     data: {
+  //       id: ulid(),
+  //       modListId: validated.modListId,
+  //       twitterUserId: validated.twitterUser.id,
+  //     },
+  //   }),
+  //   prisma.modList.update({
+  //     where: { id: validated.modListId },
+  //     data: { userCount: { increment: 1 } },
+  //   }),
+  // ])
+  await c.env.DB.batch([
+    c.env.DB.prepare(
+      'INSERT INTO modListUser (id, modListId, twitterUserId, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)',
+    ).bind(
+      ulid(),
+      validated.modListId,
+      validated.twitterUser.id,
+      new Date().toISOString(),
+      new Date().toISOString(),
+    ),
+    c.env.DB.prepare(
+      'UPDATE modList SET userCount = userCount + 1 WHERE id = ?',
+    ).bind(validated.modListId),
   ])
   const user = await prisma.user.findUnique({
     where: { id: validated.twitterUser.id },
@@ -329,14 +359,22 @@ modlists.delete(
     if (modList.ModListUser.length === 0) {
       return c.json({ code: 'modListUserNotFound' }, 404)
     }
-    await prisma.$transaction([
-      prisma.modListUser.delete({
-        where: { id: modList.ModListUser[0].id },
-      }),
-      prisma.modList.update({
-        where: { id: validated.modListId },
-        data: { userCount: { decrement: 1 } },
-      }),
+    // await prisma.$transaction([
+    //   prisma.modListUser.delete({
+    //     where: { id: modList.ModListUser[0].id },
+    //   }),
+    //   prisma.modList.update({
+    //     where: { id: validated.modListId },
+    //     data: { userCount: { decrement: 1 } },
+    //   }),
+    // ])
+    await c.env.DB.batch([
+      c.env.DB.prepare('DELETE FROM modListUser WHERE id = ?').bind(
+        modList.ModListUser[0].id,
+      ),
+      c.env.DB.prepare(
+        'UPDATE modList SET userCount = userCount - 1 WHERE id = ?',
+      ).bind(validated.modListId),
     ])
 
     return c.json({ code: 'success' })

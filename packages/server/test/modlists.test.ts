@@ -17,6 +17,7 @@ import type {
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
+import { prismaClients } from '../src/lib/prisma'
 
 describe('modlists', () => {
   initCloudflareTest()
@@ -283,7 +284,7 @@ describe('modlists', () => {
       const resp2 = await subscribe()
       expect(resp2.status).toBe(400)
     })
-    const getSubscribedUsers = async (force?: boolean) => {
+    const getSubscribedUsers = async () => {
       const resp1 = await fetch(`/api/modlists/subscribed/users`, {
         headers: { Authorization: 'test-token-1' },
       })
@@ -533,4 +534,5 @@ describe('modlists', () => {
       expect((await getModListUsers(modListId)).data.length).toBe(0)
     })
   })
+  describe.todo('transactions')
 })

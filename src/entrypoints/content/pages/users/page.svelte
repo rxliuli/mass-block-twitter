@@ -13,6 +13,7 @@
   import VerifiedWrapper from './components/VerifiedWrapper.svelte'
   import SelectFilter from './components/SelectFilter.svelte'
   import { type LabelValue } from './components/SelectFilter.types'
+  import { extractCurrentUserId } from '$lib/observe'
 
   const query = userQuery()
 
@@ -75,12 +76,14 @@
     filterVerified: 'all',
     filterFollowing: 'notFollowing',
   })
-  $effect(() => {
-    console.log('searchParams', $state.snapshot(searchParams))
+  const filteredData = $derived.by(() => {
+    const currentUserId = extractCurrentUserId()
+    return (
+      $query.data?.filter(
+        (it) => it.id !== currentUserId && filterUser(it, searchParams),
+      ) ?? []
+    )
   })
-  const filteredData = $derived(
-    $query.data?.filter((it) => filterUser(it, searchParams)) ?? [],
-  )
   const selectedRows = $derived(
     filteredData.filter((it) => selectedRowKeys.includes(it.id)),
   )

@@ -1,0 +1,21 @@
+diff --git a/dist/esm/index.js b/dist/esm/index.js
+index 7226d6b1c973e50a6eae4a518e7917070f01e49c..1c3695c675d1cfb9e41efeaacac5e26d153b686a 100644
+--- a/dist/esm/index.js
++++ b/dist/esm/index.js
+@@ -1,6 +1,6 @@
+ import { Edge } from "@jimp/types";
+ import { cssColorToHex, scan, scanIterator } from "@jimp/utils";
+-import fileType from "file-type/core.js";
++import { fileTypeFromBuffer } from "file-type";
+ import { to } from "await-to-js";
+ import { existsSync, readFile, writeFile } from "@jimp/file-ops";
+ import mime from "mime/lite.js";
+@@ -171,7 +171,7 @@ export function createJimp({ plugins: pluginsArg, formats: formatsArg, } = {}) {
+          */
+         static async fromBuffer(buffer, options) {
+             const actualBuffer = buffer instanceof ArrayBuffer ? bufferFromArrayBuffer(buffer) : buffer;
+-            const mime = await fileType.fromBuffer(actualBuffer);
++            const mime = await fileTypeFromBuffer(actualBuffer);
+             if (!mime || !mime.mime) {
+                 throw new Error("Could not find MIME for Buffer");
+             }

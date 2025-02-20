@@ -35,6 +35,7 @@ export interface Tweet {
   quoted_status_id_str?: string
   created_at: string
   updated_at: string // add to idb time
+  lang: string // ISO 639-1
 }
 
 export interface MyDB extends DBSchema {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import FancyMultiSelect from '$lib/components/custom/FancyMultiSelect.svelte'
   import { Button } from '$lib/components/ui/button'
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
   import Label from '$lib/components/ui/label/label.svelte'
@@ -8,6 +9,7 @@
   import { localStorageAdapter, localStore } from '$lib/util/localStore'
   import { BadgeCheckIcon, Trash2Icon } from 'lucide-svelte'
   import { toast } from 'svelte-sonner'
+  import { languages } from './constants/lang'
 
   const settings = localStore<Settings>(
     SETTINGS_KEY,
@@ -74,6 +76,18 @@
     <Checkbox
       class="shrink-0"
       bind:checked={$settings.hideBlueVerifiedAccounts}
+    />
+  </Label>
+  <Label class="p-4">
+    <div class="mb-2">
+      <span class="block text-base font-medium">Hide Languages</span>
+      <span class="block mt-1 text-sm text-gray-500">
+        Hide tweets from specific languages.
+      </span>
+    </div>
+    <FancyMultiSelect
+      options={languages}
+      bind:value={$settings.hideLanguages}
     />
   </Label>
   <div class="flex items-center gap-4 p-4 cursor-pointer">

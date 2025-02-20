@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { extractObjects } from './util/extractObjects'
 import { TweetMediaType, User } from './db'
+import { TweetFilter } from './filter'
 
 export function setRequestHeaders(headers: Headers) {
   localStorage.setItem(
@@ -188,12 +189,14 @@ export const tweetScheam = z.object({
     conversation_id_str: z.string(),
     in_reply_to_status_id_str: z.string().optional(),
     quoted_status_id_str: z.string().optional(),
+    lang: z.string(),
   }),
 })
 
 export interface ParsedTweet {
   id: string
   text: string
+  lang: string // ISO 639-1
   media?: {
     url: string
     type: TweetMediaType
@@ -219,6 +222,7 @@ export function parseTweets(json: any): ParsedTweet[] {
       conversation_id_str: it.legacy.conversation_id_str,
       in_reply_to_status_id_str: it.legacy.in_reply_to_status_id_str,
       quoted_status_id_str: it.legacy.quoted_status_id_str,
+      lang: it.legacy.lang,
       user: parseTimelineUser(it.core.user_results.result),
     }
     if (it.legacy.entities.media) {
@@ -233,7 +237,7 @@ export function parseTweets(json: any): ParsedTweet[] {
 
 export function filterTweets(
   json: any,
-  spamCondition: (tweet: ParsedTweet) => boolean,
+  isShow: (tweet: ParsedTweet) => boolean,
 ) {
   const addEntriesSchema = z.object({
     type: z.literal('TimelineAddEntries'),
@@ -254,13 +258,7 @@ export function filterTweets(
   }
   addEntries.entries = addEntries.entries.filter((it) => {
     const tweets = parseTweets(it)
-    let result = true
-    tweets.forEach((it) => {
-      if (spamCondition(it)) {
-        result = false
-      }
-    })
-    return result
+    return tweets.every(isShow)
   })
   return json
 }

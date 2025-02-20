@@ -26,11 +26,14 @@ import {
 import {
   blueVerifiedFilter,
   defaultProfileFilter,
+  flowFilter,
+  languageFilter,
   modListFilter,
   mutedWordsFilter,
   sharedSpamFilter,
   spamContext,
   TweetFilter,
+  verifiedFilter,
 } from '$lib/filter'
 import { getSettings } from '$lib/settings'
 
@@ -86,7 +89,7 @@ function handleTweets(): Middleware {
     'https://x.com/i/api/graphql/*/(HomeTimeline|TweetDetail|UserTweets|UserTweetsAndReplies|CommunityTweetsTimeline|HomeLatestTimeline|SearchTimeline|Bookmarks|ListLatestTweetsTimeline)',
     'https://x.com/i/api/2/notifications/all.json',
   ]
-  const filters: TweetFilter[] = []
+  const filters: TweetFilter[] = [verifiedFilter()]
   const settings = getSettings()
   if (settings.hideMutedWords) {
     filters.push(mutedWordsFilter())
@@ -102,6 +105,9 @@ function handleTweets(): Middleware {
   }
   if (settings.hideBlueVerifiedAccounts) {
     filters.push(blueVerifiedFilter())
+  }
+  if (settings.hideLanguages.length > 0) {
+    filters.push(languageFilter(settings.hideLanguages))
   }
   return async (c, next) => {
     await next()
@@ -134,22 +140,17 @@ function handleTweets(): Middleware {
             }
           }
         })
-        const spamTweets: [string, ParsedTweet][] = []
-        const currentUserId = extractCurrentUserId()
+        const hideTweets: [string, ParsedTweet][] = []
+        const isShow = flowFilter(filters)
         const filteredTweets = filterTweets(json, (it) => {
-          if (it.user.following || it.user.id === currentUserId) {
-            return false
+          const result = isShow(it)
+          if (!result) {
+            hideTweets.push([it.id, it])
           }
-          return filters.some((filter) => {
-            const r = filter.isSpam(it)
-            if (r) {
-              spamTweets.push([filter.name, it])
-            }
-            return r
-          })
+          return result
         })
-        if (spamTweets.length > 0) {
-          console.log('spamTweets', spamTweets)
+        if (hideTweets.length > 0) {
+          console.log('hideTweets', hideTweets)
         }
         c.res = new Response(JSON.stringify(filteredTweets), c.res)
       } catch (err) {

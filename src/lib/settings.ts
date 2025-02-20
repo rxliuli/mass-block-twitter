@@ -6,6 +6,7 @@ export type Settings = {
   hideBlueVerifiedAccounts: boolean
   hideMutedWords: boolean
   hideModListAccounts: boolean
+  hideLanguages: string[]
 }
 
 function getLocalStorage<T>(key: string, defaultValue: T): T {
@@ -26,5 +27,6 @@ export function getSettings(): Settings {
     hideMutedWords: true,
     hideModListAccounts: true,
     hideBlueVerifiedAccounts: false,
+    hideLanguages: [],
   } as Settings)
 }

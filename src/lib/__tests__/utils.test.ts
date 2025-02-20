@@ -6,6 +6,7 @@ import timeline from './assets/timeline.json'
 import { z } from 'zod'
 import {
   filterTweets,
+  ParsedTweet,
   parseSearchPeople,
   parseTweets,
   parseUserRecords,
@@ -25,6 +26,8 @@ import UserTweets from './assets/UserTweets.json'
 import SearchTimeline from './assets/SearchTimeline.json'
 import SearchTimelinePeople from './assets/SearchTimelinePeople.json'
 import SearchTimelinePeople2 from './assets/SearchTimelinePeople2.json'
+import HomeLatestTimeline from './assets/HomeLatestTimeline.json'
+import { flowFilter } from '$lib/filter'
 
 describe('extractObjects', () => {
   it('extractObjects 1', () => {
@@ -319,6 +322,29 @@ describe('filterTweets', () => {
     )
     const tweets = parseTweets(json)
     expect(tweets.some((it) => spamTweetIds.includes(it.id))).false
+  })
+  it('filterTweets for language', () => {
+    const json = filterTweets(HomeLatestTimeline, (it) => it.lang === 'zh')
+    const tweets = parseTweets(json)
+    expect(JSON.stringify(json)).not.includes('挂号')
+    expect(tweets.every((it) => it.lang !== 'zh')).true
+  })
+  it('flowFiltter', () => {
+    const isHide = flowFilter([
+      {
+        name: 'test1',
+        condition: (tweet) => tweet.id === 'test-1',
+      },
+      {
+        name: 'test2',
+        condition: (tweet) => tweet.user.id === 'user-1',
+      },
+    ])
+    expect(isHide({ id: 'test-1' } as ParsedTweet)).false
+    expect(isHide({ id: 'test-2', user: {} } as ParsedTweet)).true
+    expect(isHide({ id: 'test-3', user: { id: 'user-1' } } as ParsedTweet))
+      .false
+    expect(isHide({ id: 'test-4', user: { id: 'user-2' } } as ParsedTweet)).true
   })
 })
 

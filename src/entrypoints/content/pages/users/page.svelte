@@ -72,9 +72,9 @@
   let selectedRowKeys = $state<string[]>([])
   let searchParams = $state<SearchParams>({
     keyword: '',
-    filterBlocking: 'unblocked',
+    filterBlocked: 'unblocked',
     filterVerified: 'all',
-    filterFollowing: 'notFollowing',
+    filterFollowed: 'unfollowed',
   })
   const filteredData = $derived.by(() => {
     const currentUserId = extractCurrentUserId()
@@ -87,21 +87,20 @@
   const selectedRows = $derived(
     filteredData.filter((it) => selectedRowKeys.includes(it.id)),
   )
-
-  const filterVerifiedOptions: LabelValue[] = [
+  const filterVerifiedOptions: LabelValue<SearchParams['filterVerified']>[] = [
     { value: 'all', label: 'All' },
     { value: 'verified', label: 'Verified' },
     { value: 'unverified', label: 'Unverified' },
   ]
-  const filterBlockingOptions: LabelValue[] = [
+  const filterBlockedOptions: LabelValue<SearchParams['filterBlocked']>[] = [
     { value: 'all', label: 'All' },
     { value: 'blocked', label: 'Blocked' },
     { value: 'unblocked', label: 'Unblocked' },
   ]
-  const showFollowingOptions: LabelValue[] = [
+  const showFollowedOptions: LabelValue<SearchParams['filterFollowed']>[] = [
     { value: 'all', label: 'All' },
-    { value: 'following', label: 'Following' },
-    { value: 'notFollowing', label: 'Not Following' },
+    { value: 'followed', label: 'Followed' },
+    { value: 'unfollowed', label: 'Unfollowed' },
   ]
 </script>
 
@@ -119,18 +118,18 @@
   <div class="hidden md:flex items-center gap-2 mb-2">
     <SelectFilter
       label="Filter Blocking"
-      options={filterBlockingOptions}
-      bind:value={searchParams.filterBlocking}
+      options={filterBlockedOptions}
+      bind:value={searchParams.filterBlocked}
     />
     <SelectFilter
       label="Filter Verified"
       options={filterVerifiedOptions}
       bind:value={searchParams.filterVerified}
-    />
+    />filterBlockedfilterBlocked
     <SelectFilter
-      label="Filter Following"
-      options={showFollowingOptions}
-      bind:value={searchParams.filterFollowing}
+      label="Filter Followed"
+      options={showFollowedOptions}
+      bind:value={searchParams.filterFollowed}
       class="w-36"
     />
   </div>

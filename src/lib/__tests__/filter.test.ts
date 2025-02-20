@@ -24,13 +24,15 @@ describe('defaultProfileFilter', () => {
         default_profile: true,
         default_profile_image: true,
       },
+      lang: 'en',
+      conversation_id_str: '1885207553963155664',
     }
   })
   it('should return true', () => {
-    expect(defaultProfileFilter().isSpam(tweet)).true
+    expect(defaultProfileFilter().condition(tweet)).true
   })
   it('should return false', () => {
     tweet.user.followers_count = 1
-    expect(defaultProfileFilter().isSpam(tweet)).false
+    expect(defaultProfileFilter().condition(tweet)).false
   })
 })

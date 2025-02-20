@@ -3,9 +3,9 @@ import { matchByKeyword } from '$lib/util/matchByKeyword'
 
 export type SearchParams = {
   keyword: string
-  filterBlocking: 'all' | 'blocked' | 'unblocked'
+  filterBlocked: 'all' | 'blocked' | 'unblocked'
   filterVerified: 'all' | 'verified' | 'unverified'
-  filterFollowing: 'all' | 'following' | 'notFollowing'
+  filterFollowed: 'all' | 'followed' | 'unfollowed'
 }
 
 export function filterUser(user: User, searchParams: SearchParams) {
@@ -20,16 +20,16 @@ export function filterUser(user: User, searchParams: SearchParams) {
   ) {
     return false
   }
-  if (searchParams.filterBlocking === 'blocked' && !user.blocking) {
+  if (searchParams.filterBlocked === 'blocked' && !user.blocking) {
     return false
   }
-  if (searchParams.filterBlocking === 'unblocked' && user.blocking) {
+  if (searchParams.filterBlocked === 'unblocked' && user.blocking) {
     return false
   }
-  if (searchParams.filterFollowing === 'following' && !user.following) {
+  if (searchParams.filterFollowed === 'followed' && !user.following) {
     return false
   }
-  if (searchParams.filterFollowing === 'notFollowing' && user.following) {
+  if (searchParams.filterFollowed === 'unfollowed' && user.following) {
     return false
   }
   if (searchParams.filterVerified === 'verified' && !user.is_blue_verified) {

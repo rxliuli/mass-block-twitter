@@ -12,6 +12,7 @@ export interface User {
   description?: string
   profile_image_url?: string
   followers_count?: number
+  friends_count?: number
   default_profile?: boolean
   default_profile_image?: boolean
   created_at?: string

@@ -93,6 +93,7 @@ describe('parseUserRecords', () => {
     const users = parseUserRecords(notificationsSpam)
     expect(users.map((it) => it.name).some((it) => it.includes('比特币'))).true
     expect(users.map((it) => it.name).some((it) => it.includes('币圈'))).true
+    expect(users).length(23)
     expect(
       users.map((it) => omit(it, 'created_at', 'updated_at')),
     ).toMatchSnapshot()

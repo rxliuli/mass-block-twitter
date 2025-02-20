@@ -13,7 +13,6 @@
   import { untrack } from 'svelte'
   import * as RadioGroup from '$lib/components/ui/radio-group'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
-  import { MyJimp } from '$lib/jimp'
 
   type FormData = Pick<
     ModList,
@@ -75,12 +74,7 @@
     const file = (event.target as HTMLInputElement).files?.[0]
     if (file) {
       const reader = new FileReader(file)
-      const image = await MyJimp.fromBuffer(await reader.readAsArrayBuffer())
-      formState.avatar = await image
-        .resize({ w: 128, h: 128 })
-        .getBase64('image/jpeg', {
-          quality: 70,
-        })
+      formState.avatar = await reader.readAsDataURL()
     }
   }
 

@@ -1,34 +1,52 @@
 import { MUTED_WORDS_KEY, ParsedTweet } from './api'
+import { User } from './db'
 import { extractCurrentUserId } from './observe'
 import { getSettings } from './settings'
 import { matchByKeyword } from './util/matchByKeyword'
 
-type FilterResult =
-  | 'show'
-  | 'hide'
-  | 'next'
-  | true // alias hide
-  | false // alias next
-
+type FilterResult = 'show' | 'hide' | 'next'
+type FilterData =
+  | { type: 'tweet'; tweet: ParsedTweet }
+  | { type: 'user'; user: User }
 export interface TweetFilter {
   name: string
-  condition: (tweet: ParsedTweet) => FilterResult
+  tweetCondition?: (tweet: ParsedTweet) => FilterResult
+  userCondition?: (user: User) => FilterResult
 }
 
 export function flowFilter(
   filters: TweetFilter[],
-): (tweet: ParsedTweet) => boolean {
-  return (tweet: ParsedTweet) => {
+): (options: FilterData) => { value: boolean; reason?: string } {
+  return (data) => {
     for (const filter of filters) {
-      const result = filter.condition(tweet)
-      if (result === 'show') {
-        return true
+      let result: FilterResult = 'next'
+      if (data.type === 'tweet') {
+        if (filter.tweetCondition) {
+          result = filter.tweetCondition(data.tweet)
+        } else if (filter.userCondition) {
+          result = filter.userCondition(data.tweet.user)
+        }
+      } else {
+        if (filter.userCondition) {
+          result = filter.userCondition(data.user)
+        }
       }
-      if (result === 'hide' || result === true) {
-        return false
+      if (result === 'show') {
+        return {
+          value: true,
+          reason: filter.name,
+        }
+      }
+      if (result === 'hide') {
+        return {
+          value: false,
+          reason: filter.name,
+        }
       }
     }
-    return true
+    return {
+      value: true,
+    }
   }
 }
 
@@ -36,8 +54,8 @@ export function verifiedFilter(): TweetFilter {
   const currentUserId = extractCurrentUserId()
   return {
     name: 'verifiedFilter',
-    condition: (tweet: ParsedTweet) => {
-      if (tweet.user.following || tweet.user.id === currentUserId) {
+    userCondition: (user: User) => {
+      if (user.following || user.id === currentUserId) {
         return 'show'
       }
       return 'next'
@@ -46,44 +64,52 @@ export function verifiedFilter(): TweetFilter {
 }
 
 export function mutedWordsFilter(): TweetFilter {
+  function filterByTexts(texts: (string | undefined)[]): FilterResult {
+    const keywordStr = localStorage.getItem(MUTED_WORDS_KEY)
+    if (!keywordStr) {
+      return 'next'
+    }
+    const keywords = JSON.parse(keywordStr) as string[]
+    if (keywords.length === 0) {
+      return 'next'
+    }
+    if (
+      keywords.some((keyword) =>
+        texts.some((text) => matchByKeyword(keyword, [text])),
+      )
+    ) {
+      return 'hide'
+    }
+    return 'next'
+  }
   return {
     name: 'mutedWordsFilter',
-    condition: (tweet: ParsedTweet) => {
-      const keywordStr = localStorage.getItem(MUTED_WORDS_KEY)
-      if (!keywordStr) {
-        return false
-      }
-      const keywords = JSON.parse(keywordStr) as string[]
-      if (keywords.length === 0) {
-        return false
-      }
-      return keywords.some((keyword) =>
-        matchByKeyword(keyword, [
-          tweet.user.screen_name,
-          tweet.user.name,
-          tweet.user.description,
-          tweet.text,
-        ]),
-      )
-    },
+    tweetCondition: (tweet: ParsedTweet) =>
+      filterByTexts([
+        tweet.user.screen_name,
+        tweet.user.name,
+        tweet.user.description,
+        tweet.text,
+      ]),
+    userCondition: (user: User) =>
+      filterByTexts([user.screen_name, user.name, user.description]),
   }
 }
 
 export function defaultProfileFilter(): TweetFilter {
   return {
     name: 'defaultProfileFilter',
-    condition: (tweet: ParsedTweet) => {
+    userCondition: (user: User) => {
       if (
-        ((typeof tweet.user.default_profile === 'boolean' &&
-          tweet.user.default_profile) ||
-          !tweet.user.description ||
-          (typeof tweet.user.default_profile_image === 'boolean' &&
-            tweet.user.default_profile_image)) &&
-        tweet.user.followers_count === 0
+        ((typeof user.default_profile === 'boolean' && user.default_profile) ||
+          !user.description ||
+          (typeof user.default_profile_image === 'boolean' &&
+            user.default_profile_image)) &&
+        user.followers_count === 0
       ) {
-        return true
+        return 'hide'
       }
-      return false
+      return 'next'
     },
   }
 }
@@ -91,8 +117,11 @@ export function defaultProfileFilter(): TweetFilter {
 export function blueVerifiedFilter(): TweetFilter {
   return {
     name: 'blueVerifiedFilter',
-    condition: (tweet: ParsedTweet) => {
-      return !!tweet.user.is_blue_verified
+    userCondition: (user: User) => {
+      if (user.is_blue_verified) {
+        return 'hide'
+      }
+      return 'next'
     },
   }
 }
@@ -108,11 +137,11 @@ export let spamContext: {
 export function sharedSpamFilter(): TweetFilter {
   return {
     name: 'sharedSpamFilter',
-    condition: (tweet: ParsedTweet) => {
-      if (spamContext.spamUsers[tweet.user.id] === 'spam') {
-        return true
+    userCondition: (user: User) => {
+      if (spamContext.spamUsers[user.id] === 'spam') {
+        return 'hide'
       }
-      return false
+      return 'next'
     },
   }
 }
@@ -120,11 +149,11 @@ export function sharedSpamFilter(): TweetFilter {
 export function modListFilter(): TweetFilter {
   return {
     name: 'modListFilter',
-    condition: (tweet: ParsedTweet) => {
-      if (spamContext.modlistUsers[tweet.user.id]) {
-        return true
+    userCondition: (user: User) => {
+      if (spamContext.modlistUsers[user.id]) {
+        return 'hide'
       }
-      return false
+      return 'next'
     },
   }
 }
@@ -132,12 +161,11 @@ export function modListFilter(): TweetFilter {
 export function languageFilter(languages: string[]): TweetFilter {
   return {
     name: 'languageFilter',
-    condition: (tweet: ParsedTweet) => {
-      // console.log('languageFilter', tweet.lang, tweet)
-      if (languages.length === 0) {
-        return false
+    tweetCondition: (tweet: ParsedTweet) => {
+      if (languages.includes(tweet.lang)) {
+        return 'hide'
       }
-      return languages.includes(tweet.lang)
+      return 'next'
     },
   }
 }

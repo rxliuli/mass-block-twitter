@@ -235,6 +235,90 @@ export function parseTweets(json: any): ParsedTweet[] {
   })
 }
 
+const templateSchema = z.object({
+  aggregateUserActionsV1: z.object({
+    fromUsers: z.array(
+      z.object({
+        user: z.object({
+          id: z.string(),
+        }),
+      }),
+    ),
+  }),
+})
+const notificationLikeSchema = z.object({
+  icon: z.object({
+    id: z.literal('heart_icon'),
+  }),
+  template: templateSchema,
+})
+const notificationFollwingSchema = z.object({
+  icon: z.object({
+    id: z.literal('person_icon'),
+  }),
+  template: templateSchema,
+})
+const notificationCommunitiesSchema = z.object({
+  icon: z.object({
+    id: z.literal('communities_icon'),
+  }),
+  template: templateSchema,
+})
+const notificationSchema = z.object({
+  globalObjects: z.object({
+    notifications: z
+      .record(
+        z.union([
+          notificationFollwingSchema,
+          notificationLikeSchema,
+          notificationCommunitiesSchema,
+        ]),
+      )
+      .optional(),
+    tweets: z.record(z.object({})).optional(),
+    users: z.record(z.object({})).optional(),
+  }),
+  // timeline: z.object({
+  //   instructions: z.array(z.object({})),
+  // }),
+})
+
+export function filterNotifications(
+  data: z.infer<typeof notificationSchema>,
+  isShow: (tweet: User) => boolean,
+) {
+  const _json = JSON.parse(JSON.stringify(data)) as z.infer<
+    typeof notificationSchema
+  >
+  const validated = notificationSchema.safeParse(_json)
+  if (validated.error) {
+    console.error('filterNotifications', validated.error)
+    return data
+  }
+  const users = parseUserRecords(_json.globalObjects.users)
+  for (const key in _json.globalObjects.notifications) {
+    const it = _json.globalObjects.notifications[key]
+    if (it.icon.id === 'heart_icon') {
+      const fromUsers = it.template.aggregateUserActionsV1.fromUsers.filter(
+        (fromUser) => {
+          const user = users.find((it) => it.id === fromUser.user.id)
+          // if user is not found, it means the user is not a twitter user, so we should show the notification
+          if (!user) {
+            return true
+          }
+          return isShow(user)
+        },
+      )
+      if (fromUsers.length > 0) {
+        it.template.aggregateUserActionsV1.fromUsers = fromUsers
+      } else {
+        delete _json.globalObjects.notifications[key]
+      }
+    }
+  }
+  return _json
+}
+
 export function filterTweets(
   json: any,
   isShow: (tweet: ParsedTweet) => boolean,

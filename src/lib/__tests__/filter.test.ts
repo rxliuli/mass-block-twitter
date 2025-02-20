@@ -29,10 +29,10 @@ describe('defaultProfileFilter', () => {
     }
   })
   it('should return true', () => {
-    expect(defaultProfileFilter().condition(tweet)).true
+    expect(defaultProfileFilter().tweetCondition(tweet)).true
   })
   it('should return false', () => {
     tweet.user.followers_count = 1
-    expect(defaultProfileFilter().condition(tweet)).false
+    expect(defaultProfileFilter().tweetCondition(tweet)).false
   })
 })

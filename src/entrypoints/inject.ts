@@ -1,11 +1,12 @@
 import {
+  filterNotifications,
   filterTweets,
   ParsedTweet,
   parseTweets,
   parseUserRecords,
   setRequestHeaders,
 } from '$lib/api'
-import { dbApi, Tweet } from '$lib/db'
+import { dbApi, Tweet, User } from '$lib/db'
 import { omit, throttle } from 'lodash-es'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { wait } from '@liuli-util/async'
@@ -35,7 +36,7 @@ import {
   TweetFilter,
   verifiedFilter,
 } from '$lib/filter'
-import { getSettings } from '$lib/settings'
+import { getSettings, Settings } from '$lib/settings'
 
 function blockClientEvent(): Middleware {
   const pattern = new URLPattern(
@@ -84,13 +85,8 @@ function loggerViewUsers(): Middleware {
 
 const reportSpamTweetIds = new Set<string>()
 
-function handleTweets(): Middleware {
-  const routes = [
-    'https://x.com/i/api/graphql/*/(HomeTimeline|TweetDetail|UserTweets|UserTweetsAndReplies|CommunityTweetsTimeline|HomeLatestTimeline|SearchTimeline|Bookmarks|ListLatestTweetsTimeline)',
-    'https://x.com/i/api/2/notifications/all.json',
-  ]
+function getFilters(settings: Settings) {
   const filters: TweetFilter[] = [verifiedFilter()]
-  const settings = getSettings()
   if (settings.hideMutedWords) {
     filters.push(mutedWordsFilter())
   }
@@ -109,53 +105,96 @@ function handleTweets(): Middleware {
   if (settings.hideLanguages.length > 0) {
     filters.push(languageFilter(settings.hideLanguages))
   }
+  return filters
+}
+
+async function firstTimeFilterTweets(json: any) {
+  const tweets = parseTweets(json)
+  if (tweets.length === 0) {
+    return
+  }
+  await dbApi.tweets.record(
+    tweets.map((it) => ({
+      ...omit(it, 'user'),
+      updated_at: new Date().toISOString(),
+      user_id: it.user.id,
+    })),
+  )
+  // console.log('tweets', tweets)
+  await refershSpamContext()
+  tweets.forEach(async (it) => {
+    // Don't block following users
+    if (it.user.following) {
+      return
+    }
+    if (spamContext.spamUsers[it.user.id] === 'report') {
+      reportSpamTweetIds.add(it.id)
+    }
+  })
+}
+
+function handleNotifications(): Middleware {
   return async (c, next) => {
     await next()
-    if (routes.some((it) => new URLPattern(it).test(c.req.url))) {
-      try {
-        const json = await c.res.clone().json()
-        const tweets = parseTweets(json)
-        if (tweets.length === 0) {
-          return
-        }
-        await dbApi.tweets.record(
-          tweets.map((it) => ({
-            ...omit(it, 'user'),
-            updated_at: new Date().toISOString(),
-            user_id: it.user.id,
-          })),
-        )
-        console.log('tweets', tweets)
-        await refershSpamContext()
-        tweets.forEach(async (it) => {
-          // Don't block following users
-          if (it.user.following) {
-            return
-          }
-          if (spamContext.spamUsers[it.user.id]) {
-            switch (spamContext.spamUsers[it.user.id]) {
-              case 'report':
-                reportSpamTweetIds.add(it.id)
-                break
-            }
-          }
+    if (!c.req.url.startsWith('https://x.com/i/api/2/notifications/all.json')) {
+      return
+    }
+    try {
+      const json = await c.res.clone().json()
+      await firstTimeFilterTweets(json)
+      const isShow = flowFilter(getFilters(getSettings()))
+      const hideUsers: [string, User][] = []
+      const updatedJson = filterNotifications(json, (it) => {
+        const result = isShow({
+          type: 'user',
+          user: it,
         })
-        const hideTweets: [string, ParsedTweet][] = []
-        const isShow = flowFilter(filters)
-        const filteredTweets = filterTweets(json, (it) => {
-          const result = isShow(it)
-          if (!result) {
-            hideTweets.push([it.id, it])
-          }
-          return result
-        })
-        if (hideTweets.length > 0) {
-          console.log('hideTweets', hideTweets)
+        if (!result.value) {
+          hideUsers.push([result.reason!, it])
         }
-        c.res = new Response(JSON.stringify(filteredTweets), c.res)
-      } catch (err) {
-        console.error('tweets parse error', err)
+        return result.value
+      })
+      if (hideUsers.length > 0) {
+        console.log('hideUsers', hideUsers)
       }
+      c.res = new Response(JSON.stringify(updatedJson), c.res)
+    } catch (err) {
+      console.error('notifications parse error', err)
+    }
+  }
+}
+
+function handleTweets(): Middleware {
+  return async (c, next) => {
+    await next()
+    if (
+      !new URLPattern(
+        'https://x.com/i/api/graphql/*/(HomeTimeline|TweetDetail|UserTweets|UserTweetsAndReplies|CommunityTweetsTimeline|HomeLatestTimeline|SearchTimeline|Bookmarks|ListLatestTweetsTimeline)',
+      ).test(c.req.url)
+    ) {
+      return
+    }
+    try {
+      const json = await c.res.clone().json()
+      await firstTimeFilterTweets(json)
+      const isShow = flowFilter(getFilters(getSettings()))
+      const hideTweets: [string, ParsedTweet][] = []
+      const filteredTweets = filterTweets(json, (it) => {
+        const result = isShow({
+          type: 'tweet',
+          tweet: it,
+        })
+        if (!result.value) {
+          hideTweets.push([result.reason!, it])
+        }
+        return result.value
+      })
+      if (hideTweets.length > 0) {
+        console.log('hideTweets', hideTweets)
+      }
+      c.res = new Response(JSON.stringify(filteredTweets), c.res)
+    } catch (err) {
+      console.error('tweets parse error', err)
     }
   }
 }
@@ -218,6 +257,7 @@ export default defineUnlistedScript(async () => {
     .use(loggerRequestHeaders())
     .use(loggerViewUsers())
     .use(handleTweets())
+    .use(handleNotifications())
     .intercept()
   await wait(() => !!document.body)
   observe()

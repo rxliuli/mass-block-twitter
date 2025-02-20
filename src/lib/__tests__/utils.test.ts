@@ -5,6 +5,7 @@ import all2 from './assets/all2.json'
 import timeline from './assets/timeline.json'
 import { z } from 'zod'
 import {
+  filterNotifications,
   filterTweets,
   ParsedTweet,
   parseSearchPeople,
@@ -27,6 +28,7 @@ import SearchTimeline from './assets/SearchTimeline.json'
 import SearchTimelinePeople from './assets/SearchTimelinePeople.json'
 import SearchTimelinePeople2 from './assets/SearchTimelinePeople2.json'
 import HomeLatestTimeline from './assets/HomeLatestTimeline.json'
+import notifications1 from './assets/notifications1.json'
 import { flowFilter } from '$lib/filter'
 
 describe('extractObjects', () => {
@@ -324,27 +326,141 @@ describe('filterTweets', () => {
     expect(tweets.some((it) => spamTweetIds.includes(it.id))).false
   })
   it('filterTweets for language', () => {
-    const json = filterTweets(HomeLatestTimeline, (it) => it.lang === 'zh')
+    const json = filterTweets(HomeLatestTimeline, (it) => it.lang !== 'zh')
     const tweets = parseTweets(json)
     expect(JSON.stringify(json)).not.includes('挂号')
     expect(tweets.every((it) => it.lang !== 'zh')).true
   })
-  it('flowFiltter', () => {
+  describe('filterNotifications', () => {
+    const users = {
+      'user-1': {
+        id_str: 'user-1',
+        name: 'user-1',
+        screen_name: 'user-1',
+        ext_is_blue_verified: true,
+      },
+      'user-2': {
+        id_str: 'user-2',
+        name: 'user-2',
+        screen_name: 'user-2',
+        ext_is_blue_verified: true,
+      },
+    }
+    it('filterNotifications for like', () => {
+      const r = filterNotifications(
+        {
+          globalObjects: {
+            notifications: {
+              '1': {
+                icon: {
+                  id: 'heart_icon',
+                },
+                template: {
+                  aggregateUserActionsV1: {
+                    fromUsers: [
+                      { user: { id: 'user-1' } },
+                      { user: { id: 'user-2' } },
+                    ],
+                  },
+                },
+              },
+            },
+            tweets: {},
+            users,
+          },
+        },
+        (it) => it.id !== 'user-1',
+      )
+      expect(
+        r.globalObjects.notifications?.['1'].template.aggregateUserActionsV1
+          .fromUsers,
+      ).toEqual([{ user: { id: 'user-2' } }])
+    })
+    it('filterNotifications for hide all like users', () => {
+      const r = filterNotifications(
+        {
+          globalObjects: {
+            notifications: {
+              '1': {
+                icon: {
+                  id: 'heart_icon',
+                },
+                template: {
+                  aggregateUserActionsV1: {
+                    fromUsers: [{ user: { id: 'user-1' } }],
+                  },
+                },
+              },
+            },
+            tweets: {},
+            users,
+          },
+        },
+        (it) => it.id !== 'user-1',
+      )
+      expect(r.globalObjects.notifications).toEqual({})
+    })
+    it('filterNotifications for notifications1', () => {
+      const blockId = '1868318759716552704'
+      expect(
+        JSON.stringify(notifications1.globalObjects.notifications),
+      ).includes(blockId)
+      const r = filterNotifications(
+        notifications1 as any,
+        (it) => it.id !== blockId,
+      )
+      expect(JSON.stringify(r.globalObjects.notifications)).not.includes(
+        blockId,
+      )
+    })
+  })
+  it('flowFilter', () => {
     const isHide = flowFilter([
       {
-        name: 'test1',
-        condition: (tweet) => tweet.id === 'test-1',
+        name: 'filter1',
+        userCondition: (user) => {
+          return user.id === 'user-3' ? 'show' : 'next'
+        },
       },
       {
-        name: 'test2',
-        condition: (tweet) => tweet.user.id === 'user-1',
+        name: 'filter2',
+        tweetCondition: (tweet) => (tweet.id === 'test-1' ? 'hide' : 'next'),
+      },
+      {
+        name: 'filter3',
+        userCondition: (user) => (user.id === 'user-1' ? 'hide' : 'next'),
       },
     ])
-    expect(isHide({ id: 'test-1' } as ParsedTweet)).false
-    expect(isHide({ id: 'test-2', user: {} } as ParsedTweet)).true
-    expect(isHide({ id: 'test-3', user: { id: 'user-1' } } as ParsedTweet))
-      .false
-    expect(isHide({ id: 'test-4', user: { id: 'user-2' } } as ParsedTweet)).true
+    expect(
+      isHide({
+        type: 'tweet',
+        tweet: { id: 'test-1', user: {} } as ParsedTweet,
+      }).value,
+    ).false
+    expect(
+      isHide({
+        type: 'tweet',
+        tweet: { id: 'test-1', user: { id: 'user-3' } } as ParsedTweet,
+      }).value,
+    ).true
+    expect(
+      isHide({
+        type: 'tweet',
+        tweet: { id: 'test-2', user: {} } as ParsedTweet,
+      }).value,
+    ).true
+    expect(
+      isHide({
+        type: 'tweet',
+        tweet: { id: 'test-3', user: { id: 'user-1' } } as ParsedTweet,
+      }).value,
+    ).false
+    expect(
+      isHide({
+        type: 'tweet',
+        tweet: { id: 'test-4', user: { id: 'user-2' } } as ParsedTweet,
+      }).value,
+    ).true
   })
 })
 

@@ -5,7 +5,7 @@ import {
   parseUserRecords,
   setRequestHeaders,
 } from '$lib/api'
-import { dbApi } from '$lib/db'
+import { dbApi, Tweet } from '$lib/db'
 import { omit, throttle } from 'lodash-es'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { wait } from '@liuli-util/async'

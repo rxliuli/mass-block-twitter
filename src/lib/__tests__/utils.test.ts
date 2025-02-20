@@ -18,6 +18,8 @@ import HomeTimeline from './assets/HomeTimeline.json'
 import TweetDetail from './assets/TweetDetail.json'
 import TweetDetail2 from './assets/TweetDetail2.json'
 import TweetDetail3 from './assets/TweetDetail3.json'
+import TweetDetail4 from './assets/TweetDetail4.json'
+import TweetDetail5 from './assets/TweetDetail5.json'
 import UserTweetsAndReplies from './assets/UserTweetsAndReplies.json'
 import UserTweets from './assets/UserTweets.json'
 import SearchTimeline from './assets/SearchTimeline.json'
@@ -201,6 +203,50 @@ describe('parseTweets', () => {
         user: omit(it.user, 'updated_at'),
       })),
     ).toMatchSnapshot()
+  })
+  it('parseTweets for detail 4', () => {
+    const tweets = parseTweets(TweetDetail4)
+    expect(tweets).length(4)
+    expect(
+      tweets.map((it) =>
+        pick(it, 'id', 'conversation_id_str', 'in_reply_to_status_id_str'),
+      ),
+    ).toEqual([
+      {
+        id: '1892406149732806885',
+        conversation_id_str: '1892406149732806885',
+        in_reply_to_status_id_str: undefined,
+      },
+      {
+        id: '1892411880901091533',
+        conversation_id_str: '1892406149732806885',
+        in_reply_to_status_id_str: '1892406149732806885',
+      },
+      {
+        id: '1892419018364957088',
+        conversation_id_str: '1892406149732806885',
+        in_reply_to_status_id_str: '1892411880901091533',
+      },
+      {
+        id: '1892411189377859986',
+        conversation_id_str: '1892406149732806885',
+        in_reply_to_status_id_str: '1892406149732806885',
+      },
+    ])
+  })
+  it('parseTweets for detail 5', () => {
+    const tweets = parseTweets(TweetDetail5)
+    expect(tweets).length(5)
+    expect(tweets.map((it) => pick(it, 'id', 'quoted_status_id_str'))).toEqual([
+      {
+        id: '1892375497062945112',
+        quoted_status_id_str: '1884801439886713064',
+      },
+      { id: '1884801439886713064' },
+      { id: '1892378282181447757' },
+      { id: '1892380896201691602' },
+      { id: '1892377153737474157' },
+    ])
   })
   it('parseTweets for user tweets and replies', () => {
     const tweets = parseTweets(UserTweetsAndReplies)

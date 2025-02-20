@@ -30,6 +30,9 @@ export interface Tweet {
     type: TweetMediaType
   }[]
   user_id: string
+  conversation_id_str: string
+  in_reply_to_status_id_str?: string
+  quoted_status_id_str?: string
   created_at: string
   updated_at: string // add to idb time
 }

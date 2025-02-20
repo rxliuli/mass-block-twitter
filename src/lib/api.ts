@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { extractObjects } from './util/extractObjects'
 import { TweetMediaType, User } from './db'
-import { get, last } from 'lodash-es'
 
 export function setRequestHeaders(headers: Headers) {
   localStorage.setItem(
@@ -186,6 +185,9 @@ export const tweetScheam = z.object({
         )
         .optional(),
     }),
+    conversation_id_str: z.string(),
+    in_reply_to_status_id_str: z.string().optional(),
+    quoted_status_id_str: z.string().optional(),
   }),
 })
 
@@ -197,6 +199,9 @@ export interface ParsedTweet {
     type: TweetMediaType
   }[]
   created_at: string
+  conversation_id_str: string
+  in_reply_to_status_id_str?: string
+  quoted_status_id_str?: string
   user: User
 }
 
@@ -211,6 +216,9 @@ export function parseTweets(json: any): ParsedTweet[] {
       id: it.rest_id,
       text: it.legacy.full_text,
       created_at: new Date(it.legacy.created_at).toISOString(),
+      conversation_id_str: it.legacy.conversation_id_str,
+      in_reply_to_status_id_str: it.legacy.in_reply_to_status_id_str,
+      quoted_status_id_str: it.legacy.quoted_status_id_str,
       user: parseTimelineUser(it.core.user_results.result),
     }
     if (it.legacy.entities.media) {

@@ -1,0 +1,1435 @@
+{
+    "data": {
+        "threaded_conversation_with_injections_v2": {
+            "instructions": [
+                {
+                    "type": "TimelineAddEntries",
+                    "entries": [
+                        {
+                            "entryId": "tweet-1892375497062945112",
+                            "sortIndex": "7330996539791830695",
+                            "content": {
+                                "entryType": "TimelineTimelineItem",
+                                "__typename": "TimelineTimelineItem",
+                                "itemContent": {
+                                    "itemType": "TimelineTweet",
+                                    "__typename": "TimelineTweet",
+                                    "tweet_results": {
+                                        "result": {
+                                            "__typename": "Tweet",
+                                            "rest_id": "1892375497062945112",
+                                            "has_birdwatch_notes": false,
+                                            "core": {
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjoyNTgwNDIxODg1",
+                                                        "rest_id": "2580421885",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_graduated_access": true,
+                                                        "parody_commentary_fan_label": "None",
+                                                        "is_blue_verified": false,
+                                                        "profile_image_shape": "Circle",
+                                                        "legacy": {
+                                                            "following": false,
+                                                            "can_dm": true,
+                                                            "can_media_tag": true,
+                                                            "created_at": "Sat Jun 21 12:49:21 +0000 2014",
+                                                            "default_profile": true,
+                                                            "default_profile_image": false,
+                                                            "description": "@kubernetesio @IngressNGINX maintainer, #Microsoft MVP, CNCF Ambassador, open source, \uD83E\uDD51,  PyCon China & KCD Beijing organizer 公众号：MoeLove",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": []
+                                                                },
+                                                                "url": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "bio.link/zhangjintao",
+                                                                            "expanded_url": "https://bio.link/zhangjintao",
+                                                                            "url": "https://t.co/ap4Dxc424f",
+                                                                            "indices": [
+                                                                                0,
+                                                                                23
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 11678,
+                                                            "followers_count": 8942,
+                                                            "friends_count": 1162,
+                                                            "has_custom_timelines": true,
+                                                            "is_translator": false,
+                                                            "listed_count": 91,
+                                                            "location": "Get productive \uD83D\uDC49",
+                                                            "media_count": 885,
+                                                            "name": "Jintao Zhang 张晋涛",
+                                                            "normal_followers_count": 8942,
+                                                            "pinned_tweet_ids_str": [
+                                                                "1870395899865968688"
+                                                            ],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/2580421885/1675120666",
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1514978580102807557/BNMcK0Ud_normal.jpg",
+                                                            "profile_interstitial_type": "",
+                                                            "screen_name": "zhangjintao9020",
+                                                            "statuses_count": 7950,
+                                                            "translator_type": "none",
+                                                            "url": "https://t.co/ap4Dxc424f",
+                                                            "verified": false,
+                                                            "want_retweets": false,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "professional": {
+                                                            "rest_id": "1650628627736801281",
+                                                            "professional_type": "Creator",
+                                                            "category": [
+                                                                {
+                                                                    "id": 934,
+                                                                    "name": "Social Media Influencer",
+                                                                    "icon_name": "IconBriefcaseStroke"
+                                                                }
+                                                            ]
+                                                        },
+                                                        "tipjar_settings": {
+                                                            "is_enabled": false
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "unmention_data": {},
+                                            "edit_control": {
+                                                "edit_tweet_ids": [
+                                                    "1892375497062945112"
+                                                ],
+                                                "editable_until_msecs": "1740016051000",
+                                                "is_edit_eligible": true,
+                                                "edits_remaining": "5"
+                                            },
+                                            "is_translatable": true,
+                                            "views": {
+                                                "count": "5768",
+                                                "state": "EnabledWithCount"
+                                            },
+                                            "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+                                            "grok_analysis_button": true,
+                                            "quoted_status_result": {
+                                                "result": {
+                                                    "__typename": "TweetWithVisibilityResults",
+                                                    "tweet": {
+                                                        "rest_id": "1884801439886713064",
+                                                        "has_birdwatch_notes": false,
+                                                        "core": {
+                                                            "user_results": {
+                                                                "result": {
+                                                                    "__typename": "User",
+                                                                    "id": "VXNlcjoyNTgwNDIxODg1",
+                                                                    "rest_id": "2580421885",
+                                                                    "affiliates_highlighted_label": {},
+                                                                    "has_graduated_access": true,
+                                                                    "parody_commentary_fan_label": "None",
+                                                                    "is_blue_verified": false,
+                                                                    "profile_image_shape": "Circle",
+                                                                    "legacy": {
+                                                                        "following": false,
+                                                                        "can_dm": true,
+                                                                        "can_media_tag": true,
+                                                                        "created_at": "Sat Jun 21 12:49:21 +0000 2014",
+                                                                        "default_profile": true,
+                                                                        "default_profile_image": false,
+                                                                        "description": "@kubernetesio @IngressNGINX maintainer, #Microsoft MVP, CNCF Ambassador, open source, \uD83E\uDD51,  PyCon China & KCD Beijing organizer 公众号：MoeLove",
+                                                                        "entities": {
+                                                                            "description": {
+                                                                                "urls": []
+                                                                            },
+                                                                            "url": {
+                                                                                "urls": [
+                                                                                    {
+                                                                                        "display_url": "bio.link/zhangjintao",
+                                                                                        "expanded_url": "https://bio.link/zhangjintao",
+                                                                                        "url": "https://t.co/ap4Dxc424f",
+                                                                                        "indices": [
+                                                                                            0,
+                                                                                            23
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "fast_followers_count": 0,
+                                                                        "favourites_count": 11678,
+                                                                        "followers_count": 8942,
+                                                                        "friends_count": 1162,
+                                                                        "has_custom_timelines": true,
+                                                                        "is_translator": false,
+                                                                        "listed_count": 91,
+                                                                        "location": "Get productive \uD83D\uDC49",
+                                                                        "media_count": 885,
+                                                                        "name": "Jintao Zhang 张晋涛",
+                                                                        "normal_followers_count": 8942,
+                                                                        "pinned_tweet_ids_str": [
+                                                                            "1870395899865968688"
+                                                                        ],
+                                                                        "possibly_sensitive": false,
+                                                                        "profile_banner_url": "https://pbs.twimg.com/profile_banners/2580421885/1675120666",
+                                                                        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1514978580102807557/BNMcK0Ud_normal.jpg",
+                                                                        "profile_interstitial_type": "",
+                                                                        "screen_name": "zhangjintao9020",
+                                                                        "statuses_count": 7950,
+                                                                        "translator_type": "none",
+                                                                        "url": "https://t.co/ap4Dxc424f",
+                                                                        "verified": false,
+                                                                        "want_retweets": false,
+                                                                        "withheld_in_countries": []
+                                                                    },
+                                                                    "professional": {
+                                                                        "rest_id": "1650628627736801281",
+                                                                        "professional_type": "Creator",
+                                                                        "category": [
+                                                                            {
+                                                                                "id": 934,
+                                                                                "name": "Social Media Influencer",
+                                                                                "icon_name": "IconBriefcaseStroke"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    "tipjar_settings": {
+                                                                        "is_enabled": false
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        "unmention_data": {},
+                                                        "edit_control": {
+                                                            "edit_tweet_ids": [
+                                                                "1884801439886713064"
+                                                            ],
+                                                            "editable_until_msecs": "1738210255000",
+                                                            "is_edit_eligible": false,
+                                                            "edits_remaining": "5"
+                                                        },
+                                                        "is_translatable": true,
+                                                        "views": {
+                                                            "count": "36001",
+                                                            "state": "EnabledWithCount"
+                                                        },
+                                                        "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                                        "grok_analysis_button": true,
+                                                        "legacy": {
+                                                            "bookmark_count": 105,
+                                                            "bookmarked": false,
+                                                            "created_at": "Thu Jan 30 03:10:55 +0000 2025",
+                                                            "conversation_id_str": "1884801439886713064",
+                                                            "display_text_range": [
+                                                                0,
+                                                                99
+                                                            ],
+                                                            "entities": {
+                                                                "hashtags": [
+                                                                    {
+                                                                        "indices": [
+                                                                            17,
+                                                                            23
+                                                                        ],
+                                                                        "text": "Azure"
+                                                                    }
+                                                                ],
+                                                                "media": [
+                                                                    {
+                                                                        "display_url": "pic.x.com/39vhlglS4g",
+                                                                        "expanded_url": "https://x.com/zhangjintao9020/status/1884801439886713064/photo/1",
+                                                                        "id_str": "1884800528984539137",
+                                                                        "indices": [
+                                                                            100,
+                                                                            123
+                                                                        ],
+                                                                        "media_key": "3_1884800528984539137",
+                                                                        "media_url_https": "https://pbs.twimg.com/media/GigoGFKXgAEHFmF.png",
+                                                                        "type": "photo",
+                                                                        "url": "https://t.co/39vhlglS4g",
+                                                                        "ext_media_availability": {
+                                                                            "status": "Available"
+                                                                        },
+                                                                        "features": {
+                                                                            "large": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "medium": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "small": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "orig": {
+                                                                                "faces": []
+                                                                            }
+                                                                        },
+                                                                        "sizes": {
+                                                                            "large": {
+                                                                                "h": 553,
+                                                                                "w": 2048,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "medium": {
+                                                                                "h": 324,
+                                                                                "w": 1200,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "small": {
+                                                                                "h": 184,
+                                                                                "w": 680,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "thumb": {
+                                                                                "h": 150,
+                                                                                "w": 150,
+                                                                                "resize": "crop"
+                                                                            }
+                                                                        },
+                                                                        "original_info": {
+                                                                            "height": 1024,
+                                                                            "width": 3791,
+                                                                            "focus_rects": [
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 1829,
+                                                                                    "h": 1024
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 1024,
+                                                                                    "h": 1024
+                                                                                },
+                                                                                {
+                                                                                    "x": 24,
+                                                                                    "y": 0,
+                                                                                    "w": 898,
+                                                                                    "h": 1024
+                                                                                },
+                                                                                {
+                                                                                    "x": 217,
+                                                                                    "y": 0,
+                                                                                    "w": 512,
+                                                                                    "h": 1024
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 3791,
+                                                                                    "h": 1024
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        "allow_download_status": {
+                                                                            "allow_download": true
+                                                                        },
+                                                                        "media_results": {
+                                                                            "result": {
+                                                                                "media_key": "3_1884800528984539137"
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "display_url": "pic.x.com/39vhlglS4g",
+                                                                        "expanded_url": "https://x.com/zhangjintao9020/status/1884801439886713064/photo/1",
+                                                                        "id_str": "1884800573217603584",
+                                                                        "indices": [
+                                                                            100,
+                                                                            123
+                                                                        ],
+                                                                        "media_key": "3_1884800573217603584",
+                                                                        "media_url_https": "https://pbs.twimg.com/media/GigoIp8WgAA1hDO.jpg",
+                                                                        "type": "photo",
+                                                                        "url": "https://t.co/39vhlglS4g",
+                                                                        "ext_media_availability": {
+                                                                            "status": "Available"
+                                                                        },
+                                                                        "features": {
+                                                                            "large": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "medium": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "small": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "orig": {
+                                                                                "faces": []
+                                                                            }
+                                                                        },
+                                                                        "sizes": {
+                                                                            "large": {
+                                                                                "h": 848,
+                                                                                "w": 1245,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "medium": {
+                                                                                "h": 817,
+                                                                                "w": 1200,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "small": {
+                                                                                "h": 463,
+                                                                                "w": 680,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "thumb": {
+                                                                                "h": 150,
+                                                                                "w": 150,
+                                                                                "resize": "crop"
+                                                                            }
+                                                                        },
+                                                                        "original_info": {
+                                                                            "height": 848,
+                                                                            "width": 1245,
+                                                                            "focus_rects": [
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 56,
+                                                                                    "w": 1245,
+                                                                                    "h": 697
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 848,
+                                                                                    "h": 848
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 744,
+                                                                                    "h": 848
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 424,
+                                                                                    "h": 848
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 1245,
+                                                                                    "h": 848
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        "allow_download_status": {
+                                                                            "allow_download": true
+                                                                        },
+                                                                        "media_results": {
+                                                                            "result": {
+                                                                                "media_key": "3_1884800573217603584"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ],
+                                                                "symbols": [],
+                                                                "timestamps": [],
+                                                                "urls": [],
+                                                                "user_mentions": []
+                                                            },
+                                                            "extended_entities": {
+                                                                "media": [
+                                                                    {
+                                                                        "display_url": "pic.x.com/39vhlglS4g",
+                                                                        "expanded_url": "https://x.com/zhangjintao9020/status/1884801439886713064/photo/1",
+                                                                        "id_str": "1884800528984539137",
+                                                                        "indices": [
+                                                                            100,
+                                                                            123
+                                                                        ],
+                                                                        "media_key": "3_1884800528984539137",
+                                                                        "media_url_https": "https://pbs.twimg.com/media/GigoGFKXgAEHFmF.png",
+                                                                        "type": "photo",
+                                                                        "url": "https://t.co/39vhlglS4g",
+                                                                        "ext_media_availability": {
+                                                                            "status": "Available"
+                                                                        },
+                                                                        "features": {
+                                                                            "large": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "medium": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "small": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "orig": {
+                                                                                "faces": []
+                                                                            }
+                                                                        },
+                                                                        "sizes": {
+                                                                            "large": {
+                                                                                "h": 553,
+                                                                                "w": 2048,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "medium": {
+                                                                                "h": 324,
+                                                                                "w": 1200,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "small": {
+                                                                                "h": 184,
+                                                                                "w": 680,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "thumb": {
+                                                                                "h": 150,
+                                                                                "w": 150,
+                                                                                "resize": "crop"
+                                                                            }
+                                                                        },
+                                                                        "original_info": {
+                                                                            "height": 1024,
+                                                                            "width": 3791,
+                                                                            "focus_rects": [
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 1829,
+                                                                                    "h": 1024
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 1024,
+                                                                                    "h": 1024
+                                                                                },
+                                                                                {
+                                                                                    "x": 24,
+                                                                                    "y": 0,
+                                                                                    "w": 898,
+                                                                                    "h": 1024
+                                                                                },
+                                                                                {
+                                                                                    "x": 217,
+                                                                                    "y": 0,
+                                                                                    "w": 512,
+                                                                                    "h": 1024
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 3791,
+                                                                                    "h": 1024
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        "allow_download_status": {
+                                                                            "allow_download": true
+                                                                        },
+                                                                        "media_results": {
+                                                                            "result": {
+                                                                                "media_key": "3_1884800528984539137"
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "display_url": "pic.x.com/39vhlglS4g",
+                                                                        "expanded_url": "https://x.com/zhangjintao9020/status/1884801439886713064/photo/1",
+                                                                        "id_str": "1884800573217603584",
+                                                                        "indices": [
+                                                                            100,
+                                                                            123
+                                                                        ],
+                                                                        "media_key": "3_1884800573217603584",
+                                                                        "media_url_https": "https://pbs.twimg.com/media/GigoIp8WgAA1hDO.jpg",
+                                                                        "type": "photo",
+                                                                        "url": "https://t.co/39vhlglS4g",
+                                                                        "ext_media_availability": {
+                                                                            "status": "Available"
+                                                                        },
+                                                                        "features": {
+                                                                            "large": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "medium": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "small": {
+                                                                                "faces": []
+                                                                            },
+                                                                            "orig": {
+                                                                                "faces": []
+                                                                            }
+                                                                        },
+                                                                        "sizes": {
+                                                                            "large": {
+                                                                                "h": 848,
+                                                                                "w": 1245,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "medium": {
+                                                                                "h": 817,
+                                                                                "w": 1200,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "small": {
+                                                                                "h": 463,
+                                                                                "w": 680,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "thumb": {
+                                                                                "h": 150,
+                                                                                "w": 150,
+                                                                                "resize": "crop"
+                                                                            }
+                                                                        },
+                                                                        "original_info": {
+                                                                            "height": 848,
+                                                                            "width": 1245,
+                                                                            "focus_rects": [
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 56,
+                                                                                    "w": 1245,
+                                                                                    "h": 697
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 848,
+                                                                                    "h": 848
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 744,
+                                                                                    "h": 848
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 424,
+                                                                                    "h": 848
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 1245,
+                                                                                    "h": 848
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        "allow_download_status": {
+                                                                            "allow_download": true
+                                                                        },
+                                                                        "media_results": {
+                                                                            "result": {
+                                                                                "media_key": "3_1884800573217603584"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "favorite_count": 138,
+                                                            "favorited": false,
+                                                            "full_text": "DeepSeek-R1 已经上线 #Azure AI Foundry，目前是 serverless 模式部署 &amp; 价格为 0。\n\n目前速度还不错，而且应该是 R1 而非其他平台提供的蒸馏版本 https://t.co/39vhlglS4g",
+                                                            "is_quote_status": false,
+                                                            "lang": "zh",
+                                                            "possibly_sensitive": false,
+                                                            "possibly_sensitive_editable": true,
+                                                            "quote_count": 1,
+                                                            "reply_count": 15,
+                                                            "retweet_count": 13,
+                                                            "retweeted": false,
+                                                            "user_id_str": "2580421885",
+                                                            "id_str": "1884801439886713064"
+                                                        }
+                                                    },
+                                                    "tweetInterstitial": {
+                                                        "__typename": "ContextualTweetInterstitial",
+                                                        "displayType": "EntireTweet",
+                                                        "text": {
+                                                            "rtl": false,
+                                                            "text": "This Post includes a word you muted.",
+                                                            "entities": []
+                                                        },
+                                                        "revealText": {
+                                                            "rtl": false,
+                                                            "text": "View",
+                                                            "entities": []
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "legacy": {
+                                                "bookmark_count": 6,
+                                                "bookmarked": false,
+                                                "created_at": "Thu Feb 20 00:47:31 +0000 2025",
+                                                "conversation_id_str": "1892375497062945112",
+                                                "display_text_range": [
+                                                    0,
+                                                    48
+                                                ],
+                                                "entities": {
+                                                    "hashtags": [],
+                                                    "media": [
+                                                        {
+                                                            "display_url": "pic.x.com/OLGuccucde",
+                                                            "expanded_url": "https://x.com/zhangjintao9020/status/1892375497062945112/photo/1",
+                                                            "id_str": "1892375480520613889",
+                                                            "indices": [
+                                                                49,
+                                                                72
+                                                            ],
+                                                            "media_key": "3_1892375480520613889",
+                                                            "media_url_https": "https://pbs.twimg.com/media/GkMReSoXIAEDLLI.jpg",
+                                                            "type": "photo",
+                                                            "url": "https://t.co/OLGuccucde",
+                                                            "ext_media_availability": {
+                                                                "status": "Available"
+                                                            },
+                                                            "features": {
+                                                                "large": {
+                                                                    "faces": []
+                                                                },
+                                                                "medium": {
+                                                                    "faces": []
+                                                                },
+                                                                "small": {
+                                                                    "faces": []
+                                                                },
+                                                                "orig": {
+                                                                    "faces": []
+                                                                }
+                                                            },
+                                                            "sizes": {
+                                                                "large": {
+                                                                    "h": 1750,
+                                                                    "w": 1080,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "medium": {
+                                                                    "h": 1200,
+                                                                    "w": 741,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "small": {
+                                                                    "h": 680,
+                                                                    "w": 420,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "thumb": {
+                                                                    "h": 150,
+                                                                    "w": 150,
+                                                                    "resize": "crop"
+                                                                }
+                                                            },
+                                                            "original_info": {
+                                                                "height": 1750,
+                                                                "width": 1080,
+                                                                "focus_rects": [
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 1080,
+                                                                        "h": 605
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 1080,
+                                                                        "h": 1080
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 1080,
+                                                                        "h": 1231
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 875,
+                                                                        "h": 1750
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 1080,
+                                                                        "h": 1750
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "media_results": {
+                                                                "result": {
+                                                                    "media_key": "3_1892375480520613889"
+                                                                }
+                                                            }
+                                                        }
+                                                    ],
+                                                    "symbols": [],
+                                                    "timestamps": [],
+                                                    "urls": [],
+                                                    "user_mentions": []
+                                                },
+                                                "extended_entities": {
+                                                    "media": [
+                                                        {
+                                                            "display_url": "pic.x.com/OLGuccucde",
+                                                            "expanded_url": "https://x.com/zhangjintao9020/status/1892375497062945112/photo/1",
+                                                            "id_str": "1892375480520613889",
+                                                            "indices": [
+                                                                49,
+                                                                72
+                                                            ],
+                                                            "media_key": "3_1892375480520613889",
+                                                            "media_url_https": "https://pbs.twimg.com/media/GkMReSoXIAEDLLI.jpg",
+                                                            "type": "photo",
+                                                            "url": "https://t.co/OLGuccucde",
+                                                            "ext_media_availability": {
+                                                                "status": "Available"
+                                                            },
+                                                            "features": {
+                                                                "large": {
+                                                                    "faces": []
+                                                                },
+                                                                "medium": {
+                                                                    "faces": []
+                                                                },
+                                                                "small": {
+                                                                    "faces": []
+                                                                },
+                                                                "orig": {
+                                                                    "faces": []
+                                                                }
+                                                            },
+                                                            "sizes": {
+                                                                "large": {
+                                                                    "h": 1750,
+                                                                    "w": 1080,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "medium": {
+                                                                    "h": 1200,
+                                                                    "w": 741,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "small": {
+                                                                    "h": 680,
+                                                                    "w": 420,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "thumb": {
+                                                                    "h": 150,
+                                                                    "w": 150,
+                                                                    "resize": "crop"
+                                                                }
+                                                            },
+                                                            "original_info": {
+                                                                "height": 1750,
+                                                                "width": 1080,
+                                                                "focus_rects": [
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 1080,
+                                                                        "h": 605
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 1080,
+                                                                        "h": 1080
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 1080,
+                                                                        "h": 1231
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 875,
+                                                                        "h": 1750
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 1080,
+                                                                        "h": 1750
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "media_results": {
+                                                                "result": {
+                                                                    "media_key": "3_1892375480520613889"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "favorite_count": 3,
+                                                "favorited": false,
+                                                "full_text": "经过一个月的免费期，25 号开始， Azure AI 中的 DeepSeek-R1 将开始收费了 https://t.co/OLGuccucde",
+                                                "is_quote_status": true,
+                                                "lang": "zh",
+                                                "possibly_sensitive": false,
+                                                "possibly_sensitive_editable": true,
+                                                "quote_count": 0,
+                                                "quoted_status_id_str": "1884801439886713064",
+                                                "quoted_status_permalink": {
+                                                    "url": "https://t.co/eQnyLAPuUP",
+                                                    "expanded": "https://twitter.com/zhangjintao9020/status/1884801439886713064",
+                                                    "display": "x.com/zhangjintao902…"
+                                                },
+                                                "reply_count": 1,
+                                                "retweet_count": 1,
+                                                "retweeted": false,
+                                                "user_id_str": "2580421885",
+                                                "id_str": "1892375497062945112"
+                                            },
+                                            "quick_promote_eligibility": {
+                                                "eligibility": "IneligibleNotProfessional"
+                                            }
+                                        }
+                                    },
+                                    "tweetDisplayType": "Tweet",
+                                    "hasModeratedReplies": false
+                                }
+                            }
+                        },
+                        {
+                            "entryId": "conversationthread-1892378282181447757",
+                            "sortIndex": "7330996539791830685",
+                            "content": {
+                                "entryType": "TimelineTimelineModule",
+                                "__typename": "TimelineTimelineModule",
+                                "items": [
+                                    {
+                                        "entryId": "conversationthread-1892378282181447757-tweet-1892378282181447757",
+                                        "item": {
+                                            "itemContent": {
+                                                "itemType": "TimelineTweet",
+                                                "__typename": "TimelineTweet",
+                                                "tweet_results": {
+                                                    "result": {
+                                                        "__typename": "Tweet",
+                                                        "rest_id": "1892378282181447757",
+                                                        "has_birdwatch_notes": false,
+                                                        "core": {
+                                                            "user_results": {
+                                                                "result": {
+                                                                    "__typename": "User",
+                                                                    "id": "VXNlcjoxNjg2NTI5OTQwMjY1ODQ0NzM3",
+                                                                    "rest_id": "1686529940265844737",
+                                                                    "affiliates_highlighted_label": {},
+                                                                    "has_graduated_access": true,
+                                                                    "parody_commentary_fan_label": "None",
+                                                                    "is_blue_verified": false,
+                                                                    "profile_image_shape": "Circle",
+                                                                    "legacy": {
+                                                                        "following": false,
+                                                                        "can_dm": false,
+                                                                        "can_media_tag": true,
+                                                                        "created_at": "Wed Aug 02 00:10:53 +0000 2023",
+                                                                        "default_profile": true,
+                                                                        "default_profile_image": false,
+                                                                        "description": "A husband. Daily use @AsahiLinux @fedora. How to exit @neovim? Love is Smile Always~ @LiSA_OLiVE Notifications are muted.",
+                                                                        "entities": {
+                                                                            "description": {
+                                                                                "urls": []
+                                                                            },
+                                                                            "url": {
+                                                                                "urls": [
+                                                                                    {
+                                                                                        "display_url": "blog.yuchanns.xyz",
+                                                                                        "expanded_url": "https://blog.yuchanns.xyz",
+                                                                                        "url": "https://t.co/uz4zo2rSGC",
+                                                                                        "indices": [
+                                                                                            0,
+                                                                                            23
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "fast_followers_count": 0,
+                                                                        "favourites_count": 7173,
+                                                                        "followers_count": 673,
+                                                                        "friends_count": 290,
+                                                                        "has_custom_timelines": false,
+                                                                        "is_translator": false,
+                                                                        "listed_count": 4,
+                                                                        "location": "",
+                                                                        "media_count": 184,
+                                                                        "name": "Hanchin Hsieh",
+                                                                        "normal_followers_count": 673,
+                                                                        "pinned_tweet_ids_str": [],
+                                                                        "possibly_sensitive": false,
+                                                                        "profile_banner_url": "https://pbs.twimg.com/profile_banners/1686529940265844737/1735810395",
+                                                                        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1826590043185840129/oVwpru2y_normal.jpg",
+                                                                        "profile_interstitial_type": "",
+                                                                        "screen_name": "_yuchanns_",
+                                                                        "statuses_count": 2168,
+                                                                        "translator_type": "none",
+                                                                        "url": "https://t.co/uz4zo2rSGC",
+                                                                        "verified": false,
+                                                                        "want_retweets": false,
+                                                                        "withheld_in_countries": []
+                                                                    },
+                                                                    "tipjar_settings": {}
+                                                                }
+                                                            }
+                                                        },
+                                                        "unmention_data": {},
+                                                        "edit_control": {
+                                                            "edit_tweet_ids": [
+                                                                "1892378282181447757"
+                                                            ],
+                                                            "editable_until_msecs": "1740016715000",
+                                                            "is_edit_eligible": false,
+                                                            "edits_remaining": "5"
+                                                        },
+                                                        "is_translatable": true,
+                                                        "views": {
+                                                            "count": "122",
+                                                            "state": "EnabledWithCount"
+                                                        },
+                                                        "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+                                                        "grok_analysis_button": true,
+                                                        "legacy": {
+                                                            "bookmark_count": 0,
+                                                            "bookmarked": false,
+                                                            "created_at": "Thu Feb 20 00:58:35 +0000 2025",
+                                                            "conversation_id_str": "1892375497062945112",
+                                                            "display_text_range": [
+                                                                17,
+                                                                42
+                                                            ],
+                                                            "entities": {
+                                                                "hashtags": [],
+                                                                "symbols": [],
+                                                                "timestamps": [],
+                                                                "urls": [],
+                                                                "user_mentions": [
+                                                                    {
+                                                                        "id_str": "2580421885",
+                                                                        "name": "Jintao Zhang 张晋涛",
+                                                                        "screen_name": "zhangjintao9020",
+                                                                        "indices": [
+                                                                            0,
+                                                                            16
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "favorite_count": 1,
+                                                            "favorited": false,
+                                                            "full_text": "@zhangjintao9020 希望 azure 的 r1 响应速度和频率能上去吧",
+                                                            "in_reply_to_screen_name": "zhangjintao9020",
+                                                            "in_reply_to_status_id_str": "1892375497062945112",
+                                                            "in_reply_to_user_id_str": "2580421885",
+                                                            "is_quote_status": false,
+                                                            "lang": "zh",
+                                                            "quote_count": 0,
+                                                            "reply_count": 1,
+                                                            "retweet_count": 0,
+                                                            "retweeted": false,
+                                                            "user_id_str": "1686529940265844737",
+                                                            "id_str": "1892378282181447757"
+                                                        },
+                                                        "quick_promote_eligibility": {
+                                                            "eligibility": "IneligibleNotProfessional"
+                                                        }
+                                                    }
+                                                },
+                                                "tweetDisplayType": "Tweet",
+                                                "socialContext": {
+                                                    "type": "TimelineGeneralContext",
+                                                    "contextType": "Like",
+                                                    "text": "Some of your mutual follows often like this account"
+                                                }
+                                            },
+                                            "clientEventInfo": {
+                                                "details": {
+                                                    "conversationDetails": {
+                                                        "conversationSection": "HighQuality"
+                                                    },
+                                                    "timelinesDetails": {
+                                                        "controllerData": "DAACDAAEDAABCgABSoQCCGAHgBUKAAIAAAAABIAgCAAAAAA="
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "entryId": "conversationthread-1892378282181447757-tweet-1892380896201691602",
+                                        "item": {
+                                            "itemContent": {
+                                                "itemType": "TimelineTweet",
+                                                "__typename": "TimelineTweet",
+                                                "tweet_results": {
+                                                    "result": {
+                                                        "__typename": "Tweet",
+                                                        "rest_id": "1892380896201691602",
+                                                        "has_birdwatch_notes": false,
+                                                        "core": {
+                                                            "user_results": {
+                                                                "result": {
+                                                                    "__typename": "User",
+                                                                    "id": "VXNlcjoyNTgwNDIxODg1",
+                                                                    "rest_id": "2580421885",
+                                                                    "affiliates_highlighted_label": {},
+                                                                    "has_graduated_access": true,
+                                                                    "parody_commentary_fan_label": "None",
+                                                                    "is_blue_verified": false,
+                                                                    "profile_image_shape": "Circle",
+                                                                    "legacy": {
+                                                                        "following": false,
+                                                                        "can_dm": true,
+                                                                        "can_media_tag": true,
+                                                                        "created_at": "Sat Jun 21 12:49:21 +0000 2014",
+                                                                        "default_profile": true,
+                                                                        "default_profile_image": false,
+                                                                        "description": "@kubernetesio @IngressNGINX maintainer, #Microsoft MVP, CNCF Ambassador, open source, \uD83E\uDD51,  PyCon China & KCD Beijing organizer 公众号：MoeLove",
+                                                                        "entities": {
+                                                                            "description": {
+                                                                                "urls": []
+                                                                            },
+                                                                            "url": {
+                                                                                "urls": [
+                                                                                    {
+                                                                                        "display_url": "bio.link/zhangjintao",
+                                                                                        "expanded_url": "https://bio.link/zhangjintao",
+                                                                                        "url": "https://t.co/ap4Dxc424f",
+                                                                                        "indices": [
+                                                                                            0,
+                                                                                            23
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "fast_followers_count": 0,
+                                                                        "favourites_count": 11678,
+                                                                        "followers_count": 8942,
+                                                                        "friends_count": 1162,
+                                                                        "has_custom_timelines": true,
+                                                                        "is_translator": false,
+                                                                        "listed_count": 91,
+                                                                        "location": "Get productive \uD83D\uDC49",
+                                                                        "media_count": 885,
+                                                                        "name": "Jintao Zhang 张晋涛",
+                                                                        "normal_followers_count": 8942,
+                                                                        "pinned_tweet_ids_str": [
+                                                                            "1870395899865968688"
+                                                                        ],
+                                                                        "possibly_sensitive": false,
+                                                                        "profile_banner_url": "https://pbs.twimg.com/profile_banners/2580421885/1675120666",
+                                                                        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1514978580102807557/BNMcK0Ud_normal.jpg",
+                                                                        "profile_interstitial_type": "",
+                                                                        "screen_name": "zhangjintao9020",
+                                                                        "statuses_count": 7950,
+                                                                        "translator_type": "none",
+                                                                        "url": "https://t.co/ap4Dxc424f",
+                                                                        "verified": false,
+                                                                        "want_retweets": false,
+                                                                        "withheld_in_countries": []
+                                                                    },
+                                                                    "professional": {
+                                                                        "rest_id": "1650628627736801281",
+                                                                        "professional_type": "Creator",
+                                                                        "category": [
+                                                                            {
+                                                                                "id": 934,
+                                                                                "name": "Social Media Influencer",
+                                                                                "icon_name": "IconBriefcaseStroke"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    "tipjar_settings": {
+                                                                        "is_enabled": false
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        "unmention_data": {},
+                                                        "edit_control": {
+                                                            "edit_tweet_ids": [
+                                                                "1892380896201691602"
+                                                            ],
+                                                            "editable_until_msecs": "1740017339000",
+                                                            "is_edit_eligible": false,
+                                                            "edits_remaining": "5"
+                                                        },
+                                                        "is_translatable": true,
+                                                        "views": {
+                                                            "count": "88",
+                                                            "state": "EnabledWithCount"
+                                                        },
+                                                        "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+                                                        "grok_analysis_button": true,
+                                                        "legacy": {
+                                                            "bookmark_count": 0,
+                                                            "bookmarked": false,
+                                                            "created_at": "Thu Feb 20 01:08:59 +0000 2025",
+                                                            "conversation_id_str": "1892375497062945112",
+                                                            "display_text_range": [
+                                                                12,
+                                                                77
+                                                            ],
+                                                            "entities": {
+                                                                "hashtags": [],
+                                                                "symbols": [],
+                                                                "timestamps": [],
+                                                                "urls": [],
+                                                                "user_mentions": [
+                                                                    {
+                                                                        "id_str": "1686529940265844737",
+                                                                        "name": "Hanchin Hsieh",
+                                                                        "screen_name": "_yuchanns_",
+                                                                        "indices": [
+                                                                            0,
+                                                                            11
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "favorite_count": 2,
+                                                            "favorited": false,
+                                                            "full_text": "@_yuchanns_ Azure 中有几种部署方式，它的速度目前基本能到 20 tokens/s\n\n国内最快的目前好像是火山，到 25 左右，所以也还行",
+                                                            "in_reply_to_screen_name": "_yuchanns_",
+                                                            "in_reply_to_status_id_str": "1892378282181447757",
+                                                            "in_reply_to_user_id_str": "1686529940265844737",
+                                                            "is_quote_status": false,
+                                                            "lang": "zh",
+                                                            "quote_count": 0,
+                                                            "reply_count": 0,
+                                                            "retweet_count": 0,
+                                                            "retweeted": false,
+                                                            "user_id_str": "2580421885",
+                                                            "id_str": "1892380896201691602"
+                                                        },
+                                                        "quick_promote_eligibility": {
+                                                            "eligibility": "IneligibleNotProfessional"
+                                                        }
+                                                    }
+                                                },
+                                                "tweetDisplayType": "Tweet"
+                                            },
+                                            "clientEventInfo": {
+                                                "details": {
+                                                    "conversationDetails": {
+                                                        "conversationSection": "HighQuality"
+                                                    },
+                                                    "timelinesDetails": {
+                                                        "controllerData": "DAACDAAEDAABCgABDQQCkKIDgYEKAAIAAAAABIBACAAAAAA="
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                ],
+                                "displayType": "VerticalConversation",
+                                "clientEventInfo": {
+                                    "details": {
+                                        "conversationDetails": {
+                                            "conversationSection": "HighQuality"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "entryId": "tweetdetailrelatedtweets-1892377153737474157",
+                            "sortIndex": "1",
+                            "content": {
+                                "entryType": "TimelineTimelineModule",
+                                "__typename": "TimelineTimelineModule",
+                                "items": [
+                                    {
+                                        "entryId": "tweetdetailrelatedtweets-1892377153737474157-tweet-1892377153737474157",
+                                        "item": {
+                                            "itemContent": {
+                                                "itemType": "TimelineTweet",
+                                                "__typename": "TimelineTweet",
+                                                "tweet_results": {
+                                                    "result": {
+                                                        "__typename": "Tweet",
+                                                        "rest_id": "1892377153737474157",
+                                                        "has_birdwatch_notes": false,
+                                                        "core": {
+                                                            "user_results": {
+                                                                "result": {
+                                                                    "__typename": "User",
+                                                                    "id": "VXNlcjoyNTgwNDIxODg1",
+                                                                    "rest_id": "2580421885",
+                                                                    "affiliates_highlighted_label": {},
+                                                                    "has_graduated_access": true,
+                                                                    "parody_commentary_fan_label": "None",
+                                                                    "is_blue_verified": false,
+                                                                    "profile_image_shape": "Circle",
+                                                                    "legacy": {
+                                                                        "following": false,
+                                                                        "can_dm": true,
+                                                                        "can_media_tag": true,
+                                                                        "created_at": "Sat Jun 21 12:49:21 +0000 2014",
+                                                                        "default_profile": true,
+                                                                        "default_profile_image": false,
+                                                                        "description": "@kubernetesio @IngressNGINX maintainer, #Microsoft MVP, CNCF Ambassador, open source, \uD83E\uDD51,  PyCon China & KCD Beijing organizer 公众号：MoeLove",
+                                                                        "entities": {
+                                                                            "description": {
+                                                                                "urls": []
+                                                                            },
+                                                                            "url": {
+                                                                                "urls": [
+                                                                                    {
+                                                                                        "display_url": "bio.link/zhangjintao",
+                                                                                        "expanded_url": "https://bio.link/zhangjintao",
+                                                                                        "url": "https://t.co/ap4Dxc424f",
+                                                                                        "indices": [
+                                                                                            0,
+                                                                                            23
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "fast_followers_count": 0,
+                                                                        "favourites_count": 11678,
+                                                                        "followers_count": 8942,
+                                                                        "friends_count": 1162,
+                                                                        "has_custom_timelines": true,
+                                                                        "is_translator": false,
+                                                                        "listed_count": 91,
+                                                                        "location": "Get productive \uD83D\uDC49",
+                                                                        "media_count": 885,
+                                                                        "name": "Jintao Zhang 张晋涛",
+                                                                        "normal_followers_count": 8942,
+                                                                        "pinned_tweet_ids_str": [
+                                                                            "1870395899865968688"
+                                                                        ],
+                                                                        "possibly_sensitive": false,
+                                                                        "profile_banner_url": "https://pbs.twimg.com/profile_banners/2580421885/1675120666",
+                                                                        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1514978580102807557/BNMcK0Ud_normal.jpg",
+                                                                        "profile_interstitial_type": "",
+                                                                        "screen_name": "zhangjintao9020",
+                                                                        "statuses_count": 7950,
+                                                                        "translator_type": "none",
+                                                                        "url": "https://t.co/ap4Dxc424f",
+                                                                        "verified": false,
+                                                                        "want_retweets": false,
+                                                                        "withheld_in_countries": []
+                                                                    },
+                                                                    "professional": {
+                                                                        "rest_id": "1650628627736801281",
+                                                                        "professional_type": "Creator",
+                                                                        "category": [
+                                                                            {
+                                                                                "id": 934,
+                                                                                "name": "Social Media Influencer",
+                                                                                "icon_name": "IconBriefcaseStroke"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    "tipjar_settings": {
+                                                                        "is_enabled": false
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        "unmention_data": {},
+                                                        "edit_control": {
+                                                            "edit_tweet_ids": [
+                                                                "1892377153737474157"
+                                                            ],
+                                                            "editable_until_msecs": "1740016446000",
+                                                            "is_edit_eligible": true,
+                                                            "edits_remaining": "5"
+                                                        },
+                                                        "is_translatable": true,
+                                                        "views": {
+                                                            "count": "435",
+                                                            "state": "EnabledWithCount"
+                                                        },
+                                                        "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+                                                        "grok_analysis_button": true,
+                                                        "legacy": {
+                                                            "bookmark_count": 0,
+                                                            "bookmarked": false,
+                                                            "created_at": "Thu Feb 20 00:54:06 +0000 2025",
+                                                            "conversation_id_str": "1892377153737474157",
+                                                            "display_text_range": [
+                                                                0,
+                                                                46
+                                                            ],
+                                                            "entities": {
+                                                                "hashtags": [],
+                                                                "symbols": [],
+                                                                "timestamps": [],
+                                                                "urls": [],
+                                                                "user_mentions": []
+                                                            },
+                                                            "favorite_count": 3,
+                                                            "favorited": false,
+                                                            "full_text": "我并不是很能吃辣\uD83C\uDF36️ 但是对麻婆豆腐格外钟爱，而且所幸肠胃还算不错，吃完也不会有什么不适 \uD83E\uDD23",
+                                                            "is_quote_status": false,
+                                                            "lang": "zh",
+                                                            "quote_count": 0,
+                                                            "reply_count": 0,
+                                                            "retweet_count": 0,
+                                                            "retweeted": false,
+                                                            "user_id_str": "2580421885",
+                                                            "id_str": "1892377153737474157"
+                                                        },
+                                                        "quick_promote_eligibility": {
+                                                            "eligibility": "IneligibleNotProfessional"
+                                                        }
+                                                    }
+                                                },
+                                                "tweetDisplayType": "Tweet"
+                                            },
+                                            "clientEventInfo": {
+                                                "component": "related_tweet",
+                                                "details": {
+                                                    "conversationDetails": {
+                                                        "conversationSection": "RelatedTweet"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                ],
+                                "displayType": "Vertical",
+                                "header": {
+                                    "displayType": "Classic",
+                                    "text": "Discover more",
+                                    "socialContext": {
+                                        "type": "TimelineGeneralContext",
+                                        "contextType": "TextOnly",
+                                        "text": "Sourced from across X"
+                                    },
+                                    "sticky": true
+                                },
+                                "clientEventInfo": {
+                                    "component": "related_tweet",
+                                    "details": {
+                                        "conversationDetails": {
+                                            "conversationSection": "RelatedTweet"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "TimelineTerminateTimeline",
+                    "direction": "Top"
+                }
+            ]
+        }
+    }
+}

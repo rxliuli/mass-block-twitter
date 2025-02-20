@@ -3,14 +3,17 @@
 exports[`parseTweets > parseTweets for detail 1 1`] = `
 [
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T15:20:32.000Z",
     "id": "1883173115230134610",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiJf-AmaIAA5er1.jpg",
       },
     ],
+    "quoted_status_id_str": "1882896992017465643",
     "text": "这钱真能给到孩子，那多少钱我也认了。
 你睁眼看看，现在日本给孩子吃的都是什么鸡巴玩意儿。
 什么こども家庭庁年间预算7万亿日元，平摊到一个纳税人身上快10万日元就给孩子喂了屎。
@@ -32,8 +35,11 @@ exports[`parseTweets > parseTweets for detail 1 1`] = `
     },
   },
   {
+    "conversation_id_str": "1882822506392027415",
     "created_at": "2025-01-24T21:03:20.000Z",
     "id": "1882896992017465643",
+    "in_reply_to_status_id_str": "1882822506392027415",
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu 换句话说，只要黑在日本想方设法造个孩子，出于所谓人权考量就不能依法驱逐了，等于变相获得永居权，还要由你这样的纳税大户来间接抚养？这公平吗？",
     "user": {
       "blocking": false,
@@ -52,8 +58,11 @@ exports[`parseTweets > parseTweets for detail 1 1`] = `
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T15:52:55.000Z",
     "id": "1883181263605174363",
+    "in_reply_to_status_id_str": "1883173115230134610",
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu 吃这些东西我真怀疑蛋白质摄入够么...生长发育期的能量消耗很大啊...",
     "user": {
       "blocking": false,
@@ -72,8 +81,11 @@ exports[`parseTweets > parseTweets for detail 1 1`] = `
     },
   },
   {
+    "conversation_id_str": "1869575000291987895",
     "created_at": "2024-12-19T02:46:29.000Z",
     "id": "1869575000291987895",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "培育蜘蛛子來殺時間吧
 
 等級提升太神啦",
@@ -97,8 +109,11 @@ Discord：https://t.co/xjaSarTarG
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T16:30:08.000Z",
     "id": "1883190629930557596",
+    "in_reply_to_status_id_str": "1883173115230134610",
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu 饭菜还能添么？  如果可以自由打菜的话，感觉还行啊",
     "user": {
       "blocking": false,
@@ -117,8 +132,11 @@ Discord：https://t.co/xjaSarTarG
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T16:36:57.000Z",
     "id": "1883192344599724449",
+    "in_reply_to_status_id_str": "1883190629930557596",
+    "quoted_status_id_str": undefined,
     "text": "@nursenika1840 添是不可能了",
     "user": {
       "blocking": false,
@@ -137,8 +155,11 @@ Discord：https://t.co/xjaSarTarG
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T15:22:25.000Z",
     "id": "1883173585298358422",
+    "in_reply_to_status_id_str": "1883173115230134610",
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu 这孩子长大不得营养不良😅",
     "user": {
       "blocking": false,
@@ -157,8 +178,11 @@ Discord：https://t.co/xjaSarTarG
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T15:31:25.000Z",
     "id": "1883175851522773368",
+    "in_reply_to_status_id_str": "1883173115230134610",
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu 少子化是問題，各種抖機靈寄生空手套白狼吃現成的也絕對是問題",
     "user": {
       "blocking": false,
@@ -177,8 +201,11 @@ Discord：https://t.co/xjaSarTarG
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T15:41:45.000Z",
     "id": "1883178452297400439",
+    "in_reply_to_status_id_str": "1883173115230134610",
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu 比我幼儿园吃的还差。",
     "user": {
       "blocking": false,
@@ -199,8 +226,11 @@ https://t.co/jYpgMIVDT2",
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-26T00:55:38.000Z",
     "id": "1883317842550100478",
+    "in_reply_to_status_id_str": "1883173115230134610",
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu 这就是典型的做了婊子还在立牌坊！到现在为止，日本的义务教育的饭钱是收取孩子爹娘的钱！
 穷地方政府不想掏钱，又没办法多收取爹娘的钱，所以就这么忽悠下一代😁
 23区去年才4-50%的区不收饭钱了
@@ -222,14 +252,17 @@ https://t.co/jYpgMIVDT2",
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T15:23:25.000Z",
     "id": "1883173839691305205",
+    "in_reply_to_status_id_str": "1883173115230134610",
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiJgoH6aAAEKva1.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu https://t.co/c4cqViZqUl",
     "user": {
       "blocking": false,
@@ -248,8 +281,11 @@ https://t.co/jYpgMIVDT2",
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T23:38:54.000Z",
     "id": "1883298530049310968",
+    "in_reply_to_status_id_str": "1883173115230134610",
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu 生育率还是太高了",
     "user": {
       "blocking": false,
@@ -268,8 +304,11 @@ https://t.co/jYpgMIVDT2",
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T15:27:37.000Z",
     "id": "1883174897410888070",
+    "in_reply_to_status_id_str": "1883173115230134610",
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu 额……说实话不如几年前在微博看到的某个山区小学的午餐。。。那个不精致但是份量足够。。。",
     "user": {
       "blocking": false,
@@ -293,8 +332,11 @@ https://t.co/jYpgMIVDT2",
 exports[`parseTweets > parseTweets for detail 2 1`] = `
 [
   {
+    "conversation_id_str": "1883445865710240006",
     "created_at": "2025-01-26T09:24:21.000Z",
     "id": "1883445865710240006",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "https://t.co/4TdugLoj4i v2 is live!
 
 Special v2 launch deal: $0.99 for util 300 users (82 spots left). Would really appreciate you leaving a review on the App Store!
@@ -328,14 +370,17 @@ Give your website a badge → https://t.co/Aa6arAMga9 🥇",
 exports[`parseTweets > parseTweets for detail 3 1`] = `
 [
   {
+    "conversation_id_str": "1883588715861413893",
     "created_at": "2025-01-26T18:51:59.000Z",
     "id": "1883588715861413893",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiPZ9GGaEAAluBt.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "https://t.co/7Q78qGrTKN",
     "user": {
       "blocking": false,
@@ -354,14 +399,17 @@ exports[`parseTweets > parseTweets for detail 3 1`] = `
     },
   },
   {
+    "conversation_id_str": "1883588715861413893",
     "created_at": "2025-01-27T03:37:20.000Z",
     "id": "1883720922370310290",
+    "in_reply_to_status_id_str": "1883588715861413893",
     "media": [
       {
         "type": "animated_gif",
         "url": "https://pbs.twimg.com/tweet_video_thumb/GiRSMHlboAA7HYX.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "@hsn8086 https://t.co/8lCWFoddY1",
     "user": {
       "blocking": false,
@@ -385,14 +433,17 @@ exports[`parseTweets > parseTweets for detail 3 1`] = `
 exports[`parseTweets > parseTweets for timeline 1`] = `
 [
   {
+    "conversation_id_str": "1883155733203877940",
     "created_at": "2025-01-25T14:11:28.000Z",
     "id": "1883155733203877940",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiJQIJSbIAA-IHg.jpg",
       },
     ],
+    "quoted_status_id_str": "1883142636820676965",
     "text": "Open-R1: DeepSeek-R1大模型开源复现计划
 
 概述：HuggingFace 发布的完全开放的项目，旨在分三步(知识蒸馏、强化学习、多阶段训练)复现 DeepSeek-R1 的完整训练流程，让更多人能理解和使用这套技术方案
@@ -421,8 +472,11 @@ ex Microsoft MVP (2014-2022)
     },
   },
   {
+    "conversation_id_str": "1883142636820676965",
     "created_at": "2025-01-25T13:19:26.000Z",
     "id": "1883142636820676965",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "We are reproducing the full DeepSeek R1 data and training pipeline so everybody can use their recipe. Instead of doing it in secret we can do it together in the open!
 
 🧪 Step 1: replicate the R1-Distill models by distilling a high-quality reasoning corpus from DeepSeek-R1.
@@ -449,8 +503,11 @@ ex Microsoft MVP (2014-2022)
     },
   },
   {
+    "conversation_id_str": "1880134969504457066",
     "created_at": "2025-01-17T06:08:02.000Z",
     "id": "1880134969504457066",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "培育蜘蛛子來殺時間吧
 
 等級提升太神啦",
@@ -474,8 +531,11 @@ Discord：https://t.co/xjaSarTarG
     },
   },
   {
+    "conversation_id_str": "1883203289585717593",
     "created_at": "2025-01-25T17:20:27.000Z",
     "id": "1883203289585717593",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "我长得好丑😭",
     "user": {
       "blocking": false,
@@ -494,14 +554,17 @@ Discord：https://t.co/xjaSarTarG
     },
   },
   {
+    "conversation_id_str": "1883111988970365351",
     "created_at": "2025-01-25T11:17:39.000Z",
     "id": "1883111988970365351",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiIoX2BagAALHsL.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "https://t.co/PWCCyj8clA",
     "user": {
       "blocking": false,
@@ -520,14 +583,17 @@ Discord：https://t.co/xjaSarTarG
     },
   },
   {
+    "conversation_id_str": "1883213006005490010",
     "created_at": "2025-01-25T17:59:03.000Z",
     "id": "1883213006005490010",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiKEP8UaMAA1iGJ.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "https://t.co/XSxRGe3AmJ",
     "user": {
       "blocking": false,
@@ -546,14 +612,17 @@ Discord：https://t.co/xjaSarTarG
     },
   },
   {
+    "conversation_id_str": "1882987254764703953",
     "created_at": "2025-01-25T03:02:00.000Z",
     "id": "1882987254764703953",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiGu4gkbgAEK9p7.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "❤️‍🩹❤️‍🩹❤️‍🩹 https://t.co/UOVKWudJxT",
     "user": {
       "blocking": false,
@@ -578,8 +647,11 @@ Discord：https://t.co/xjaSarTarG
     },
   },
   {
+    "conversation_id_str": "1824200895648669753",
     "created_at": "2024-08-15T21:46:00.000Z",
     "id": "1824200895648669753",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "Supercharge your Gmail with AI ✨",
     "user": {
       "blocking": false,
@@ -598,8 +670,11 @@ Discord：https://t.co/xjaSarTarG
     },
   },
   {
+    "conversation_id_str": "1883082737684480431",
     "created_at": "2025-01-25T09:21:25.000Z",
     "id": "1883082737684480431",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1882851449991737473",
     "text": "“AMD宣布，已将新的DeepSeek-V3模型集成到Instinct MI300X GPU上，该模型旨在与SGLang一起实现最佳性能。DeepSeek-V3针对Al推理进行了优化。” //可以啊，DeepSeek挺牛逼的，居然被AMD看上了……👀
 
 ref: https://t.co/uGurvXfWRq",
@@ -623,8 +698,11 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
     },
   },
   {
+    "conversation_id_str": "1882851449991737473",
     "created_at": "2025-01-24T18:02:22.000Z",
     "id": "1882851449991737473",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "Excited to share that AMD has integrated the new DeepSeek-V3 model on Instinct MI300X GPUs, designed for peak performance with SGLang. DeepSeek-V3 is optimized for AI inferencing. Special thanks to the DeepSeek and SGLang teams for their close collaboration!",
     "user": {
       "blocking": false,
@@ -643,8 +721,11 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
     },
   },
   {
+    "conversation_id_str": "1883190307690614795",
     "created_at": "2025-01-25T16:28:51.000Z",
     "id": "1883190307690614795",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "😓 为什么我的时间线上一直有一个人持之以恒、锲而不舍地发着帖想要唱衰 deepseek R1
 
 从 “有没有专家来说说是不是真的牛逼？” 到 “希望大家不要把他吹过了”
@@ -667,14 +748,17 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
     },
   },
   {
+    "conversation_id_str": "1883155657974780240",
     "created_at": "2025-01-25T14:11:10.000Z",
     "id": "1883155657974780240",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiJP8m7aoAA-IyW.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "HuggingFace 刚开源了个项目叫 Open-R1, 旨在复现 DeepSeek-R1
 
 地址：https://t.co/Ve5qM8iM2d https://t.co/zaIbLesjd8",
@@ -695,8 +779,11 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
     },
   },
   {
+    "conversation_id_str": "1883215125550866788",
     "created_at": "2025-01-25T18:07:29.000Z",
     "id": "1883215125550866788",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "我混的最好的同学就是本科毕业就工作了的
 
 现在都是正科副处，房价暴涨之前上了车，解决了终身大事
@@ -723,14 +810,17 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
     },
   },
   {
+    "conversation_id_str": "1795063065328628063",
     "created_at": "2024-05-27T12:02:40.000Z",
     "id": "1795063065328628063",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "video",
         "url": "https://pbs.twimg.com/ext_tw_video_thumb/1795061154949320704/pu/img/nPjJoqOxDjy4s5XL.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "✨Hello Live2D Riggers and VTubers!✨
 
 nizima LIVE is the official Live2D Vtuber app. We've invited professional Live2D creator Soulty to introduce the app's features and explain why she uses it. If you're interested, you can download the free trial here! https://t.co/AQzxFSjMCf https://t.co/qn6biVxftM",
@@ -756,14 +846,17 @@ Discord ➭ https://t.co/cY3mXa0ABd",
     },
   },
   {
+    "conversation_id_str": "1883113128596304263",
     "created_at": "2025-01-25T11:22:11.000Z",
     "id": "1883113128596304263",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/Gh4ycVKbgAAWRpl.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "RT @sakura_oriko: 1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨ https://t.co/EkDPlUFF21",
     "user": {
       "blocking": false,
@@ -782,14 +875,17 @@ Discord ➭ https://t.co/cY3mXa0ABd",
     },
   },
   {
+    "conversation_id_str": "1881997161384349713",
     "created_at": "2025-01-22T09:27:43.000Z",
     "id": "1881997161384349713",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/Gh4ycVKbgAAWRpl.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨ https://t.co/EkDPlUFF21",
     "user": {
       "blocking": false,
@@ -808,8 +904,11 @@ Discord ➭ https://t.co/cY3mXa0ABd",
     },
   },
   {
+    "conversation_id_str": "1883327017095159909",
     "created_at": "2025-01-26T01:32:06.000Z",
     "id": "1883327017095159909",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "Today I bust my head doing data cleaning using Python string methods.
 
 I could've asked ChatGPT or Cursor to do it for me, but I'm learning Python and wanted to challenge myself.
@@ -832,8 +931,11 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1883229230227665128",
     "created_at": "2025-01-25T19:03:31.000Z",
     "id": "1883229230227665128",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1883022883578171482",
     "text": "说明半个小时，Cursor 写出来的应用，拿到国区第一，巧合不可复制",
     "user": {
       "blocking": false,
@@ -852,8 +954,11 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1883022883578171482",
     "created_at": "2025-01-25T05:23:34.000Z",
     "id": "1883022883578171482",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1882944708743467514",
     "text": "OpenAI 招前端工程师，年薪 $245K – $385K + Offers Equity。
 如果 OpenAI 都还在招前端工程师，那说明 AI 替代程序员还早……",
     "user": {
@@ -873,8 +978,11 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1883208540061622404",
     "created_at": "2025-01-25T17:41:18.000Z",
     "id": "1883208540061622404",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1883152254641082413",
     "text": "蒸馏这个词确实让人迷惑，感觉是从一份混合液中蒸馏出一种纯净水（从模型A中提取出了A1），实际完全不是这个意思，更应该翻译成“教学”。",
     "user": {
       "blocking": false,
@@ -893,8 +1001,11 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1883152254641082413",
     "created_at": "2025-01-25T13:57:39.000Z",
     "id": "1883152254641082413",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1882679738789216456",
     "text": "所以我说学界取得这个蒸馏术语，就取得不太好。
 
 外行一听就有自己的小理解了",
@@ -915,8 +1026,11 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1880155597854920998",
     "created_at": "2025-01-17T07:30:00.000Z",
     "id": "1880155597854920998",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "3月24日の申請から「#2025年旅券（#パスポート）」の発給が開始！
 偽造・変造対策が強化され、顔写真ページがプラスチック製に変わります。
 #現在お持ちのパスポートは有効期間まで使えます #パスポくん #旅券",
@@ -938,14 +1052,17 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1883328449382908284",
     "created_at": "2025-01-26T01:37:47.000Z",
     "id": "1883328449382908284",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiLsn-hWIAAJAoA.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "Programming gave me purpose , how about you ? https://t.co/gksun0A815",
     "user": {
       "blocking": false,
@@ -964,14 +1081,17 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1883106988349071564",
     "created_at": "2025-01-25T10:57:47.000Z",
     "id": "1883106988349071564",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiIj0fYakAArvKd.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "来拍个合影
 #复刻字体设计 https://t.co/2mzmg7eJ4Y",
     "user": {
@@ -991,14 +1111,17 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1883105370434081269",
     "created_at": "2025-01-25T10:51:21.000Z",
     "id": "1883105370434081269",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiIiStZbwAAov7P.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "#ブルアカ  
 プラナ https://t.co/3aoujXWJgl",
     "user": {
@@ -1020,8 +1143,10 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1883134783305171236",
     "created_at": "2025-01-25T12:48:13.000Z",
     "id": "1883134783305171236",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
@@ -1032,6 +1157,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
         "url": "https://pbs.twimg.com/media/GiI9GhfXMAA44Pk.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "好耶是方便面！加了自己烤的脆皮培根卷里脊肉和好多配菜ww
 
 其实方便面还好，之前看到0.7欧一袋顺手买了点，加的肉和菜有3欧了。其实吃起来和中国版没区别qwq https://t.co/BYRfkQgBWC",
@@ -1052,8 +1178,11 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1824603801061560477",
     "created_at": "2024-08-17T00:27:00.000Z",
     "id": "1824603801061560477",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "歷史紀錄片《秦始皇》以史籍文獻、文物遺蹟為依據，追溯秦始皇的一生事蹟，展現周秦之交一段波瀾壯闊的歷史。
 
 整部紀錄片共計12集，每集時長約20分鐘，講述兩千多年前，秦始皇統一六國、建立大一統王朝的輝煌功績。
@@ -1076,14 +1205,17 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1883320522760741081",
     "created_at": "2025-01-26T01:06:17.000Z",
     "id": "1883320522760741081",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiLmCNwbsAAMMFA.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "大早上：拿铁＋摩卡＋文拉法辛
 今天我跟世界必须疯一个 https://t.co/pceSmn6pLv",
     "user": {
@@ -1103,14 +1235,17 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1883142426245894475",
     "created_at": "2025-01-25T13:18:36.000Z",
     "id": "1883142426245894475",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiJDtEoa4AAf8tP.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "angel Alya #ロシデレ https://t.co/nPLvL4718S",
     "user": {
       "blocking": false,
@@ -1129,14 +1264,17 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1883163856845054174",
     "created_at": "2025-01-25T14:43:45.000Z",
     "id": "1883163856845054174",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiJXbeQaYAEVd2S.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "#angelicpretty Melty Berry Princess JSK 🍓
 给大家拜个早年啦~祝各位蛇年大吉！
 📷: @YazawaBunny 
@@ -1158,14 +1296,17 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1882891372866531358",
     "created_at": "2025-01-24T20:41:00.000Z",
     "id": "1882891372866531358",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiE5G14asAAB-Rv.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "apparently this is not an "acceptable excuse" 🙄 https://t.co/ELJJlmJFxo",
     "user": {
       "blocking": false,
@@ -1184,8 +1325,11 @@ Am I the only one who makes their projects harder just to learn the skills?",
     },
   },
   {
+    "conversation_id_str": "1877721770767319092",
     "created_at": "2025-01-10T14:18:51.000Z",
     "id": "1877721770767319092",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "Freedom &amp; joy at Phuket Island Rehab top luxury addiction rehab for your addiction recovery journey,
 
 We are ready when you are.  Join us at Phuket Island Rehab in Thailand and reclaim your life.",
@@ -1206,14 +1350,17 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T15:20:32.000Z",
     "id": "1883173115230134610",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiJf-AmaIAA5er1.jpg",
       },
     ],
+    "quoted_status_id_str": "1882896992017465643",
     "text": "这钱真能给到孩子，那多少钱我也认了。
 你睁眼看看，现在日本给孩子吃的都是什么鸡巴玩意儿。
 什么こども家庭庁年间预算7万亿日元，平摊到一个纳税人身上快10万日元就给孩子喂了屎。
@@ -1235,8 +1382,11 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
     },
   },
   {
+    "conversation_id_str": "1882822506392027415",
     "created_at": "2025-01-24T21:03:20.000Z",
     "id": "1882896992017465643",
+    "in_reply_to_status_id_str": "1882822506392027415",
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu 换句话说，只要黑在日本想方设法造个孩子，出于所谓人权考量就不能依法驱逐了，等于变相获得永居权，还要由你这样的纳税大户来间接抚养？这公平吗？",
     "user": {
       "blocking": false,
@@ -1255,8 +1405,11 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
     },
   },
   {
+    "conversation_id_str": "1883173115230134610",
     "created_at": "2025-01-25T15:52:55.000Z",
     "id": "1883181263605174363",
+    "in_reply_to_status_id_str": "1883173115230134610",
+    "quoted_status_id_str": undefined,
     "text": "@yuebanzhu 吃这些东西我真怀疑蛋白质摄入够么...生长发育期的能量消耗很大啊...",
     "user": {
       "blocking": false,
@@ -1275,14 +1428,17 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
     },
   },
   {
+    "conversation_id_str": "1882992803233591465",
     "created_at": "2025-01-25T03:24:03.000Z",
     "id": "1882992803233591465",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiG7-bvbsAAccXa.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "😁😁😁好久没发做的饭了。 https://t.co/0lttSIyadm",
     "user": {
       "blocking": false,
@@ -1301,8 +1457,11 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
     },
   },
   {
+    "conversation_id_str": "1883109864832127088",
     "created_at": "2025-01-25T11:09:12.000Z",
     "id": "1883109864832127088",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1882865234765058403",
     "text": "This guy thinks deepseek r1, which had pver 100 authors, more then any ive seen on a meta paper and maybe even more than i saw on gpt4 technical report - thinks that they are claiming they are a “small group” of ai engineers?",
     "user": {
       "blocking": false,
@@ -1323,8 +1482,11 @@ HuggingFace: https://t.co/sN2FFU8PVE",
     },
   },
   {
+    "conversation_id_str": "1882865234765058403",
     "created_at": "2025-01-24T18:57:08.000Z",
     "id": "1882865234765058403",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "What's more likely? 
 
 1 - small group of AI engineers at @deepseek_ai figures out how to beat all of the top researchers in the world as a side project
@@ -1347,8 +1509,11 @@ HuggingFace: https://t.co/sN2FFU8PVE",
     },
   },
   {
+    "conversation_id_str": "1883109864832127088",
     "created_at": "2025-01-26T00:55:34.000Z",
     "id": "1883317825487638616",
+    "in_reply_to_status_id_str": "1883109864832127088",
+    "quoted_status_id_str": undefined,
     "text": "@Teknium1 I think they included cooks and bus driver at their company no?",
     "user": {
       "blocking": false,
@@ -1369,8 +1534,11 @@ Let's make AI even cooler.",
     },
   },
   {
+    "conversation_id_str": "1856990771922309514",
     "created_at": "2024-11-14T09:21:15.000Z",
     "id": "1856990771922309514",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "暴雪VPN
 加速器必备，免费安全，翻墙无压力
 
@@ -1399,8 +1567,11 @@ Let's make AI even cooler.",
     },
   },
   {
+    "conversation_id_str": "1883016575235789282",
     "created_at": "2025-01-25T04:58:30.000Z",
     "id": "1883016575235789282",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1882725553071120594",
     "text": "RT @zhanghaili0610: Huge congrats on the launch! 🎉 Thrilled to see Refly enter the open-source world. Powered by @LangChainAI 🦜🕸️ and LangG…",
     "user": {
       "blocking": false,
@@ -1419,8 +1590,11 @@ Let's make AI even cooler.",
     },
   },
   {
+    "conversation_id_str": "1882789803449876645",
     "created_at": "2025-01-24T13:57:24.000Z",
     "id": "1882789803449876645",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1882725553071120594",
     "text": "Huge congrats on the launch! 🎉 Thrilled to see Refly enter the open-source world. Powered by @LangChainAI 🦜🕸️ and LangGraph.js for next-level AI capabilities — the possibilities are endless. Can’t wait to dive in! 🚀🔥🎉",
     "user": {
       "blocking": false,
@@ -1439,14 +1613,17 @@ Let's make AI even cooler.",
     },
   },
   {
+    "conversation_id_str": "1882725553071120594",
     "created_at": "2025-01-24T09:42:05.000Z",
     "id": "1882725553071120594",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiDI1tibMAAPD4K.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "After 7 months of development, 1 month of beta testing, and 77,376 lines of code! ⚡️Refly is now officially open source! 🔥🚀 
 
 Since day one, Refly has aspired to become a world-class open-source project alongside Docker and K8S! Our mission is to create the best AI-native https://t.co/nIuS3DNoZl",
@@ -1470,14 +1647,17 @@ Discord: https://t.co/HFvxnoFRvr",
     },
   },
   {
+    "conversation_id_str": "1883085175988556027",
     "created_at": "2025-01-25T09:31:06.000Z",
     "id": "1883085175988556027",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiIP_A_akAAB724.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "崩壊:スターレイル / 開拓者 星 https://t.co/zcsznxg5lv",
     "user": {
       "blocking": false,
@@ -1496,14 +1676,17 @@ Discord: https://t.co/HFvxnoFRvr",
     },
   },
   {
+    "conversation_id_str": "1883077348578173377",
     "created_at": "2025-01-25T09:00:00.000Z",
     "id": "1883077348578173377",
+    "in_reply_to_status_id_str": undefined,
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiIIwBpa0AA0b0g.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "百合園セイア
 #ブルアカ #BlueArchive https://t.co/Pf5CrczwOv",
     "user": {
@@ -1523,8 +1706,11 @@ Discord: https://t.co/HFvxnoFRvr",
     },
   },
   {
+    "conversation_id_str": "1883145230683406810",
     "created_at": "2025-01-25T13:29:44.000Z",
     "id": "1883145230683406810",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "02年家里人说不养我了，谁能收留我一段时间，我会想办法打工然后卷款跑路，包联系不上的",
     "user": {
       "blocking": false,
@@ -1548,8 +1734,11 @@ Discord: https://t.co/HFvxnoFRvr",
 exports[`parseTweets > parseTweets for user tweets and replies 1`] = `
 [
   {
+    "conversation_id_str": "1883347352976843148",
     "created_at": "2025-01-26T02:52:54.000Z",
     "id": "1883347352976843148",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1883346528397590546",
     "text": "再评论deepseek要捅马蜂窝了，最后说下：
 
 我理解deepseek提供了了一条更快实现O-1复刻路径。推理端变更便宜，落后的都可以用。但是对行业没有冲击，不涉及训练端
@@ -1572,8 +1761,11 @@ exports[`parseTweets > parseTweets for user tweets and replies 1`] = `
     },
   },
   {
+    "conversation_id_str": "1883135245148717450",
     "created_at": "2025-01-26T02:49:37.000Z",
     "id": "1883346528397590546",
+    "in_reply_to_status_id_str": "1883295248136229230",
+    "quoted_status_id_str": undefined,
     "text": "@JundeMorsenWu 那么，幻方这条路是谁趟出来的呢？
 
 OpenAI不告诉你怎么re-inforce learning，幻方都不知道怎么蒸馏模型。这个路是OpenAI一遍遍试出来的，幻方“拿来用”，成本低不是太正常了么？
@@ -1596,8 +1788,11 @@ OpenAI不告诉你怎么re-inforce learning，幻方都不知道怎么蒸馏模�
     },
   },
   {
+    "conversation_id_str": "1883347352976843148",
     "created_at": "2025-01-26T02:56:50.000Z",
     "id": "1883348342622830634",
+    "in_reply_to_status_id_str": "1883347352976843148",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin 还是华为一如既往的操作手段
 把自己吹成后来者居上
 直到某天被人掐脖子。。。",
@@ -1618,8 +1813,11 @@ OpenAI不告诉你怎么re-inforce learning，幻方都不知道怎么蒸馏模�
     },
   },
   {
+    "conversation_id_str": "1883347352976843148",
     "created_at": "2025-01-26T03:07:27.000Z",
     "id": "1883351014927200505",
+    "in_reply_to_status_id_str": "1883348342622830634",
+    "quoted_status_id_str": undefined,
     "text": "@syang2045 @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
 https://t.co/66kk5cUv1v",
     "user": {
@@ -1639,14 +1837,17 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1883347352976843148",
     "created_at": "2025-01-26T02:57:24.000Z",
     "id": "1883348486592266476",
+    "in_reply_to_status_id_str": "1883347352976843148",
     "media": [
       {
         "type": "photo",
         "url": "https://pbs.twimg.com/media/GiL_dQAakAAU9cF.jpg",
       },
     ],
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin https://t.co/z6jSO6LCNJ",
     "user": {
       "blocking": false,
@@ -1665,8 +1866,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1883347352976843148",
     "created_at": "2025-01-26T03:07:22.000Z",
     "id": "1883350994899320836",
+    "in_reply_to_status_id_str": "1883348486592266476",
+    "quoted_status_id_str": undefined,
     "text": "@linzhutou404 @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
 https://t.co/66kk5cUv1v",
     "user": {
@@ -1686,8 +1890,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1883347352976843148",
     "created_at": "2025-01-26T03:01:04.000Z",
     "id": "1883349407439138839",
+    "in_reply_to_status_id_str": "1883347352976843148",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin 我覺得對行業衝擊很大，AI版Temu",
     "user": {
       "blocking": false,
@@ -1706,8 +1913,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1883347352976843148",
     "created_at": "2025-01-26T03:07:13.000Z",
     "id": "1883350956534075902",
+    "in_reply_to_status_id_str": "1883349407439138839",
+    "quoted_status_id_str": undefined,
     "text": "@Manchesea @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
 https://t.co/66kk5cUv1v",
     "user": {
@@ -1727,8 +1937,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1883135245148717450",
     "created_at": "2025-01-25T12:50:04.000Z",
     "id": "1883135245148717450",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1882679738789216456",
     "text": "不要把deepseek拿去跟GPT做比较，是不可同日而语的东西
 
 Hugging face上这种论文、垂直模型多如牛毛。市场关注亮点不过是中国在“没有”算力卡成本很低也能训练出效果差不多的模型。且说中国真没囤H100么？
@@ -1751,8 +1964,11 @@ deepseek是个工程方法，大厂不屑于做，浪费精力做这个模型能
     },
   },
   {
+    "conversation_id_str": "1882679738789216456",
     "created_at": "2025-01-24T06:40:02.000Z",
     "id": "1882679738789216456",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1882647210359415188",
     "text": "你听说过什么叫“蒸馏”么？说个大白话：
 
 就是拿人家算出来的模型参数，跳过所有数据清洗、训练，做最后一程。其实没有任何创新
@@ -1775,8 +1991,11 @@ deepseek是个工程方法，大厂不屑于做，浪费精力做这个模型能
     },
   },
   {
+    "conversation_id_str": "1883135245148717450",
     "created_at": "2025-01-25T12:54:09.000Z",
     "id": "1883136276335145013",
+    "in_reply_to_status_id_str": "1883135245148717450",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin 已经够nvda 跌的了",
     "user": {
       "blocking": false,
@@ -1795,8 +2014,11 @@ deepseek是个工程方法，大厂不屑于做，浪费精力做这个模型能
     },
   },
   {
+    "conversation_id_str": "1883135245148717450",
     "created_at": "2025-01-25T16:13:48.000Z",
     "id": "1883186517298040851",
+    "in_reply_to_status_id_str": "1883136276335145013",
+    "quoted_status_id_str": undefined,
     "text": "@Charles48717364 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -1820,8 +2042,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882971745344491595",
     "created_at": "2025-01-25T02:00:22.000Z",
     "id": "1882971745344491595",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1877201139436843456",
     "text": "ASML放开我觉得影响没那么大
 
 记者们总喜欢搞一个“大新闻”，但是EUV光源是美国军控的不可能对中国开放
@@ -1844,8 +2069,11 @@ DUV中国已经堆积如山多，过度投资多的发毛没人用了。现在�
     },
   },
   {
+    "conversation_id_str": "1877201139436843456",
     "created_at": "2025-01-09T03:50:03.000Z",
     "id": "1877201139436843456",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "只要不制裁到位，1-2年内中国还会把成熟制程芯片全部卷死",
     "user": {
       "blocking": false,
@@ -1864,8 +2092,11 @@ DUV中国已经堆积如山多，过度投资多的发毛没人用了。现在�
     },
   },
   {
+    "conversation_id_str": "1882971745344491595",
     "created_at": "2025-01-25T08:11:29.000Z",
     "id": "1883065140624683421",
+    "in_reply_to_status_id_str": "1882971745344491595",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin Asml er gonna be weak",
     "user": {
       "blocking": false,
@@ -1885,8 +2116,11 @@ I share my trade ideas and opinion free and glad to hear your ideas otherwise sh
     },
   },
   {
+    "conversation_id_str": "1882971745344491595",
     "created_at": "2025-01-25T14:59:27.000Z",
     "id": "1883167805882945809",
+    "in_reply_to_status_id_str": "1883065140624683421",
+    "quoted_status_id_str": undefined,
     "text": "@diyas_1989 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -1911,8 +2145,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882971745344491595",
     "created_at": "2025-01-25T07:29:55.000Z",
     "id": "1883054680127004972",
+    "in_reply_to_status_id_str": "1882971745344491595",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin 记者们总搞“大新闻”，EUV是军控，不会开放。DUV堆积如山，过剩得离谱，盘厂申请退税，利息付了就行。",
     "user": {
       "blocking": true,
@@ -1931,8 +2168,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882971745344491595",
     "created_at": "2025-01-25T14:59:24.000Z",
     "id": "1883167796684820961",
+    "in_reply_to_status_id_str": "1883054680127004972",
+    "quoted_status_id_str": undefined,
     "text": "@OfficialNewsWin @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -1957,8 +2197,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882971745344491595",
     "created_at": "2025-01-25T02:04:36.000Z",
     "id": "1882972808474701957",
+    "in_reply_to_status_id_str": "1882971745344491595",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin 搞一个大新闻，马上让我看到了长者的样子。😂",
     "user": {
       "blocking": false,
@@ -1977,8 +2220,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882971745344491595",
     "created_at": "2025-01-25T14:59:22.000Z",
     "id": "1883167787889365114",
+    "in_reply_to_status_id_str": "1882972808474701957",
+    "quoted_status_id_str": undefined,
     "text": "@liangJiao8 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2003,8 +2249,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882847756454351091",
     "created_at": "2025-01-24T17:47:41.000Z",
     "id": "1882847756454351091",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1882727821178757273",
     "text": "解释下文“短期预期太满”
 
 不是盈利预期问题，除了TSLA/AAPL考卷不会太难看，而是云厂需要回答：23-24年CapEx 50%+增加后，毛利如何、25年CapEx如何定调？
@@ -2031,8 +2280,11 @@ C. 考虑毛利，降低ROI增速",
     },
   },
   {
+    "conversation_id_str": "1882727821178757273",
     "created_at": "2025-01-24T09:51:06.000Z",
     "id": "1882727821178757273",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1880077688381272433",
     "text": "维持之前观点，1Q再上一层楼不容易
 
 Goog/MSFT/NV/AMZN大概率inline～beat。但是预期太满了，幅度也不一定够
@@ -2057,8 +2309,11 @@ TSLA/AAPL很难及格
     },
   },
   {
+    "conversation_id_str": "1882847756454351091",
     "created_at": "2025-01-24T18:11:00.000Z",
     "id": "1882853625845928402",
+    "in_reply_to_status_id_str": "1882847756454351091",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin 当初吹过的牛，现在含着泪也要吹完。",
     "user": {
       "blocking": false,
@@ -2077,8 +2332,11 @@ TSLA/AAPL很难及格
     },
   },
   {
+    "conversation_id_str": "1882847756454351091",
     "created_at": "2025-01-25T14:59:20.000Z",
     "id": "1883167780016636201",
+    "in_reply_to_status_id_str": "1882853625845928402",
+    "quoted_status_id_str": undefined,
     "text": "@joedhammer @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2103,8 +2361,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882847756454351091",
     "created_at": "2025-01-24T18:08:47.000Z",
     "id": "1882853067684720830",
+    "in_reply_to_status_id_str": "1882847756454351091",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin I hope that servers’ demand for ASICs will be cross-verified during Amazon’s Q4 earnings call, even though the current price of $MRVL&amp; $AVGO is not entirely reasonable to me.😂😂",
     "user": {
       "blocking": false,
@@ -2123,8 +2384,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882847756454351091",
     "created_at": "2025-01-25T14:59:19.000Z",
     "id": "1883167772525666381",
+    "in_reply_to_status_id_str": "1882853067684720830",
+    "quoted_status_id_str": undefined,
     "text": "@cliupsic @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2149,8 +2413,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882847756454351091",
     "created_at": "2025-01-24T20:12:05.000Z",
     "id": "1882884094302019940",
+    "in_reply_to_status_id_str": "1882847756454351091",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin 短期预期太满：市场对公司未来表现期待过高，可能导致失望。",
     "user": {
       "blocking": true,
@@ -2169,8 +2436,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882847756454351091",
     "created_at": "2025-01-25T14:59:17.000Z",
     "id": "1883167765496004622",
+    "in_reply_to_status_id_str": "1882884094302019940",
+    "quoted_status_id_str": undefined,
     "text": "@OfficialNewsWin @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2195,8 +2465,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882983442792755242",
     "created_at": "2025-01-25T02:46:51.000Z",
     "id": "1882983442792755242",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": "1882814711823217046",
     "text": "我都不知道该怎么评论这个“deep sick”了
 
 这可不是我发明的哦",
@@ -2217,8 +2490,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882679738789216456",
     "created_at": "2025-01-24T15:36:22.000Z",
     "id": "1882814711823217046",
+    "in_reply_to_status_id_str": "1882679738789216456",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin Open AI都不开源的，你看deep sick完全开源谁抄谁呀？",
     "user": {
       "blocking": false,
@@ -2237,8 +2513,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882983442792755242",
     "created_at": "2025-01-25T09:08:50.000Z",
     "id": "1883079571454808187",
+    "in_reply_to_status_id_str": "1882983442792755242",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin deep sick fantasy",
     "user": {
       "blocking": false,
@@ -2257,8 +2536,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882983442792755242",
     "created_at": "2025-01-25T14:59:15.000Z",
     "id": "1883167758424371517",
+    "in_reply_to_status_id_str": "1883079571454808187",
+    "quoted_status_id_str": undefined,
     "text": "@allaboutgamble @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2283,8 +2565,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882983442792755242",
     "created_at": "2025-01-25T03:02:45.000Z",
     "id": "1882987445706494140",
+    "in_reply_to_status_id_str": "1882983442792755242",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin 能给我你电报的链接吗？",
     "user": {
       "blocking": false,
@@ -2303,8 +2588,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882983442792755242",
     "created_at": "2025-01-25T14:59:12.000Z",
     "id": "1883167746537750881",
+    "in_reply_to_status_id_str": "1882987445706494140",
+    "quoted_status_id_str": undefined,
     "text": "@MangalT44107774 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2329,8 +2617,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882983442792755242",
     "created_at": "2025-01-25T04:11:58.000Z",
     "id": "1883004861161275570",
+    "in_reply_to_status_id_str": "1882983442792755242",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin 老中骨子里可太喜欢这种“弯道超车”了，建议信这东西的，先想想你一时抖机灵，能不能跑赢你头顶姥爷三代走草地的积累吧",
     "user": {
       "blocking": false,
@@ -2349,8 +2640,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1882983442792755242",
     "created_at": "2025-01-25T14:59:10.000Z",
     "id": "1883167735141843133",
+    "in_reply_to_status_id_str": "1883004861161275570",
+    "quoted_status_id_str": undefined,
     "text": "@lyric47749 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2375,8 +2669,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1883135245148717450",
     "created_at": "2025-01-25T12:57:58.000Z",
     "id": "1883137237124264367",
+    "in_reply_to_status_id_str": "1883135245148717450",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin Have ever heard Ilya just said Pre-training is hitting the wall a few months ago? Data distill from big model is a great strategy to accelerate training especially when your competitors start to focus on reasoning capabilities.",
     "user": {
       "blocking": false,
@@ -2395,8 +2692,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1883135245148717450",
     "created_at": "2025-01-25T14:59:07.000Z",
     "id": "1883167724668674524",
+    "in_reply_to_status_id_str": "1883137237124264367",
+    "quoted_status_id_str": undefined,
     "text": "@LinQingV @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2421,8 +2721,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1883135245148717450",
     "created_at": "2025-01-25T13:00:39.000Z",
     "id": "1883137909236367734",
+    "in_reply_to_status_id_str": "1883135245148717450",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin There is no point to waste compute resources on pre-training stage of LLM model.",
     "user": {
       "blocking": false,
@@ -2441,8 +2744,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1883135245148717450",
     "created_at": "2025-01-25T14:59:06.000Z",
     "id": "1883167717232091467",
+    "in_reply_to_status_id_str": "1883137909236367734",
+    "quoted_status_id_str": undefined,
     "text": "@LinQingV @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2467,8 +2773,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1883135245148717450",
     "created_at": "2025-01-25T12:51:55.000Z",
     "id": "1883135713052704996",
+    "in_reply_to_status_id_str": "1883135245148717450",
+    "quoted_status_id_str": undefined,
     "text": "@ShanghaoJin J35吊打一切地球武器。",
     "user": {
       "blocking": false,
@@ -2487,8 +2796,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1883135245148717450",
     "created_at": "2025-01-25T14:58:27.000Z",
     "id": "1883167556086964382",
+    "in_reply_to_status_id_str": "1883135713052704996",
+    "quoted_status_id_str": undefined,
     "text": "@liangJiao8 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2513,8 +2825,11 @@ https://t.co/66kk5cUv1v",
     },
   },
   {
+    "conversation_id_str": "1498359213000921089",
     "created_at": "2022-02-28T18:07:29.000Z",
     "id": "1498359213000921089",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "RT @R183342664: คืนนี้แตกกับคู่เทพ
 @69fun
 https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
@@ -2535,8 +2850,11 @@ https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
     },
   },
   {
+    "conversation_id_str": "1498305435048509445",
     "created_at": "2022-02-28T14:33:47.000Z",
     "id": "1498305435048509445",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "คืนนี้แตกกับคู่เทพ
 @69fun
 https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
@@ -2562,8 +2880,11 @@ https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
 exports[`parseTweets > parseTweets for user tweets only 1`] = `
 [
   {
+    "conversation_id_str": "1498359213000921089",
     "created_at": "2022-02-28T18:07:29.000Z",
     "id": "1498359213000921089",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "RT @R183342664: คืนนี้แตกกับคู่เทพ
 @69fun
 https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
@@ -2584,8 +2905,11 @@ https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
     },
   },
   {
+    "conversation_id_str": "1498305435048509445",
     "created_at": "2022-02-28T14:33:47.000Z",
     "id": "1498305435048509445",
+    "in_reply_to_status_id_str": undefined,
+    "quoted_status_id_str": undefined,
     "text": "คืนนี้แตกกับคู่เทพ
 @69fun
 https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",

@@ -14,9 +14,9 @@ export type AccountSettingsError = {
 }
 accounts.get('/settings', async (c) => {
   const prisma = await prismaClients.fetch(c.env.DB)
-  const tokenInfo = c.get('tokenInfo')
+  const tokenInfo = c.get('jwtPayload')
   const user = await prisma.localUser.findUnique({
-    where: { id: tokenInfo.id },
+    where: { id: tokenInfo.sub },
     select: {
       id: true,
       email: true,

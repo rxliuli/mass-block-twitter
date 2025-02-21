@@ -30,7 +30,7 @@ billing.post(
   zValidator('json', checkoutCompleteRequestSchema),
   async (c) => {
     const { transactionId, countryCode } = c.req.valid('json')
-    const tokenInfo = c.get('tokenInfo')
+    const tokenInfo = c.get('jwtPayload')
     const resp = await fetch(
       c.env.PADDEL_API_URL + '/transactions/' + transactionId,
       {
@@ -69,13 +69,13 @@ billing.post(
         'subscription',
         transaction.data.details.totals.total / 100,
         'success',
-        tokenInfo.id,
+        tokenInfo.sub,
         countryCode,
         new Date().toISOString(),
         new Date().toISOString(),
       ),
       c.env.DB.prepare('UPDATE localUser SET isPro = true WHERE id = ?').bind(
-        tokenInfo.id,
+        tokenInfo.sub,
       ),
     ])
     return c.json({ message: 'Payment created' })

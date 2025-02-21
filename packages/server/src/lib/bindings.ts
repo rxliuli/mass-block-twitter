@@ -8,18 +8,22 @@ export type Bindings = {
   RESEND_API_KEY: string
 
   TEST_INIT_SQL: string
+
+  JWT_SECRET: string
 }
 
 export interface TokenInfo {
-  createdAt: string
-  updatedAt: string
-  id: string // userId
-  email: string
+  sub: string // localUserId
 }
 
 export type HonoEnv = {
   Bindings: Bindings
   Variables: {
     tokenInfo: TokenInfo
+
+    jwtPayload: TokenInfo & {
+      iat: number
+      exp: number
+    }
   }
 }

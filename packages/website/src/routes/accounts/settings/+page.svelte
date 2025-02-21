@@ -20,7 +20,7 @@
         import.meta.env.VITE_API_URL + '/api/accounts/settings',
         {
           headers: {
-            Authorization: (await getAuthInfo())?.token!,
+            Authorization: 'Bearer ' + (await getAuthInfo())?.token!,
           },
         },
       )

@@ -2,9 +2,9 @@ import { zValidator } from '@hono/zod-validator'
 import { Context, Hono } from 'hono'
 import { z } from 'zod'
 import { prismaClients } from '../lib/prisma'
-import { HonoEnv, TokenInfo } from '../lib/bindings'
+import { HonoEnv } from '../lib/bindings'
 import { generateSecureCode, sha256 } from '../lib/crypto'
-import { getTokenInfo } from '../middlewares/auth'
+import { generateToken, getTokenInfo } from '../middlewares/auth'
 
 type CreateEmailOptions = {
   from: string
@@ -153,20 +153,9 @@ auth
       where: { id: user.id },
       data: user,
     })
-    const token = (await sha256({
-      id: user.id,
-      email: user.email,
-      createdAt: new Date().toISOString(),
-    }))!
-    await c.env.MY_KV.put(
-      token,
-      JSON.stringify({
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        id: user.id,
-        email: user.email,
-      } satisfies TokenInfo),
-    )
+    const token = await generateToken(c.env, {
+      sub: user.id,
+    })
     return c.json({
       code: 'success',
       data: {
@@ -178,10 +167,7 @@ auth
     })
   })
   .post('/logout', async (c) => {
-    const tokenInfo = await getTokenInfo(c)
-    if (tokenInfo) {
-      await c.env.MY_KV.delete(tokenInfo.token)
-    }
+    // TODO add token to blacklist
     return c.json({ code: 'success' })
   })
   .post(
@@ -295,20 +281,9 @@ auth
       await c.env.MY_KV.delete('verify-email-' + validated.email)
 
       // generate token
-      const token = (await sha256({
-        id: user.id,
-        email: user.email,
-        createdAt: new Date().toISOString(),
-      }))!
-      await c.env.MY_KV.put(
-        token,
-        JSON.stringify({
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          id: user.id,
-          email: user.email,
-        } satisfies TokenInfo),
-      )
+      const token = await generateToken(c.env, {
+        sub: user.id,
+      })
       return c.json({
         code: 'success',
         data: {

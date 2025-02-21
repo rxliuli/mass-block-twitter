@@ -4,31 +4,39 @@ import { HonoEnv, TokenInfo } from '../src/lib/bindings'
 import { createExecutionContext, env } from 'cloudflare:test'
 import { prismaClients } from '../src/lib/prisma'
 import { PrismaClient } from '@prisma/client'
+import { generateToken } from '../src/middlewares/auth'
 
 export interface CloudflareTestContext {
   ctx: ExecutionContext
   fetch: typeof app.request
   prisma: PrismaClient
+  token1: string
+  token2: string
+  env: HonoEnv['Bindings']
 }
 
 export async function createCloudflareTestContext(): Promise<CloudflareTestContext> {
   const _env = env as HonoEnv['Bindings']
+  const token1 = await generateToken(_env, {
+    sub: 'test-user-1',
+    email: '1@test.com',
+  })
+  const token2 = await generateToken(_env, {
+    sub: 'test-user-2',
+    email: '2@test.com',
+  })
   await _env.MY_KV.put(
-    'test-token-1',
+    token1,
     JSON.stringify({
-      id: 'test-user-1',
+      sub: 'test-user-1',
       email: '1@test.com',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     } satisfies TokenInfo),
   )
   await _env.MY_KV.put(
-    'test-token-2',
+    token2,
     JSON.stringify({
-      id: 'test-user-2',
+      sub: 'test-user-2',
       email: '2@test.com',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     } satisfies TokenInfo),
   )
   await _env.DB.prepare(_env.TEST_INIT_SQL).run()
@@ -39,8 +47,6 @@ export async function createCloudflareTestContext(): Promise<CloudflareTestConte
       email: '1@test.com',
       password: 'test',
       emailVerified: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     },
   })
   await prisma.localUser.create({
@@ -49,8 +55,6 @@ export async function createCloudflareTestContext(): Promise<CloudflareTestConte
       email: '2@test.com',
       password: 'test',
       emailVerified: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     },
   })
   const ctx = createExecutionContext()
@@ -60,10 +64,13 @@ export async function createCloudflareTestContext(): Promise<CloudflareTestConte
     ctx,
     fetch,
     prisma,
+    token1,
+    token2,
+    env: _env,
   }
 }
 
-export function initCloudflareTest() {
+export function initCloudflareTest(): CloudflareTestContext {
   let context: CloudflareTestContext
   beforeEach(async () => {
     context = await createCloudflareTestContext()
@@ -84,7 +91,13 @@ export function initCloudflareTest() {
       return context.prisma
     },
     get env() {
-      return env as HonoEnv['Bindings']
+      return context.env
+    },
+    get token1() {
+      return context.token1
+    },
+    get token2() {
+      return context.token2
     },
   }
 }

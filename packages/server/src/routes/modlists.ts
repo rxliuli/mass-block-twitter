@@ -7,6 +7,7 @@ import { ulid } from 'ulidx'
 import { userSchema } from '../lib/request'
 import { ModList, PrismaClient, User } from '@prisma/client'
 import { getTokenInfo } from '../middlewares/auth'
+import { decode } from 'hono/jwt'
 
 const modlists = new Hono<HonoEnv>()
 
@@ -43,7 +44,7 @@ export type ModListCreateResponse = ModList
 modlists.post('/create', zValidator('json', createSchema), async (c) => {
   const validated = c.req.valid('json')
   const prisma = await prismaClients.fetch(c.env.DB)
-  const tokenInfo = c.get('tokenInfo')
+  const tokenInfo = c.get('jwtPayload')
   await upsertUser(prisma, validated.twitterUser)
   const r = await prisma.modList.create({
     data: {
@@ -51,7 +52,7 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
       name: validated.name,
       description: validated.description,
       avatar: validated.avatar,
-      localUserId: tokenInfo.id,
+      localUserId: tokenInfo.sub,
       twitterUserId: validated.twitterUser.id,
       visibility: validated.visibility,
       subscriptionCount: 0,
@@ -71,9 +72,9 @@ modlists.put('/update/:id', zValidator('json', updateSchema), async (c) => {
   const validated = c.req.valid('json')
   const id = c.req.param('id')
   const prisma = await prismaClients.fetch(c.env.DB)
-  const tokenInfo = c.get('tokenInfo')
+  const tokenInfo = c.get('jwtPayload')
   const modList = await prisma.modList.findUnique({
-    where: { id, localUserId: tokenInfo.id },
+    where: { id, localUserId: tokenInfo.sub },
   })
   if (!modList) {
     return c.json({ code: 'modListNotFound' }, 404)
@@ -100,9 +101,9 @@ export type ModListRemoveErrorResponse = {
 modlists.delete('/remove/:id', zValidator('param', removeSchema), async (c) => {
   const validated = c.req.valid('param')
   const prisma = await prismaClients.fetch(c.env.DB)
-  const tokenInfo = c.get('tokenInfo')
+  const tokenInfo = c.get('jwtPayload')
   const modList = await prisma.modList.findUnique({
-    where: { id: validated.id, localUserId: tokenInfo.id },
+    where: { id: validated.id, localUserId: tokenInfo.sub },
   })
   if (!modList) {
     return c.json({ code: 'modListNotFound' }, 404)
@@ -130,9 +131,9 @@ modlists.delete('/remove/:id', zValidator('param', removeSchema), async (c) => {
 export type ModListGetCreatedResponse = ModList[]
 modlists.get('/created', async (c) => {
   const prisma = await prismaClients.fetch(c.env.DB)
-  const tokenInfo = c.get('tokenInfo')
+  const tokenInfo = c.get('jwtPayload')
   const modLists = await prisma.modList.findMany({
-    where: { localUserId: tokenInfo.id },
+    where: { localUserId: tokenInfo.sub },
     orderBy: { updatedAt: 'desc' },
   })
   return c.json<ModListGetCreatedResponse>(modLists)
@@ -153,7 +154,7 @@ modlists
     async (c) => {
       const validated = c.req.valid('param')
       const prisma = await prismaClients.fetch(c.env.DB)
-      const tokenInfo = c.get('tokenInfo')
+      const tokenInfo = c.get('jwtPayload')
       const modList = await prisma.modList.findUnique({
         where: { id: validated.modListId },
       })
@@ -164,7 +165,7 @@ modlists
         where: {
           modListId_localUserId: {
             modListId: validated.modListId,
-            localUserId: tokenInfo.id,
+            localUserId: tokenInfo.sub,
           },
         },
       })
@@ -190,7 +191,7 @@ modlists
         ).bind(
           ulid(),
           validated.modListId,
-          tokenInfo.id,
+          tokenInfo.sub,
           new Date().toISOString(),
           new Date().toISOString(),
         ),
@@ -207,7 +208,7 @@ modlists
     async (c) => {
       const validated = c.req.valid('param')
       const prisma = await prismaClients.fetch(c.env.DB)
-      const tokenInfo = c.get('tokenInfo')
+      const tokenInfo = c.get('jwtPayload')
       const modList = await prisma.modList.findUnique({
         where: { id: validated.modListId },
       })
@@ -218,7 +219,7 @@ modlists
         where: {
           modListId_localUserId: {
             modListId: validated.modListId,
-            localUserId: tokenInfo.id,
+            localUserId: tokenInfo.sub,
           },
         },
       })
@@ -247,12 +248,12 @@ modlists
   )
   .get('/subscribed', async (c) => {
     const prisma = await prismaClients.fetch(c.env.DB)
-    const tokenInfo = c.get('tokenInfo')
+    const tokenInfo = c.get('jwtPayload')
     const modList = await prisma.modListSubscription.findMany({
       select: {
         modList: true,
       },
-      where: { localUserId: tokenInfo.id },
+      where: { localUserId: tokenInfo.sub },
     })
     return c.json<ModListSubscribeResponse>(modList.map((it) => it.modList))
   })
@@ -267,11 +268,11 @@ export type ModListAddTwitterUserResponse = User
 modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
   const validated = c.req.valid('json')
   const prisma = await prismaClients.fetch(c.env.DB)
-  const tokenInfo = c.get('tokenInfo')
+  const tokenInfo = c.get('jwtPayload')
   const result = await prisma.modList.findUnique({
     where: {
       id: validated.modListId,
-      localUserId: tokenInfo.id,
+      localUserId: tokenInfo.sub,
     },
     include: {
       ModListUser: {
@@ -338,11 +339,11 @@ modlists.delete(
   async (c) => {
     const validated = c.req.valid('json')
     const prisma = await prismaClients.fetch(c.env.DB)
-    const tokenInfo = c.get('tokenInfo')
+    const tokenInfo = c.get('jwtPayload')
     const modList = await prisma.modList.findUnique({
       where: {
         id: validated.modListId,
-        localUserId: tokenInfo.id,
+        localUserId: tokenInfo.sub,
       },
       include: {
         ModListUser: {
@@ -443,9 +444,9 @@ export type ModListSubscribedUserResponse = {
 }[]
 modlists.get('/subscribed/users', async (c) => {
   const prisma = await prismaClients.fetch(c.env.DB)
-  const tokenInfo = c.get('tokenInfo')
+  const tokenInfo = c.get('jwtPayload')
   const modLists = await prisma.modListSubscription.findMany({
-    where: { localUserId: tokenInfo.id, modList: { userCount: { gt: 0 } } },
+    where: { localUserId: tokenInfo.sub, modList: { userCount: { gt: 0 } } },
     include: {
       modList: {
         include: {
@@ -527,10 +528,10 @@ search
     const tokenInfo = await getTokenInfo(c)
     const subscribed = tokenInfo
       ? (await prisma.modListSubscription.count({
-          where: { modListId: id, localUserId: tokenInfo.id },
+          where: { modListId: id, localUserId: tokenInfo.sub },
         })) > 0
       : false
-    const owner = modList.localUserId === tokenInfo?.id
+    const owner = modList.localUserId === tokenInfo?.sub
     return c.json<ModListGetResponse>({
       ...modList,
       subscribed,

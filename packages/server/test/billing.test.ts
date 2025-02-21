@@ -1,8 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import {
-  CloudflareTestContext,
-  createCloudflareTestContext,
-} from './utils'
+import { CloudflareTestContext, createCloudflareTestContext } from './utils'
 import { CheckoutCompleteRequest } from '../src/lib'
 import { PaddleTransaction } from '../src/routes/billing'
 
@@ -29,7 +26,7 @@ describe('billing', () => {
         countryCode: 'US',
       } satisfies CheckoutCompleteRequest),
       headers: {
-        Authorization: 'test-token-1',
+        Authorization: `Bearer ${context.token1}`,
         'Content-Type': 'application/json',
       },
     })
@@ -62,7 +59,7 @@ describe('billing', () => {
         countryCode: 'US',
       } satisfies CheckoutCompleteRequest),
       headers: {
-        Authorization: 'test-token-1',
+        Authorization: `Bearer ${context.token1}`,
         'Content-Type': 'application/json',
       },
     })

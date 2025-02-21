@@ -41,7 +41,7 @@ describe('modlists', () => {
         method: 'POST',
         body: JSON.stringify(newModList),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -58,7 +58,7 @@ describe('modlists', () => {
       const resp1 = await fetch('/api/modlists/create', {
         method: 'POST',
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -85,7 +85,7 @@ describe('modlists', () => {
     it('should be able to get created modlists', async () => {
       const getCreated = async () => {
         const resp1 = await fetch('/api/modlists/created', {
-          headers: { Authorization: 'test-token-1' },
+          headers: { Authorization: `Bearer ${context.token1}` },
         })
         expect(resp1.ok).true
         return (await resp1.json()) as ModListGetCreatedResponse
@@ -96,7 +96,7 @@ describe('modlists', () => {
         method: 'POST',
         body: JSON.stringify(newModList),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -114,7 +114,7 @@ describe('modlists', () => {
           visibility: 'protected',
         } satisfies ModListCreateRequest),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -132,7 +132,7 @@ describe('modlists', () => {
           visibility: 'public',
         } satisfies ModListUpdateRequest),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -152,7 +152,7 @@ describe('modlists', () => {
         method: 'POST',
         body: JSON.stringify(newModList),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -165,7 +165,7 @@ describe('modlists', () => {
         method: 'PUT',
         body: JSON.stringify({ name: 'test2' } satisfies ModListUpdateRequest),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -178,7 +178,7 @@ describe('modlists', () => {
         method: 'PUT',
         body: JSON.stringify({ name: 'test2' } satisfies ModListUpdateRequest),
         headers: {
-          Authorization: 'test-token-2',
+          Authorization: `Bearer ${context.token2}`,
           'Content-Type': 'application/json',
         },
       })
@@ -188,7 +188,7 @@ describe('modlists', () => {
   const remove = (id: string) =>
     fetch(`/api/modlists/remove/${id}`, {
       method: 'DELETE',
-      headers: { Authorization: 'test-token-1' },
+      headers: { Authorization: `Bearer ${context.token1}` },
     })
   const getModList = async (id: string, token?: string) => {
     const headers = token ? { Authorization: token } : undefined
@@ -207,7 +207,7 @@ describe('modlists', () => {
         twitterUser,
       } satisfies ModListAddTwitterUserRequest),
       headers: {
-        Authorization: 'test-token-1',
+        Authorization: `Bearer ${context.token1}`,
         'Content-Type': 'application/json',
       },
     })
@@ -221,7 +221,7 @@ describe('modlists', () => {
         method: 'POST',
         body: JSON.stringify(newModList),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -240,7 +240,7 @@ describe('modlists', () => {
         method: 'POST',
         body: JSON.stringify(newModList),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -250,7 +250,7 @@ describe('modlists', () => {
       expect((await getModList(r1.id)).subscriptionCount).toBe(0)
       const resp2 = await fetch(`/api/modlists/subscribe/${r1.id}`, {
         method: 'POST',
-        headers: { Authorization: 'test-token-2' },
+        headers: { Authorization: `Bearer ${context.token2}` },
       })
       expect(resp2.ok).true
       expect((await getModList(r1.id)).subscriptionCount).toBe(1)
@@ -263,7 +263,7 @@ describe('modlists', () => {
         method: 'POST',
         body: JSON.stringify(newModList),
         headers: {
-          Authorization: 'test-token-2',
+          Authorization: `Bearer ${context.token2}`,
           'Content-Type': 'application/json',
         },
       })
@@ -282,7 +282,7 @@ describe('modlists', () => {
         method: 'POST',
         body: JSON.stringify(newModList),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -293,24 +293,24 @@ describe('modlists', () => {
     it('should be able to subscribe to a modlist', async () => {
       const resp2 = await fetch(`/api/modlists/subscribe/${modListId}`, {
         method: 'POST',
-        headers: { Authorization: 'test-token-1' },
+        headers: { Authorization: `Bearer ${context.token1}` },
       })
       expect(resp2.ok).true
       const resp3 = await fetch('/api/modlists/subscribed', {
-        headers: { Authorization: 'test-token-1' },
+        headers: { Authorization: `Bearer ${context.token1}` },
       })
       expect(resp3.ok).true
       const r3 = (await resp3.json()) as ModListSubscribeResponse
       expect(r3.length).toBe(1)
       expect(r3[0].id).toBe(modListId)
-      expect((await getModList(modListId, 'test-token-1')).subscribed).true
+      expect((await getModList(modListId, `Bearer ${context.token1}`)).subscribed).true
       expect((await getModList(modListId)).subscribed).false
     })
     it('should not be able to subscribe to a modlist twice', async () => {
       const subscribe = () =>
         fetch(`/api/modlists/subscribe/${modListId}`, {
           method: 'POST',
-          headers: { Authorization: 'test-token-1' },
+          headers: { Authorization: `Bearer ${context.token1}` },
         })
       const resp1 = await subscribe()
       expect(resp1.ok).true
@@ -319,7 +319,7 @@ describe('modlists', () => {
     })
     const getSubscribedUsers = async () => {
       const resp1 = await fetch(`/api/modlists/subscribed/users`, {
-        headers: { Authorization: 'test-token-1' },
+        headers: { Authorization: `Bearer ${context.token1}` },
       })
       expect(resp1.ok).true
       return (await resp1.json()) as ModListSubscribedUserResponse
@@ -327,7 +327,7 @@ describe('modlists', () => {
     it('should be able to get subscribed users', async () => {
       const resp1 = await fetch(`/api/modlists/subscribe/${modListId}`, {
         method: 'POST',
-        headers: { Authorization: 'test-token-1' },
+        headers: { Authorization: `Bearer ${context.token1}` },
       })
       expect(resp1.ok).true
       expect(await getSubscribedUsers()).length(0)
@@ -355,7 +355,7 @@ describe('modlists', () => {
         method: 'POST',
         body: JSON.stringify(newModList),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -389,7 +389,7 @@ describe('modlists', () => {
           },
         } satisfies ModListAddTwitterUserRequest),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -417,7 +417,7 @@ describe('modlists', () => {
             },
           } satisfies ModListAddTwitterUserRequest),
           headers: {
-            Authorization: 'test-token-1',
+            Authorization: `Bearer ${context.token1}`,
             'Content-Type': 'application/json',
           },
         })
@@ -445,7 +445,7 @@ describe('modlists', () => {
           },
         } satisfies ModListAddTwitterUserRequest),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -470,7 +470,7 @@ describe('modlists', () => {
           },
         } satisfies ModListAddTwitterUserRequest),
         headers: {
-          Authorization: 'test-token-2',
+          Authorization: `Bearer ${context.token2}`,
           'Content-Type': 'application/json',
         },
       })
@@ -493,7 +493,7 @@ describe('modlists', () => {
         const resp1 = await fetch('/api/modlists/user/check', {
           method: 'POST',
           headers: {
-            Authorization: 'test-token-1',
+            Authorization: `Bearer ${context.token1}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -513,7 +513,7 @@ describe('modlists', () => {
           twitterUser: twittrUsers[0],
         } satisfies ModListAddTwitterUserRequest),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })
@@ -617,7 +617,7 @@ describe('modlists', () => {
           twitterUserId: 'twitter-user-1',
         } satisfies ModListRemoveTwitterUserRequest),
         headers: {
-          Authorization: 'test-token-1',
+          Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
         },
       })

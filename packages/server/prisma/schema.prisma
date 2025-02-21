@@ -25,11 +25,11 @@ model User {
   spamReportCount     Int           @default(0)
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
-  followersCount      Int           @default(0)
-  followingCount      Int           @default(0)
-  blueVerified        Boolean       @default(false)
-  defaultProfile      Boolean       @default(false)
-  defaultProfileImage Boolean       @default(false)
+  followersCount      Int?
+  followingCount      Int?
+  blueVerified        Boolean?
+  defaultProfile      Boolean?
+  defaultProfileImage Boolean?
   Tweet               Tweet[]
   spamUser            SpamReport[]  @relation("SpamUser")
   reportUser          SpamReport[]  @relation("ReportUser")

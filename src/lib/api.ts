@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import { extractObjects } from './util/extractObjects'
 import { TweetMediaType, User } from './db'
-import { TweetFilter } from './filter'
+import { FilterData, TweetFilter } from './filter'
+import { get, remove } from 'lodash-es'
 
 export function setRequestHeaders(headers: Headers) {
   localStorage.setItem(
@@ -72,7 +73,9 @@ const timelineUserSchema = z.object({
   }),
 })
 
-function parseTimelineUser(tweetUser: typeof timelineUserSchema._type): User {
+function parseTimelineUser(
+  tweetUser: z.infer<typeof timelineUserSchema>,
+): User {
   return {
     id: tweetUser.rest_id,
     blocking: tweetUser.legacy.blocking ?? false,
@@ -93,50 +96,52 @@ function parseTimelineUser(tweetUser: typeof timelineUserSchema._type): User {
   }
 }
 
+const notifacationUserSchema = z.object({
+  id_str: z.string(),
+  blocking: z.boolean().optional().nullable(),
+  following: z.boolean().optional().nullable(),
+  screen_name: z.string(),
+  name: z.string(),
+  description: z.string().optional().nullable(),
+  profile_image_url_https: z.string().optional().nullable(),
+  created_at: z.string().optional(),
+  followers_count: z.number().optional(),
+  friends_count: z.number().optional(),
+  default_profile: z.boolean().optional(),
+  default_profile_image: z.boolean().optional(),
+  ext_is_blue_verified: z.boolean(),
+})
+function parseNotificationUser(
+  user: z.infer<typeof notifacationUserSchema>,
+): User {
+  return {
+    id: user.id_str,
+    screen_name: user.screen_name,
+    blocking: user.blocking ?? false,
+    following: user.following ?? false,
+    name: user.name,
+    description: user.description ?? undefined,
+    profile_image_url: user.profile_image_url_https ?? undefined,
+    created_at: user.created_at
+      ? new Date(user.created_at).toISOString()
+      : undefined,
+    updated_at: new Date().toISOString(),
+    followers_count: user.followers_count,
+    friends_count: user.friends_count,
+    default_profile: user.default_profile,
+    default_profile_image: user.default_profile_image,
+    is_blue_verified: user.ext_is_blue_verified,
+  }
+}
 export function parseUserRecords(json: any): User[] {
   const users: User[] = []
-  const userSchema = z.object({
-    id_str: z.string(),
-    blocking: z.boolean().optional().nullable(),
-    following: z.boolean().optional().nullable(),
-    screen_name: z.string(),
-    name: z.string(),
-    description: z.string().optional().nullable(),
-    profile_image_url_https: z.string().optional().nullable(),
-    created_at: z.string().optional(),
-    followers_count: z.number().optional(),
-    friends_count: z.number().optional(),
-    default_profile: z.boolean().optional(),
-    default_profile_image: z.boolean().optional(),
-    ext_is_blue_verified: z.boolean(),
-  })
   users.push(
     ...(
       extractObjects(
         json,
-        (obj) => userSchema.safeParse(obj).success,
-      ) as (typeof userSchema._type)[]
-    ).map(
-      (it) =>
-        ({
-          id: it.id_str,
-          screen_name: it.screen_name,
-          blocking: it.blocking ?? false,
-          following: it.following ?? false,
-          name: it.name,
-          description: it.description ?? undefined,
-          profile_image_url: it.profile_image_url_https ?? undefined,
-          created_at: it.created_at
-            ? new Date(it.created_at).toISOString()
-            : undefined,
-          updated_at: new Date().toISOString(),
-          followers_count: it.followers_count,
-          friends_count: it.friends_count,
-          default_profile: it.default_profile,
-          default_profile_image: it.default_profile_image,
-          is_blue_verified: it.ext_is_blue_verified,
-        } satisfies User),
-    ),
+        (obj) => notifacationUserSchema.safeParse(obj).success,
+      ) as (typeof notifacationUserSchema._type)[]
+    ).map(parseNotificationUser),
   )
 
   users.push(
@@ -158,6 +163,31 @@ export interface UserRecord {
 
 export const MUTED_WORDS_KEY = 'MASS_BLOCK_TWITTER_MUTED_WORDS'
 
+const legacySchema = z.object({
+  created_at: z.string(),
+  full_text: z.string(),
+  user_id_str: z.string(),
+  id_str: z.string(),
+  entities: z.object({
+    media: z
+      .array(
+        z.object({
+          media_url_https: z.string(),
+          type: z.union([
+            z.literal('photo'),
+            z.literal('video'),
+            z.literal('animated_gif'),
+          ]),
+          url: z.string(),
+        }),
+      )
+      .optional(),
+  }),
+  conversation_id_str: z.string(),
+  in_reply_to_status_id_str: z.string().optional().nullable(),
+  quoted_status_id_str: z.string().optional(),
+  lang: z.string(),
+})
 export const tweetScheam = z.object({
   __typename: z.literal('Tweet').optional(),
   rest_id: z.string(),
@@ -166,32 +196,29 @@ export const tweetScheam = z.object({
       result: timelineUserSchema,
     }),
   }),
-  legacy: z.object({
-    created_at: z.string(),
-    full_text: z.string(),
-    user_id_str: z.string(),
-    id_str: z.string(),
-    entities: z.object({
-      media: z
-        .array(
-          z.object({
-            media_url_https: z.string(),
-            type: z.union([
-              z.literal('photo'),
-              z.literal('video'),
-              z.literal('animated_gif'),
-            ]),
-            url: z.string(),
-          }),
-        )
-        .optional(),
-    }),
-    conversation_id_str: z.string(),
-    in_reply_to_status_id_str: z.string().optional(),
-    quoted_status_id_str: z.string().optional(),
-    lang: z.string(),
-  }),
+  legacy: legacySchema,
 })
+
+function parseLegacyTweet(
+  it: z.infer<typeof legacySchema>,
+): Omit<ParsedTweet, 'user'> {
+  const tweet: Omit<ParsedTweet, 'user'> = {
+    id: it.id_str,
+    text: it.full_text,
+    created_at: new Date(it.created_at).toISOString(),
+    conversation_id_str: it.conversation_id_str,
+    in_reply_to_status_id_str: it.in_reply_to_status_id_str ?? undefined,
+    quoted_status_id_str: it.quoted_status_id_str,
+    lang: it.lang,
+  }
+  if (it.entities.media) {
+    tweet.media = it.entities.media?.map((media) => ({
+      url: media.media_url_https,
+      type: media.type,
+    }))
+  }
+  return tweet
+}
 
 export interface ParsedTweet {
   id: string
@@ -208,28 +235,52 @@ export interface ParsedTweet {
   user: User
 }
 
-export function parseTweets(json: any): ParsedTweet[] {
-  return (
-    extractObjects(
-      json,
-      (it) => tweetScheam.safeParse(it).success,
-    ) as (typeof tweetScheam._type)[]
-  ).map((it) => {
-    const tweet: ParsedTweet = {
-      id: it.rest_id,
-      text: it.legacy.full_text,
-      created_at: new Date(it.legacy.created_at).toISOString(),
-      conversation_id_str: it.legacy.conversation_id_str,
-      in_reply_to_status_id_str: it.legacy.in_reply_to_status_id_str,
-      quoted_status_id_str: it.legacy.quoted_status_id_str,
-      lang: it.legacy.lang,
-      user: parseTimelineUser(it.core.user_results.result),
+function parseNotificationTweets(json: any): ParsedTweet[] {
+  const validated = notificationSchema.safeParse(json)
+  if (validated.error) {
+    return []
+  }
+  const _json = json as z.infer<typeof notificationSchema>
+  const tweets = _json.globalObjects.tweets
+  if (!tweets) {
+    return []
+  }
+  const result: ParsedTweet[] = []
+  for (const key in tweets) {
+    const tweet = tweets[key]
+    const user = _json.globalObjects.users?.[tweet.user_id_str]
+    if (user) {
+      result.push({
+        ...parseLegacyTweet(tweet),
+        user: parseNotificationUser(user),
+      })
     }
-    if (it.legacy.entities.media) {
-      tweet.media = it.legacy.entities.media?.map((media) => ({
-        url: media.media_url_https,
-        type: media.type,
-      }))
+  }
+  return result
+}
+
+export function parseTweet(it: z.infer<typeof tweetScheam>) {
+  const legacyTweet = parseLegacyTweet(it.legacy)
+  const tweet: ParsedTweet = {
+    ...legacyTweet,
+    user: parseTimelineUser(it.core.user_results.result),
+  }
+  return tweet
+}
+export function parseTweets(json: any): ParsedTweet[] {
+  const notificationTweets = parseNotificationTweets(json)
+  if (notificationTweets.length > 0) {
+    return notificationTweets
+  }
+  return (
+    extractObjects(json, (it) => tweetScheam.safeParse(it).success) as z.infer<
+      typeof tweetScheam
+    >[]
+  ).map((it) => {
+    const legacyTweet = parseLegacyTweet(it.legacy)
+    const tweet: ParsedTweet = {
+      ...legacyTweet,
+      user: parseTimelineUser(it.core.user_results.result),
     }
     return tweet
   })
@@ -258,6 +309,12 @@ const notificationFollwingSchema = z.object({
   }),
   template: templateSchema,
 })
+const notificationRetweetSchema = z.object({
+  icon: z.object({
+    id: z.literal('retweet_icon'),
+  }),
+  template: templateSchema,
+})
 const notificationCommunitiesSchema = z.object({
   icon: z.object({
     id: z.literal('communities_icon'),
@@ -272,21 +329,55 @@ const notificationSchema = z.object({
           notificationFollwingSchema,
           notificationLikeSchema,
           notificationCommunitiesSchema,
+          notificationRetweetSchema,
         ]),
       )
       .optional(),
-    tweets: z.record(z.object({})).optional(),
-    users: z.record(z.object({})).optional(),
+    tweets: z.record(legacySchema).optional(),
+    users: z.record(notifacationUserSchema).optional(),
   }),
-  // timeline: z.object({
-  //   instructions: z.array(z.object({})),
-  // }),
+  timeline: z.object({
+    instructions: z.array(
+      z.object({
+        addEntries: z
+          .object({
+            entries: z.array(
+              z.object({
+                entryId: z.string(),
+                sortIndex: z.string(),
+                content: z.object({
+                  item: z
+                    .object({
+                      content: z.object({
+                        notification: z
+                          .object({
+                            id: z.string(),
+                            fromUsers: z.array(z.string()),
+                          })
+                          .optional(),
+                        tweet: z
+                          .object({
+                            id: z.string(),
+                            displayType: z.literal('Tweet'),
+                          })
+                          .optional(),
+                      }),
+                    })
+                    .optional(),
+                }),
+              }),
+            ),
+          })
+          .optional(),
+      }),
+    ),
+  }),
 })
 
 export function filterNotifications(
   data: z.infer<typeof notificationSchema>,
-  isShow: (tweet: User) => boolean,
-) {
+  isShow: (data: FilterData) => boolean,
+): z.infer<typeof notificationSchema> {
   const _json = JSON.parse(JSON.stringify(data)) as z.infer<
     typeof notificationSchema
   >
@@ -306,7 +397,7 @@ export function filterNotifications(
           if (!user) {
             return true
           }
-          return isShow(user)
+          return isShow({ type: 'user', user })
         },
       )
       if (fromUsers.length > 0) {
@@ -315,6 +406,30 @@ export function filterNotifications(
         delete _json.globalObjects.notifications[key]
       }
     }
+  }
+  const removeTweetIds: string[] = []
+  for (const key in _json.globalObjects.tweets) {
+    const tweet = _json.globalObjects.tweets[key]
+    const user = _json.globalObjects.users?.[tweet.user_id_str]
+    if (user) {
+      const parsedTweet: ParsedTweet = {
+        ...parseLegacyTweet(tweet),
+        user: parseNotificationUser(user),
+      }
+      if (!isShow({ type: 'tweet', tweet: parsedTweet })) {
+        delete _json.globalObjects.tweets[key]
+        removeTweetIds.push(tweet.id_str)
+      }
+    }
+  }
+  const addEntries = _json.timeline.instructions.find(
+    (it) => it.addEntries?.entries,
+  )
+  if (addEntries?.addEntries?.entries) {
+    addEntries.addEntries.entries = addEntries.addEntries.entries.filter(
+      (it) =>
+        !removeTweetIds.includes(it.content.item?.content.tweet?.id ?? ''),
+    )
   }
   return _json
 }
@@ -338,10 +453,44 @@ export function filterTweets(
     (it) => addEntriesSchema.safeParse(it).success,
   ) as (typeof addEntriesSchema._type)[]
   if (!addEntries) {
+    console.error('addEntries is required')
     return json
   }
-  addEntries.entries = addEntries.entries.filter((it) => {
-    const tweets = parseTweets(it)
+  addEntries.entries = addEntries.entries.filter((entrie) => {
+    const extendedTweetSchema = tweetScheam.extend({
+      quoted_status_result: z
+        .object({
+          result: tweetScheam,
+        })
+        .optional(),
+    })
+    const originalTweets = extractObjects(
+      entrie,
+      (it) => extendedTweetSchema.safeParse(it).success,
+    ) as z.infer<typeof extendedTweetSchema>[]
+    const tweets = originalTweets.map((it) => {
+      const legacyTweet = parseLegacyTweet(it.legacy)
+      const tweet: ParsedTweet = {
+        ...legacyTweet,
+        user: parseTimelineUser(it.core.user_results.result),
+      }
+      return tweet
+    })
+    if (tweets.length === 2) {
+      const showMain = isShow(tweets[0])
+      const showQuote = isShow(tweets[1])
+      // if main tweet is not show, return false
+      if (!showMain) {
+        return false
+      }
+      // if quote tweet is show, return true
+      if (showQuote) {
+        return true
+      }
+      // if quote tweet is not show, but main tweet is show, remove the quote tweet
+      delete originalTweets[0].quoted_status_result
+      return true
+    }
     return tweets.every(isShow)
   })
   return json

@@ -4,8 +4,8 @@ import { extractCurrentUserId } from './observe'
 import { getSettings } from './settings'
 import { matchByKeyword } from './util/matchByKeyword'
 
-type FilterResult = 'show' | 'hide' | 'next'
-type FilterData =
+export type FilterResult = 'show' | 'hide' | 'next'
+export type FilterData =
   | { type: 'tweet'; tweet: ParsedTweet }
   | { type: 'user'; user: User }
 export interface TweetFilter {

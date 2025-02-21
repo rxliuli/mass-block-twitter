@@ -27,6 +27,7 @@ import {
 import {
   blueVerifiedFilter,
   defaultProfileFilter,
+  FilterData,
   flowFilter,
   languageFilter,
   modListFilter,
@@ -143,19 +144,16 @@ function handleNotifications(): Middleware {
       const json = await c.res.clone().json()
       await firstTimeFilterTweets(json)
       const isShow = flowFilter(getFilters(getSettings()))
-      const hideUsers: [string, User][] = []
+      const hideNotifications: [string, FilterData][] = []
       const updatedJson = filterNotifications(json, (it) => {
-        const result = isShow({
-          type: 'user',
-          user: it,
-        })
+        const result = isShow(it)
         if (!result.value) {
-          hideUsers.push([result.reason!, it])
+          hideNotifications.push([result.reason!, it])
         }
         return result.value
       })
-      if (hideUsers.length > 0) {
-        console.log('hideUsers', hideUsers)
+      if (hideNotifications.length > 0) {
+        console.log('hideNotifications', hideNotifications)
       }
       c.res = new Response(JSON.stringify(updatedJson), c.res)
     } catch (err) {

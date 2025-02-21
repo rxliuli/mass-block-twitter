@@ -22,6 +22,7 @@ import TweetDetail2 from './assets/TweetDetail2.json'
 import TweetDetail3 from './assets/TweetDetail3.json'
 import TweetDetail4 from './assets/TweetDetail4.json'
 import TweetDetail5 from './assets/TweetDetail5.json'
+import TweetDetail6 from './assets/TweetDetail6.json'
 import UserTweetsAndReplies from './assets/UserTweetsAndReplies.json'
 import UserTweets from './assets/UserTweets.json'
 import SearchTimeline from './assets/SearchTimeline.json'
@@ -29,7 +30,9 @@ import SearchTimelinePeople from './assets/SearchTimelinePeople.json'
 import SearchTimelinePeople2 from './assets/SearchTimelinePeople2.json'
 import HomeLatestTimeline from './assets/HomeLatestTimeline.json'
 import notifications1 from './assets/notifications1.json'
-import { flowFilter } from '$lib/filter'
+import notifications2 from './assets/notifications2.json'
+import notifications3 from './assets/notifications3.json'
+import { blueVerifiedFilter, flowFilter } from '$lib/filter'
 
 describe('extractObjects', () => {
   it('extractObjects 1', () => {
@@ -300,20 +303,22 @@ describe('parseTweets', () => {
       })),
     ).toMatchSnapshot()
   })
-  it.todo('parseTweets for all2', () => {
-    const tweets = parseTweets(all2)
-    console.log(tweets.map((it) => it.id))
-    // expect(tweets).length(10)
-    // expect(
-    //   tweets.map((it) => omit(it, 'created_at', 'updated_at')),
-    // ).toMatchSnapshot()
+  it('parseTweets for notifications', () => {
+    const tweets = parseTweets(notifications1)
+    expect(tweets).length(20)
+    expect(
+      tweets.map((it) => omit(it, 'created_at', 'updated_at', 'user')),
+    ).toMatchSnapshot()
   })
 })
 
 describe('filterTweets', () => {
   it('filterTweets for detail', () => {
     const spamTweetIds = ['1883173115230134610']
-    const json = filterTweets(TweetDetail, (it) => spamTweetIds.includes(it.id))
+    const json = filterTweets(
+      TweetDetail,
+      (it) => !spamTweetIds.includes(it.id),
+    )
     const tweets = parseTweets(json)
     expect(tweets.some((it) => spamTweetIds.includes(it.id))).false
   })
@@ -331,88 +336,171 @@ describe('filterTweets', () => {
     expect(JSON.stringify(json)).not.includes('挂号')
     expect(tweets.every((it) => it.lang !== 'zh')).true
   })
-  describe('filterNotifications', () => {
-    const users = {
-      'user-1': {
-        id_str: 'user-1',
-        name: 'user-1',
-        screen_name: 'user-1',
-        ext_is_blue_verified: true,
-      },
-      'user-2': {
-        id_str: 'user-2',
-        name: 'user-2',
-        screen_name: 'user-2',
-        ext_is_blue_verified: true,
-      },
-    }
-    it('filterNotifications for like', () => {
-      const r = filterNotifications(
-        {
-          globalObjects: {
-            notifications: {
-              '1': {
-                icon: {
-                  id: 'heart_icon',
-                },
-                template: {
-                  aggregateUserActionsV1: {
-                    fromUsers: [
-                      { user: { id: 'user-1' } },
-                      { user: { id: 'user-2' } },
-                    ],
-                  },
+  it('filterTweets for quote', () => {
+    const isShow = flowFilter([blueVerifiedFilter()])
+    const handledJson = filterTweets(
+      TweetDetail6,
+      (it) =>
+        isShow({
+          type: 'user',
+          user: it.user,
+        }).value,
+    )
+    const tweets = parseTweets(handledJson)
+    expect(tweets).length(2)
+  })
+})
+
+describe('filterNotifications', () => {
+  const users = {
+    'user-1': {
+      id_str: 'user-1',
+      name: 'user-1',
+      screen_name: 'user-1',
+      ext_is_blue_verified: true,
+    },
+    'user-2': {
+      id_str: 'user-2',
+      name: 'user-2',
+      screen_name: 'user-2',
+      ext_is_blue_verified: true,
+    },
+  }
+  it('filterNotifications for like', () => {
+    const r = filterNotifications(
+      {
+        globalObjects: {
+          notifications: {
+            '1': {
+              icon: {
+                id: 'heart_icon',
+              },
+              template: {
+                aggregateUserActionsV1: {
+                  fromUsers: [
+                    { user: { id: 'user-1' } },
+                    { user: { id: 'user-2' } },
+                  ],
                 },
               },
             },
-            tweets: {},
-            users,
           },
+          tweets: {},
+          users,
         },
-        (it) => it.id !== 'user-1',
-      )
-      expect(
-        r.globalObjects.notifications?.['1'].template.aggregateUserActionsV1
-          .fromUsers,
-      ).toEqual([{ user: { id: 'user-2' } }])
-    })
-    it('filterNotifications for hide all like users', () => {
-      const r = filterNotifications(
-        {
-          globalObjects: {
-            notifications: {
-              '1': {
-                icon: {
-                  id: 'heart_icon',
-                },
-                template: {
-                  aggregateUserActionsV1: {
-                    fromUsers: [{ user: { id: 'user-1' } }],
-                  },
+        timeline: {
+          instructions: [],
+        },
+      },
+      (it) => it.type === 'user' && it.user.id !== 'user-1',
+    )
+    expect(
+      r.globalObjects.notifications?.['1'].template.aggregateUserActionsV1
+        .fromUsers,
+    ).toEqual([{ user: { id: 'user-2' } }])
+  })
+  it('filterNotifications for hide all like users', () => {
+    const r = filterNotifications(
+      {
+        globalObjects: {
+          notifications: {
+            '1': {
+              icon: {
+                id: 'heart_icon',
+              },
+              template: {
+                aggregateUserActionsV1: {
+                  fromUsers: [{ user: { id: 'user-1' } }],
                 },
               },
             },
-            tweets: {},
-            users,
           },
+          tweets: {},
+          users,
         },
-        (it) => it.id !== 'user-1',
-      )
-      expect(r.globalObjects.notifications).toEqual({})
-    })
-    it('filterNotifications for notifications1', () => {
-      const blockId = '1868318759716552704'
-      expect(
-        JSON.stringify(notifications1.globalObjects.notifications),
-      ).includes(blockId)
-      const r = filterNotifications(
-        notifications1 as any,
-        (it) => it.id !== blockId,
-      )
-      expect(JSON.stringify(r.globalObjects.notifications)).not.includes(
-        blockId,
-      )
-    })
+        timeline: {
+          instructions: [],
+        },
+      },
+      (it) => it.type === 'user' && it.user.id !== 'user-1',
+    )
+    expect(r.globalObjects.notifications).toEqual({})
+  })
+  it('filterNotifications for spam tweet', () => {
+    const r = filterNotifications(
+      {
+        globalObjects: {
+          notifications: {
+            '1': {
+              icon: {
+                id: 'heart_icon',
+              },
+              template: {
+                aggregateUserActionsV1: {
+                  fromUsers: [{ user: { id: 'user-1' } }],
+                },
+              },
+            },
+          },
+          tweets: {
+            '1': {
+              id_str: '1',
+              full_text: 'BTC is the best',
+              created_at: '2025-01-01',
+              user_id_str: 'user-1',
+              lang: 'en',
+              conversation_id_str: '1',
+              entities: {},
+            },
+          },
+          users,
+        },
+        timeline: {
+          instructions: [
+            {
+              addEntries: {
+                entries: [
+                  {
+                    entryId: '1',
+                    sortIndex: '1',
+                    content: {
+                      item: {
+                        content: {
+                          tweet: {
+                            id: '1',
+                            displayType: 'Tweet',
+                          },
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+      (it) => it.type === 'tweet' && !it.tweet.text.includes('BTC'),
+    )
+    expect(JSON.stringify(r.timeline)).not.includes('BTC')
+    expect(JSON.stringify(r.globalObjects.tweets)).not.includes('BTC')
+  })
+  it('filterNotifications for notifications1', () => {
+    const blockId = '1868318759716552704'
+    expect(JSON.stringify(notifications1.globalObjects.notifications)).includes(
+      blockId,
+    )
+    const r = filterNotifications(
+      notifications1 as any,
+      (it) => it.type === 'user' && it.user.id !== blockId,
+    )
+    expect(JSON.stringify(r.globalObjects.notifications)).not.includes(blockId)
+  })
+  it('filterNotifications for notifications2', () => {
+    filterNotifications(notifications2 as any, (it) => true)
+  })
+  it('filterNotifications for notifications3', () => {
+    filterNotifications(notifications3 as any, (it) => true)
   })
   it('flowFilter', () => {
     const isHide = flowFilter([

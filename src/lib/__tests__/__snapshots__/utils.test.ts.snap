@@ -446,6 +446,224 @@ exports[`parseTweets > parseTweets for detail 3 1`] = `
 ]
 `;
 
+exports[`parseTweets > parseTweets for notifications 1`] = `
+[
+  {
+    "conversation_id_str": "1892438131468537905",
+    "id": "1892438131468537905",
+    "in_reply_to_status_id_str": undefined,
+    "lang": "zh",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GkNKXbIbUAEc9yx.jpg",
+      },
+    ],
+    "quoted_status_id_str": undefined,
+    "text": "让吾辈试试是否有各位推友说的那么好 https://t.co/uYGtPdxclY",
+  },
+  {
+    "conversation_id_str": "1891047551136092390",
+    "id": "1891047551136092390",
+    "in_reply_to_status_id_str": undefined,
+    "lang": "zh",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/Gj5ZkEabsAASpQ8.jpg",
+      },
+    ],
+    "quoted_status_id_str": undefined,
+    "text": "去 tmd firefox，9 年前的 bug 还在，网站的 csp 限制和我扩展有什么关系？🙃 https://t.co/q4cMsfHjMo",
+  },
+  {
+    "conversation_id_str": "1891776881659138158",
+    "id": "1891799469223522698",
+    "in_reply_to_status_id_str": "1891798929433305117",
+    "lang": "zh",
+    "quoted_status_id_str": undefined,
+    "text": "@_a_wing 开辟险路，奇袭敌军（",
+  },
+  {
+    "conversation_id_str": "1892125875556024831",
+    "id": "1892150189865238855",
+    "in_reply_to_status_id_str": "1892149537017336203",
+    "lang": "zh",
+    "quoted_status_id_str": undefined,
+    "text": "@rxliuli J.P. Illanes 创建的好久没有维护，被人fork 过去支持mac的吧
+https://t.co/0cUf1dPbVq",
+  },
+  {
+    "conversation_id_str": "1892241501024817338",
+    "id": "1892478913852690539",
+    "in_reply_to_status_id_str": "1892241501024817338",
+    "lang": "zh",
+    "quoted_status_id_str": undefined,
+    "text": "@plusyip 那也许再找个更近的可以步行上下班的位置？🤣",
+  },
+  {
+    "conversation_id_str": "1892049891058384992",
+    "id": "1892155509765280080",
+    "in_reply_to_status_id_str": "1892049891058384992",
+    "lang": "zh",
+    "quoted_status_id_str": undefined,
+    "text": "@skywind3000 好主意，先 mark 一下，插件后续版本看看能不能支持一下",
+  },
+  {
+    "conversation_id_str": "1891794054574223610",
+    "id": "1891809694458556698",
+    "in_reply_to_status_id_str": "1891795007960645808",
+    "lang": "ja",
+    "quoted_status_id_str": undefined,
+    "text": "@Vegetable_Lee 允悲",
+  },
+  {
+    "conversation_id_str": "1892125875556024831",
+    "id": "1892147128807645647",
+    "in_reply_to_status_id_str": "1892132961086050784",
+    "lang": "zh",
+    "quoted_status_id_str": undefined,
+    "text": "@rxliuli 🤣 GitHub 官方出品，参考参考用的啥代码高亮包😄",
+  },
+  {
+    "conversation_id_str": "1892125875556024831",
+    "id": "1892149537017336203",
+    "in_reply_to_status_id_str": "1892147128807645647",
+    "lang": "zh",
+    "quoted_status_id_str": undefined,
+    "text": "@jaywcjlove 瞄了一眼，用的是 GitHub 员工创建的一个 Public Repo，然而 0 🌟
+https://t.co/hLt1jI7SQ7",
+  },
+  {
+    "conversation_id_str": "1892413451210817924",
+    "id": "1892413451210817924",
+    "in_reply_to_status_id_str": undefined,
+    "lang": "zh",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GkMzpz2bUAIi7-g.png",
+      },
+    ],
+    "quoted_status_id_str": undefined,
+    "text": "jimp 看起来是一个纯 js 的图像处理库，然而它依赖着 pngjs，这也是一个 js 的 png 图像处理库，但它依赖了 nodejs 的 assert/stream 之类的模块，它使用了 assert polyfill 以在浏览器中使用，而 assert 模块依赖了 get-intrinsic，而它使用了 eval，然后浏览器扩展就原地升天了🤡 https://t.co/cDY92zc447",
+  },
+  {
+    "conversation_id_str": "1892115266600874028",
+    "id": "1892115266600874028",
+    "in_reply_to_status_id_str": undefined,
+    "lang": "zh",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GkIky8SbYAAaLuI.jpg",
+      },
+    ],
+    "quoted_status_id_str": "1892106682454479166",
+    "text": "在推特上发布你拍摄的照片，没有描述 https://t.co/fMhxYHrFbU",
+  },
+  {
+    "conversation_id_str": "1892125875556024831",
+    "id": "1892132961086050784",
+    "in_reply_to_status_id_str": "1892125875556024831",
+    "lang": "ja",
+    "quoted_status_id_str": undefined,
+    "text": "@jaywcjlove 屎上雕花，也不容易😄",
+  },
+  {
+    "conversation_id_str": "1892465442415096301",
+    "id": "1892486632688775269",
+    "in_reply_to_status_id_str": "1892465442415096301",
+    "lang": "zh",
+    "quoted_status_id_str": "1891798765117288799",
+    "text": "@Piglei 吾辈最近经常碰到“编译器错误”，不管是 10k+ star 的库，还是久经考验的 Firefox，都遇到了一些奇奇怪怪的 bug
+https://t.co/AuRdSPslba",
+  },
+  {
+    "conversation_id_str": "1891798765117288799",
+    "id": "1891798765117288799",
+    "in_reply_to_status_id_str": undefined,
+    "lang": "zh",
+    "quoted_status_id_str": "1891047551136092390",
+    "text": "发布博客【当吾辈遇上 Firefox 中 9 年的陈年老 Bug】
+https://t.co/lyojR7UDxY",
+  },
+  {
+    "conversation_id_str": "1892239429982626222",
+    "id": "1892478612533645694",
+    "in_reply_to_status_id_str": "1892239429982626222",
+    "lang": "ja",
+    "quoted_status_id_str": undefined,
+    "text": "@moeyua13 恭喜",
+  },
+  {
+    "conversation_id_str": "1892060279808135621",
+    "id": "1892060279808135621",
+    "in_reply_to_status_id_str": undefined,
+    "lang": "en",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GkHyoZzakAAnZyL.jpg",
+      },
+    ],
+    "quoted_status_id_str": undefined,
+    "text": "New Feature?
+No! New Bugs! https://t.co/ohxbM1cYZB",
+  },
+  {
+    "conversation_id_str": "1891776881659138158",
+    "id": "1891784618640031842",
+    "in_reply_to_status_id_str": "1891776881659138158",
+    "lang": "zh",
+    "quoted_status_id_str": undefined,
+    "text": "@_a_wing 身边还没有足够的人这样做过，换句话说，我们大部分人只是刚刚保证温饱没多少年而已。。。例如在零几年吾辈家里那会还吃不上米饭🙂",
+  },
+  {
+    "conversation_id_str": "1892175077237526729",
+    "id": "1892175077237526729",
+    "in_reply_to_status_id_str": undefined,
+    "lang": "zh",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GkJbMZFXYAE6odf.jpg",
+      },
+    ],
+    "quoted_status_id_str": "1892115266600874028",
+    "text": "在推特上发布你拍摄的照片，没有描述 https://t.co/PZvZOrpSYW",
+  },
+  {
+    "conversation_id_str": "1892019395968295103",
+    "id": "1892019395968295103",
+    "in_reply_to_status_id_str": undefined,
+    "lang": "zh",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GkHNnBnaAAI1E56.jpg",
+      },
+    ],
+    "quoted_status_id_str": undefined,
+    "text": "谢谢？ https://t.co/1VLLzYEPAE",
+  },
+  {
+    "conversation_id_str": "1891702394603323877",
+    "id": "1891702394603323877",
+    "in_reply_to_status_id_str": undefined,
+    "lang": "zh",
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GkCsv1paAAQI7SV.jpg",
+      },
+    ],
+    "quoted_status_id_str": undefined,
+    "text": "触景伤情，突然想起一句“欲买桂花同载酒，终不似，少年游” https://t.co/Xy072LGH84",
+  },
+]
+`;
+
 exports[`parseTweets > parseTweets for timeline 1`] = `
 [
   {

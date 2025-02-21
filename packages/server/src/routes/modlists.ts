@@ -5,29 +5,29 @@ import { z } from 'zod'
 import { prismaClients } from '../lib/prisma'
 import { ulid } from 'ulidx'
 import { userSchema } from '../lib/request'
-import { ModList, ModListVisibility, PrismaClient, User } from '@prisma/client'
+import { ModList, PrismaClient, User } from '@prisma/client'
 import { getTokenInfo } from '../middlewares/auth'
 
 const modlists = new Hono<HonoEnv>()
 
 function upsertUser(prisma: PrismaClient, user: typeof userSchema._type) {
+  const twitterUser = {
+    id: user.id,
+    screenName: user.screen_name,
+    name: user.name,
+    description: user.description,
+    profileImageUrl: user.profile_image_url,
+    accountCreatedAt: user.created_at,
+    blueVerified: user.is_blue_verified,
+    followersCount: user.followers_count,
+    followingCount: user.friends_count,
+    defaultProfile: user.default_profile,
+    defaultProfileImage: user.default_profile_image,
+  } as Parameters<typeof prisma.user.create>[0]['data']
   return prisma.user.upsert({
     where: { id: user.id },
-    update: {
-      screenName: user.screen_name,
-      name: user.name,
-      description: user.description,
-      profileImageUrl: user.profile_image_url,
-      accountCreatedAt: user.created_at,
-    },
-    create: {
-      id: user.id,
-      screenName: user.screen_name,
-      name: user.name,
-      description: user.description,
-      profileImageUrl: user.profile_image_url,
-      accountCreatedAt: user.created_at,
-    },
+    update: twitterUser,
+    create: twitterUser,
   })
 }
 
@@ -184,7 +184,7 @@ modlists
       //     data: { subscriptionCount: { increment: 1 } },
       //   }),
       // ])
-       await c.env.DB.batch([
+      await c.env.DB.batch([
         c.env.DB.prepare(
           'INSERT INTO modListSubscription (id, modListId, localUserId, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)',
         ).bind(

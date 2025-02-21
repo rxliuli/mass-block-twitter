@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
 import {
+  ReportSpamContextTweet,
   spamReportRequestSchema,
   tweetSchema,
   userSchema,
@@ -35,74 +36,68 @@ twitter
         userParams: typeof userSchema._type,
         isSpam: boolean,
       ) {
-        const r = await prisma.user.upsert({
+        const twitterUser = {
+          id: userParams.id,
+          screenName: userParams.screen_name,
+          name: userParams.name,
+          description: userParams.description,
+          profileImageUrl: userParams.profile_image_url,
+          accountCreatedAt: userParams.created_at,
+          blueVerified: userParams.is_blue_verified,
+          followersCount: userParams.followers_count,
+          followingCount: userParams.friends_count,
+          defaultProfile: userParams.default_profile,
+          defaultProfileImage: userParams.default_profile_image,
+        } as Parameters<typeof prisma.user.create>[0]['data']
+        await prisma.user.upsert({
           where: {
             id: userParams.id,
           },
           update: {
-            screenName: userParams.screen_name,
-            name: userParams.name,
-            description: userParams.description,
-            profileImageUrl: userParams.profile_image_url,
-            accountCreatedAt: userParams.created_at
-              ? new Date(userParams.created_at)
-              : undefined,
-            updatedAt: new Date(),
+            ...twitterUser,
             spamReportCount: {
               increment: isSpam && !isReportThisUser ? 1 : 0,
             },
           },
           create: {
-            id: userParams.id,
-            screenName: userParams.screen_name,
-            name: userParams.name,
-            description: userParams.description,
-            profileImageUrl: userParams.profile_image_url,
-            accountCreatedAt: userParams.created_at
-              ? new Date(userParams.created_at)
-              : undefined,
+            ...twitterUser,
             spamReportCount: isSpam ? 1 : 0,
-            createdAt: new Date(),
-            updatedAt: new Date(),
           },
         })
+      }
+      function convertTweet(
+        tweetParams: ReportSpamContextTweet,
+      ): Parameters<typeof prisma.tweet.create>[0]['data'] {
+        return {
+          id: tweetParams.id,
+          text: tweetParams.text,
+          publishedAt: new Date(tweetParams.created_at),
+          userId: validated.spamUser.id,
+          media: tweetParams.media,
+          conversationId: tweetParams.conversation_id_str,
+          inReplyToStatusId: tweetParams.in_reply_to_status_id_str,
+          quotedStatusId: tweetParams.quoted_status_id_str,
+        }
       }
       async function createOrUpdateTweet(
         tweetParams: typeof tweetSchema._type,
       ) {
-        const tweet = await prisma.tweet.findFirst({
+        const tweet = convertTweet(tweetParams)
+        await prisma.tweet.upsert({
           where: {
             id: tweetParams.id,
           },
+          update: {
+            ...tweet,
+            spamReportCount: {
+              increment: 1,
+            },
+          },
+          create: {
+            ...tweet,
+            spamReportCount: 1,
+          },
         })
-        if (!tweet) {
-          await prisma.tweet.create({
-            data: {
-              id: tweetParams.id,
-              text: tweetParams.text,
-              publishedAt: new Date(tweetParams.created_at),
-              userId: validated.spamUser.id,
-              media: tweetParams.media,
-              spamReportCount: 1,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          })
-        } else {
-          await prisma.tweet.update({
-            where: {
-              id: tweetParams.id,
-            },
-            data: {
-              ...tweet,
-              text: tweetParams.text,
-              publishedAt: new Date(tweetParams.created_at),
-              media: tweetParams.media,
-              spamReportCount: tweet.spamReportCount + 1,
-              updatedAt: new Date(),
-            },
-          })
-        }
       }
       async function createSpamReport(
         validated: typeof spamReportRequestSchema._type,
@@ -131,9 +126,31 @@ twitter
           },
         })
       }
-      await createOrUpdateUser(validated.reportUser, false)
+      async function createRelationTweetsAndUsers(
+        relationTweets: NonNullable<
+          TwitterSpamReportRequest['context']['relationTweets']
+        >,
+      ) {
+        await Promise.all(
+          relationTweets.map(async (it) => {
+            const tweet = convertTweet(it.tweet)
+            await prisma.tweet.upsert({
+              where: {
+                id: it.tweet.id,
+              },
+              update: tweet,
+              create: tweet,
+            })
+            await createOrUpdateUser(it.user, false)
+          }),
+        )
+      }
       await createOrUpdateUser(validated.spamUser, true)
+      await createOrUpdateUser(validated.reportUser, false)
       await createOrUpdateTweet(validated.context.tweet)
+      if (validated.context.relationTweets) {
+        await createRelationTweetsAndUsers(validated.context.relationTweets)
+      }
       await createSpamReport(validated)
       return c.json({ success: true })
     },

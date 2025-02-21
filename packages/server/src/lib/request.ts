@@ -7,6 +7,11 @@ export const userSchema = z.object({
   description: z.string().optional(),
   profile_image_url: z.string().optional(),
   created_at: z.string().optional(),
+  is_blue_verified: z.boolean().optional(),
+  followers_count: z.number().optional(),
+  friends_count: z.number().optional(),
+  default_profile: z.boolean().optional(),
+  default_profile_image: z.boolean().optional(),
 })
 
 export const tweetSchema = z.object({
@@ -25,7 +30,12 @@ export const tweetSchema = z.object({
       }),
     )
     .optional(),
+  conversation_id_str: z.string().optional(),
+  in_reply_to_status_id_str: z.string().optional(),
+  // TODO: remove optional when new version is released
+  quoted_status_id_str: z.string().optional(),
 })
+export type ReportSpamContextTweet = z.infer<typeof tweetSchema>
 
 const contextSchema = z.object({
   page_url: z.string(),
@@ -35,6 +45,14 @@ const contextSchema = z.object({
     z.literal('other'),
   ]),
   tweet: tweetSchema,
+  relationTweets: z
+    .array(
+      z.object({
+        tweet: tweetSchema,
+        user: userSchema,
+      }),
+    )
+    .optional(),
 })
 
 export const spamReportRequestSchema = z.object({

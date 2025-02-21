@@ -16,33 +16,41 @@ datasource db {
 
 // Create a simple model database
 model User {
-  id               String        @id
-  screenName       String
-  name             String
-  description      String?
-  profileImageUrl  String?
-  accountCreatedAt DateTime?
-  spamReportCount  Int           @default(0)
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  Tweet            Tweet[]
-  spamUser         SpamReport[]  @relation("SpamUser")
-  reportUser       SpamReport[]  @relation("ReportUser")
-  ModList          ModList[]
-  ModListUser      ModListUser[]
+  id                  String        @id
+  screenName          String
+  name                String
+  description         String?
+  profileImageUrl     String?
+  accountCreatedAt    DateTime?
+  spamReportCount     Int           @default(0)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  followersCount      Int           @default(0)
+  followingCount      Int           @default(0)
+  blueVerified        Boolean       @default(false)
+  defaultProfile      Boolean       @default(false)
+  defaultProfileImage Boolean       @default(false)
+  Tweet               Tweet[]
+  spamUser            SpamReport[]  @relation("SpamUser")
+  reportUser          SpamReport[]  @relation("ReportUser")
+  ModList             ModList[]
+  ModListUser         ModListUser[]
 }
 
 model Tweet {
-  id              String       @id
-  text            String
-  media           Json?
-  publishedAt     DateTime
-  userId          String
-  user            User         @relation(fields: [userId], references: [id])
-  SpamReport      SpamReport[]
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  spamReportCount Int          @default(0)
+  id                String       @id
+  text              String
+  media             Json?
+  publishedAt       DateTime
+  userId            String
+  user              User         @relation(fields: [userId], references: [id])
+  SpamReport        SpamReport[]
+  conversationId    String?
+  inReplyToStatusId String?
+  quotedStatusId    String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  spamReportCount   Int          @default(0)
 }
 
 enum PageType {

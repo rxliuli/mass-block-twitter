@@ -82,6 +82,28 @@ async function extractSpamReportRequest(
   if (!spamUser) {
     throw new Error('spamUser not found ' + spamUserId)
   }
+  const getRelationTweet = async (tweetId?: string) => {
+    if (!tweetId) {
+      return null
+    }
+    const tweet = await dbApi.tweets.get(tweetId)
+    if (tweet) {
+      const user = await dbApi.users.get(tweet.user_id)
+      if (user) {
+        return { tweet, user }
+      }
+    }
+    return null
+  }
+  const relationTweets = (
+    await Promise.all([
+      getRelationTweet(tweet.conversation_id_str),
+      getRelationTweet(tweet.in_reply_to_status_id_str),
+      getRelationTweet(tweet.quoted_status_id_str),
+    ])
+  ).filter(
+    (it) => it !== null,
+  ) satisfies TwitterSpamReportRequest['context']['relationTweets']
   return {
     reportUser: reportUser,
     spamUser: spamUser,
@@ -93,7 +115,11 @@ async function extractSpamReportRequest(
         id: tweet.id,
         created_at: tweet.created_at,
         media: tweet.media,
+        conversation_id_str: tweet.conversation_id_str,
+        in_reply_to_status_id_str: tweet.in_reply_to_status_id_str,
+        quoted_status_id_str: tweet.quoted_status_id_str,
       },
+      relationTweets: relationTweets,
     },
   }
 }

@@ -17,10 +17,9 @@ import type {
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
-import { prismaClients } from '../src/lib/prisma'
 
 describe('modlists', () => {
-  initCloudflareTest()
+  const context = initCloudflareTest()
   const newModList = {
     name: 'test',
     description: 'test',
@@ -28,6 +27,12 @@ describe('modlists', () => {
       id: '123',
       screen_name: 'test',
       name: 'test',
+      created_at: new Date().toISOString(),
+      is_blue_verified: false,
+      followers_count: 100,
+      friends_count: 100,
+      default_profile: false,
+      default_profile_image: false,
     },
   } satisfies ModListCreateRequest
   describe('create', () => {
@@ -48,6 +53,34 @@ describe('modlists', () => {
       const r2 = (await resp2.json()) as ModListSearchResponse
       expect(r2.length).toBe(1)
       expect(r2[0].id).toBe(r1.id)
+    })
+    it('should be able to create a modlist insert user new fields', async () => {
+      const resp1 = await fetch('/api/modlists/create', {
+        method: 'POST',
+        headers: {
+          Authorization: 'test-token-1',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...newModList,
+          twitterUser: {
+            ...newModList.twitterUser,
+            is_blue_verified: true,
+            followers_count: 100,
+            friends_count: 100,
+            default_profile: false,
+            default_profile_image: false,
+          },
+        } satisfies ModListCreateRequest),
+      })
+      expect(resp1.ok).true
+      const users = await context.prisma.user.findMany()
+      expect(users).length(1)
+      expect(users[0].blueVerified).toBe(true)
+      expect(users[0].followersCount).toBe(100)
+      expect(users[0].followingCount).toBe(100)
+      expect(users[0].defaultProfile).toBe(false)
+      expect(users[0].defaultProfileImage).toBe(false)
     })
     it('should be able to get created modlists', async () => {
       const getCreated = async () => {
@@ -303,6 +336,12 @@ describe('modlists', () => {
           id: 'twitter-user-1',
           screen_name: 'test-user-1',
           name: 'test-user-1',
+          created_at: new Date().toISOString(),
+          is_blue_verified: false,
+          followers_count: 100,
+          friends_count: 100,
+          default_profile: false,
+          default_profile_image: false,
         },
         modListId,
       )
@@ -342,6 +381,11 @@ describe('modlists', () => {
             name: 'test',
             profile_image_url: 'test',
             created_at: new Date().toISOString(),
+            is_blue_verified: false,
+            followers_count: 100,
+            friends_count: 100,
+            default_profile: false,
+            default_profile_image: false,
           },
         } satisfies ModListAddTwitterUserRequest),
         headers: {
@@ -365,6 +409,11 @@ describe('modlists', () => {
               name: 'test',
               profile_image_url: 'test',
               created_at: new Date().toISOString(),
+              is_blue_verified: false,
+              followers_count: 100,
+              friends_count: 100,
+              default_profile: false,
+              default_profile_image: false,
             },
           } satisfies ModListAddTwitterUserRequest),
           headers: {
@@ -388,6 +437,11 @@ describe('modlists', () => {
             name: 'test',
             profile_image_url: 'test',
             created_at: new Date().toISOString(),
+            is_blue_verified: false,
+            followers_count: 100,
+            friends_count: 100,
+            default_profile: false,
+            default_profile_image: false,
           },
         } satisfies ModListAddTwitterUserRequest),
         headers: {
@@ -408,6 +462,11 @@ describe('modlists', () => {
             name: 'test',
             profile_image_url: 'test',
             created_at: new Date().toISOString(),
+            is_blue_verified: false,
+            followers_count: 100,
+            friends_count: 100,
+            default_profile: false,
+            default_profile_image: false,
           },
         } satisfies ModListAddTwitterUserRequest),
         headers: {
@@ -424,6 +483,11 @@ describe('modlists', () => {
         name: `test-${i}`,
         profile_image_url: `test-${i}`,
         created_at: new Date().toISOString(),
+        is_blue_verified: false,
+        followers_count: 100,
+        friends_count: 100,
+        default_profile: false,
+        default_profile_image: false,
       }))
       const getCheck = async () => {
         const resp1 = await fetch('/api/modlists/user/check', {
@@ -458,13 +522,22 @@ describe('modlists', () => {
       expect(r2[twittrUsers[0].id]).true
     })
     it('should be able to get modlist users with cursor', async () => {
-      const list = Array.from({ length: 10 }, (_, i) => ({
-        id: `123-${i}`,
-        screen_name: `test-${i}`,
-        name: `test-${i}`,
-        profile_image_url: `test-${i}`,
-        created_at: new Date().toISOString(),
-      }))
+      const list = Array.from(
+        { length: 10 },
+        (_, i) =>
+          ({
+            id: `123-${i}`,
+            screen_name: `test-${i}`,
+            name: `test-${i}`,
+            profile_image_url: `test-${i}`,
+            created_at: new Date().toISOString(),
+            is_blue_verified: false,
+            followers_count: 100,
+            friends_count: 100,
+            default_profile: false,
+            default_profile_image: false,
+          } satisfies TwitterUser),
+      )
       await Promise.all(list.map((it) => addUserToModList(it, modListId)))
       const getModListUsers = async (options: ModListUsersRequest) => {
         const resp2 = await fetch(
@@ -495,6 +568,12 @@ describe('modlists', () => {
           id: 'twitter-user-1',
           screen_name: 'test-user-1',
           name: 'test-user-1',
+          created_at: new Date().toISOString(),
+          is_blue_verified: false,
+          followers_count: 100,
+          friends_count: 100,
+          default_profile: false,
+          default_profile_image: false,
         },
         modListId,
       )
@@ -504,6 +583,12 @@ describe('modlists', () => {
             id: 'twitter-user-1',
             screen_name: 'test-user-1',
             name: 'test-user-1',
+            created_at: new Date().toISOString(),
+            is_blue_verified: false,
+            followers_count: 100,
+            friends_count: 100,
+            default_profile: false,
+            default_profile_image: false,
           },
           modListId,
         ),
@@ -515,6 +600,12 @@ describe('modlists', () => {
           id: 'twitter-user-1',
           screen_name: 'test-user-1',
           name: 'test-user-1',
+          created_at: new Date().toISOString(),
+          is_blue_verified: false,
+          followers_count: 100,
+          friends_count: 100,
+          default_profile: false,
+          default_profile_image: false,
         },
         modListId,
       )

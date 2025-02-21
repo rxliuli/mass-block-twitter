@@ -83,14 +83,17 @@ async function extractSpamReportRequest(
     throw new Error('spamUser not found ' + spamUserId)
   }
   const getRelationTweet = async (tweetId?: string) => {
+    if (tweetId === tweet.id) {
+      return null
+    }
     if (!tweetId) {
       return null
     }
-    const tweet = await dbApi.tweets.get(tweetId)
-    if (tweet) {
-      const user = await dbApi.users.get(tweet.user_id)
+    const dbTweet = await dbApi.tweets.get(tweetId)
+    if (dbTweet) {
+      const user = await dbApi.users.get(dbTweet.user_id)
       if (user) {
-        return { tweet, user }
+        return { tweet: dbTweet, user }
       }
     }
     return null

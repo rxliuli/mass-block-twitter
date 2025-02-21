@@ -1,7 +1,6 @@
 import { extractObjects } from '$lib/util/extractObjects'
 import { it, expect, describe } from 'vitest'
 import all from './assets/all.json'
-import all2 from './assets/all2.json'
 import timeline from './assets/timeline.json'
 import { z } from 'zod'
 import {
@@ -23,6 +22,7 @@ import TweetDetail3 from './assets/TweetDetail3.json'
 import TweetDetail4 from './assets/TweetDetail4.json'
 import TweetDetail5 from './assets/TweetDetail5.json'
 import TweetDetail6 from './assets/TweetDetail6.json'
+import TweetDetail7 from './assets/TweetDetail7.json'
 import UserTweetsAndReplies from './assets/UserTweetsAndReplies.json'
 import UserTweets from './assets/UserTweets.json'
 import SearchTimeline from './assets/SearchTimeline.json'
@@ -348,6 +348,16 @@ describe('filterTweets', () => {
     )
     const tweets = parseTweets(handledJson)
     expect(tweets).length(2)
+  })
+  it('filterTweets for TimelineAddToModule', () => {
+    const r1 = parseTweets(TweetDetail7)
+    expect(r1).length(2)
+    const filtered = filterTweets(
+      TweetDetail7,
+      (it) => it.id !== '1892813087004098960',
+    )
+    const r2 = parseTweets(filtered)
+    expect(r2).length(1)
   })
 })
 

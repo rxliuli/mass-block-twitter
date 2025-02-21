@@ -1,0 +1,351 @@
+{
+  "data": {
+      "threaded_conversation_with_injections_v2": {
+          "instructions": [
+              {
+                  "type": "TimelineAddToModule",
+                  "moduleItems": [
+                      {
+                          "entryId": "conversationthread-1892809811361955918-tweet-1892813087004098960",
+                          "item": {
+                              "itemContent": {
+                                  "itemType": "TimelineTweet",
+                                  "__typename": "TimelineTweet",
+                                  "tweet_results": {
+                                      "result": {
+                                          "__typename": "Tweet",
+                                          "rest_id": "1892813087004098960",
+                                          "has_birdwatch_notes": false,
+                                          "core": {
+                                              "user_results": {
+                                                  "result": {
+                                                      "__typename": "User",
+                                                      "id": "VXNlcjo1MjEyMDAyNTg=",
+                                                      "rest_id": "521200258",
+                                                      "affiliates_highlighted_label": {},
+                                                      "has_graduated_access": true,
+                                                      "parody_commentary_fan_label": "None",
+                                                      "is_blue_verified": false,
+                                                      "profile_image_shape": "Circle",
+                                                      "legacy": {
+                                                          "following": false,
+                                                          "can_dm": true,
+                                                          "can_media_tag": true,
+                                                          "created_at": "Sun Mar 11 10:24:10 +0000 2012",
+                                                          "default_profile": false,
+                                                          "default_profile_image": false,
+                                                          "description": "",
+                                                          "entities": {
+                                                              "description": {
+                                                                  "urls": []
+                                                              }
+                                                          },
+                                                          "fast_followers_count": 0,
+                                                          "favourites_count": 112131,
+                                                          "followers_count": 173,
+                                                          "friends_count": 503,
+                                                          "has_custom_timelines": true,
+                                                          "is_translator": false,
+                                                          "listed_count": 1,
+                                                          "location": "China,广州",
+                                                          "media_count": 5,
+                                                          "name": "Deeper",
+                                                          "normal_followers_count": 173,
+                                                          "pinned_tweet_ids_str": [],
+                                                          "possibly_sensitive": false,
+                                                          "profile_banner_url": "https://pbs.twimg.com/profile_banners/521200258/1706628622",
+                                                          "profile_image_url_https": "https://pbs.twimg.com/profile_images/1886416675790295040/VzTF9NoI_normal.jpg",
+                                                          "profile_interstitial_type": "",
+                                                          "screen_name": "deepultraman",
+                                                          "statuses_count": 614,
+                                                          "translator_type": "none",
+                                                          "verified": false,
+                                                          "want_retweets": false,
+                                                          "withheld_in_countries": []
+                                                      },
+                                                      "tipjar_settings": {}
+                                                  }
+                                              }
+                                          },
+                                          "unmention_data": {},
+                                          "edit_control": {
+                                              "edit_tweet_ids": [
+                                                  "1892813087004098960"
+                                              ],
+                                              "editable_until_msecs": "1740120381000",
+                                              "is_edit_eligible": false,
+                                              "edits_remaining": "5"
+                                          },
+                                          "is_translatable": true,
+                                          "views": {
+                                              "count": "91",
+                                              "state": "EnabledWithCount"
+                                          },
+                                          "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+                                          "grok_analysis_button": true,
+                                          "legacy": {
+                                              "bookmark_count": 0,
+                                              "bookmarked": false,
+                                              "created_at": "Fri Feb 21 05:46:21 +0000 2025",
+                                              "conversation_id_str": "1892808355183218914",
+                                              "display_text_range": [
+                                                  20,
+                                                  46
+                                              ],
+                                              "entities": {
+                                                  "hashtags": [],
+                                                  "symbols": [],
+                                                  "timestamps": [],
+                                                  "urls": [],
+                                                  "user_mentions": [
+                                                      {
+                                                          "id_str": "85775914",
+                                                          "name": "Jim Yu",
+                                                          "screen_name": "ivyliner",
+                                                          "indices": [
+                                                              0,
+                                                              9
+                                                          ]
+                                                      },
+                                                      {
+                                                          "id_str": "182009582",
+                                                          "name": "cqmiao",
+                                                          "screen_name": "cqinmiao",
+                                                          "indices": [
+                                                              10,
+                                                              19
+                                                          ]
+                                                      }
+                                                  ]
+                                              },
+                                              "favorite_count": 3,
+                                              "favorited": false,
+                                              "full_text": "@ivyliner @cqinmiao 不一定吧，app就是请求服务器。你想的sdk能干什么",
+                                              "in_reply_to_screen_name": "ivyliner",
+                                              "in_reply_to_status_id_str": "1892810407267717488",
+                                              "in_reply_to_user_id_str": "85775914",
+                                              "is_quote_status": false,
+                                              "lang": "zh",
+                                              "quote_count": 0,
+                                              "reply_count": 1,
+                                              "retweet_count": 0,
+                                              "retweeted": false,
+                                              "user_id_str": "521200258",
+                                              "id_str": "1892813087004098960"
+                                          },
+                                          "quick_promote_eligibility": {
+                                              "eligibility": "IneligibleNotProfessional"
+                                          }
+                                      }
+                                  },
+                                  "tweetDisplayType": "Tweet"
+                              },
+                              "clientEventInfo": {
+                                  "details": {
+                                      "conversationDetails": {
+                                          "conversationSection": "HighQuality"
+                                      },
+                                      "timelinesDetails": {
+                                          "controllerData": "DAACDAAEDAABCgABFQCBCCAGABEKAAIAAAAABYBACAAAAAA="
+                                      }
+                                  }
+                              }
+                          }
+                      },
+                      {
+                          "entryId": "conversationthread-1892809811361955918-tweet-1892829754996511151",
+                          "item": {
+                              "itemContent": {
+                                  "itemType": "TimelineTweet",
+                                  "__typename": "TimelineTweet",
+                                  "tweet_results": {
+                                      "result": {
+                                          "__typename": "Tweet",
+                                          "rest_id": "1892829754996511151",
+                                          "has_birdwatch_notes": false,
+                                          "core": {
+                                              "user_results": {
+                                                  "result": {
+                                                      "__typename": "User",
+                                                      "id": "VXNlcjoyODQ5NjU2MDk=",
+                                                      "rest_id": "284965609",
+                                                      "affiliates_highlighted_label": {},
+                                                      "has_graduated_access": true,
+                                                      "parody_commentary_fan_label": "None",
+                                                      "is_blue_verified": true,
+                                                      "profile_image_shape": "Circle",
+                                                      "legacy": {
+                                                          "following": false,
+                                                          "can_dm": true,
+                                                          "can_media_tag": false,
+                                                          "created_at": "Wed Apr 20 08:49:25 +0000 2011",
+                                                          "default_profile": false,
+                                                          "default_profile_image": false,
+                                                          "description": "On the way to Hobbiton but now in Mordor. DFMYYPE2",
+                                                          "entities": {
+                                                              "description": {
+                                                                  "urls": []
+                                                              },
+                                                              "url": {
+                                                                  "urls": [
+                                                                      {
+                                                                          "display_url": "frad.me",
+                                                                          "expanded_url": "http://frad.me",
+                                                                          "url": "https://t.co/aLu8CQ4W4P",
+                                                                          "indices": [
+                                                                              0,
+                                                                              23
+                                                                          ]
+                                                                      }
+                                                                  ]
+                                                              }
+                                                          },
+                                                          "fast_followers_count": 0,
+                                                          "favourites_count": 45157,
+                                                          "followers_count": 7055,
+                                                          "friends_count": 757,
+                                                          "has_custom_timelines": true,
+                                                          "is_translator": false,
+                                                          "listed_count": 104,
+                                                          "location": "Shenzhen, China",
+                                                          "media_count": 2331,
+                                                          "name": "Frad",
+                                                          "normal_followers_count": 7055,
+                                                          "pinned_tweet_ids_str": [
+                                                              "1890465292612202534"
+                                                          ],
+                                                          "possibly_sensitive": false,
+                                                          "profile_banner_url": "https://pbs.twimg.com/profile_banners/284965609/1363142699",
+                                                          "profile_image_url_https": "https://pbs.twimg.com/profile_images/1309149063120642051/BKmpWP-l_normal.jpg",
+                                                          "profile_interstitial_type": "",
+                                                          "screen_name": "FradSer",
+                                                          "statuses_count": 14328,
+                                                          "translator_type": "regular",
+                                                          "url": "https://t.co/aLu8CQ4W4P",
+                                                          "verified": false,
+                                                          "want_retweets": false,
+                                                          "withheld_in_countries": []
+                                                      },
+                                                      "professional": {
+                                                          "rest_id": "1505943203131797507",
+                                                          "professional_type": "Creator",
+                                                          "category": [
+                                                              {
+                                                                  "id": 1020,
+                                                                  "name": "Product Designer",
+                                                                  "icon_name": "IconBriefcaseStroke"
+                                                              }
+                                                          ]
+                                                      },
+                                                      "tipjar_settings": {
+                                                          "is_enabled": true
+                                                      }
+                                                  }
+                                              }
+                                          },
+                                          "unmention_data": {},
+                                          "edit_control": {
+                                              "edit_tweet_ids": [
+                                                  "1892829754996511151"
+                                              ],
+                                              "editable_until_msecs": "1740124355000",
+                                              "is_edit_eligible": false,
+                                              "edits_remaining": "5"
+                                          },
+                                          "is_translatable": true,
+                                          "views": {
+                                              "count": "23",
+                                              "state": "EnabledWithCount"
+                                          },
+                                          "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                          "grok_analysis_button": true,
+                                          "legacy": {
+                                              "bookmark_count": 0,
+                                              "bookmarked": false,
+                                              "created_at": "Fri Feb 21 06:52:35 +0000 2025",
+                                              "conversation_id_str": "1892808355183218914",
+                                              "display_text_range": [
+                                                  34,
+                                                  96
+                                              ],
+                                              "entities": {
+                                                  "hashtags": [],
+                                                  "symbols": [],
+                                                  "timestamps": [],
+                                                  "urls": [],
+                                                  "user_mentions": [
+                                                      {
+                                                          "id_str": "521200258",
+                                                          "name": "Deeper",
+                                                          "screen_name": "deepultraman",
+                                                          "indices": [
+                                                              0,
+                                                              13
+                                                          ]
+                                                      },
+                                                      {
+                                                          "id_str": "85775914",
+                                                          "name": "Jim Yu",
+                                                          "screen_name": "ivyliner",
+                                                          "indices": [
+                                                              14,
+                                                              23
+                                                          ]
+                                                      },
+                                                      {
+                                                          "id_str": "182009582",
+                                                          "name": "cqmiao",
+                                                          "screen_name": "cqinmiao",
+                                                          "indices": [
+                                                              24,
+                                                              33
+                                                          ]
+                                                      }
+                                                  ]
+                                              },
+                                              "favorite_count": 0,
+                                              "favorited": false,
+                                              "full_text": "@deepultraman @ivyliner @cqinmiao 虽然都是请求API，纯网络库手写用，用起来肯定没有任何问题，但是SDK会方便很多。最大的原因私以为是接入AI的第三方需求少。",
+                                              "in_reply_to_screen_name": "deepultraman",
+                                              "in_reply_to_status_id_str": "1892813087004098960",
+                                              "in_reply_to_user_id_str": "521200258",
+                                              "is_quote_status": false,
+                                              "lang": "zh",
+                                              "quote_count": 0,
+                                              "reply_count": 0,
+                                              "retweet_count": 0,
+                                              "retweeted": false,
+                                              "user_id_str": "284965609",
+                                              "id_str": "1892829754996511151"
+                                          },
+                                          "quick_promote_eligibility": {
+                                              "eligibility": "IneligibleNotProfessional"
+                                          }
+                                      }
+                                  },
+                                  "tweetDisplayType": "Tweet"
+                              },
+                              "clientEventInfo": {
+                                  "details": {
+                                      "conversationDetails": {
+                                          "conversationSection": "HighQuality"
+                                      },
+                                      "timelinesDetails": {
+                                          "controllerData": "DAACDAAEDAABCgABDQCBkCICAAEKAAIAAAAAFIAgCAAAAAA="
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  ],
+                  "moduleEntryId": "conversationthread-1892809811361955918",
+                  "prepend": false
+              },
+              {
+                  "type": "TimelineTerminateTimeline",
+                  "direction": "Top"
+              }
+          ]
+      }
+  }
+}

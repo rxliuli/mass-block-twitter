@@ -441,16 +441,100 @@ export function filterNotifications(
   return _json
 }
 
-export function filterTweets(
+function filterEntrie(
+  entrie: any,
+  isShow: (tweet: ParsedTweet) => boolean,
+): boolean {
+  const extendedTweetSchema = tweetScheam.extend({
+    quoted_status_result: z
+      .object({
+        result: tweetScheam,
+      })
+      .optional(),
+  })
+  const originalTweets = extractObjects(
+    entrie,
+    (it) => extendedTweetSchema.safeParse(it).success,
+  ) as z.infer<typeof extendedTweetSchema>[]
+  const tweets = originalTweets.map((it) => {
+    const legacyTweet = parseLegacyTweet(it.legacy)
+    const tweet: ParsedTweet = {
+      ...legacyTweet,
+      user: parseTimelineUser(it.core.user_results.result),
+    }
+    return tweet
+  })
+  if (tweets.length === 2) {
+    const showMain = isShow(tweets[0])
+    const showQuote = isShow(tweets[1])
+    // if main tweet is not show, return false
+    if (!showMain) {
+      return false
+    }
+    // if quote tweet is show, return true
+    if (showQuote) {
+      return true
+    }
+    // if quote tweet is not show, but main tweet is show, remove the quote tweet
+    delete originalTweets[0].quoted_status_result
+    return true
+  }
+  return tweets.every(isShow)
+}
+
+function filterTimelineAddToModule(
   json: any,
   isShow: (tweet: ParsedTweet) => boolean,
-) {
+): {
+  matched: boolean
+  data: any
+} {
+  const addToModulesSchema = z.object({
+    type: z.literal('TimelineAddToModule'),
+    moduleItems: z.array(
+      z.object({
+        entryId: z.string(),
+        item: z.object({}),
+      }),
+    ),
+  })
+  const [addToModules] = extractObjects(
+    json,
+    (it) => addToModulesSchema.safeParse(it).success,
+  ) as (typeof addToModulesSchema._type)[]
+  if (!addToModules) {
+    return {
+      matched: false,
+      data: json,
+    }
+  }
+  if (!addToModules) {
+    return {
+      matched: false,
+      data: json,
+    }
+  }
+  addToModules.moduleItems = addToModules.moduleItems.filter((it) =>
+    filterEntrie(it, isShow),
+  )
+  return {
+    matched: true,
+    data: json,
+  }
+}
+
+function filterTimelineAddEntries(
+  json: any,
+  isShow: (tweet: ParsedTweet) => boolean,
+): {
+  matched: boolean
+  data: any
+} {
   const addEntriesSchema = z.object({
     type: z.literal('TimelineAddEntries'),
     entries: z.array(
       z.object({
         entryId: z.string(),
-        sortIndex: z.string(),
         content: z.object({}),
       }),
     ),
@@ -460,46 +544,33 @@ export function filterTweets(
     (it) => addEntriesSchema.safeParse(it).success,
   ) as (typeof addEntriesSchema._type)[]
   if (!addEntries) {
-    console.error('addEntries is required')
-    return json
-  }
-  addEntries.entries = addEntries.entries.filter((entrie) => {
-    const extendedTweetSchema = tweetScheam.extend({
-      quoted_status_result: z
-        .object({
-          result: tweetScheam,
-        })
-        .optional(),
-    })
-    const originalTweets = extractObjects(
-      entrie,
-      (it) => extendedTweetSchema.safeParse(it).success,
-    ) as z.infer<typeof extendedTweetSchema>[]
-    const tweets = originalTweets.map((it) => {
-      const legacyTweet = parseLegacyTweet(it.legacy)
-      const tweet: ParsedTweet = {
-        ...legacyTweet,
-        user: parseTimelineUser(it.core.user_results.result),
-      }
-      return tweet
-    })
-    if (tweets.length === 2) {
-      const showMain = isShow(tweets[0])
-      const showQuote = isShow(tweets[1])
-      // if main tweet is not show, return false
-      if (!showMain) {
-        return false
-      }
-      // if quote tweet is show, return true
-      if (showQuote) {
-        return true
-      }
-      // if quote tweet is not show, but main tweet is show, remove the quote tweet
-      delete originalTweets[0].quoted_status_result
-      return true
+    return {
+      matched: false,
+      data: json,
     }
-    return tweets.every(isShow)
-  })
+  }
+  addEntries.entries = addEntries.entries.filter((it) =>
+    filterEntrie(it, isShow),
+  )
+  return {
+    matched: true,
+    data: json,
+  }
+}
+
+export function filterTweets(
+  json: any,
+  isShow: (tweet: ParsedTweet) => boolean,
+) {
+  const r1 = filterTimelineAddEntries(json, isShow)
+  if (r1.matched) {
+    return r1.data
+  }
+  const r2 = filterTimelineAddToModule(json, isShow)
+  if (r2.matched) {
+    return r2.data
+  }
+  console.error('filterTweets not parsed', json)
   return json
 }
 

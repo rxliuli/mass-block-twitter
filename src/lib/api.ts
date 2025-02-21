@@ -321,6 +321,12 @@ const notificationCommunitiesSchema = z.object({
   }),
   template: templateSchema,
 })
+const notificationBirdSchema = z.object({
+  icon: z.object({
+    id: z.literal('bird_icon'),
+  }),
+  template: templateSchema,
+})
 const notificationSchema = z.object({
   globalObjects: z.object({
     notifications: z
@@ -330,6 +336,7 @@ const notificationSchema = z.object({
           notificationLikeSchema,
           notificationCommunitiesSchema,
           notificationRetweetSchema,
+          notificationBirdSchema,
         ]),
       )
       .optional(),

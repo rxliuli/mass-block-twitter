@@ -25,11 +25,13 @@
 
   function lockScroll() {
     document.documentElement.style.overflow = 'hidden'
+    document.body.style.overflow = 'hidden'
     document.documentElement.style.marginRight = '0px'
   }
 
   function unlockScroll() {
     document.documentElement.style.overflow = 'auto scroll'
+    document.body.style.overflow = 'auto scroll'
     document.documentElement.style.marginRight = ''
   }
 

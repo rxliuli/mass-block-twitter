@@ -117,17 +117,17 @@
   </UserActions>
   <div class="hidden md:flex items-center gap-2 mb-2">
     <SelectFilter
-      label="Filter Blocking"
+      label="Blocking"
       options={filterBlockedOptions}
       bind:value={searchParams.filterBlocked}
     />
     <SelectFilter
-      label="Filter Verified"
+      label="Verified"
       options={filterVerifiedOptions}
       bind:value={searchParams.filterVerified}
-    />filterBlockedfilterBlocked
+    />
     <SelectFilter
-      label="Filter Followed"
+      label="Followed"
       options={showFollowedOptions}
       bind:value={searchParams.filterFollowed}
       class="w-36"

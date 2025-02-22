@@ -1,16 +1,16 @@
 <script lang="ts">
   import UpgradeToPro from '@/components/billing/UpgradeToPro.svelte'
-  
+
   const features = [
     {
       icon: '🔍',
-      title: 'Smart Scan',
+      title: 'Scan & Block',
       desc: 'Batch blocking of suspicious accounts',
     },
     {
       icon: '📋',
       title: 'Moderation Lists',
-      desc: '',
+      desc: 'Create and subscribe to moderation lists',
     },
     {
       icon: '👥',
@@ -40,12 +40,12 @@
       desc: 'No 100-keyword limit like free version',
     },
     {
-      title: '(Dev) AI-Powered Detection',
-      desc: 'Smart spam tweet identification',
+      title: 'Unlimited Moderation Lists',
+      desc: 'Create and subscribe to unlimited moderation lists',
     },
     {
-      title: '(Dev) Settings Sync',
-      desc: 'Sync your settings across devices',
+      title: '(Dev) AI-Powered Detection',
+      desc: 'Smart spam tweet identification',
     },
     { title: 'Early Access', desc: 'Try new features before others' },
   ]

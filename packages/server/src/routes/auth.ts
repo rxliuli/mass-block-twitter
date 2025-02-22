@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { prismaClients } from '../lib/prisma'
 import { HonoEnv } from '../lib/bindings'
 import { generateSecureCode, sha256 } from '../lib/crypto'
-import { generateToken, getTokenInfo } from '../middlewares/auth'
+import { generateToken } from '../middlewares/auth'
 
 type CreateEmailOptions = {
   from: string
@@ -186,7 +186,6 @@ auth
       })
       if (!user) {
         // If you use this email, we will send you a reset password email.
-        console.log('user not found', validated.email)
         return c.json({ message: 'success' })
       }
       const code = generateSecureCode(4)

@@ -7,7 +7,6 @@ import { ulid } from 'ulidx'
 import { userSchema } from '../lib/request'
 import { ModList, PrismaClient, User } from '@prisma/client'
 import { getTokenInfo } from '../middlewares/auth'
-import { decode } from 'hono/jwt'
 
 const modlists = new Hono<HonoEnv>()
 
@@ -269,40 +268,27 @@ modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
   const validated = c.req.valid('json')
   const prisma = await prismaClients.fetch(c.env.DB)
   const tokenInfo = c.get('jwtPayload')
-  const result = await prisma.modList.findUnique({
+
+  const modListExists = await prisma.modList.findUnique({
     where: {
       id: validated.modListId,
-      localUserId: tokenInfo.sub,
     },
-    include: {
-      ModListUser: {
-        where: {
-          twitterUserId: validated.twitterUser.id,
-        },
-        take: 1,
+  })
+  if (!modListExists || modListExists.localUserId !== tokenInfo.sub) {
+    return c.json({ code: 'modListNotFound' }, 404)
+  }
+  const userAlreadyInList = await prisma.modListUser.findUnique({
+    where: {
+      modListId_twitterUserId: {
+        modListId: validated.modListId,
+        twitterUserId: validated.twitterUser.id,
       },
     },
   })
-  if (!result) {
-    return c.json({ code: 'modListNotFound' }, 404)
-  }
-  if (result.ModListUser.length > 0) {
+  if (userAlreadyInList) {
     return c.json({ code: 'userAlreadyInModList' }, 400)
   }
-  await upsertUser(prisma, validated.twitterUser)
-  // await prisma.$transaction([
-  //   prisma.modListUser.create({
-  //     data: {
-  //       id: ulid(),
-  //       modListId: validated.modListId,
-  //       twitterUserId: validated.twitterUser.id,
-  //     },
-  //   }),
-  //   prisma.modList.update({
-  //     where: { id: validated.modListId },
-  //     data: { userCount: { increment: 1 } },
-  //   }),
-  // ])
+  const user = await upsertUser(prisma, validated.twitterUser)
   await c.env.DB.batch([
     c.env.DB.prepare(
       'INSERT INTO modListUser (id, modListId, twitterUserId, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)',
@@ -317,12 +303,6 @@ modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
       'UPDATE modList SET userCount = userCount + 1 WHERE id = ?',
     ).bind(validated.modListId),
   ])
-  const user = await prisma.user.findUnique({
-    where: { id: validated.twitterUser.id },
-  })
-  if (!user) {
-    return c.json({ code: 'userNotFound' }, 404)
-  }
   return c.json(user)
 })
 

@@ -23,10 +23,9 @@
       <!-- <a href="/docs" class="transition-colors hover:text-foreground/80">
         Docs
       </a> -->
-      <!-- wait for paddle review -->
-      <!-- <a href="/pricing" class="transition-colors hover:text-foreground/80">
+      <a href="/pricing" class="transition-colors hover:text-foreground/80">
         Pricing
-      </a> -->
+      </a>
     </nav>
     <div class="flex-1"></div>
     <AuthButton />

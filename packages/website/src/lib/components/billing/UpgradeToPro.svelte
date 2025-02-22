@@ -3,14 +3,15 @@
   import { initializePaddle } from '@paddle/paddle-js'
   import { mode } from 'mode-watcher'
   import { get } from 'svelte/store'
-  import { getAuthInfo, setAuthInfo } from '../auth/auth.svelte'
+  import { getAuthInfo, setAuthInfo, useAuthInfo } from '../auth/auth.svelte'
   import { goto } from '$app/navigation'
   import { toast } from 'svelte-sonner'
 
   const props: ButtonProps = $props()
 
+  const authInfo = useAuthInfo()
+
   async function handleUpgrade() {
-    const authInfo = await getAuthInfo()
     if (!authInfo) {
       const confirmed = confirm('Please login to upgrade to Pro')
       if (!confirmed) {
@@ -76,6 +77,14 @@
             ...authInfo,
             isPro: true,
           })
+          document.dispatchEvent(
+            new CustomEvent('LoginSuccess', {
+              detail: {
+                ...authInfo,
+                isPro: true,
+              },
+            }),
+          )
           toast.success('Upgraded to Pro')
           goto('/')
         }
@@ -102,4 +111,11 @@
   }
 </script>
 
-<Button {...props} onclick={handleUpgrade}>Upgrade to Pro</Button>
+<Button
+  {...props}
+  onclick={handleUpgrade}
+  disabled={authInfo.isPro}
+  data-testid="upgrade-button"
+>
+  {authInfo.isPro ? 'You are already a Pro user' : 'Upgrade to Pro'}
+</Button>

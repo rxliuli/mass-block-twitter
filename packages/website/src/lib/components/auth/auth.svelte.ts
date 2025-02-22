@@ -1,4 +1,5 @@
 import { createMutation, createQuery } from '@tanstack/svelte-query'
+import { onMount } from 'svelte'
 
 export interface AuthInfo {
   id: string
@@ -32,11 +33,46 @@ export function clearAuthInfo() {
   userState.authInfo = undefined
 }
 
-export function useAuthInfo() {
-  return createQuery({
-    queryKey: ['authInfo'],
-    queryFn: getAuthInfo,
+let initialized = false
+export function useAuthInfo(): Partial<AuthInfo> {
+  onMount(async () => {
+    if (initialized) {
+      return
+    }
+    initialized = true
+    await getAuthInfo()
+    if (userState.authInfo?.token) {
+      const resp = await fetch(
+        import.meta.env.VITE_API_URL + '/api/accounts/settings',
+        {
+          headers: { Authorization: `Bearer ${userState.authInfo.token}` },
+        },
+      )
+      if (!resp.ok) {
+        clearAuthInfo()
+        return
+      }
+      const data = await resp.json()
+      userState.authInfo = {
+        ...userState.authInfo,
+        ...data,
+      }
+    }
   })
+  return {
+    get id() {
+      return userState.authInfo?.id
+    },
+    get email() {
+      return userState.authInfo?.email
+    },
+    get token() {
+      return userState.authInfo?.token
+    },
+    get isPro() {
+      return userState.authInfo?.isPro
+    },
+  }
 }
 
 export function useLogout() {

@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { useAuthInfo, useLogout, userState } from './auth.svelte'
+  import { getAuthInfo, useLogout, userState } from './auth.svelte'
   import Loading from '../ui/Loading.svelte'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import { UserIcon } from 'lucide-svelte'
   import { Button } from '../ui/button'
+  import { createQuery } from '@tanstack/svelte-query'
 
-  const query = useAuthInfo()
+  const query = createQuery({
+    queryKey: ['authInfo'],
+    queryFn: getAuthInfo,
+  })
 
   const logout = useLogout()
 </script>

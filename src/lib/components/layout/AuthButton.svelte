@@ -3,7 +3,7 @@
   import { openLoginWindow } from '$lib/util/openLoginWindow'
   import { toast } from 'svelte-sonner'
   import * as Sidebar from '$lib/components/ui/sidebar/index.js'
-  import { UserIcon } from 'lucide-svelte'
+  import { CircleFadingArrowUpIcon, UserIcon } from 'lucide-svelte'
   import { Badge } from '$lib/components/ui/badge'
   import * as DropdownMenu from '../ui/dropdown-menu'
   import { shadcnConfig } from '../logic/config'
@@ -65,9 +65,26 @@
       toast.success('Logged out')
     },
   })
+
+  function onOpenUpgrade(event: MouseEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    window.open(webUrl + '/pricing', '_blank')
+  }
 </script>
 
 {#if authInfo.value}
+  {#if !authInfo.value.isPro}
+    <Sidebar.MenuItem>
+      <Sidebar.MenuButton
+        class="bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+        onclick={onOpenUpgrade}
+      >
+        <CircleFadingArrowUpIcon />
+        Upgrade
+      </Sidebar.MenuButton>
+    </Sidebar.MenuItem>
+  {/if}
   <DropdownMenu.Root>
     <DropdownMenu.Trigger>
       <Sidebar.MenuItem>

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { AuthInfo } from '../../src/lib/components/auth/auth.svelte'
+import { AuthInfo } from '@mass-block-twitter/server'
 
 test.describe('login successfully', () => {
   test.beforeEach(async ({ page }) => {
@@ -14,6 +14,17 @@ test.describe('login successfully', () => {
             token: '1234567890',
             isPro: false,
           } satisfies AuthInfo,
+        }),
+      })
+    })
+    await page.route('**/api/accounts/settings', async (route) => {
+      await route.fulfill({
+        status: 200,
+        body: JSON.stringify({
+          id: '1',
+          email: 'test@test.com',
+          token: '1234567890',
+          isPro: false,
         }),
       })
     })

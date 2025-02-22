@@ -47,10 +47,6 @@
   },
   "dependencies": {
     "@faker-js/faker": "^9.5.0",
-    "@jimp/core": "^1.6.0",
-    "@jimp/js-jpeg": "^1.6.0",
-    "@jimp/js-png": "^1.6.0",
-    "@jimp/plugin-resize": "^1.6.0",
     "@json2csv/plainjs": "^7.0.6",
     "@liuli-util/async": "^3.7.0",
     "@mass-block-twitter/server": "workspace:^",
@@ -68,7 +64,6 @@
     "idb": "^8.0.1",
     "idb-keyval": "^6.2.1",
     "immer": "^10.1.1",
-    "jimp": "^1.6.0",
     "just-map-object": "^2.3.0",
     "lodash-es": "^4.17.21",
     "pngjs": "^7.0.0",
@@ -87,15 +82,11 @@
   "pnpm": {
     "patchedDependencies": {
       "lodash-es": "patches/lodash-es.patch",
-      "svelte-toolbelt": "patches/svelte-toolbelt.patch",
-      "@jimp/core": "patches/@jimp__core.patch"
+      "svelte-toolbelt": "patches/svelte-toolbelt.patch"
     },
     "onlyBuiltDependencies": [
       "esbuild"
-    ],
-    "overrides": {
-      "@jimp/core>file-type": "^20.1.0"
-    }
+    ]
   },
   "packageManager": "pnpm@10.3.0+sha512.ee592eda8815a8a293c206bb0917c4bb0ff274c50def7cbc17be05ec641fc2d1b02490ce660061356bd0d126a4d7eb2ec8830e6959fb8a447571c631d5a2442d"
 }

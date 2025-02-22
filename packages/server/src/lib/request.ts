@@ -18,6 +18,8 @@ export const tweetSchema = z.object({
   id: z.string(),
   text: z.string(),
   created_at: z.string(),
+  // TODO: remove optional when new version >0.13.2 is released
+  lang: z.string().optional(),
   media: z
     .array(
       z.object({

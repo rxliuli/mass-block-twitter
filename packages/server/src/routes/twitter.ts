@@ -77,6 +77,7 @@ twitter
           conversationId: tweetParams.conversation_id_str,
           inReplyToStatusId: tweetParams.in_reply_to_status_id_str,
           quotedStatusId: tweetParams.quoted_status_id_str,
+          lang: tweetParams.lang,
         }
       }
       async function createOrUpdateTweet(

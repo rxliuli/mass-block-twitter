@@ -117,6 +117,7 @@ async function extractSpamReportRequest(
         text: tweet.text,
         id: tweet.id,
         created_at: tweet.created_at,
+        lang: tweet.lang,
         media: tweet.media,
         conversation_id_str: tweet.conversation_id_str,
         in_reply_to_status_id_str: tweet.in_reply_to_status_id_str,

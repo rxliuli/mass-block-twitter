@@ -42,11 +42,15 @@ export function useAuthInfo() {
 export function useLogout() {
   return createMutation({
     mutationFn: async () => {
+      const authInfo = await getAuthInfo()
+      if (!authInfo) {
+        throw new Error('No auth info')
+      }
       const resp = await fetch(
         import.meta.env.VITE_API_URL + '/api/auth/logout',
         {
           method: 'POST',
-          headers: { Authorization: (await getAuthInfo())?.token! },
+          headers: { Authorization: `Bearer ${authInfo.token}` },
         },
       )
       if (!resp.ok) {

@@ -27,7 +27,7 @@
       import.meta.env.VITE_API_URL + '/api/accounts/settings',
       {
         headers: {
-          Authorization: (await getAuthInfo())?.token!,
+          Authorization: `Bearer ${authInfo.token}`,
         },
       },
     )
@@ -45,6 +45,7 @@
       token: import.meta.env.VITE_PADDLE_CLIENT_TOKEN,
       async eventCallback(event) {
         console.log('event', event)
+
         if (event.name === 'checkout.completed' && event.data) {
           paddle?.Checkout.close()
           const resp = await fetch(
@@ -53,7 +54,7 @@
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: (await getAuthInfo())?.token!,
+                Authorization: `Bearer ${(await getAuthInfo())?.token}`,
               },
               body: JSON.stringify({
                 transactionId: event.data.transaction_id,

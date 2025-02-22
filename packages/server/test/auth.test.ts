@@ -28,7 +28,6 @@ it('should support bearer token with expired token', async () => {
   })
   const token = await generateToken(context.env, {
     sub: 'test-user-1',
-    email: '1@test.com',
   })
   vi.useRealTimers()
   const resp = await fetch('/api/accounts/settings', {

@@ -10,12 +10,11 @@
     getAuthInfo,
     onPluginLoggedIn,
     setAuthInfo,
-    type AuthInfo,
   } from '@/components/auth/auth.svelte'
-  import { createMutation, useQueryClient } from '@tanstack/svelte-query'
+  import { createMutation } from '@tanstack/svelte-query'
   import { onMount } from 'svelte'
   import { toast } from 'svelte-sonner'
-
+  import type { LoginResponse } from '@mass-block-twitter/server'
 
   onMount(async () => {
     if (page.url.searchParams.get('from') !== 'plugin') {
@@ -55,14 +54,7 @@
         },
       )
       if (resp.ok) {
-        const data = (await resp.json()) as
-          | {
-              code: 'success'
-              data: AuthInfo
-            }
-          | {
-              code: 'verify-email'
-            }
+        const data = (await resp.json()) as LoginResponse
         if (data.code === 'verify-email') {
           const params = new URLSearchParams([
             ...page.url.searchParams,

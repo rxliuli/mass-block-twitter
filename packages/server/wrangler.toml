@@ -21,6 +21,7 @@ preview_id = "fdb2b670b220487f8f946be9ccdae4d2"
 binding = "DB"
 database_name = "mass-block-twitter"
 database_id = "30a33a44-9313-407c-a2c6-6dd1e1f598c4"
+migrations_dir = "drizzle"
 
 # [ai]
 # binding = "AI"

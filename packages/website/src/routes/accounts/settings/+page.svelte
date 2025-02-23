@@ -5,14 +5,9 @@
   import { goto } from '$app/navigation'
   import { getAuthInfo } from '@/components/auth/auth.svelte'
   import Loading from '@/components/ui/Loading.svelte'
+  import type { AccountSettingsResponse } from '@mass-block-twitter/server'
 
-  const query = createQuery<{
-    id: string
-    email: string
-    isPro: boolean
-    createdAt: string
-    lastLogin: string
-  }>({
+  const query = createQuery<AccountSettingsResponse>({
     queryKey: ['settings'],
     retry: false,
     queryFn: async () => {

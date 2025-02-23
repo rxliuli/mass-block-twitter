@@ -3,14 +3,13 @@ import { readdir, readFile } from 'node:fs/promises'
 import path from 'node:path'
 
 async function getInitSql() {
-  const list = (await readdir(path.resolve(__dirname, 'migrations'))).sort(
-    (a, b) => a.localeCompare(b),
-  )
+  const dirName = path.resolve(__dirname, 'drizzle')
+  const list = (await readdir(dirName))
+    .filter((it) => it.endsWith('.sql'))
+    .sort((a, b) => a.localeCompare(b))
   return (
     await Promise.all(
-      list.map((file) =>
-        readFile(path.resolve(__dirname, 'migrations', file), 'utf-8'),
-      ),
+      list.map((name) => readFile(path.resolve(dirName, name), 'utf-8')),
     )
   ).join('\n')
 }

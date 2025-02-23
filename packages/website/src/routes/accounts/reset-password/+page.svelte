@@ -6,6 +6,7 @@
   import { createMutation } from '@tanstack/svelte-query'
   import { goto } from '$app/navigation'
   import { toast } from 'svelte-sonner'
+  import type { ResetPasswordRequest } from '@mass-block-twitter/server'
 
   const formState = $state({
     email: '',
@@ -29,7 +30,7 @@
             email: formState.email,
             code: formState.code,
             password: formState.password,
-          }),
+          } satisfies ResetPasswordRequest),
           headers: {
             'Content-Type': 'application/json',
           },

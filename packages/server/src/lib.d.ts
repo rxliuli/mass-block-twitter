@@ -28,3 +28,11 @@ export type {
   ModListUserCheckPostRequest,
 } from './routes/modlists'
 export type { CheckoutCompleteRequest } from './routes/billing'
+export type {
+  LoginRequest,
+  LoginResponse,
+  LoginErrorResponse,
+  SendVerifyEmailRequest,
+  VerifyEmailRequest,
+  ResetPasswordRequest,
+} from './routes/auth'

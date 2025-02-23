@@ -6,6 +6,7 @@
   import { getAuthInfo, setAuthInfo, useAuthInfo } from '../auth/auth.svelte'
   import { goto } from '$app/navigation'
   import { toast } from 'svelte-sonner'
+  import type { CheckoutCompleteRequest } from '@mass-block-twitter/server'
 
   const props: ButtonProps = $props()
 
@@ -60,7 +61,7 @@
               body: JSON.stringify({
                 transactionId: event.data.transaction_id,
                 countryCode: event.data.customer.address!.country_code,
-              }),
+              } satisfies CheckoutCompleteRequest),
             },
           )
           if (!resp.ok) {
@@ -99,7 +100,6 @@
     if (!paddle) {
       throw new Error('Failed to initialize Paddle')
     }
-    console.log('Upgrade')
     paddle.Checkout.open({
       items: [
         {

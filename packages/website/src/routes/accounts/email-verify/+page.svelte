@@ -11,16 +11,23 @@
     setAuthInfo,
     type AuthInfo,
   } from '@/components/auth/auth.svelte'
+  import type {
+    SendVerifyEmailRequest,
+    VerifyEmailRequest,
+  } from '@mass-block-twitter/server'
 
   const email = page.url.searchParams.get('email')
 
   const sendMailMutation = createMutation({
     mutationFn: async () => {
+      if (!email) {
+        throw new Error('Email is required')
+      }
       const resp = await fetch(
         import.meta.env.VITE_API_URL + '/api/auth/send-verify-email',
         {
           method: 'POST',
-          body: JSON.stringify({ email }),
+          body: JSON.stringify({ email } satisfies SendVerifyEmailRequest),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -42,12 +49,18 @@
     mutationFn: async (event: SubmitEvent) => {
       event.preventDefault()
       const formData = new FormData(event.target as HTMLFormElement)
-      const code = formData.get('code')
+      const code = formData.get('code') as string
+      if (!email) {
+        throw new Error('Email is required')
+      }
       const resp = await fetch(
         import.meta.env.VITE_API_URL + '/api/auth/verify-email',
         {
           method: 'POST',
-          body: JSON.stringify({ email, code }),
+          body: JSON.stringify({
+            email,
+            code,
+          } satisfies VerifyEmailRequest),
           headers: {
             'Content-Type': 'application/json',
           },

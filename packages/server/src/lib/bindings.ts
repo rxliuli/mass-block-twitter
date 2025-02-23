@@ -16,14 +16,16 @@ export interface TokenInfo {
   sub: string // localUserId
 }
 
+export type JwtPayload = TokenInfo & {
+  iat: number
+  exp: number
+}
+
 export type HonoEnv = {
   Bindings: Bindings
   Variables: {
     tokenInfo: TokenInfo
 
-    jwtPayload: TokenInfo & {
-      iat: number
-      exp: number
-    }
+    jwtPayload: JwtPayload
   }
 }

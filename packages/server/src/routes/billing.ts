@@ -2,7 +2,9 @@ import { Hono } from 'hono'
 import { HonoEnv } from '../lib/bindings'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
-import { prismaClients } from '../lib/prisma'
+import { drizzle } from 'drizzle-orm/d1'
+import { payment, localUser } from '../db/schema'
+import { eq } from 'drizzle-orm'
 
 const billing = new Hono<HonoEnv>()
 
@@ -43,42 +45,23 @@ billing.post(
       console.error('Failed to create payment', await resp.json())
       return c.json({ message: 'Failed to create payment' }, 500)
     }
-    const prisma = await prismaClients.fetch(c.env.DB)
+    const db = drizzle(c.env.DB)
     const transaction = (await resp.json()) as PaddleTransaction
-    // await prisma.$transaction([
-    //   prisma.payment.create({
-    //     data: {
-    //       id: transaction.data.id,
-    //       type: 'subscription',
-    //       amount: transaction.data.details.totals.total / 100,
-    //       status: 'success',
-    //       localUserId: tokenInfo.id,
-    //       countryCode,
-    //     },
-    //   }),
-    //   prisma.localUser.update({
-    //     data: { isPro: true },
-    //     where: { id: tokenInfo.id },
-    //   }),
-    // ])
-    await c.env.DB.batch([
-      c.env.DB.prepare(
-        'INSERT INTO payment (id, type, amount, status, localUserId, countryCode, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      ).bind(
-        transaction.data.id,
-        'subscription',
-        transaction.data.details.totals.total / 100,
-        'success',
-        tokenInfo.sub,
+    await db.batch([
+      db.insert(payment).values({
+        id: transaction.data.id,
+        type: 'subscription',
+        amount: transaction.data.details.totals.total / 100,
+        status: 'success',
+        localUserId: tokenInfo.sub,
         countryCode,
-        new Date().toISOString(),
-        new Date().toISOString(),
-      ),
-      c.env.DB.prepare('UPDATE localUser SET isPro = true WHERE id = ?').bind(
-        tokenInfo.sub,
-      ),
+      }),
+      db
+        .update(localUser)
+        .set({ isPro: true })
+        .where(eq(localUser.id, tokenInfo.sub)),
     ])
-    return c.json({ message: 'Payment created' })
+    return c.json({ code: 'success' })
   },
 )
 

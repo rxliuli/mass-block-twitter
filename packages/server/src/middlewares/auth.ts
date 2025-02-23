@@ -1,17 +1,17 @@
 import { Context, MiddlewareHandler } from 'hono'
-import { HonoEnv, TokenInfo } from '../lib/bindings'
+import { HonoEnv, JwtPayload, TokenInfo } from '../lib/bindings'
 import { jwt, sign, verify } from 'hono/jwt'
 
 export async function getTokenInfo(
   c: Context<HonoEnv>,
-): Promise<TokenInfo | undefined> {
+): Promise<JwtPayload | undefined> {
   const token = c.req.header('Authorization')?.replace('Bearer ', '')
   if (!token) {
     return
   }
   try {
     const payload = await verify(token, c.env.JWT_SECRET)
-    const tokenInfo = payload as unknown as TokenInfo
+    const tokenInfo = payload as unknown as JwtPayload
     return tokenInfo
   } catch (error) {
     return
@@ -32,7 +32,6 @@ export async function generateToken(
 
 export function auth(): MiddlewareHandler<HonoEnv> {
   return async (c, next) => {
-    // TODO temp
     if (c.req.url === '/api/modlists/search') {
       return next()
     }
@@ -47,7 +46,13 @@ export function auth(): MiddlewareHandler<HonoEnv> {
       secret: c.env.JWT_SECRET,
     })
     try {
-      return await jwtMiddleware(c, next)
+      return await jwtMiddleware(c, async () => {
+        if (await c.env.MY_KV.get(`logout-${token}`)) {
+          c.res = c.json({ code: 'Unauthorized' }, 401)
+          return
+        }
+        await next()
+      })
     } catch (error) {
       return c.json({ error: 'Invalid or expired token' }, 401)
     }

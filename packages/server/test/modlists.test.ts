@@ -17,6 +17,8 @@ import type {
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
+import { modList, user } from '../src/db/schema'
+import { ulid } from 'ulidx'
 
 describe('modlists', () => {
   const context = initCloudflareTest()
@@ -173,6 +175,32 @@ describe('modlists', () => {
       const r1 = await getModList(modListId)
       expect(r1.name).toBe('test2')
     })
+    it("should not be able to update other user's modlist", async () => {
+      const resp1 = await fetch('/api/modlists/create', {
+        method: 'POST',
+        body: JSON.stringify(newModList),
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.ok).true
+      const r1 = (await resp1.json()) as ModListCreateResponse
+      const modListId2 = r1.id
+      const resp2 = await fetch(`/api/modlists/update/${modListId2}`, {
+        method: 'PUT',
+        body: JSON.stringify({ name: 'test2' } satisfies ModListUpdateRequest),
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp2.ok).true
+      const r2 = await getModList(modListId2)
+      expect(r2.name).toBe('test2')
+      const r3 = await getModList(modListId)
+      expect(r3.name).toBe('test')
+    })
     it('should not be able to update a modlist that is not created by the user', async () => {
       const resp1 = await fetch(`/api/modlists/update/${modListId}`, {
         method: 'PUT',
@@ -303,7 +331,9 @@ describe('modlists', () => {
       const r3 = (await resp3.json()) as ModListSubscribeResponse
       expect(r3.length).toBe(1)
       expect(r3[0].id).toBe(modListId)
-      expect((await getModList(modListId, `Bearer ${context.token1}`)).subscribed).true
+      expect(
+        (await getModList(modListId, `Bearer ${context.token1}`)).subscribed,
+      ).true
       expect((await getModList(modListId)).subscribed).false
     })
     it('should not be able to subscribe to a modlist twice', async () => {

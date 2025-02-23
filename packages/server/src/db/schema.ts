@@ -6,7 +6,7 @@ import {
   uniqueIndex,
   index,
 } from 'drizzle-orm/sqlite-core'
-import { relations, sql } from 'drizzle-orm'
+import { relations } from 'drizzle-orm'
 import { ulid } from 'ulidx'
 
 // User table
@@ -14,7 +14,7 @@ export const user = sqliteTable(
   'User',
   {
     id: text('id').primaryKey(),
-    screenName: text('screenName'),
+    screenName: text('screenName').notNull(),
     name: text('name'),
     description: text('description'),
     profileImageUrl: text('profileImageUrl'),
@@ -96,30 +96,29 @@ export const spamReport = sqliteTable(
       .notNull()
       .$defaultFn(() => new Date().toISOString()),
   },
-  (table) => ({
-    uniqueSpamReport: uniqueIndex('spamReport_unique').on(
+  (table) => [
+    uniqueIndex('spamReport_unique').on(
       table.spamUserId,
       table.reportUserId,
       table.spamTweetId,
     ),
-    spamUserIdx: index('spamUser_idx').on(table.spamUserId),
-    reportUserIdx: index('reportUser_idx').on(table.reportUserId),
-    spamUserReportIdx: index('spamUser_report_idx').on(
-      table.spamUserId,
-      table.reportUserId,
-    ),
-    createdAtIdx: index('createdAt_idx').on(table.createdAt),
-  }),
+    index('spamUser_idx').on(table.spamUserId),
+    index('reportUser_idx').on(table.reportUserId),
+    index('spamUser_report_idx').on(table.spamUserId, table.reportUserId),
+    index('createdAt_idx').on(table.createdAt),
+  ],
 )
 
 // Payment table
 export const payment = sqliteTable('Payment', {
   id: text('id').primaryKey(),
-  localUserId: text('localUserId').references(() => localUser.id),
-  type: text('type'),
-  amount: real('amount'),
-  status: text('status', { enum: ['pending', 'success', 'failed'] }),
-  countryCode: text('countryCode'),
+  localUserId: text('localUserId')
+    .references(() => localUser.id)
+    .notNull(),
+  type: text('type').notNull(),
+  amount: real('amount').notNull(),
+  status: text('status', { enum: ['pending', 'success', 'failed'] }).notNull(),
+  countryCode: text('countryCode').notNull(),
   createdAt: text('createdAt')
     .notNull()
     .$defaultFn(() => new Date().toISOString()),
@@ -151,7 +150,7 @@ export const modList = sqliteTable(
   'ModList',
   {
     id: text('id').primaryKey(),
-    name: text('name'),
+    name: text('name').notNull(),
     description: text('description'),
     avatar: text('avatar'),
     userCount: integer('userCount').default(0),
@@ -172,10 +171,10 @@ export const modList = sqliteTable(
       .notNull()
       .$defaultFn(() => new Date().toISOString()),
   },
-  (table) => ({
-    nameIdx: index('modList_name_idx').on(table.name),
-    descriptionIdx: index('modList_description_idx').on(table.description),
-  }),
+  (table) => [
+    index('modList_name_idx').on(table.name),
+    index('modList_description_idx').on(table.description),
+  ],
 )
 
 // ModListUser table

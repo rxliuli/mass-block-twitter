@@ -6,10 +6,17 @@ import { ulid } from 'ulidx'
 import { userSchema } from '../lib/request'
 import { getTokenInfo } from '../middlewares/auth'
 import { drizzle } from 'drizzle-orm/d1'
-import { modList, modListSubscription, modListUser, user } from '../db/schema'
+import {
+  localUser,
+  modList,
+  modListSubscription,
+  modListUser,
+  user,
+} from '../db/schema'
 import { convertUserParamsToDBUser } from './twitter'
 import { and, desc, eq, inArray, InferSelectModel, lt, sql } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
+import { getTableAliasedColumns } from '../lib/drizzle'
 
 const modlists = new Hono<HonoEnv>()
 
@@ -491,11 +498,14 @@ search
     const id = c.req.param('id')
     const db = drizzle(c.env.DB)
     const tokenInfo = await getTokenInfo(c)
-    const [_modList, _subscribed] = await Promise.all([
+    const [_modList, _subscribed] = await db.batch([
       db
-        .select()
+        .select({
+          modList: getTableAliasedColumns(modList),
+          user: getTableAliasedColumns(user),
+        })
         .from(modList)
-        .leftJoin(user, eq(modList.twitterUserId, user.id))
+        .innerJoin(user, eq(modList.twitterUserId, user.id))
         .where(eq(modList.id, id))
         .limit(1),
       ...(tokenInfo
@@ -506,7 +516,7 @@ search
               .where(
                 and(
                   eq(modListSubscription.modListId, id),
-                  eq(modListSubscription.localUserId, tokenInfo?.sub),
+                  eq(modListSubscription.localUserId, tokenInfo.sub),
                 ),
               )
               .limit(1),
@@ -517,12 +527,12 @@ search
       return c.json<ModListGetErrorResponse>({ code: 'modListNotFound' }, 404)
     }
     const subscribed = _subscribed?.length > 0
-    const owner = _modList[0].ModList.localUserId === tokenInfo?.sub
+    const owner = _modList[0].modList.localUserId === tokenInfo?.sub
     return c.json<ModListGetResponse>({
-      ..._modList[0].ModList,
+      ..._modList[0].modList,
       subscribed,
       owner,
-      twitterUser: _modList[0].User!,
+      twitterUser: _modList[0].user,
     })
   })
 

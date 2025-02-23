@@ -12,7 +12,7 @@ CREATE TABLE `LocalUser` (
 CREATE UNIQUE INDEX `LocalUser_email_unique` ON `LocalUser` (`email`);--> statement-breakpoint
 CREATE TABLE `ModList` (
 	`id` text PRIMARY KEY NOT NULL,
-	`name` text,
+	`name` text NOT NULL,
 	`description` text,
 	`avatar` text,
 	`userCount` integer DEFAULT 0,
@@ -52,11 +52,11 @@ CREATE TABLE `ModListUser` (
 CREATE UNIQUE INDEX `modListUser_unique` ON `ModListUser` (`id`,`twitterUserId`);--> statement-breakpoint
 CREATE TABLE `Payment` (
 	`id` text PRIMARY KEY NOT NULL,
-	`localUserId` text,
-	`type` text,
-	`amount` real,
-	`status` text,
-	`countryCode` text,
+	`localUserId` text NOT NULL,
+	`type` text NOT NULL,
+	`amount` real NOT NULL,
+	`status` text NOT NULL,
+	`countryCode` text NOT NULL,
 	`createdAt` text NOT NULL,
 	`updatedAt` text NOT NULL,
 	FOREIGN KEY (`localUserId`) REFERENCES `LocalUser`(`id`) ON UPDATE no action ON DELETE no action
@@ -100,7 +100,7 @@ CREATE TABLE `Tweet` (
 CREATE INDEX `tweet_spamReportCount_idx` ON `Tweet` (`spamReportCount`);--> statement-breakpoint
 CREATE TABLE `User` (
 	`id` text PRIMARY KEY NOT NULL,
-	`screenName` text,
+	`screenName` text NOT NULL,
 	`name` text,
 	`description` text,
 	`profileImageUrl` text,

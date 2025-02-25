@@ -34,4 +34,6 @@ export type Props<TData> = {
   class?: string
   rowSelection?: RowSelection<TData>
   virtual?: boolean
+  onScroll?: (event: UIEvent) => void
+  loading?: boolean
 }

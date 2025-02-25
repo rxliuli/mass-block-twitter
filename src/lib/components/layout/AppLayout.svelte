@@ -30,7 +30,7 @@
 
   const menuItems: MenuItem[] = [
     {
-      title: 'Record Users',
+      title: 'Search and Block',
       url: '/',
       icon: UserIcon,
       to: 'content',

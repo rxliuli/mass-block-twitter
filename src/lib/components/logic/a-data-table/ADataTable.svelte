@@ -4,8 +4,9 @@
   import type { Props } from './props'
   import { isComponent, isComponentConfig, isSnippetConfig } from './utils'
   import { getVirtualizedRange } from './virtual'
-  import { cn } from '$lib/utils'
   import { onMount, tick } from 'svelte'
+  import { Loader2Icon } from 'lucide-svelte'
+  import { AutoSizer } from '@rxliuli/svelte-window'
 
   const props: Props<TData> = $props()
 
@@ -97,89 +98,104 @@
     }
   })
 
-  const handleScroll = (event: Event) => {
+  const handleScroll = (event: UIEvent) => {
     const target = event.target as HTMLTableElement
     const top = target.scrollTop
     requestAnimationFrame(() => {
       scrollTop = top
     })
+    props.onScroll?.(event as UIEvent)
   }
 </script>
 
-<div
-  bind:this={tableRef}
-  class={cn('max-h-screen overflow-auto', props.class)}
-  onscroll={handleScroll}
->
-  <table class={'table-auto border-b border-collapse border-gray-400 w-full'}>
-    <thead class="text-muted-foreground sticky top-0 bg-background z-10">
-      <tr>
-        {#if props.rowSelection}
-          <th class="table-cell selection">
-            <Checkbox
-              checked={allSelected}
-              onCheckedChange={toggleAllSelection}
-            />
-          </th>
-        {/if}
-        {#each props.columns as column (column.dataIndex)}
-          <th class="table-cell">{column.title}</th>
-        {/each}
-      </tr>
-    </thead>
+<div class="relative h-full overflow-x-auto" onscroll={handleScroll}>
+  <AutoSizer>
+    {#snippet child({ height })}
+      <table
+        bind:this={tableRef}
+        class={'table-auto border-b border-collapse border-gray-400 w-full'}
+        style="height: {height}px"
+      >
+        <thead class="text-muted-foreground sticky top-0 bg-background z-10">
+          <tr>
+            {#if props.rowSelection}
+              <th class="table-cell selection">
+                <Checkbox
+                  checked={allSelected}
+                  onCheckedChange={toggleAllSelection}
+                />
+              </th>
+            {/if}
+            {#each props.columns as column (column.dataIndex)}
+              <th class="table-cell">{column.title}</th>
+            {/each}
+          </tr>
+        </thead>
 
-    <tbody class="h-full overflow-y-auto">
-      {#if props.virtual}
-        <tr style="height: {rangeData.paddingTop}px"></tr>
-      {/if}
-      {#each rangeData.data as row, localIndex (row[props.rowKey as keyof TData] ?? localIndex)}
-        {@const globalIndex = rangeData.start + localIndex}
-        <tr
-          onload={(ev) => handleTrMount(ev.target as HTMLElement, globalIndex)}
-          data-id={row[props.rowKey as keyof TData] as any}
-          class="border-b border-gray-300 hover:bg-muted/50 group"
-        >
-          {#if props.rowSelection}
-            {@const key = row[props.rowKey as keyof TData] as any}
-            <td class="table-cell selection">
-              <Checkbox
-                checked={props.rowSelection.selectedRowKeys.includes(key)}
-                onCheckedChange={(checked) =>
-                  toggleSelection(key, row, checked)}
-              />
-            </td>
+        <tbody>
+          {#if props.virtual}
+            <tr style="height: {rangeData.paddingTop}px"></tr>
           {/if}
-          {#each props.columns as column (column.dataIndex)}
-            <td class="table-cell">
-              {#if column.render}
-                {@const RenderResult = column.render(
-                  row[column.dataIndex as keyof TData],
-                  row,
-                  localIndex,
-                )}
-                {#if isComponentConfig(RenderResult)}
-                  <RenderResult.component {...RenderResult.props} />
-                {:else if isComponent(RenderResult)}
-                  <RenderResult />
-                {:else if isSnippetConfig(RenderResult)}
-                  {@const snippet = RenderResult.snippet}
-                  {@const params = RenderResult.params}
-                  {@render snippet(params)}
-                {:else}
-                  {RenderResult}
-                {/if}
-              {:else}
-                {row[column.dataIndex as keyof TData]}
+          {#each rangeData.data as row, localIndex (row[props.rowKey as keyof TData] ?? localIndex)}
+            {@const globalIndex = rangeData.start + localIndex}
+            <tr
+              onload={(ev) =>
+                handleTrMount(ev.target as HTMLElement, globalIndex)}
+              data-id={row[props.rowKey as keyof TData] as any}
+              class="border-b border-gray-300 hover:bg-muted/50 group"
+            >
+              {#if props.rowSelection}
+                {@const key = row[props.rowKey as keyof TData] as any}
+                <td class="table-cell selection">
+                  <Checkbox
+                    checked={props.rowSelection.selectedRowKeys.includes(key)}
+                    onCheckedChange={(checked) =>
+                      toggleSelection(key, row, checked)}
+                  />
+                </td>
               {/if}
-            </td>
+              {#each props.columns as column (column.dataIndex)}
+                <td class="table-cell">
+                  {#if column.render}
+                    {@const RenderResult = column.render(
+                      row[column.dataIndex as keyof TData],
+                      row,
+                      localIndex,
+                    )}
+                    {#if isComponentConfig(RenderResult)}
+                      <RenderResult.component {...RenderResult.props} />
+                    {:else if isComponent(RenderResult)}
+                      <RenderResult />
+                    {:else if isSnippetConfig(RenderResult)}
+                      {@const snippet = RenderResult.snippet}
+                      {@const params = RenderResult.params}
+                      {@render snippet(params)}
+                    {:else}
+                      {RenderResult}
+                    {/if}
+                  {:else}
+                    {row[column.dataIndex as keyof TData]}
+                  {/if}
+                </td>
+              {/each}
+            </tr>
           {/each}
-        </tr>
-      {/each}
-      {#if props.virtual}
-        <tr style="height: {rangeData.paddingBottom}px"></tr>
-      {/if}
-    </tbody>
-  </table>
+          {#if props.virtual}
+            <tr style="height: {rangeData.paddingBottom}px"></tr>
+          {/if}
+        </tbody>
+      </table>
+    {/snippet}
+  </AutoSizer>
+  {#if props.loading}
+    <div class="sticky bottom-0 flex items-center justify-center p-2 z-10">
+      <div
+        class="bg-background/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm"
+      >
+        <Loader2Icon class="w-6 h-6 animate-spin text-primary" />
+      </div>
+    </div>
+  {/if}
 </div>
 
 <style>

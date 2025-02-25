@@ -1,4 +1,4 @@
-<script lang="ts" generics="T extends string | number">
+<script lang="ts" generics="T extends string">
   import { X } from 'lucide-svelte'
   import { Badge } from '$lib/components/ui/badge'
   import {
@@ -7,7 +7,10 @@
     CommandItem,
     CommandList,
   } from '$lib/components/ui/command'
-  import { tick } from 'svelte'
+  import { onMount, tick } from 'svelte'
+  import { Command as CommandPrimitive } from 'bits-ui'
+
+  let command = $state<typeof CommandPrimitive.Root | null>(null)
 
   interface LabelValue {
     value: T
@@ -15,7 +18,7 @@
   }
 
   let {
-    value = $bindable(),
+    value = $bindable<T[]>([]),
     options,
   }: {
     value: T[]
@@ -24,7 +27,8 @@
 
   let open = $state(false)
   let inputValue = $state('')
-  let inputEl: HTMLInputElement | undefined = $state()
+  let inputEl: HTMLInputElement | null = $state(null)
+  let focused = $state<T>()
 
   let selectables = $derived(
     options.filter((f) => !value.some((s) => s === f.value)),
@@ -44,21 +48,42 @@
     if (e.key === 'Escape') {
       inputEl.blur()
     }
+
+    if (e.key === 'Enter' && focused && open) {
+      if (!value.includes(focused)) {
+        handleSelect(focused)
+      }
+    }
   }
 
-  async function handleSelect(item: LabelValue) {
+  $inspect(value)
+
+  async function handleSelect(item: T) {
     inputValue = ''
-    value = [...value, item.value]
+    if (value.includes(item)) {
+      return
+    }
+    value = [...value, item]
     await tick()
     inputEl?.focus()
+    console.log('handleSelect', item, $state.snapshot(value))
   }
 
   const selected = $derived(
     options.filter((f) => value.some((s) => s === f.value)),
   )
+  onMount(() => {
+    console.log('command', command)
+  })
 </script>
 
-<Command class="overflow-visible bg-transparent" onkeydown={handleKeyDown}>
+<Command
+  class="overflow-visible bg-transparent"
+  onkeydown={handleKeyDown}
+  onStateChange={(options) => {
+    focused = options.value as T
+  }}
+>
   <div
     class="group rounded-md border border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
   >
@@ -72,15 +97,15 @@
             onmousedown={(e) => {
               e.preventDefault()
               e.stopPropagation()
+              handleUnselect(item)
             }}
-            onclick={() => handleUnselect(item)}
           >
             <X class="h-3 w-3 text-muted-foreground hover:text-foreground" />
           </button>
         </Badge>
       {/each}
-      <input
-        bind:this={inputEl}
+      <CommandPrimitive.Input
+        bind:ref={inputEl}
         bind:value={inputValue}
         onblur={() => (open = false)}
         onfocus={() => (open = true)}
@@ -99,10 +124,11 @@
           <CommandGroup class="h-full overflow-auto">
             {#each selectables as framework (framework.value)}
               <CommandItem
+                value={framework.value}
                 onmousedown={(e) => {
                   e.preventDefault()
                   e.stopPropagation()
-                  handleSelect(framework)
+                  handleSelect(framework.value)
                 }}
                 class="cursor-pointer"
               >

@@ -78,7 +78,7 @@
       bind:checked={$settings.hideBlueVerifiedAccounts}
     />
   </Label>
-  <Label class="p-4">
+  <Label class="p-4 block">
     <div class="mb-2">
       <span class="block text-base font-medium">Hide Languages</span>
       <span class="block mt-1 text-sm text-gray-500">

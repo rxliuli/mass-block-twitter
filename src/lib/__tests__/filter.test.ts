@@ -1,38 +1,98 @@
-import { ParsedTweet } from '$lib/api'
-import { defaultProfileFilter } from '$lib/filter'
-import { beforeEach, describe, expect, it } from 'vitest'
+// @vitest-environment happy-dom
+import { MUTED_WORD_RULES_KEY, ParsedTweet } from '$lib/api'
+import { User } from '$lib/db'
+import {
+  defaultProfileFilter,
+  MutedWordRule,
+  mutedWordsFilter,
+} from '$lib/filter'
+import { describe, expect, it } from 'vitest'
 
 describe('defaultProfileFilter', () => {
-  let tweet: ParsedTweet
-  beforeEach(() => {
-    tweet = {
-      id: '1885207553963155664',
-      text: '@Cldeop 蓝V代🍂开，刷推特粉丝🌈，卖推特号',
-      created_at: '2025-01-31T06:04:40.000Z',
-      user: {
-        id: '1866039122118443008',
-        blocking: false,
-        following: false,
-        screen_name: 'brentzgtp18293',
-        name: 'Brentzgtp',
-        description: '',
-        profile_image_url:
-          'https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png',
-        created_at: '2024-12-09T08:36:12.000Z',
-        updated_at: '2025-01-31T07:19:26.136Z',
-        followers_count: 0,
+  const filter = defaultProfileFilter()
+  it('should match hide', () => {
+    expect(
+      filter.userCondition!({
         default_profile: true,
         default_profile_image: true,
-      },
-      lang: 'en',
-      conversation_id_str: '1885207553963155664',
-    }
+        followers_count: 0,
+      } as User),
+    ).toBe('hide')
   })
-  it('should return true', () => {
-    expect(defaultProfileFilter().tweetCondition(tweet)).true
+  it('should match next', () => {
+    expect(
+      filter.userCondition!({
+        default_profile: true,
+        default_profile_image: true,
+        followers_count: 1,
+      } as User),
+    ).toBe('next')
   })
-  it('should return false', () => {
-    tweet.user.followers_count = 1
-    expect(defaultProfileFilter().tweetCondition(tweet)).false
+})
+
+describe('mutedWordsFilter', () => {
+  it('should return next when no rules', () => {
+    const filter = mutedWordsFilter()
+    expect(
+      filter.userCondition!({
+        name: 'test',
+        screen_name: 'test',
+        description: 'test',
+      } as User),
+    ).toBe('next')
+  })
+  it('should return hide when rule matches', () => {
+    localStorage.setItem(
+      MUTED_WORD_RULES_KEY,
+      JSON.stringify([
+        {
+          id: '1',
+          keyword: 'test1',
+          type: 'hide',
+          checkpoints: ['name', 'screen_name', 'description', 'tweet'],
+        },
+      ] as MutedWordRule[]),
+    )
+    const filter = mutedWordsFilter()
+    expect(filter.userCondition!({ name: 'test1' } as User)).toBe('hide')
+    expect(filter.userCondition!({ screen_name: 'test1' } as User)).toBe('hide')
+    expect(filter.userCondition!({ description: 'test1' } as User)).toBe('hide')
+    expect(filter.userCondition!({ name: 'test2' } as User)).toBe('next')
+  })
+  it('should return block when rule matches', () => {
+    localStorage.setItem(
+      MUTED_WORD_RULES_KEY,
+      JSON.stringify([
+        {
+          id: '1',
+          keyword: 'test1',
+          type: 'block',
+          checkpoints: ['name'],
+        },
+      ] as MutedWordRule[]),
+    )
+    const filter = mutedWordsFilter()
+    expect(filter.userCondition!({ name: 'test1' } as User)).toBe('block')
+    expect(filter.userCondition!({ name: 'test2' } as User)).toBe('next')
+  })
+  it('should match tweet when rule matches', () => {
+    localStorage.setItem(
+      MUTED_WORD_RULES_KEY,
+      JSON.stringify([
+        {
+          id: '1',
+          keyword: 'test1',
+          type: 'hide',
+          checkpoints: ['tweet'],
+        },
+      ] as MutedWordRule[]),
+    )
+    const filter = mutedWordsFilter()
+    expect(
+      filter.tweetCondition!({ text: 'test1', user: {} } as ParsedTweet),
+    ).toBe('hide')
+    expect(
+      filter.tweetCondition!({ text: 'test2', user: {} } as ParsedTweet),
+    ).toBe('next')
   })
 })

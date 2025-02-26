@@ -1,5 +1,5 @@
 <script lang="ts">
-  import FancyMultiSelect from '$lib/components/custom/FancyMultiSelect.svelte'
+  import { FancyMultiSelect } from '$lib/components/custom/select'
   import { Button } from '$lib/components/ui/button'
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
   import Label from '$lib/components/ui/label/label.svelte'

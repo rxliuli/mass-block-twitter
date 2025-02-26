@@ -162,6 +162,7 @@ export interface UserRecord {
 }
 
 export const MUTED_WORDS_KEY = 'MASS_BLOCK_TWITTER_MUTED_WORDS'
+export const MUTED_WORD_RULES_KEY = 'MASS_BLOCK_TWITTER_MUTED_WORD_RULES'
 
 const legacySchema = z.object({
   created_at: z.string(),

@@ -1,13 +1,15 @@
-import { MUTED_WORDS_KEY, ParsedTweet } from './api'
+import { ulid } from 'ulidx'
+import { MUTED_WORD_RULES_KEY, MUTED_WORDS_KEY, ParsedTweet } from './api'
 import { User } from './db'
 import { extractCurrentUserId } from './observe'
-import { getSettings } from './settings'
 import { matchByKeyword } from './util/matchByKeyword'
+import { pick } from 'lodash-es'
 
-export type FilterResult = 'show' | 'hide' | 'next'
+export type FilterResult = 'show' | 'hide' | 'next' | 'block'
 export type FilterData =
   | { type: 'tweet'; tweet: ParsedTweet }
   | { type: 'user'; user: User }
+
 export interface TweetFilter {
   name: string
   tweetCondition?: (tweet: ParsedTweet) => FilterResult
@@ -16,6 +18,7 @@ export interface TweetFilter {
 
 export function flowFilter(
   filters: TweetFilter[],
+  onBlock?: (user: User) => void,
 ): (options: FilterData) => { value: boolean; reason?: string } {
   return (data) => {
     for (const filter of filters) {
@@ -43,6 +46,13 @@ export function flowFilter(
           reason: filter.name,
         }
       }
+      if (result === 'block') {
+        onBlock?.(data.type === 'tweet' ? data.tweet.user : data.user)
+        return {
+          value: false,
+          reason: filter.name,
+        }
+      }
     }
     return {
       value: true,
@@ -63,36 +73,66 @@ export function verifiedFilter(): TweetFilter {
   }
 }
 
+export interface MutedWordRule {
+  id: string
+  keyword: string
+  type: Extract<FilterResult, 'hide' | 'block'>
+  checkpoints: ('name' | 'screen_name' | 'description' | 'tweet')[]
+}
+
+export function getMutedWordRules(): MutedWordRule[] {
+  const value = localStorage.getItem(MUTED_WORD_RULES_KEY)
+  if (value) {
+    return JSON.parse(value)
+  }
+  const keywords = localStorage.getItem(MUTED_WORDS_KEY)
+  if (keywords) {
+    return JSON.parse(keywords).map(
+      (it: string) =>
+        ({
+          id: ulid(),
+          keyword: it,
+          type: 'hide',
+          checkpoints: ['name', 'screen_name', 'description', 'tweet'],
+        } satisfies MutedWordRule),
+    )
+  }
+  return []
+}
+
 export function mutedWordsFilter(): TweetFilter {
-  function filterByTexts(texts: (string | undefined)[]): FilterResult {
-    const keywordStr = localStorage.getItem(MUTED_WORDS_KEY)
-    if (!keywordStr) {
+  const rules = getMutedWordRules()
+  function filter(
+    user: Pick<User, 'name' | 'screen_name' | 'description'> & {
+      tweet?: string
+    },
+  ) {
+    if (rules.length === 0) {
       return 'next'
     }
-    const keywords = JSON.parse(keywordStr) as string[]
-    if (keywords.length === 0) {
-      return 'next'
-    }
-    if (
-      keywords.some((keyword) =>
-        texts.some((text) => matchByKeyword(keyword, [text])),
-      )
-    ) {
-      return 'hide'
+    const rule = rules.find((rule) => {
+      const texts = Object.values(pick(user, rule.checkpoints)) as (
+        | string
+        | undefined
+      )[]
+      if (matchByKeyword(rule.keyword, texts)) {
+        return true
+      }
+      return false
+    })
+    if (rule) {
+      return rule.type
     }
     return 'next'
   }
   return {
     name: 'mutedWordsFilter',
     tweetCondition: (tweet: ParsedTweet) =>
-      filterByTexts([
-        tweet.user.screen_name,
-        tweet.user.name,
-        tweet.user.description,
-        tweet.text,
-      ]),
-    userCondition: (user: User) =>
-      filterByTexts([user.screen_name, user.name, user.description]),
+      filter({
+        ...tweet.user,
+        tweet: tweet.text,
+      }),
+    userCondition: filter,
   }
 }
 

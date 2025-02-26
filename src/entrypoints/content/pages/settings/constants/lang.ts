@@ -1,4 +1,4 @@
-import { LabelValue } from '$lib/components/custom/types'
+import { LabelValue } from '$lib/components/custom/select/types'
 
 export const languages: LabelValue[] = [
   { label: 'Arabic', value: 'ar' },

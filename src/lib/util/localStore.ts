@@ -1,7 +1,7 @@
 import { derived, type Writable, writable } from 'svelte/store'
 import { set, get } from 'idb-keyval'
 
-interface LocalStoreAdapter<T> {
+export interface LocalStoreAdapter<T> {
   write(key: string, value: T): void | Promise<void>
   read(key: string): T | Promise<T>
 }

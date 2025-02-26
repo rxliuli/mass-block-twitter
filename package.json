@@ -46,7 +46,6 @@
     "wxt": "^0.19.13"
   },
   "dependencies": {
-    "@cloudflare/vitest-pool-workers": "link:../../../workers-sdk/packages/vitest-pool-workers",
     "@faker-js/faker": "^9.5.0",
     "@json2csv/plainjs": "^7.0.6",
     "@liuli-util/async": "^3.7.0",
@@ -76,6 +75,7 @@
     "svelte-toolbelt": "^0.7.1",
     "toad-cache": "^3.7.0",
     "type-fest": "^4.34.1",
+    "ulidx": "^2.4.1",
     "urlpattern-polyfill": "^10.0.0",
     "virtua": "^0.39.3",
     "zod": "^3.24.1"

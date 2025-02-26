@@ -132,11 +132,15 @@
           bind:value={formState.description}
         />
       </div>
-      <div class={authInfo.value?.isPro ? 'block' : 'hidden'}>
+      <div>
         <Label for="visibility" class="block mb-2">Visibility</Label>
         <RadioGroup.Root
           id="visibility"
           name="visibility"
+          disabled={!authInfo.value?.isPro}
+          title={authInfo.value?.isPro
+            ? ''
+            : 'Upgrade to Pro to make your list private'}
           bind:value={formState.visibility}
           class="flex gap-2"
         >

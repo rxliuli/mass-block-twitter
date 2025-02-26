@@ -1,4 +1,5 @@
 import {
+  blockUser,
   filterNotifications,
   filterTweets,
   ParsedTweet,
@@ -6,24 +7,15 @@ import {
   parseUserRecords,
   setRequestHeaders,
 } from '$lib/api'
-import { dbApi, Tweet, User } from '$lib/db'
+import { dbApi, User } from '$lib/db'
 import { omit, throttle } from 'lodash-es'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { wait } from '@liuli-util/async'
-import {
-  addBlockButton,
-  alertWarning,
-  extractCurrentUserId,
-  extractTweet,
-} from '$lib/observe'
+import { addBlockButton, alertWarning, extractTweet } from '$lib/observe'
 import css from './style.css?inline'
 import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'
-import {
-  getModListSubscribedUsers,
-  getSpamUsers,
-  refershSpamContext,
-} from '$lib/shared'
+import { refershSpamContext } from '$lib/shared'
 import {
   blueVerifiedFilter,
   defaultProfileFilter,
@@ -134,16 +126,28 @@ async function firstTimeFilterTweets(json: any) {
   })
 }
 
+async function onBlockUser(user: User) {
+  await blockUser(user)
+  new Notification('Blocked user', {
+    body: `${user.name} @${user.screen_name}`,
+  }).onclick = () => {
+    window.open(`https://x.com/${user.screen_name}`, '_blank')
+  }
+}
 function handleNotifications(): Middleware {
   return async (c, next) => {
     await next()
-    if (!c.req.url.startsWith('https://x.com/i/api/2/notifications/all.json')) {
+    if (
+      !new URLPattern(
+        'https://x.com/i/api/2/notifications/(all|verified).json',
+      ).test(c.req.url)
+    ) {
       return
     }
     try {
       const json = await c.res.clone().json()
       await firstTimeFilterTweets(json)
-      const isShow = flowFilter(getFilters(getSettings()))
+      const isShow = flowFilter(getFilters(getSettings()), onBlockUser)
       const hideNotifications: [string, FilterData][] = []
       const updatedJson = filterNotifications(json, (it) => {
         const result = isShow(it)
@@ -175,7 +179,7 @@ function handleTweets(): Middleware {
     try {
       const json = await c.res.clone().json()
       await firstTimeFilterTweets(json)
-      const isShow = flowFilter(getFilters(getSettings()))
+      const isShow = flowFilter(getFilters(getSettings()), onBlockUser)
       const hideTweets: [string, ParsedTweet][] = []
       const filteredTweets = filterTweets(json, (it) => {
         const result = isShow({

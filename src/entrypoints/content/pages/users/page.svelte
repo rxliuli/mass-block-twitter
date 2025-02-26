@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { dbApi, Tweet, type User } from '$lib/db'
+  import { dbApi, type Tweet, type User } from '$lib/db'
   import { renderComponent } from '$lib/components/ui/data-table'
   import AvatarWrapper from './components/AvatarWrapper.svelte'
   import BlockingWrapper from './components/BlockingWrapper.svelte'

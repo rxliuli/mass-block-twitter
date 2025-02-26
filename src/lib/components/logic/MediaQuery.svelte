@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, Snippet, untrack } from 'svelte'
+  import { onMount, type Snippet, untrack } from 'svelte'
 
   let { query, children } = $props<{
     query: string

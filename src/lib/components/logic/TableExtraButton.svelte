@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button'
-  import { Snippet } from 'svelte'
+  import type { Snippet } from 'svelte'
   import MediaQuery from './MediaQuery.svelte'
 
   const props = $props<{

@@ -13,6 +13,7 @@
     ModListCreateResponse,
   } from '@mass-block-twitter/server'
   import { SERVER_URL } from '$lib/constants'
+  import { PlusIcon } from 'lucide-svelte'
 
   const props: {
     onCreated: (modList: ModListCreateResponse) => void
@@ -76,7 +77,14 @@
   const authInfo = useAuthInfo()
 </script>
 
-<Button onclick={onOpenModal} disabled={!authInfo.value}>Create</Button>
+<Button
+  variant={'ghost'}
+  size={'icon'}
+  onclick={onOpenModal}
+  disabled={!authInfo.value}
+>
+  <PlusIcon class="w-4 h-4" />
+</Button>
 
 <ModListEdit
   bind:open

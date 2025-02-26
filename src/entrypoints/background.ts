@@ -74,12 +74,16 @@ export default defineBackground(() => {
         message: 'Unauthorized',
       } as JsonError
     }
-    const resp = await fetch(`${SERVER_URL}/api/modlists/subscribed/users`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Cache-Control': 'no-cache',
+    const resp = await fetch(
+      `${SERVER_URL}/api/modlists/subscribed/users?version=` +
+        browser.runtime.getManifest().version,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Cache-Control': 'no-cache',
+        },
       },
-    })
+    )
     if (!resp.ok) {
       if (resp.status === 401) {
         throw {
@@ -92,12 +96,6 @@ export default defineBackground(() => {
         message: 'Failed to fetch mod list subscribed users',
       } as JsonError
     }
-    const r = (await resp.json()) as ModListSubscribedUserResponse
-    return r.reduce((acc, it) => {
-      it.twitterUserIds.forEach((id) => {
-        acc[id] = it.modListId
-      })
-      return acc
-    }, {} as Record<string, string>)
+    return (await resp.json()) as ModListSubscribedUserResponse
   })
 })

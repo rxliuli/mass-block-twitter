@@ -128,17 +128,24 @@ async function firstTimeFilterTweets(json: any) {
   })
 }
 
+const queue: User[] = []
 async function onBlockUser(user: User) {
   if (user.blocking) {
     return
   }
-  await blockUser(user)
-  console.log('blockUser', user)
-  new Notification('Blocked user', {
-    body: `${user.name} @${user.screen_name}`,
-  }).onclick = () => {
-    window.open(`https://x.com/${user.screen_name}`, '_blank')
+  if (queue.some((it) => it.id === user.id)) {
+    return
   }
+  queue.push(user)
+  requestIdleCallback(async () => {
+    await blockUser(user)
+    console.log('blockUser', user)
+    new Notification('Blocked user', {
+      body: `${user.name} @${user.screen_name}`,
+    }).onclick = () => {
+      window.open(`https://x.com/${user.screen_name}`, '_blank')
+    }
+  })
 }
 function handleNotifications(): Middleware {
   return async (c, next) => {

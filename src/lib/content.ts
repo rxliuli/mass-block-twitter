@@ -1,7 +1,12 @@
 import { set } from 'idb-keyval'
 import { sendMessage } from './messaging'
-import { AccountSettingsResponse, AuthInfo } from '@mass-block-twitter/server'
+import {
+  AccountSettingsResponse,
+  AuthInfo,
+  ModListSubscribedUserResponse,
+} from '@mass-block-twitter/server'
 import { SERVER_URL } from './constants'
+import { ModListSubscribedUsersKey } from './shared'
 
 export async function refreshSpamUsers(): Promise<void> {
   const spamUsers = await sendMessage('fetchSpamUsers', undefined)
@@ -11,25 +16,33 @@ export async function refreshSpamUsers(): Promise<void> {
 export async function refreshModListSubscribedUsers(
   force?: boolean,
 ): Promise<void> {
-  try {
-    const modListSubscribedUsers = await sendMessage(
-      'fetchModListSubscribedUsers',
-      force,
-    )
-    await set('modListSubscribedUsers', modListSubscribedUsers)
-    document.dispatchEvent(new Event('RefreshModListSubscribedUsers'))
-  } catch (error) {
-    if (
-      typeof error === 'object' &&
-      error &&
-      'code' in error &&
-      error.code === 401
-    ) {
+  const token = (
+    await browser.storage.local.get<{ authInfo: AuthInfo | null }>('authInfo')
+  ).authInfo?.token
+  if (!token) {
+    return
+  }
+  const resp = await fetch(
+    `${SERVER_URL}/api/modlists/subscribed/users?version=` +
+      browser.runtime.getManifest().version,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Cache-Control': 'no-cache',
+      },
+    },
+  )
+  if (!resp.ok) {
+    if (resp.status === 401) {
       document.dispatchEvent(new Event('TokenExpired'))
       return
     }
-    throw error
+    return
   }
+  const modListSubscribedUsers =
+    (await resp.json()) as ModListSubscribedUserResponse
+  await set(ModListSubscribedUsersKey, modListSubscribedUsers)
+  document.dispatchEvent(new Event('RefreshModListSubscribedUsers'))
 }
 
 export async function refreshAuthInfo() {

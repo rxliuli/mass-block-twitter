@@ -13,6 +13,7 @@
     ModListGetResponse,
     ModListRemoveErrorResponse,
     ModListRemoveTwitterUserRequest,
+    ModListSubscribeRequest,
     ModListUpdateRequest,
     ModListUsersPageResponse,
   } from '@mass-block-twitter/server'
@@ -20,7 +21,9 @@
   import { Button } from '$lib/components/ui/button'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import {
+    BanIcon,
     EllipsisIcon,
+    MessageCircleOffIcon,
     PencilIcon,
     Trash2Icon,
     UserPlusIcon,
@@ -64,13 +67,15 @@
   })
 
   const subscribeMutation = createMutation({
-    mutationFn: async () => {
+    mutationFn: async (action: ModListSubscribeRequest['action']) => {
       const authInfo = await getAuthInfo()
       const resp = await crossFetch(
         `${SERVER_URL}/api/modlists/subscribe/${route.search?.get('id')}`,
         {
           method: 'POST',
+          body: JSON.stringify({ action } satisfies ModListSubscribeRequest),
           headers: {
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${authInfo?.token}`,
           },
         },
@@ -302,12 +307,21 @@
       Unsubscribe
     </Button>
   {:else}
-    <Button
-      onclick={() => $subscribeMutation.mutate()}
-      disabled={!authInfo.value || $subscribeMutation.isPending}
-    >
-      Subscribe
-    </Button>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger
+        disabled={!authInfo.value || $subscribeMutation.isPending}
+      >
+        Subscribe
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content portalProps={{ to: shadcnConfig.get().portal }}>
+        <DropdownMenu.Item onclick={() => $subscribeMutation.mutate('hide')}>
+          Mute accounts <MessageCircleOffIcon class="w-4 h-4" />
+        </DropdownMenu.Item>
+        <DropdownMenu.Item onclick={() => $subscribeMutation.mutate('block')}>
+          Block accounts <BanIcon class="w-4 h-4" />
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   {/if}
   <DropdownMenu.Root>
     <DropdownMenu.Trigger>

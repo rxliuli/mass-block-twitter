@@ -6,13 +6,7 @@ import { ulid } from 'ulidx'
 import { userSchema } from '../lib/request'
 import { getTokenInfo } from '../middlewares/auth'
 import { drizzle } from 'drizzle-orm/d1'
-import {
-  localUser,
-  modList,
-  modListSubscription,
-  modListUser,
-  user,
-} from '../db/schema'
+import { modList, modListSubscription, modListUser, user } from '../db/schema'
 import { convertUserParamsToDBUser } from './twitter'
 import { and, desc, eq, inArray, InferSelectModel, lt, sql } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
@@ -64,11 +58,6 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
         subscriptionCount: 0,
       })
       .returning(),
-    db.insert(modListSubscription).values({
-      id: ulid(),
-      localUserId: tokenInfo.sub,
-      modListId: modListId,
-    }),
   ])
   return c.json(r)
 })
@@ -159,20 +148,21 @@ modlists.get('/created', async (c) => {
   return c.json<ModListGetCreatedResponse>(modLists)
 })
 
-export const subscribeSchema = z.object({
-  modListId: z.string().describe('modlist id'),
+export const subscribeParamSchema = z.object({
+  modListId: z.string(),
 })
-
+export const subscribeSchema = z.object({
+  action: z.enum(['block', 'hide']).optional().default('hide'),
+})
 export type ModListSubscribeRequest = z.infer<typeof subscribeSchema>
-
-export type ModListSubscribeResponse = InferSelectModel<typeof modList>[]
-
 modlists
   .post(
     '/subscribe/:modListId',
-    zValidator('param', subscribeSchema),
+    zValidator('param', subscribeParamSchema),
+    zValidator('json', subscribeSchema),
     async (c) => {
       const validated = c.req.valid('param')
+      const subscribe = c.req.valid('json')
       const db = drizzle(c.env.DB)
       const tokenInfo = c.get('jwtPayload')
       const [_modList, _existingSubscription] = await db.batch([
@@ -203,6 +193,7 @@ modlists
           id: ulid(),
           modListId: validated.modListId,
           localUserId: tokenInfo.sub,
+          action: subscribe.action,
         }),
         db
           .update(modList)
@@ -216,7 +207,7 @@ modlists
   )
   .delete(
     '/subscribe/:modListId',
-    zValidator('param', subscribeSchema),
+    zValidator('param', subscribeParamSchema),
     async (c) => {
       const validated = c.req.valid('param')
       const db = drizzle(c.env.DB)
@@ -253,16 +244,18 @@ modlists
       return c.json({ code: 'success' })
     },
   )
-  .get('/subscribed', async (c) => {
-    const db = drizzle(c.env.DB)
-    const tokenInfo = c.get('jwtPayload')
-    const _modList = await db
-      .select()
-      .from(modListSubscription)
-      .innerJoin(modList, eq(modListSubscription.modListId, modList.id))
-      .where(eq(modListSubscription.localUserId, tokenInfo.sub))
-    return c.json<ModListSubscribeResponse>(_modList.map((it) => it.ModList))
-  })
+
+export type ModListSubscribeResponse = InferSelectModel<typeof modList>[]
+modlists.get('/subscribed', async (c) => {
+  const db = drizzle(c.env.DB)
+  const tokenInfo = c.get('jwtPayload')
+  const _modList = await db
+    .select()
+    .from(modListSubscription)
+    .innerJoin(modList, eq(modListSubscription.modListId, modList.id))
+    .where(eq(modListSubscription.localUserId, tokenInfo.sub))
+  return c.json<ModListSubscribeResponse>(_modList.map((it) => it.ModList))
+})
 
 export const addTwitterUserSchema = z.object({
   modListId: z.string(),
@@ -424,6 +417,7 @@ modlists.post(
 
 export type ModListSubscribedUserResponse = {
   modListId: string
+  action: 'block' | 'hide'
   twitterUserIds: string[]
 }[]
 modlists.get('/subscribed/users', async (c) => {
@@ -432,6 +426,7 @@ modlists.get('/subscribed/users', async (c) => {
   const _modLists = await db
     .select({
       modListId: modListSubscription.modListId,
+      action: modListSubscription.action,
       twitterUserId: modListUser.twitterUserId,
     })
     .from(modListSubscription)
@@ -441,27 +436,23 @@ modlists.get('/subscribed/users', async (c) => {
     )
     .where(eq(modListSubscription.localUserId, tokenInfo.sub))
   const modListMap = _modLists.reduce((acc, it) => {
-    if (!acc[it.modListId]) {
-      acc[it.modListId] = []
+    if (!acc[it.modListId] && it.twitterUserId) {
+      acc[it.modListId] = {
+        modListId: it.modListId,
+        action: it.action ?? 'hide',
+        twitterUserIds: [],
+      }
     }
     if (it.twitterUserId) {
-      acc[it.modListId].push(it.twitterUserId)
+      acc[it.modListId].twitterUserIds.push(it.twitterUserId)
     }
     return acc
-  }, {} as Record<string, string[]>)
-  return c.json<ModListSubscribedUserResponse>(
-    Object.entries(modListMap)
-      .filter(([_, twitterUserIds]) => twitterUserIds.length > 0)
-      .map(([modListId, twitterUserIds]) => ({
-        modListId,
-        twitterUserIds,
-      })),
-    {
-      headers: {
-        'Cache-Control': 'public, max-age=3600',
-      },
+  }, {} as Record<string, ModListSubscribedUserResponse[number]>)
+  return c.json<ModListSubscribedUserResponse>(Object.values(modListMap), {
+    headers: {
+      'Cache-Control': 'public, max-age=3600',
     },
-  )
+  })
 })
 
 const searchSchema = z.object({

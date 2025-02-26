@@ -14,11 +14,11 @@ import type {
   ModListRemoveTwitterUserRequest,
   ModListCreateResponse,
   ModListUserCheckPostRequest,
+  ModListSubscribeRequest,
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
-import { modList, modListSubscription, user } from '../src/db/schema'
-import { ulid } from 'ulidx'
+import { modListSubscription } from '../src/db/schema'
 
 describe('modlists', () => {
   const context = initCloudflareTest()
@@ -52,10 +52,6 @@ describe('modlists', () => {
       expect(resp1.ok).true
       const r1 = (await resp1.json()) as ModListCreateResponse
       expect(r1.id).not.undefined
-      const subscribers = await db.select().from(modListSubscription).all()
-      expect(subscribers).length(1)
-      expect(subscribers[0].modListId).toBe(r1.id)
-      expect(subscribers[0].localUserId).toBe(r1.localUserId)
       const resp2 = await fetch('/api/modlists/search')
       expect(resp2.ok).true
       const r2 = (await resp2.json()) as ModListSearchResponse
@@ -267,8 +263,6 @@ describe('modlists', () => {
       expect(resp2.ok).true
       const r2 = (await resp2.json()) as ModListCreateResponse
       expect(r2.id).not.undefined
-      expect((await remove(r2.id)).ok).false
-      await unsubscribe(r2.id)
       const resp3 = await remove(r2.id)
       expect(resp3.ok).true
       const resp4 = await fetch('/api/modlists/search')
@@ -389,6 +383,43 @@ describe('modlists', () => {
         modListId,
       )
       expect(await getSubscribedUsers()).length(1)
+      expect((await getSubscribedUsers())[0].twitterUserIds).toEqual([
+        'twitter-user-1',
+      ])
+    })
+    it('should be able to subscribe to a modlist with block action', async () => {
+      const resp1 = await fetch(`/api/modlists/subscribe/${modListId}`, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'block',
+        } satisfies ModListSubscribeRequest),
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.ok).true
+      await addUserToModList(
+        {
+          id: 'twitter-user-1',
+          screen_name: 'test-user-1',
+          name: 'test-user-1',
+          created_at: new Date().toISOString(),
+          is_blue_verified: false,
+          followers_count: 100,
+          friends_count: 100,
+          default_profile: false,
+          default_profile_image: false,
+        },
+        modListId,
+      )
+      expect(await getSubscribedUsers()).toEqual([
+        {
+          modListId,
+          action: 'block',
+          twitterUserIds: ['twitter-user-1'],
+        },
+      ])
     })
   })
   describe('user', () => {

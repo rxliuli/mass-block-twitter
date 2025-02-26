@@ -3,13 +3,13 @@
   import { Card } from '$lib/components/ui/card'
   import * as Avatar from '$lib/components/ui/avatar'
   import type { QueryObserverResult } from '@tanstack/svelte-query'
-  import type { ModList } from '@mass-block-twitter/server'
+  import type { ModListSubscribeResponse } from '@mass-block-twitter/server'
   import { navigate } from '$lib/components/logic/router'
 
   const {
     query,
   }: {
-    query: QueryObserverResult<ModList[]>
+    query: QueryObserverResult<ModListSubscribeResponse>
   } = $props()
 
   function onGotoDetail(id: string) {

@@ -8,9 +8,6 @@ import { billing } from './routes/billing'
 import { HonoEnv } from './lib/bindings'
 import { modlists, modlistSearch } from './routes/modlists'
 import { errorHandler } from './middlewares/error'
-import { prismaClients } from './lib/prisma'
-import { drizzle } from 'drizzle-orm/d1'
-import { user } from './db/schema'
 
 const app = new Hono<HonoEnv>()
 

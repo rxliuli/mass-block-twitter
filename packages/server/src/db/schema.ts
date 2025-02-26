@@ -141,8 +141,12 @@ export const localUser = sqliteTable('LocalUser', {
   lastLogin: text('lastLogin')
     .notNull()
     .$defaultFn(() => new Date().toISOString()),
-  isPro: integer('isPro', { mode: 'boolean' }).default(false),
-  emailVerified: integer('emailVerified', { mode: 'boolean' }).default(false),
+  isPro: integer('isPro', { mode: 'boolean' })
+    .notNull()
+    .$defaultFn(() => false),
+  emailVerified: integer('emailVerified', { mode: 'boolean' })
+    .notNull()
+    .$defaultFn(() => false),
 })
 
 // ModList table
@@ -153,8 +157,12 @@ export const modList = sqliteTable(
     name: text('name').notNull(),
     description: text('description'),
     avatar: text('avatar'),
-    userCount: integer('userCount').default(0),
-    subscriptionCount: integer('subscriptionCount').default(0),
+    userCount: integer('userCount')
+      .notNull()
+      .$defaultFn(() => 0),
+    subscriptionCount: integer('subscriptionCount')
+      .notNull()
+      .$defaultFn(() => 0),
     localUserId: text('localUserId')
       .references(() => localUser.id)
       .notNull(),
@@ -219,13 +227,16 @@ export const modListSubscription = sqliteTable(
     updatedAt: text('updatedAt')
       .notNull()
       .$defaultFn(() => new Date().toISOString()),
+    action: text('action', { enum: ['block', 'hide'] }).$defaultFn(
+      () => 'hide',
+    ),
   },
-  (table) => ({
-    uniqueModListSubscription: uniqueIndex('modListSubscription_unique').on(
+  (table) => [
+    uniqueIndex('modListSubscription_unique').on(
       table.modListId,
       table.localUserId,
     ),
-  }),
+  ],
 )
 
 // Relations

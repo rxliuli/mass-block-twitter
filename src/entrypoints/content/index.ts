@@ -1,5 +1,4 @@
 import { mount, unmount } from 'svelte'
-import { wait } from '@liuli-util/async'
 import App from './app.svelte'
 import './app.css'
 import { onMessage, sendMessage } from '$lib/messaging'
@@ -8,7 +7,7 @@ import {
   refreshModListSubscribedUsers,
   refreshSpamUsers,
 } from '$lib/content'
-import { PublicPath } from 'wxt/browser'
+import { initXTransactionId } from '$lib/api'
 
 export default defineContentScript({
   matches: ['https://x.com/**'],
@@ -16,6 +15,8 @@ export default defineContentScript({
   runAt: 'document_start',
   cssInjectionMode: 'ui',
   async main(ctx) {
+    initXTransactionId()
+
     refreshSpamUsers()
     refreshModListSubscribedUsers()
     refreshAuthInfo()

@@ -5,7 +5,7 @@
   import type { ModListSearchResponse } from '@mass-block-twitter/server'
   import Button from '$lib/components/ui/button/button.svelte'
   import ModLists from './components/ModLists.svelte'
-  import { getAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
+  import { getAuthInfo, useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { toast } from 'svelte-sonner'
   import { crossFetch } from '$lib/query'
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
@@ -22,17 +22,16 @@
     },
   })
 
+  const authInfo = useAuthInfo()
   async function onGotoCreated() {
-    const authInfo = await getAuthInfo()
-    if (!authInfo) {
+    if (!authInfo.value) {
       toast.info('Please login to view your created modlists')
       return
     }
-    navigate(`/modlists/created?userId=${authInfo.id}`)
+    navigate(`/modlists/created`)
   }
   async function onGotoSubscribed() {
-    const authInfo = await getAuthInfo()
-    if (!authInfo) {
+    if (!authInfo.value) {
       toast.info('Please login to view your subscribed modlists')
       return
     }

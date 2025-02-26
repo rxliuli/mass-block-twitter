@@ -733,7 +733,7 @@ export async function searchPeople(options: {
     referrer: 'https://x.com',
   })
   if (!r.ok) {
-    throw new Error(r.statusText)
+    throw r
   }
   const json = await r.json()
   return parseSearchPeople(json)
@@ -877,4 +877,25 @@ export function getXTransactionId() {
       )['map'](XOR),
     )
   }
+}
+
+export function initXTransactionId() {
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach(async (node) => {
+        if (node instanceof SVGElement && node.id === 'loading-x-anim-0') {
+          getXTransactionId()
+          console.log(
+            'getXTransactionId',
+            await getXTransactionId()('/i/api/1.1/blocks/create.json', 'POST'),
+          )
+          observer.disconnect()
+        }
+      })
+    })
+  })
+  observer.observe(document, {
+    childList: true,
+    subtree: true,
+  })
 }

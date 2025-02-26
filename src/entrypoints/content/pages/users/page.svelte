@@ -49,18 +49,26 @@
           data: [],
         }
       }
-      const twitterPage = await searchPeople({
-        term,
-        count: 40,
-        cursor: pageParam,
-      })
-      return {
-        cursor: twitterPage.cursor,
-        data: twitterPage.data,
+      try {
+        const twitterPage = await searchPeople({
+          term,
+          count: 40,
+          cursor: pageParam,
+        })
+        return {
+          cursor: twitterPage.cursor,
+          data: twitterPage.data,
+        }
+      } catch (err) {
+        if (err instanceof Response && err.status === 429) {
+          toast.error('Rate limit exceeded, please try again later')
+        }
+        throw err
       }
     },
     getNextPageParam: (lastPage) => lastPage.cursor,
     initialPageParam: undefined as string | undefined,
+    retry: false,
   })
   let isCompositionOn = $state(false)
   const onSearch = debounce(() => {
@@ -75,11 +83,9 @@
     const clientHeight = target.clientHeight
     const scrollHeight = target.scrollHeight
     if (Math.abs(scrollHeight - scrollTop - clientHeight) <= 1) {
-      requestAnimationFrame(() => {
-        if ($query.hasNextPage) {
-          $query.fetchNextPage()
-        }
-      })
+      if ($query.hasNextPage && !$query.isFetchingNextPage) {
+        $query.fetchNextPage()
+      }
     }
   }
 

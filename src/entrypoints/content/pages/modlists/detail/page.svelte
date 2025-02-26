@@ -221,7 +221,10 @@
       queryClient.setQueryData(
         ['modlistUsers'],
         produce((old: typeof $query.data) => {
-          old?.pages[0]?.data.unshift(data)
+          old?.pages[0]?.data.unshift({
+            ...data,
+            modListUserId: data.id,
+          })
         }),
       )
     },
@@ -292,7 +295,7 @@
 <LayoutNav title="Moderation Lists Detail">
   {#if $metadata.data?.subscribed}
     <Button
-      variant="destructive"
+      variant="outline"
       onclick={() => $unsubscribeMutation.mutate()}
       disabled={!authInfo.value || $unsubscribeMutation.isPending}
     >

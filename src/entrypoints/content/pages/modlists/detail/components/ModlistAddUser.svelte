@@ -55,11 +55,22 @@
           data: [],
         }
       }
-      const twitterPage = await searchPeople({
-        term,
-        count: 20,
-        cursor: pageParam,
-      })
+      let twitterPage: {
+        cursor: string
+        data: User[]
+      }
+      try {
+        twitterPage = await searchPeople({
+          term,
+          count: 20,
+          cursor: pageParam,
+        })
+      } catch (err) {
+        if (err instanceof Response && err.status === 429) {
+          toast.error('Rate limit exceeded, please try again later')
+        }
+        throw err
+      }
       const resp = await crossFetch(`${SERVER_URL}/api/modlists/user/check`, {
         method: 'POST',
         headers: {
@@ -82,6 +93,7 @@
     },
     getNextPageParam: (lastPage) => lastPage.cursor,
     initialPageParam: undefined as string | undefined,
+    retry: false,
   })
 
   const { loadings, withLoading } = useLoading()

@@ -81,14 +81,16 @@
 <div
   id="mass-block-twitter"
   class={cn(
-    'fixed w-full top-0 left-0 h-screen h-[100dvh] flex flex-col bg-background p-6',
+    'fixed w-full top-0 left-0 h-screen h-[100dvh] flex flex-col bg-background',
     open ? 'block' : 'hidden',
   )}
 >
   <Sidebar.Provider class="h-full">
     <AppSidebar items={menuItems} />
-    <main class="w-full h-[calc(100%-3rem)] flex flex-col overflow-auto">
-      <div class="flex items-center gap-2 mb-2 h-10">
+    <main class="w-full overflow-hidden">
+      <div
+        class="flex items-center gap-2 h-10 sticky top-0 bg-background px-6 pt-6"
+      >
         {#if isTopLevel}
           <Sidebar.Trigger />
         {:else}
@@ -101,7 +103,7 @@
         </h1>
         <div class="ml-auto" id="layout-nav-extra"></div>
       </div>
-      <div class="flex-1 w-full overflow-auto">
+      <div class="h-[calc(100%-3rem)] px-6 pt-2 pb-6 overflow-auto">
         {@render children?.()}
       </div>
     </main>

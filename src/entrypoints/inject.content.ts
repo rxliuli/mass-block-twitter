@@ -3,6 +3,7 @@ import {
   filterNotifications,
   filterTweets,
   getXTransactionId,
+  initXTransactionId,
   ParsedTweet,
   parseTweets,
   parseUserRecords,
@@ -128,7 +129,11 @@ async function firstTimeFilterTweets(json: any) {
 }
 
 async function onBlockUser(user: User) {
+  if (user.blocking) {
+    return
+  }
   await blockUser(user)
+  console.log('blockUser', user)
   new Notification('Blocked user', {
     body: `${user.name} @${user.screen_name}`,
   }).onclick = () => {
@@ -249,28 +254,6 @@ function observe() {
   })
 
   observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-  })
-}
-
-function initXTransactionId() {
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach(async (node) => {
-        if (node instanceof SVGElement && node.id === 'loading-x-anim-0') {
-          console.log('svg', node)
-          Reflect.set(globalThis, 'XTransactionId', getXTransactionId())
-          console.log(
-            'getXTransactionId',
-            await getXTransactionId()('/i/api/1.1/blocks/create.json', 'POST'),
-          )
-          observer.disconnect()
-        }
-      })
-    })
-  })
-  observer.observe(document, {
     childList: true,
     subtree: true,
   })

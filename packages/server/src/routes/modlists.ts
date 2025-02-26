@@ -48,12 +48,13 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
   const validated = c.req.valid('json')
   const db = drizzle(c.env.DB)
   const tokenInfo = c.get('jwtPayload')
+  const modListId = ulid()
   const [, [r]] = await db.batch([
     upsertUser(db, validated.twitterUser),
     db
       .insert(modList)
       .values({
-        id: ulid(),
+        id: modListId,
         name: validated.name,
         description: validated.description,
         avatar: validated.avatar,
@@ -63,6 +64,11 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
         subscriptionCount: 0,
       })
       .returning(),
+    db.insert(modListSubscription).values({
+      id: ulid(),
+      localUserId: tokenInfo.sub,
+      modListId: modListId,
+    }),
   ])
   return c.json(r)
 })
@@ -190,7 +196,7 @@ modlists
         return c.json({ code: 'modListNotFound' }, 404)
       }
       if (_existingSubscription.length > 0) {
-        return c.json({ code: 'alreadySubscribed' }, 400)
+        return c.json({ code: 'success' })
       }
       await db.batch([
         db.insert(modListSubscription).values({

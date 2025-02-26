@@ -17,7 +17,7 @@ import type {
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
-import { modList, user } from '../src/db/schema'
+import { modList, modListSubscription, user } from '../src/db/schema'
 import { ulid } from 'ulidx'
 
 describe('modlists', () => {
@@ -39,6 +39,8 @@ describe('modlists', () => {
   } satisfies ModListCreateRequest
   describe('create', () => {
     it('should be able to create a modlist', async () => {
+      const db = context.db
+      expect(await db.select().from(modListSubscription).all()).length(0)
       const resp1 = await fetch('/api/modlists/create', {
         method: 'POST',
         body: JSON.stringify(newModList),
@@ -50,6 +52,10 @@ describe('modlists', () => {
       expect(resp1.ok).true
       const r1 = (await resp1.json()) as ModListCreateResponse
       expect(r1.id).not.undefined
+      const subscribers = await db.select().from(modListSubscription).all()
+      expect(subscribers).length(1)
+      expect(subscribers[0].modListId).toBe(r1.id)
+      expect(subscribers[0].localUserId).toBe(r1.localUserId)
       const resp2 = await fetch('/api/modlists/search')
       expect(resp2.ok).true
       const r2 = (await resp2.json()) as ModListSearchResponse
@@ -241,6 +247,11 @@ describe('modlists', () => {
     })
     expect(resp1.ok).true
   }
+  const unsubscribe = (modListId: string) =>
+    fetch(`/api/modlists/subscribe/${modListId}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${context.token1}` },
+    })
   describe('remove', () => {
     it('should be able to remove a modlist', async () => {
       const resp1 = await remove('123')
@@ -256,6 +267,8 @@ describe('modlists', () => {
       expect(resp2.ok).true
       const r2 = (await resp2.json()) as ModListCreateResponse
       expect(r2.id).not.undefined
+      expect((await remove(r2.id)).ok).false
+      await unsubscribe(r2.id)
       const resp3 = await remove(r2.id)
       expect(resp3.ok).true
       const resp4 = await fetch('/api/modlists/search')
@@ -336,7 +349,7 @@ describe('modlists', () => {
       ).true
       expect((await getModList(modListId)).subscribed).false
     })
-    it('should not be able to subscribe to a modlist twice', async () => {
+    it('should duplicate subscribe to a modlist', async () => {
       const subscribe = () =>
         fetch(`/api/modlists/subscribe/${modListId}`, {
           method: 'POST',
@@ -345,7 +358,7 @@ describe('modlists', () => {
       const resp1 = await subscribe()
       expect(resp1.ok).true
       const resp2 = await subscribe()
-      expect(resp2.status).toBe(400)
+      expect(resp2.status).toBe(200)
     })
     const getSubscribedUsers = async () => {
       const resp1 = await fetch(`/api/modlists/subscribed/users`, {

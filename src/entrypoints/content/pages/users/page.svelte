@@ -137,7 +137,7 @@
 
   let selectedRowKeys = $state<string[]>([])
   let searchParams = $state<SearchParams>({
-    filterBlocked: 'unblocked',
+    filterBlocked: 'all',
     filterVerified: 'all',
     filterFollowed: 'unfollowed',
   })

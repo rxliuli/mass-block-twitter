@@ -134,7 +134,7 @@
 
         <tbody>
           {#if props.virtual}
-            <tr style="height: {rangeData.paddingTop}px"></tr>
+            <tr style="height: {Math.max(rangeData.paddingTop, 1)}px"></tr>
           {/if}
           {#each rangeData.data as row, localIndex (row[props.rowKey as keyof TData] ?? localIndex)}
             {@const globalIndex = rangeData.start + localIndex}

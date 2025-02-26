@@ -12,12 +12,7 @@ export default defineConfig({
       description:
         'Mass Block Twitter - Efficiently block multiple spam accounts on Twitter/X with just a few clicks.',
       permissions: ['contextMenus', 'scripting', 'storage'],
-      web_accessible_resources: [
-        {
-          resources: ['/inject.js'],
-          matches: ['<all_urls>'],
-        },
-      ],
+      web_accessible_resources: [],
       action: {
         default_icon: {
           '16': 'icon/16.png',

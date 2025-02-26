@@ -16,8 +16,6 @@ export default defineContentScript({
   runAt: 'document_start',
   cssInjectionMode: 'ui',
   async main(ctx) {
-    await injectScript('/inject.js')
-
     refreshSpamUsers()
     refreshModListSubscribedUsers()
     refreshAuthInfo()

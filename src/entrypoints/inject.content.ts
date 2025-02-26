@@ -2,6 +2,7 @@ import {
   blockUser,
   filterNotifications,
   filterTweets,
+  getXTransactionId,
   ParsedTweet,
   parseTweets,
   parseUserRecords,
@@ -253,19 +254,48 @@ function observe() {
   })
 }
 
-export default defineUnlistedScript(async () => {
-  new Vista()
-    .use(blockClientEvent())
-    .use(loggerRequestHeaders())
-    .use(loggerViewUsers())
-    .use(handleTweets())
-    .use(handleNotifications())
-    .intercept()
-  await wait(() => !!document.body)
-  observe()
-
-  document.addEventListener('RefreshModListSubscribedUsers', async () => {
-    await refershSpamContext()
-    console.log('RefreshModListSubscribedUsers from dashboard', spamContext)
+function initXTransactionId() {
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach(async (node) => {
+        if (node instanceof SVGElement && node.id === 'loading-x-anim-0') {
+          console.log('svg', node)
+          Reflect.set(globalThis, 'XTransactionId', getXTransactionId())
+          console.log(
+            'getXTransactionId',
+            await getXTransactionId()('/i/api/1.1/blocks/create.json', 'POST'),
+          )
+          observer.disconnect()
+        }
+      })
+    })
   })
+  observer.observe(document, {
+    childList: true,
+    subtree: true,
+  })
+}
+
+export default defineContentScript({
+  matches: ['https://x.com/**'],
+  allFrames: true,
+  runAt: 'document_start',
+  world: 'MAIN',
+  async main() {
+    initXTransactionId()
+    new Vista()
+      .use(blockClientEvent())
+      .use(loggerRequestHeaders())
+      .use(loggerViewUsers())
+      .use(handleTweets())
+      .use(handleNotifications())
+      .intercept()
+    await wait(() => !!document.body)
+    observe()
+
+    document.addEventListener('RefreshModListSubscribedUsers', async () => {
+      await refershSpamContext()
+      console.log('RefreshModListSubscribedUsers from dashboard', spamContext)
+    })
+  },
 })

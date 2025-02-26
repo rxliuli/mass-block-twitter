@@ -23,8 +23,8 @@
   }
 </script>
 
-<div>
-  <Label class="flex items-center gap-4 p-4 cursor-pointer">
+<div class="max-w-3xl mx-auto">
+  <Label class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
       <span class="block text-base font-medium">Hide Suspicious Accounts</span>
       <span class="block mt-1 text-sm text-gray-500">
@@ -37,7 +37,7 @@
       bind:checked={$settings.hideSuspiciousAccounts}
     />
   </Label>
-  <Label class="flex items-center gap-4 p-4 cursor-pointer">
+  <Label class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
       <span class="block text-base font-medium">Hide Spam Accounts</span>
       <span class="block mt-1 text-sm text-gray-500">
@@ -46,7 +46,7 @@
     </div>
     <Checkbox class="shrink-0" bind:checked={$settings.hideSpamAccounts} />
   </Label>
-  <Label class="flex items-center gap-4 p-4 cursor-pointer">
+  <Label class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
       <span class="block text-base font-medium">Hide Mute Words</span>
       <span class="block mt-1 text-sm text-gray-500">
@@ -55,7 +55,7 @@
     </div>
     <Checkbox class="shrink-0" bind:checked={$settings.hideMutedWords} />
   </Label>
-  <Label class="flex items-center gap-4 p-4 cursor-pointer">
+  <Label class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
       <span class="block text-base font-medium">Hide Mod List Accounts</span>
       <span class="block mt-1 text-sm text-gray-500">
@@ -64,7 +64,7 @@
     </div>
     <Checkbox class="shrink-0" bind:checked={$settings.hideModListAccounts} />
   </Label>
-  <Label class="flex items-center gap-4 p-4 cursor-pointer">
+  <Label class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
       <span class="block text-base font-medium"
         >Hide Blue Verified Accounts</span
@@ -78,7 +78,7 @@
       bind:checked={$settings.hideBlueVerifiedAccounts}
     />
   </Label>
-  <Label class="p-4 block">
+  <Label class="py-4 block">
     <div class="mb-2">
       <span class="block text-base font-medium">Hide Languages</span>
       <span class="block mt-1 text-sm text-gray-500">
@@ -90,7 +90,7 @@
       bind:value={$settings.hideLanguages}
     />
   </Label>
-  <div class="flex items-center gap-4 p-4 cursor-pointer">
+  <div class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
       <span class="block text-base font-medium">Clear All Cache</span>
       <span class="block mt-1 text-sm text-gray-500">

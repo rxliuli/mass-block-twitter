@@ -72,9 +72,6 @@
   const selected = $derived(
     options.filter((f) => value.some((s) => s === f.value)),
   )
-  onMount(() => {
-    console.log('command', command)
-  })
 </script>
 
 <Command

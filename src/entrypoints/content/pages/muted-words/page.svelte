@@ -65,7 +65,7 @@
   {/snippet}
 </LayoutNav>
 
-<div>
+<div class="max-w-3xl mx-auto">
   <p class="text-sm text-gray-500 mb-2">
     Add keyword rules to hide posts or automatically block users. Rules apply to
     usernames, display names, bios, and tweet content.
@@ -73,7 +73,7 @@
   <ul class="flex flex-col divide-y divide-muted">
     {#each $rules as rune, index}
       <li
-        class="flex items-center justify-between gap-2 px-4 py-3 hover:bg-muted/50 cursor-pointer"
+        class="flex items-center justify-between gap-2 py-3 hover:bg-muted/50 cursor-pointer"
       >
         <div class="flex-1 flex flex-col">
           <span class="font-medium">{rune.keyword}</span>

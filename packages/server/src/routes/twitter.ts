@@ -12,7 +12,7 @@ import { drizzle } from 'drizzle-orm/d1'
 import { spamReport, tweet, user } from '../db/schema'
 import { and, desc, eq, gte, InferInsertModel, sql } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
-import { uniqBy } from 'lodash-es'
+import { uniqBy } from 'es-toolkit'
 import { rateLimiter } from 'hono-rate-limiter'
 import { WorkersKVStore } from '@hono-rate-limiter/cloudflare'
 

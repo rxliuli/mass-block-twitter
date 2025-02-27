@@ -220,12 +220,18 @@ importers:
       drizzle-orm:
         specifier: ^0.39.3
         version: 0.39.3(@cloudflare/workers-types@4.20250124.3)(@prisma/client@6.2.1(prisma@6.2.1))(prisma@6.2.1)
+      es-toolkit:
+        specifier: ^1.32.0
+        version: 1.32.0
       hono:
         specifier: ^4.6.18
         version: 4.6.19
       hono-rate-limiter:
         specifier: ^0.4.2
         version: 0.4.2(hono@4.6.19)
+      serialize-error:
+        specifier: ^11.0.3
+        version: 11.0.3
       ulidx:
         specifier: ^2.4.1
         version: 2.4.1
@@ -239,18 +245,9 @@ importers:
       '@cloudflare/workers-types':
         specifier: ^4.20250109.0
         version: 4.20250124.3
-      '@types/lodash-es':
-        specifier: ^4.17.12
-        version: 4.17.12
       drizzle-kit:
         specifier: ^0.30.4
         version: 0.30.4
-      just-sort-by:
-        specifier: ^3.2.0
-        version: 3.2.0
-      miniflare:
-        specifier: ^3.20250204.0
-        version: 3.20250204.0
       prisma:
         specifier: 6.2.1
         version: 6.2.1
@@ -2887,6 +2884,9 @@ packages:
   es-module-lexer@1.6.0:
     resolution: {integrity: sha512-qqnD1yMU6tk/jnaMosogGySTZP8YtUgAffA9nMN+E/rjxcfRQ6IEk7IiozUjgxKoFHBGjTLnrHB/YC45r/59EQ==}
 
+  es-toolkit@1.32.0:
+    resolution: {integrity: sha512-ZfSfHP1l6ubgW/B/FRtqb9bYdMvI6jizbOSfbwwJNcOQ1QE6TFsC3jpQkZ900uUPSR3t3SU5Ds7UWKnYz+uP8Q==}
+
   es6-error@4.1.1:
     resolution: {integrity: sha512-Um/+FxMr9CISWh0bi5Zv0iOD+4cFh5qLeks1qhAopKVAJw3drgKbKySikp7wGhDL0HPeaja0P5ULZrxLkniUVg==}
 
@@ -3462,9 +3462,6 @@ packages:
 
   just-map-object@2.3.0:
     resolution: {integrity: sha512-702xzYHUSFKdnN4844avAytynTAYBJvPoaGKrw4QKkyy1UkW44zWsrITV1KUFFCvDn7YQpzHffCRKdsa0szoLA==}
-
-  just-sort-by@3.2.0:
-    resolution: {integrity: sha512-kfKNELhpDd0/aC/dBeT1uS+pUmFgHIcU6sDnUKZRuGoGYx8mKgZLCNlL6QfNYFzUkqPUEVOsiN9uaZs4z2X9Vw==}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -7166,6 +7163,8 @@ snapshots:
 
   es-module-lexer@1.6.0: {}
 
+  es-toolkit@1.32.0: {}
+
   es6-error@4.1.1: {}
 
   esbuild-register@3.6.0(esbuild@0.19.12):
@@ -7854,8 +7853,6 @@ snapshots:
       setimmediate: 1.0.5
 
   just-map-object@2.3.0: {}
-
-  just-sort-by@3.2.0: {}
 
   keyv@4.5.4:
     dependencies:

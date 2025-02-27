@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { AccountSettingsResponse } from '../src/lib'
 import { initCloudflareTest } from './utils'
 import { localUser } from '../src/db/schema'
-import { pick } from 'lodash-es'
+import { pick } from 'es-toolkit'
 
 const context = initCloudflareTest()
 
@@ -26,7 +26,7 @@ describe('accounts', () => {
       expect(data).toEqual(
         JSON.parse(
           JSON.stringify(
-            pick(expected, [
+            pick(expected!, [
               'id',
               'email',
               'isPro',

@@ -13,6 +13,7 @@ import { spamReport, tweet, user } from '../db/schema'
 import { and, desc, eq, gte, InferInsertModel, sql } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
 import { uniqBy } from 'lodash-es'
+import { rateLimiter } from 'hono-rate-limiter'
 
 export function convertUserParamsToDBUser(
   userParams: typeof userSchema._type,
@@ -43,6 +44,13 @@ export type TwitterUser = z.infer<typeof userSchema>
 twitter
   .post(
     '/spam-users',
+    rateLimiter({
+      windowMs: 15 * 60 * 1000,
+      limit: 100,
+      standardHeaders: 'draft-6',
+      keyGenerator: (c) =>
+        `${c.header('x-real-ip')}::${c.header('user-agent')}`,
+    }),
     zValidator('json', spamReportRequestSchema),
     async (c) => {
       const validated = c.req.valid('json')

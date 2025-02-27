@@ -19,6 +19,7 @@
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.39.3",
     "hono": "^4.6.18",
+    "hono-rate-limiter": "^0.4.2",
     "ulidx": "^2.4.1",
     "zod": "^3.24.1"
   },

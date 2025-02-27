@@ -89,7 +89,6 @@ describe('report spam', () => {
     const users = await getSpamUsers()
     expect(users).toEqual({ '1': 1 })
   })
-
   it('should be able to report spam with update new fields', async () => {
     expect((await add('1', '2', '1')).ok).true
     const tweets = await context.prisma.tweet.findMany()
@@ -217,6 +216,7 @@ describe('report spam', () => {
     expect(tweet4.quotedStatusId).eq('tweet-3')
     expect(tweet4.spamReportCount).eq(1)
   })
+  
 })
 
 describe('get spam users for type', () => {

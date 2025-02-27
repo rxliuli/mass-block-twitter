@@ -1,4 +1,4 @@
-import { Hono } from 'hono'
+import { Context, Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
 import {
   ReportSpamContextTweet,
@@ -14,6 +14,7 @@ import { and, desc, eq, gte, InferInsertModel, sql } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
 import { uniqBy } from 'lodash-es'
 import { rateLimiter } from 'hono-rate-limiter'
+import { WorkersKVStore } from '@hono-rate-limiter/cloudflare'
 
 export function convertUserParamsToDBUser(
   userParams: typeof userSchema._type,
@@ -44,13 +45,18 @@ export type TwitterUser = z.infer<typeof userSchema>
 twitter
   .post(
     '/spam-users',
-    rateLimiter({
-      windowMs: 15 * 60 * 1000,
-      limit: 100,
-      standardHeaders: 'draft-6',
-      keyGenerator: (c) =>
-        `${c.header('x-real-ip')}::${c.header('user-agent')}`,
-    }),
+    (c, next) =>
+      rateLimiter({
+        windowMs: 15 * 60 * 1000,
+        limit: 100,
+        standardHeaders: 'draft-6',
+        keyGenerator: (c) =>
+          `${c.header('x-real-ip')}::${c.header('user-agent')}`,
+        store: new WorkersKVStore({
+          namespace: c.env.MY_KV,
+          prefix: 'rate-limit',
+        }),
+      })(c as Context, next),
     zValidator('json', spamReportRequestSchema),
     async (c) => {
       const validated = c.req.valid('json')

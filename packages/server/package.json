@@ -13,6 +13,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@hono-rate-limiter/cloudflare": "^0.2.2",
     "@hono/zod-validator": "^0.4.2",
     "@prisma/adapter-d1": "6.2.1",
     "@prisma/client": "6.2.1",

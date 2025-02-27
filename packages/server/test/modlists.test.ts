@@ -699,5 +699,4 @@ describe('modlists', () => {
       expect((await getModListUsers(modListId)).data.length).toBe(0)
     })
   })
-  describe.todo('transactions')
 })

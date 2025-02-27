@@ -216,7 +216,6 @@ describe('report spam', () => {
     expect(tweet4.quotedStatusId).eq('tweet-3')
     expect(tweet4.spamReportCount).eq(1)
   })
-  
 })
 
 describe('get spam users for type', () => {
@@ -246,12 +245,13 @@ describe('get spam users for type', () => {
     expect(await getSpamUsers()).toEqual({ '2': 'report', '3': 'report' })
   })
   it('should be get spam users for type with expired cache', async () => {
-    vi.setSystemTime(new Date(1998, 11, 19))
+    vi.useFakeTimers()
     expect((await add('2', '1', '2')).ok).true
     expect(await getSpamUsers()).toEqual({ '2': 'report' })
     expect((await add('3', '1', '3')).ok).true
     expect(await getSpamUsers()).toEqual({ '2': 'report' })
     vi.setSystemTime(Date.now() + 1000 * 60 * 60 * 24 + 1)
     expect(await getSpamUsers()).toEqual({ '2': 'report', '3': 'report' })
+    vi.useRealTimers()
   })
 })

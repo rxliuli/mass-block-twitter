@@ -134,13 +134,17 @@ describe('logout', () => {
       headers: { Authorization: `Bearer ${context.token1}` },
     })
     expect(resp2.status).eq(401)
-    expect(await context.env.MY_KV.get(`logout-${context.token1}`)).not
-      .undefined
-    vi.useFakeTimers({
-      now: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+  })
+  it('should delete the token in logout with expired token', async () => {
+    const resp1 = await fetch('/api/auth/logout', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${context.token1}` },
     })
-    // TODO https://github.com/cloudflare/workers-sdk/issues/5394
-    // expect(await context.env.MY_KV.get(`logout-${context.token1}`)).undefined
-    vi.useRealTimers()
+    expect(resp1.ok).true
+    vi.setSystemTime(Date.now() + 1000 * 60 * 60 * 24 * 30)
+    const resp2 = await fetch('/api/accounts/settings', {
+      headers: { Authorization: `Bearer ${context.token1}` },
+    })
+    expect(resp2.status).eq(401)
   })
 })

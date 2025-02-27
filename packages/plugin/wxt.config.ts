@@ -46,6 +46,9 @@ export default defineConfig({
     }
     return manifest
   },
+  zip: {
+    name: 'mass-block-twitter',
+  },
   runner: {
     disabled: true,
   },

@@ -1,7 +1,9 @@
 {
   "name": "@mass-block-twitter/all",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "init-all": "pnpm run -r init"
+  },
   "pnpm": {
     "patchedDependencies": {
       "lodash-es": "patches/lodash-es.patch",

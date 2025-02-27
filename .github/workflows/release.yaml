@@ -1,5 +1,5 @@
 env:
-  DIRECTORY: .output
+  DIRECTORY: packages/plugin/.output
   PROJECT_NAME: mass-block-twitter
 
 name: Release
@@ -23,7 +23,7 @@ jobs:
       - name: Check for version change
         id: check_version
         run: |
-          if git diff --name-only HEAD~1..HEAD | grep -q '^package\.json$'; then
+          if git diff --name-only HEAD~1..HEAD | grep -q '^packages\/plugin\/package\.json$'; then
             VERSION_CHANGED=1
           else
             VERSION_CHANGED=0
@@ -33,7 +33,7 @@ jobs:
         if: ${{ steps.check_version.outputs.version_changed == '1' }}
         id: get_version
         run: |
-          VERSION=$(jq -r .version package.json)
+          VERSION=$(jq -r .version packages/plugin/package.json)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
   Submit:
@@ -51,12 +51,14 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
       - name: Install dependencies
-        run: pnpm install && pnpm init-all
+        run: |
+          pnpm install && pnpm init-all
       - name: Zip extensions
         run: |
+          cd packages/plugin
           pnpm zip && pnpm zip:firefox
 
       - name: Create Release

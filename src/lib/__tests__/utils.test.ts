@@ -33,6 +33,7 @@ import notifications1 from './assets/notifications1.json'
 import notifications2 from './assets/notifications2.json'
 import notifications3 from './assets/notifications3.json'
 import { blueVerifiedFilter, flowFilter } from '$lib/filter'
+import TweetDetail8ProbableSpam from './assets/TweetDetail8ProbableSpam.json'
 
 describe('extractObjects', () => {
   it('extractObjects 1', () => {
@@ -309,6 +310,14 @@ describe('parseTweets', () => {
     expect(
       tweets.map((it) => omit(it, 'created_at', 'updated_at', 'user')),
     ).toMatchSnapshot()
+  })
+  it('parseTweets for probable spam', () => {
+    const tweets = parseTweets(TweetDetail8ProbableSpam)
+    expect(tweets).length(2)
+    expect(tweets.map((it) => it.id)).toEqual([
+      '1894889195824615903',
+      '1894741492708647035',
+    ])
   })
 })
 

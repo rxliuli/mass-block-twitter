@@ -2,7 +2,6 @@ import {
   blockUser,
   filterNotifications,
   filterTweets,
-  getXTransactionId,
   initXTransactionId,
   ParsedTweet,
   parseTweets,
@@ -82,11 +81,11 @@ const reportSpamTweetIds = new Set<string>()
 
 function getFilters(settings: Settings) {
   const filters: TweetFilter[] = [verifiedFilter()]
-  if (settings.hideMutedWords) {
-    filters.push(mutedWordsFilter())
-  }
   if (settings.hideModListAccounts) {
     filters.push(modListFilter())
+  }
+  if (settings.hideMutedWords) {
+    filters.push(mutedWordsFilter())
   }
   if (settings.hideSuspiciousAccounts) {
     filters.push(defaultProfileFilter())
@@ -138,12 +137,18 @@ async function onBlockUser(user: User) {
   }
   queue.push(user)
   requestIdleCallback(async () => {
-    await blockUser(user)
-    console.log('blockUser', user)
-    new Notification('Blocked user', {
-      body: `${user.name} @${user.screen_name}`,
-    }).onclick = () => {
-      window.open(`https://x.com/${user.screen_name}`, '_blank')
+    while (queue.length > 0) {
+      let user = queue.shift()
+      if (!user) {
+        return
+      }
+      await blockUser(user)
+      console.log('blockUser', user)
+      new Notification('Blocked user', {
+        body: `${user.name} @${user.screen_name}`,
+      }).onclick = () => {
+        window.open(`https://x.com/${user.screen_name}`, '_blank')
+      }
     }
   })
 }

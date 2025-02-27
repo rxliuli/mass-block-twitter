@@ -1,0 +1,370 @@
+{
+    "data": {
+        "threaded_conversation_with_injections_v2": {
+            "instructions": [
+                {
+                    "type": "TimelineAddEntries",
+                    "entries": [
+                        {
+                            "entryId": "conversationthread-1894889195824615903",
+                            "sortIndex": "7328756891379855150",
+                            "content": {
+                                "entryType": "TimelineTimelineModule",
+                                "__typename": "TimelineTimelineModule",
+                                "items": [
+                                    {
+                                        "entryId": "conversationthread-1894889195824615903-tweet-1894889195824615903",
+                                        "item": {
+                                            "itemContent": {
+                                                "itemType": "TimelineTweet",
+                                                "__typename": "TimelineTweet",
+                                                "tweet_results": {
+                                                    "result": {
+                                                        "__typename": "Tweet",
+                                                        "rest_id": "1894889195824615903",
+                                                        "has_birdwatch_notes": false,
+                                                        "core": {
+                                                            "user_results": {
+                                                                "result": {
+                                                                    "__typename": "User",
+                                                                    "id": "VXNlcjoxODc1NDc1MjM3ODMzMjQ4NzY4",
+                                                                    "rest_id": "1875475237833248768",
+                                                                    "affiliates_highlighted_label": {},
+                                                                    "has_graduated_access": false,
+                                                                    "parody_commentary_fan_label": "None",
+                                                                    "is_blue_verified": false,
+                                                                    "profile_image_shape": "Circle",
+                                                                    "legacy": {
+                                                                        "following": false,
+                                                                        "can_dm": false,
+                                                                        "can_media_tag": true,
+                                                                        "created_at": "Sat Jan 04 09:32:12 +0000 2025",
+                                                                        "default_profile": true,
+                                                                        "default_profile_image": false,
+                                                                        "description": "进群在线看片\uD83D\uDC83各种稀缺绝版⏰特殊资源都有！看不到群内容请联系https://t.co/ERIIySDgVl 中国人不骗中国人，全网唯一真实资源群主，跑路必死。711-全天真人客服，机器人客服都是骗子",
+                                                                        "entities": {
+                                                                            "description": {
+                                                                                "urls": [
+                                                                                    {
+                                                                                        "display_url": "t.me/UNN711bot",
+                                                                                        "expanded_url": "http://t.me/UNN711bot",
+                                                                                        "url": "https://t.co/ERIIySDgVl",
+                                                                                        "indices": [
+                                                                                            30,
+                                                                                            53
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            "url": {
+                                                                                "urls": [
+                                                                                    {
+                                                                                        "display_url": "t.me/+RT3RCVQcsAY5Z…",
+                                                                                        "expanded_url": "https://t.me/+RT3RCVQcsAY5ZGQ1",
+                                                                                        "url": "https://t.co/6zE2mMzQ22",
+                                                                                        "indices": [
+                                                                                            0,
+                                                                                            23
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "fast_followers_count": 0,
+                                                                        "favourites_count": 0,
+                                                                        "followers_count": 0,
+                                                                        "friends_count": 0,
+                                                                        "has_custom_timelines": false,
+                                                                        "is_translator": false,
+                                                                        "listed_count": 0,
+                                                                        "location": "进群\uD83D\uDC49\uD83D\uDC49",
+                                                                        "media_count": 0,
+                                                                        "name": "2幼女幼幼呦呦乱伦小马拉大车偷拍人兽厕拍性奴高潮骚货母狗调教猎奇足交口交强奸反差处女母子电报群街射",
+                                                                        "normal_followers_count": 0,
+                                                                        "pinned_tweet_ids_str": [],
+                                                                        "possibly_sensitive": false,
+                                                                        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1894742255967281152/hucCyDNo_normal.jpg",
+                                                                        "profile_interstitial_type": "",
+                                                                        "screen_name": "sandra753012283",
+                                                                        "statuses_count": 47,
+                                                                        "translator_type": "none",
+                                                                        "url": "https://t.co/6zE2mMzQ22",
+                                                                        "verified": false,
+                                                                        "want_retweets": false,
+                                                                        "withheld_in_countries": []
+                                                                    },
+                                                                    "tipjar_settings": {}
+                                                                }
+                                                            }
+                                                        },
+                                                        "unmention_data": {},
+                                                        "edit_control": {
+                                                            "edit_tweet_ids": [
+                                                                "1894889195824615903"
+                                                            ],
+                                                            "editable_until_msecs": "1740615364000",
+                                                            "is_edit_eligible": false,
+                                                            "edits_remaining": "5"
+                                                        },
+                                                        "is_translatable": false,
+                                                        "views": {
+                                                            "count": "1",
+                                                            "state": "EnabledWithCount"
+                                                        },
+                                                        "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                                        "grok_analysis_button": true,
+                                                        "legacy": {
+                                                            "bookmark_count": 0,
+                                                            "bookmarked": false,
+                                                            "created_at": "Wed Feb 26 23:16:04 +0000 2025",
+                                                            "conversation_id_str": "1894615145474920507",
+                                                            "display_text_range": [
+                                                                11,
+                                                                20
+                                                            ],
+                                                            "entities": {
+                                                                "hashtags": [],
+                                                                "symbols": [],
+                                                                "timestamps": [],
+                                                                "urls": [],
+                                                                "user_mentions": [
+                                                                    {
+                                                                        "id_str": "367212879",
+                                                                        "name": "SamGor 三哥",
+                                                                        "screen_name": "biggor888",
+                                                                        "indices": [
+                                                                            0,
+                                                                            10
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "favorite_count": 0,
+                                                            "favorited": false,
+                                                            "full_text": "@biggor888 \uD83D\uDE38\uD83E\uDD37‍♀️点头\uD83D\uDCBC像",
+                                                            "in_reply_to_screen_name": "biggor888",
+                                                            "in_reply_to_status_id_str": "1894615145474920507",
+                                                            "in_reply_to_user_id_str": "367212879",
+                                                            "is_quote_status": false,
+                                                            "lang": "zh",
+                                                            "quote_count": 0,
+                                                            "reply_count": 0,
+                                                            "retweet_count": 0,
+                                                            "retweeted": false,
+                                                            "user_id_str": "1875475237833248768",
+                                                            "id_str": "1894889195824615903"
+                                                        },
+                                                        "quick_promote_eligibility": {
+                                                            "eligibility": "IneligibleNotProfessional"
+                                                        }
+                                                    }
+                                                },
+                                                "tweetDisplayType": "Tweet"
+                                            },
+                                            "clientEventInfo": {
+                                                "details": {
+                                                    "conversationDetails": {
+                                                        "conversationSection": "AbusiveQuality"
+                                                    },
+                                                    "timelinesDetails": {
+                                                        "controllerData": "DAACDAAEDAABCgABFIABiCAHAAUKAAIAAAAAB4AASAAAAAA="
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                ],
+                                "displayType": "VerticalConversation",
+                                "clientEventInfo": {
+                                    "details": {
+                                        "conversationDetails": {
+                                            "conversationSection": "AbusiveQuality"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "entryId": "conversationthread-1894741492708647035",
+                            "sortIndex": "7328756891379855140",
+                            "content": {
+                                "entryType": "TimelineTimelineModule",
+                                "__typename": "TimelineTimelineModule",
+                                "items": [
+                                    {
+                                        "entryId": "conversationthread-1894741492708647035-tweet-1894741492708647035",
+                                        "item": {
+                                            "itemContent": {
+                                                "itemType": "TimelineTweet",
+                                                "__typename": "TimelineTweet",
+                                                "tweet_results": {
+                                                    "result": {
+                                                        "__typename": "Tweet",
+                                                        "rest_id": "1894741492708647035",
+                                                        "has_birdwatch_notes": false,
+                                                        "core": {
+                                                            "user_results": {
+                                                                "result": {
+                                                                    "__typename": "User",
+                                                                    "id": "VXNlcjoxODczNzA3MDY3NTgxODg2NDY0",
+                                                                    "rest_id": "1873707067581886464",
+                                                                    "affiliates_highlighted_label": {},
+                                                                    "has_graduated_access": false,
+                                                                    "parody_commentary_fan_label": "None",
+                                                                    "is_blue_verified": false,
+                                                                    "profile_image_shape": "Circle",
+                                                                    "legacy": {
+                                                                        "following": false,
+                                                                        "can_dm": false,
+                                                                        "can_media_tag": true,
+                                                                        "created_at": "Mon Dec 30 12:25:58 +0000 2024",
+                                                                        "default_profile": true,
+                                                                        "default_profile_image": false,
+                                                                        "description": "引流官网：https://t.co/6WEBf7Fp1G TG群：https://t.co/0V0xvcCkpy\n支持各种数据采集、群发私信、群发评论、自动发推、霸屏推文、提醒营销、社群营销，只需电脑挂机无人值守日引千粉；同时也提供代发服务，日发私信10w+！支持新用户淘宝下单，先使用，后付款。\n微信客服：rogsn1",
+                                                                        "entities": {
+                                                                            "description": {
+                                                                                "urls": [
+                                                                                    {
+                                                                                        "display_url": "rogsn.com",
+                                                                                        "expanded_url": "https://rogsn.com",
+                                                                                        "url": "https://t.co/6WEBf7Fp1G",
+                                                                                        "indices": [
+                                                                                            5,
+                                                                                            28
+                                                                                        ]
+                                                                                    },
+                                                                                    {
+                                                                                        "display_url": "t.me/rogsnx",
+                                                                                        "expanded_url": "https://t.me/rogsnx",
+                                                                                        "url": "https://t.co/0V0xvcCkpy",
+                                                                                        "indices": [
+                                                                                            33,
+                                                                                            56
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "fast_followers_count": 0,
+                                                                        "favourites_count": 0,
+                                                                        "followers_count": 0,
+                                                                        "friends_count": 0,
+                                                                        "has_custom_timelines": false,
+                                                                        "is_translator": false,
+                                                                        "listed_count": 0,
+                                                                        "location": "",
+                                                                        "media_count": 1,
+                                                                        "name": "推特引流x自动涨粉|品牌曝光提升",
+                                                                        "normal_followers_count": 0,
+                                                                        "pinned_tweet_ids_str": [],
+                                                                        "possibly_sensitive": false,
+                                                                        "profile_banner_url": "https://pbs.twimg.com/profile_banners/1873707067581886464/1738607221",
+                                                                        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1886481535211331587/nera86fI_normal.jpg",
+                                                                        "profile_interstitial_type": "",
+                                                                        "screen_name": "Blair2070152",
+                                                                        "statuses_count": 89,
+                                                                        "translator_type": "none",
+                                                                        "verified": false,
+                                                                        "want_retweets": false,
+                                                                        "withheld_in_countries": []
+                                                                    },
+                                                                    "tipjar_settings": {}
+                                                                }
+                                                            }
+                                                        },
+                                                        "unmention_data": {},
+                                                        "edit_control": {
+                                                            "edit_tweet_ids": [
+                                                                "1894741492708647035"
+                                                            ],
+                                                            "editable_until_msecs": "1740580149000",
+                                                            "is_edit_eligible": false,
+                                                            "edits_remaining": "5"
+                                                        },
+                                                        "is_translatable": true,
+                                                        "views": {
+                                                            "state": "Enabled"
+                                                        },
+                                                        "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                                        "grok_analysis_button": true,
+                                                        "legacy": {
+                                                            "bookmark_count": 0,
+                                                            "bookmarked": false,
+                                                            "created_at": "Wed Feb 26 13:29:09 +0000 2025",
+                                                            "conversation_id_str": "1894615145474920507",
+                                                            "display_text_range": [
+                                                                11,
+                                                                32
+                                                            ],
+                                                            "entities": {
+                                                                "hashtags": [],
+                                                                "symbols": [],
+                                                                "timestamps": [],
+                                                                "urls": [],
+                                                                "user_mentions": [
+                                                                    {
+                                                                        "id_str": "367212879",
+                                                                        "name": "SamGor 三哥",
+                                                                        "screen_name": "biggor888",
+                                                                        "indices": [
+                                                                            0,
+                                                                            10
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "favorite_count": 0,
+                                                            "favorited": false,
+                                                            "full_text": "@biggor888 \uD83D\uDCBC \uD83C\uDF02 \uD83C\uDF88 \uD83C\uDF8C 点开后，你会感谢我或恨我。",
+                                                            "in_reply_to_screen_name": "biggor888",
+                                                            "in_reply_to_status_id_str": "1894615145474920507",
+                                                            "in_reply_to_user_id_str": "367212879",
+                                                            "is_quote_status": false,
+                                                            "lang": "zh",
+                                                            "quote_count": 0,
+                                                            "reply_count": 0,
+                                                            "retweet_count": 0,
+                                                            "retweeted": false,
+                                                            "user_id_str": "1873707067581886464",
+                                                            "id_str": "1894741492708647035"
+                                                        },
+                                                        "quick_promote_eligibility": {
+                                                            "eligibility": "IneligibleNotProfessional"
+                                                        }
+                                                    }
+                                                },
+                                                "tweetDisplayType": "Tweet"
+                                            },
+                                            "clientEventInfo": {
+                                                "details": {
+                                                    "conversationDetails": {
+                                                        "conversationSection": "AbusiveQuality"
+                                                    },
+                                                    "timelinesDetails": {
+                                                        "controllerData": "DAACDAAEDAABCgABFIABiCIDAAUKAAIAAAAAB4AASAAAAAA="
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                ],
+                                "displayType": "VerticalConversation",
+                                "clientEventInfo": {
+                                    "details": {
+                                        "conversationDetails": {
+                                            "conversationSection": "AbusiveQuality"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "TimelineTerminateTimeline",
+                    "direction": "Top"
+                }
+            ]
+        }
+    }
+}

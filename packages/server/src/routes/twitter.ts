@@ -14,7 +14,7 @@ import { and, desc, eq, gte, InferInsertModel, sql } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
 import { uniqBy } from 'es-toolkit'
 import { rateLimiter } from 'hono-rate-limiter'
-import { WorkersKVStore } from '@hono-rate-limiter/cloudflare'
+import { WorkersKVStore } from '../lib/KVStore'
 
 export function convertUserParamsToDBUser(
   userParams: typeof userSchema._type,

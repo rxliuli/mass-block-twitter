@@ -355,26 +355,28 @@
   </DropdownMenu.Root>
 </LayoutNav>
 
-<div class="max-w-3xl mx-auto h-full flex flex-col">
-  {#if $metadata.isLoading}
-    <QueryLoading />
-  {:else if $metadata.data}
-    <ModlistDesc modlist={$metadata.data}>
-      {#snippet actions()}
-        <Button
-          variant="ghost"
-          class="text-blue-400 flex items-center gap-2"
-          onclick={onOpenUserAdd}
-          disabled={!$metadata.data.owner}
-        >
-          <UserPlusIcon class="h-4 w-4" />
-          Add people
-        </Button>
-      {/snippet}
-    </ModlistDesc>
-  {:else}
-    <QueryError description={'Load modlist detail failed'} />
-  {/if}
+<div class="h-full flex flex-col">
+  <div class="max-w-3xl mx-auto">
+    {#if $metadata.isLoading}
+      <QueryLoading />
+    {:else if $metadata.data}
+      <ModlistDesc modlist={$metadata.data}>
+        {#snippet actions()}
+          <Button
+            variant="ghost"
+            class="text-blue-400 flex items-center gap-2"
+            onclick={onOpenUserAdd}
+            disabled={!$metadata.data.owner}
+          >
+            <UserPlusIcon class="h-4 w-4" />
+            Add people
+          </Button>
+        {/snippet}
+      </ModlistDesc>
+    {:else}
+      <QueryError description={'Load modlist detail failed'} />
+    {/if}
+  </div>
 
   <div class="flex-1 overflow-y-hidden">
     <AutoSizer>
@@ -391,7 +393,6 @@
               itemKey="id"
               itemHeight={100}
               {height}
-              class="divide-y"
               dynamic
               onscroll={onScroll}
             >

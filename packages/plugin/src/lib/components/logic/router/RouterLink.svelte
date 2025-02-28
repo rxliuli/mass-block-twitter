@@ -10,6 +10,10 @@
   {href}
   onclick={(ev) => {
     ev.preventDefault()
+    if (props.onclick) {
+      props.onclick(ev)
+      return
+    }
     if (href) {
       navigate(href)
     }

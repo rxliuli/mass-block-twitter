@@ -1,6 +1,7 @@
 import { SETTINGS_KEY } from './constants'
 
 export type Settings = {
+  theme?: 'system' | 'light' | 'dark'
   hideSuspiciousAccounts: boolean
   hideSpamAccounts: boolean
   hideBlueVerifiedAccounts: boolean
@@ -28,5 +29,6 @@ export function getSettings(): Settings {
     hideModListAccounts: true,
     hideBlueVerifiedAccounts: false,
     hideLanguages: [],
+    theme: 'system',
   } as Settings)
 }

@@ -1,109 +1,45 @@
 <script lang="ts">
-  import { FancyMultiSelect } from '$lib/components/custom/select'
   import { Button } from '$lib/components/ui/button'
-  import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
-  import Label from '$lib/components/ui/label/label.svelte'
-  import { SETTINGS_KEY } from '$lib/constants'
-  import { dbApi } from '$lib/db'
-  import { getSettings, type Settings } from '$lib/settings'
-  import { localStorageAdapter, localStore } from '$lib/util/localStore'
-  import { BadgeCheckIcon, Trash2Icon } from 'lucide-svelte'
-  import { toast } from 'svelte-sonner'
-  import { languages } from './constants/lang'
+  import {
+    ChevronRightIcon,
+    HandIcon,
+    LockIcon,
+    PaintRollerIcon,
+  } from 'lucide-svelte'
+  import RouterLink from '$lib/components/logic/router/RouterLink.svelte'
 
-  const settings = localStore<Settings>(
-    SETTINGS_KEY,
-    (value) => ({ ...getSettings(), ...(value ?? {}) }),
-    localStorageAdapter(),
-  )
-
-  async function onClearCache() {
-    await dbApi.clear()
-    toast.success('Cache cleared')
-  }
+  const menuItems = [
+    {
+      icon: PaintRollerIcon,
+      label: 'Appearance',
+      href: '/settings/appearance',
+    },
+    { icon: HandIcon, label: 'Filter Control', href: '/settings/filter' },
+    {
+      icon: LockIcon,
+      label: 'Privacy and security',
+      href: '/settings/privacy',
+    },
+    // { icon: HelpIcon, label: 'Help' },
+    // { icon: AboutIcon, label: 'About' },
+  ]
 </script>
 
 <div class="max-w-3xl mx-auto">
-  <Label class="flex items-center gap-4 py-4 cursor-pointer">
-    <div class="flex-1">
-      <span class="block text-base font-medium">Hide Suspicious Accounts</span>
-      <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets from accounts with default avatars, no bio and zero
-        followers. Their content will be automatically hidden.
-      </span>
-    </div>
-    <Checkbox
-      class="shrink-0"
-      bind:checked={$settings.hideSuspiciousAccounts}
-    />
-  </Label>
-  <Label class="flex items-center gap-4 py-4 cursor-pointer">
-    <div class="flex-1">
-      <span class="block text-base font-medium">Hide Spam Accounts</span>
-      <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets from accounts that are marked as spam.
-      </span>
-    </div>
-    <Checkbox class="shrink-0" bind:checked={$settings.hideSpamAccounts} />
-  </Label>
-  <Label class="flex items-center gap-4 py-4 cursor-pointer">
-    <div class="flex-1">
-      <span class="block text-base font-medium">Hide Mute Words</span>
-      <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets that contain muted words.
-      </span>
-    </div>
-    <Checkbox class="shrink-0" bind:checked={$settings.hideMutedWords} />
-  </Label>
-  <Label class="flex items-center gap-4 py-4 cursor-pointer">
-    <div class="flex-1">
-      <span class="block text-base font-medium">Hide Mod List Accounts</span>
-      <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets from accounts that are subscribed to a mod list.
-      </span>
-    </div>
-    <Checkbox class="shrink-0" bind:checked={$settings.hideModListAccounts} />
-  </Label>
-  <Label class="flex items-center gap-4 py-4 cursor-pointer">
-    <div class="flex-1">
-      <span class="block text-base font-medium"
-        >Hide Blue Verified Accounts</span
-      >
-      <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets from blue verified accounts, except those you follow.
-      </span>
-    </div>
-    <Checkbox
-      class="shrink-0"
-      bind:checked={$settings.hideBlueVerifiedAccounts}
-    />
-  </Label>
-  <Label class="py-4 block">
-    <div class="mb-2">
-      <span class="block text-base font-medium">Hide Languages</span>
-      <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets from specific languages.
-      </span>
-    </div>
-    <FancyMultiSelect
-      options={languages}
-      bind:value={$settings.hideLanguages}
-    />
-  </Label>
-  <div class="flex items-center gap-4 py-4 cursor-pointer">
-    <div class="flex-1">
-      <span class="block text-base font-medium">Clear All Cache</span>
-      <span class="block mt-1 text-sm text-gray-500">
-        Clear all cache data, including record users and tweets.
-      </span>
-    </div>
-    <Button
-      variant="ghost"
-      size="icon"
-      class="transform translate-x-2"
-      onclick={onClearCache}
-    >
-      <Trash2Icon />
-    </Button>
-  </div>
+  <nav class="flex flex-col">
+    {#each menuItems as item}
+      <RouterLink href={item.href}>
+        <Button
+          variant="ghost"
+          class="flex items-center justify-between w-full p-5 text-lg rounded-lg"
+        >
+          <div class="flex items-center gap-4">
+            <svelte:component this={item.icon} class="w-6 h-6 text-zinc-400" />
+            <span>{item.label}</span>
+          </div>
+          <ChevronRightIcon class="w-5 h-5" />
+        </Button>
+      </RouterLink>
+    {/each}
+  </nav>
 </div>

@@ -5,6 +5,7 @@
   import { init } from 'echarts'
   import { formatActivity } from '../utils/activity'
   import { Dayjs } from 'dayjs'
+  import { mode } from 'mode-watcher'
 
   const {
     activities,
@@ -64,4 +65,4 @@
   })
 </script>
 
-<Chart {options} {init} />
+<Chart {options} {init} theme={$mode} />

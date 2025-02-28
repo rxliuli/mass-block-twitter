@@ -17,6 +17,9 @@
   import ModListsSubscribePage from './pages/modlists/subscribe/page.svelte'
   import ModListsDetailPage from './pages/modlists/detail/page.svelte'
   import DashboardPage from './pages/dashboard/page.svelte'
+  import SettingsAppearancePage from './pages/settings/appearance/page.svelte'
+  import SettingsFilterPage from './pages/settings/filter/page.svelte'
+  import SettingsPrivacyPage from './pages/settings/privacy/page.svelte'
 
   let open = $state(true)
 
@@ -112,6 +115,18 @@
         {
           path: '/settings',
           component: SettingsPage,
+        },
+        {
+          path: '/settings/appearance',
+          component: SettingsAppearancePage,
+        },
+        {
+          path: '/settings/filter',
+          component: SettingsFilterPage,
+        },
+        {
+          path: '/settings/privacy',
+          component: SettingsPrivacyPage,
         },
         {
           path: '/pro',

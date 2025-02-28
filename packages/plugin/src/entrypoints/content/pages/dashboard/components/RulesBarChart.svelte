@@ -4,6 +4,7 @@
   import { Chart } from '$lib/components/chart'
   import type { Activity } from '$lib/db'
   import { groupBy } from 'lodash-es'
+  import { mode } from 'mode-watcher'
 
   const { activities }: { activities: Activity[] } = $props()
 
@@ -59,4 +60,4 @@
   })
 </script>
 
-<Chart {options} {init} />
+<Chart {options} {init} theme={$mode} />

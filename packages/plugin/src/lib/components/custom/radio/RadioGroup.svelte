@@ -6,13 +6,19 @@
   let {
     value = $bindable<string>(),
     options,
+    onChange,
   }: {
     value?: string
     options: LabelValue[]
+    onChange?: (value: string) => void
   } = $props()
 </script>
 
-<RadioGroup.Root bind:value class="flex items-center gap-2">
+<RadioGroup.Root
+  bind:value
+  onValueChange={onChange}
+  class="flex items-center gap-2"
+>
   {#each options as option}
     <Label for={option.value} class="flex items-center cursor-pointer">
       <RadioGroup.Item value={option.value} id={option.value} />

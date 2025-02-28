@@ -43,11 +43,13 @@
   <ModListCreator onCreated={() => $query.refetch()} />
 </LayoutNav>
 
-<header>
-  <nav>
-    <Button variant="link" onclick={onGotoCreated}>Created</Button>
-    <Button variant="link" onclick={onGotoSubscribed}>Subscribed</Button>
-  </nav>
-</header>
+<nav class="flex items-center gap-4">
+  <RouterLink class="text-blue-500 cursor-pointer" onclick={onGotoCreated}>
+    Created
+  </RouterLink>
+  <RouterLink class="text-blue-500 cursor-pointer" onclick={onGotoSubscribed}>
+    Subscribed
+  </RouterLink>
+</nav>
 
 <ModLists query={$query} />

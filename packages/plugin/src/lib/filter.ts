@@ -19,7 +19,11 @@ export interface TweetFilter {
 
 export function flowFilter(
   filters: TweetFilter[],
-  onBlock?: (user: User) => void,
+  onAction?: (
+    filterData: FilterData,
+    result: Extract<FilterResult, 'hide' | 'block'>,
+    filterName: TweetFilter['name'],
+  ) => void,
 ): (options: FilterData) => { value: boolean; reason?: string } {
   return (data) => {
     for (const filter of filters) {
@@ -42,13 +46,14 @@ export function flowFilter(
         }
       }
       if (result === 'hide') {
+        onAction?.(data, 'hide', filter.name)
         return {
           value: false,
           reason: filter.name,
         }
       }
       if (result === 'block') {
-        onBlock?.(data.type === 'tweet' ? data.tweet.user : data.user)
+        onAction?.(data, 'block', filter.name)
         return {
           value: false,
           reason: filter.name,
@@ -61,10 +66,10 @@ export function flowFilter(
   }
 }
 
-export function verifiedFilter(): TweetFilter {
+export function selfFilter(): TweetFilter {
   const currentUserId = extractCurrentUserId()
   return {
-    name: 'verifiedFilter',
+    name: 'self',
     userCondition: (user: User) => {
       if (user.following || user.id === currentUserId) {
         return 'show'
@@ -127,7 +132,7 @@ export function mutedWordsFilter(): TweetFilter {
     return 'next'
   }
   return {
-    name: 'mutedWordsFilter',
+    name: 'mutedWords',
     tweetCondition: (tweet: ParsedTweet) =>
       filter({
         ...tweet.user,
@@ -139,7 +144,7 @@ export function mutedWordsFilter(): TweetFilter {
 
 export function defaultProfileFilter(): TweetFilter {
   return {
-    name: 'defaultProfileFilter',
+    name: 'defaultProfile',
     userCondition: (user: User) => {
       if (
         ((typeof user.default_profile === 'boolean' && user.default_profile) ||
@@ -157,7 +162,7 @@ export function defaultProfileFilter(): TweetFilter {
 
 export function blueVerifiedFilter(): TweetFilter {
   return {
-    name: 'blueVerifiedFilter',
+    name: 'blueVerified',
     userCondition: (user: User) => {
       if (user.is_blue_verified) {
         return 'hide'
@@ -176,7 +181,7 @@ export let spamContext: {
 
 export function sharedSpamFilter(): TweetFilter {
   return {
-    name: 'sharedSpamFilter',
+    name: 'sharedSpam',
     userCondition: (user: User) => {
       if (spamContext.spamUsers[user.id] === 'spam') {
         return 'hide'
@@ -188,7 +193,7 @@ export function sharedSpamFilter(): TweetFilter {
 
 export function modListFilter(): TweetFilter {
   return {
-    name: 'modListFilter',
+    name: 'modList',
     userCondition: (user: User) => {
       for (const modlist of spamContext.modlists) {
         if (modlist.twitterUserIds.includes(user.id)) {
@@ -206,7 +211,7 @@ export function modListFilter(): TweetFilter {
 
 export function languageFilter(languages: string[]): TweetFilter {
   return {
-    name: 'languageFilter',
+    name: 'language',
     tweetCondition: (tweet: ParsedTweet) => {
       if (languages.includes(tweet.lang)) {
         return 'hide'

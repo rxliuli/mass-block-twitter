@@ -8,8 +8,8 @@ import {
   parseUserRecords,
   setRequestHeaders,
 } from '$lib/api'
-import { dbApi, User } from '$lib/db'
-import { omit, throttle } from 'lodash-es'
+import { Activity, dbApi, User } from '$lib/db'
+import { filter, omit, throttle } from 'lodash-es'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { wait } from '@liuli-util/async'
 import { addBlockButton, alertWarning, extractTweet } from '$lib/observe'
@@ -21,6 +21,7 @@ import {
   blueVerifiedFilter,
   defaultProfileFilter,
   FilterData,
+  FilterResult,
   flowFilter,
   languageFilter,
   modListFilter,
@@ -28,9 +29,10 @@ import {
   sharedSpamFilter,
   spamContext,
   TweetFilter,
-  verifiedFilter,
+  selfFilter,
 } from '$lib/filter'
 import { getSettings, Settings } from '$lib/settings'
+import { ulid } from 'ulidx'
 
 function blockClientEvent(): Middleware {
   const pattern = new URLPattern(
@@ -80,7 +82,7 @@ function loggerViewUsers(): Middleware {
 const reportSpamTweetIds = new Set<string>()
 
 function getFilters(settings: Settings) {
-  const filters: TweetFilter[] = [verifiedFilter()]
+  const filters: TweetFilter[] = [selfFilter()]
   if (settings.hideModListAccounts) {
     filters.push(modListFilter())
   }
@@ -128,29 +130,55 @@ async function firstTimeFilterTweets(json: any) {
 }
 
 const queue: User[] = []
-async function onBlockUser(user: User) {
-  if (user.blocking) {
-    return
+async function onAction(
+  filterData: FilterData,
+  result: Extract<FilterResult, 'hide' | 'block'>,
+  filterName: TweetFilter['name'],
+) {
+  let user: User
+  let activity: Activity = {
+    id: ulid().toString(),
+    action: result,
+    trigger_type: 'auto',
+    match_type: filterData.type,
+    match_filter: filterName,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  } as Activity
+  if (filterData.type === 'user') {
+    user = filterData.user
+    activity = {
+      ...activity,
+      user_id: user.id,
+      user_name: user.name,
+      user_screen_name: user.screen_name,
+    }
+  } else {
+    user = filterData.tweet.user
+    activity = {
+      ...activity,
+      user_id: user.id,
+      user_name: user.name,
+      user_screen_name: user.screen_name,
+      tweet_id: filterData.tweet.id,
+      tweet_content: filterData.tweet.text,
+    }
   }
   if (queue.some((it) => it.id === user.id)) {
     return
   }
   queue.push(user)
-  requestIdleCallback(async () => {
-    while (queue.length > 0) {
-      let user = queue.shift()
-      if (!user) {
-        return
-      }
-      await blockUser(user)
-      console.log('blockUser', user)
-      new Notification('Blocked user', {
-        body: `${user.name} @${user.screen_name}`,
-      }).onclick = () => {
-        window.open(`https://x.com/${user.screen_name}`, '_blank')
-      }
-    }
-  })
+  dbApi.activitys.record([activity])
+  if (user.blocking || result !== 'block') {
+    return
+  }
+  await blockUser(user)
+  console.log('blockUser', user)
+  new Notification('Blocked user', {
+    body: `${user.name} @${user.screen_name}`,
+  }).onclick = () => {
+    window.open(`https://x.com/${user.screen_name}`, '_blank')
+  }
 }
 function handleNotifications(): Middleware {
   return async (c, next) => {
@@ -165,7 +193,7 @@ function handleNotifications(): Middleware {
     try {
       const json = await c.res.clone().json()
       await firstTimeFilterTweets(json)
-      const isShow = flowFilter(getFilters(getSettings()), onBlockUser)
+      const isShow = flowFilter(getFilters(getSettings()), onAction)
       const hideNotifications: [string, FilterData][] = []
       const updatedJson = filterNotifications(json, (it) => {
         const result = isShow(it)
@@ -197,7 +225,7 @@ function handleTweets(): Middleware {
     try {
       const json = await c.res.clone().json()
       await firstTimeFilterTweets(json)
-      const isShow = flowFilter(getFilters(getSettings()), onBlockUser)
+      const isShow = flowFilter(getFilters(getSettings()), onAction)
       const hideTweets: [string, ParsedTweet][] = []
       const filteredTweets = filterTweets(json, (it) => {
         const result = isShow({

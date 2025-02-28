@@ -5,6 +5,7 @@
   import { cn } from '$lib/utils'
   import {
     ArrowLeftIcon,
+    HomeIcon,
     MessageCircleOffIcon,
     SettingsIcon,
     UserIcon,
@@ -30,8 +31,14 @@
 
   const menuItems: MenuItem[] = [
     {
-      title: 'Search and Block',
+      title: 'Dashboard',
       url: '/',
+      icon: HomeIcon,
+      to: 'content',
+    },
+    {
+      title: 'Search and Block',
+      url: '/search-and-block',
       icon: UserIcon,
       to: 'content',
     },
@@ -88,8 +95,8 @@
   <Sidebar.Provider class="h-full">
     <AppSidebar items={menuItems} />
     <main class="w-full overflow-hidden">
-      <div
-        class="flex items-center gap-2 h-10 sticky top-0 bg-background px-6 pt-6"
+      <header
+        class="flex items-center gap-2 h-10 sticky top-0 bg-background p-6"
       >
         {#if isTopLevel}
           <Sidebar.Trigger />
@@ -102,7 +109,7 @@
           {title ?? autoTitle}
         </h1>
         <div class="ml-auto" id="layout-nav-extra"></div>
-      </div>
+      </header>
       <div class="h-[calc(100%-3rem)] px-6 pt-2 pb-6 overflow-auto">
         {@render children?.()}
       </div>

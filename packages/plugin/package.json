@@ -16,6 +16,7 @@
     "postinstall": "wxt prepare"
   },
   "devDependencies": {
+    "@internationalized/date": "^3.7.0",
     "@rollup/plugin-inject": "^5.0.5",
     "@tsconfig/svelte": "^5.0.4",
     "@types/chrome": "^0.0.280",
@@ -59,11 +60,14 @@
     "@webext-core/messaging": "^2.1.0",
     "csv": "^6.3.11",
     "csv-parse": "^5.6.0",
+    "dayjs": "^1.11.13",
+    "echarts": "^5.6.0",
     "file-saver": "^2.0.5",
     "idb": "^8.0.1",
     "idb-keyval": "^6.2.1",
     "immer": "^10.1.1",
     "just-map-object": "^2.3.0",
+    "layerchart": "^1.0.0",
     "lodash-es": "^4.17.21",
     "pngjs": "^7.0.0",
     "runed": "^0.23.2",

@@ -666,7 +666,7 @@ const SEARCH_TIMELINE_FLAGS = {
   rweb_video_timestamps_enabled: true,
   longform_notetweets_rich_text_read_enabled: true,
   longform_notetweets_inline_media_enabled: true,
-  responsive_web_grok_image_annotation_enabled: false,
+  responsive_web_grok_image_annotation_enabled: true,
   responsive_web_enhance_cards_enabled: false,
 }
 
@@ -726,10 +726,32 @@ export async function searchPeople(options: {
     ...options,
     graphqlId,
   })
+
   const headers = getRequestHeaders()
   headers.set('Content-Type', 'application/json')
+  const xTransactionId = await getXTransactionId()(new URL(url).pathname, 'GET')
   const r = await fetch(url, {
-    headers,
+    headers: {
+      accept: '*/*',
+      'accept-language':
+        'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,ja-JP;q=0.6,ja;q=0.5',
+      authorization: headers.get('authorization')!,
+      'content-type': 'application/json',
+      priority: 'u=1, i',
+      'sec-ch-ua':
+        '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
+      'sec-ch-ua-mobile': '?0',
+      'sec-ch-ua-platform': '"macOS"',
+      'sec-fetch-dest': 'empty',
+      'sec-fetch-mode': 'cors',
+      'sec-fetch-site': 'same-origin',
+      'x-client-transaction-id': xTransactionId,
+      'x-client-uuid': headers.get('x-client-uuid')!,
+      'x-csrf-token': headers.get('x-csrf-token')!,
+      'x-twitter-active-user': 'yes',
+      'x-twitter-auth-type': 'OAuth2Session',
+      'x-twitter-client-language': 'en',
+    },
     referrer: 'https://x.com',
   })
   if (!r.ok) {

@@ -19,7 +19,7 @@
 <a
   href={`https://twitter.com/${user.screenName}`}
   target="_blank"
-  class="w-full py-4 rounded-lg bg-zinc-950 grid grid-cols-[auto_1fr_auto] gap-3"
+  class="w-full py-4 rounded-lg grid grid-cols-[auto_1fr_auto] gap-3"
 >
   <Avatar class="h-12 w-12">
     <AvatarImage src={user.profileImageUrl} alt={user.name} />

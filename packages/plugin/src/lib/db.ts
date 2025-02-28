@@ -38,6 +38,28 @@ export interface Tweet {
   lang: string // ISO 639-1
 }
 
+export interface Activity {
+  id: string
+  created_at: string
+  updated_at: string
+  action: 'block' | 'hide'
+  trigger_type: 'auto' | 'manual'
+  match_type: 'user' | 'tweet'
+  match_filter:
+    | 'mutedWords'
+    | 'defaultProfile'
+    | 'blueVerified'
+    | 'sharedSpam'
+    | 'modList'
+    | 'language'
+    | 'batchSelected'
+  user_id: string
+  user_name: string
+  user_screen_name: string
+  tweet_id?: string
+  tweet_content?: string
+}
+
 export interface MyDB extends DBSchema {
   users: {
     key: string
@@ -54,6 +76,13 @@ export interface MyDB extends DBSchema {
       user_id_index: string
     }
   }
+  activitys: {
+    key: string
+    value: Activity
+    indexes: {
+      created_at_index: string
+    }
+  }
 }
 
 export type DBStore = {
@@ -61,7 +90,7 @@ export type DBStore = {
 }
 
 export async function initDB() {
-  dbStore.idb = await openDB<MyDB>('mass-db', 13, {
+  dbStore.idb = await openDB<MyDB>('mass-db', 15, {
     async upgrade(db, oldVersion, newVersion, transaction) {
       if (db.objectStoreNames.length === 0) {
         // init users store
@@ -72,42 +101,10 @@ export async function initDB() {
         })
         const tweetsStore = db.createObjectStore('tweets')
         tweetsStore.createIndex('user_id_index', 'user_id')
-      } else {
-        const usersStore = transaction.objectStore('users')
-        if (oldVersion < 6) {
-          const allScreenNames = new Map<string, IDBValidKey>()
-          let cursor = await usersStore.openCursor()
-          while (cursor) {
-            const user: User = cursor.value
-            if (allScreenNames.has(user.screen_name)) {
-              await cursor.delete()
-            } else {
-              allScreenNames.set(user.screen_name, cursor.key)
-            }
-            cursor = await cursor.continue()
-          }
-          usersStore.createIndex('screen_name_index', 'screen_name', {
-            unique: true,
-          })
-        }
-        if (oldVersion < 9) {
-          let cursor = await usersStore.openCursor()
-          while (cursor) {
-            const user: User = cursor.value
-            if (!user.following) {
-              user.following = false
-            }
-            cursor.update(user)
-            cursor = await cursor.continue()
-          }
-        }
-        if (oldVersion < 10) {
-          usersStore.createIndex('updated_at_index', 'updated_at')
-        }
-        if (oldVersion < 11) {
-          const tweetsStore = db.createObjectStore('tweets')
-          tweetsStore.createIndex('user_id_index', 'user_id')
-        }
+      }
+      if (oldVersion < 15) {
+        const activityStore = db.createObjectStore('activitys')
+        activityStore.createIndex('created_at_index', 'created_at')
       }
     },
   })
@@ -210,11 +207,29 @@ function wrap<T extends object>(obj: T): T {
   })
 }
 
+class ActivityDAO {
+  async record(activities: Activity[]): Promise<void> {
+    await Promise.all(
+      activities.map(async (it) => {
+        await dbStore.idb.put('activitys', it, it.id)
+      }),
+    )
+  }
+  async getByRange(from: Date, to: Date): Promise<Activity[]> {
+    return dbStore.idb.getAllFromIndex(
+      'activitys',
+      'created_at_index',
+      IDBKeyRange.bound(from.toISOString(), to.toISOString()),
+    )
+  }
+}
 export const dbApi = {
   users: wrap(new UserDAO()),
   tweets: wrap(new TweetDAO()),
+  activitys: wrap(new ActivityDAO()),
   clear: async () => {
     await dbStore.idb.clear('users')
     await dbStore.idb.clear('tweets')
+    await dbStore.idb.clear('activitys')
   },
 }

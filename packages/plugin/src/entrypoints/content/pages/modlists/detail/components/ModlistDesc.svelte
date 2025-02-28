@@ -9,7 +9,7 @@
   } = $props()
 </script>
 
-<div class="w-full bg-zinc-950 p-4">
+<div class="w-full p-4">
   <div class="flex items-start justify-between">
     <div class="flex gap-4">
       <Avatar.Root>
@@ -19,10 +19,10 @@
         </Avatar.Fallback>
       </Avatar.Root>
       <div class="flex flex-col">
-        <h1 class="text-2xl font-semibold text-white">
+        <h1 class="text-2xl font-semibold">
           {props.modlist.name}
         </h1>
-        <p class="text-zinc-400">
+        <p>
           Moderation list by
           <a
             href={`https://x.com/${props.modlist.twitterUser.screenName}`}

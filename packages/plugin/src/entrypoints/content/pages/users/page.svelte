@@ -37,10 +37,11 @@
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import { shadcnConfig } from '$lib/components/logic/config'
   import TableExtraButton from '$lib/components/logic/TableExtraButton.svelte'
+  import { ulid } from 'ulidx'
 
   let term = $state('')
   const query = createInfiniteQuery({
-    queryKey: ['modlistAddUser', 'search'],
+    queryKey: ['searchAndBlock'],
     queryFn: async ({ pageParam }) => {
       term = term.trim()
       if (!term) {
@@ -199,6 +200,20 @@
           if (action === 'block') {
             await blockUser(it)
             await dbApi.users.block(it)
+            await dbApi.activitys.record([
+              {
+                id: ulid().toString(),
+                action: 'block',
+                trigger_type: 'manual',
+                match_type: 'user',
+                match_filter: 'batchSelected',
+                user_id: it.id,
+                user_name: it.name,
+                user_screen_name: it.screen_name,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              },
+            ])
           } else {
             await unblockUser(it.id)
             await dbApi.users.unblock(it)

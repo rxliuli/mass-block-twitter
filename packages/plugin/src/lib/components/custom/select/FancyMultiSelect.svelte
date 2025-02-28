@@ -56,8 +56,6 @@
     }
   }
 
-  $inspect(value)
-
   async function handleSelect(item: T) {
     inputValue = ''
     if (value.includes(item)) {

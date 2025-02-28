@@ -27,8 +27,6 @@
       .filter((it) => it.count > 0)
   })
 
-  $inspect('data', data)
-
   const options: EChartsOption = $derived({
     tooltip: {
       trigger: 'axis',

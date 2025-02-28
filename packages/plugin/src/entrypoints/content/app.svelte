@@ -20,6 +20,7 @@
   import SettingsAppearancePage from './pages/settings/appearance/page.svelte'
   import SettingsFilterPage from './pages/settings/filter/page.svelte'
   import SettingsPrivacyPage from './pages/settings/privacy/page.svelte'
+  import DashboardActivitiesPage from './pages/dashboard/activities/page.svelte'
 
   let open = $state(true)
 
@@ -87,6 +88,10 @@
         {
           path: '/',
           component: DashboardPage,
+        },
+        {
+          path: '/dashboard/activities',
+          component: DashboardActivitiesPage,
         },
         {
           path: '/search-and-block',

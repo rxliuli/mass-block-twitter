@@ -152,6 +152,7 @@ async function onAction(
       user_id: user.id,
       user_name: user.name,
       user_screen_name: user.screen_name,
+      user_profile_image_url: user.profile_image_url,
     }
   } else {
     user = filterData.tweet.user
@@ -160,6 +161,7 @@ async function onAction(
       user_id: user.id,
       user_name: user.name,
       user_screen_name: user.screen_name,
+      user_profile_image_url: user.profile_image_url,
       tweet_id: filterData.tweet.id,
       tweet_content: filterData.tweet.text,
     }

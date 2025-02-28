@@ -15,6 +15,7 @@
   import { type Activity, dbApi } from '$lib/db'
   import { groupBy, sortBy } from 'lodash-es'
   import { calcStats, formatStats } from './utils/stats'
+  import { RouterLink } from '$lib/components/logic/router'
 
   let dateRange = {
     from: dayjs().subtract(1, 'week'),
@@ -136,7 +137,7 @@
             <div class="space-y-1">
               <p class="text-sm font-medium leading-none">
                 <a
-                  href={`https://twitter.com/${activity.username}`}
+                  href={`https://x.com/${activity.username}`}
                   target="_blank"
                   class="text-blue-500"
                 >
@@ -154,11 +155,11 @@
           {/if}
         {/each}
 
-        <!-- <div class="flex justify-center pt-2">
-          <Button variant="outline" size="sm">
-            <a href="/dashboard/activities">View All</a>
-          </Button>
-        </div> -->
+        <div class="flex justify-center pt-2">
+          <RouterLink href="/dashboard/activities">
+            <Button variant="outline" size="sm">View All</Button>
+          </RouterLink>
+        </div>
       </div>
     </CardContent>
   </Card>

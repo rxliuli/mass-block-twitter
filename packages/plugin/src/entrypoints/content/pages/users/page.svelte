@@ -210,6 +210,7 @@
                 user_id: it.id,
                 user_name: it.name,
                 user_screen_name: it.screen_name,
+                user_profile_image_url: it.profile_image_url,
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
               },

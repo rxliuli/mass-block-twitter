@@ -1,5 +1,6 @@
 import { DBSchema, IDBPDatabase, openDB } from 'idb'
 import { pickBy } from 'lodash-es'
+import { ulid } from 'ulidx'
 
 export const dbStore: DBStore = {} as any
 
@@ -56,6 +57,7 @@ export interface Activity {
   user_id: string
   user_name: string
   user_screen_name: string
+  user_profile_image_url?: string
   tweet_id?: string
   tweet_content?: string
 }
@@ -221,6 +223,31 @@ class ActivityDAO {
       'created_at_index',
       IDBKeyRange.bound(from.toISOString(), to.toISOString()),
     )
+  }
+  async getByPage(params: { limit: number; cursor?: string }): Promise<{
+    data: Activity[]
+    cursor: string | undefined
+  }> {
+    const cursor = params.cursor ?? ulid().toString()
+    const range = IDBKeyRange.upperBound(cursor, true)
+    let cursorRequest = await dbStore.idb
+      .transaction('activitys', 'readonly')
+      .store.openCursor(range, 'prev')
+    let count = 0
+    const data: (Activity & { user_profile_image_url?: string })[] = []
+    while (cursorRequest) {
+      data.push(cursorRequest.value)
+      count++
+      cursorRequest = await cursorRequest.continue()
+      if (count >= params.limit) {
+        break
+      }
+    }
+    return {
+      data,
+      cursor:
+        data.length === params.limit ? data[data.length - 1]?.id : undefined,
+    }
   }
 }
 export const dbApi = {

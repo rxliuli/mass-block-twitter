@@ -50,18 +50,25 @@
 
     <div class="flex items-center gap-2">
       <div class="text-sm text-muted-foreground">
-        {dayjs(activity.created_at).format('YYYY-MM-DD HH:mm:ss')}
+        {dayjs(activity.created_at).format('MM-DD HH:mm')}
       </div>
-      <Badge variant={actionMap[activity.action].color}>
+      <Badge
+        variant={actionMap[activity.action].color}
+        class="w-14 text-center truncate"
+      >
         {actionMap[activity.action].label}
       </Badge>
     </div>
-    <div class="text-sm">
+    <div class="text-sm flex items-center">
       <span class="text-muted-foreground">Rule:</span>
-      <span>{ruleMap[activity.match_filter]}</span>
+      <span class="inline-block w-24 truncate"
+        >{ruleMap[activity.match_filter]}</span
+      >
       <span class="text-muted-foreground mx-1">·</span>
       <span class="text-muted-foreground">Trigger:</span>
-      <span>{triggerMap[activity.trigger_type]}</span>
+      <span class="inline-block w-24 truncate"
+        >{triggerMap[activity.trigger_type]}</span
+      >
     </div>
   </div>
 

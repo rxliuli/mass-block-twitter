@@ -67,7 +67,7 @@
         username: it.user_screen_name,
         action: actionMap[it.action] + ' ' + matchTypeMap[it.match_type],
         rule: ruleMap[it.match_filter],
-        timestamp: dayjs(it.created_at).format('YYYY-MM-DD HH:mm:ss'),
+        date: dayjs(it.created_at).format('MM-DD HH:mm'),
       }))
   })
 </script>
@@ -146,7 +146,7 @@
                 {activity.action}
               </p>
               <p class="text-sm text-muted-foreground">
-                ({activity.rule}) {activity.timestamp}
+                ({activity.rule}) {activity.date}
               </p>
             </div>
           </div>

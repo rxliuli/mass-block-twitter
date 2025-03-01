@@ -1,4 +1,8 @@
-import { router, useRoute, defineAsyncComponent } from '$lib/route.svelte'
+import {
+  router,
+  useRoute,
+  defineAsyncComponent,
+} from '$lib/components/logic/router'
 import { beforeEach, describe, expect, it } from 'vitest'
 import HomeView from './components/HomeView.svelte'
 import AboutView from './components/AboutView.svelte'
@@ -30,8 +34,18 @@ describe('useRoute', () => {
     expect(route.path).toBe('/')
     router.path = '/home'
     router.routes = [
-      { path: '/home', component: defineAsyncComponent(() => import('./components/HomeView.svelte')) },
-      { path: '/about', component: defineAsyncComponent(() => import('./components/AboutView.svelte')) },
+      {
+        path: '/home',
+        component: defineAsyncComponent(
+          () => import('./components/HomeView.svelte'),
+        ),
+      },
+      {
+        path: '/about',
+        component: defineAsyncComponent(
+          () => import('./components/AboutView.svelte'),
+        ),
+      },
     ]
     expect(route.path).toBe('/home')
     expect(route.matched).toBe(router.routes[0])

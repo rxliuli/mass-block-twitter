@@ -1,3 +1,4 @@
+import { ulid } from 'ulidx'
 import { blockUser } from './api'
 import { dbApi, Tweet } from './db'
 import type { TwitterSpamReportRequest } from '@mass-block-twitter/server'
@@ -60,6 +61,26 @@ export function addBlockButton(tweetElement: HTMLElement, tweet: Tweet) {
         }),
       )
       await blockUser({ id: tweet.user_id })
+      const user = await dbApi.users.get(tweet.user_id)
+      if (user) {
+        await dbApi.activitys.record([
+          {
+            id: ulid(),
+            action: 'block',
+            trigger_type: 'manual',
+            match_filter: 'batchSelected',
+            match_type: 'tweet',
+            tweet_id: tweet.id,
+            tweet_content: tweet.text,
+            user_id: user.id,
+            user_name: user.name,
+            user_screen_name: user.screen_name,
+            user_profile_image_url: user.profile_image_url,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+        ])
+      }
       tweetElement.style.display = 'none'
     })
     actionBar.appendChild(customButton)

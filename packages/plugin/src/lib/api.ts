@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { extractObjects } from './util/extractObjects'
 import { TweetMediaType, User } from './db'
 import { FilterData } from './filter'
+import { uniqBy } from 'lodash-es'
 
 export function setRequestHeaders(headers: Headers) {
   const old = getRequestHeaders()
@@ -195,7 +196,7 @@ export function parseUserRecords(json: any): User[] {
       ) as (typeof timelineUserSchema._type)[]
     ).map(parseTimelineUser),
   )
-  return users
+  return uniqBy(users, (it) => it.id)
 }
 
 export interface UserRecord {
@@ -904,13 +905,9 @@ export function getXTransactionId() {
 export function initXTransactionId() {
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach(async (node) => {
+      mutation.addedNodes.forEach((node) => {
         if (node instanceof SVGElement && node.id === 'loading-x-anim-0') {
-          getXTransactionId()
-          console.log(
-            'getXTransactionId',
-            await getXTransactionId()('/i/api/1.1/blocks/create.json', 'POST'),
-          )
+          getXTransactionId()('/i/api/1.1/blocks/create.json', 'POST')
           observer.disconnect()
         }
       })

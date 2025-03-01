@@ -1,5 +1,4 @@
 import { type Component } from 'svelte'
-import { computed } from './utils/rune.svelte'
 
 interface AsyncComponent {
   loader: () => Promise<{ default: Component }>
@@ -55,8 +54,6 @@ export function goBack() {
   }
 }
 
-
-
 interface Route {
   path: string
   search?: URLSearchParams
@@ -64,12 +61,17 @@ interface Route {
 }
 
 export function useRoute(): Route {
-  return computed(() => {
-    const [path, search] = router.path.split('?')
-    return {
-      path: router.path,
-      search: search ? new URLSearchParams(search) : undefined,
-      matched: router.routes.find((it) => it.path === path),
-    }
-  })
+  return {
+    get path() {
+      return router.path
+    },
+    get search() {
+      const [, search] = router.path.split('?')
+      return search ? new URLSearchParams(search) : undefined
+    },
+    get matched() {
+      const [path] = router.path.split('?')
+      return router.routes.find((it) => it.path === path)
+    },
+  }
 }

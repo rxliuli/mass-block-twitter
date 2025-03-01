@@ -1,4 +1,5 @@
 import { defineWorkspace } from 'vitest/config'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
 
 const browserIncludes = [
   'src/**/*.browser.test.ts',
@@ -17,6 +18,7 @@ export default defineWorkspace([
       name: 'unit',
       environment: 'node',
     },
+    plugins: [svelte()],
   },
   {
     extends: 'vitest.config.ts',

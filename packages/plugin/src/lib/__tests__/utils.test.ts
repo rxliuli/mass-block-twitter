@@ -1,3 +1,4 @@
+// @vitest-environment happy-dom
 import { extractObjects } from '$lib/util/extractObjects'
 import { it, expect, describe } from 'vitest'
 import all from './assets/all.json'
@@ -6,6 +7,7 @@ import { z } from 'zod'
 import {
   filterNotifications,
   filterTweets,
+  MUTED_WORD_RULES_KEY,
   ParsedTweet,
   parseSearchPeople,
   parseTweets,
@@ -23,6 +25,7 @@ import TweetDetail4 from './assets/TweetDetail4.json'
 import TweetDetail5 from './assets/TweetDetail5.json'
 import TweetDetail6 from './assets/TweetDetail6.json'
 import TweetDetail7 from './assets/TweetDetail7.json'
+import TweetDetail9 from './assets/TweetDetail9.json'
 import UserTweetsAndReplies from './assets/UserTweetsAndReplies.json'
 import UserTweets from './assets/UserTweets.json'
 import SearchTimeline from './assets/SearchTimeline.json'
@@ -32,7 +35,12 @@ import HomeLatestTimeline from './assets/HomeLatestTimeline.json'
 import notifications1 from './assets/notifications1.json'
 import notifications2 from './assets/notifications2.json'
 import notifications3 from './assets/notifications3.json'
-import { blueVerifiedFilter, flowFilter } from '$lib/filter'
+import {
+  blueVerifiedFilter,
+  flowFilter,
+  mutedWordsFilter,
+  MutedWordRule,
+} from '$lib/filter'
 import TweetDetail8ProbableSpam from './assets/TweetDetail8ProbableSpam.json'
 
 describe('extractObjects', () => {
@@ -104,7 +112,7 @@ describe('parseUserRecords', () => {
     const users = parseUserRecords(notificationsSpam)
     expect(users.map((it) => it.name).some((it) => it.includes('比特币'))).true
     expect(users.map((it) => it.name).some((it) => it.includes('币圈'))).true
-    expect(users).length(23)
+    expect(users).length(22)
     expect(
       users.map((it) => omit(it, 'created_at', 'updated_at')),
     ).toMatchSnapshot()
@@ -118,6 +126,11 @@ describe('parseUserRecords', () => {
       name: '比特币矿机',
       screen_name: 'bitmain_miner',
     })
+  })
+
+  it('parseUserRecords for detail 9', () => {
+    const users = parseUserRecords(TweetDetail9)
+    expect(users).length(2)
   })
 })
 
@@ -368,6 +381,28 @@ describe('filterTweets', () => {
     const r2 = parseTweets(filtered)
     expect(r2).length(1)
   })
+  it('filterTweets for muted words', () => {
+    localStorage.setItem(
+      MUTED_WORD_RULES_KEY,
+      JSON.stringify([
+        {
+          id: '1',
+          keyword: '比特币',
+          type: 'hide',
+          checkpoints: ['name', 'screen_name', 'description', 'tweet'],
+        },
+      ] as MutedWordRule[]),
+    )
+    const filter = mutedWordsFilter()
+    const r1 = parseTweets(TweetDetail9)
+    expect(r1).length(3)
+    const filtered = filterTweets(
+      TweetDetail9,
+      (it) => filter.tweetCondition!(it) === 'next',
+    )
+    const r2 = parseTweets(filtered)
+    expect(r2).length(2)
+  })
 })
 
 describe('filterNotifications', () => {
@@ -516,10 +551,10 @@ describe('filterNotifications', () => {
     expect(JSON.stringify(r.globalObjects.notifications)).not.includes(blockId)
   })
   it('filterNotifications for notifications2', () => {
-    filterNotifications(notifications2 as any, (it) => true)
+    filterNotifications(notifications2 as any, () => true)
   })
   it('filterNotifications for notifications3', () => {
-    filterNotifications(notifications3 as any, (it) => true)
+    filterNotifications(notifications3 as any, () => true)
   })
   it('flowFilter', () => {
     const isHide = flowFilter([

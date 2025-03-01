@@ -1,0 +1,796 @@
+{
+    "data": {
+        "threaded_conversation_with_injections_v2": {
+            "instructions": [
+                {
+                    "type": "TimelineAddEntries",
+                    "entries": [
+                        {
+                            "entryId": "tweet-1895719198112039111",
+                            "sortIndex": "7327652838742736696",
+                            "content": {
+                                "entryType": "TimelineTimelineItem",
+                                "__typename": "TimelineTimelineItem",
+                                "itemContent": {
+                                    "itemType": "TimelineTweet",
+                                    "__typename": "TimelineTweet",
+                                    "tweet_results": {
+                                        "result": {
+                                            "__typename": "Tweet",
+                                            "rest_id": "1895719198112039111",
+                                            "has_birdwatch_notes": false,
+                                            "core": {
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjoyNjE3MTEx",
+                                                        "rest_id": "2617111",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_graduated_access": true,
+                                                        "parody_commentary_fan_label": "None",
+                                                        "is_blue_verified": true,
+                                                        "profile_image_shape": "Circle",
+                                                        "legacy": {
+                                                            "followed_by": true,
+                                                            "following": true,
+                                                            "can_dm": true,
+                                                            "can_media_tag": false,
+                                                            "created_at": "Wed Mar 28 05:01:39 +0000 2007",
+                                                            "default_profile": false,
+                                                            "default_profile_image": false,
+                                                            "description": "Linglingfa(零零发)。Initiator of the open source project MNBVC, the co-Founder of Sparitcle, and the initiator of the CorgiFun, LIWU, and oneface projects.",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": []
+                                                                },
+                                                                "url": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "mnbvc.253874.net",
+                                                                            "expanded_url": "https://mnbvc.253874.net",
+                                                                            "url": "https://t.co/jrdA0sepB9",
+                                                                            "indices": [
+                                                                                0,
+                                                                                23
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 33940,
+                                                            "followers_count": 23732,
+                                                            "friends_count": 2173,
+                                                            "has_custom_timelines": true,
+                                                            "is_translator": false,
+                                                            "listed_count": 226,
+                                                            "location": "Japan,Tokyo",
+                                                            "media_count": 2573,
+                                                            "name": "零零發",
+                                                            "normal_followers_count": 23732,
+                                                            "pinned_tweet_ids_str": [
+                                                                "1894345130938937435"
+                                                            ],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/2617111/1692198501",
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1655985931223191552/V6XKAdm7_normal.jpg",
+                                                            "profile_interstitial_type": "",
+                                                            "screen_name": "linglingfa",
+                                                            "statuses_count": 38775,
+                                                            "translator_type": "none",
+                                                            "url": "https://t.co/jrdA0sepB9",
+                                                            "verified": false,
+                                                            "want_retweets": true,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "professional": {
+                                                            "rest_id": "1540395181676957696",
+                                                            "professional_type": "Creator",
+                                                            "category": [
+                                                                {
+                                                                    "id": 713,
+                                                                    "name": "Science & Technology",
+                                                                    "icon_name": "IconBriefcaseStroke"
+                                                                }
+                                                            ]
+                                                        },
+                                                        "tipjar_settings": {}
+                                                    }
+                                                }
+                                            },
+                                            "unmention_data": {},
+                                            "edit_control": {
+                                                "edit_tweet_ids": [
+                                                    "1895719198112039111"
+                                                ],
+                                                "editable_until_msecs": "1740813252000",
+                                                "is_edit_eligible": true,
+                                                "edits_remaining": "5"
+                                            },
+                                            "is_translatable": true,
+                                            "views": {
+                                                "count": "771",
+                                                "state": "EnabledWithCount"
+                                            },
+                                            "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+                                            "note_tweet": {
+                                                "is_expandable": true,
+                                                "note_tweet_results": {
+                                                    "result": {
+                                                        "id": "Tm90ZVR3ZWV0OjE4OTU3MTkxOTc5OTg3OTI3MDU=",
+                                                        "text": "诸位有多少人是真的看完了他们这个争论的视频的。\n我花了一个多小时看了一下，我英语也一般，听吵架确实不太行，但是在翻译字幕的帮助下算是有了一点了解：\n1，泽连斯基英语挺好，但是还没好到能方面和川普吵架的程度。更无论川普刚刚经历了选战，那是身经百战啊……在吵架这方面。\n2，其实川普表现出来的只是一贯的傲慢和牛逼罢了，而且在白宫，川普是美国总统，是美国人民刚刚选出来的国家元首，泽连斯基一直争吵，不断反驳，可能在美国人眼里会显得不够礼貌。\n3，如果泽连斯基用专业翻译，可能这场讨论的效果会更好，不至于搞到好像要动手的样子。\n4，惹毛泽连斯基的不是川普，是万斯。万斯导致了整个讨论的气氛急转直下，感觉万斯就是来搅和这场会谈的，或者是故意来给泽连斯基挖坑的。用中国外交部常说的一个词，万斯这是在“拱火”。\n5，西方国家对于政客不要脸似的争吵司空见惯了，他们社会的感受，会和我们有所不同。\n……\n万斯和川普的行为其实仅源于一个核心问题:美国能不能保证普京遵守协议。\n这个问题一开始CNN记者问了“矿产协议包括了乌东矿产，也就是鹅占区，那么美国如何保证这些已经部分归属美国的财产呢?”结果川普没有正面回答，而是说“我们之后在看”。\n到后面万斯开始说“之前拜登的行为是不正确的，我们要靠政治手段来牵制俄罗斯化解战争”的时候，司机坐不住了，因为当年明斯克协定就是他亲自签的，他就去问万斯“14年鹅入侵克里米亚，你说你川普不在任，那么之后那么多年在乌东的入侵和全面战争的准备都在川普17-20的任上发生，你们怎么没有阻止呢?”\n然后万斯急眼，直接攻击司机“不尊重美国人，不表示感谢”。而川普也没有唱红白脸，而是直接跟着万斯一起攻击司机。这是一种无能的表现，体现出的只有他“无力约束普京”这一个事实，对于美国的外交是致命的。如果川普既不愿意给予盟友援助，也没有能力约束普京，那么盟友还有什么必要跟你打好关系呢?\n所以有人说川普万斯这俩哥们的水准跟里屋论坛用户差不多也不算胡说八道，因为万斯这明显是避重就轻转移话题自己把水搅浑的玩法。\n\n就是为了吵架而吵架。\n\n前两个月我就说过，最近这十多年美国的总统大选总让我感觉很出戏。以前看各国大选，包括美国，至少看起来都是从一帮候选人中选出一个最厉害最牛逼最聪明最能干的人来领导国家。\n但是自从川普开始竞选，感觉每次大选就变成了两党候选人相互攻击：\n“她是傻逼！”\n“他才是傻逼！”\n“你说我是傻逼的话，你也是傻逼！”\n“no no no no！ 你也是傻逼，更大的傻逼…”\n\n感情美国总统是从两个傻逼中选一个看起来不是最傻逼的那一个吗？\n这不是搞笑吗？\n这场会面最后，还是有资深的政治记者抓住要点再次问川普：“如果普京不管你的协议还是入侵怎么办？”\n结果川普直接破防：“你不能老是说如果，如果你今天被炮弹炸了怎么办？不要提前假设，如果他真的入侵那么我们会继续协商。”\n得，还是里屋论坛的辩论方法：转换话题。\n你川普作为一个老板，商人，如果有人问你\"你的合作伙伴如果不遵守合作协议怎么办？\"这不是很正常一个问题吗？正常人会说我们有违约条款，他敢违约我们就能起诉他们。\n但是你偏要说你不能假设人家会违反协议。卧槽，你丫要是真这么做生意绝逼赔死啊！",
+                                                        "entity_set": {
+                                                            "hashtags": [],
+                                                            "symbols": [],
+                                                            "urls": [],
+                                                            "user_mentions": []
+                                                        },
+                                                        "richtext": {
+                                                            "richtext_tags": []
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "grok_analysis_button": true,
+                                            "legacy": {
+                                                "bookmark_count": 2,
+                                                "bookmarked": false,
+                                                "created_at": "Sat Mar 01 06:14:12 +0000 2025",
+                                                "conversation_id_str": "1895719198112039111",
+                                                "display_text_range": [
+                                                    0,
+                                                    132
+                                                ],
+                                                "entities": {
+                                                    "hashtags": [],
+                                                    "symbols": [],
+                                                    "timestamps": [],
+                                                    "urls": [],
+                                                    "user_mentions": []
+                                                },
+                                                "favorite_count": 4,
+                                                "favorited": false,
+                                                "full_text": "诸位有多少人是真的看完了他们这个争论的视频的。\n我花了一个多小时看了一下，我英语也一般，听吵架确实不太行，但是在翻译字幕的帮助下算是有了一点了解：\n1，泽连斯基英语挺好，但是还没好到能方面和川普吵架的程度。更无论川普刚刚经历了选战，那是身经百战啊……在吵架这方面。",
+                                                "is_quote_status": false,
+                                                "lang": "zh",
+                                                "quote_count": 0,
+                                                "reply_count": 2,
+                                                "retweet_count": 1,
+                                                "retweeted": false,
+                                                "user_id_str": "2617111",
+                                                "id_str": "1895719198112039111"
+                                            },
+                                            "quick_promote_eligibility": {
+                                                "eligibility": "IneligibleNotProfessional"
+                                            }
+                                        }
+                                    },
+                                    "tweetDisplayType": "Tweet",
+                                    "hasModeratedReplies": false
+                                }
+                            }
+                        },
+                        {
+                            "entryId": "conversationthread-1895728925080449102",
+                            "sortIndex": "7327652838742736686",
+                            "content": {
+                                "entryType": "TimelineTimelineModule",
+                                "__typename": "TimelineTimelineModule",
+                                "items": [
+                                    {
+                                        "entryId": "conversationthread-1895728925080449102-tweet-1895728925080449102",
+                                        "item": {
+                                            "itemContent": {
+                                                "itemType": "TimelineTweet",
+                                                "__typename": "TimelineTweet",
+                                                "tweet_results": {
+                                                    "result": {
+                                                        "__typename": "Tweet",
+                                                        "rest_id": "1895728925080449102",
+                                                        "has_birdwatch_notes": false,
+                                                        "core": {
+                                                            "user_results": {
+                                                                "result": {
+                                                                    "__typename": "User",
+                                                                    "id": "VXNlcjoxODc3Mzc3NjUxMDkxODQ1MTIw",
+                                                                    "rest_id": "1877377651091845120",
+                                                                    "affiliates_highlighted_label": {},
+                                                                    "has_graduated_access": true,
+                                                                    "parody_commentary_fan_label": "None",
+                                                                    "is_blue_verified": false,
+                                                                    "profile_image_shape": "Circle",
+                                                                    "legacy": {
+                                                                        "following": false,
+                                                                        "can_dm": false,
+                                                                        "can_media_tag": true,
+                                                                        "created_at": "Thu Jan 09 15:31:42 +0000 2025",
+                                                                        "default_profile": true,
+                                                                        "default_profile_image": false,
+                                                                        "description": "\uD83D\uDD25币安官方中文电报群 币圈必进\uD83D\uDCAF进群后查看群置顶消息教程参与币安流动性矿池可获得至少8%以上的BNB收益奖励\uD83C\uDF81每日可领取三次智能矿池收益\uD83C\uDFC5暴涨暴跌的行情下更适合赚取稳定的收益\uD83D\uDE80机不可失抓紧时间参与哦‼️\n➡️点击进群：https://t.co/i1GjrRHx4u",
+                                                                        "entities": {
+                                                                            "description": {
+                                                                                "urls": [
+                                                                                    {
+                                                                                        "display_url": "t.me/+U8cDdsZrleJmY…",
+                                                                                        "expanded_url": "https://t.me/+U8cDdsZrleJmYTMx",
+                                                                                        "url": "https://t.co/i1GjrRHx4u",
+                                                                                        "indices": [
+                                                                                            109,
+                                                                                            132
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "fast_followers_count": 0,
+                                                                        "favourites_count": 0,
+                                                                        "followers_count": 0,
+                                                                        "friends_count": 0,
+                                                                        "has_custom_timelines": false,
+                                                                        "is_translator": false,
+                                                                        "listed_count": 0,
+                                                                        "location": "Spokane",
+                                                                        "media_count": 0,
+                                                                        "name": "比特币飞扬",
+                                                                        "normal_followers_count": 0,
+                                                                        "pinned_tweet_ids_str": [],
+                                                                        "possibly_sensitive": false,
+                                                                        "profile_banner_url": "https://pbs.twimg.com/profile_banners/1877377651091845120/1740677185",
+                                                                        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1895163594133614592/vTNY7rP5_normal.jpg",
+                                                                        "profile_interstitial_type": "",
+                                                                        "screen_name": "murphy_dylMika",
+                                                                        "statuses_count": 7,
+                                                                        "translator_type": "none",
+                                                                        "verified": false,
+                                                                        "want_retweets": false,
+                                                                        "withheld_in_countries": []
+                                                                    },
+                                                                    "tipjar_settings": {}
+                                                                }
+                                                            }
+                                                        },
+                                                        "unmention_data": {},
+                                                        "edit_control": {
+                                                            "edit_tweet_ids": [
+                                                                "1895728925080449102"
+                                                            ],
+                                                            "editable_until_msecs": "1740815571000",
+                                                            "is_edit_eligible": false,
+                                                            "edits_remaining": "5"
+                                                        },
+                                                        "is_translatable": true,
+                                                        "views": {
+                                                            "count": "46",
+                                                            "state": "EnabledWithCount"
+                                                        },
+                                                        "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                                        "grok_analysis_button": true,
+                                                        "legacy": {
+                                                            "bookmark_count": 0,
+                                                            "bookmarked": false,
+                                                            "created_at": "Sat Mar 01 06:52:51 +0000 2025",
+                                                            "conversation_id_str": "1895719198112039111",
+                                                            "display_text_range": [
+                                                                12,
+                                                                44
+                                                            ],
+                                                            "entities": {
+                                                                "hashtags": [],
+                                                                "symbols": [],
+                                                                "timestamps": [],
+                                                                "urls": [],
+                                                                "user_mentions": [
+                                                                    {
+                                                                        "id_str": "2617111",
+                                                                        "name": "零零發",
+                                                                        "screen_name": "linglingfa",
+                                                                        "indices": [
+                                                                            0,
+                                                                            11
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "favorite_count": 0,
+                                                            "favorited": false,
+                                                            "full_text": "@linglingfa 现在都是做币安的搬砖套利 收益可观 主页进群 \uD83C\uDF3B \uD83C\uDF02 \uD83C\uDF89 \uD83C\uDF8A \uD83C\uDF02",
+                                                            "in_reply_to_screen_name": "linglingfa",
+                                                            "in_reply_to_status_id_str": "1895719198112039111",
+                                                            "in_reply_to_user_id_str": "2617111",
+                                                            "is_quote_status": false,
+                                                            "lang": "zh",
+                                                            "quote_count": 0,
+                                                            "reply_count": 0,
+                                                            "retweet_count": 0,
+                                                            "retweeted": false,
+                                                            "user_id_str": "1877377651091845120",
+                                                            "id_str": "1895728925080449102"
+                                                        },
+                                                        "quick_promote_eligibility": {
+                                                            "eligibility": "IneligibleNotProfessional"
+                                                        }
+                                                    }
+                                                },
+                                                "tweetDisplayType": "Tweet"
+                                            },
+                                            "clientEventInfo": {
+                                                "details": {
+                                                    "conversationDetails": {
+                                                        "conversationSection": "HighQuality"
+                                                    },
+                                                    "timelinesDetails": {
+                                                        "controllerData": "DAACDAAEDAABCgABFIACiGAHgAUKAAIAAAAAB4AASAAAAAA="
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                ],
+                                "displayType": "VerticalConversation",
+                                "clientEventInfo": {
+                                    "details": {
+                                        "conversationDetails": {
+                                            "conversationSection": "HighQuality"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "entryId": "tweetdetailrelatedtweets-1895696668475170938",
+                            "sortIndex": "1",
+                            "content": {
+                                "entryType": "TimelineTimelineModule",
+                                "__typename": "TimelineTimelineModule",
+                                "items": [
+                                    {
+                                        "entryId": "tweetdetailrelatedtweets-1895696668475170938-tweet-1895696668475170938",
+                                        "item": {
+                                            "itemContent": {
+                                                "itemType": "TimelineTweet",
+                                                "__typename": "TimelineTweet",
+                                                "tweet_results": {
+                                                    "result": {
+                                                        "__typename": "Tweet",
+                                                        "rest_id": "1895696668475170938",
+                                                        "has_birdwatch_notes": false,
+                                                        "core": {
+                                                            "user_results": {
+                                                                "result": {
+                                                                    "__typename": "User",
+                                                                    "id": "VXNlcjoyNjE3MTEx",
+                                                                    "rest_id": "2617111",
+                                                                    "affiliates_highlighted_label": {},
+                                                                    "has_graduated_access": true,
+                                                                    "parody_commentary_fan_label": "None",
+                                                                    "is_blue_verified": true,
+                                                                    "profile_image_shape": "Circle",
+                                                                    "legacy": {
+                                                                        "followed_by": true,
+                                                                        "following": true,
+                                                                        "can_dm": true,
+                                                                        "can_media_tag": false,
+                                                                        "created_at": "Wed Mar 28 05:01:39 +0000 2007",
+                                                                        "default_profile": false,
+                                                                        "default_profile_image": false,
+                                                                        "description": "Linglingfa(零零发)。Initiator of the open source project MNBVC, the co-Founder of Sparitcle, and the initiator of the CorgiFun, LIWU, and oneface projects.",
+                                                                        "entities": {
+                                                                            "description": {
+                                                                                "urls": []
+                                                                            },
+                                                                            "url": {
+                                                                                "urls": [
+                                                                                    {
+                                                                                        "display_url": "mnbvc.253874.net",
+                                                                                        "expanded_url": "https://mnbvc.253874.net",
+                                                                                        "url": "https://t.co/jrdA0sepB9",
+                                                                                        "indices": [
+                                                                                            0,
+                                                                                            23
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "fast_followers_count": 0,
+                                                                        "favourites_count": 33940,
+                                                                        "followers_count": 23732,
+                                                                        "friends_count": 2173,
+                                                                        "has_custom_timelines": true,
+                                                                        "is_translator": false,
+                                                                        "listed_count": 226,
+                                                                        "location": "Japan,Tokyo",
+                                                                        "media_count": 2573,
+                                                                        "name": "零零發",
+                                                                        "normal_followers_count": 23732,
+                                                                        "pinned_tweet_ids_str": [
+                                                                            "1894345130938937435"
+                                                                        ],
+                                                                        "possibly_sensitive": false,
+                                                                        "profile_banner_url": "https://pbs.twimg.com/profile_banners/2617111/1692198501",
+                                                                        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1655985931223191552/V6XKAdm7_normal.jpg",
+                                                                        "profile_interstitial_type": "",
+                                                                        "screen_name": "linglingfa",
+                                                                        "statuses_count": 38775,
+                                                                        "translator_type": "none",
+                                                                        "url": "https://t.co/jrdA0sepB9",
+                                                                        "verified": false,
+                                                                        "want_retweets": true,
+                                                                        "withheld_in_countries": []
+                                                                    },
+                                                                    "professional": {
+                                                                        "rest_id": "1540395181676957696",
+                                                                        "professional_type": "Creator",
+                                                                        "category": [
+                                                                            {
+                                                                                "id": 713,
+                                                                                "name": "Science & Technology",
+                                                                                "icon_name": "IconBriefcaseStroke"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    "tipjar_settings": {}
+                                                                }
+                                                            }
+                                                        },
+                                                        "unmention_data": {},
+                                                        "edit_control": {
+                                                            "edit_tweet_ids": [
+                                                                "1895696668475170938"
+                                                            ],
+                                                            "editable_until_msecs": "1740807880000",
+                                                            "is_edit_eligible": true,
+                                                            "edits_remaining": "5"
+                                                        },
+                                                        "is_translatable": true,
+                                                        "views": {
+                                                            "count": "612",
+                                                            "state": "EnabledWithCount"
+                                                        },
+                                                        "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+                                                        "grok_analysis_button": true,
+                                                        "legacy": {
+                                                            "bookmark_count": 0,
+                                                            "bookmarked": false,
+                                                            "created_at": "Sat Mar 01 04:44:40 +0000 2025",
+                                                            "conversation_id_str": "1895696668475170938",
+                                                            "display_text_range": [
+                                                                0,
+                                                                12
+                                                            ],
+                                                            "entities": {
+                                                                "hashtags": [],
+                                                                "media": [
+                                                                    {
+                                                                        "display_url": "pic.x.com/8678uMEBPa",
+                                                                        "expanded_url": "https://x.com/linglingfa/status/1895696668475170938/photo/1",
+                                                                        "id_str": "1895696666717745152",
+                                                                        "indices": [
+                                                                            13,
+                                                                            36
+                                                                        ],
+                                                                        "media_key": "3_1895696666717745152",
+                                                                        "media_url_https": "https://pbs.twimg.com/media/Gk7eExWacAAU27s.jpg",
+                                                                        "type": "photo",
+                                                                        "url": "https://t.co/8678uMEBPa",
+                                                                        "ext_media_availability": {
+                                                                            "status": "Available"
+                                                                        },
+                                                                        "features": {
+                                                                            "large": {
+                                                                                "faces": [
+                                                                                    {
+                                                                                        "x": 345,
+                                                                                        "y": 629,
+                                                                                        "h": 105,
+                                                                                        "w": 105
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            "medium": {
+                                                                                "faces": [
+                                                                                    {
+                                                                                        "x": 298,
+                                                                                        "y": 544,
+                                                                                        "h": 90,
+                                                                                        "w": 90
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            "small": {
+                                                                                "faces": [
+                                                                                    {
+                                                                                        "x": 169,
+                                                                                        "y": 308,
+                                                                                        "h": 51,
+                                                                                        "w": 51
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            "orig": {
+                                                                                "faces": [
+                                                                                    {
+                                                                                        "x": 345,
+                                                                                        "y": 629,
+                                                                                        "h": 105,
+                                                                                        "w": 105
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "sizes": {
+                                                                            "large": {
+                                                                                "h": 1386,
+                                                                                "w": 1058,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "medium": {
+                                                                                "h": 1200,
+                                                                                "w": 916,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "small": {
+                                                                                "h": 680,
+                                                                                "w": 519,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "thumb": {
+                                                                                "h": 150,
+                                                                                "w": 150,
+                                                                                "resize": "crop"
+                                                                            }
+                                                                        },
+                                                                        "original_info": {
+                                                                            "height": 1386,
+                                                                            "width": 1058,
+                                                                            "focus_rects": [
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 293,
+                                                                                    "w": 1058,
+                                                                                    "h": 592
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 60,
+                                                                                    "w": 1058,
+                                                                                    "h": 1058
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 1058,
+                                                                                    "h": 1206
+                                                                                },
+                                                                                {
+                                                                                    "x": 365,
+                                                                                    "y": 0,
+                                                                                    "w": 693,
+                                                                                    "h": 1386
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 1058,
+                                                                                    "h": 1386
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        "media_results": {
+                                                                            "result": {
+                                                                                "media_key": "3_1895696666717745152"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ],
+                                                                "symbols": [],
+                                                                "timestamps": [],
+                                                                "urls": [],
+                                                                "user_mentions": []
+                                                            },
+                                                            "extended_entities": {
+                                                                "media": [
+                                                                    {
+                                                                        "display_url": "pic.x.com/8678uMEBPa",
+                                                                        "expanded_url": "https://x.com/linglingfa/status/1895696668475170938/photo/1",
+                                                                        "id_str": "1895696666717745152",
+                                                                        "indices": [
+                                                                            13,
+                                                                            36
+                                                                        ],
+                                                                        "media_key": "3_1895696666717745152",
+                                                                        "media_url_https": "https://pbs.twimg.com/media/Gk7eExWacAAU27s.jpg",
+                                                                        "type": "photo",
+                                                                        "url": "https://t.co/8678uMEBPa",
+                                                                        "ext_media_availability": {
+                                                                            "status": "Available"
+                                                                        },
+                                                                        "features": {
+                                                                            "large": {
+                                                                                "faces": [
+                                                                                    {
+                                                                                        "x": 345,
+                                                                                        "y": 629,
+                                                                                        "h": 105,
+                                                                                        "w": 105
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            "medium": {
+                                                                                "faces": [
+                                                                                    {
+                                                                                        "x": 298,
+                                                                                        "y": 544,
+                                                                                        "h": 90,
+                                                                                        "w": 90
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            "small": {
+                                                                                "faces": [
+                                                                                    {
+                                                                                        "x": 169,
+                                                                                        "y": 308,
+                                                                                        "h": 51,
+                                                                                        "w": 51
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            "orig": {
+                                                                                "faces": [
+                                                                                    {
+                                                                                        "x": 345,
+                                                                                        "y": 629,
+                                                                                        "h": 105,
+                                                                                        "w": 105
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        "sizes": {
+                                                                            "large": {
+                                                                                "h": 1386,
+                                                                                "w": 1058,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "medium": {
+                                                                                "h": 1200,
+                                                                                "w": 916,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "small": {
+                                                                                "h": 680,
+                                                                                "w": 519,
+                                                                                "resize": "fit"
+                                                                            },
+                                                                            "thumb": {
+                                                                                "h": 150,
+                                                                                "w": 150,
+                                                                                "resize": "crop"
+                                                                            }
+                                                                        },
+                                                                        "original_info": {
+                                                                            "height": 1386,
+                                                                            "width": 1058,
+                                                                            "focus_rects": [
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 293,
+                                                                                    "w": 1058,
+                                                                                    "h": 592
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 60,
+                                                                                    "w": 1058,
+                                                                                    "h": 1058
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 1058,
+                                                                                    "h": 1206
+                                                                                },
+                                                                                {
+                                                                                    "x": 365,
+                                                                                    "y": 0,
+                                                                                    "w": 693,
+                                                                                    "h": 1386
+                                                                                },
+                                                                                {
+                                                                                    "x": 0,
+                                                                                    "y": 0,
+                                                                                    "w": 1058,
+                                                                                    "h": 1386
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        "media_results": {
+                                                                            "result": {
+                                                                                "media_key": "3_1895696666717745152"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "favorite_count": 3,
+                                                            "favorited": false,
+                                                            "full_text": "蜜雪冰城真会玩。\n233 https://t.co/8678uMEBPa",
+                                                            "is_quote_status": false,
+                                                            "lang": "zh",
+                                                            "possibly_sensitive": false,
+                                                            "possibly_sensitive_editable": true,
+                                                            "quote_count": 0,
+                                                            "reply_count": 2,
+                                                            "retweet_count": 0,
+                                                            "retweeted": false,
+                                                            "user_id_str": "2617111",
+                                                            "id_str": "1895696668475170938"
+                                                        },
+                                                        "quick_promote_eligibility": {
+                                                            "eligibility": "IneligibleNotProfessional"
+                                                        }
+                                                    }
+                                                },
+                                                "tweetDisplayType": "Tweet"
+                                            },
+                                            "clientEventInfo": {
+                                                "component": "related_tweet",
+                                                "details": {
+                                                    "conversationDetails": {
+                                                        "conversationSection": "RelatedTweet"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                ],
+                                "displayType": "Vertical",
+                                "header": {
+                                    "displayType": "Classic",
+                                    "text": "Discover more",
+                                    "socialContext": {
+                                        "type": "TimelineGeneralContext",
+                                        "contextType": "TextOnly",
+                                        "text": "Sourced from across X"
+                                    },
+                                    "sticky": true
+                                },
+                                "clientEventInfo": {
+                                    "component": "related_tweet",
+                                    "details": {
+                                        "conversationDetails": {
+                                            "conversationSection": "RelatedTweet"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "entryId": "cursor-showmorethreadsprompt-42645404274214690",
+                            "sortIndex": "7327652838742736665",
+                            "content": {
+                                "entryType": "TimelineTimelineItem",
+                                "__typename": "TimelineTimelineItem",
+                                "itemContent": {
+                                    "itemType": "TimelineTimelineCursor",
+                                    "__typename": "TimelineTimelineCursor",
+                                    "value": "HAAAAPANHBkmnMHTnbra_c409IHV5e-E7840JQYRFRAAAA",
+                                    "cursorType": "ShowMoreThreadsPrompt",
+                                    "displayTreatment": {
+                                        "actionText": "Show",
+                                        "labelText": "Show additional replies, including those that may contain offensive content"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "TimelineTerminateTimeline",
+                    "direction": "Top"
+                }
+            ]
+        }
+    }
+}

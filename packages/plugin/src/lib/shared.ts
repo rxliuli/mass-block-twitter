@@ -1,7 +1,7 @@
 import { get } from 'idb-keyval'
 import map from 'just-map-object'
 import { spamContext } from './filter'
-import { ModListSubscribedUserResponse } from 'packages/server/src/lib'
+import { ModListSubscribedUserResponse } from '@mass-block-twitter/server'
 
 export async function getSpamUsers(): Promise<
   Record<string, 'spam' | 'report'>

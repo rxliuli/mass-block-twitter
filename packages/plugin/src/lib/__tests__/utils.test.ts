@@ -42,6 +42,7 @@ import {
   MutedWordRule,
 } from '$lib/filter'
 import TweetDetail8ProbableSpam from './assets/TweetDetail8ProbableSpam.json'
+import CreateTweet from './assets/CreateTweet.json'
 
 describe('extractObjects', () => {
   it('extractObjects 1', () => {
@@ -331,6 +332,11 @@ describe('parseTweets', () => {
       '1894889195824615903',
       '1894741492708647035',
     ])
+  })
+  it('parseTweets for create tweet', () => {
+    const tweets = parseTweets(CreateTweet)
+    expect(tweets).length(1)
+    expect(tweets[0].id).toEqual('1895870325092737311')
   })
 })
 

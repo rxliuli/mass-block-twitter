@@ -1,0 +1,152 @@
+{
+  "data": {
+      "create_tweet": {
+          "tweet_results": {
+              "result": {
+                  "rest_id": "1895870325092737311",
+                  "core": {
+                      "user_results": {
+                          "result": {
+                              "__typename": "User",
+                              "id": "VXNlcjo4ODg0NjU3MTUyNjY4MDk4NTY=",
+                              "rest_id": "888465715266809856",
+                              "affiliates_highlighted_label": {},
+                              "has_graduated_access": true,
+                              "parody_commentary_fan_label": "None",
+                              "is_blue_verified": false,
+                              "profile_image_shape": "Circle",
+                              "legacy": {
+                                  "following": false,
+                                  "can_dm": true,
+                                  "can_media_tag": false,
+                                  "created_at": "Fri Jul 21 18:28:28 +0000 2017",
+                                  "default_profile": false,
+                                  "default_profile_image": false,
+                                  "description": "放下助人情节，尊重他人命运！#ts #go #日本語初心者",
+                                  "entities": {
+                                      "description": {
+                                          "urls": []
+                                      },
+                                      "url": {
+                                          "urls": [
+                                              {
+                                                  "display_url": "blog.rxliuli.com",
+                                                  "expanded_url": "https://blog.rxliuli.com",
+                                                  "url": "https://t.co/Q4J3NvpdQ3",
+                                                  "indices": [
+                                                      0,
+                                                      23
+                                                  ]
+                                              }
+                                          ]
+                                      }
+                                  },
+                                  "fast_followers_count": 0,
+                                  "favourites_count": 2076,
+                                  "followers_count": 1605,
+                                  "friends_count": 351,
+                                  "has_custom_timelines": true,
+                                  "is_translator": false,
+                                  "listed_count": 16,
+                                  "location": "",
+                                  "media_count": 2736,
+                                  "name": "琉璃",
+                                  "needs_phone_verification": false,
+                                  "normal_followers_count": 1605,
+                                  "pinned_tweet_ids_str": [],
+                                  "possibly_sensitive": false,
+                                  "profile_banner_url": "https://pbs.twimg.com/profile_banners/888465715266809856/1740737883",
+                                  "profile_image_url_https": "https://pbs.twimg.com/profile_images/896290684298174464/Yk3siS2C_normal.jpg",
+                                  "profile_interstitial_type": "",
+                                  "screen_name": "rxliuli",
+                                  "statuses_count": 11124,
+                                  "translator_type": "none",
+                                  "url": "https://t.co/Q4J3NvpdQ3",
+                                  "verified": false,
+                                  "want_retweets": false,
+                                  "withheld_in_countries": []
+                              },
+                              "tipjar_settings": {}
+                          }
+                      }
+                  },
+                  "unmention_data": {},
+                  "edit_control": {
+                      "edit_tweet_ids": [
+                          "1895870325092737311"
+                      ],
+                      "editable_until_msecs": "1740849283000",
+                      "is_edit_eligible": false,
+                      "edits_remaining": "5"
+                  },
+                  "is_translatable": true,
+                  "views": {
+                      "state": "Enabled"
+                  },
+                  "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                  "grok_analysis_button": true,
+                  "legacy": {
+                      "bookmark_count": 0,
+                      "bookmarked": false,
+                      "created_at": "Sat Mar 01 16:14:43 +0000 2025",
+                      "conversation_id_str": "1895700022962110910",
+                      "display_text_range": [
+                          34,
+                          112
+                      ],
+                      "entities": {
+                          "hashtags": [],
+                          "symbols": [],
+                          "timestamps": [],
+                          "urls": [],
+                          "user_mentions": [
+                              {
+                                  "id_str": "2751923820",
+                                  "name": "饭特稀",
+                                  "screen_name": "mytwillot",
+                                  "indices": [
+                                      0,
+                                      10
+                                  ]
+                              },
+                              {
+                                  "id_str": "126880447",
+                                  "name": "面条",
+                                  "screen_name": "miantiao_me",
+                                  "indices": [
+                                      11,
+                                      23
+                                  ]
+                              },
+                              {
+                                  "id_str": "1865299069092139008",
+                                  "name": "Indie Maker Hu",
+                                  "screen_name": "javay_hu",
+                                  "indices": [
+                                      24,
+                                      33
+                                  ]
+                              }
+                          ]
+                      },
+                      "favorite_count": 0,
+                      "favorited": false,
+                      "full_text": "@mytwillot @miantiao_me @javay_hu 感谢推荐，吾辈最早也用 vps，后面换了 docker，再后来就是 vercel/cf 这种前后端一体化的了，但目前来看虽然前期零成本但也有一些烦人的局限性",
+                      "in_reply_to_screen_name": "mytwillot",
+                      "in_reply_to_status_id_str": "1895867966950162441",
+                      "in_reply_to_user_id_str": "2751923820",
+                      "is_quote_status": false,
+                      "lang": "zh",
+                      "quote_count": 0,
+                      "reply_count": 0,
+                      "retweet_count": 0,
+                      "retweeted": false,
+                      "user_id_str": "888465715266809856",
+                      "id_str": "1895870325092737311"
+                  },
+                  "unmention_info": {}
+              }
+          }
+      }
+  }
+}

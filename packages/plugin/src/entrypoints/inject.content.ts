@@ -65,14 +65,14 @@ function loggerRequestHeaders(): Middleware {
   }
 }
 
-function loggerViewUsers(): Middleware {
+function loggerUsers(): Middleware {
   return async (c, next) => {
     await next()
     if (c.res.headers.get('content-type')?.includes('application/json')) {
       const json = await c.res.clone().json()
       const users = parseUserRecords(json)
       if (users.length > 0) {
-        // console.log('loggerViewUsers', c.req.url, json, users)
+        // console.log('loggerUsers', c.req.url, json, users)
         await dbApi.users.record(users)
       }
     }
@@ -104,29 +104,34 @@ function getFilters(settings: Settings) {
   return filters
 }
 
-async function firstTimeFilterTweets(json: any) {
-  const tweets = parseTweets(json)
-  if (tweets.length === 0) {
-    return
+function loggerTweets(): Middleware {
+  return async (c, next) => {
+    await next()
+    if (c.res.headers.get('content-type')?.includes('application/json')) {
+      const json = await c.res.clone().json()
+      const tweets = parseTweets(json)
+      if (tweets.length === 0) {
+        return
+      }
+      await dbApi.tweets.record(
+        tweets.map((it) => ({
+          ...omit(it, 'user'),
+          updated_at: new Date().toISOString(),
+          user_id: it.user.id,
+        })),
+      )
+      await refershSpamContext()
+      tweets.forEach(async (it) => {
+        // Don't block following users
+        if (it.user.following) {
+          return
+        }
+        if (spamContext.spamUsers[it.user.id] === 'report') {
+          reportSpamTweetIds.add(it.id)
+        }
+      })
+    }
   }
-  await dbApi.tweets.record(
-    tweets.map((it) => ({
-      ...omit(it, 'user'),
-      updated_at: new Date().toISOString(),
-      user_id: it.user.id,
-    })),
-  )
-  // console.log('tweets', tweets)
-  await refershSpamContext()
-  tweets.forEach(async (it) => {
-    // Don't block following users
-    if (it.user.following) {
-      return
-    }
-    if (spamContext.spamUsers[it.user.id] === 'report') {
-      reportSpamTweetIds.add(it.id)
-    }
-  })
 }
 
 const queue: User[] = []
@@ -194,7 +199,6 @@ function handleNotifications(): Middleware {
     }
     try {
       const json = await c.res.clone().json()
-      await firstTimeFilterTweets(json)
       const isShow = flowFilter(getFilters(getSettings()), onAction)
       const hideNotifications: [string, FilterData][] = []
       const updatedJson = filterNotifications(json, (it) => {
@@ -226,7 +230,6 @@ function handleTweets(): Middleware {
     }
     try {
       const json = await c.res.clone().json()
-      await firstTimeFilterTweets(json)
       const isShow = flowFilter(getFilters(getSettings()), onAction)
       const hideTweets: [string, ParsedTweet][] = []
       const filteredTweets = filterTweets(json, (it) => {
@@ -311,7 +314,8 @@ export default defineContentScript({
     new Vista()
       .use(blockClientEvent())
       .use(loggerRequestHeaders())
-      .use(loggerViewUsers())
+      .use(loggerUsers())
+      .use(loggerTweets())
       .use(handleTweets())
       .use(handleNotifications())
       .intercept()

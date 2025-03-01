@@ -7,6 +7,8 @@
   import WordRuleEdit from './components/WordRuleEdit.svelte'
   import { ulid } from 'ulidx'
   import { getMutedWordRules, type MutedWordRule } from '$lib/filter'
+  import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
+  import { toast } from 'svelte-sonner'
 
   let rules = localStore<MutedWordRule[]>(
     MUTED_WORD_RULES_KEY,
@@ -27,7 +29,15 @@
       checkpoints: ['name', 'screen_name', 'description', 'tweet'],
     },
   })
+  const authInfo = useAuthInfo()
   function onAddKeyword() {
+    if ($rules.length >= 100 && !authInfo.value?.isPro) {
+      toast.info('Free version has 100-keyword limit', {
+        description:
+          'please login and upgrade to Pro to add more keyword rules',
+      })
+      return
+    }
     editState.open = true
     editState.index = undefined
     editState.rule = {

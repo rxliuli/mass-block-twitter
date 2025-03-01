@@ -69,6 +69,7 @@
             { value: 'name', label: 'Name' },
             { value: 'screen_name', label: 'Screen Name' },
             { value: 'description', label: 'Description' },
+            { value: 'location', label: 'Location' },
             { value: 'tweet', label: 'Tweet' },
           ]}
           bind:value={() => rule.checkpoints,

@@ -95,4 +95,19 @@ describe('mutedWordsFilter', () => {
       filter.tweetCondition!({ text: 'test2', user: {} } as ParsedTweet),
     ).toBe('next')
   })
+  it('should match location when rule matches', () => {
+    localStorage.setItem(
+      MUTED_WORD_RULES_KEY,
+      JSON.stringify([
+        {
+          id: '1',
+          keyword: 'test1',
+          type: 'block',
+          checkpoints: ['location'],
+        },
+      ] as MutedWordRule[]),
+    )
+    const filter = mutedWordsFilter()
+    expect(filter.userCondition!({ location: 'test1' } as User)).toBe('block')
+  })
 })

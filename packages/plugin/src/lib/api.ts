@@ -114,6 +114,7 @@ const timelineUserSchema = z.object({
     friends_count: z.number().optional(),
     default_profile: z.boolean().optional(),
     default_profile_image: z.boolean().optional(),
+    location: z.string().optional().nullable(),
   }),
 })
 
@@ -137,6 +138,7 @@ function parseTimelineUser(
     default_profile: tweetUser.legacy.default_profile,
     default_profile_image: tweetUser.legacy.default_profile_image,
     is_blue_verified: tweetUser.is_blue_verified,
+    location: tweetUser.legacy.location ?? undefined,
   }
 }
 
@@ -154,6 +156,7 @@ const notifacationUserSchema = z.object({
   default_profile: z.boolean().optional(),
   default_profile_image: z.boolean().optional(),
   ext_is_blue_verified: z.boolean(),
+  location: z.string().optional().nullable(),
 })
 function parseNotificationUser(
   user: z.infer<typeof notifacationUserSchema>,

@@ -16,18 +16,22 @@
     localStorageAdapter(),
   )
 
+  function newRule(): MutedWordRule {
+    return {
+      id: ulid(),
+      keyword: '',
+      type: 'hide',
+      checkpoints: ['name', 'screen_name', 'description', 'location', 'tweet'],
+    }
+  }
+
   let editState = $state<{
     open: boolean
     rule: MutedWordRule
     index?: number
   }>({
     open: false,
-    rule: {
-      id: ulid(),
-      keyword: '',
-      type: 'hide',
-      checkpoints: ['name', 'screen_name', 'description', 'tweet'],
-    },
+    rule: newRule(),
   })
   const authInfo = useAuthInfo()
   function onAddKeyword() {
@@ -40,12 +44,7 @@
     }
     editState.open = true
     editState.index = undefined
-    editState.rule = {
-      id: ulid(),
-      keyword: '',
-      type: 'hide',
-      checkpoints: ['name', 'screen_name', 'description', 'tweet'],
-    }
+    editState.rule = newRule()
   }
   function onEditKeyword(index: number) {
     editState.open = true

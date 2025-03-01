@@ -19,6 +19,7 @@ export interface User {
   created_at?: string
   updated_at: string // add to idb time
   is_blue_verified?: boolean
+  location?: string
 }
 
 export type TweetMediaType = 'photo' | 'video' | 'animated_gif'
@@ -60,6 +61,7 @@ export interface Activity {
   user_profile_image_url?: string
   tweet_id?: string
   tweet_content?: string
+  location?: string
 }
 
 export interface MyDB extends DBSchema {

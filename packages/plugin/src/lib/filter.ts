@@ -83,7 +83,7 @@ export interface MutedWordRule {
   id: string
   keyword: string
   type: Extract<FilterResult, 'hide' | 'block'>
-  checkpoints: ('name' | 'screen_name' | 'description' | 'tweet')[]
+  checkpoints: ('name' | 'screen_name' | 'description' | 'location' | 'tweet')[]
 }
 
 export function getMutedWordRules(): MutedWordRule[] {
@@ -99,7 +99,13 @@ export function getMutedWordRules(): MutedWordRule[] {
           id: ulid(),
           keyword: it,
           type: 'hide',
-          checkpoints: ['name', 'screen_name', 'description', 'tweet'],
+          checkpoints: [
+            'name',
+            'screen_name',
+            'description',
+            'location',
+            'tweet',
+          ],
         } satisfies MutedWordRule),
     )
   }
@@ -109,7 +115,7 @@ export function getMutedWordRules(): MutedWordRule[] {
 export function mutedWordsFilter(): TweetFilter {
   const rules = getMutedWordRules()
   function filter(
-    user: Pick<User, 'name' | 'screen_name' | 'description'> & {
+    user: Pick<User, 'name' | 'screen_name' | 'description' | 'location'> & {
       tweet?: string
     },
   ) {

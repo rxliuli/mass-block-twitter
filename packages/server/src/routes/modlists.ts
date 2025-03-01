@@ -11,12 +11,13 @@ import { convertUserParamsToDBUser } from './twitter'
 import { and, desc, eq, inArray, InferSelectModel, lt, sql } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
 import { getTableAliasedColumns } from '../lib/drizzle'
+import { omit } from 'es-toolkit'
 
 const modlists = new Hono<HonoEnv>()
 
 function upsertUser(
   db: ReturnType<typeof drizzle>,
-  userParams: typeof userSchema._type,
+  userParams: z.infer<typeof userSchema>,
 ) {
   const twitterUser = convertUserParamsToDBUser(userParams)
   return db
@@ -24,7 +25,7 @@ function upsertUser(
     .values(twitterUser)
     .onConflictDoUpdate({
       target: user.id,
-      set: twitterUser,
+      set: omit(twitterUser, ['id']),
     })
     .returning()
 }
@@ -381,7 +382,10 @@ export type ModListUserCheckRequest = z.infer<typeof checkUserSchema>
 export type ModListUserCheckResponse = Record<string, boolean>
 async function checkUsers(c: Context, validated: ModListUserCheckPostRequest) {
   const db = drizzle(c.env.DB)
-  // TODO need to upsert users for cloudflare queue async
+  if (validated.users.length > 0) {
+    // async upsert users, avoid blocking
+    db.batch([...validated.users.map((it) => upsertUser(db, it))] as any)
+  }
   const subscriptions = await db
     .select({ twitterUserId: modListUser.twitterUserId })
     .from(modListUser)
@@ -404,7 +408,7 @@ async function checkUsers(c: Context, validated: ModListUserCheckPostRequest) {
 }
 const checkUserPostSchema = z.object({
   modListId: z.string(),
-  users: z.array(z.object({ id: z.string() })),
+  users: z.array(userSchema),
 })
 export type ModListUserCheckPostRequest = z.infer<typeof checkUserPostSchema>
 modlists.post(

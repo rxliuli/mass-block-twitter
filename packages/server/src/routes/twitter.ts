@@ -12,7 +12,7 @@ import { drizzle } from 'drizzle-orm/d1'
 import { spamReport, tweet, user } from '../db/schema'
 import { and, desc, eq, gte, InferInsertModel, sql } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
-import { uniqBy } from 'es-toolkit'
+import { omit, uniqBy } from 'es-toolkit'
 import { rateLimiter } from 'hono-rate-limiter'
 import { WorkersKVStore } from '../lib/KVStore'
 
@@ -88,7 +88,7 @@ twitter
           .onConflictDoUpdate({
             target: user.id,
             set: {
-              ...twitterUser,
+              ...omit(twitterUser, ['id']),
               spamReportCount: sql`${user.spamReportCount} + ${
                 isSpam && !isReportThisUser ? 1 : 0
               }`,
@@ -121,7 +121,7 @@ twitter
           .onConflictDoUpdate({
             target: tweet.id,
             set: {
-              ..._tweet,
+              ...omit(_tweet, ['id']),
               spamReportCount: sql`${tweet.spamReportCount} + 1`,
             },
           })
@@ -176,17 +176,6 @@ twitter
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         })
-        // await prisma.spamReport.create({
-        //   data: {
-        //     spamUserId: validated.spamUser.id,
-        //     reportUserId: validated.reportUser.id,
-        //     spamTweetId: validated.context.tweet.id,
-        //     pageType: validated.context.page_type,
-        //     pageUrl: validated.context.page_url,
-        //     createdAt: new Date(),
-        //     updatedAt: new Date(),
-        //   },
-        // })
       }
       function createRelationTweetsAndUsers(
         relationTweets: NonNullable<
@@ -209,23 +198,10 @@ twitter
               .values(convertTweet(it))
               .onConflictDoUpdate({
                 target: tweet.id,
-                set: convertTweet(it),
+                set: omit(convertTweet(it), ['id']),
               }),
           ),
         ]
-        // await Promise.all(
-        //   relationTweets.map(async (it) => {
-        //     const tweet = convertTweet(it.tweet)
-        //     await prisma.tweet.upsert({
-        //       where: {
-        //         id: it.tweet.id,
-        //       },
-        //       update: tweet,
-        //       create: tweet,
-        //     })
-        //     await createOrUpdateUser(it.user, false)
-        //   }),
-        // )
       }
       const list: BatchItem<'sqlite'>[] = [
         createOrUpdateUser(validated.spamUser, true),

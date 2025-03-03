@@ -6,7 +6,13 @@ import { ulid } from 'ulidx'
 import { userSchema } from '../lib/request'
 import { getTokenInfo } from '../middlewares/auth'
 import { drizzle } from 'drizzle-orm/d1'
-import { modList, modListSubscription, modListUser, user } from '../db/schema'
+import {
+  modList,
+  modListRule,
+  modListSubscription,
+  modListUser,
+  user,
+} from '../db/schema'
 import { convertUserParamsToDBUser } from './twitter'
 import { and, desc, eq, inArray, InferSelectModel, lt, sql } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
@@ -247,6 +253,17 @@ modlists
   )
 
 export type ModListSubscribeResponse = InferSelectModel<typeof modList>[]
+modlists.get('/subscribed/metadata', async (c) => {
+  const db = drizzle(c.env.DB)
+  const tokenInfo = c.get('jwtPayload')
+  const _modList = await db
+    .select()
+    .from(modListSubscription)
+    .innerJoin(modList, eq(modListSubscription.modListId, modList.id))
+    .where(eq(modListSubscription.localUserId, tokenInfo.sub))
+  return c.json<ModListSubscribeResponse>(_modList.map((it) => it.ModList))
+})
+// TODO @deprecated
 modlists.get('/subscribed', async (c) => {
   const db = drizzle(c.env.DB)
   const tokenInfo = c.get('jwtPayload')
@@ -377,7 +394,6 @@ const checkUserSchema = z.object({
     }
   }),
 })
-
 export type ModListUserCheckRequest = z.infer<typeof checkUserSchema>
 export type ModListUserCheckResponse = Record<string, boolean>
 async function checkUsers(c: Context, validated: ModListUserCheckPostRequest) {
@@ -419,10 +435,120 @@ modlists.post(
   },
 )
 
-export type ModListSubscribedUserResponse = {
+const ruleConditionSchema = z.object({
+  or: z.array(
+    z.object({
+      and: z.array(
+        z.object({
+          field: z.string(),
+          operator: z.string(),
+          value: z.union([z.string(), z.number(), z.boolean()]),
+        }),
+      ),
+    }),
+  ),
+})
+const addRuleSchema = z.object({
+  modListId: z.string(),
+  name: z.string(),
+  condition: ruleConditionSchema,
+})
+export type ModListAddRuleRequest = z.infer<typeof addRuleSchema>
+export type ModListAddRuleResponse = InferSelectModel<typeof modListRule>
+modlists.post('/rule', zValidator('json', addRuleSchema), async (c) => {
+  const validated = c.req.valid('json')
+  const db = drizzle(c.env.DB)
+  const r = await db
+    .insert(modListRule)
+    .values({
+      id: ulid(),
+      name: validated.name,
+      modListId: validated.modListId,
+      condition: validated.condition,
+    })
+    .returning()
+    .get()
+  return c.json<ModListAddRuleResponse>(r)
+})
+
+const updateRuleSchema = z.object({
+  name: z.string(),
+  condition: ruleConditionSchema,
+})
+export type ModListUpdateRuleRequest = z.infer<typeof updateRuleSchema>
+export type ModListUpdateRuleResponse = InferSelectModel<typeof modListRule>
+modlists.put(
+  '/rule/:id',
+  zValidator('param', z.object({ id: z.string() })),
+  zValidator('json', updateRuleSchema),
+  async (c) => {
+    const validated = c.req.valid('param')
+    const validatedJson = c.req.valid('json')
+    const db = drizzle(c.env.DB)
+    const tokenInfo = c.get('jwtPayload')
+    const _modListRule = await db
+      .select()
+      .from(modListRule)
+      .innerJoin(modList, eq(modListRule.modListId, modList.id))
+      .where(
+        and(
+          eq(modListRule.id, validated.id),
+          eq(modList.localUserId, tokenInfo.sub),
+        ),
+      )
+      .get()
+    if (!_modListRule) {
+      return c.json({ code: 'modListRuleNotFound' }, 404)
+    }
+    const r = await db
+      .update(modListRule)
+      .set({
+        name: validatedJson.name,
+        condition: validatedJson.condition,
+      })
+      .where(eq(modListRule.id, validated.id))
+      .returning()
+      .get()
+    return c.json<ModListUpdateRuleResponse>(r)
+  },
+)
+
+const removeRuleSchema = z.object({
+  id: z.string(),
+})
+export type ModListRemoveRuleRequest = z.infer<typeof removeRuleSchema>
+export type ModListRemoveRuleResponse = InferSelectModel<typeof modListRule>
+modlists.delete(
+  '/rule/:id',
+  zValidator('param', removeRuleSchema),
+  async (c) => {
+    const validated = c.req.valid('param')
+    const db = drizzle(c.env.DB)
+    const tokenInfo = c.get('jwtPayload')
+    const _modListRule = await db
+      .select()
+      .from(modListRule)
+      .innerJoin(modList, eq(modListRule.modListId, modList.id))
+      .where(
+        and(
+          eq(modListRule.id, validated.id),
+          eq(modList.localUserId, tokenInfo.sub),
+        ),
+      )
+      .get()
+    if (!_modListRule) {
+      return c.json({ code: 'modListRuleNotFound' }, 404)
+    }
+    await db.delete(modListRule).where(eq(modListRule.id, validated.id))
+    return c.json({ code: 'success' })
+  },
+)
+
+export type ModListSubscribedUserAndRulesResponse = {
   modListId: string
   action: 'block' | 'hide'
   twitterUserIds: string[]
+  conditions: InferSelectModel<typeof modListRule>['condition'][]
 }[]
 modlists.get('/subscribed/users', async (c) => {
   const tokenInfo = c.get('jwtPayload')
@@ -431,32 +557,46 @@ modlists.get('/subscribed/users', async (c) => {
     .select({
       modListId: modListSubscription.modListId,
       action: modListSubscription.action,
-      twitterUserId: modListUser.twitterUserId,
+      modListUsers: sql<string>`json_group_array(DISTINCT ${modListUser.twitterUserId})`,
+      modListRules: sql<string>`json_group_array(DISTINCT ${modListRule.condition})`,
     })
     .from(modListSubscription)
     .leftJoin(
       modListUser,
       eq(modListSubscription.modListId, modListUser.modListId),
     )
+    .leftJoin(
+      modListRule,
+      eq(modListSubscription.modListId, modListRule.modListId),
+    )
     .where(eq(modListSubscription.localUserId, tokenInfo.sub))
-  const modListMap = _modLists.reduce((acc, it) => {
-    if (!acc[it.modListId] && it.twitterUserId) {
-      acc[it.modListId] = {
-        modListId: it.modListId,
-        action: it.action ?? 'hide',
-        twitterUserIds: [],
-      }
-    }
-    if (it.twitterUserId) {
-      acc[it.modListId].twitterUserIds.push(it.twitterUserId)
-    }
-    return acc
-  }, {} as Record<string, ModListSubscribedUserResponse[number]>)
-  return c.json<ModListSubscribedUserResponse>(Object.values(modListMap), {
-    headers: {
-      'Cache-Control': 'public, max-age=3600',
+    .groupBy(modListSubscription.modListId, modListSubscription.action)
+  return c.json<ModListSubscribedUserAndRulesResponse>(
+    _modLists
+      .map((item) => {
+        const twitterUserIds = JSON.parse(item.modListUsers).filter(
+          (id: any) => id !== null && id !== undefined && id !== '',
+        ) as string[]
+        const conditionsStr = JSON.parse(item.modListRules).filter(
+          (c: any) => c !== null && c !== undefined && c !== '',
+        ) as string[]
+        const conditions = conditionsStr.map((c: string) =>
+          JSON.parse(c),
+        ) as InferSelectModel<typeof modListRule>['condition'][]
+        return {
+          modListId: item.modListId,
+          action: item.action as 'block' | 'hide',
+          twitterUserIds,
+          conditions,
+        }
+      })
+      .filter((it) => it.conditions.length > 0 || it.twitterUserIds.length > 0),
+    {
+      headers: {
+        'Cache-Control': 'public, max-age=3600',
+      },
     },
-  })
+  )
 })
 
 const searchSchema = z.object({
@@ -489,6 +629,7 @@ export type ModListGetResponse = InferSelectModel<typeof modList> & {
   subscribed: boolean
   owner: boolean
   twitterUser: InferSelectModel<typeof user>
+  action: 'block' | 'hide'
 }
 export type ModListGetErrorResponse = {
   code: 'modListNotFound'
@@ -534,6 +675,7 @@ search
       subscribed,
       owner,
       twitterUser: _modList[0].user,
+      action: subscribed ? 'block' : 'hide',
     })
   })
 
@@ -582,4 +724,36 @@ search
     } satisfies ModListUsersPageResponse)
   })
 
+const rulesSchema = z.object({
+  modListId: z.string(),
+  cursor: z.string().optional(),
+  limit: zodStringNumber().optional(),
+})
+export type ModListRulesRequest = z.infer<typeof rulesSchema>
+export type ModListRule = InferSelectModel<typeof modListRule>
+export type ModListRulesPageResponse = {
+  data: ModListRule[]
+  cursor?: string
+}
+search.get('/rules', zValidator('query', rulesSchema), async (c) => {
+  const validated = c.req.valid('query')
+  const db = drizzle(c.env.DB)
+  const conditions = [eq(modListRule.modListId, validated.modListId)]
+  if (validated.cursor) {
+    conditions.push(lt(modListRule.id, validated.cursor))
+  }
+  const limit = validated.limit ?? 20
+  const rules = await db
+    .select()
+    .from(modListRule)
+    .where(and(...conditions))
+    .orderBy(desc(modListRule.id))
+    .limit(limit)
+  return c.json<ModListRulesPageResponse>({
+    data: rules,
+    cursor: rules.length === limit ? rules[rules.length - 1]?.id : undefined,
+  })
+})
+
 export { modlists, search as modlistSearch }
+export type { ModListConditionItem } from '../db/schema'

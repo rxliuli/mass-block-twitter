@@ -6,7 +6,7 @@
   import { SETTINGS_KEY } from '$lib/constants'
   import { getSettings, type Settings } from '$lib/settings'
   import { localStorageAdapter, localStore } from '$lib/util/localStore'
-  import { languages } from './constants/languages'
+  import { languages } from '$lib/constants/languages'
 
   const settings = localStore<Settings>(
     SETTINGS_KEY,

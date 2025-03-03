@@ -28,6 +28,7 @@
   import { toast } from 'svelte-sonner'
   import { AutoSizer, List } from '@rxliuli/svelte-window'
   import { crossFetch } from '$lib/query'
+  import { cn } from '$lib/utils'
   let {
     open = $bindable(false),
     modListId,
@@ -170,7 +171,7 @@
 
 <Dialog.Root bind:open>
   <Dialog.Content
-    class="w-full max-w-[600px]"
+    class="w-full max-w-3xl"
     portalProps={{ to: shadcnConfig.get().portal }}
     trapFocus={false}
   >
@@ -200,7 +201,9 @@
               data={users}
               itemKey={'id'}
               itemHeight={54}
-              class="divide-y"
+              class={cn('divide-y', {
+                'divide-y-0': users.length === 0,
+              })}
               {height}
               onscroll={onScroll}
             >
@@ -255,7 +258,7 @@
 
     <Dialog.Footer>
       <Button class="w-full" variant="secondary" onclick={onCancel}>
-        Cancel
+        Close
       </Button>
     </Dialog.Footer>
   </Dialog.Content>

@@ -10,6 +10,7 @@ dist/
 .idea/workspace.xml
 .idea/usage.statistics.xml
 .idea/shelf
+database.sql
 
 # deps
 node_modules/

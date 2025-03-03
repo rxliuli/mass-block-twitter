@@ -1,6 +1,6 @@
 import { defineExtensionMessaging } from '@webext-core/messaging'
 import type {
-  ModListSubscribedUserResponse,
+  ModListSubscribedUserAndRulesResponse,
   TwitterSpamReportRequest,
 } from '@mass-block-twitter/server'
 
@@ -9,7 +9,7 @@ interface ProtocolMap {
 
   fetchSpamUsers(): Record<string, number>
   spamReport(request: TwitterSpamReportRequest): void
-  fetchModListSubscribedUsers(force?: boolean): ModListSubscribedUserResponse
+  fetchModListSubscribedUsers(force?: boolean): ModListSubscribedUserAndRulesResponse
 }
 
 export const { sendMessage, onMessage, removeAllListeners } =

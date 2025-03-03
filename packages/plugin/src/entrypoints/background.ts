@@ -3,7 +3,7 @@ import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
 import { onMessage, sendMessage } from '$lib/messaging'
 import {
   AuthInfo,
-  ModListSubscribedUserResponse,
+  ModListSubscribedUserAndRulesResponse,
 } from '@mass-block-twitter/server'
 
 export default defineBackground(() => {
@@ -96,6 +96,6 @@ export default defineBackground(() => {
         message: 'Failed to fetch mod list subscribed users',
       } as JsonError
     }
-    return (await resp.json()) as ModListSubscribedUserResponse
+    return (await resp.json()) as ModListSubscribedUserAndRulesResponse
   })
 })

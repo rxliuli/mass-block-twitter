@@ -101,7 +101,7 @@
         {#if isTopLevel}
           <Sidebar.Trigger />
         {:else}
-          <Button variant="link" size="icon" onclick={safeGoBack}>
+          <Button variant="link" size="icon" class="-ml-2" onclick={safeGoBack}>
             <ArrowLeftIcon class="w-4 h-4" />
           </Button>
         {/if}

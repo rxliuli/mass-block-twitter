@@ -189,7 +189,7 @@ export const modList = sqliteTable(
 export const modListUser = sqliteTable(
   'ModListUser',
   {
-    id: text('id').primaryKey(),
+    id: text('id').primaryKey().$defaultFn(ulid),
     modListId: text('modListId')
       .references(() => modList.id)
       .notNull(),
@@ -208,6 +208,38 @@ export const modListUser = sqliteTable(
 export const modListUserUnique = uniqueIndex('modListUser_unique').on(
   modList.id,
   modListUser.twitterUserId,
+)
+
+export type ModListConditionItem = {
+  field: string
+  operator: string
+  value: string | number | boolean
+}
+export const modListRule = sqliteTable(
+  'ModListRule',
+  {
+    id: text('id').primaryKey(),
+    name: text('name').notNull(),
+    modListId: text('modListId')
+      .references(() => modList.id)
+      .notNull(),
+    condition: text('condition', {
+      mode: 'json',
+    })
+      .notNull()
+      .$type<{
+        or: {
+          and: ModListConditionItem[]
+        }[]
+      }>(),
+    createdAt: text('createdAt')
+      .notNull()
+      .$defaultFn(() => new Date().toISOString()),
+    updatedAt: text('updatedAt')
+      .notNull()
+      .$defaultFn(() => new Date().toISOString()),
+  },
+  (table) => [index('modListRule_modListId_idx').on(table.modListId)],
 )
 
 // ModListSubscription table

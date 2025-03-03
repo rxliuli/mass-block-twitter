@@ -1,7 +1,7 @@
 import { get } from 'idb-keyval'
 import map from 'just-map-object'
 import { spamContext } from './filter'
-import { ModListSubscribedUserResponse } from '@mass-block-twitter/server'
+import { ModListSubscribedUserAndRulesResponse } from '@mass-block-twitter/server'
 
 export async function getSpamUsers(): Promise<
   Record<string, 'spam' | 'report'>
@@ -21,9 +21,9 @@ export async function getSpamUsers(): Promise<
 export const ModListSubscribedUsersKey =
   'MassBlockTwitterModListSubscribedUsers'
 
-export async function getSubscribedModLists(): Promise<ModListSubscribedUserResponse> {
+export async function getSubscribedModLists(): Promise<ModListSubscribedUserAndRulesResponse> {
   return ((await get(ModListSubscribedUsersKey)) ??
-    []) as ModListSubscribedUserResponse
+    []) as ModListSubscribedUserAndRulesResponse
 }
 
 export async function refershSpamContext() {

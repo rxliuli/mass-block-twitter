@@ -24,8 +24,13 @@ export type {
   ModListUsersPageResponse,
   ModListSearchResponse,
   ModListSubscribeResponse,
-  ModListSubscribedUserResponse,
+  ModListSubscribedUserAndRulesResponse,
   ModListUserCheckPostRequest,
+  ModListRulesPageResponse,
+  ModListRule,
+  ModListConditionItem,
+  ModListAddRuleRequest,
+  ModListUpdateRuleRequest,
 } from './routes/modlists'
 export type { CheckoutCompleteRequest } from './routes/billing'
 export type {

@@ -10,15 +10,22 @@ import type {
   ModListSearchResponse,
   ModListSubscribeResponse,
   ModListUsersRequest,
-  ModListSubscribedUserResponse,
+  ModListSubscribedUserAndRulesResponse,
   ModListRemoveTwitterUserRequest,
   ModListCreateResponse,
   ModListUserCheckPostRequest,
   ModListSubscribeRequest,
+  ModListAddRuleResponse,
+  ModListAddRuleRequest,
+  ModListUpdateRuleRequest,
+  ModListRulesPageResponse,
+  ModListRulesRequest,
+  ModListUpdateRuleResponse,
 } from '../src/routes/modlists'
 import { TwitterUser } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
-import { modListSubscription } from '../src/db/schema'
+import { modListRule, modListSubscription, modListUser } from '../src/db/schema'
+import { eq, name, sql } from 'drizzle-orm'
 
 describe('modlists', () => {
   const context = initCloudflareTest()
@@ -310,6 +317,13 @@ describe('modlists', () => {
       expect(resp2.status).toBe(404)
     })
   })
+  const getSubscribedUsers = async () => {
+    const resp1 = await fetch(`/api/modlists/subscribed/users`, {
+      headers: { Authorization: `Bearer ${context.token1}` },
+    })
+    expect(resp1.ok).true
+    return (await resp1.json()) as ModListSubscribedUserAndRulesResponse
+  }
   describe('subscribe', () => {
     let modListId: string
     beforeEach(async () => {
@@ -331,7 +345,7 @@ describe('modlists', () => {
         headers: { Authorization: `Bearer ${context.token1}` },
       })
       expect(resp2.ok).true
-      const resp3 = await fetch('/api/modlists/subscribed', {
+      const resp3 = await fetch('/api/modlists/subscribed/metadata', {
         headers: { Authorization: `Bearer ${context.token1}` },
       })
       expect(resp3.ok).true
@@ -354,13 +368,6 @@ describe('modlists', () => {
       const resp2 = await subscribe()
       expect(resp2.status).toBe(200)
     })
-    const getSubscribedUsers = async () => {
-      const resp1 = await fetch(`/api/modlists/subscribed/users`, {
-        headers: { Authorization: `Bearer ${context.token1}` },
-      })
-      expect(resp1.ok).true
-      return (await resp1.json()) as ModListSubscribedUserResponse
-    }
     it('should be able to get subscribed users', async () => {
       const resp1 = await fetch(`/api/modlists/subscribe/${modListId}`, {
         method: 'POST',
@@ -418,8 +425,9 @@ describe('modlists', () => {
           modListId,
           action: 'block',
           twitterUserIds: ['twitter-user-1'],
+          conditions: [],
         },
-      ])
+      ] satisfies ModListSubscribedUserAndRulesResponse)
     })
   })
   describe('user', () => {
@@ -697,6 +705,232 @@ describe('modlists', () => {
       })
       expect(resp1.ok).true
       expect((await getModListUsers(modListId)).data.length).toBe(0)
+    })
+  })
+  describe('rule', () => {
+    let modListId: string
+    beforeEach(async () => {
+      const resp1 = await fetch('/api/modlists/create', {
+        method: 'POST',
+        body: JSON.stringify(newModList),
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.ok).true
+      const r1 = (await resp1.json()) as ModListCreateResponse
+      modListId = r1.id
+    })
+    async function addRule(condition: ModListAddRuleRequest['condition']) {
+      const resp1 = await fetch('/api/modlists/rule', {
+        method: 'POST',
+        body: JSON.stringify({
+          modListId,
+          name: 'test',
+          condition,
+        } satisfies ModListAddRuleRequest),
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.ok).true
+      return (await resp1.json()) as ModListAddRuleResponse
+    }
+    async function getRules(options: ModListRulesRequest) {
+      const resp1 = await fetch(
+        '/api/modlists/rules?' + new URLSearchParams(options as any).toString(),
+      )
+      expect(resp1.ok).true
+      return (await resp1.json()) as ModListRulesPageResponse
+    }
+    it('should be able to add a rule to a modlist', async () => {
+      expect(await getSubscribedUsers()).length(0)
+      const r1 = await addRule({
+        or: [
+          {
+            and: [{ field: 'user.name', operator: 'inc', value: '100' }],
+          },
+        ],
+      })
+      expect(r1.id).not.undefined
+      const resp2 = await fetch(`/api/modlists/subscribe/${modListId}`, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'block',
+        } satisfies ModListSubscribeRequest),
+        headers: { Authorization: `Bearer ${context.token1}` },
+      })
+      expect(resp2.ok).true
+      const r2 = await getSubscribedUsers()
+      expect(r2).length(1)
+      expect(r2[0].conditions).length(1)
+      expect(r2[0].conditions[0]).toEqual(r1.condition)
+    })
+    async function updateRule(options: {
+      id: string
+      condition: ModListUpdateRuleRequest['condition']
+      token?: string
+      name: string
+    }) {
+      const resp1 = await fetch(`/api/modlists/rule/${options.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          name: options.name,
+          condition: options.condition,
+        } satisfies ModListUpdateRuleRequest),
+        headers: {
+          Authorization: `Bearer ${options.token ?? context.token1}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.ok).true
+      return (await resp1.json()) as ModListUpdateRuleResponse
+    }
+    it('should be able to update a rule', async () => {
+      const r1 = await addRule({
+        or: [
+          {
+            and: [{ field: 'user.followers_count', operator: 'eq', value: 0 }],
+          },
+        ],
+      })
+      const r2 = await updateRule({
+        id: r1.id,
+        name: 'test2',
+        condition: {
+          or: [
+            {
+              and: [
+                { field: 'user.followers_count', operator: 'lt', value: 10 },
+              ],
+            },
+          ],
+        },
+      })
+      expect(r2.id).toEqual(r1.id)
+      expect(r2.name).toEqual('test2')
+      expect(r2.condition).toEqual({
+        or: [
+          {
+            and: [{ field: 'user.followers_count', operator: 'lt', value: 10 }],
+          },
+        ],
+      } satisfies ModListUpdateRuleResponse['condition'])
+    })
+    it('should not be able to update a rule that does not exist', async () => {
+      const resp1 = await fetch(`/api/modlists/rule/123`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          id: '123',
+          name: 'test',
+          condition: {
+            or: [
+              {
+                and: [
+                  { field: 'user.followers_count', operator: 'lt', value: 10 },
+                ],
+              },
+            ],
+          },
+        }),
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.status).toBe(404)
+    })
+    it('should not be able to update a rule that is not created by the user', async () => {
+      const r1 = await addRule({
+        or: [{ and: [{ field: 'user.name', operator: 'inc', value: '100' }] }],
+      })
+      const resp1 = await fetch(`/api/modlists/rule/${r1.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          name: 'test',
+          condition: {
+            or: [
+              {
+                and: [
+                  { field: 'user.followers_count', operator: 'lt', value: 10 },
+                ],
+              },
+            ],
+          },
+        }),
+        headers: {
+          Authorization: `Bearer ${context.token2}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp1.status).toBe(404)
+    })
+    it('should be able to remove a rule from a modlist', async () => {
+      const r1 = await addRule({
+        or: [{ and: [{ field: 'user.name', operator: 'inc', value: '100' }] }],
+      })
+      const l1 = await getRules({ modListId })
+      expect(l1.data).length(1)
+      expect(l1.data[0]).toEqual(r1)
+      const resp2 = await fetch(`/api/modlists/rule/${r1.id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      expect(resp2.ok).true
+      const l2 = await getRules({ modListId })
+      expect(l2.cursor).undefined
+      expect(l2.data).length(0)
+    })
+    it('should not be able to remove a rule that does not exist', async () => {
+      const resp1 = await fetch(`/api/modlists/rule/123`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${context.token1}` },
+      })
+      expect(resp1.status).toBe(404)
+    })
+    it('should not be able to remove a rule that is not created by the user', async () => {
+      const r1 = await addRule({
+        or: [{ and: [{ field: 'user.name', operator: 'inc', value: '100' }] }],
+      })
+      const resp1 = await fetch(`/api/modlists/rule/${r1.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${context.token2}` },
+      })
+      expect(resp1.status).toBe(404)
+    })
+    it('should be able to get rules with cursor', async () => {
+      await Promise.all(
+        Array.from({ length: 10 }, (_, i) => i).map((it) =>
+          addRule({
+            or: [
+              {
+                and: [
+                  {
+                    field: 'user.followers_count',
+                    operator: 'eq',
+                    value: 0,
+                  },
+                ],
+              },
+            ],
+          }),
+        ),
+      )
+      const r1 = await getRules({ modListId, limit: 1 })
+      expect(r1.cursor).not.undefined
+      expect(r1.data).length(1)
+      const r2 = await getRules({ modListId, cursor: r1.cursor, limit: 9 })
+      expect(r2.data).length(9)
+      const r3 = await getRules({ modListId, cursor: r2.cursor, limit: 1 })
+      expect(r3.data).length(0)
+      const r4 = await getRules({ modListId, limit: 10, cursor: r1.cursor })
+      expect(r4.cursor).undefined
+      expect(r4.data).length(9)
     })
   })
 })

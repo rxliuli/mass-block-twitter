@@ -1,0 +1,526 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getRuleFileds > should return the correct fields 1`] = `
+[
+  {
+    "field": "user.id",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "user.screen_name",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "user.name",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "user.description",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "user.location",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "user.profile_image_url",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "user.created_at",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "user.is_blue_verified",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+    ],
+    "type": "boolean",
+  },
+  {
+    "field": "user.followers_count",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Greater Than",
+        "value": "gt",
+      },
+      {
+        "label": "Greater Than or Equal",
+        "value": "gte",
+      },
+      {
+        "label": "Less Than",
+        "value": "lt",
+      },
+      {
+        "label": "Less Than or Equal",
+        "value": "lte",
+      },
+    ],
+    "type": "number",
+  },
+  {
+    "field": "user.friends_count",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Greater Than",
+        "value": "gt",
+      },
+      {
+        "label": "Greater Than or Equal",
+        "value": "gte",
+      },
+      {
+        "label": "Less Than",
+        "value": "lt",
+      },
+      {
+        "label": "Less Than or Equal",
+        "value": "lte",
+      },
+    ],
+    "type": "number",
+  },
+  {
+    "field": "user.default_profile",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+    ],
+    "type": "boolean",
+  },
+  {
+    "field": "user.default_profile_image",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+    ],
+    "type": "boolean",
+  },
+  {
+    "field": "tweet.id",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "tweet.text",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "tweet.created_at",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "enum": [
+      {
+        "label": "Arabic",
+        "value": "ar",
+      },
+      {
+        "label": "Bengali",
+        "value": "bn",
+      },
+      {
+        "label": "Chinese",
+        "value": "zh",
+      },
+      {
+        "label": "Czech",
+        "value": "cs",
+      },
+      {
+        "label": "Danish",
+        "value": "da",
+      },
+      {
+        "label": "Dutch",
+        "value": "nl",
+      },
+      {
+        "label": "English",
+        "value": "en",
+      },
+      {
+        "label": "Finnish",
+        "value": "fi",
+      },
+      {
+        "label": "French",
+        "value": "fr",
+      },
+      {
+        "label": "German",
+        "value": "de",
+      },
+      {
+        "label": "Greek",
+        "value": "el",
+      },
+      {
+        "label": "Hebrew",
+        "value": "he",
+      },
+      {
+        "label": "Hindi",
+        "value": "hi",
+      },
+      {
+        "label": "Hungarian",
+        "value": "hu",
+      },
+      {
+        "label": "Indonesian",
+        "value": "id",
+      },
+      {
+        "label": "Italian",
+        "value": "it",
+      },
+      {
+        "label": "Japanese",
+        "value": "ja",
+      },
+      {
+        "label": "Korean",
+        "value": "ko",
+      },
+      {
+        "label": "Malay",
+        "value": "ms",
+      },
+      {
+        "label": "Norwegian",
+        "value": "no",
+      },
+      {
+        "label": "Persian",
+        "value": "fa",
+      },
+      {
+        "label": "Polish",
+        "value": "pl",
+      },
+      {
+        "label": "Portuguese",
+        "value": "pt",
+      },
+      {
+        "label": "Romanian",
+        "value": "ro",
+      },
+      {
+        "label": "Russian",
+        "value": "ru",
+      },
+      {
+        "label": "Spanish",
+        "value": "es",
+      },
+      {
+        "label": "Swahili",
+        "value": "sw",
+      },
+      {
+        "label": "Swedish",
+        "value": "sv",
+      },
+      {
+        "label": "Thai",
+        "value": "th",
+      },
+      {
+        "label": "Turkish",
+        "value": "tr",
+      },
+      {
+        "label": "Ukrainian",
+        "value": "uk",
+      },
+      {
+        "label": "Urdu",
+        "value": "ur",
+      },
+      {
+        "label": "Vietnamese",
+        "value": "vi",
+      },
+    ],
+    "field": "tweet.lang",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "tweet.conversation_id_str",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "tweet.in_reply_to_status_id_str",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
+    "field": "tweet.quoted_status_id_str",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+]
+`;

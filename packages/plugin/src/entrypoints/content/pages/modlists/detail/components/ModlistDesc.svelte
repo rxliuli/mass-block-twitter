@@ -9,8 +9,8 @@
   } = $props()
 </script>
 
-<div class="w-full p-4">
-  <div class="flex items-start justify-between">
+<div class="w-full py-4">
+  <div class="flex items-start justify-between mb-2">
     <div class="flex gap-4">
       <Avatar.Root>
         <Avatar.Image src={props.modlist.avatar} alt={props.modlist.name} />
@@ -38,7 +38,5 @@
   <p class="text-base leading-relaxed max-w-3xl">
     {props.modlist.description}
   </p>
-  <div class="flex justify-end pt-4">
-    {@render props.actions()}
-  </div>
+  {@render props.actions()}
 </div>

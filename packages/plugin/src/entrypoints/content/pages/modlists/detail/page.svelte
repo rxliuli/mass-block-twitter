@@ -18,19 +18,20 @@
     ModListUsersPageResponse,
   } from '@mass-block-twitter/server'
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
-  import { Button } from '$lib/components/ui/button'
+  import { Button, buttonVariants } from '$lib/components/ui/button'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import {
     BanIcon,
     EllipsisIcon,
+    ListFilterPlusIcon,
     MessageCircleOffIcon,
     PencilIcon,
+    PlusIcon,
     Trash2Icon,
     UserPlusIcon,
   } from 'lucide-svelte'
   import { shadcnConfig } from '$lib/components/logic/config'
   import { getAuthInfo, useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
-  import ModlistUser from './components/ModlistUser.svelte'
   import ModlistDesc from './components/ModlistDesc.svelte'
   import {
     QueryError,
@@ -47,6 +48,10 @@
   import { AutoSizer, List } from '@rxliuli/svelte-window'
   import { refreshModListSubscribedUsers } from '$lib/content'
   import { crossFetch } from '$lib/query'
+  import * as Tabs from '$lib/components/ui/tabs'
+  import ModlistUsers from './components/ModlistUsers.svelte'
+  import ModlistRules from './components/ModlistRules.svelte'
+  import { cn } from '$lib/utils'
 
   const route = useRoute()
 
@@ -183,118 +188,15 @@
       toast.error('Update modlist failed')
     },
   })
-
-  const query = createInfiniteQuery({
-    queryKey: ['modlistUsers', route.search?.get('id')],
-    queryFn: async ({ pageParam }) => {
-      const authInfo = await getAuthInfo()
-      const url = new URL(`${SERVER_URL}/api/modlists/users`)
-      url.searchParams.set('modListId', route.search?.get('id')!)
-      if (pageParam) {
-        url.searchParams.set('cursor', pageParam)
-      }
-      const resp = await crossFetch(url, {
-        headers: { Authorization: `Bearer ${authInfo?.token}` },
-      })
-      return (await resp.json()) as ModListUsersPageResponse
-    },
-    getNextPageParam: (lastPage) => lastPage.cursor,
-    initialPageParam: undefined as string | undefined,
-  })
-  const queryClient = useQueryClient()
-  const addUserMutation = createMutation({
-    mutationFn: async (user: User) => {
-      const resp = await crossFetch(`${SERVER_URL}/api/modlists/user`, {
-        method: 'POST',
-        headers: {
-          Authorization: 'Bearer ' + (await getAuthInfo())?.token,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          modListId: route.search?.get('id')!,
-          twitterUser: user,
-        } satisfies ModListAddTwitterUserRequest),
-      })
-      if (!resp.ok) {
-        throw new Error('Failed to add user')
-      }
-      const data = (await resp.json()) as ModListAddTwitterUserResponse
-      if (!$query.data) {
-        await $query.refetch()
-        return
-      }
-      queryClient.setQueryData(
-        ['modlistUsers'],
-        produce((old: typeof $query.data) => {
-          old?.pages[0]?.data.unshift({
-            ...data,
-            modListUserId: data.id,
-          })
-        }),
-      )
-    },
-    onSuccess: () => {
-      toast.success('Added to list')
-    },
-    onError: () => {
-      toast.error('Add to list failed')
-    },
-  })
-  const { loadings, withLoading } = useLoading()
-  const removeUserMutation = createMutation({
-    mutationFn: withLoading(
-      async (twitterUserId: string) => {
-        const resp = await crossFetch(`${SERVER_URL}/api/modlists/user`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: 'Bearer ' + (await getAuthInfo())?.token,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            modListId: route.search?.get('id')!,
-            twitterUserId: twitterUserId,
-          } satisfies ModListRemoveTwitterUserRequest),
-        })
-        if (!resp.ok) {
-          throw new Error('Failed to remove user')
-        }
-        queryClient.setQueryData(
-          ['modlistUsers'],
-          produce((old: typeof $query.data) => {
-            old?.pages.forEach((page) => {
-              page.data = page.data.filter((it) => it.id !== twitterUserId)
-            })
-          }),
-        )
-      },
-      (twitterUserId) => twitterUserId,
-    ),
-    onSuccess: () => {
-      toast.success('Removed from list')
-    },
-    onError: () => {
-      toast.error('Remove from list failed')
-    },
-  })
-  let userAddOpen = $state(false)
-  async function onOpenUserAdd() {
-    userAddOpen = true
-  }
   const authInfo = useAuthInfo()
 
-  function onScroll(event: UIEvent) {
-    const target = event.target as HTMLElement
-    const scrollTop = target.scrollTop
-    const clientHeight = target.clientHeight
-    const scrollHeight = target.scrollHeight
-    if (Math.abs(scrollHeight - scrollTop - clientHeight) <= 1) {
-      requestAnimationFrame(() => {
-        if ($query.hasNextPage) {
-          $query.fetchNextPage()
-        }
-      })
-    }
-  }
+  let currentTab = $state<'users' | 'rules'>('users')
+  let usersRef = $state<{
+    onOpenUserAdd: () => void
+  }>()
+  let rulesRef = $state<{
+    onOpenRuleEdit: () => void
+  }>()
 </script>
 
 <LayoutNav title="Moderation Lists Detail">
@@ -304,7 +206,7 @@
       onclick={() => $unsubscribeMutation.mutate()}
       disabled={!authInfo.value || $unsubscribeMutation.isPending}
     >
-      Unsubscribe
+      {$metadata.data.action === 'block' ? 'Unblock' : 'Unmute'}
     </Button>
   {:else}
     <DropdownMenu.Root>
@@ -356,21 +258,42 @@
 </LayoutNav>
 
 <div class="h-full flex flex-col">
-  <div class="max-w-3xl mx-auto">
+  <div class="w-full max-w-3xl mx-auto">
     {#if $metadata.isLoading}
       <QueryLoading />
     {:else if $metadata.data}
       <ModlistDesc modlist={$metadata.data}>
         {#snippet actions()}
-          <Button
-            variant="ghost"
-            class="text-blue-400 flex items-center gap-2"
-            onclick={onOpenUserAdd}
-            disabled={!$metadata.data.owner}
-          >
-            <UserPlusIcon class="h-4 w-4" />
-            Add people
-          </Button>
+          <div class="flex items-center justify-between">
+            <Tabs.Root bind:value={currentTab}>
+              <Tabs.List>
+                <Tabs.Trigger value="users">Users</Tabs.Trigger>
+                <Tabs.Trigger value="rules">Rules</Tabs.Trigger>
+              </Tabs.List>
+            </Tabs.Root>
+            <Button
+              variant="ghost"
+              class={cn('text-blue-400 flex items-center gap-2', {
+                hidden: currentTab !== 'users',
+              })}
+              onclick={() => usersRef?.onOpenUserAdd()}
+              disabled={!$metadata.data.owner}
+            >
+              <UserPlusIcon class="h-4 w-4" />
+              Add people
+            </Button>
+            <Button
+              variant="ghost"
+              class={cn('text-blue-400 flex items-center gap-2', {
+                hidden: currentTab !== 'rules',
+              })}
+              onclick={() => rulesRef?.onOpenRuleEdit()}
+              disabled={!$metadata.data.owner}
+            >
+              <ListFilterPlusIcon class="h-4 w-4" />
+              Add rule
+            </Button>
+          </div>
         {/snippet}
       </ModlistDesc>
     {:else}
@@ -378,55 +301,11 @@
     {/if}
   </div>
 
-  <div class="flex-1 overflow-y-hidden">
-    <AutoSizer>
-      {#snippet child({ height })}
-        {#if $query.data}
-          {@const users = $query.data.pages.flatMap((it) => it.data) ?? []}
-          {#if users.length === 0}
-            {#if !$query.isFetching}
-              <div class="text-center text-zinc-400">No users in this list</div>
-            {/if}
-          {:else}
-            <List
-              data={users}
-              itemKey="id"
-              itemHeight={100}
-              {height}
-              dynamic
-              onscroll={onScroll}
-            >
-              {#snippet child(item)}
-                <ModlistUser user={item}>
-                  {#snippet actions()}
-                    {#if $metadata.data?.owner}
-                      <Button
-                        variant="secondary"
-                        onclick={(ev) => {
-                          ev.preventDefault()
-                          $removeUserMutation.mutate(item.id)
-                        }}
-                        disabled={loadings[item.id]}
-                      >
-                        Remove
-                      </Button>
-                    {/if}
-                  {/snippet}
-                </ModlistUser>
-              {/snippet}
-            </List>
-          {/if}
-        {/if}
-      {/snippet}
-    </AutoSizer>
-    <div class="sticky bottom-0">
-      {#if $query.isFetching}
-        <QueryLoading class="h-auto" />
-      {:else if $query.error}
-        <QueryError description={'Load modlist users failed'} />
-      {/if}
-    </div>
-  </div>
+  {#if currentTab === 'users'}
+    <ModlistUsers owner={!!$metadata.data?.owner} bind:ref={usersRef} />
+  {:else}
+    <ModlistRules owner={!!$metadata.data?.owner} bind:ref={rulesRef} />
+  {/if}
 </div>
 
 <ModListEdit
@@ -434,11 +313,4 @@
   title="Edit Moderation List"
   data={$metadata.data}
   onSave={$updateModlist.mutateAsync}
-/>
-
-<ModlistAddUser
-  bind:open={userAddOpen}
-  modListId={$metadata.data?.id ?? ''}
-  onAdd={$addUserMutation.mutateAsync}
-  onRemove={(user) => $removeUserMutation.mutateAsync(user.id)}
 />

@@ -4,7 +4,7 @@ import { User } from './db'
 import { extractCurrentUserId } from './observe'
 import { matchByKeyword } from './util/matchByKeyword'
 import { pick } from 'lodash-es'
-import { ModListSubscribedUserResponse } from '@mass-block-twitter/server'
+import { ModListSubscribedUserAndRulesResponse } from '@mass-block-twitter/server'
 
 export type FilterResult = 'show' | 'hide' | 'next' | 'block'
 export type FilterData =
@@ -179,7 +179,7 @@ export function blueVerifiedFilter(): TweetFilter {
 }
 export let spamContext: {
   spamUsers: Record<string, 'spam' | 'report'>
-  modlists: ModListSubscribedUserResponse
+  modlists: ModListSubscribedUserAndRulesResponse
 } = {
   spamUsers: {},
   modlists: [],

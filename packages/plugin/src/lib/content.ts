@@ -3,7 +3,7 @@ import { sendMessage } from './messaging'
 import {
   AccountSettingsResponse,
   AuthInfo,
-  ModListSubscribedUserResponse,
+  ModListSubscribedUserAndRulesResponse,
 } from '@mass-block-twitter/server'
 import { SERVER_URL } from './constants'
 import { ModListSubscribedUsersKey } from './shared'
@@ -40,7 +40,7 @@ export async function refreshModListSubscribedUsers(
     return
   }
   const modListSubscribedUsers =
-    (await resp.json()) as ModListSubscribedUserResponse
+    (await resp.json()) as ModListSubscribedUserAndRulesResponse
   await set(ModListSubscribedUsersKey, modListSubscribedUsers)
   document.dispatchEvent(new Event('RefreshModListSubscribedUsers'))
 }

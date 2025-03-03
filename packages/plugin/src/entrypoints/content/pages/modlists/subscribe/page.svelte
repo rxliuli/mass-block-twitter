@@ -11,7 +11,7 @@
     queryKey: ['modlists', 'subscribed'],
     queryFn: async () => {
       const authInfo = await getAuthInfo()
-      const resp = await crossFetch(`${SERVER_URL}/api/modlists/subscribed`, {
+      const resp = await crossFetch(`${SERVER_URL}/api/modlists/subscribed/metadata`, {
         headers: {
           Authorization: `Bearer ${authInfo?.token}`,
         },

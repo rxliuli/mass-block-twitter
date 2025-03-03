@@ -23,7 +23,7 @@
 </script>
 
 <LayoutNav title="My Moderation Lists">
-  <ModListCreator onCreated={() => $query.refetch()} />
+  <ModListCreator />
 </LayoutNav>
 
 <ModLists query={$query} />

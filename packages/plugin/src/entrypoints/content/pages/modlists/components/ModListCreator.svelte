@@ -15,10 +15,7 @@
   } from '@mass-block-twitter/server'
   import { SERVER_URL } from '$lib/constants'
   import { PlusIcon } from 'lucide-svelte'
-
-  const props: {
-    onCreated: (modList: ModListCreateResponse) => void
-  } = $props()
+  import { navigate } from '$lib/components/logic/router'
 
   let open = $state(false)
   async function onOpenModal() {
@@ -81,11 +78,11 @@
         }
         throw resp
       }
-      props.onCreated?.((await resp.json()) as ModListCreateResponse)
-    },
-    onSuccess: async () => {
+      const r = (await resp.json()) as ModListCreateResponse
       toast.success('Modlist created')
+      navigate(`/modlists/detail?id=${r.id}`)
     },
+    onSuccess: async () => {},
     onError: (resp) => {
       if (resp instanceof Response && resp.status === 401) {
         toast.info('Please login to create a Moderation List!')

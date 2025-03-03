@@ -40,7 +40,7 @@
 </script>
 
 <LayoutNav title="Moderation Lists">
-  <ModListCreator onCreated={() => $query.refetch()} />
+  <ModListCreator />
 </LayoutNav>
 
 <nav class="flex items-center gap-4">

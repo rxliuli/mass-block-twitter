@@ -77,7 +77,7 @@
   {#if !authInfo.value.isPro}
     <Sidebar.MenuItem>
       <Sidebar.MenuButton
-        class="bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+        class="bg-blue-500 text-white hover:bg-blue-600 hover:text-white rounded-md transition-colors"
         onclick={onOpenUpgrade}
       >
         <CircleFadingArrowUpIcon />
@@ -106,7 +106,9 @@
   </DropdownMenu.Root>
 {:else}
   <Sidebar.MenuItem onclick={onLogin}>
-    <Sidebar.MenuButton>
+    <Sidebar.MenuButton
+      class="bg-blue-500 text-white hover:bg-blue-600 hover:text-white rounded-md transition-colors"
+    >
       <UserIcon />
       <span>Login</span>
     </Sidebar.MenuButton>

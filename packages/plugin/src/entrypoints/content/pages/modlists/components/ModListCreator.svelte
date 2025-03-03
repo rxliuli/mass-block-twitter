@@ -11,6 +11,7 @@
     ModList,
     ModListCreateRequest,
     ModListCreateResponse,
+    ModListGetCreatedResponse,
   } from '@mass-block-twitter/server'
   import { SERVER_URL } from '$lib/constants'
   import { PlusIcon } from 'lucide-svelte'
@@ -21,6 +22,30 @@
 
   let open = $state(false)
   async function onOpenModal() {
+    const authInfo = await getAuthInfo()
+    if (!authInfo?.isPro) {
+      const created = (await (
+        await crossFetch(`${SERVER_URL}/api/modlists/created`, {
+          headers: {
+            Authorization: `Bearer ${authInfo?.token}`,
+          },
+        })
+      ).json()) as ModListGetCreatedResponse
+      if (created.length >= 3) {
+        toast.info('You have reached the maximum number of moderation lists.', {
+          description:
+            'Please upgrade to Pro to create unlimited moderation lists.',
+          action: {
+            label: 'Upgrade Now',
+            onClick: () => {
+              window.open('https://mass-block-twitter.rxliuli.com/pricing')
+            },
+          },
+        })
+        return
+      }
+    }
+
     open = true
   }
 

@@ -14,7 +14,16 @@ import {
   user,
 } from '../db/schema'
 import { convertUserParamsToDBUser } from './twitter'
-import { and, desc, eq, inArray, InferSelectModel, lt, sql } from 'drizzle-orm'
+import {
+  and,
+  desc,
+  eq,
+  exists,
+  inArray,
+  InferSelectModel,
+  lt,
+  sql,
+} from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
 import { getTableAliasedColumns } from '../lib/drizzle'
 import { omit } from 'es-toolkit'
@@ -611,20 +620,18 @@ const searchSchema = z.object({
 
 export type ModListSearchResponse = InferSelectModel<typeof modList>[]
 
-const search = new Hono<HonoEnv>().get(
-  '/search',
-  zValidator('query', searchSchema),
-  async (c) => {
-    // const _validated = c.req.valid('query')
-    const db = drizzle(c.env.DB)
-    const modLists = await db
-      .select()
-      .from(modList)
-      .where(eq(modList.visibility, 'public'))
-      .orderBy(desc(modList.updatedAt))
-    return c.json<ModListSearchResponse>(modLists)
-  },
-)
+const search = new Hono<HonoEnv>()
+
+search.get('/search', zValidator('query', searchSchema), async (c) => {
+  // const _validated = c.req.valid('query')
+  const db = drizzle(c.env.DB)
+  const modLists = await db
+    .select()
+    .from(modList)
+    .where(eq(modList.visibility, 'public'))
+    .orderBy(desc(modList.updatedAt))
+  return c.json<ModListSearchResponse>(modLists)
+})
 
 export type ModListGetResponse = InferSelectModel<typeof modList> & {
   subscribed: boolean

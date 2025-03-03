@@ -1,24 +1,16 @@
 <script lang="ts">
   import { useRoute } from '$lib/components/logic/router'
-  import {
-    createInfiniteQuery,
-    createMutation,
-    createQuery,
-    useQueryClient,
-  } from '@tanstack/svelte-query'
+  import { createMutation, createQuery } from '@tanstack/svelte-query'
   import type {
     ModList,
-    ModListAddTwitterUserRequest,
-    ModListAddTwitterUserResponse,
     ModListGetResponse,
     ModListRemoveErrorResponse,
-    ModListRemoveTwitterUserRequest,
     ModListSubscribeRequest,
+    ModListSubscribeResponse,
     ModListUpdateRequest,
-    ModListUsersPageResponse,
   } from '@mass-block-twitter/server'
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
-  import { Button, buttonVariants } from '$lib/components/ui/button'
+  import { Button } from '$lib/components/ui/button'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import {
     BanIcon,
@@ -26,26 +18,17 @@
     ListFilterPlusIcon,
     MessageCircleOffIcon,
     PencilIcon,
-    PlusIcon,
     Trash2Icon,
     UserPlusIcon,
   } from 'lucide-svelte'
   import { shadcnConfig } from '$lib/components/logic/config'
   import { getAuthInfo, useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import ModlistDesc from './components/ModlistDesc.svelte'
-  import {
-    QueryError,
-    QueryLoading,
-    useLoading,
-  } from '$lib/components/logic/query'
+  import { QueryError, QueryLoading } from '$lib/components/logic/query'
   import { SERVER_URL } from '$lib/constants'
   import ModListEdit from '../components/ModListEdit.svelte'
   import { toast } from 'svelte-sonner'
   import { goBack } from '$lib/components/logic/router/route.svelte'
-  import ModlistAddUser from './components/ModlistAddUser.svelte'
-  import { type User } from '$lib/db'
-  import { produce } from 'immer'
-  import { AutoSizer, List } from '@rxliuli/svelte-window'
   import { refreshModListSubscribedUsers } from '$lib/content'
   import { crossFetch } from '$lib/query'
   import * as Tabs from '$lib/components/ui/tabs'
@@ -74,6 +57,27 @@
   const subscribeMutation = createMutation({
     mutationFn: async (action: ModListSubscribeRequest['action']) => {
       const authInfo = await getAuthInfo()
+      if (!authInfo?.isPro) {
+        const subscribed = (await (
+          await crossFetch(`${SERVER_URL}/api/modlists/subscribed/metadata`, {
+            headers: {
+              Authorization: `Bearer ${authInfo?.token}`,
+            },
+          })
+        ).json()) as ModListSubscribeResponse
+        if (subscribed.length >= 3) {
+          toast.info('You have reached the maximum number of subscribed.', {
+            description:
+              'Please upgrade to Pro to create unlimited subscribed.',
+            action: {
+              label: 'Upgrade Now',
+              onClick: () => {
+                window.open('https://mass-block-twitter.rxliuli.com/pricing')
+              },
+            },
+          })
+        }
+      }
       const resp = await crossFetch(
         `${SERVER_URL}/api/modlists/subscribe/${route.search?.get('id')}`,
         {

@@ -37,8 +37,13 @@
   function onAddKeyword() {
     if ($rules.length >= 100 && !authInfo.value?.isPro) {
       toast.info('Free version has 100-keyword limit', {
-        description:
-          'please login and upgrade to Pro to add more keyword rules',
+        description: 'please upgrade to Pro to add more keyword rules',
+        action: {
+          label: 'Upgrade Now',
+          onClick: () => {
+            window.open('https://mass-block-twitter.rxliuli.com/pricing')
+          },
+        },
       })
       return
     }

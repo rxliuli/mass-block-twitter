@@ -2,7 +2,7 @@
   import { QueryError, QueryLoading } from '$lib/components/logic/query'
   import { useRoute } from '$lib/components/logic/router'
   import { SERVER_URL } from '$lib/constants'
-  import { getAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
+  import { getAuthInfo, useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { crossFetch } from '$lib/query'
   import type {
     ModListRulesPageResponse,
@@ -82,7 +82,22 @@
       id?: string
     }
   >(createRule())
+  const authInfo = useAuthInfo()
   function onOpenAddRuleEdit() {
+    if (!authInfo.value?.isPro) {
+      if (($query.data?.pages.flatMap((it) => it.data) ?? []).length >= 10) {
+        toast.info('You have reached the maximum number of rules.', {
+          description: 'Please upgrade to Pro to create unlimited rules.',
+          action: {
+            label: 'Upgrade Now',
+            onClick: () => {
+              window.open('https://mass-block-twitter.rxliuli.com/pricing')
+            },
+          },
+        })
+        return
+      }
+    }
     ruleEditOpen = true
     rule = createRule()
   }

@@ -223,7 +223,7 @@ export const modListRule = sqliteTable(
     modListId: text('modListId')
       .references(() => modList.id)
       .notNull(),
-    condition: text('condition', {
+    rule: text('rule', {
       mode: 'json',
     })
       .notNull()

@@ -131,6 +131,7 @@ modlists.delete('/remove/:id', zValidator('param', removeSchema), async (c) => {
   }
   await db.batch([
     db.delete(modListUser).where(eq(modListUser.modListId, validated.id)),
+    db.delete(modListRule).where(eq(modListRule.modListId, validated.id)),
     db
       .delete(modList)
       .where(
@@ -435,7 +436,7 @@ modlists.post(
   },
 )
 
-const ruleConditionSchema = z.object({
+const ruleSchema = z.object({
   or: z.array(
     z.object({
       and: z.array(
@@ -451,7 +452,7 @@ const ruleConditionSchema = z.object({
 const addRuleSchema = z.object({
   modListId: z.string(),
   name: z.string(),
-  condition: ruleConditionSchema,
+  rule: ruleSchema,
 })
 export type ModListAddRuleRequest = z.infer<typeof addRuleSchema>
 export type ModListAddRuleResponse = InferSelectModel<typeof modListRule>
@@ -464,7 +465,7 @@ modlists.post('/rule', zValidator('json', addRuleSchema), async (c) => {
       id: ulid(),
       name: validated.name,
       modListId: validated.modListId,
-      condition: validated.condition,
+      rule: validated.rule,
     })
     .returning()
     .get()
@@ -473,7 +474,7 @@ modlists.post('/rule', zValidator('json', addRuleSchema), async (c) => {
 
 const updateRuleSchema = z.object({
   name: z.string(),
-  condition: ruleConditionSchema,
+  rule: ruleSchema,
 })
 export type ModListUpdateRuleRequest = z.infer<typeof updateRuleSchema>
 export type ModListUpdateRuleResponse = InferSelectModel<typeof modListRule>
@@ -504,7 +505,7 @@ modlists.put(
       .update(modListRule)
       .set({
         name: validatedJson.name,
-        condition: validatedJson.condition,
+        rule: validatedJson.rule,
       })
       .where(eq(modListRule.id, validated.id))
       .returning()
@@ -548,7 +549,7 @@ export type ModListSubscribedUserAndRulesResponse = {
   modListId: string
   action: 'block' | 'hide'
   twitterUserIds: string[]
-  conditions: InferSelectModel<typeof modListRule>['condition'][]
+  rules: InferSelectModel<typeof modListRule>['rule'][]
 }[]
 modlists.get('/subscribed/users', async (c) => {
   const tokenInfo = c.get('jwtPayload')
@@ -558,7 +559,7 @@ modlists.get('/subscribed/users', async (c) => {
       modListId: modListSubscription.modListId,
       action: modListSubscription.action,
       modListUsers: sql<string>`json_group_array(DISTINCT ${modListUser.twitterUserId})`,
-      modListRules: sql<string>`json_group_array(DISTINCT ${modListRule.condition})`,
+      modListRules: sql<string>`json_group_array(DISTINCT ${modListRule.rule})`,
     })
     .from(modListSubscription)
     .leftJoin(
@@ -577,20 +578,20 @@ modlists.get('/subscribed/users', async (c) => {
         const twitterUserIds = JSON.parse(item.modListUsers).filter(
           (id: any) => id !== null && id !== undefined && id !== '',
         ) as string[]
-        const conditionsStr = JSON.parse(item.modListRules).filter(
+        const rulesStr = JSON.parse(item.modListRules).filter(
           (c: any) => c !== null && c !== undefined && c !== '',
         ) as string[]
-        const conditions = conditionsStr.map((c: string) =>
+        const rules = rulesStr.map((c: string) =>
           JSON.parse(c),
-        ) as InferSelectModel<typeof modListRule>['condition'][]
+        ) as InferSelectModel<typeof modListRule>['rule'][]
         return {
           modListId: item.modListId,
           action: item.action as 'block' | 'hide',
           twitterUserIds,
-          conditions,
+          rules,
         }
       })
-      .filter((it) => it.conditions.length > 0 || it.twitterUserIds.length > 0),
+      .filter((it) => it.rules.length > 0 || it.twitterUserIds.length > 0),
     {
       headers: {
         'Cache-Control': 'public, max-age=3600',

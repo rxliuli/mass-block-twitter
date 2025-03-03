@@ -425,7 +425,7 @@ describe('modlists', () => {
           modListId,
           action: 'block',
           twitterUserIds: ['twitter-user-1'],
-          conditions: [],
+          rules: [],
         },
       ] satisfies ModListSubscribedUserAndRulesResponse)
     })
@@ -722,13 +722,13 @@ describe('modlists', () => {
       const r1 = (await resp1.json()) as ModListCreateResponse
       modListId = r1.id
     })
-    async function addRule(condition: ModListAddRuleRequest['condition']) {
+    async function addRule(rule: ModListAddRuleRequest['rule']) {
       const resp1 = await fetch('/api/modlists/rule', {
         method: 'POST',
         body: JSON.stringify({
           modListId,
           name: 'test',
-          condition,
+          rule,
         } satisfies ModListAddRuleRequest),
         headers: {
           Authorization: `Bearer ${context.token1}`,
@@ -765,12 +765,12 @@ describe('modlists', () => {
       expect(resp2.ok).true
       const r2 = await getSubscribedUsers()
       expect(r2).length(1)
-      expect(r2[0].conditions).length(1)
-      expect(r2[0].conditions[0]).toEqual(r1.condition)
+      expect(r2[0].rules).length(1)
+      expect(r2[0].rules[0]).toEqual(r1.rule)
     })
     async function updateRule(options: {
       id: string
-      condition: ModListUpdateRuleRequest['condition']
+      rule: ModListUpdateRuleRequest['rule']
       token?: string
       name: string
     }) {
@@ -778,7 +778,7 @@ describe('modlists', () => {
         method: 'PUT',
         body: JSON.stringify({
           name: options.name,
-          condition: options.condition,
+          rule: options.rule,
         } satisfies ModListUpdateRuleRequest),
         headers: {
           Authorization: `Bearer ${options.token ?? context.token1}`,
@@ -799,7 +799,7 @@ describe('modlists', () => {
       const r2 = await updateRule({
         id: r1.id,
         name: 'test2',
-        condition: {
+        rule: {
           or: [
             {
               and: [
@@ -811,13 +811,13 @@ describe('modlists', () => {
       })
       expect(r2.id).toEqual(r1.id)
       expect(r2.name).toEqual('test2')
-      expect(r2.condition).toEqual({
+      expect(r2.rule).toEqual({
         or: [
           {
             and: [{ field: 'user.followers_count', operator: 'lt', value: 10 }],
           },
         ],
-      } satisfies ModListUpdateRuleResponse['condition'])
+      } satisfies ModListUpdateRuleResponse['rule'])
     })
     it('should not be able to update a rule that does not exist', async () => {
       const resp1 = await fetch(`/api/modlists/rule/123`, {
@@ -825,7 +825,7 @@ describe('modlists', () => {
         body: JSON.stringify({
           id: '123',
           name: 'test',
-          condition: {
+          rule: {
             or: [
               {
                 and: [
@@ -850,7 +850,7 @@ describe('modlists', () => {
         method: 'PUT',
         body: JSON.stringify({
           name: 'test',
-          condition: {
+          rule: {
             or: [
               {
                 and: [
@@ -931,6 +931,18 @@ describe('modlists', () => {
       const r4 = await getRules({ modListId, limit: 10, cursor: r1.cursor })
       expect(r4.cursor).undefined
       expect(r4.data).length(9)
+    })
+    it('should be able remove modlist', async () => {
+      await addRule({
+        or: [
+          {
+            and: [{ field: 'user.name', operator: 'inc', value: '100' }],
+          },
+        ],
+      })
+      expect((await remove(modListId)).ok).true
+      const r1 = await getRules({ modListId })
+      expect(r1.data).length(0)
     })
   })
 })

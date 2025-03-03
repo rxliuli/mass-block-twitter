@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "c73bd175-57e6-4bb6-a7b6-14f1dfa05069",
+  "id": "9a355518-f675-4045-84df-43b63809bd96",
   "prevId": "b0135c76-ca40-4a4c-b7d5-f39b5dedf672",
   "tables": {
     "LocalUser": {
@@ -218,6 +218,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "modListId": {
           "name": "modListId",
           "type": "text",
@@ -225,8 +232,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "condition": {
-          "name": "condition",
+        "rule": {
+          "name": "rule",
           "type": "text",
           "primaryKey": false,
           "notNull": true,

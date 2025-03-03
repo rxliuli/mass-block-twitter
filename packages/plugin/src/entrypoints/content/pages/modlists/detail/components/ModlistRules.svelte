@@ -217,7 +217,7 @@
             {#snippet child(item)}
               <div
                 class={cn(
-                  'flex py-1 h-12 rounded-md items-center justify-between gap-2 hover:bg-accent hover:text-accent-foreground',
+                  'flex py-1 h-12 rounded-md items-center justify-between gap-2 hover:bg-accent hover:text-accent-foreground max-w-3xl mx-auto',
                 )}
                 role="button"
                 tabindex="0"

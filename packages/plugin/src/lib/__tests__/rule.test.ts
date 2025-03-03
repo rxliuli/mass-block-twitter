@@ -1,4 +1,4 @@
-import { getRuleFileds, visit } from '$lib/rule'
+import { getRuleFileds, matchRule, Rule, visit } from '$lib/rule'
 import { describe, expect, it } from 'vitest'
 import { z, ZodArray, ZodEnum } from 'zod'
 
@@ -43,5 +43,37 @@ describe('visit', () => {
       },
     )
     expect(fields).toEqual(['a'])
+  })
+})
+
+describe('matchRule', () => {
+  it('should match the rule', () => {
+    const rule1: Rule = {
+      or: [{ and: [{ field: 'a', operator: 'eq', value: 'a' }] }],
+    }
+    const data = {
+      a: 'a',
+    }
+    expect(matchRule([rule1], data)).true
+  })
+  it('should not match the rule', () => {
+    const rule1: Rule = {
+      or: [{ and: [{ field: 'a', operator: 'eq', value: 'a' }] }],
+    }
+    const data = {
+      a: 'b',
+    }
+    expect(matchRule([rule1], data)).false
+  })
+  it('should not match in data is undefined', () => {
+    const rule1: Rule = {
+      or: [{ and: [{ field: 'a', operator: 'eq', value: 'a' }] }],
+    }
+    const data = {}
+    expect(matchRule([rule1], data)).false
+    const rule2: Rule = {
+      or: [{ and: [{ field: 'a', operator: 'neq', value: 'a' }] }],
+    }
+    expect(matchRule([rule2], data)).false
   })
 })

@@ -7,6 +7,7 @@ import {
 } from '@mass-block-twitter/server'
 import { SERVER_URL } from './constants'
 import { ModListSubscribedUsersKey } from './shared'
+import { crossFetch } from './query'
 
 export async function refreshSpamUsers(): Promise<void> {
   const spamUsers = await sendMessage('fetchSpamUsers', undefined)
@@ -22,7 +23,7 @@ export async function refreshModListSubscribedUsers(
   if (!token) {
     return
   }
-  const resp = await fetch(
+  const resp = await crossFetch(
     `${SERVER_URL}/api/modlists/subscribed/users?version=` +
       browser.runtime.getManifest().version,
     {

@@ -5,6 +5,7 @@ import { extractCurrentUserId } from './observe'
 import { matchByKeyword } from './util/matchByKeyword'
 import { pick } from 'lodash-es'
 import { ModListSubscribedUserAndRulesResponse } from '@mass-block-twitter/server'
+import { matchRule, Rule, RuleData } from './rule'
 
 export type FilterResult = 'show' | 'hide' | 'next' | 'block'
 export type FilterData =
@@ -198,20 +199,34 @@ export function sharedSpamFilter(): TweetFilter {
 }
 
 export function modListFilter(): TweetFilter {
-  return {
-    name: 'modList',
-    userCondition: (user: User) => {
-      for (const modlist of spamContext.modlists) {
-        if (modlist.twitterUserIds.includes(user.id)) {
-          if (modlist.action === 'block') {
-            return 'block'
-          } else {
-            return 'hide'
-          }
+  function f(data: RuleData) {
+    for (const modlist of spamContext.modlists) {
+      if (data.user && modlist.twitterUserIds.includes(data.user.id)) {
+        if (modlist.action === 'block') {
+          return 'block'
+        } else {
+          return 'hide'
         }
       }
-      return 'next'
+      if (matchRule(modlist.conditions as Rule[], data)) {
+        if (modlist.action === 'block') {
+          return 'block'
+        } else {
+          return 'hide'
+        }
+      }
+    }
+    return 'next'
+  }
+  return {
+    name: 'modList',
+    tweetCondition(tweet) {
+      return f({
+        tweet,
+        user: tweet.user,
+      })
     },
+    userCondition: (user) => f({ user }),
   }
 }
 

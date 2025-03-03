@@ -194,7 +194,7 @@
           <List
             data={users}
             itemKey="id"
-            itemHeight={37.5}
+            itemHeight={45}
             {height}
             dynamic
             onscroll={onScroll}
@@ -202,12 +202,15 @@
             {#snippet child(item)}
               <div
                 class={cn(
-                  'flex py-1 h-10 rounded-md items-center justify-between gap-2 hover:bg-accent hover:text-accent-foreground',
+                  'flex py-1 h-12 rounded-md items-center justify-between gap-2 hover:bg-accent hover:text-accent-foreground',
                 )}
                 role="button"
                 tabindex="0"
-                onclick={() => onPreviewRule(item)}
-                onkeydown={(e) => e.key === 'Enter' && onPreviewRule(item)}
+                onclick={() =>
+                  owner ? onOpenUpdateRuleEdit(item) : onPreviewRule(item)}
+                onkeydown={(e) =>
+                  e.key === 'Enter' &&
+                  (owner ? onOpenUpdateRuleEdit(item) : onPreviewRule(item))}
               >
                 <div class="flex-1 truncate text-sm font-medium">
                   {item.name}

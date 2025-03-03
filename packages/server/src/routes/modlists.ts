@@ -263,7 +263,7 @@ modlists.get('/subscribed/metadata', async (c) => {
     .where(eq(modListSubscription.localUserId, tokenInfo.sub))
   return c.json<ModListSubscribeResponse>(_modList.map((it) => it.ModList))
 })
-// TODO @deprecated
+// TODO @deprecated v0.15.1
 modlists.get('/subscribed', async (c) => {
   const db = drizzle(c.env.DB)
   const tokenInfo = c.get('jwtPayload')

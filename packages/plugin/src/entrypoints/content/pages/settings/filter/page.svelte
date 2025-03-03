@@ -51,9 +51,9 @@
   </Label>
   <Label class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
-      <span class="block text-base font-medium">Hide Mod List Accounts</span>
+      <span class="block text-base font-medium">Hide Moderation Lists</span>
       <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets from accounts that are subscribed to a mod list.
+        Hide tweets from accounts that are subscribed to a Moderation Lists.
       </span>
     </div>
     <Checkbox class="shrink-0" bind:checked={$settings.hideModListAccounts} />

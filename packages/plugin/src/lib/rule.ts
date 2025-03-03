@@ -12,6 +12,8 @@ import {
 } from 'zod'
 import { languages } from './constants/languages'
 import { get } from 'lodash-es'
+import { extend } from 'dayjs'
+import { ModListRule } from '@mass-block-twitter/server'
 
 const ruleDataSchema = z.object({
   user: z
@@ -56,7 +58,7 @@ const ruleDataSchema = z.object({
     })
     .optional(),
 })
-type RuleData = z.infer<typeof ruleDataSchema>
+export type RuleData = z.infer<typeof ruleDataSchema>
 
 type StringCondition = {
   field: string
@@ -74,7 +76,7 @@ type BooleanCondition = {
   value: boolean
 }
 type Condition = StringCondition | NumberCondition | BooleanCondition
-interface Rule {
+export interface Rule {
   or: {
     and: Condition[]
   }[]
@@ -214,7 +216,7 @@ const rules: Rule[] = [
   },
 ]
 
-function matchCondition(cond: Condition, data: RuleData) {
+function matchCondition(cond: Condition, data: any) {
   const { field, operator, value } = cond
   const fieldValue = get(data, field)
   if (fieldValue === undefined || fieldValue === null) {
@@ -241,7 +243,7 @@ function matchCondition(cond: Condition, data: RuleData) {
   return true
 }
 
-function matchRule(rules: Rule[], data: RuleData) {
+export function matchRule(rules: Rule[], data: any) {
   return rules.some((rule) =>
     rule.or.some((or) => or.and.every((cond) => matchCondition(cond, data))),
   )

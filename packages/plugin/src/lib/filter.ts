@@ -208,7 +208,7 @@ export function modListFilter(): TweetFilter {
           return 'hide'
         }
       }
-      if (matchRule(modlist.conditions as Rule[], data)) {
+      if (matchRule(modlist.rules as Rule[], data)) {
         if (modlist.action === 'block') {
           return 'block'
         } else {

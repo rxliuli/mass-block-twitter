@@ -55,10 +55,10 @@
           Give your rule a descriptive name.
         </p>
       </div>
-      {#each rule.condition.or as or, orIndex (orIndex)}
+      {#each rule.rule.or as or, orIndex (orIndex)}
         {#each or.and as _, andIndex (andIndex)}
           {@const hasOne =
-            rule.condition.or.length === 1 && or.and.length === 1}
+            rule.rule.or.length === 1 && or.and.length === 1}
           <div
             class={cn(
               'flex md:hidden items-center justify-end gap-2',
@@ -71,7 +71,7 @@
               onclick={() => {
                 or.and.splice(andIndex, 1)
                 if (or.and.length === 0) {
-                  rule.condition.or.splice(orIndex, 1)
+                  rule.rule.or.splice(orIndex, 1)
                 }
               }}
             >
@@ -97,7 +97,7 @@
                 <Button
                   variant="secondary"
                   onclick={() => {
-                    rule.condition.or.splice(orIndex + 1, 0, {
+                    rule.rule.or.splice(orIndex + 1, 0, {
                       and: [{} as ModListConditionItem],
                     })
                   }}
@@ -112,7 +112,7 @@
                   onclick={() => {
                     or.and.splice(andIndex, 1)
                     if (or.and.length === 0) {
-                      rule.condition.or.splice(orIndex, 1)
+                      rule.rule.or.splice(orIndex, 1)
                     }
                   }}
                 >
@@ -128,7 +128,7 @@
               <div class="h-2 border-l"></div>
             </div>
           {/if}
-          {#if orIndex === rule.condition.or.length - 1 && andIndex === or.and.length - 1}
+          {#if orIndex === rule.rule.or.length - 1 && andIndex === or.and.length - 1}
             <div class="md:hidden">
               <Button
                 variant="secondary"
@@ -141,7 +141,7 @@
               <Button
                 variant="secondary"
                 onclick={() => {
-                  rule.condition.or.splice(orIndex + 1, 0, {
+                  rule.rule.or.splice(orIndex + 1, 0, {
                     and: [{} as ModListConditionItem],
                   })
                 }}
@@ -151,7 +151,7 @@
             </div>
           {/if}
         {/each}
-        {#if orIndex !== rule.condition.or.length - 1}
+        {#if orIndex !== rule.rule.or.length - 1}
           <div class="flex w-fit flex-col items-center">
             <div class="h-4"></div>
             <Badge>Or</Badge>

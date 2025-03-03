@@ -324,7 +324,6 @@ export default defineContentScript({
 
     document.addEventListener('RefreshModListSubscribedUsers', async () => {
       await refershSpamContext()
-      console.log('RefreshModListSubscribedUsers from dashboard', spamContext)
     })
   },
 })

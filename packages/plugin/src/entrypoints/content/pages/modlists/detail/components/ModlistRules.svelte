@@ -15,7 +15,7 @@
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
   import ModlistRuleEdit from './ModlistRuleEdit.svelte'
   import { toast } from 'svelte-sonner'
-  import { Button, buttonVariants } from '$lib/components/ui/button'
+  import { Button } from '$lib/components/ui/button'
   import { PencilIcon, Trash2Icon } from 'lucide-svelte'
   import { cn } from '$lib/utils'
   import ModlistRulePreview from './ModlistRulePreview.svelte'
@@ -68,7 +68,7 @@
   const createRule = () =>
     ({
       name: '',
-      condition: {
+      rule: {
         or: [
           {
             and: [{} as ModListConditionItem],
@@ -98,7 +98,7 @@
         method: 'POST',
         body: JSON.stringify({
           modListId: route.search?.get('id')!,
-          condition: rule.condition,
+          rule: rule.rule,
           name: rule.name,
         } satisfies ModListAddRuleRequest),
       })
@@ -129,7 +129,7 @@
           },
           method: 'PUT',
           body: JSON.stringify({
-            condition: rule.condition,
+            rule: rule.rule,
             name: rule.name,
           } satisfies ModListUpdateRuleRequest),
         },

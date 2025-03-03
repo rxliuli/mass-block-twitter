@@ -33,7 +33,7 @@
     </Dialog.Header>
     <div class="h-[60dvh] overflow-y-auto">
       {#if rule}
-        {#each rule.condition.or as or, orIndex (orIndex)}
+        {#each rule.rule.or as or, orIndex (orIndex)}
           {#each or.and as condition, andIndex (andIndex)}
             {@const first = andIndex === 0}
             {@const field = fields.find((it) => it.field === condition.field)}
@@ -120,7 +120,7 @@
               </div>
             {/if}
           {/each}
-          {#if orIndex !== rule.condition.or.length - 1}
+          {#if orIndex !== rule.rule.or.length - 1}
             <div class="flex w-fit flex-col items-center">
               <div class="h-4"></div>
               <Badge>Or</Badge>

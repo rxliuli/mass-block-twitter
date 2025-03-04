@@ -76,4 +76,46 @@ describe('matchRule', () => {
     }
     expect(matchRule([rule2], data)).false
   })
+  it('should match and rule', () => {
+    const rule: Rule = {
+      or: [
+        {
+          and: [
+            { field: 'a', operator: 'cont', value: 'a' },
+            { field: 'a', operator: 'cont', value: 'b' },
+          ],
+        },
+      ],
+    }
+    expect(matchRule([rule], { a: 'ab' })).true
+    expect(matchRule([rule], { a: 'ac' })).false
+  })
+  it('real match', () => {
+    expect(
+      matchRule(
+        [
+          {
+            or: [
+              {
+                and: [
+                  { field: 'user.description', operator: 'cont', value: '🔞' },
+                  {
+                    field: 'user.description',
+                    operator: 'cont',
+                    value: '👇👇👇',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        {
+          user: {
+            description:
+              '🧡  👇👇👇   👇🔞💦My Hot🔥 Foto🍓 and Video🔥 👉👌 free chat wich me 👇♥️🍓',
+          },
+        },
+      ),
+    ).true
+  })
 })

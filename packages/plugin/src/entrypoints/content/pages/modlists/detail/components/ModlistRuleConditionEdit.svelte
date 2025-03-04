@@ -86,6 +86,9 @@
           <Input
             name={`${name}.value`}
             bind:value={condition.value as string}
+            onchange={(ev) => {
+              condition.value = (ev.target as HTMLInputElement).value.trim()
+            }}
             disabled={!condition.operator}
             required
           />

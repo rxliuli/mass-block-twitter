@@ -8,6 +8,8 @@
   import type {
     ModListAddTwitterUserRequest,
     ModListAddTwitterUserResponse,
+    ModListAddTwitterUsersRequest,
+    ModListAddTwitterUsersResponse,
     ModListRemoveTwitterUserRequest,
     ModListUsersPageResponse,
   } from '@mass-block-twitter/server'
@@ -90,6 +92,46 @@
             ...data,
             modListUserId: data.id,
           })
+        }),
+      )
+    },
+    onSuccess: () => {
+      toast.success('Added to list')
+    },
+    onError: () => {
+      toast.error('Add to list failed')
+    },
+  })
+  const addUsersMutation = createMutation({
+    mutationFn: async (users: User[]) => {
+      const resp = await crossFetch(`${SERVER_URL}/api/modlists/users`, {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + (await getAuthInfo())?.token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          modListId: route.search?.get('id')!,
+          twitterUsers: users,
+        } satisfies ModListAddTwitterUsersRequest),
+      })
+      if (!resp.ok) {
+        throw new Error('Failed to add user')
+      }
+      const data = (await resp.json()) as ModListAddTwitterUsersResponse
+      if (!$query.data) {
+        await $query.refetch()
+        return
+      }
+      queryClient.setQueryData(
+        ['modlistUsers', route.search?.get('id')],
+        produce((old: typeof $query.data) => {
+          old?.pages[0]?.data.unshift(
+            ...data.map((it) => ({
+              ...it,
+              modListUserId: it.id,
+            })),
+          )
         }),
       )
     },
@@ -207,5 +249,6 @@
   bind:open={userAddOpen}
   modListId={route.search?.get('id')!}
   onAdd={$addUserMutation.mutateAsync}
+  onAddUsers={$addUsersMutation.mutateAsync}
   onRemove={(user) => $removeUserMutation.mutateAsync(user.id)}
 />

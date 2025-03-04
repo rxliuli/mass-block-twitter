@@ -4,7 +4,6 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 const browserIncludes = [
   'src/**/*.browser.test.ts',
   'src/**/*.browser.svelte.test.ts',
-  'src/**/__tests__/*.browser.ts',
 ]
 
 export default defineWorkspace([
@@ -26,7 +25,6 @@ export default defineWorkspace([
       // an example of file based convention,
       // you don't have to follow it
       include: browserIncludes,
-      exclude: ['src/**/*.test.ts'],
       name: 'browser',
       browser: {
         enabled: true,
@@ -40,5 +38,6 @@ export default defineWorkspace([
         ],
       },
     },
+    plugins: [svelte()],
   },
 ])

@@ -7,4 +7,10 @@ export default defineConfig({
       $lib: path.resolve('./src/lib'),
     },
   },
+  test: {
+    coverage: {
+      excludeAfterRemap: true,
+      exclude: ['src/lib/components/ui/**', '.wxt/**', 'node_modules/**'],
+    },
+  },
 })

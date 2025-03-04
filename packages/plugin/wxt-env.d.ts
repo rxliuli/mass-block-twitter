@@ -1,4 +1,5 @@
 /// <reference types="svelte" />
+/// <reference types="@vitest/browser/matchers" />
 
 declare global {
   interface ImportMetaEnv {

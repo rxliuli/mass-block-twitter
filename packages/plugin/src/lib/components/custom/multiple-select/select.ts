@@ -17,8 +17,26 @@ export class Selector {
     start: string
     end: string
   }
-  get mode() {
-    return this.#mode
+  getKeys() {
+    return this.#keys
+  }
+  setKeys(keys: string[]) {
+    const allSelected =
+      this.#keys.length !== 0 && this.#keys.length === this.selected.length
+    this.#keys = keys
+    if (this.#range) {
+      if (!keys.includes(this.#range.start)) {
+        this.shiftUp()
+      }
+    }
+    if (allSelected) {
+      this.#selected = keys
+    } else {
+      this.#selected = this.#keys.filter((it) => this.#selected.includes(it))
+    }
+  }
+  setSelected(selected: string[]) {
+    this.#selected = selected
   }
   shiftDown() {
     this.#shiftKey = true
@@ -48,6 +66,9 @@ export class Selector {
     return this.#selected.filter((it) => !rangeKeys.includes(it))
   }
   click(key: string) {
+    if (!this.#keys.includes(key)) {
+      return
+    }
     const included = this.#selected.includes(key)
     if (!this.#shiftKey) {
       this.#selected = included
@@ -71,5 +92,10 @@ export class Selector {
       return
     }
     this.#range.end = key
+  }
+  selectAll() {
+    this.shiftUp()
+    this.#selected =
+      this.#selected.length === this.#keys.length ? [] : this.#keys
   }
 }

@@ -20,13 +20,14 @@ import {
   eq,
   exists,
   inArray,
+  InferInsertModel,
   InferSelectModel,
   lt,
   sql,
 } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
 import { getTableAliasedColumns } from '../lib/drizzle'
-import { omit } from 'es-toolkit'
+import { groupBy, omit } from 'es-toolkit'
 
 const modlists = new Hono<HonoEnv>()
 
@@ -337,6 +338,59 @@ modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
   ])
   return c.json(user)
 })
+export const addTwitterUsersSchema = z.object({
+  modListId: z.string(),
+  twitterUsers: z.array(userSchema),
+})
+export type ModListAddTwitterUsersRequest = z.infer<
+  typeof addTwitterUsersSchema
+>
+export type ModListAddTwitterUsersResponse = InferSelectModel<typeof user>[]
+modlists.post(
+  '/users',
+  zValidator('json', addTwitterUsersSchema),
+  async (c) => {
+    const validated = c.req.valid('json')
+    const db = drizzle(c.env.DB)
+    const tokenInfo = c.get('jwtPayload')
+    const _modList = await db
+      .select({
+        localUserId: modList.localUserId,
+      })
+      .from(modList)
+      .where(eq(modList.id, validated.modListId))
+      .get()
+    if (!_modList || _modList.localUserId !== tokenInfo.sub) {
+      return c.json({ code: 'modListNotFound' }, 404)
+    }
+    const results = (await db.batch([
+      ...validated.twitterUsers.map((it) => upsertUser(db, it)),
+      ...validated.twitterUsers.map((it) =>
+        db
+          .insert(modListUser)
+          .values({
+            id: ulid(),
+            modListId: validated.modListId,
+            twitterUserId: it.id,
+          })
+          .onConflictDoNothing({
+            target: [modListUser.modListId, modListUser.twitterUserId],
+          })
+          .returning({ inserted: sql`changes()` }),
+      ),
+    ] as any)) as (InferInsertModel<typeof user>[] | { inserted: 0 }[])[]
+    const { users = [], inserts = [] } = groupBy(results.flat(), (it) =>
+      'id' in it ? 'users' : 'inserts',
+    )
+    await db
+      .update(modList)
+      .set({ userCount: sql`userCount + ${inserts.length}` })
+      .where(eq(modList.id, validated.modListId))
+    return c.json<ModListAddTwitterUsersResponse>(
+      users as ModListAddTwitterUsersResponse,
+    )
+  },
+)
 
 const removeTwitterUserSchema = z.object({
   twitterUserId: z.string(),

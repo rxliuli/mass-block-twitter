@@ -38,7 +38,7 @@ CREATE TABLE `ModListSubscription` (
 	FOREIGN KEY (`localUserId`) REFERENCES `LocalUser`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `modListSubscription_unique` ON `ModListSubscription` (`modListId`,`localUserId`);--> statement-breakpoint
+CREATE UNIQUE INDEX "ModListSubscription_modListId_localUserId_key" ON "ModListSubscription"("modListId", "localUserId");--> statement-breakpoint
 CREATE TABLE `ModListUser` (
 	`id` text PRIMARY KEY NOT NULL,
 	`modListId` text NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE `ModListUser` (
 	FOREIGN KEY (`twitterUserId`) REFERENCES `User`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `modListUser_unique` ON `ModListUser` (`id`,`twitterUserId`);--> statement-breakpoint
+CREATE UNIQUE INDEX "ModListUser_modListId_twitterUserId_key" ON "ModListUser"("modListId", "twitterUserId"); --> statement-breakpoint
 CREATE TABLE `Payment` (
 	`id` text PRIMARY KEY NOT NULL,
 	`localUserId` text NOT NULL,

@@ -21,11 +21,17 @@ import type {
   ModListRulesPageResponse,
   ModListRulesRequest,
   ModListUpdateRuleResponse,
-} from '../src/routes/modlists'
+  ModListAddTwitterUsersRequest,
+  ModListAddTwitterUsersResponse,
+} from '../src/lib'
 import { TwitterUser } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
-import { modListRule, modListSubscription, modListUser } from '../src/db/schema'
-import { eq, name, sql } from 'drizzle-orm'
+import {
+  modListRule,
+  modListSubscription,
+  modListUser,
+  user,
+} from '../src/db/schema'
 
 describe('modlists', () => {
   const context = initCloudflareTest()
@@ -705,6 +711,59 @@ describe('modlists', () => {
       })
       expect(resp1.ok).true
       expect((await getModListUsers(modListId)).data.length).toBe(0)
+    })
+    it('should be able to add multiple users to a modlist', async () => {
+      const db = context.db
+      await db.insert(user).values({
+        id: 'twitter-user-1',
+        screenName: 'test-user-1',
+        name: 'test-user-1',
+        profileImageUrl: 'test-user-1',
+        accountCreatedAt: new Date().toISOString(),
+      })
+      await db.insert(modListUser).values({
+        id: 'modlist-user-1',
+        modListId,
+        twitterUserId: 'twitter-user-1',
+      })
+      const req = async () => {
+        const resp1 = await fetch('/api/modlists/users', {
+          method: 'POST',
+          body: JSON.stringify({
+            modListId,
+            twitterUsers: [
+              {
+                id: 'twitter-user-1',
+                screen_name: 'test-user-1',
+                name: 'test-user-1',
+                profile_image_url: 'test-user-1',
+                created_at: new Date().toISOString(),
+              },
+              {
+                id: 'twitter-user-2',
+                screen_name: 'test-user-2',
+                name: 'test-user-2',
+                profile_image_url: 'test-user-2',
+                created_at: new Date().toISOString(),
+              },
+            ],
+          } satisfies ModListAddTwitterUsersRequest),
+          headers: {
+            Authorization: `Bearer ${context.token1}`,
+            'Content-Type': 'application/json',
+          },
+        })
+        expect(resp1.ok).true
+        return (await resp1.json()) as ModListAddTwitterUsersResponse
+      }
+      const r1 = await req()
+      expect(r1.length).toBe(2)
+      expect(r1[0].id).toBe('twitter-user-1')
+      expect(r1[1].id).toBe('twitter-user-2')
+      const r2 = await req()
+      expect(r2.length).toBe(2)
+      expect(r2[0].id).toBe('twitter-user-1')
+      expect(r2[1].id).toBe('twitter-user-2')
     })
   })
   describe('rule', () => {

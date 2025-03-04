@@ -10,66 +10,58 @@ import { relations } from 'drizzle-orm'
 import { ulid } from 'ulidx'
 
 // User table
-export const user = sqliteTable(
-  'User',
-  {
-    id: text('id').primaryKey(),
-    screenName: text('screenName').notNull(),
-    name: text('name'),
-    description: text('description'),
-    profileImageUrl: text('profileImageUrl'),
-    accountCreatedAt: text('accountCreatedAt').$defaultFn(() =>
-      new Date().toISOString(),
-    ),
-    spamReportCount: integer('spamReportCount').default(0).notNull(),
-    createdAt: text('createdAt')
-      .notNull()
-      .$defaultFn(() => new Date().toISOString()),
-    updatedAt: text('updatedAt')
-      .notNull()
-      .$defaultFn(() => new Date().toISOString()),
-    followersCount: integer('followersCount').default(0).notNull(),
-    followingCount: integer('followingCount').default(0).notNull(),
-    blueVerified: integer('blueVerified', { mode: 'boolean' })
-      .default(false)
-      .notNull(),
-    defaultProfile: integer('defaultProfile', { mode: 'boolean' })
-      .default(true)
-      .notNull(),
-    defaultProfileImage: integer('defaultProfileImage', {
-      mode: 'boolean',
-    })
-      .default(true)
-      .notNull(),
-  },
-  (table) => [index('user_spamReportCount_idx').on(table.spamReportCount)],
-)
+export const user = sqliteTable('User', {
+  id: text('id').primaryKey(),
+  screenName: text('screenName').notNull(),
+  name: text('name'),
+  description: text('description'),
+  profileImageUrl: text('profileImageUrl'),
+  accountCreatedAt: text('accountCreatedAt').$defaultFn(() =>
+    new Date().toISOString(),
+  ),
+  spamReportCount: integer('spamReportCount').default(0).notNull(),
+  createdAt: text('createdAt')
+    .notNull()
+    .$defaultFn(() => new Date().toISOString()),
+  updatedAt: text('updatedAt')
+    .notNull()
+    .$defaultFn(() => new Date().toISOString()),
+  followersCount: integer('followersCount').default(0).notNull(),
+  followingCount: integer('followingCount').default(0).notNull(),
+  blueVerified: integer('blueVerified', { mode: 'boolean' })
+    .default(false)
+    .notNull(),
+  defaultProfile: integer('defaultProfile', { mode: 'boolean' })
+    .default(true)
+    .notNull(),
+  defaultProfileImage: integer('defaultProfileImage', {
+    mode: 'boolean',
+  })
+    .default(true)
+    .notNull(),
+})
 
 // Tweet table
-export const tweet = sqliteTable(
-  'Tweet',
-  {
-    id: text('id').primaryKey(),
-    text: text('text'),
-    media: text('media', { mode: 'json' }),
-    publishedAt: text('publishedAt').$defaultFn(() => new Date().toISOString()),
-    userId: text('userId')
-      .references(() => user.id)
-      .notNull(),
-    conversationId: text('conversationId'),
-    inReplyToStatusId: text('inReplyToStatusId'),
-    quotedStatusId: text('quotedStatusId'),
-    lang: text('lang').default('en'),
-    createdAt: text('createdAt')
-      .notNull()
-      .$defaultFn(() => new Date().toISOString()),
-    updatedAt: text('updatedAt')
-      .notNull()
-      .$defaultFn(() => new Date().toISOString()),
-    spamReportCount: integer('spamReportCount').default(0),
-  },
-  (table) => [index('tweet_spamReportCount_idx').on(table.spamReportCount)],
-)
+export const tweet = sqliteTable('Tweet', {
+  id: text('id').primaryKey(),
+  text: text('text'),
+  media: text('media', { mode: 'json' }),
+  publishedAt: text('publishedAt').$defaultFn(() => new Date().toISOString()),
+  userId: text('userId')
+    .references(() => user.id)
+    .notNull(),
+  conversationId: text('conversationId'),
+  inReplyToStatusId: text('inReplyToStatusId'),
+  quotedStatusId: text('quotedStatusId'),
+  lang: text('lang').default('en'),
+  createdAt: text('createdAt')
+    .notNull()
+    .$defaultFn(() => new Date().toISOString()),
+  updatedAt: text('updatedAt')
+    .notNull()
+    .$defaultFn(() => new Date().toISOString()),
+  spamReportCount: integer('spamReportCount').default(0),
+})
 
 // SpamReport table
 export const spamReport = sqliteTable(
@@ -97,15 +89,15 @@ export const spamReport = sqliteTable(
       .$defaultFn(() => new Date().toISOString()),
   },
   (table) => [
-    uniqueIndex('spamReport_unique').on(
+    uniqueIndex('SpamReport_spamUserId_reportUserId_spamTweetId_key').on(
       table.spamUserId,
       table.reportUserId,
       table.spamTweetId,
     ),
-    index('spamUser_idx').on(table.spamUserId),
-    index('reportUser_idx').on(table.reportUserId),
-    index('spamUser_report_idx').on(table.spamUserId, table.reportUserId),
-    index('createdAt_idx').on(table.createdAt),
+    index('SpamReport_spamUserId_idx').on(table.spamUserId),
+    index('SpamReport_reportUserId_idx').on(table.reportUserId),
+    index('SpamReport_spamUserId_reportUserId_idx').on(table.spamUserId, table.reportUserId),
+    index('SpamReport_createdAt_idx').on(table.createdAt),
   ],
 )
 
@@ -180,8 +172,8 @@ export const modList = sqliteTable(
       .$defaultFn(() => new Date().toISOString()),
   },
   (table) => [
-    index('modList_name_idx').on(table.name),
-    index('modList_description_idx').on(table.description),
+    index('ModList_name_idx').on(table.name),
+    index('ModList_description_idx').on(table.description),
   ],
 )
 
@@ -203,11 +195,12 @@ export const modListUser = sqliteTable(
       .notNull()
       .$defaultFn(() => new Date().toISOString()),
   },
-  () => [modListUserUnique],
-)
-export const modListUserUnique = uniqueIndex('modListUser_unique').on(
-  modList.id,
-  modListUser.twitterUserId,
+  (table) => [
+    uniqueIndex('ModListUser_modListId_twitterUserId_key').on(
+      table.modListId,
+      table.twitterUserId,
+    ),
+  ],
 )
 
 export type ModListConditionItem = {
@@ -264,7 +257,7 @@ export const modListSubscription = sqliteTable(
     ),
   },
   (table) => [
-    uniqueIndex('modListSubscription_unique').on(
+    uniqueIndex('ModListSubscription_modListId_localUserId_key').on(
       table.modListId,
       table.localUserId,
     ),

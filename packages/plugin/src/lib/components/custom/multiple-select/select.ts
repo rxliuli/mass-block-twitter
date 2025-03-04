@@ -36,6 +36,9 @@ export class Selector {
     }
   }
   setSelected(selected: string[]) {
+    if (JSON.stringify(this.selected) === JSON.stringify(selected)) {
+      return
+    }
     this.#selected = selected
   }
   shiftDown() {

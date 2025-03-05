@@ -2,10 +2,27 @@
   import type { Activity } from '$lib/db'
   import { Chart } from '$lib/components/chart'
   import type { EChartsOption } from 'echarts'
-  import { init } from 'echarts'
+  import { init, use } from 'echarts/core'
   import { formatActivity } from '../utils/activity'
   import { Dayjs } from 'dayjs'
   import { mode } from 'mode-watcher'
+  import { SVGRenderer } from 'echarts/renderers'
+  import { LineChart } from 'echarts/charts'
+  import {
+    TitleComponent,
+    TooltipComponent,
+    GridComponent,
+    LegendComponent,
+  } from 'echarts/components'
+
+  use([
+    SVGRenderer,
+    LineChart,
+    TitleComponent,
+    TooltipComponent,
+    GridComponent,
+    LegendComponent,
+  ])
 
   const {
     activities,

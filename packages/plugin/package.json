@@ -37,6 +37,7 @@
     "mode-watcher": "^0.5.0",
     "playwright": "^1.49.1",
     "rollup-plugin-polyfill-node": "^0.13.0",
+    "rollup-plugin-visualizer": "^5.14.0",
     "svelte": "^5.20.5",
     "svelte-check": "^4.0.7",
     "svelte-sonner": "^0.3.28",
@@ -46,6 +47,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tslib": "^2.8.1",
     "typescript": "^5.6.3",
+    "vite-bundle-analyzer": "^0.17.1",
     "vitest": "^3.0.7",
     "vitest-browser-svelte": "^0.1.0",
     "wxt": "^0.19.27"

@@ -1,10 +1,27 @@
 <script lang="ts">
   import type { EChartsOption } from 'echarts'
-  import { init } from 'echarts'
+  import { init, use } from 'echarts/core'
   import { Chart } from '$lib/components/chart'
   import type { Activity } from '$lib/db'
   import { groupBy } from 'lodash-es'
   import { mode } from 'mode-watcher'
+  import { SVGRenderer } from 'echarts/renderers'
+  import { BarChart } from 'echarts/charts'
+  import {
+    TitleComponent,
+    TooltipComponent,
+    GridComponent,
+    LegendComponent,
+  } from 'echarts/components'
+
+  use([
+    SVGRenderer,
+    BarChart,
+    TitleComponent,
+    TooltipComponent,
+    GridComponent,
+    LegendComponent,
+  ])
 
   const { activities }: { activities: Activity[] } = $props()
 

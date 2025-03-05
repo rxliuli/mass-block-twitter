@@ -168,7 +168,7 @@ importers:
         version: 2.0.2(svelte@5.20.5)(vite@6.2.0(@types/node@22.10.2)(jiti@1.21.7)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0))(wxt@0.19.27(@types/node@22.10.2)(lightningcss@1.29.1)(rollup@4.34.9)(tsx@4.19.3)(yaml@2.7.0))
       autoprefixer:
         specifier: ^10.4.20
-        version: 10.4.20(postcss@8.5.3)
+        version: 10.4.20(postcss@8.4.49)
       bits-ui:
         specifier: ^1.1.0
         version: 1.1.0(svelte@5.20.5)
@@ -193,6 +193,9 @@ importers:
       rollup-plugin-polyfill-node:
         specifier: ^0.13.0
         version: 0.13.0(rollup@4.34.9)
+      rollup-plugin-visualizer:
+        specifier: ^5.14.0
+        version: 5.14.0(rollup@4.34.9)
       svelte:
         specifier: ^5.20.5
         version: 5.20.5
@@ -220,6 +223,9 @@ importers:
       typescript:
         specifier: ^5.6.3
         version: 5.7.2
+      vite-bundle-analyzer:
+        specifier: ^0.17.1
+        version: 0.17.1
       vitest:
         specifier: ^3.0.7
         version: 3.0.7(@types/node@22.10.2)(@vitest/browser@3.0.7)(@vitest/ui@3.0.7)(happy-dom@17.0.0)(jiti@1.21.7)(jsdom@25.0.1)(lightningcss@1.29.1)(msw@2.7.3(@types/node@22.10.2)(typescript@5.7.2))(tsx@4.19.3)(yaml@2.7.0)
@@ -399,7 +405,7 @@ importers:
         version: 0.5.16(tailwindcss@3.4.17)
       autoprefixer:
         specifier: ^10.4.20
-        version: 10.4.20(postcss@8.4.49)
+        version: 10.4.20(postcss@8.5.3)
       bits-ui:
         specifier: 1.0.0-next.91
         version: 1.0.0-next.91(svelte@5.16.0)
@@ -4816,6 +4822,19 @@ packages:
     peerDependencies:
       rollup: ^1.20.0 || ^2.0.0 || ^3.0.0 || ^4.0.0
 
+  rollup-plugin-visualizer@5.14.0:
+    resolution: {integrity: sha512-VlDXneTDaKsHIw8yzJAFWtrzguoJ/LnQ+lMpoVfYJ3jJF4Ihe5oYLAqLklIK/35lgUY+1yEzCkHyZ1j4A5w5fA==}
+    engines: {node: '>=18'}
+    hasBin: true
+    peerDependencies:
+      rolldown: 1.x
+      rollup: 2.x || 3.x || 4.x
+    peerDependenciesMeta:
+      rolldown:
+        optional: true
+      rollup:
+        optional: true
+
   rollup-pluginutils@2.8.2:
     resolution: {integrity: sha512-EEp9NhnUkwY8aif6bxgovPHMoMoNr2FulJziTndpt5H9RdwC47GSGuII9XxpSdzVGM0GWrNPHV6ie1LTNJPaLQ==}
 
@@ -5402,6 +5421,10 @@ packages:
         optional: true
       vue:
         optional: true
+
+  vite-bundle-analyzer@0.17.1:
+    resolution: {integrity: sha512-ubjLhkuRgOSBNck+6xBbQmjmh8SeLTG4alEM5PX2TNzyGhKLwWlyCz1YG0an3RQnscbhVzSb6kYteoHXhP///A==}
+    hasBin: true
 
   vite-node@2.1.8:
     resolution: {integrity: sha512-uPAwSr57kYjAUux+8E2j0q0Fxpn8M9VoyfGiRI8Kfktz9NcYMCenwY5RnZxnF1WTu3TGiYipirIzacLL3VVGFg==}
@@ -9980,6 +10003,15 @@ snapshots:
       '@rollup/plugin-inject': 5.0.5(rollup@4.34.9)
       rollup: 4.34.9
 
+  rollup-plugin-visualizer@5.14.0(rollup@4.34.9):
+    dependencies:
+      open: 8.4.2
+      picomatch: 4.0.2
+      source-map: 0.7.4
+      yargs: 17.7.2
+    optionalDependencies:
+      rollup: 4.34.9
+
   rollup-pluginutils@2.8.2:
     dependencies:
       estree-walker: 0.6.1
@@ -10695,6 +10727,8 @@ snapshots:
       react-dom: 19.0.0(react@19.0.0)
       svelte: 5.20.5
       vue: 3.5.13(typescript@5.7.2)
+
+  vite-bundle-analyzer@0.17.1: {}
 
   vite-node@2.1.8(@types/node@22.10.2)(lightningcss@1.29.1):
     dependencies:

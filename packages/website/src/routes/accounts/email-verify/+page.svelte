@@ -16,10 +16,9 @@
     VerifyEmailRequest,
   } from '@mass-block-twitter/server'
 
-  const email = page.url.searchParams.get('email')
-
   const sendMailMutation = createMutation({
     mutationFn: async () => {
+      const email = page.url.searchParams.get('email')
       if (!email) {
         throw new Error('Email is required')
       }
@@ -50,6 +49,7 @@
       event.preventDefault()
       const formData = new FormData(event.target as HTMLFormElement)
       const code = formData.get('code') as string
+      const email = page.url.searchParams.get('email')
       if (!email) {
         throw new Error('Email is required')
       }
@@ -86,6 +86,11 @@
     onError: () => {
       toast.error('Failed to verify email')
     },
+  })
+
+  let email = $state('')
+  $effect(() => {
+    email = page.url.searchParams.get('email') ?? ''
   })
 </script>
 

@@ -1,4 +1,4 @@
-import { Context, Hono } from 'hono'
+import { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
 import {
   ReportSpamContextTweet,
@@ -13,8 +13,6 @@ import { spamReport, tweet, user } from '../db/schema'
 import { and, desc, eq, gte, InferInsertModel, sql } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
 import { omit, uniqBy } from 'es-toolkit'
-import { rateLimiter } from 'hono-rate-limiter'
-import { WorkersKVStore } from '../lib/KVStore'
 
 export function convertUserParamsToDBUser(
   userParams: typeof userSchema._type,
@@ -45,18 +43,19 @@ export type TwitterUser = z.infer<typeof userSchema>
 twitter
   .post(
     '/spam-users',
-    (c, next) =>
-      rateLimiter({
-        windowMs: 15 * 60 * 1000,
-        limit: 100,
-        standardHeaders: 'draft-6',
-        keyGenerator: (c) =>
-          `${c.header('x-real-ip')}::${c.header('user-agent')}`,
-        store: new WorkersKVStore({
-          namespace: c.env.MY_KV,
-          prefix: 'rate-limit',
-        }),
-      })(c as Context, next),
+    // TODO: disable rate limit, wait https://github.com/rhinobase/hono-rate-limiter/issues/34
+    // (c, next) =>
+    //   rateLimiter({
+    //     windowMs: 15 * 60 * 1000,
+    //     limit: 100,
+    //     standardHeaders: 'draft-6',
+    //     keyGenerator: (c) =>
+    //       `${c.header('x-real-ip')}::${c.header('user-agent')}`,
+    //     store: new WorkersKVStore({
+    //       namespace: c.env.MY_KV,
+    //       prefix: 'rate-limit',
+    //     }),
+    //   })(c as Context, next),
     zValidator('json', spamReportRequestSchema),
     async (c) => {
       const validated = c.req.valid('json')
@@ -221,13 +220,12 @@ twitter
     },
   )
   .get('/spam-users-for-type', async (c) => {
-    const spamUsersExpireTime = await c.env.MY_KV.get('spamUsersExpireTime')
-    if (!c.req.query('force') && spamUsersExpireTime) {
-      const time = new Date(spamUsersExpireTime)
-      if (Date.now() < time.getTime()) {
-        const spamUsers = await c.env.MY_KV.get('spamUsers')
-        if (spamUsers) {
-          return c.json(JSON.parse(spamUsers), {
+    if (!c.req.query('force')) {
+      const spamUsers = await c.env.MY_KV.get('SpamUsers')
+      if (spamUsers) {
+        const { data, expireTime } = JSON.parse(spamUsers)
+        if (Date.now() / 1000 < expireTime) {
+          return c.json(data, {
             headers: {
               'Cache-Control': 'public, max-age=3600',
             },
@@ -250,10 +248,15 @@ twitter
       acc[it.id] = it.spamReportCount > 10 ? 'spam' : 'report'
       return acc
     }, {} as Record<string, 'spam' | 'report'>)
-    await c.env.MY_KV.put('spamUsers', JSON.stringify(res))
     await c.env.MY_KV.put(
-      'spamUsersExpireTime',
-      new Date(Date.now() + +1000 * 60 * 60 * 24).toISOString(),
+      'SpamUsers',
+      JSON.stringify({
+        data: res,
+        expireTime: Date.now() / 1000 + 60 * 60 * 24,
+      }),
+      {
+        expiration: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+      },
     )
     return c.json(res)
   })

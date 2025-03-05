@@ -62,7 +62,8 @@ async function add(spamUserId: string, reportUserId: string, tweetId: string) {
 }
 
 describe('report spam', () => {
-  it('should be rate limit', async () => {
+  // TODO: disable rate limit, wait https://github.com/rhinobase/hono-rate-limiter/issues/34
+  it.skip('should be rate limit', async () => {
     for (let i = 0; i < 100; i++) {
       expect((await add('1', '2', '1')).ok).true
     }

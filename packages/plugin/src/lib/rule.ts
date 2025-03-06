@@ -12,8 +12,6 @@ import {
 } from 'zod'
 import { languages } from './constants/languages'
 import { get } from 'lodash-es'
-import { extend } from 'dayjs'
-import { ModListRule } from '@mass-block-twitter/server'
 
 const ruleDataSchema = z.object({
   user: z
@@ -205,17 +203,6 @@ export function getRuleFileds(): RuleField[] {
   return fields
 }
 
-const rules: Rule[] = [
-  {
-    or: [
-      { and: [{ field: 'user.name', operator: 'cont', value: 'test' }] },
-      { and: [{ field: 'user.screen_name', operator: 'cont', value: 'test' }] },
-      { and: [{ field: 'user.description', operator: 'cont', value: 'test' }] },
-      { and: [{ field: 'user.location', operator: 'cont', value: 'test' }] },
-    ],
-  },
-]
-
 function matchCondition(cond: Condition, data: any) {
   const { field, operator, value } = cond
   const fieldValue = get(data, field)
@@ -240,7 +227,7 @@ function matchCondition(cond: Condition, data: any) {
     case 'lte':
       return fieldValue <= value
   }
-  return true
+  return false
 }
 
 export function matchRule(rules: Rule[], data: any) {

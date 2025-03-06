@@ -43,6 +43,8 @@ import {
 } from '$lib/filter'
 import TweetDetail8ProbableSpam from './assets/TweetDetail8ProbableSpam.json'
 import CreateTweet from './assets/CreateTweet.json'
+import SearchTimeline2 from './assets/SearchTimeline2.json'
+import TweetEntity from './assets/TweetEntity.json'
 
 describe('extractObjects', () => {
   it('extractObjects 1', () => {
@@ -95,6 +97,7 @@ describe('parseUserRecords', () => {
   it('parse timeline', () => {
     const users = parseUserRecords(timeline)
     expect(users).length(20)
+    expect(users.some((it) => it.description?.includes('t.co'))).false
     expect(
       users.map((it) => omit(it, 'created_at', 'updated_at')),
     ).toMatchSnapshot()
@@ -338,6 +341,13 @@ describe('parseTweets', () => {
     expect(tweets).length(1)
     expect(tweets[0].id).toEqual('1895870325092737311')
   })
+  it('parseTweets for t.co link', () => {
+    const tweets = parseTweets(TweetEntity)
+    expect(tweets).length(1)
+    expect(tweets[0].id).toEqual('1897471935401034084')
+    expect(tweets[0].text).includes('manus.im')
+    expect(tweets[0].text).not.includes('t.co')
+  })
 })
 
 describe('filterTweets', () => {
@@ -408,6 +418,28 @@ describe('filterTweets', () => {
     )
     const r2 = parseTweets(filtered)
     expect(r2).length(2)
+  })
+  it('filterTweets for SearchTimeline2 (quoted_status_id_str exists but quoted_status_result is {})', () => {
+    localStorage.setItem(
+      MUTED_WORD_RULES_KEY,
+      JSON.stringify([
+        {
+          id: '1',
+          keyword: 'Manus',
+          type: 'hide',
+          checkpoints: ['tweet'],
+        },
+      ] as MutedWordRule[]),
+    )
+    const filter = mutedWordsFilter()
+    const r1 = parseTweets(SearchTimeline2)
+    expect(r1.some((it) => it.text.includes('Manus'))).true
+    const filtered = filterTweets(
+      SearchTimeline2,
+      (it) => filter.tweetCondition!(it) === 'next',
+    )
+    const r2 = parseTweets(filtered)
+    expect(r2.some((it) => it.text.includes('Manus'))).false
   })
 })
 

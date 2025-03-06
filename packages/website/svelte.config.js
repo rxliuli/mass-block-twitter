@@ -1,7 +1,5 @@
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import { mdsvex } from 'mdsvex'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import adapter from '@sveltejs/adapter-static'
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -12,10 +10,6 @@ const config = {
   preprocess: [
     mdsvex({
       extensions: ['.md'],
-      layout: path.resolve(
-        path.dirname(fileURLToPath(import.meta.url)),
-        './src/lib/components/layout/Markdown.svelte',
-      ),
     }),
     vitePreprocess(),
   ],

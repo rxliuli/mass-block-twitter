@@ -19,10 +19,9 @@
       <a href="/" class="font-bold transition-colors hover:text-foreground/80">
         {siteMetadata.title}
       </a>
-      <!-- wait for docs -->
-      <!-- <a href="/docs" class="transition-colors hover:text-foreground/80">
+      <a href="/docs" class="transition-colors hover:text-foreground/80">
         Docs
-      </a> -->
+      </a>
       <a href="/pricing" class="transition-colors hover:text-foreground/80">
         Pricing
       </a>

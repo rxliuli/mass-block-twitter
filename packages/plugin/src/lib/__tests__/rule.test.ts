@@ -118,4 +118,30 @@ describe('matchRule', () => {
       ),
     ).true
   })
+  it('default not match', () => {
+    expect(
+      matchRule(
+        [
+          {
+            or: [
+              {
+                and: [
+                  {
+                    field: 'user.description',
+                    operator: 'test' as any,
+                    value: 'test1',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        {
+          user: {
+            description: 'test2',
+          },
+        },
+      ),
+    ).false
+  })
 })

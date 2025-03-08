@@ -46,6 +46,7 @@ export function addBlockButton(tweetElement: HTMLElement, tweet: Tweet) {
   const actionBar = tweetElement.querySelector('[role="group"]')
   if (actionBar) {
     const customButton = document.createElement('button')
+    customButton.style.height = getComputedStyle(actionBar).height
     customButton.className = 'mass-block-twitter-button-block'
     customButton.title = 'Block Spam'
     customButton.innerHTML = `

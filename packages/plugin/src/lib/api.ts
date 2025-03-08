@@ -98,6 +98,12 @@ export async function unblockUser(userId: string) {
   }
 }
 
+const urlSchema = z.object({
+  display_url: z.string(),
+  expanded_url: z.string(),
+  url: z.string(),
+})
+
 const timelineUserSchema = z.object({
   __typename: z.literal('User'),
   rest_id: z.string(),
@@ -115,13 +121,16 @@ const timelineUserSchema = z.object({
     default_profile: z.boolean().optional(),
     default_profile_image: z.boolean().optional(),
     location: z.string().optional().nullable(),
+    entities: z.object({
+      description: z.object({ urls: z.array(urlSchema) }),
+    }),
   }),
 })
 
 function parseTimelineUser(
   tweetUser: z.infer<typeof timelineUserSchema>,
 ): User {
-  return {
+  const user: User = {
     id: tweetUser.rest_id,
     blocking: tweetUser.legacy.blocking ?? false,
     following: tweetUser.legacy.following ?? false,
@@ -140,6 +149,15 @@ function parseTimelineUser(
     is_blue_verified: tweetUser.is_blue_verified,
     location: tweetUser.legacy.location ?? undefined,
   }
+  if (
+    tweetUser.legacy.description &&
+    tweetUser.legacy.entities.description.urls
+  ) {
+    tweetUser.legacy.entities.description.urls.forEach((url) => {
+      user.description = user.description?.replace(url.url, url.expanded_url)
+    })
+  }
+  return user
 }
 
 const notifacationUserSchema = z.object({
@@ -157,28 +175,40 @@ const notifacationUserSchema = z.object({
   default_profile_image: z.boolean().optional(),
   ext_is_blue_verified: z.boolean(),
   location: z.string().optional().nullable(),
+  entities: z
+    .object({
+      description: z.object({ urls: z.array(urlSchema) }),
+    })
+    .optional(),
 })
+
 function parseNotificationUser(
-  user: z.infer<typeof notifacationUserSchema>,
+  twitterUser: z.infer<typeof notifacationUserSchema>,
 ): User {
-  return {
-    id: user.id_str,
-    screen_name: user.screen_name,
-    blocking: user.blocking ?? false,
-    following: user.following ?? false,
-    name: user.name,
-    description: user.description ?? undefined,
-    profile_image_url: user.profile_image_url_https ?? undefined,
-    created_at: user.created_at
-      ? new Date(user.created_at).toISOString()
+  const user: User = {
+    id: twitterUser.id_str,
+    screen_name: twitterUser.screen_name,
+    blocking: twitterUser.blocking ?? false,
+    following: twitterUser.following ?? false,
+    name: twitterUser.name,
+    description: twitterUser.description ?? undefined,
+    profile_image_url: twitterUser.profile_image_url_https ?? undefined,
+    created_at: twitterUser.created_at
+      ? new Date(twitterUser.created_at).toISOString()
       : undefined,
     updated_at: new Date().toISOString(),
-    followers_count: user.followers_count,
-    friends_count: user.friends_count,
-    default_profile: user.default_profile,
-    default_profile_image: user.default_profile_image,
-    is_blue_verified: user.ext_is_blue_verified,
+    followers_count: twitterUser.followers_count,
+    friends_count: twitterUser.friends_count,
+    default_profile: twitterUser.default_profile,
+    default_profile_image: twitterUser.default_profile_image,
+    is_blue_verified: twitterUser.ext_is_blue_verified,
   }
+  if (twitterUser.description && twitterUser.entities?.description.urls) {
+    twitterUser.entities.description.urls.forEach((url) => {
+      user.description = user.description?.replace(url.url, url.expanded_url)
+    })
+  }
+  return user
 }
 export function parseUserRecords(json: any): User[] {
   const users: User[] = []
@@ -230,6 +260,7 @@ const legacySchema = z.object({
         }),
       )
       .optional(),
+    urls: z.array(urlSchema).optional(),
   }),
   conversation_id_str: z.string(),
   in_reply_to_status_id_str: z.string().optional().nullable(),
@@ -258,6 +289,21 @@ function parseLegacyTweet(
     in_reply_to_status_id_str: it.in_reply_to_status_id_str ?? undefined,
     quoted_status_id_str: it.quoted_status_id_str,
     lang: it.lang,
+  }
+  if (it.entities.urls) {
+    it.entities.urls.forEach((url) => {
+      tweet.text = tweet.text.replace(url.url, url.expanded_url)
+    })
+  }
+  if (it.entities.media) {
+    it.entities.media.forEach((media) => {
+      if (tweet.text.endsWith(' ' + media.url)) {
+        tweet.text = tweet.text.slice(
+          0,
+          tweet.text.length - media.url.length - 1,
+        )
+      }
+    })
   }
   if (it.entities.media) {
     tweet.media = it.entities.media?.map((media) => ({
@@ -495,9 +541,12 @@ function filterEntrie(
 ): boolean {
   const extendedTweetSchema = tweetScheam.extend({
     quoted_status_result: z
-      .object({
-        result: tweetScheam,
-      })
+      .union([
+        z.object({
+          result: tweetScheam,
+        }),
+        z.object({}),
+      ])
       .optional(),
   })
   const originalTweets = extractObjects(

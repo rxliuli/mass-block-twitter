@@ -18,13 +18,13 @@ exports[`parseTweets > parseTweets for detail 1 1`] = `
     "text": "这钱真能给到孩子，那多少钱我也认了。
 你睁眼看看，现在日本给孩子吃的都是什么鸡巴玩意儿。
 什么こども家庭庁年间预算7万亿日元，平摊到一个纳税人身上快10万日元就给孩子喂了屎。
-丢人不丢人呐？ https://t.co/3gobJQAbuD",
+丢人不丢人呐？",
     "user": {
       "blocking": false,
       "created_at": "2022-03-26T14:18:40.000Z",
       "default_profile": true,
       "default_profile_image": false,
-      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。https://t.co/zwDurJQwha宫司🥳私信回复较慢（一般周三周六晚上回复）",
+      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。http://runjinja.jp宫司🥳私信回复较慢（一般周三周六晚上回复）",
       "followers_count": 12755,
       "following": false,
       "friends_count": 4317,
@@ -103,7 +103,7 @@ exports[`parseTweets > parseTweets for detail 1 1`] = `
       "default_profile_image": false,
       "description": "Kumoko's coming back. 🕷🕸️
 A dungeon RPG based on the anime "So I'm a Spider, So What?"!
-Discord：https://t.co/xjaSarTarG
+Discord：https://discord.com/invite/5spUnekZQB
 #SpiderRotL #SoImASpider",
       "followers_count": 5523,
       "following": false,
@@ -154,7 +154,7 @@ Discord：https://t.co/xjaSarTarG
       "created_at": "2022-03-26T14:18:40.000Z",
       "default_profile": true,
       "default_profile_image": false,
-      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。https://t.co/zwDurJQwha宫司🥳私信回复较慢（一般周三周六晚上回复）",
+      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。http://runjinja.jp宫司🥳私信回复较慢（一般周三周六晚上回复）",
       "followers_count": 12755,
       "following": false,
       "friends_count": 4317,
@@ -231,7 +231,7 @@ Discord：https://t.co/xjaSarTarG
       "default_profile_image": false,
       "description": "music producer&photographer
 PM me on instagram ✉️
-https://t.co/jYpgMIVDT2",
+https://www.instagram.com/bocchi1chan/",
       "followers_count": 14428,
       "following": false,
       "friends_count": 2754,
@@ -284,13 +284,13 @@ https://t.co/jYpgMIVDT2",
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "@yuebanzhu https://t.co/c4cqViZqUl",
+    "text": "@yuebanzhu",
     "user": {
       "blocking": false,
       "created_at": "2016-04-24T02:16:53.000Z",
       "default_profile": true,
       "default_profile_image": false,
-      "description": "財經博主。https://t.co/jkd99Engoh 離岸業務付費諮詢。120美金起步。0xd523c439939DD7E1fea567f6Bb45eE36FCF061cA",
+      "description": "財經博主。http://buymeacoffee.com/ookuninushi 離岸業務付費諮詢。120美金起步。0xd523c439939DD7E1fea567f6Bb45eE36FCF061cA",
       "followers_count": 512,
       "following": false,
       "friends_count": 186,
@@ -364,7 +364,7 @@ exports[`parseTweets > parseTweets for detail 2 1`] = `
     "in_reply_to_status_id_str": undefined,
     "lang": "en",
     "quoted_status_id_str": undefined,
-    "text": "https://t.co/4TdugLoj4i v2 is live!
+    "text": "http://textcapture.app v2 is live!
 
 Special v2 launch deal: $0.99 for util 300 users (82 spots left). Would really appreciate you leaving a review on the App Store!
 
@@ -379,8 +379,8 @@ What's new? Introducing AI Text Extraction:
       "default_profile_image": false,
       "description": "YC Dev 🚀 | Building In Public💡
 
-Effortless text capture → https://t.co/xmrSuxAHJg ✨
-Give your website a badge → https://t.co/Aa6arAMga9 🥇",
+Effortless text capture → https://textcapture.app ✨
+Give your website a badge → https://badgemy.app 🥇",
       "followers_count": 215,
       "following": false,
       "friends_count": 277,
@@ -441,7 +441,7 @@ exports[`parseTweets > parseTweets for detail 3 1`] = `
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "@hsn8086 https://t.co/8lCWFoddY1",
+    "text": "@hsn8086",
     "user": {
       "blocking": false,
       "created_at": "2024-08-08T07:59:06.000Z",
@@ -476,7 +476,7 @@ exports[`parseTweets > parseTweets for notifications 1`] = `
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "让吾辈试试是否有各位推友说的那么好 https://t.co/uYGtPdxclY",
+    "text": "让吾辈试试是否有各位推友说的那么好",
   },
   {
     "conversation_id_str": "1891047551136092390",
@@ -490,7 +490,7 @@ exports[`parseTweets > parseTweets for notifications 1`] = `
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "去 tmd firefox，9 年前的 bug 还在，网站的 csp 限制和我扩展有什么关系？🙃 https://t.co/q4cMsfHjMo",
+    "text": "去 tmd firefox，9 年前的 bug 还在，网站的 csp 限制和我扩展有什么关系？🙃",
   },
   {
     "conversation_id_str": "1891776881659138158",
@@ -507,7 +507,7 @@ exports[`parseTweets > parseTweets for notifications 1`] = `
     "lang": "zh",
     "quoted_status_id_str": undefined,
     "text": "@rxliuli J.P. Illanes 创建的好久没有维护，被人fork 过去支持mac的吧
-https://t.co/0cUf1dPbVq",
+https://github.com/raspu/Highlightr",
   },
   {
     "conversation_id_str": "1892241501024817338",
@@ -548,7 +548,7 @@ https://t.co/0cUf1dPbVq",
     "lang": "zh",
     "quoted_status_id_str": undefined,
     "text": "@jaywcjlove 瞄了一眼，用的是 GitHub 员工创建的一个 Public Repo，然而 0 🌟
-https://t.co/hLt1jI7SQ7",
+https://github.com/devm33/Highlightr",
   },
   {
     "conversation_id_str": "1892413451210817924",
@@ -562,7 +562,7 @@ https://t.co/hLt1jI7SQ7",
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "jimp 看起来是一个纯 js 的图像处理库，然而它依赖着 pngjs，这也是一个 js 的 png 图像处理库，但它依赖了 nodejs 的 assert/stream 之类的模块，它使用了 assert polyfill 以在浏览器中使用，而 assert 模块依赖了 get-intrinsic，而它使用了 eval，然后浏览器扩展就原地升天了🤡 https://t.co/cDY92zc447",
+    "text": "jimp 看起来是一个纯 js 的图像处理库，然而它依赖着 pngjs，这也是一个 js 的 png 图像处理库，但它依赖了 nodejs 的 assert/stream 之类的模块，它使用了 assert polyfill 以在浏览器中使用，而 assert 模块依赖了 get-intrinsic，而它使用了 eval，然后浏览器扩展就原地升天了🤡",
   },
   {
     "conversation_id_str": "1892115266600874028",
@@ -576,7 +576,7 @@ https://t.co/hLt1jI7SQ7",
       },
     ],
     "quoted_status_id_str": "1892106682454479166",
-    "text": "在推特上发布你拍摄的照片，没有描述 https://t.co/fMhxYHrFbU",
+    "text": "在推特上发布你拍摄的照片，没有描述",
   },
   {
     "conversation_id_str": "1892125875556024831",
@@ -593,7 +593,7 @@ https://t.co/hLt1jI7SQ7",
     "lang": "zh",
     "quoted_status_id_str": "1891798765117288799",
     "text": "@Piglei 吾辈最近经常碰到“编译器错误”，不管是 10k+ star 的库，还是久经考验的 Firefox，都遇到了一些奇奇怪怪的 bug
-https://t.co/AuRdSPslba",
+https://x.com/rxliuli/status/1891798765117288799",
   },
   {
     "conversation_id_str": "1891798765117288799",
@@ -602,7 +602,7 @@ https://t.co/AuRdSPslba",
     "lang": "zh",
     "quoted_status_id_str": "1891047551136092390",
     "text": "发布博客【当吾辈遇上 Firefox 中 9 年的陈年老 Bug】
-https://t.co/lyojR7UDxY",
+https://blog.rxliuli.com/p/23bc670bb5e54e6190d3ecf39cc3efd4/",
   },
   {
     "conversation_id_str": "1892239429982626222",
@@ -625,7 +625,7 @@ https://t.co/lyojR7UDxY",
     ],
     "quoted_status_id_str": undefined,
     "text": "New Feature?
-No! New Bugs! https://t.co/ohxbM1cYZB",
+No! New Bugs!",
   },
   {
     "conversation_id_str": "1891776881659138158",
@@ -647,7 +647,7 @@ No! New Bugs! https://t.co/ohxbM1cYZB",
       },
     ],
     "quoted_status_id_str": "1892115266600874028",
-    "text": "在推特上发布你拍摄的照片，没有描述 https://t.co/PZvZOrpSYW",
+    "text": "在推特上发布你拍摄的照片，没有描述",
   },
   {
     "conversation_id_str": "1892019395968295103",
@@ -661,7 +661,7 @@ No! New Bugs! https://t.co/ohxbM1cYZB",
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "谢谢？ https://t.co/1VLLzYEPAE",
+    "text": "谢谢？",
   },
   {
     "conversation_id_str": "1891702394603323877",
@@ -675,7 +675,7 @@ No! New Bugs! https://t.co/ohxbM1cYZB",
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "触景伤情，突然想起一句“欲买桂花同载酒，终不似，少年游” https://t.co/Xy072LGH84",
+    "text": "触景伤情，突然想起一句“欲买桂花同载酒，终不似，少年游”",
   },
 ]
 `;
@@ -700,7 +700,7 @@ exports[`parseTweets > parseTweets for timeline 1`] = `
 概述：HuggingFace 发布的完全开放的项目，旨在分三步(知识蒸馏、强化学习、多阶段训练)复现 DeepSeek-R1 的完整训练流程，让更多人能理解和使用这套技术方案
 
 项目分三个主要步骤：
-· 步骤 1: 通过从 DeepSeek-R1 中提取高质量的推理语料，复现 R1-Distill https://t.co/JPlVUqbvwD",
+· 步骤 1: 通过从 DeepSeek-R1 中提取高质量的推理语料，复现 R1-Distill",
     "user": {
       "blocking": false,
       "created_at": "2023-11-23T04:44:15.000Z",
@@ -773,7 +773,7 @@ ex Microsoft MVP (2014-2022)
       "default_profile_image": false,
       "description": "Kumoko's coming back. 🕷🕸️
 A dungeon RPG based on the anime "So I'm a Spider, So What?"!
-Discord：https://t.co/xjaSarTarG
+Discord：https://discord.com/invite/5spUnekZQB
 #SpiderRotL #SoImASpider",
       "followers_count": 5519,
       "following": false,
@@ -886,7 +886,7 @@ Discord：https://t.co/xjaSarTarG
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "❤️‍🩹❤️‍🩹❤️‍🩹 https://t.co/UOVKWudJxT",
+    "text": "❤️‍🩹❤️‍🩹❤️‍🩹",
     "user": {
       "blocking": false,
       "created_at": "2022-11-07T01:26:14.000Z",
@@ -897,8 +897,8 @@ Discord：https://t.co/xjaSarTarG
 🎮️ Steam, FF14, PoE2 
 
 ▶️ fanart #おねんねあーと 
-▶️ https://t.co/EMlnRMM9vv
-▶️ https://t.co/p7WQPW8Aw5",
+▶️ http://youtube.com/@llrinnell
+▶️ http://huggingface.co/RinneAI",
       "followers_count": 34227,
       "following": false,
       "friends_count": 640,
@@ -944,14 +944,14 @@ Discord：https://t.co/xjaSarTarG
     "quoted_status_id_str": "1882851449991737473",
     "text": "“AMD宣布，已将新的DeepSeek-V3模型集成到Instinct MI300X GPU上，该模型旨在与SGLang一起实现最佳性能。DeepSeek-V3针对Al推理进行了优化。” //可以啊，DeepSeek挺牛逼的，居然被AMD看上了……👀
 
-ref: https://t.co/uGurvXfWRq",
+ref: https://wallstreetcn.com/livenews/2855343",
     "user": {
       "blocking": false,
       "created_at": "2008-11-19T09:11:24.000Z",
       "default_profile": false,
       "default_profile_image": false,
       "description": "构成：30%生活，20%ACG，20%技术，15%查证，10%股市，5%政治。 
-PGP：https://t.co/tE5FodMBh0，
+PGP：http://keybase.io/chenshaoju，
 Bitcoin：1DvdCDjUJ4bnqDgyzTAQ2xabw6ChRnQ9Sy，
 BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
       "followers_count": 61239,
@@ -1007,7 +1007,7 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
       "created_at": "2020-06-05T04:07:26.000Z",
       "default_profile": true,
       "default_profile_image": false,
-      "description": "Loving 琳琳/ Chinese / Frontend / 或许可以看看 Vue Vine https://t.co/slT87ROPvZ / 参与 Vue.js +Vite+Rollup 中文文档译制 / Valorant / Socialist",
+      "description": "Loving 琳琳/ Chinese / Frontend / 或许可以看看 Vue Vine https://vue-vine.dev / 参与 Vue.js +Vite+Rollup 中文文档译制 / Valorant / Socialist",
       "followers_count": 4335,
       "following": false,
       "friends_count": 681,
@@ -1034,7 +1034,7 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
     "quoted_status_id_str": undefined,
     "text": "HuggingFace 刚开源了个项目叫 Open-R1, 旨在复现 DeepSeek-R1
 
-地址：https://t.co/Ve5qM8iM2d https://t.co/zaIbLesjd8",
+地址：https://github.com/huggingface/open-r1",
     "user": {
       "blocking": false,
       "created_at": "2018-12-08T02:07:30.000Z",
@@ -1100,7 +1100,7 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
     "quoted_status_id_str": undefined,
     "text": "✨Hello Live2D Riggers and VTubers!✨
 
-nizima LIVE is the official Live2D Vtuber app. We've invited professional Live2D creator Soulty to introduce the app's features and explain why she uses it. If you're interested, you can download the free trial here! https://t.co/AQzxFSjMCf https://t.co/qn6biVxftM",
+nizima LIVE is the official Live2D Vtuber app. We've invited professional Live2D creator Soulty to introduce the app's features and explain why she uses it. If you're interested, you can download the free trial here! https://nizimalive.com/en/?utm_source=nizimalive&utm_medium=tweet_movie&utm_campaign=nl_Soulty_video",
     "user": {
       "blocking": false,
       "created_at": "2023-05-31T05:28:21.000Z",
@@ -1110,8 +1110,8 @@ nizima LIVE is the official Live2D Vtuber app. We've invited professional Live2D
 
 Live2D公式のVTuber向けトラッキングアプリ「nizima LIVE」公式アカウントです。たまに公式キャラの虹丸イブが発信を行います🍬
 
-公式サイト ➭ https://t.co/xkMQznHONa
-Discord ➭ https://t.co/cY3mXa0ABd",
+公式サイト ➭ http://nizimalive.com
+Discord ➭ http://discord.live2d.app",
       "followers_count": 6033,
       "following": false,
       "friends_count": 12,
@@ -1136,13 +1136,13 @@ Discord ➭ https://t.co/cY3mXa0ABd",
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "RT @sakura_oriko: 1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨ https://t.co/EkDPlUFF21",
+    "text": "RT @sakura_oriko: 1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨",
     "user": {
       "blocking": false,
       "created_at": "2014-09-01T12:07:34.000Z",
       "default_profile": false,
       "default_profile_image": false,
-      "description": "イラストレーター・漫画家。メルヘンファンタジーな世界観を描きます ◆個人画集『Fluffy』 ◆ちゃおプラス『ふしぎな猫のまちメルティア』 ②巻 #猫メル ◆ 『#すいんぐ』 全⑤巻『#四つ子ぐらし』絵⑲巻・漫画④巻◆新作著書1/31発売！｜リンク集▶︎https://t.co/el37bL8pUc #おりこ糖",
+      "description": "イラストレーター・漫画家。メルヘンファンタジーな世界観を描きます ◆個人画集『Fluffy』 ◆ちゃおプラス『ふしぎな猫のまちメルティア』 ②巻 #猫メル ◆ 『#すいんぐ』 全⑤巻『#四つ子ぐらし』絵⑲巻・漫画④巻◆新作著書1/31発売！｜リンク集▶︎http://lit.link/sakuraoriko #おりこ糖",
       "followers_count": 127529,
       "following": true,
       "friends_count": 772,
@@ -1167,13 +1167,13 @@ Discord ➭ https://t.co/cY3mXa0ABd",
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨ https://t.co/EkDPlUFF21",
+    "text": "1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨",
     "user": {
       "blocking": false,
       "created_at": "2014-09-01T12:07:34.000Z",
       "default_profile": false,
       "default_profile_image": false,
-      "description": "イラストレーター・漫画家。メルヘンファンタジーな世界観を描きます ◆個人画集『Fluffy』 ◆ちゃおプラス『ふしぎな猫のまちメルティア』 ②巻 #猫メル ◆ 『#すいんぐ』 全⑤巻『#四つ子ぐらし』絵⑲巻・漫画④巻◆新作著書1/31発売！｜リンク集▶︎https://t.co/el37bL8pUc #おりこ糖",
+      "description": "イラストレーター・漫画家。メルヘンファンタジーな世界観を描きます ◆個人画集『Fluffy』 ◆ちゃおプラス『ふしぎな猫のまちメルティア』 ②巻 #猫メル ◆ 『#すいんぐ』 全⑤巻『#四つ子ぐらし』絵⑲巻・漫画④巻◆新作著書1/31発売！｜リンク集▶︎http://lit.link/sakuraoriko #おりこ糖",
       "followers_count": 127529,
       "following": true,
       "friends_count": 772,
@@ -1333,7 +1333,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
       "default_profile": true,
       "default_profile_image": false,
       "description": "外務省の公式アカウントです。外交に関する新着情報を中心に発信しております。｜英語版（English）@MofaJapan_en
-｜外務省ソーシャルメディア一覧： https://t.co/2VDfT2CifR",
+｜外務省ソーシャルメディア一覧： https://www.mofa.go.jp/mofaj/annai/sns/list_jp.html",
       "followers_count": 510445,
       "following": false,
       "friends_count": 212,
@@ -1358,7 +1358,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "Programming gave me purpose , how about you ? https://t.co/gksun0A815",
+    "text": "Programming gave me purpose , how about you ?",
     "user": {
       "blocking": false,
       "created_at": "2024-12-10T05:21:23.000Z",
@@ -1390,7 +1390,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     ],
     "quoted_status_id_str": undefined,
     "text": "来拍个合影
-#复刻字体设计 https://t.co/2mzmg7eJ4Y",
+#复刻字体设计",
     "user": {
       "blocking": false,
       "created_at": "2021-05-29T00:50:58.000Z",
@@ -1422,7 +1422,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     ],
     "quoted_status_id_str": undefined,
     "text": "#ブルアカ  
-プラナ https://t.co/3aoujXWJgl",
+プラナ",
     "user": {
       "blocking": false,
       "created_at": "2024-10-01T12:13:34.000Z",
@@ -1461,7 +1461,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     "quoted_status_id_str": undefined,
     "text": "好耶是方便面！加了自己烤的脆皮培根卷里脊肉和好多配菜ww
 
-其实方便面还好，之前看到0.7欧一袋顺手买了点，加的肉和菜有3欧了。其实吃起来和中国版没区别qwq https://t.co/BYRfkQgBWC",
+其实方便面还好，之前看到0.7欧一袋顺手买了点，加的肉和菜有3欧了。其实吃起来和中国版没区别qwq",
     "user": {
       "blocking": false,
       "created_at": "2018-02-19T13:48:07.000Z",
@@ -1522,7 +1522,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     ],
     "quoted_status_id_str": undefined,
     "text": "大早上：拿铁＋摩卡＋文拉法辛
-今天我跟世界必须疯一个 https://t.co/pceSmn6pLv",
+今天我跟世界必须疯一个",
     "user": {
       "blocking": false,
       "created_at": "2017-08-16T09:20:50.000Z",
@@ -1553,13 +1553,13 @@ Am I the only one who makes their projects harder just to learn the skills?",
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "angel Alya #ロシデレ https://t.co/nPLvL4718S",
+    "text": "angel Alya #ロシデレ",
     "user": {
       "blocking": false,
       "created_at": "2012-03-03T02:54:22.000Z",
       "default_profile": false,
       "default_profile_image": false,
-      "description": "イラストレーター🥯ライトノベル「時々ボソッとロシア語でデレる隣のアーリャさん」 Vtuber「ペトラ・グリン」「博衣こより」「五十嵐梨花」「杏戸ゆげ」 FANBOX→https://t.co/d9cjUE8TXJ 最新画集→https://t.co/FsSS6ndUUv",
+      "description": "イラストレーター🥯ライトノベル「時々ボソッとロシア語でデレる隣のアーリャさん」 Vtuber「ペトラ・グリン」「博衣こより」「五十嵐梨花」「杏戸ゆげ」 FANBOX→https://momocotomaro.fanbox.cc/ 最新画集→https://amzn.asia/d/iIP1GE5",
       "followers_count": 985100,
       "following": false,
       "friends_count": 2418,
@@ -1587,7 +1587,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     "text": "#angelicpretty Melty Berry Princess JSK 🍓
 给大家拜个早年啦~祝各位蛇年大吉！
 📷: @YazawaBunny 
-#lolitafashion #sweetlolita https://t.co/DaopgI2K7S",
+#lolitafashion #sweetlolita",
     "user": {
       "blocking": false,
       "created_at": "2021-09-10T01:28:09.000Z",
@@ -1618,13 +1618,13 @@ Am I the only one who makes their projects harder just to learn the skills?",
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "apparently this is not an "acceptable excuse" 🙄 https://t.co/ELJJlmJFxo",
+    "text": "apparently this is not an "acceptable excuse" 🙄",
     "user": {
       "blocking": false,
       "created_at": "2020-01-14T01:56:34.000Z",
       "default_profile": true,
       "default_profile_image": false,
-      "description": "is your site slow? https://t.co/LZNgAoDlch | founder @milliondotjs, alum @hackclub",
+      "description": "is your site slow? http://react-scan.com | founder @milliondotjs, alum @hackclub",
       "followers_count": 30305,
       "following": false,
       "friends_count": 1071,
@@ -1679,13 +1679,13 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
     "text": "这钱真能给到孩子，那多少钱我也认了。
 你睁眼看看，现在日本给孩子吃的都是什么鸡巴玩意儿。
 什么こども家庭庁年间预算7万亿日元，平摊到一个纳税人身上快10万日元就给孩子喂了屎。
-丢人不丢人呐？ https://t.co/3gobJQAbuD",
+丢人不丢人呐？",
     "user": {
       "blocking": false,
       "created_at": "2022-03-26T14:18:40.000Z",
       "default_profile": true,
       "default_profile_image": false,
-      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。https://t.co/zwDurJQwha宫司🥳私信回复较慢（一般周三周六晚上回复）",
+      "description": "一直在日本。似乎是一名法律工作者。右翼，非典型自由主义。政治面貌境外势力汉奸叛徒反革命分子。荒川商学院🥱创始人。http://runjinja.jp宫司🥳私信回复较慢（一般周三周六晚上回复）",
       "followers_count": 12751,
       "following": false,
       "friends_count": 4317,
@@ -1760,13 +1760,13 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "😁😁😁好久没发做的饭了。 https://t.co/0lttSIyadm",
+    "text": "😁😁😁好久没发做的饭了。",
     "user": {
       "blocking": false,
       "created_at": "2022-07-27T23:45:26.000Z",
       "default_profile": true,
       "default_profile_image": false,
-      "description": "个人博客：https://t.co/fGVztYtBQS。",
+      "description": "个人博客：https://kikiyoshi.blogspot.com/。",
       "followers_count": 2897,
       "following": false,
       "friends_count": 2227,
@@ -1792,8 +1792,8 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
       "default_profile": true,
       "default_profile_image": false,
       "description": "Cofounder and Head of Post Training @NousResearch, prev @StabilityAI
-Github: https://t.co/LZwHTUFwPq
-HuggingFace: https://t.co/sN2FFU8PVE",
+Github: http://github.com/teknium1
+HuggingFace: http://huggingface.co/teknium",
       "followers_count": 38824,
       "following": false,
       "friends_count": 3643,
@@ -1909,7 +1909,7 @@ Let's make AI even cooler.",
       "created_at": "2016-12-07T11:45:38.000Z",
       "default_profile": true,
       "default_profile_image": false,
-      "description": "Building the context-aware, collaborative AI Native canvas for content creation → https://t.co/u3zni4yOrS, ex @tiktok_us",
+      "description": "Building the context-aware, collaborative AI Native canvas for content creation → https://refly.ai/, ex @tiktok_us",
       "followers_count": 25248,
       "following": true,
       "friends_count": 5937,
@@ -1961,7 +1961,7 @@ Let's make AI even cooler.",
     "quoted_status_id_str": undefined,
     "text": "After 7 months of development, 1 month of beta testing, and 77,376 lines of code! ⚡️Refly is now officially open source! 🔥🚀 
 
-Since day one, Refly has aspired to become a world-class open-source project alongside Docker and K8S! Our mission is to create the best AI-native https://t.co/nIuS3DNoZl",
+Since day one, Refly has aspired to become a world-class open-source project alongside Docker and K8S! Our mission is to create the best AI-native",
     "user": {
       "blocking": false,
       "created_at": "2024-12-31T01:19:27.000Z",
@@ -1969,8 +1969,8 @@ Since day one, Refly has aspired to become a world-class open-source project alo
       "default_profile_image": false,
       "description": "The open-source AI native creation engine, powered by free-form canvas.
 
-GitHub: https://t.co/MNhI3qf8M7
-Discord: https://t.co/HFvxnoFRvr",
+GitHub: https://github.com/refly-ai/refly
+Discord: https://discord.gg/bWjffrb89h",
       "followers_count": 251,
       "following": false,
       "friends_count": 8,
@@ -1995,7 +1995,7 @@ Discord: https://t.co/HFvxnoFRvr",
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "崩壊:スターレイル / 開拓者 星 https://t.co/zcsznxg5lv",
+    "text": "崩壊:スターレイル / 開拓者 星",
     "user": {
       "blocking": false,
       "created_at": "2022-10-28T21:54:22.000Z",
@@ -2027,7 +2027,7 @@ Discord: https://t.co/HFvxnoFRvr",
     ],
     "quoted_status_id_str": undefined,
     "text": "百合園セイア
-#ブルアカ #BlueArchive https://t.co/Pf5CrczwOv",
+#ブルアカ #BlueArchive",
     "user": {
       "blocking": false,
       "created_at": "2023-02-23T02:37:38.000Z",
@@ -2168,7 +2168,7 @@ OpenAI不告诉你怎么re-inforce learning，幻方都不知道怎么蒸馏模�
     "lang": "zh",
     "quoted_status_id_str": undefined,
     "text": "@syang2045 @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -2199,7 +2199,7 @@ https://t.co/66kk5cUv1v",
       },
     ],
     "quoted_status_id_str": undefined,
-    "text": "@ShanghaoJin https://t.co/z6jSO6LCNJ",
+    "text": "@ShanghaoJin",
     "user": {
       "blocking": false,
       "created_at": "2022-01-24T04:44:12.000Z",
@@ -2225,7 +2225,7 @@ https://t.co/66kk5cUv1v",
     "lang": "zh",
     "quoted_status_id_str": undefined,
     "text": "@linzhutou404 @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -2276,7 +2276,7 @@ https://t.co/66kk5cUv1v",
     "lang": "zh",
     "quoted_status_id_str": undefined,
     "text": "@Manchesea @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -2389,7 +2389,7 @@ deepseek是个工程方法，大厂不屑于做，浪费精力做这个模型能
 所有的交易指令和決策會在公開之前先與群組成員分享。
 
 名額僅限 8,000  人，趕快加入 ⤵️
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -2500,7 +2500,7 @@ I share my trade ideas and opinion free and glad to hear your ideas otherwise sh
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -2556,7 +2556,7 @@ https://t.co/66kk5cUv1v",
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -2612,7 +2612,7 @@ https://t.co/66kk5cUv1v",
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -2732,7 +2732,7 @@ TSLA/AAPL很难及格
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -2788,7 +2788,7 @@ https://t.co/66kk5cUv1v",
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -2844,7 +2844,7 @@ https://t.co/66kk5cUv1v",
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -2952,7 +2952,7 @@ https://t.co/66kk5cUv1v",
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -3008,7 +3008,7 @@ https://t.co/66kk5cUv1v",
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -3064,7 +3064,7 @@ https://t.co/66kk5cUv1v",
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -3120,7 +3120,7 @@ https://t.co/66kk5cUv1v",
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -3176,7 +3176,7 @@ https://t.co/66kk5cUv1v",
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -3232,7 +3232,7 @@ https://t.co/66kk5cUv1v",
 
 名額僅限 8,000  人，趕快加入 ⤵️
 
-https://t.co/66kk5cUv1v",
+https://t.me/ShanghaoJin_alpha/a5",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -3259,7 +3259,7 @@ https://t.co/66kk5cUv1v",
     "quoted_status_id_str": undefined,
     "text": "RT @R183342664: คืนนี้แตกกับคู่เทพ
 @69fun
-https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
+https://lin.ee/vQ2ZGGY https://x.com/i/broadcasts/1MYGNnYZybVGw",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -3286,7 +3286,7 @@ https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
     "quoted_status_id_str": undefined,
     "text": "คืนนี้แตกกับคู่เทพ
 @69fun
-https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
+https://lin.ee/vQ2ZGGY https://x.com/i/broadcasts/1MYGNnYZybVGw",
     "user": {
       "blocking": false,
       "created_at": "2022-02-28T13:07:27.000Z",
@@ -3318,7 +3318,7 @@ exports[`parseTweets > parseTweets for user tweets only 1`] = `
     "quoted_status_id_str": undefined,
     "text": "RT @R183342664: คืนนี้แตกกับคู่เทพ
 @69fun
-https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
+https://lin.ee/vQ2ZGGY https://x.com/i/broadcasts/1MYGNnYZybVGw",
     "user": {
       "blocking": false,
       "created_at": "2021-06-28T22:29:36.000Z",
@@ -3345,7 +3345,7 @@ https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
     "quoted_status_id_str": undefined,
     "text": "คืนนี้แตกกับคู่เทพ
 @69fun
-https://t.co/wCD6hFROjV https://t.co/WOl6DuPfOa",
+https://lin.ee/vQ2ZGGY https://x.com/i/broadcasts/1MYGNnYZybVGw",
     "user": {
       "blocking": false,
       "created_at": "2022-02-28T13:07:27.000Z",
@@ -3372,7 +3372,7 @@ exports[`parseUserRecords > parse all-spam 1`] = `
     "blocking": true,
     "default_profile": true,
     "default_profile_image": false,
-    "description": "在这里找到我👉 电报：https://t.co/MmRE09QgA7频道 https://t.co/7NarD6YajO",
+    "description": "在这里找到我👉 电报：https://t.me/TraderFeiyang频道 http://t.me/feiyangkanbi",
     "followers_count": 1855,
     "following": false,
     "friends_count": 261,
@@ -5307,7 +5307,7 @@ exports[`parseUserRecords > parse all-spam 1`] = `
     "blocking": true,
     "default_profile": true,
     "default_profile_image": false,
-    "description": "在这里找到我👉 电报：https://t.co/MmRE09QgA7频道 https://t.co/7NarD6YajO",
+    "description": "在这里找到我👉 电报：https://t.me/TraderFeiyang频道 http://t.me/feiyangkanbi",
     "followers_count": 0,
     "following": false,
     "friends_count": 83,
@@ -6554,7 +6554,7 @@ I built a Cursor-like experience plugin for Neovim: avante.nvim",
     "default_profile": false,
     "default_profile_image": false,
     "description": "赵客缦胡缨，吴钩霜雪明
-🐍Python developer / PyPA member / Creator of @pdm_project / @frostming@mas.to / TG channel: https://t.co/eTgAKqBQ2C
+🐍Python developer / PyPA member / Creator of @pdm_project / @frostming@mas.to / TG channel: https://t.me/fming_weekly
 Y4UNURKV",
     "followers_count": 6546,
     "following": false,
@@ -6597,7 +6597,7 @@ Y4UNURKV",
     "blocking": false,
     "default_profile": true,
     "default_profile_image": false,
-    "description": "Building the context-aware, collaborative AI Native canvas for content creation → https://t.co/u3zni4yOrS, ex @tiktok_us",
+    "description": "Building the context-aware, collaborative AI Native canvas for content creation → https://refly.ai/, ex @tiktok_us",
     "followers_count": 24149,
     "following": true,
     "friends_count": 5840,
@@ -6611,7 +6611,7 @@ Y4UNURKV",
     "blocking": false,
     "default_profile": true,
     "default_profile_image": false,
-    "description": "喜欢王小波，大概我们能成为朋友。 我的 2024 https://t.co/HfDF6oduB7 我的 2023 https://t.co/QyV8PiZmOY 我的2022 https://t.co/NLYTn7xtta 我的 2021 我的 2020",
+    "description": "喜欢王小波，大概我们能成为朋友。 我的 2024 http://github.com/yihong0618/2024 我的 2023 http://github.com/yihong0618/2023 我的2022 http://github.com/yihong0618/2022 我的 2021 我的 2020",
     "followers_count": 70818,
     "following": true,
     "friends_count": 3294,
@@ -6698,7 +6698,7 @@ en @ayingott_lo",
     "blocking": false,
     "default_profile": false,
     "default_profile_image": false,
-    "description": "The place to find your new favorite product 🚀 Get new products in your inbox: https://t.co/uLj6s6LIgw",
+    "description": "The place to find your new favorite product 🚀 Get new products in your inbox: https://meow.ph/new",
     "followers_count": 543343,
     "following": false,
     "friends_count": 497,
@@ -6717,7 +6717,7 @@ exports[`parseUserRecords > parse timeline 1`] = `
     "blocking": false,
     "default_profile": true,
     "default_profile_image": false,
-    "description": "在这里找到我👉 电报：https://t.co/MmRE09QgA7频道 https://t.co/7NarD6YajO",
+    "description": "在这里找到我👉 电报：https://t.me/TraderFeiyang频道 http://t.me/feiyangkanbi",
     "followers_count": 1855,
     "following": false,
     "friends_count": 261,

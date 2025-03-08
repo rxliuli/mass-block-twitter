@@ -1,0 +1,526 @@
+{
+  "entryId": "tweet-1897471935401034084",
+  "sortIndex": "7325900101453741723",
+  "content": {
+    "entryType": "TimelineTimelineItem",
+    "__typename": "TimelineTimelineItem",
+    "itemContent": {
+      "itemType": "TimelineTweet",
+      "__typename": "TimelineTweet",
+      "tweet_results": {
+        "result": {
+          "__typename": "Tweet",
+          "rest_id": "1897471935401034084",
+          "has_birdwatch_notes": false,
+          "core": {
+            "user_results": {
+              "result": {
+                "__typename": "User",
+                "id": "VXNlcjoxMjE5MDg0Mzc=",
+                "rest_id": "121908437",
+                "affiliates_highlighted_label": {},
+                "has_graduated_access": true,
+                "parody_commentary_fan_label": "None",
+                "is_blue_verified": true,
+                "profile_image_shape": "Circle",
+                "legacy": {
+                  "following": false,
+                  "can_dm": true,
+                  "can_media_tag": false,
+                  "created_at": "Thu Mar 11 00:35:59 +0000 2010",
+                  "default_profile": false,
+                  "default_profile_image": false,
+                  "description": "\uD83D\uDC49 访问该链接，随机了解一个我的产品 https://t.co/jpmuMzehfs",
+                  "entities": {
+                    "description": {
+                      "urls": [
+                        {
+                          "display_url": "imtx.me/random/x/",
+                          "expanded_url": "https://imtx.me/random/x/",
+                          "url": "https://t.co/jpmuMzehfs",
+                          "indices": [19, 42]
+                        }
+                      ]
+                    },
+                    "url": {
+                      "urls": [
+                        {
+                          "display_url": "imtx.me",
+                          "expanded_url": "https://imtx.me",
+                          "url": "https://t.co/NP9nPh438N",
+                          "indices": [0, 23]
+                        }
+                      ]
+                    }
+                  },
+                  "fast_followers_count": 0,
+                  "favourites_count": 21086,
+                  "followers_count": 100251,
+                  "friends_count": 1200,
+                  "has_custom_timelines": true,
+                  "is_translator": false,
+                  "listed_count": 987,
+                  "location": "Hangzhou, China",
+                  "media_count": 18514,
+                  "name": "图拉鼎",
+                  "normal_followers_count": 100251,
+                  "pinned_tweet_ids_str": [],
+                  "possibly_sensitive": false,
+                  "profile_banner_url": "https://pbs.twimg.com/profile_banners/121908437/1728475582",
+                  "profile_image_url_https": "https://pbs.twimg.com/profile_images/675270246509350912/lV9-F5ey_normal.jpg",
+                  "profile_interstitial_type": "",
+                  "screen_name": "tualatrix",
+                  "statuses_count": 101945,
+                  "translator_type": "regular",
+                  "url": "https://t.co/NP9nPh438N",
+                  "verified": false,
+                  "want_retweets": false,
+                  "withheld_in_countries": []
+                },
+                "professional": {
+                  "rest_id": "1676498399124926471",
+                  "professional_type": "Business",
+                  "category": []
+                },
+                "tipjar_settings": {
+                  "is_enabled": true
+                }
+              }
+            }
+          },
+          "unmention_data": {},
+          "edit_control": {
+            "edit_tweet_ids": ["1897471935401034084"],
+            "editable_until_msecs": "1741231137000",
+            "is_edit_eligible": true,
+            "edits_remaining": "5"
+          },
+          "is_translatable": true,
+          "views": {
+            "count": "3515",
+            "state": "EnabledWithCount"
+          },
+          "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+          "grok_analysis_button": false,
+          "legacy": {
+            "bookmark_count": 2,
+            "bookmarked": false,
+            "created_at": "Thu Mar 06 02:18:57 +0000 2025",
+            "conversation_id_str": "1897471935401034084",
+            "display_text_range": [0, 116],
+            "entities": {
+              "hashtags": [],
+              "media": [
+                {
+                  "display_url": "pic.x.com/GQg0zz87oZ",
+                  "expanded_url": "https://x.com/tualatrix/status/1897471935401034084/photo/1",
+                  "id_str": "1897471501928181760",
+                  "indices": [117, 140],
+                  "media_key": "3_1897471501928181760",
+                  "media_url_https": "https://pbs.twimg.com/media/GlUsRxvbMAANn-a.png",
+                  "type": "photo",
+                  "url": "https://t.co/GQg0zz87oZ",
+                  "ext_media_availability": {
+                    "status": "Available"
+                  },
+                  "features": {
+                    "large": {
+                      "faces": []
+                    },
+                    "medium": {
+                      "faces": []
+                    },
+                    "small": {
+                      "faces": []
+                    },
+                    "orig": {
+                      "faces": []
+                    }
+                  },
+                  "sizes": {
+                    "large": {
+                      "h": 268,
+                      "w": 504,
+                      "resize": "fit"
+                    },
+                    "medium": {
+                      "h": 268,
+                      "w": 504,
+                      "resize": "fit"
+                    },
+                    "small": {
+                      "h": 268,
+                      "w": 504,
+                      "resize": "fit"
+                    },
+                    "thumb": {
+                      "h": 150,
+                      "w": 150,
+                      "resize": "crop"
+                    }
+                  },
+                  "original_info": {
+                    "height": 268,
+                    "width": 504,
+                    "focus_rects": [
+                      {
+                        "x": 0,
+                        "y": 0,
+                        "w": 479,
+                        "h": 268
+                      },
+                      {
+                        "x": 29,
+                        "y": 0,
+                        "w": 268,
+                        "h": 268
+                      },
+                      {
+                        "x": 46,
+                        "y": 0,
+                        "w": 235,
+                        "h": 268
+                      },
+                      {
+                        "x": 96,
+                        "y": 0,
+                        "w": 134,
+                        "h": 268
+                      },
+                      {
+                        "x": 0,
+                        "y": 0,
+                        "w": 504,
+                        "h": 268
+                      }
+                    ]
+                  },
+                  "allow_download_status": {
+                    "allow_download": true
+                  },
+                  "media_results": {
+                    "result": {
+                      "media_key": "3_1897471501928181760"
+                    }
+                  }
+                },
+                {
+                  "display_url": "pic.x.com/GQg0zz87oZ",
+                  "expanded_url": "https://x.com/tualatrix/status/1897471935401034084/photo/1",
+                  "id_str": "1897471929306767364",
+                  "indices": [117, 140],
+                  "media_key": "3_1897471929306767364",
+                  "media_url_https": "https://pbs.twimg.com/media/GlUsqp2a4AQD-KZ.jpg",
+                  "type": "photo",
+                  "url": "https://t.co/GQg0zz87oZ",
+                  "ext_media_availability": {
+                    "status": "Available"
+                  },
+                  "features": {
+                    "large": {
+                      "faces": []
+                    },
+                    "medium": {
+                      "faces": []
+                    },
+                    "small": {
+                      "faces": []
+                    },
+                    "orig": {
+                      "faces": []
+                    }
+                  },
+                  "sizes": {
+                    "large": {
+                      "h": 1106,
+                      "w": 1882,
+                      "resize": "fit"
+                    },
+                    "medium": {
+                      "h": 705,
+                      "w": 1200,
+                      "resize": "fit"
+                    },
+                    "small": {
+                      "h": 400,
+                      "w": 680,
+                      "resize": "fit"
+                    },
+                    "thumb": {
+                      "h": 150,
+                      "w": 150,
+                      "resize": "crop"
+                    }
+                  },
+                  "original_info": {
+                    "height": 1106,
+                    "width": 1882,
+                    "focus_rects": [
+                      {
+                        "x": 0,
+                        "y": 0,
+                        "w": 1882,
+                        "h": 1054
+                      },
+                      {
+                        "x": 340,
+                        "y": 0,
+                        "w": 1106,
+                        "h": 1106
+                      },
+                      {
+                        "x": 408,
+                        "y": 0,
+                        "w": 970,
+                        "h": 1106
+                      },
+                      {
+                        "x": 617,
+                        "y": 0,
+                        "w": 553,
+                        "h": 1106
+                      },
+                      {
+                        "x": 0,
+                        "y": 0,
+                        "w": 1882,
+                        "h": 1106
+                      }
+                    ]
+                  },
+                  "allow_download_status": {
+                    "allow_download": true
+                  },
+                  "media_results": {
+                    "result": {
+                      "media_key": "3_1897471929306767364"
+                    }
+                  }
+                }
+              ],
+              "symbols": [],
+              "timestamps": [],
+              "urls": [
+                {
+                  "display_url": "manus.im",
+                  "expanded_url": "https://manus.im",
+                  "url": "https://t.co/rEfJbRGDvW",
+                  "indices": [5, 28]
+                }
+              ],
+              "user_mentions": []
+            },
+            "extended_entities": {
+              "media": [
+                {
+                  "display_url": "pic.x.com/GQg0zz87oZ",
+                  "expanded_url": "https://x.com/tualatrix/status/1897471935401034084/photo/1",
+                  "id_str": "1897471501928181760",
+                  "indices": [117, 140],
+                  "media_key": "3_1897471501928181760",
+                  "media_url_https": "https://pbs.twimg.com/media/GlUsRxvbMAANn-a.png",
+                  "type": "photo",
+                  "url": "https://t.co/GQg0zz87oZ",
+                  "ext_media_availability": {
+                    "status": "Available"
+                  },
+                  "features": {
+                    "large": {
+                      "faces": []
+                    },
+                    "medium": {
+                      "faces": []
+                    },
+                    "small": {
+                      "faces": []
+                    },
+                    "orig": {
+                      "faces": []
+                    }
+                  },
+                  "sizes": {
+                    "large": {
+                      "h": 268,
+                      "w": 504,
+                      "resize": "fit"
+                    },
+                    "medium": {
+                      "h": 268,
+                      "w": 504,
+                      "resize": "fit"
+                    },
+                    "small": {
+                      "h": 268,
+                      "w": 504,
+                      "resize": "fit"
+                    },
+                    "thumb": {
+                      "h": 150,
+                      "w": 150,
+                      "resize": "crop"
+                    }
+                  },
+                  "original_info": {
+                    "height": 268,
+                    "width": 504,
+                    "focus_rects": [
+                      {
+                        "x": 0,
+                        "y": 0,
+                        "w": 479,
+                        "h": 268
+                      },
+                      {
+                        "x": 29,
+                        "y": 0,
+                        "w": 268,
+                        "h": 268
+                      },
+                      {
+                        "x": 46,
+                        "y": 0,
+                        "w": 235,
+                        "h": 268
+                      },
+                      {
+                        "x": 96,
+                        "y": 0,
+                        "w": 134,
+                        "h": 268
+                      },
+                      {
+                        "x": 0,
+                        "y": 0,
+                        "w": 504,
+                        "h": 268
+                      }
+                    ]
+                  },
+                  "allow_download_status": {
+                    "allow_download": true
+                  },
+                  "media_results": {
+                    "result": {
+                      "media_key": "3_1897471501928181760"
+                    }
+                  }
+                },
+                {
+                  "display_url": "pic.x.com/GQg0zz87oZ",
+                  "expanded_url": "https://x.com/tualatrix/status/1897471935401034084/photo/1",
+                  "id_str": "1897471929306767364",
+                  "indices": [117, 140],
+                  "media_key": "3_1897471929306767364",
+                  "media_url_https": "https://pbs.twimg.com/media/GlUsqp2a4AQD-KZ.jpg",
+                  "type": "photo",
+                  "url": "https://t.co/GQg0zz87oZ",
+                  "ext_media_availability": {
+                    "status": "Available"
+                  },
+                  "features": {
+                    "large": {
+                      "faces": []
+                    },
+                    "medium": {
+                      "faces": []
+                    },
+                    "small": {
+                      "faces": []
+                    },
+                    "orig": {
+                      "faces": []
+                    }
+                  },
+                  "sizes": {
+                    "large": {
+                      "h": 1106,
+                      "w": 1882,
+                      "resize": "fit"
+                    },
+                    "medium": {
+                      "h": 705,
+                      "w": 1200,
+                      "resize": "fit"
+                    },
+                    "small": {
+                      "h": 400,
+                      "w": 680,
+                      "resize": "fit"
+                    },
+                    "thumb": {
+                      "h": 150,
+                      "w": 150,
+                      "resize": "crop"
+                    }
+                  },
+                  "original_info": {
+                    "height": 1106,
+                    "width": 1882,
+                    "focus_rects": [
+                      {
+                        "x": 0,
+                        "y": 0,
+                        "w": 1882,
+                        "h": 1054
+                      },
+                      {
+                        "x": 340,
+                        "y": 0,
+                        "w": 1106,
+                        "h": 1106
+                      },
+                      {
+                        "x": 408,
+                        "y": 0,
+                        "w": 970,
+                        "h": 1106
+                      },
+                      {
+                        "x": 617,
+                        "y": 0,
+                        "w": 553,
+                        "h": 1106
+                      },
+                      {
+                        "x": 0,
+                        "y": 0,
+                        "w": 1882,
+                        "h": 1106
+                      }
+                    ]
+                  },
+                  "allow_download_status": {
+                    "allow_download": true
+                  },
+                  "media_results": {
+                    "result": {
+                      "media_key": "3_1897471929306767364"
+                    }
+                  }
+                }
+              ]
+            },
+            "favorite_count": 6,
+            "favorited": false,
+            "full_text": "想玩一下 https://t.co/rEfJbRGDvW，说是超越了 OpenAI Deep Research。乘着我还有一周的 Deep Research 使用时间，于是决定亲自体验。结果注册跳转后就 504 了，申请的人太多了？ https://t.co/GQg0zz87oZ",
+            "is_quote_status": false,
+            "lang": "zh",
+            "possibly_sensitive": false,
+            "possibly_sensitive_editable": true,
+            "quote_count": 0,
+            "reply_count": 8,
+            "retweet_count": 1,
+            "retweeted": false,
+            "user_id_str": "121908437",
+            "id_str": "1897471935401034084"
+          },
+          "quick_promote_eligibility": {
+            "eligibility": "IneligibleNotProfessional"
+          }
+        }
+      },
+      "tweetDisplayType": "Tweet",
+      "hasModeratedReplies": true
+    }
+  }
+}

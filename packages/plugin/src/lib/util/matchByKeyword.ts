@@ -6,7 +6,7 @@ export function matchByKeyword(
     if (!value || !keyword) {
       return false
     }
-    if (value.includes(keyword)) {
+    if (value.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())) {
       return true
     }
     return new RegExp(keyword).test(value)

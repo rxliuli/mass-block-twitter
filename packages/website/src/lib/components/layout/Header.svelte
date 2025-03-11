@@ -1,21 +1,36 @@
 <script lang="ts">
-  import { MoonIcon, SunIcon } from 'lucide-svelte'
-  import { Button } from '../ui/button'
-  import { toggleMode } from 'mode-watcher'
+  import { PanelLeftIcon } from 'lucide-svelte'
   import AuthButton from '../auth/AuthButton.svelte'
+  import Button from '../ui/button/button.svelte'
+  import { useSidebar } from '$lib/store/layout.svelte'
+  import { page } from '$app/state'
 
   const siteMetadata = {
     title: 'Mass Block Twitter',
     description: 'One-Click Solution to Clean Up Twitter/X Spam',
     author: 'rxliuli',
   }
+
+  const sidebar = useSidebar()
 </script>
 
 <header
   class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >
-  <div class="container flex h-14 items-center">
-    <nav class="flex items-center space-x-6 text-sm font-medium">
+  <div class="md:container flex h-12 items-center">
+    <nav
+      class="flex items-center pl-2 space-x-2 md:space-x-6 text-sm font-medium"
+    >
+      {#if page.url.pathname.startsWith('/docs')}
+        <Button
+          variant="ghost"
+          size="icon"
+          class="md:hidden -ml-2"
+          onclick={() => sidebar.toggle()}
+        >
+          <PanelLeftIcon class="size-4" />
+        </Button>
+      {/if}
       <a href="/" class="font-bold transition-colors hover:text-foreground/80">
         {siteMetadata.title}
       </a>
@@ -28,14 +43,5 @@
     </nav>
     <div class="flex-1"></div>
     <AuthButton />
-    <Button onclick={toggleMode} variant="outline" size="icon">
-      <SunIcon
-        class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-      />
-      <MoonIcon
-        class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-      />
-      <span class="sr-only">Toggle theme</span>
-    </Button>
   </div>
 </header>

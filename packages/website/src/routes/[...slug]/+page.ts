@@ -7,12 +7,12 @@ export async function load({ params }) {
       error(404, `Could not find ${params.slug}`)
     }
     const doc = matchDoc(import.meta.env.DOCS, params.slug.slice(5))
-    const post = await import(`../../docs/${doc}`)
-    console.log('docs: ', import.meta.env.DOCS, params.slug.slice(5), post)
+    const post = await import(/* @vite-ignore */ `../../docs/${doc}?html`)
+    const meta = await import(/* @vite-ignore */ `../../docs/${doc}?meta`)
 
     return {
-      content: post.default,
-      meta: post.metadata,
+      html: post.default,
+      meta: meta.default,
     }
   } catch (e) {
     error(404, `Could not find ${params.slug}`)

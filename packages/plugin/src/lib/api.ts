@@ -690,6 +690,7 @@ export async function extractSearchTimelineGraphqlId(): Promise<string> {
 }
 
 const SEARCH_TIMELINE_FLAGS = {
+  rweb_video_screen_enabled: false,
   profile_label_improvements_pcf_label_in_post_enabled: true,
   rweb_tipjar_consumption_enabled: true,
   responsive_web_graphql_exclude_directive_enabled: true,
@@ -785,9 +786,6 @@ export async function searchPeople(options: {
   const xTransactionId = await getXTransactionId()(new URL(url).pathname, 'GET')
   const r = await fetch(url, {
     headers: {
-      accept: '*/*',
-      'accept-language':
-        'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,ja-JP;q=0.6,ja;q=0.5',
       authorization: headers.get('authorization')!,
       'content-type': 'application/json',
       priority: 'u=1, i',
@@ -805,7 +803,13 @@ export async function searchPeople(options: {
       'x-twitter-auth-type': 'OAuth2Session',
       'x-twitter-client-language': 'en',
     },
-    referrer: 'https://x.com',
+    referrer:
+      'https://x.com/search?' +
+      new URLSearchParams({
+        // q=%E7%90%89%E7%92%83&src=typed_query
+        q: options.term,
+        src: 'typed_query',
+      }).toString(),
   })
   if (!r.ok) {
     throw r

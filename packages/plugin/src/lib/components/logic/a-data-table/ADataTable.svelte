@@ -7,6 +7,13 @@
   import { onMount, tick } from 'svelte'
   import { Loader2Icon } from 'lucide-svelte'
   import { AutoSizer } from '@rxliuli/svelte-window'
+  import { cn } from '$lib/utils'
+  import MultipleSelectRoot from '$lib/components/custom/multiple-select/MultipleSelectRoot.svelte'
+  import {
+    MultipleSelectAll,
+    MultipleSelectCheckbox,
+  } from '$lib/components/custom/multiple-select'
+  import { ThreeCheckbox } from '$lib/components/custom/checkbox'
 
   const props: Props<TData> = $props()
 
@@ -108,85 +115,107 @@
   }
 </script>
 
-<div class="relative h-full overflow-x-auto" onscroll={handleScroll}>
-  <AutoSizer>
-    {#snippet child({ height })}
-      <table
-        bind:this={tableRef}
-        class={'table-auto border-b border-collapse border-gray-400 w-full'}
-        style="height: {height}px"
-      >
-        <thead class="text-muted-foreground sticky top-0 bg-background z-10">
-          <tr>
-            {#if props.rowSelection}
-              <th class="table-cell selection">
-                <Checkbox
-                  checked={allSelected}
-                  onCheckedChange={toggleAllSelection}
-                />
-              </th>
-            {/if}
-            {#each props.columns as column (column.dataIndex)}
-              <th class="table-cell">{column.title}</th>
-            {/each}
-          </tr>
-        </thead>
-
-        <tbody>
-          {#if props.virtual}
-            <tr style="height: {Math.max(rangeData.paddingTop, 1)}px"></tr>
-          {/if}
-          {#each rangeData.data as row, localIndex (row[props.rowKey as keyof TData] ?? localIndex)}
-            {@const globalIndex = rangeData.start + localIndex}
-            <tr
-              onload={(ev) =>
-                handleTrMount(ev.target as HTMLElement, globalIndex)}
-              data-id={row[props.rowKey as keyof TData] as any}
-              class="border-b border-gray-300 hover:bg-muted/50 group"
-            >
+<div
+  class={cn('relative h-full overflow-x-auto', props.class)}
+  onscroll={handleScroll}
+>
+  <MultipleSelectRoot
+    bind:selected={
+      () => props.rowSelection?.selectedRowKeys ?? [],
+      (newVal) => {
+        const newSet = new Set(newVal)
+        props.rowSelection?.onChange(
+          newVal,
+          props.dataSource.filter((it) =>
+            newSet.has(it[props.rowKey as keyof TData] as string),
+          ),
+        )
+      }
+    }
+    keys={props.dataSource.map(
+      (it) => it[props.rowKey as keyof TData] as string,
+    )}
+  >
+    <AutoSizer>
+      {#snippet child({ height })}
+        <table
+          bind:this={tableRef}
+          class={'table-auto border-b border-collapse border-gray-400 w-full'}
+          style="height: {height}px"
+        >
+          <thead class="text-muted-foreground sticky top-0 bg-background z-10">
+            <tr>
               {#if props.rowSelection}
-                {@const key = row[props.rowKey as keyof TData] as any}
-                <td class="table-cell selection">
-                  <Checkbox
-                    checked={props.rowSelection.selectedRowKeys.includes(key)}
-                    onCheckedChange={(checked) =>
-                      toggleSelection(key, row, checked)}
-                  />
-                </td>
+                <th class="table-cell selection">
+                  <MultipleSelectAll>
+                    {#snippet child({ mode, onclick })}
+                      <ThreeCheckbox checked={mode} {onclick} />
+                    {/snippet}
+                  </MultipleSelectAll>
+                </th>
               {/if}
               {#each props.columns as column (column.dataIndex)}
-                <td class="table-cell">
-                  {#if column.render}
-                    {@const RenderResult = column.render(
-                      row[column.dataIndex as keyof TData],
-                      row,
-                      localIndex,
-                    )}
-                    {#if isComponentConfig(RenderResult)}
-                      <RenderResult.component {...RenderResult.props} />
-                    {:else if isComponent(RenderResult)}
-                      <RenderResult />
-                    {:else if isSnippetConfig(RenderResult)}
-                      {@const snippet = RenderResult.snippet}
-                      {@const params = RenderResult.params}
-                      {@render snippet(params)}
-                    {:else}
-                      {RenderResult}
-                    {/if}
-                  {:else}
-                    {row[column.dataIndex as keyof TData]}
-                  {/if}
-                </td>
+                <th class="table-cell">{column.title}</th>
               {/each}
             </tr>
-          {/each}
-          {#if props.virtual}
-            <tr style="height: {rangeData.paddingBottom}px"></tr>
-          {/if}
-        </tbody>
-      </table>
-    {/snippet}
-  </AutoSizer>
+          </thead>
+
+          <tbody>
+            {#if props.virtual}
+              <tr style="height: {Math.max(rangeData.paddingTop, 1)}px"></tr>
+            {/if}
+            {#each rangeData.data as row, localIndex (row[props.rowKey as keyof TData] ?? localIndex)}
+              {@const globalIndex = rangeData.start + localIndex}
+              <tr
+                onload={(ev) =>
+                  handleTrMount(ev.target as HTMLElement, globalIndex)}
+                data-id={row[props.rowKey as keyof TData] as any}
+                class="border-b border-gray-300 hover:bg-muted/50 group"
+              >
+                {#if props.rowSelection}
+                  {@const key = row[props.rowKey as keyof TData] as any}
+                  <td class="table-cell selection">
+                    <MultipleSelectCheckbox {key}>
+                      {#snippet child({ checked, onclick })}
+                        <Checkbox {checked} {onclick} />
+                      {/snippet}
+                    </MultipleSelectCheckbox>
+                  </td>
+                {/if}
+                {#each props.columns as column (column.dataIndex)}
+                  <td class="table-cell">
+                    {#if column.render}
+                      {@const RenderResult = column.render(
+                        row[column.dataIndex as keyof TData],
+                        row,
+                        localIndex,
+                      )}
+                      {#if isComponentConfig(RenderResult)}
+                        <RenderResult.component {...RenderResult.props} />
+                      {:else if isComponent(RenderResult)}
+                        <RenderResult />
+                      {:else if isSnippetConfig(RenderResult)}
+                        {@const snippet = RenderResult.snippet}
+                        {@const params = RenderResult.params}
+                        {@render snippet(params)}
+                      {:else}
+                        {RenderResult}
+                      {/if}
+                    {:else}
+                      {row[column.dataIndex as keyof TData]}
+                    {/if}
+                  </td>
+                {/each}
+              </tr>
+            {/each}
+            {#if props.virtual}
+              <tr style="height: {rangeData.paddingBottom}px"></tr>
+            {/if}
+          </tbody>
+        </table>
+      {/snippet}
+    </AutoSizer>
+  </MultipleSelectRoot>
   {#if props.loading}
     <div class="sticky bottom-0 flex items-center justify-center p-2 z-10">
       <div

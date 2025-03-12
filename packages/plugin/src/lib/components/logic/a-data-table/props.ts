@@ -30,7 +30,7 @@ export type RowSelection<TData> = {
 export type Props<TData> = {
   columns: Column<TData>[]
   dataSource: TData[]
-  rowKey?: string
+  rowKey: string
   class?: string
   rowSelection?: RowSelection<TData>
   virtual?: boolean

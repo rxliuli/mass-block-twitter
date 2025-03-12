@@ -22,6 +22,7 @@
   import { Button, buttonVariants } from '$lib/components/ui/button'
   import {
     DownloadIcon,
+    EyeIcon,
     ImportIcon,
     MenuIcon,
     ShieldBanIcon,
@@ -38,6 +39,8 @@
   import { shadcnConfig } from '$lib/components/logic/config'
   import TableExtraButton from '$lib/components/logic/TableExtraButton.svelte'
   import { ulid } from 'ulidx'
+  import { navigate } from '$lib/components/logic/router'
+  import { userColumns } from './utils/columns'
 
   let term = $state('')
   const query = createInfiniteQuery({
@@ -89,58 +92,6 @@
       }
     }
   }
-
-  const columns: Column<User>[] = [
-    {
-      title: 'Avatar',
-      dataIndex: 'profile_image_url',
-      render: (value, record) =>
-        renderComponent(AvatarWrapper, {
-          src: value,
-          alt: 'Profile Image',
-          screen_name: record.screen_name,
-        }),
-    },
-    {
-      title: 'Screen Name',
-      dataIndex: 'screen_name',
-      render: (value) =>
-        renderComponent(TextWrapper, {
-          class: 'w-40 truncate',
-          title: value,
-          children: value,
-        }),
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      render: (value) =>
-        renderComponent(TextWrapper, {
-          class: 'w-40 truncate',
-          title: value,
-          children: value,
-        }),
-    },
-    {
-      title: 'Blocking',
-      dataIndex: 'blocking',
-      render: (value) => renderComponent(BlockingWrapper, { blocking: value }),
-    },
-    {
-      title: 'Verified',
-      dataIndex: 'is_blue_verified',
-      render: (value) => renderComponent(VerifiedWrapper, { verified: value }),
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      render: (value) =>
-        renderComponent(TextWrapper, {
-          class: 'text-sm truncate',
-          children: value,
-        }),
-    },
-  ]
 
   let selectedRowKeys = $state<string[]>([])
   let searchParams = $state<SearchParams>({
@@ -327,6 +278,10 @@
     const users = selectedRows.filter((it) => it.blocking)
     $mutation.mutateAsync({ users, action: 'unblock' })
   }
+
+  function onViewBlockedUsers() {
+    navigate('/search-and-block/blocked')
+  }
 </script>
 
 <div class="h-full flex flex-col">
@@ -364,6 +319,10 @@
             <ImportIcon class="w-4 h-4" />
             Import Block List
           </DropdownMenu.Item>
+          <DropdownMenu.Item onclick={onViewBlockedUsers}>
+            <EyeIcon class="w-4 h-4" />
+            View Blocked Users
+          </DropdownMenu.Item>
         </DropdownMenu.Group>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
@@ -389,7 +348,7 @@
   <div class="flex-1 overflow-hidden">
     <ADataTable
       class="flex-1"
-      {columns}
+      columns={userColumns}
       dataSource={filteredData}
       rowKey="id"
       rowSelection={{

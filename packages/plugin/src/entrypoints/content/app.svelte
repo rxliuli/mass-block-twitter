@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMessage, removeAllListeners } from '$lib/messaging'
-  import UsersPage from './pages/users/page.svelte'
+  import SearchBlockPage from './pages/users/page.svelte'
+  import BlockedUsersPage from './pages/users/blocked/page.svelte'
   import ModListsPage from './pages/modlists/page.svelte'
   import MutedWordsPage from './pages/muted-words/page.svelte'
   import SettingsPage from './pages/settings/page.svelte'
@@ -95,7 +96,11 @@
         },
         {
           path: '/search-and-block',
-          component: UsersPage,
+          component: SearchBlockPage,
+        },
+        {
+          path: '/search-and-block/blocked',
+          component: BlockedUsersPage,
         },
         {
           path: '/muted-words',

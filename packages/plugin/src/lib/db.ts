@@ -1,4 +1,4 @@
-import { DBSchema, IDBPDatabase, openDB } from 'idb'
+import { DBSchema, IDBPCursorWithValue, IDBPDatabase, openDB } from 'idb'
 import { pickBy } from 'lodash-es'
 import { ulid } from 'ulidx'
 
@@ -176,6 +176,36 @@ export class UserDAO {
       },
       user.id,
     )
+  }
+  async getByPage(params: { limit: number; cursor?: number }): Promise<{
+    data: User[]
+    cursor: number | undefined
+  }> {
+    let cursorRequest = await dbStore.idb
+      .transaction('users', 'readonly')
+      .store.index('updated_at_index')
+      .openCursor(null, 'prev')
+    if (params.cursor && cursorRequest) {
+      cursorRequest = await cursorRequest.advance(params.cursor)
+    }
+    let count = 0
+    const data: User[] = []
+    let cursor = params.cursor ?? 0
+    while (cursorRequest) {
+      if (cursorRequest.value.blocking) {
+        data.push(cursorRequest.value)
+        count++
+      }
+      cursor++
+      if (count >= params.limit) {
+        break
+      }
+      cursorRequest = await cursorRequest.continue()
+    }
+    return {
+      data,
+      cursor: data.length === params.limit ? cursor : undefined,
+    }
   }
 }
 

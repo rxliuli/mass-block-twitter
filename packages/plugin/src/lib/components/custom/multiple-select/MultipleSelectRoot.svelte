@@ -15,6 +15,9 @@
 
   let selector = $state(new Selector(keys))
   $effect(() => {
+    if (JSON.stringify(keys) === JSON.stringify(selector.getKeys())) {
+      return
+    }
     selector.setKeys(keys)
     selected = selector.selected
   })

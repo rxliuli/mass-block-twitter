@@ -7,12 +7,29 @@ export async function load({ params }) {
       error(404, `Could not find ${params.slug}`)
     }
     const doc = matchDoc(import.meta.env.DOCS, params.slug.slice(5))
-    const post = await import(/* @vite-ignore */ `../../docs/${doc}?html`)
-    const meta = await import(/* @vite-ignore */ `../../docs/${doc}?meta`)
+
+    const htmlModules = import.meta.glob('../../docs/*.md', {
+      query: '?html',
+      eager: false,
+    })
+    const metaModules = import.meta.glob('../../docs/*.md', {
+      query: '?meta',
+      eager: false,
+    })
+
+    const mdPath = `../../docs/${doc}`
+    if (!htmlModules[mdPath] || !metaModules[mdPath]) {
+      error(404, `Could not find ${params.slug}`)
+    }
+
+    const [post, meta] = await Promise.all([
+      htmlModules[mdPath](),
+      metaModules[mdPath](),
+    ])
 
     return {
-      html: post.default,
-      meta: meta.default,
+      html: (post as any).default,
+      meta: (meta as any).default,
     }
   } catch (e) {
     error(404, `Could not find ${params.slug}`)

@@ -39,6 +39,8 @@ export const user = sqliteTable('User', {
   })
     .default(true)
     .notNull(),
+  location: text('location'),
+  url: text('url'),
 })
 
 // Tweet table
@@ -96,7 +98,10 @@ export const spamReport = sqliteTable(
     ),
     index('SpamReport_spamUserId_idx').on(table.spamUserId),
     index('SpamReport_reportUserId_idx').on(table.reportUserId),
-    index('SpamReport_spamUserId_reportUserId_idx').on(table.spamUserId, table.reportUserId),
+    index('SpamReport_spamUserId_reportUserId_idx').on(
+      table.spamUserId,
+      table.reportUserId,
+    ),
     index('SpamReport_createdAt_idx').on(table.createdAt),
   ],
 )

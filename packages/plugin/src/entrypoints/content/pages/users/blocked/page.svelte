@@ -1,7 +1,7 @@
 <script lang="ts">
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import { ADataTable } from '$lib/components/logic/a-data-table'
-  import { dbApi, User } from '$lib/db'
+  import { dbApi, type User } from '$lib/db'
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
   import { userColumns } from '../utils/columns'
   import Button from '$lib/components/ui/button/button.svelte'

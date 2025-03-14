@@ -12,6 +12,8 @@ export const userSchema = z.object({
   friends_count: z.number().optional(),
   default_profile: z.boolean().optional(),
   default_profile_image: z.boolean().optional(),
+  location: z.string().optional(),
+  url: z.string().optional(),
 })
 
 export const tweetSchema = z.object({

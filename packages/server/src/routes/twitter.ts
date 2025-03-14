@@ -31,6 +31,8 @@ export function convertUserParamsToDBUser(
     followingCount: userParams.friends_count,
     defaultProfile: userParams.default_profile,
     defaultProfileImage: userParams.default_profile_image,
+    location: userParams.location,
+    url: userParams.url,
   }
 }
 
@@ -74,7 +76,7 @@ twitter
             .limit(1)
         ).length > 0
       function createOrUpdateUser(
-        userParams: typeof userSchema._type,
+        userParams: z.infer<typeof userSchema>,
         isSpam: boolean,
       ) {
         const twitterUser = convertUserParamsToDBUser(userParams)

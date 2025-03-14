@@ -1,6 +1,7 @@
 import { assert, describe, expect, it, vi } from 'vitest'
 import type { TwitterSpamReportRequest } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
+import { user } from '../src/db/schema'
 
 let context = initCloudflareTest()
 
@@ -215,6 +216,23 @@ describe('report spam', () => {
     expect(tweet4.inReplyToStatusId).eq('tweet-2')
     expect(tweet4.quotedStatusId).eq('tweet-3')
     expect(tweet4.spamReportCount).eq(1)
+  })
+  it('should be able to report spam with location and url', async () => {
+    const spamReport = getSpamRequest('1', '2', '1')
+    spamReport.spamUser.location = 'test'
+    spamReport.spamUser.url = 'test'
+    await fetch('/api/twitter/spam-users', {
+      method: 'POST',
+      body: JSON.stringify(spamReport),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const r = (await context.db.select().from(user).get({
+      id: '1',
+    }))!
+    expect(r.location).eq('test')
+    expect(r.url).eq('test')
   })
 })
 

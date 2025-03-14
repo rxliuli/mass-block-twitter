@@ -29,7 +29,6 @@ export async function refreshModListSubscribedUsers(
     {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Cache-Control': 'no-cache',
       },
     },
   )

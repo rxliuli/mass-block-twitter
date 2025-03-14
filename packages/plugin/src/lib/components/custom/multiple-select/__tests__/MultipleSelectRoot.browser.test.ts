@@ -24,7 +24,7 @@ describe('MultipleSelect', () => {
     expect(get(selected)).toEqual(['2', '3'])
   })
   it('should be range select', async () => {
-    const selected = writable(['1', '2', '3'])
+    const selected = writable([])
     const screen = render(MultipleSelectRootTest, {
       props: {
         selected,
@@ -71,7 +71,7 @@ describe('MultipleSelect', () => {
     expect(get(selected)).toEqual(['1'])
   })
   it('should be select reverse', async () => {
-    const selected = writable(['1', '2', '3'])
+    const selected = writable([])
     const screen = render(MultipleSelectRootTest, {
       props: {
         selected,

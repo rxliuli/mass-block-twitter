@@ -6,20 +6,22 @@ export const dbStore: DBStore = {} as any
 
 export interface User {
   id: string
-  blocking: boolean
-  following?: boolean
   screen_name: string
   name: string
   description?: string
   profile_image_url?: string
-  followers_count?: number
-  friends_count?: number
-  default_profile?: boolean
-  default_profile_image?: boolean
   created_at?: string
   updated_at: string // add to idb time
+  followers_count?: number
+  friends_count?: number
   is_blue_verified?: boolean
+  default_profile?: boolean
+  default_profile_image?: boolean
   location?: string
+  url?: string // profile url
+
+  blocking: boolean // local only
+  following?: boolean // local only
 }
 
 export type TweetMediaType = 'photo' | 'video' | 'animated_gif'

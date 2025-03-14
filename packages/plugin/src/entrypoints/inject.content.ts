@@ -9,7 +9,7 @@ import {
   setRequestHeaders,
 } from '$lib/api'
 import { Activity, dbApi, User } from '$lib/db'
-import { filter, omit, throttle } from 'lodash-es'
+import { omit, throttle } from 'lodash-es'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { wait } from '@liuli-util/async'
 import { addBlockButton, alertWarning, extractTweet } from '$lib/observe'
@@ -174,7 +174,8 @@ async function onAction(
   if (queue.some((it) => it.id === user.id)) {
     return
   }
-  queue.push(user)
+  queue.unshift(user)
+  queue.length = 100
   dbApi.activitys.record([activity])
   if (user.blocking || result !== 'block') {
     return

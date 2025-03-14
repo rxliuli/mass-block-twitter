@@ -14,7 +14,7 @@ import {
   parseUserRecords,
 } from '../api'
 import allSpam from './assets/all-spam.json'
-import { omit, pick } from 'lodash-es'
+import { conforms, omit, pick } from 'lodash-es'
 import notificationsSpam from './assets/notifications-spam.json'
 import profile from './assets/ProfileSpotlightsQuery.json'
 import HomeTimeline from './assets/HomeTimeline.json'
@@ -114,9 +114,9 @@ describe('parseUserRecords', () => {
 
   it('parse notifications-spam', () => {
     const users = parseUserRecords(notificationsSpam)
+    expect(users).length(22)
     expect(users.map((it) => it.name).some((it) => it.includes('比特币'))).true
     expect(users.map((it) => it.name).some((it) => it.includes('币圈'))).true
-    expect(users).length(22)
     expect(
       users.map((it) => omit(it, 'created_at', 'updated_at')),
     ).toMatchSnapshot()

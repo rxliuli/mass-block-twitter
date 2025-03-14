@@ -121,41 +121,51 @@ const timelineUserSchema = z.object({
     default_profile: z.boolean().optional(),
     default_profile_image: z.boolean().optional(),
     location: z.string().optional().nullable(),
+    url: z.string().optional().nullable(),
     entities: z.object({
       description: z.object({ urls: z.array(urlSchema) }),
+      url: z.object({ urls: z.array(urlSchema) }).optional(),
     }),
   }),
 })
 
 function parseTimelineUser(
-  tweetUser: z.infer<typeof timelineUserSchema>,
+  twitterUser: z.infer<typeof timelineUserSchema>,
 ): User {
   const user: User = {
-    id: tweetUser.rest_id,
-    blocking: tweetUser.legacy.blocking ?? false,
-    following: tweetUser.legacy.following ?? false,
-    screen_name: tweetUser.legacy.screen_name,
-    name: tweetUser.legacy.name,
-    description: tweetUser.legacy.description ?? undefined,
-    profile_image_url: tweetUser.legacy.profile_image_url_https ?? undefined,
-    created_at: tweetUser.legacy.created_at
-      ? new Date(tweetUser.legacy.created_at).toISOString()
+    id: twitterUser.rest_id,
+    blocking: twitterUser.legacy.blocking ?? false,
+    following: twitterUser.legacy.following ?? false,
+    screen_name: twitterUser.legacy.screen_name,
+    name: twitterUser.legacy.name,
+    description: twitterUser.legacy.description ?? undefined,
+    profile_image_url: twitterUser.legacy.profile_image_url_https ?? undefined,
+    created_at: twitterUser.legacy.created_at
+      ? new Date(twitterUser.legacy.created_at).toISOString()
       : undefined,
     updated_at: new Date().toISOString(),
-    followers_count: tweetUser.legacy.followers_count,
-    friends_count: tweetUser.legacy.friends_count,
-    default_profile: tweetUser.legacy.default_profile,
-    default_profile_image: tweetUser.legacy.default_profile_image,
-    is_blue_verified: tweetUser.is_blue_verified,
-    location: tweetUser.legacy.location ?? undefined,
+    followers_count: twitterUser.legacy.followers_count,
+    friends_count: twitterUser.legacy.friends_count,
+    default_profile: twitterUser.legacy.default_profile,
+    default_profile_image: twitterUser.legacy.default_profile_image,
+    is_blue_verified: twitterUser.is_blue_verified,
+    location: twitterUser.legacy.location ?? undefined,
   }
   if (
-    tweetUser.legacy.description &&
-    tweetUser.legacy.entities.description.urls
+    twitterUser.legacy.description &&
+    twitterUser.legacy.entities.description.urls
   ) {
-    tweetUser.legacy.entities.description.urls.forEach((url) => {
+    twitterUser.legacy.entities.description.urls.forEach((url) => {
       user.description = user.description?.replace(url.url, url.expanded_url)
     })
+  }
+  if (twitterUser.legacy.url && twitterUser.legacy.entities?.url?.urls) {
+    const item = twitterUser.legacy.entities.url.urls.find(
+      (it) => it.url === twitterUser.legacy.url,
+    )
+    if (item) {
+      user.url = item.expanded_url
+    }
   }
   return user
 }
@@ -175,9 +185,11 @@ const notifacationUserSchema = z.object({
   default_profile_image: z.boolean().optional(),
   ext_is_blue_verified: z.boolean(),
   location: z.string().optional().nullable(),
+  url: z.string().optional().nullable(),
   entities: z
     .object({
       description: z.object({ urls: z.array(urlSchema) }),
+      url: z.object({ urls: z.array(urlSchema) }).optional(),
     })
     .optional(),
 })
@@ -207,6 +219,14 @@ function parseNotificationUser(
     twitterUser.entities.description.urls.forEach((url) => {
       user.description = user.description?.replace(url.url, url.expanded_url)
     })
+  }
+  if (twitterUser.url && twitterUser.entities?.url?.urls) {
+    const item = twitterUser.entities.url.urls.find(
+      (it) => it.url === twitterUser.url,
+    )
+    if (item) {
+      user.url = item.expanded_url
+    }
   }
   return user
 }

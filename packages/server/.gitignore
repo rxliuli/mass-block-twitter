@@ -11,6 +11,10 @@ dist/
 .idea/usage.statistics.xml
 .idea/shelf
 database.sql
+user.sql
+tweet.sql
+d1/
+__snapshots__/
 
 # deps
 node_modules/

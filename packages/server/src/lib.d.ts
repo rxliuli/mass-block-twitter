@@ -49,3 +49,11 @@ export type {
   VerifyEmailRequest,
   ResetPasswordRequest,
 } from './routes/auth'
+export type {
+  ReviewUsersResponse,
+  ReviewRequest,
+  ReviewUsersRequest,
+  LlmAnalyzeRequest,
+  LlmAnalyzeResponse,
+  UserSpamAnalyze,
+} from './routes/analyze'

@@ -3,8 +3,9 @@ import { HonoEnv } from '../lib/bindings'
 import { localUser } from '../db/schema'
 import { drizzle } from 'drizzle-orm/d1'
 import { InferSelectModel } from 'drizzle-orm'
+import { auth } from '../middlewares/auth'
 
-const accounts = new Hono<HonoEnv>()
+const accounts = new Hono<HonoEnv>().use(auth())
 
 type LocalUser = InferSelectModel<typeof localUser>
 export type AccountSettingsResponse = Pick<

@@ -3,3 +3,11 @@
 interface Env {
   DB: D1Database
 }
+
+interface ImportMeta {
+  env: {
+    VITE_OPENAI_BASE_URL: string
+    VITE_OPENAI_API_KEY: string
+    VITE_OPENAI_MODEL: string
+  }
+}

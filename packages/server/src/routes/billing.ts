@@ -5,8 +5,9 @@ import { zValidator } from '@hono/zod-validator'
 import { drizzle } from 'drizzle-orm/d1'
 import { payment, localUser } from '../db/schema'
 import { eq } from 'drizzle-orm'
+import { auth } from '../middlewares/auth'
 
-const billing = new Hono<HonoEnv>()
+const billing = new Hono<HonoEnv>().use(auth())
 
 const checkoutCompleteRequestSchema = z.object({
   transactionId: z.string(),

@@ -6,10 +6,13 @@ export type Bindings = {
   PADDEL_API_URL: string
   PADDEL_API_KEY: string
   RESEND_API_KEY: string
+  JWT_SECRET: string
+  OPENAI_BASE_URL: string
+  OPENAI_API_KEY: string
+  OPENAI_MODEL: string
+  ADMIN_TOKEN: string
 
   TEST_INIT_SQL: string
-
-  JWT_SECRET: string
 }
 
 export interface TokenInfo {

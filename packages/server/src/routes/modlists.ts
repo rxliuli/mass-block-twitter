@@ -4,7 +4,7 @@ import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 import { ulid } from 'ulidx'
 import { userSchema } from '../lib/request'
-import { getTokenInfo } from '../middlewares/auth'
+import { auth, getTokenInfo } from '../middlewares/auth'
 import { drizzle } from 'drizzle-orm/d1'
 import {
   modList,
@@ -29,7 +29,7 @@ import { zodStringNumber } from '../lib/utils/zod'
 import { getTableAliasedColumns } from '../lib/drizzle'
 import { groupBy, omit } from 'es-toolkit'
 
-const modlists = new Hono<HonoEnv>()
+const modlists = new Hono<HonoEnv>().use(auth())
 
 function upsertUser(
   db: ReturnType<typeof drizzle>,

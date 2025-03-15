@@ -26,19 +26,17 @@ export const user = sqliteTable('User', {
   updatedAt: text('updatedAt')
     .notNull()
     .$defaultFn(() => new Date().toISOString()),
-  followersCount: integer('followersCount').default(0).notNull(),
-  followingCount: integer('followingCount').default(0).notNull(),
-  blueVerified: integer('blueVerified', { mode: 'boolean' })
-    .default(false)
-    .notNull(),
-  defaultProfile: integer('defaultProfile', { mode: 'boolean' })
-    .default(true)
-    .notNull(),
+  followersCount: integer('followersCount').$defaultFn(() => 0),
+  followingCount: integer('followingCount').$defaultFn(() => 0),
+  blueVerified: integer('blueVerified', { mode: 'boolean' }).$defaultFn(
+    () => false,
+  ),
+  defaultProfile: integer('defaultProfile', { mode: 'boolean' }).$defaultFn(
+    () => true,
+  ),
   defaultProfileImage: integer('defaultProfileImage', {
     mode: 'boolean',
-  })
-    .default(true)
-    .notNull(),
+  }).$defaultFn(() => true),
   location: text('location'),
   url: text('url'),
 })
@@ -266,6 +264,73 @@ export const modListSubscription = sqliteTable(
       table.modListId,
       table.localUserId,
     ),
+  ],
+)
+
+export const userSpamAnalysis = sqliteTable(
+  'UserSpamAnalysis',
+  {
+    id: text('id').primaryKey().$defaultFn(ulid),
+    userId: text('userId')
+      .notNull()
+      .references(() => user.id),
+
+    llmSpamRating: integer('llmSpamRating').notNull(),
+    llmSpamExplanation: text('llmSpamExplanation').notNull(),
+    llmAnalyzedAt: text('llmAnalyzedAt').$defaultFn(() =>
+      new Date().toISOString(),
+    ),
+
+    isSpamByManualReview: integer('isSpamByManualReview', { mode: 'boolean' }),
+    manualReviewNotes: text('manualReviewNotes'),
+    manualReviewedAt: text('manualReviewedAt'),
+
+    createdAt: text('createdAt')
+      .notNull()
+      .$defaultFn(() => new Date().toISOString()),
+    updatedAt: text('updatedAt')
+      .notNull()
+      .$defaultFn(() => new Date().toISOString())
+      .$onUpdateFn(() => new Date().toISOString()),
+  },
+  (table) => [uniqueIndex('UserSpamAnalysis_userId_key').on(table.userId)],
+)
+
+export const llmRequestLog = sqliteTable(
+  'LLMRequestLog',
+  {
+    id: text('id').primaryKey().$defaultFn(ulid),
+
+    userId: text('userId').references(() => user.id),
+    requestType: text('requestType').notNull(), // like 'spam_detection'
+    modelName: text('modelName').notNull(), // like 'gpt-4o'
+
+    requestTimestamp: text('requestTimestamp').notNull(),
+    responseTimestamp: text('responseTimestamp'),
+    latencyMs: integer('latencyMs'),
+
+    promptTokens: integer('promptTokens'),
+    completionTokens: integer('completionTokens'),
+    totalTokens: integer('totalTokens'),
+    estimatedCost: real('estimatedCost'),
+
+    prompt: text('prompt'),
+    completion: text('completion'),
+
+    status: text('status', {
+      enum: ['success', 'error', 'timeout'],
+    }).notNull(),
+    errorMessage: text('errorMessage'),
+
+    relatedRecordId: text('relatedRecordId'),
+    relatedRecordType: text('relatedRecordType'),
+
+    metadata: text('metadata'),
+  },
+  (table) => [
+    index('LlmRequestLog_userId_idx').on(table.userId),
+    index('LlmRequestLog_requestTimestamp_idx').on(table.requestTimestamp),
+    index('LlmRequestLog_requestType_idx').on(table.requestType),
   ],
 )
 

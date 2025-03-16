@@ -2,7 +2,8 @@
   "name": "@mass-block-twitter/all",
   "private": true,
   "scripts": {
-    "init-all": "pnpm run -r init"
+    "init-all": "pnpm run -r init",
+    "test-all": "pnpm run -r test"
   },
   "pnpm": {
     "patchedDependencies": {

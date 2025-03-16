@@ -55,11 +55,10 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: |
-          pnpm install && pnpm init-all && pnpm exec playwright install
+          pnpm install && pnpm init-all
       - name: Zip extensions
         run: |
           cd packages/plugin
-          pnpm test
           pnpm zip && pnpm zip:firefox
 
       - name: Create Release

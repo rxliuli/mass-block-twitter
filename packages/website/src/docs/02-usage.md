@@ -123,9 +123,25 @@ You can:
 - Add/remove specific keywords
 - Edit matching conditions for existing keywords
 
+## Remote Shared Blacklist
+
+The remote shared blacklist is a community-based feature that allows users to share confirmed spam account information.
+
+### Enabling the Remote Shared Blacklist
+
+1. Navigate to the **Settings > Filter Control** tab in the extension panel
+2. Find the **Hide Spam Accounts** option
+3. Toggle the switch to enable the feature (default enabled)
+
+![remote blacklist](/docs/remote-blacklist.png)
+
 ### Contributing
 
-When you block spam accounts, it will automatically be submitted to the remote shared database. Your contribution will help other users avoid the same spam content. You can opt out of the shared blacklist feature at any time.
+When you browse tweets, it will automatically check if the user or tweet is a Spam account. If confirmed, it will automatically block and submit to the remote shared database. Your contribution will help other users avoid the same spam content. You can opt out of the shared blacklist feature at any time.
+
+### What is Spam Account
+
+Spam account is an account that posts spam content, ads, scams, etc. But does not include accounts that post political content. If you do not like them, you can create a moderation list and share it with anyone.
 
 ## Settings
 

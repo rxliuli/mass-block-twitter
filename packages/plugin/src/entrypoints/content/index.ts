@@ -1,12 +1,12 @@
 import { mount, unmount } from 'svelte'
 import App from './app.svelte'
 import './app.css'
-import { onMessage, sendMessage } from '$lib/messaging'
+import { onMessage } from '$lib/messaging'
 import {
   autoCheckPendingUsers,
   refreshAuthInfo,
   refreshModListSubscribedUsers,
-  refreshSpamUsers,
+  spamReport,
 } from '$lib/content'
 import { initXTransactionId } from '$lib/api'
 
@@ -18,7 +18,6 @@ export default defineContentScript({
   async main(ctx) {
     initXTransactionId()
 
-    refreshSpamUsers()
     refreshModListSubscribedUsers()
     refreshAuthInfo()
     autoCheckPendingUsers()
@@ -48,7 +47,7 @@ export default defineContentScript({
     window.addEventListener('SpamReportRequest', (event) => {
       const request = (event as CustomEvent).detail
       // console.log('spamReport isolation content script', request)
-      sendMessage('spamReport', request)
+      spamReport(request)
     })
   },
 })

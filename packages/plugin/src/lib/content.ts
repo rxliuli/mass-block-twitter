@@ -6,16 +6,12 @@ import {
   CheckSpamUserRequest,
   CheckSpamUserResponse,
   ModListSubscribedUserAndRulesResponse,
+  TwitterSpamReportRequest,
 } from '@mass-block-twitter/server'
 import { SERVER_URL } from './constants'
 import { ModListSubscribedUsersKey } from './shared'
 import { crossFetch } from './query'
 import { dbApi } from './db'
-
-export async function refreshSpamUsers(): Promise<void> {
-  const spamUsers = await sendMessage('fetchSpamUsers', undefined)
-  await set('spamUsers', spamUsers)
-}
 
 export async function refreshModListSubscribedUsers(
   force?: boolean,
@@ -107,4 +103,17 @@ export async function autoCheckPendingUsers() {
     )
   }, 1000 * 10)
   return () => clearInterval(interval)
+}
+
+export async function spamReport(request: TwitterSpamReportRequest) {
+  const resp = await fetch(`${SERVER_URL}/api/twitter/spam-users`, {
+    method: 'POST',
+    body: JSON.stringify(request),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  if (!resp.ok) {
+    throw new Error('Failed to report spam' + resp.statusText)
+  }
 }

@@ -156,21 +156,6 @@ twitter
               spamReportCount: sql`${tweet.spamReportCount} + 1`,
             },
           })
-        // await prisma.tweet.upsert({
-        //   where: {
-        //     id: tweetParams.id,
-        //   },
-        //   update: {
-        //     ..._tweet,
-        //     spamReportCount: {
-        //       increment: 1,
-        //     },
-        //   },
-        //   create: {
-        //     ..._tweet,
-        //     spamReportCount: 1,
-        //   },
-        // })
       }
       const _spamReport = await db
         .select({
@@ -186,15 +171,6 @@ twitter
         )
         .limit(1)
         .get()
-      // const _spamReport = await prisma.spamReport.findFirst({
-      //   where: {
-      //     AND: [
-      //       { spamUserId: validated.spamUser.id },
-      //       { reportUserId: validated.reportUser.id },
-      //       { spamTweetId: validated.context.tweet.id },
-      //     ],
-      //   },
-      // })
       function createSpamReport(
         validated: typeof spamReportRequestSchema._type,
       ) {

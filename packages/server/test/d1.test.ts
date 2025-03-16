@@ -49,19 +49,6 @@ describe('drizzle', () => {
   })
 })
 
-describe('prisma', () => {
-  it('prisma transaction', async () => {
-    await context.prisma.$transaction([
-      context.prisma.user.create({
-        data: { id: '1', screenName: '1', name: '1' },
-      }),
-      context.prisma.user.create({
-        data: { id: '2', screenName: '2', name: '2' },
-      }),
-    ])
-  })
-})
-
 describe('d1 batch', () => {
   beforeEach(async () => {
     const db = context.db

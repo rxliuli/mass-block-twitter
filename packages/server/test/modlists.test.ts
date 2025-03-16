@@ -91,7 +91,7 @@ describe('modlists', () => {
         } satisfies ModListCreateRequest),
       })
       expect(resp1.ok).true
-      const users = await context.prisma.user.findMany()
+      const users = await context.db.select().from(user).all()
       expect(users).length(1)
       expect(users[0].blueVerified).toBe(true)
       expect(users[0].followersCount).toBe(100)

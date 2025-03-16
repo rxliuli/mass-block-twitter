@@ -6,6 +6,7 @@ import type {
 } from '../src/lib'
 import { initCloudflareTest } from './utils'
 import { tweet, user, userSpamAnalysis } from '../src/db/schema'
+import { eq, gt } from 'drizzle-orm'
 
 let c = initCloudflareTest()
 
@@ -68,9 +69,10 @@ async function add(spamUserId: string, reportUserId: string, tweetId: string) {
 }
 
 async function getSpamUsers(): Promise<Record<string, number>> {
-  const users = await c.prisma.user.findMany({
-    where: { spamReportCount: { gt: 0 } },
-  })
+  const users = await c.db
+    .select()
+    .from(user)
+    .where(gt(user.spamReportCount, 0))
   return users.reduce((acc, user) => {
     acc[user.id] = user.spamReportCount
     return acc
@@ -96,10 +98,10 @@ describe('report spam', () => {
   })
   it('should be able to report spam with update new fields', async () => {
     expect((await add('1', '2', '1')).ok).true
-    const tweets = await c.prisma.tweet.findMany()
+    const tweets = await c.db.select().from(tweet).all()
     expect(tweets).length(1)
     expect(tweets[0].conversationId).toEqual('1')
-    let user1 = await c.prisma.user.findUnique({ where: { id: '1' } })
+    let user1 = await c.db.select().from(user).where(eq(user.id, '1')).get()
     assert(user1)
     expect(user1.blueVerified).eq(false)
     expect(user1.followersCount).eq(0)
@@ -117,7 +119,7 @@ describe('report spam', () => {
       },
     })
     expect(r2.ok).true
-    user1 = await c.prisma.user.findUnique({ where: { id: '1' } })
+    user1 = await c.db.select().from(user).where(eq(user.id, '1')).get()
     assert(user1)
     expect(user1.blueVerified).eq(true)
     expect(user1.followersCount).eq(100)
@@ -207,12 +209,12 @@ describe('report spam', () => {
       },
     })
     expect(resp.ok).true
-    const users = await c.prisma.user.findMany()
+    const users = await c.db.select().from(user).all()
     expect(users).length(5)
     const user4 = users.find((it) => it.id === 'user-4')
     assert(user4)
     expect(user4.spamReportCount).eq(1)
-    const tweets = await c.prisma.tweet.findMany()
+    const tweets = await c.db.select().from(tweet).all()
     expect(tweets).length(4)
     const tweet4 = tweets.find((it) => it.id === 'tweet-4')
     assert(tweet4)

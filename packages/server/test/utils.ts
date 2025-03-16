@@ -2,8 +2,6 @@ import app from '../src'
 import { afterEach, assert, beforeEach, vi } from 'vitest'
 import { HonoEnv, TokenInfo } from '../src/lib/bindings'
 import { createExecutionContext, env } from 'cloudflare:test'
-import { prismaClients } from '../src/lib/prisma'
-import { PrismaClient } from '@prisma/client'
 import { generateToken } from '../src/middlewares/auth'
 import { drizzle } from 'drizzle-orm/d1'
 import { localUser } from '../src/db/schema'
@@ -12,7 +10,6 @@ import { sha256 } from '../src/lib/crypto'
 export interface CloudflareTestContext {
   ctx: ExecutionContext
   fetch: typeof app.request
-  prisma: PrismaClient
   token1: string
   token2: string
   env: HonoEnv['Bindings']
@@ -40,7 +37,6 @@ export async function createCloudflareTestContext(): Promise<CloudflareTestConte
     } satisfies TokenInfo),
   )
   await _env.DB.prepare(_env.TEST_INIT_SQL).run()
-  const prisma = await prismaClients.fetch(_env.DB)
   const db = drizzle(_env.DB)
   const encryptedPassword = await sha256('test')
   assert(encryptedPassword)
@@ -64,7 +60,6 @@ export async function createCloudflareTestContext(): Promise<CloudflareTestConte
   return {
     ctx,
     fetch,
-    prisma,
     token1,
     token2,
     env: _env,
@@ -88,9 +83,6 @@ export function initCloudflareTest(): CloudflareTestContext {
     },
     get fetch() {
       return context.fetch
-    },
-    get prisma() {
-      return context.prisma
     },
     get env() {
       return context.env

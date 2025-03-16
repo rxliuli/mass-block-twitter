@@ -1,7 +1,9 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { assert, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CloudflareTestContext, createCloudflareTestContext } from './utils'
 import { CheckoutCompleteRequest } from '../src/lib'
 import { PaddleTransaction } from '../src/routes/billing'
+import { localUser, modList, payment } from '../src/db/schema'
+import { eq } from 'drizzle-orm'
 
 describe('billing', () => {
   let context: CloudflareTestContext
@@ -31,14 +33,19 @@ describe('billing', () => {
       },
     })
     expect(resp.status).toBe(200)
-    const payment = await context.prisma.payment.findUnique({
-      where: { id: 'test-transaction-id' },
-    })
-    expect(payment?.id).eq('test-transaction-id')
-    const user = await context.prisma.localUser.findUnique({
-      where: { id: 'test-user-1' },
-    })
-    expect(user?.isPro).true
+    const _payment = await context.db
+      .select()
+      .from(payment)
+      .where(eq(payment.id, 'test-transaction-id'))
+      .get()
+    expect(_payment?.id).eq('test-transaction-id')
+    const user = await context.db
+      .select()
+      .from(localUser)
+      .where(eq(localUser.id, 'test-user-1'))
+      .get()
+    assert(user)
+    expect(user.isPro).true
   })
   it('should be able to handle a failed payment', async () => {
     vi.spyOn(globalThis, 'fetch').mockImplementation(async () => {

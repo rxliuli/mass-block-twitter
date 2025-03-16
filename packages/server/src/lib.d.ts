@@ -1,5 +1,10 @@
+import type { InferSelectModel } from 'drizzle-orm'
+import type { modList, modListUser, modListSubscription } from './db/schema'
+
 export type { AuthInfo } from './routes/auth'
-export type { ModList, ModListUser, ModListSubscription } from '@prisma/client'
+export type ModList = InferSelectModel<typeof modList>
+export type ModListUser = InferSelectModel<typeof modListUser>
+export type ModListSubscription = InferSelectModel<typeof modListSubscription>
 export type {
   TwitterUser,
   TwitterSpamReportRequest,

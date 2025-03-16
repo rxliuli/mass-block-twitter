@@ -1,34 +1,48 @@
 import { get } from 'idb-keyval'
-import map from 'just-map-object'
 import { spamContext } from './filter'
 import { ModListSubscribedUserAndRulesResponse } from '@mass-block-twitter/server'
+import { dbApi } from './db'
+import { blockUser } from './api'
+import { ulid } from 'ulidx'
 
-export async function getSpamUsers(): Promise<
-  Record<string, 'spam' | 'report'>
-> {
-  const spamUsers = ((await get('spamUsers')) ?? {}) as Record<string, number>
-  return map(spamUsers, (_key, value) => {
-    if (typeof value === 'string') {
-      return value
+export async function refreshSpamUsers(userIds: string[]): Promise<void> {
+  const list = await Promise.all(
+    userIds.map(
+      async (userId) => [userId, await dbApi.spamUsers.has(userId)] as const,
+    ),
+  )
+  list.forEach(async ([userId, isSpam]) => {
+    if (!isSpam) {
+      return
     }
-    if (value > 10) {
-      return 'spam'
+    spamContext.spamUsers.add(userId)
+    const user = await dbApi.users.get(userId)
+    if (!user || user.following || user.blocking) {
+      return
     }
-    return 'report'
+    await blockUser(user)
+    await dbApi.activitys.record([
+      {
+        id: ulid().toString(),
+        action: 'block',
+        trigger_type: 'auto',
+        match_type: 'user',
+        match_filter: 'sharedSpam',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user_id: user.id,
+        user_name: user.name,
+        user_screen_name: user.screen_name,
+      },
+    ])
+    console.log('blockUser', user)
   })
 }
 
 export const ModListSubscribedUsersKey =
   'MassBlockTwitterModListSubscribedUsers'
 
-export async function getSubscribedModLists(): Promise<ModListSubscribedUserAndRulesResponse> {
-  return ((await get(ModListSubscribedUsersKey)) ??
+export async function refreshSubscribedModLists(): Promise<void> {
+  spamContext.modlists = ((await get(ModListSubscribedUsersKey)) ??
     []) as ModListSubscribedUserAndRulesResponse
-}
-
-export async function refershSpamContext() {
-  ;[spamContext.spamUsers, spamContext.modlists] = await Promise.all([
-    getSpamUsers(),
-    getSubscribedModLists(),
-  ])
 }

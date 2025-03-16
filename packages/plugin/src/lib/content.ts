@@ -3,11 +3,14 @@ import { sendMessage } from './messaging'
 import {
   AccountSettingsResponse,
   AuthInfo,
+  CheckSpamUserRequest,
+  CheckSpamUserResponse,
   ModListSubscribedUserAndRulesResponse,
 } from '@mass-block-twitter/server'
 import { SERVER_URL } from './constants'
 import { ModListSubscribedUsersKey } from './shared'
 import { crossFetch } from './query'
+import { dbApi } from './db'
 
 export async function refreshSpamUsers(): Promise<void> {
   const spamUsers = await sendMessage('fetchSpamUsers', undefined)
@@ -23,13 +26,17 @@ export async function refreshModListSubscribedUsers(
   if (!token) {
     return
   }
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
+  }
+  if (force) {
+    headers['no-cache'] = 'true'
+  }
   const resp = await crossFetch(
     `${SERVER_URL}/api/modlists/subscribed/users?version=` +
       browser.runtime.getManifest().version,
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers,
     },
   )
   if (!resp.ok) {
@@ -71,4 +78,33 @@ export async function refreshAuthInfo() {
       isPro: settings.isPro,
     } satisfies AuthInfo,
   })
+}
+
+export async function autoCheckPendingUsers() {
+  const interval = setInterval(async () => {
+    const pendingUsers = await dbApi.pendingCheckUsers.list()
+    // console.log('autoCheckPendingUsers', pendingUsers)
+    if (pendingUsers.length === 0) {
+      return
+    }
+    const resp = await fetch(SERVER_URL + '/api/twitter/spam-users/check', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(pendingUsers satisfies CheckSpamUserRequest),
+    })
+    if (!resp.ok) {
+      return
+    }
+    const data = (await resp.json()) as CheckSpamUserResponse
+    await dbApi.spamUsers.record(
+      data.filter((it) => it.isSpamByManualReview).map((it) => it.userId),
+    )
+    await dbApi.pendingCheckUsers.updateStatus(
+      pendingUsers.map((it) => it.user.id),
+      'checked',
+    )
+  }, 1000 * 10)
+  return () => clearInterval(interval)
 }

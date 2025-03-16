@@ -109,11 +109,12 @@ describe('analyze', () => {
     expect(resp2.ok).true
     expect(await c.db.$count(userSpamAnalysis)).eq(2)
     const r3 = await getReviewUsers('unreviewed')
-    expect(r3.total).eq(2)
-    expect(
-      r3.users.map((it) => it.id).sort((a, b) => a.localeCompare(b)),
-    ).toEqual(['test-user-1', 'test-user-2'])
-    expect((await getReviewUsers('reviewed')).total).eq(0)
+    expect(r3.length).eq(2)
+    expect(r3.map((it) => it.id).sort((a, b) => a.localeCompare(b))).toEqual([
+      'test-user-1',
+      'test-user-2',
+    ])
+    expect((await getReviewUsers('reviewed')).length).eq(0)
     const resp4 = await fetch('/api/analyze/review', {
       method: 'post',
       headers: {
@@ -121,7 +122,7 @@ describe('analyze', () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        userId: r3.users[0].id,
+        userId: r3[0].id,
         isSpam: true,
         notes: 'test',
       } satisfies ReviewRequest),
@@ -130,17 +131,17 @@ describe('analyze', () => {
     const r5 = await c.db
       .select()
       .from(userSpamAnalysis)
-      .where(eq(userSpamAnalysis.userId, r3.users[0].id))
+      .where(eq(userSpamAnalysis.userId, r3[0].id))
       .get()
     assert(r5)
     expect(r5.isSpamByManualReview).true
     expect(r5.manualReviewNotes).eq('test')
     const r6 = await getReviewUsers('unreviewed')
-    expect(r6.total).eq(1)
-    expect(
-      r6.users.map((it) => it.id).sort((a, b) => a.localeCompare(b)),
-    ).toEqual(['test-user-2'])
-    expect((await getReviewUsers('reviewed')).total).eq(1)
+    expect(r6.length).eq(1)
+    expect(r6.map((it) => it.id).sort((a, b) => a.localeCompare(b))).toEqual([
+      'test-user-2',
+    ])
+    expect((await getReviewUsers('reviewed')).length).eq(1)
   })
   it('should not allow review user not found', async () => {
     const resp1 = await fetch('/api/analyze/review', {
@@ -163,11 +164,14 @@ describe('analyze', () => {
         id: 'test-user-1',
         screenName: 'test-user-1',
         name: 'test-user-1',
+        followersCount: 100,
+        followingCount: 100,
+        blueVerified: true,
       },
     ])
     expect(await c.db.$count(user)).eq(1)
-    expect((await getReviewUsers('unanalyzed')).total).eq(1)
-    expect((await getReviewUsers('unreviewed')).total).eq(0)
+    expect((await getReviewUsers('unanalyzed')).length).eq(1)
+    expect((await getReviewUsers('unreviewed')).length).eq(0)
     const resp1 = await fetch('/api/analyze/llm', {
       method: 'POST',
       headers: {
@@ -177,8 +181,8 @@ describe('analyze', () => {
       body: JSON.stringify({ userId: 'test-user-1' }),
     })
     expect(resp1.ok).true
-    expect((await getReviewUsers('unanalyzed')).total).eq(0)
-    expect((await getReviewUsers('unreviewed')).total).eq(1)
+    expect((await getReviewUsers('unanalyzed')).length).eq(0)
+    expect((await getReviewUsers('unreviewed')).length).eq(1)
   })
   it('should get user spam analyze', async () => {
     await c.db.insert(user).values([
@@ -254,8 +258,8 @@ describe('analyze', () => {
     })
     expect(resp1.ok).true
     const r1 = await getReviewUsers('unreviewed')
-    expect(r1.total).eq(1)
-    expect(r1.users[0].id).eq('test-user-1')
+    expect(r1.length).eq(1)
+    expect(r1[0].id).eq('test-user-1')
     const resp2 = await fetch('/api/analyze/review', {
       method: 'post',
       headers: {
@@ -270,8 +274,28 @@ describe('analyze', () => {
     })
     expect(resp2.ok).true
     const r2 = await getReviewUsers('unreviewed')
-    expect(r2.total).eq(0)
+    expect(r2.length).eq(0)
     const r3 = await getReviewUsers('reviewed')
-    expect(r3.total).eq(1)
+    expect(r3.length).eq(1)
+  })
+  it('should get unanalyzed users with followersCount, followingCount, blueVerified', async () => {
+    await c.db.insert(user).values([
+      {
+        id: 'test-user-1',
+        screenName: 'test-screen-name-1',
+        name: 'test-name-1',
+        followersCount: 100,
+        followingCount: 100,
+        blueVerified: true,
+      },
+      {
+        id: 'test-user-2',
+        screenName: 'test-screen-name-2',
+        name: 'test-name-2',
+      },
+    ])
+    const r1 = await getReviewUsers('unanalyzed')
+    expect(r1.length).eq(1)
+    expect(r1[0].id).eq('test-user-1')
   })
 })

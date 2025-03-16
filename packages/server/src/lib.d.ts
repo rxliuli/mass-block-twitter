@@ -1,6 +1,11 @@
 export type { AuthInfo } from './routes/auth'
 export type { ModList, ModListUser, ModListSubscription } from '@prisma/client'
-export type { TwitterUser, TwitterSpamReportRequest } from './routes/twitter'
+export type {
+  TwitterUser,
+  TwitterSpamReportRequest,
+  CheckSpamUserRequest,
+  CheckSpamUserResponse,
+} from './routes/twitter'
 export type {
   AccountSettingsResponse,
   AccountSettingsError,

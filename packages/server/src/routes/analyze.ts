@@ -156,17 +156,15 @@ analyze.post('/review', zValidator('json', reviewSchema), async (c) => {
 })
 
 export type ReviewUsersResponse = {
-  users: {
-    id: string
-    screenName: string
-    name: string
-    status: 'unanalyzed' | 'unreviewed' | 'reviewed'
-    llmSpamRating: number
-    llmSpamExplanation: string
-    isSpamByManualReview: boolean
-  }[]
-  total: number
-}
+  id: string
+  screenName: string
+  name: string
+  status: 'unanalyzed' | 'unreviewed' | 'reviewed'
+  llmSpamRating: number
+  llmSpamExplanation: string
+  isSpamByManualReview: boolean
+}[]
+
 const reviewUsersSchema = z.object({
   status: z.enum(['unanalyzed', 'unreviewed', 'reviewed']),
 })
@@ -175,23 +173,23 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
   const db = drizzle(c.env.DB)
   const valid = c.req.valid('query')
   if (valid.status === 'unanalyzed') {
-    const [users, total] = await db.batch([
-      db
-        .select({
-          User: getTableAliasedColumns(user),
-        })
-        .from(user)
-        .leftJoin(userSpamAnalysis, eq(user.id, userSpamAnalysis.userId))
-        .where(isNull(userSpamAnalysis.userId))
-        .limit(100),
-      db
-        .select({ count: count() })
-        .from(user)
-        .leftJoin(userSpamAnalysis, eq(user.id, userSpamAnalysis.userId))
-        .where(isNull(userSpamAnalysis.userId)),
-    ])
-    return c.json({
-      users: users.map((it) => ({
+    const users = await db
+      .select({
+        User: getTableAliasedColumns(user),
+      })
+      .from(user)
+      .leftJoin(userSpamAnalysis, eq(user.id, userSpamAnalysis.userId))
+      .where(
+        and(
+          isNull(userSpamAnalysis.userId),
+          isNotNull(user.followersCount),
+          isNotNull(user.followingCount),
+          isNotNull(user.blueVerified),
+        ),
+      )
+      .limit(100)
+    return c.json(
+      users.map((it) => ({
         id: it.User.id,
         screenName: it.User.screenName,
         name: it.User.name ?? it.User.screenName,
@@ -199,34 +197,27 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
         llmSpamRating: 0,
         llmSpamExplanation: '',
         isSpamByManualReview: false,
-      })),
-      total: total[0].count,
-    } satisfies ReviewUsersResponse)
+      })) satisfies ReviewUsersResponse,
+    )
   }
   if (valid.status === 'unreviewed') {
-    const [users, total] = await db.batch([
-      db
-        .select({
-          UserSpamAnalysis: getTableAliasedColumns(userSpamAnalysis),
-          User: getTableAliasedColumns(user),
-        })
-        .from(userSpamAnalysis)
-        .innerJoin(user, eq(userSpamAnalysis.userId, user.id))
-        .where(
-          and(
-            isNull(userSpamAnalysis.isSpamByManualReview),
-            gte(userSpamAnalysis.llmSpamRating, 4),
-          ),
-        )
-        .orderBy(userSpamAnalysis.id)
-        .limit(100),
-      db
-        .select({ count: count() })
-        .from(userSpamAnalysis)
-        .where(isNull(userSpamAnalysis.isSpamByManualReview)),
-    ])
-    return c.json({
-      users: users.map((it) => ({
+    const users = await db
+      .select({
+        UserSpamAnalysis: getTableAliasedColumns(userSpamAnalysis),
+        User: getTableAliasedColumns(user),
+      })
+      .from(userSpamAnalysis)
+      .innerJoin(user, eq(userSpamAnalysis.userId, user.id))
+      .where(
+        and(
+          isNull(userSpamAnalysis.isSpamByManualReview),
+          gte(userSpamAnalysis.llmSpamRating, 4),
+        ),
+      )
+      .orderBy(userSpamAnalysis.id)
+      .limit(100)
+    return c.json(
+      users.map((it) => ({
         id: it.User.id,
         screenName: it.User.screenName,
         name: it.User.name ?? it.User.screenName,
@@ -234,29 +225,22 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
         llmSpamRating: it.UserSpamAnalysis.llmSpamRating,
         llmSpamExplanation: it.UserSpamAnalysis.llmSpamExplanation,
         isSpamByManualReview: false,
-      })),
-      total: total[0].count,
-    } satisfies ReviewUsersResponse)
+      })) satisfies ReviewUsersResponse,
+    )
   }
   if (valid.status === 'reviewed') {
-    const [users, total] = await db.batch([
-      db
-        .select({
-          UserSpamAnalysis: getTableAliasedColumns(userSpamAnalysis),
-          User: getTableAliasedColumns(user),
-        })
-        .from(userSpamAnalysis)
-        .innerJoin(user, eq(userSpamAnalysis.userId, user.id))
-        .orderBy(userSpamAnalysis.id)
-        .where(isNotNull(userSpamAnalysis.isSpamByManualReview))
-        .limit(100),
-      db
-        .select({ count: count() })
-        .from(userSpamAnalysis)
-        .where(isNotNull(userSpamAnalysis.isSpamByManualReview)),
-    ])
-    return c.json({
-      users: users.map((it) => ({
+    const users = await db
+      .select({
+        UserSpamAnalysis: getTableAliasedColumns(userSpamAnalysis),
+        User: getTableAliasedColumns(user),
+      })
+      .from(userSpamAnalysis)
+      .innerJoin(user, eq(userSpamAnalysis.userId, user.id))
+      .orderBy(userSpamAnalysis.id)
+      .where(isNotNull(userSpamAnalysis.isSpamByManualReview))
+      .limit(100)
+    return c.json(
+      users.map((it) => ({
         id: it.User.id,
         screenName: it.User.screenName,
         name: it.User.name ?? it.User.screenName,
@@ -264,9 +248,8 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
         llmSpamRating: it.UserSpamAnalysis.llmSpamRating,
         llmSpamExplanation: it.UserSpamAnalysis.llmSpamExplanation,
         isSpamByManualReview: !!it.UserSpamAnalysis.isSpamByManualReview,
-      })),
-      total: total[0].count,
-    } satisfies ReviewUsersResponse)
+      })) satisfies ReviewUsersResponse,
+    )
   }
   return c.json({ code: 'invalid_status' }, 400)
 })

@@ -87,15 +87,19 @@ async function analyzeUser(config: Config, userId: string) {
 
 async function analyzeUsers(config: Config) {
   const reviewUsers = await getReviewUsers(config, 'unanalyzed')
-  console.log(`Total: ${reviewUsers.total}`)
+  if (reviewUsers.length === 0) {
+    console.log('No unanalyzed users')
+    return
+  }
+  console.log(`Length: ${reviewUsers.length}`)
   const selectedUserIds = await checkbox({
     message: 'Select users to analyze',
-    choices: reviewUsers.users.map((it) => ({
+    choices: reviewUsers.map((it) => ({
       name: `${it.name} (https://x.com/${it.screenName})`,
       value: it.id,
     })),
   })
-  const selectedUsers = reviewUsers.users.filter((it) =>
+  const selectedUsers = reviewUsers.filter((it) =>
     selectedUserIds.includes(it.id),
   )
   const tasks = new Listr(
@@ -151,21 +155,19 @@ async function reviewUser(config: Config, req: ReviewRequest) {
 
 async function reviewUsers(config: Config) {
   const unreviewUsers = await getReviewUsers(config, 'unreviewed')
-  console.log(`Total: ${unreviewUsers.total}`)
-  if (unreviewUsers.users.length === 0) {
+  console.log(`Length: ${unreviewUsers.length}`)
+  if (unreviewUsers.length === 0) {
     console.log('No unreviewed users')
     return
   }
   const selectedUserIds = await checkbox({
     message: 'Select user to review',
-    choices: unreviewUsers.users.map((it) => ({
+    choices: unreviewUsers.map((it) => ({
       name: `${it.name} (https://x.com/${it.screenName}) (${it.llmSpamRating})`,
       value: it.id,
     })),
   })
-  const users = unreviewUsers.users.filter((it) =>
-    selectedUserIds.includes(it.id),
-  )
+  const users = unreviewUsers.filter((it) => selectedUserIds.includes(it.id))
   if (users.length === 0) {
     console.log(chalk.red('Users not selected'))
     return
@@ -226,14 +228,14 @@ async function reviewUsers(config: Config) {
 
 async function reviewedUsers(config: Config) {
   const reviewedUsers = await getReviewUsers(config, 'reviewed')
-  console.log(`Total: ${reviewedUsers.total}`)
-  if (reviewedUsers.total === 0) {
+  console.log(`Length: ${reviewedUsers.length}`)
+  if (reviewedUsers.length === 0) {
     console.log('No reviewed users')
     return
   }
   const selectedUserId = await select({
     message: 'Select user to view',
-    choices: reviewedUsers.users.map((it) => ({
+    choices: reviewedUsers.map((it) => ({
       name: `${it.name} (${it.screenName}) (${
         it.isSpamByManualReview ? 'Spam' : 'Not Spam'
       })`,

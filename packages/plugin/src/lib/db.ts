@@ -1,5 +1,5 @@
-import { DBSchema, IDBPCursorWithValue, IDBPDatabase, openDB } from 'idb'
-import { pickBy } from 'lodash-es'
+import { DBSchema, IDBPDatabase, openDB } from 'idb'
+import { pickBy, sortBy } from 'lodash-es'
 import { ulid } from 'ulidx'
 
 export const dbStore: DBStore = {} as any
@@ -66,6 +66,19 @@ export interface Activity {
   location?: string
 }
 
+export interface PendingCheckUser {
+  id: string // user id
+  created_at: string
+  updated_at: string
+  status: 'pending' | 'checked'
+}
+
+export interface SpamUser {
+  id: string // user id
+  created_at: string
+  updated_at: string
+}
+
 export interface MyDB extends DBSchema {
   users: {
     key: string
@@ -89,6 +102,17 @@ export interface MyDB extends DBSchema {
       created_at_index: string
     }
   }
+  pendingCheckUsers: {
+    key: string
+    value: PendingCheckUser
+    indexes: {
+      status_index: string
+    }
+  }
+  spamUsers: {
+    key: string
+    value: SpamUser
+  }
 }
 
 export type DBStore = {
@@ -96,7 +120,7 @@ export type DBStore = {
 }
 
 export async function initDB() {
-  dbStore.idb = await openDB<MyDB>('mass-db', 15, {
+  dbStore.idb = await openDB<MyDB>('mass-db', 16, {
     async upgrade(db, oldVersion, newVersion, transaction) {
       if (db.objectStoreNames.length === 0) {
         // init users store
@@ -111,6 +135,13 @@ export async function initDB() {
       if (oldVersion < 15) {
         const activityStore = db.createObjectStore('activitys')
         activityStore.createIndex('created_at_index', 'created_at')
+      }
+      if (oldVersion < 16) {
+        db.createObjectStore('pendingCheckUsers').createIndex(
+          'status_index',
+          'status',
+        )
+        db.createObjectStore('spamUsers')
       }
     },
   })
@@ -284,13 +315,127 @@ class ActivityDAO {
     }
   }
 }
+
+class PendingCheckUserDAO {
+  async record(userIds: string[]): Promise<void> {
+    await Promise.all(
+      userIds.map(async (it) => {
+        const store = await dbStore.idb.get('pendingCheckUsers', it)
+        if (store) {
+          if (
+            new Date().getTime() - new Date(store.created_at).getTime() <
+            1000 * 60 * 60 * 24
+          ) {
+            return
+          }
+        }
+        if (await dbStore.idb.get('spamUsers', it)) {
+          return
+        }
+        await dbStore.idb.put(
+          'pendingCheckUsers',
+          {
+            id: it,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            status: 'pending',
+          },
+          it,
+        )
+      }),
+    )
+  }
+  async list(): Promise<
+    {
+      user: User
+      tweets: Tweet[]
+    }[]
+  > {
+    const userIds = await dbStore.idb.getAllKeysFromIndex(
+      'pendingCheckUsers',
+      'status_index',
+      'pending',
+    )
+    const list = await Promise.all(
+      userIds.map(async (userId) => {
+        const user = await dbStore.idb.get('users', userId)
+        if (
+          !user ||
+          user.followers_count === undefined ||
+          user.friends_count === undefined ||
+          user.is_blue_verified === undefined
+        ) {
+          return
+        }
+        const tweets = sortBy(
+          await dbStore.idb.getAllFromIndex('tweets', 'user_id_index', userId),
+          (it) => -new Date(it.created_at).getTime(),
+        ).slice(0, 10)
+        return {
+          user,
+          tweets,
+        }
+      }),
+    )
+    return list.filter((it) => it !== undefined)
+  }
+
+  async updateStatus(
+    userIds: string[],
+    status: 'pending' | 'checked',
+  ): Promise<void> {
+    await Promise.all(
+      userIds.map(async (userId) => {
+        const user = await dbStore.idb.get('pendingCheckUsers', userId)
+        if (!user) {
+          return
+        }
+        await dbStore.idb.put(
+          'pendingCheckUsers',
+          {
+            ...user,
+            updated_at: new Date().toISOString(),
+            status,
+          },
+          userId,
+        )
+      }),
+    )
+  }
+}
+
+class SpamUserDAO {
+  async record(userIds: string[]): Promise<void> {
+    await Promise.all(
+      userIds.map(async (userId) => {
+        await dbStore.idb.put(
+          'spamUsers',
+          {
+            id: userId,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+          userId,
+        )
+      }),
+    )
+  }
+  async has(userId: string): Promise<boolean> {
+    return !!(await dbStore.idb.getKey('spamUsers', userId))
+  }
+}
+
 export const dbApi = {
   users: wrap(new UserDAO()),
   tweets: wrap(new TweetDAO()),
   activitys: wrap(new ActivityDAO()),
+  pendingCheckUsers: wrap(new PendingCheckUserDAO()),
+  spamUsers: wrap(new SpamUserDAO()),
   clear: async () => {
     await dbStore.idb.clear('users')
     await dbStore.idb.clear('tweets')
     await dbStore.idb.clear('activitys')
+    await dbStore.idb.clear('pendingCheckUsers')
+    await dbStore.idb.clear('spamUsers')
   },
 }

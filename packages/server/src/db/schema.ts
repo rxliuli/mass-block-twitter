@@ -16,9 +16,7 @@ export const user = sqliteTable('User', {
   name: text('name'),
   description: text('description'),
   profileImageUrl: text('profileImageUrl'),
-  accountCreatedAt: text('accountCreatedAt').$defaultFn(() =>
-    new Date().toISOString(),
-  ),
+  accountCreatedAt: text('accountCreatedAt'),
   spamReportCount: integer('spamReportCount').default(0).notNull(),
   createdAt: text('createdAt')
     .notNull()
@@ -26,17 +24,13 @@ export const user = sqliteTable('User', {
   updatedAt: text('updatedAt')
     .notNull()
     .$defaultFn(() => new Date().toISOString()),
-  followersCount: integer('followersCount').$defaultFn(() => 0),
-  followingCount: integer('followingCount').$defaultFn(() => 0),
-  blueVerified: integer('blueVerified', { mode: 'boolean' }).$defaultFn(
-    () => false,
-  ),
-  defaultProfile: integer('defaultProfile', { mode: 'boolean' }).$defaultFn(
-    () => true,
-  ),
+  followersCount: integer('followersCount'),
+  followingCount: integer('followingCount'),
+  blueVerified: integer('blueVerified', { mode: 'boolean' }),
+  defaultProfile: integer('defaultProfile', { mode: 'boolean' }),
   defaultProfileImage: integer('defaultProfileImage', {
     mode: 'boolean',
-  }).$defaultFn(() => true),
+  }),
   location: text('location'),
   url: text('url'),
 })
@@ -46,7 +40,7 @@ export const tweet = sqliteTable('Tweet', {
   id: text('id').primaryKey(),
   text: text('text'),
   media: text('media', { mode: 'json' }),
-  publishedAt: text('publishedAt').$defaultFn(() => new Date().toISOString()),
+  publishedAt: text('publishedAt'),
   userId: text('userId')
     .references(() => user.id)
     .notNull(),

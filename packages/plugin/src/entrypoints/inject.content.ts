@@ -16,7 +16,7 @@ import { addBlockButton, alertWarning, extractTweet } from '$lib/observe'
 import css from './style.css?inline'
 import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'
-import { refershSpamContext } from '$lib/shared'
+import { refreshSpamUsers, refreshSubscribedModLists } from '$lib/shared'
 import {
   blueVerifiedFilter,
   defaultProfileFilter,
@@ -71,15 +71,21 @@ function loggerUsers(): Middleware {
     if (c.res.headers.get('content-type')?.includes('application/json')) {
       const json = await c.res.clone().json()
       const users = parseUserRecords(json)
-      if (users.length > 0) {
-        // console.log('loggerUsers', c.req.url, json, users)
-        await dbApi.users.record(users)
+      if (users.length === 0) {
+        return
       }
+      // console.log('loggerUsers', c.req.url, users)
+      await dbApi.users.record(users)
+      if (getSettings().hideSpamAccounts) {
+        await dbApi.pendingCheckUsers.record(users.map((it) => it.id))
+      }
+      await Promise.all([
+        refreshSpamUsers(users.map((it) => it.id)),
+        refreshSubscribedModLists(),
+      ])
     }
   }
 }
-
-const reportSpamTweetIds = new Set<string>()
 
 function getFilters(settings: Settings) {
   const filters: TweetFilter[] = [selfFilter()]
@@ -120,16 +126,6 @@ function loggerTweets(): Middleware {
           user_id: it.user.id,
         })),
       )
-      await refershSpamContext()
-      tweets.forEach(async (it) => {
-        // Don't block following users
-        if (it.user.following) {
-          return
-        }
-        if (spamContext.spamUsers[it.user.id] === 'report') {
-          reportSpamTweetIds.add(it.id)
-        }
-      })
     }
   }
 }
@@ -268,10 +264,6 @@ async function processTweetElement(tweetElement: HTMLElement) {
     return
   }
   addBlockButton(tweetElement, tweet)
-  if (getSettings().hideSpamAccounts && reportSpamTweetIds.has(tweetId)) {
-    alertWarning(tweetElement, tweet)
-  }
-  tweetElement.dataset.spamScanned = 'true'
 }
 
 function eachTweetElements() {
@@ -324,7 +316,7 @@ export default defineContentScript({
     observe()
 
     document.addEventListener('RefreshModListSubscribedUsers', async () => {
-      await refershSpamContext()
+      await refreshSubscribedModLists()
     })
   },
 })

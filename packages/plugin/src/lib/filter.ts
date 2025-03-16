@@ -1,6 +1,6 @@
 import { ulid } from 'ulidx'
 import { MUTED_WORD_RULES_KEY, MUTED_WORDS_KEY, ParsedTweet } from './api'
-import { User } from './db'
+import { dbApi, User } from './db'
 import { extractCurrentUserId } from './observe'
 import { matchByKeyword } from './util/matchByKeyword'
 import { pick } from 'lodash-es'
@@ -179,10 +179,10 @@ export function blueVerifiedFilter(): TweetFilter {
   }
 }
 export let spamContext: {
-  spamUsers: Record<string, 'spam' | 'report'>
+  spamUsers: Set<string>
   modlists: ModListSubscribedUserAndRulesResponse
 } = {
-  spamUsers: {},
+  spamUsers: new Set(),
   modlists: [],
 }
 
@@ -190,8 +190,8 @@ export function sharedSpamFilter(): TweetFilter {
   return {
     name: 'sharedSpam',
     userCondition: (user: User) => {
-      if (spamContext.spamUsers[user.id] === 'spam') {
-        return 'hide'
+      if (spamContext.spamUsers.has(user.id)) {
+        return 'block'
       }
       return 'next'
     },

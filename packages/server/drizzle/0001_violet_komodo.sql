@@ -1,1 +1,0 @@
-ALTER TABLE `ModListSubscription` ADD `action` text;

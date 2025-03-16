@@ -3,6 +3,7 @@ import App from './app.svelte'
 import './app.css'
 import { onMessage, sendMessage } from '$lib/messaging'
 import {
+  autoCheckPendingUsers,
   refreshAuthInfo,
   refreshModListSubscribedUsers,
   refreshSpamUsers,
@@ -20,6 +21,7 @@ export default defineContentScript({
     refreshSpamUsers()
     refreshModListSubscribedUsers()
     refreshAuthInfo()
+    autoCheckPendingUsers()
 
     const removeListener = onMessage('show', async () => {
       const ui = await createShadowRootUi(ctx, {

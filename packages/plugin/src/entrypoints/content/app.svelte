@@ -22,6 +22,7 @@
   import SettingsFilterPage from './pages/settings/filter/page.svelte'
   import SettingsPrivacyPage from './pages/settings/privacy/page.svelte'
   import DashboardActivitiesPage from './pages/dashboard/activities/page.svelte'
+  import AppNotifications from '$lib/components/layout/AppNotifications.svelte'
 
   let open = $state(true)
 
@@ -162,3 +163,4 @@
 
 <ModeWatcher />
 <Toaster richColors closeButton />
+<AppNotifications />

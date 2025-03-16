@@ -1,7 +1,6 @@
 import { InferInsertModel, InferSelectModel } from 'drizzle-orm'
 import { llmRequestLog, tweet, user } from '../db/schema'
 import type { OpenAI } from 'openai'
-import { ulid } from 'ulidx'
 
 const PROMPT = `
 You are an expert system designed to detect spam and bot accounts on Twitter. Analyze the following Twitter user profile and recent tweets (including media) to determine if this account appears to be a spam/bot account or a legitimate human user.
@@ -82,7 +81,10 @@ export function getPrompt(data: LLMAnalyzeRequest) {
     .replace('{{followersCount}}', data.user.followersCount?.toString() ?? '0')
     .replace('{{followingCount}}', data.user.followingCount?.toString() ?? '0')
     .replace('{{blueVerified}}', data.user.blueVerified?.toString() ?? 'false')
-    .replace('{{defaultProfile}}', data.user.defaultProfile?.toString() ?? 'true')
+    .replace(
+      '{{defaultProfile}}',
+      data.user.defaultProfile?.toString() ?? 'true',
+    )
     .replace(
       '{{defaultProfileImage}}',
       data.user.defaultProfileImage?.toString() ?? 'true',
@@ -180,12 +182,20 @@ export async function analyzeUser(
 }> {
   const prompt = getPrompt(data)
   const start = new Date()
-  let response: OpenAI.ChatCompletion
+  let response:
+    | OpenAI.ChatCompletion
+    | {
+        error: OpenAI.ErrorObject
+      }
   try {
-    response = await getClient({
+    response = (await getClient({
       ...options,
       jsonResponse: true,
-    })(prompt)
+    })(prompt)) as
+      | OpenAI.ChatCompletion
+      | {
+          error: OpenAI.ErrorObject
+        }
   } catch (error) {
     return {
       logData: {
@@ -200,6 +210,10 @@ export async function analyzeUser(
         errorMessage: error instanceof Error ? error.message : 'Unknown error',
       },
     }
+  }
+  if ('error' in response) {
+    console.error('LLM error', JSON.stringify(response, null, 2))
+    throw response
   }
   const logData: InferInsertModel<typeof llmRequestLog> = {
     userId: data.user.id,

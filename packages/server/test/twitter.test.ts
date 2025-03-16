@@ -1,9 +1,13 @@
 import { assert, describe, expect, it, vi } from 'vitest'
-import type { TwitterSpamReportRequest } from '../src/routes/twitter'
+import type {
+  CheckSpamUserRequest,
+  CheckSpamUserResponse,
+  TwitterSpamReportRequest,
+} from '../src/lib'
 import { initCloudflareTest } from './utils'
-import { user } from '../src/db/schema'
+import { tweet, user, userSpamAnalysis } from '../src/db/schema'
 
-let context = initCloudflareTest()
+let c = initCloudflareTest()
 
 const getSpamRequest = (
   spamUserId: string,
@@ -64,7 +68,7 @@ async function add(spamUserId: string, reportUserId: string, tweetId: string) {
 }
 
 async function getSpamUsers(): Promise<Record<string, number>> {
-  const users = await context.prisma.user.findMany({
+  const users = await c.prisma.user.findMany({
     where: { spamReportCount: { gt: 0 } },
   })
   return users.reduce((acc, user) => {
@@ -92,10 +96,10 @@ describe('report spam', () => {
   })
   it('should be able to report spam with update new fields', async () => {
     expect((await add('1', '2', '1')).ok).true
-    const tweets = await context.prisma.tweet.findMany()
+    const tweets = await c.prisma.tweet.findMany()
     expect(tweets).length(1)
     expect(tweets[0].conversationId).toEqual('1')
-    let user1 = await context.prisma.user.findUnique({ where: { id: '1' } })
+    let user1 = await c.prisma.user.findUnique({ where: { id: '1' } })
     assert(user1)
     expect(user1.blueVerified).eq(false)
     expect(user1.followersCount).eq(0)
@@ -113,7 +117,7 @@ describe('report spam', () => {
       },
     })
     expect(r2.ok).true
-    user1 = await context.prisma.user.findUnique({ where: { id: '1' } })
+    user1 = await c.prisma.user.findUnique({ where: { id: '1' } })
     assert(user1)
     expect(user1.blueVerified).eq(true)
     expect(user1.followersCount).eq(100)
@@ -203,12 +207,12 @@ describe('report spam', () => {
       },
     })
     expect(resp.ok).true
-    const users = await context.prisma.user.findMany()
+    const users = await c.prisma.user.findMany()
     expect(users).length(5)
     const user4 = users.find((it) => it.id === 'user-4')
     assert(user4)
     expect(user4.spamReportCount).eq(1)
-    const tweets = await context.prisma.tweet.findMany()
+    const tweets = await c.prisma.tweet.findMany()
     expect(tweets).length(4)
     const tweet4 = tweets.find((it) => it.id === 'tweet-4')
     assert(tweet4)
@@ -228,7 +232,7 @@ describe('report spam', () => {
         'Content-Type': 'application/json',
       },
     })
-    const r = (await context.db.select().from(user).get({
+    const r = (await c.db.select().from(user).get({
       id: '1',
     }))!
     expect(r.location).eq('test')
@@ -271,5 +275,66 @@ describe('get spam users for type', () => {
     vi.setSystemTime(Date.now() + 1000 * 60 * 60 * 24 + 1)
     expect(await getSpamUsers()).toEqual({ '2': 'report', '3': 'report' })
     vi.useRealTimers()
+  })
+})
+
+describe('check spam user', () => {
+  async function checkSpamUser(users: { id: string; tweetIds: string[] }[]) {
+    const resp = await fetch('/api/twitter/spam-users/check', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(
+        users.map((it) => ({
+          user: {
+            id: it.id,
+            screen_name: `test ${it.id}`,
+            name: `test ${it.id}`,
+          },
+          tweets: it.tweetIds.map((tweetId) => ({
+            id: tweetId,
+            created_at: new Date().toISOString(),
+            text: 'test',
+            user_id: it.id,
+          })),
+        })) satisfies CheckSpamUserRequest,
+      ),
+    })
+    expect(resp.ok).true
+    return (await resp.json()) as CheckSpamUserResponse
+  }
+  it('should be able to check spam user', async () => {
+    const r1 = await checkSpamUser([
+      { id: 'user-1', tweetIds: ['tweet-1', 'tweet-2'] },
+      { id: 'user-2', tweetIds: ['tweet-3', 'tweet-4'] },
+    ])
+    expect(r1).length(0)
+    expect(await c.db.$count(user)).eq(2)
+    expect(await c.db.$count(tweet)).eq(4)
+    await c.db.insert(userSpamAnalysis).values([
+      {
+        userId: 'user-1',
+        llmSpamRating: 5,
+        llmSpamExplanation: 'test',
+        isSpamByManualReview: true,
+        manualReviewedAt: new Date().toISOString(),
+      },
+      {
+        userId: 'user-2',
+        llmSpamRating: 1,
+        llmSpamExplanation: '',
+        isSpamByManualReview: false,
+        manualReviewedAt: new Date().toISOString(),
+      },
+    ])
+    const r2 = await checkSpamUser([
+      { id: 'user-1', tweetIds: ['tweet-1', 'tweet-2'] },
+      { id: 'user-2', tweetIds: ['tweet-3', 'tweet-4'] },
+      { id: 'user-3', tweetIds: ['tweet-5', 'tweet-6'] },
+    ])
+    expect(r2).length(1)
+    expect(r2[0].userId).eq('user-1')
+    expect(r2[0].isSpamByManualReview).eq(true)
   })
 })

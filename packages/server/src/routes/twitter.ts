@@ -9,8 +9,18 @@ import {
 import { HonoEnv } from '../lib/bindings'
 import { z } from 'zod'
 import { drizzle } from 'drizzle-orm/d1'
-import { spamReport, tweet, user } from '../db/schema'
-import { and, desc, eq, gte, InferInsertModel, sql } from 'drizzle-orm'
+import { spamReport, tweet, user, userSpamAnalysis } from '../db/schema'
+import {
+  and,
+  desc,
+  eq,
+  gte,
+  inArray,
+  InferInsertModel,
+  InferSelectModel,
+  isNotNull,
+  sql,
+} from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
 import { omit, uniqBy } from 'es-toolkit'
 
@@ -33,6 +43,25 @@ export function convertUserParamsToDBUser(
     defaultProfileImage: userParams.default_profile_image,
     location: userParams.location,
     url: userParams.url,
+  }
+}
+
+const tweetSchemaWithUserId = tweetSchema.extend({
+  user_id: z.string(),
+})
+function convertTweet(
+  tweetParams: z.infer<typeof tweetSchemaWithUserId>,
+): InferInsertModel<typeof tweet> {
+  return {
+    id: tweetParams.id,
+    text: tweetParams.text,
+    publishedAt: new Date(tweetParams.created_at).toISOString(),
+    userId: tweetParams.user_id,
+    media: tweetParams.media,
+    conversationId: tweetParams.conversation_id_str,
+    inReplyToStatusId: tweetParams.in_reply_to_status_id_str,
+    quotedStatusId: tweetParams.quoted_status_id_str,
+    lang: tweetParams.lang,
   }
 }
 
@@ -96,6 +125,7 @@ twitter
             },
           })
       }
+      // TODO: update tweet must have userId
       function convertTweet(
         tweetParams: ReportSpamContextTweet,
       ): InferInsertModel<typeof tweet> {
@@ -262,5 +292,68 @@ twitter
     )
     return c.json(res)
   })
+
+const checkSpamUserSchema = z.array(
+  z.object({
+    user: userSchema,
+    tweets: z.array(tweetSchemaWithUserId),
+  }),
+)
+export type CheckSpamUserRequest = z.infer<typeof checkSpamUserSchema>
+export type CheckSpamUserResponse = Pick<
+  InferSelectModel<typeof userSpamAnalysis>,
+  'userId' | 'isSpamByManualReview'
+>[]
+twitter.post(
+  '/spam-users/check',
+  zValidator('json', checkSpamUserSchema),
+  async (c) => {
+    const validated = c.req.valid('json')
+    const db = drizzle(c.env.DB)
+    await db.batch([
+      ...validated.map((it) => {
+        const _user = convertUserParamsToDBUser(it.user)
+        return db
+          .insert(user)
+          .values(_user)
+          .onConflictDoUpdate({
+            target: user.id,
+            set: omit(_user, ['id']),
+          })
+      }),
+      ...validated.flatMap((userParam) =>
+        userParam.tweets.map((it) => {
+          const _tweet = convertTweet({
+            ...it,
+            user_id: userParam.user.id,
+          })
+          return db
+            .insert(tweet)
+            .values(_tweet)
+            .onConflictDoUpdate({
+              target: tweet.id,
+              set: omit(_tweet, ['id']),
+            })
+        }),
+      ),
+    ] as any)
+    const spamAnalysis = await db
+      .select({
+        userId: userSpamAnalysis.userId,
+        isSpamByManualReview: userSpamAnalysis.isSpamByManualReview,
+      })
+      .from(userSpamAnalysis)
+      .where(
+        and(
+          inArray(
+            userSpamAnalysis.userId,
+            validated.map((it) => it.user.id),
+          ),
+          eq(userSpamAnalysis.isSpamByManualReview, true),
+        ),
+      )
+    return c.json(spamAnalysis satisfies CheckSpamUserResponse)
+  },
+)
 
 export { twitter }

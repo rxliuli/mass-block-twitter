@@ -1,6 +1,8 @@
-import { Activity, dbApi, dbStore, initDB, MyDB, User } from '$lib/db'
+import { Activity, dbApi, dbStore, initDB, Tweet, User } from '$lib/db'
+import dayjs from 'dayjs'
+import { range, rangeRight } from 'lodash-es'
 import { ulid } from 'ulidx'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 beforeEach(async () => {
   await initDB()
@@ -56,5 +58,126 @@ describe('user', () => {
     const r2 = await dbApi.users.getByPage({ limit: 10, cursor: r1.cursor })
     expect(r2.data.length).toBe(9)
     expect(r2.cursor).undefined
+  })
+})
+describe('pending check user', () => {
+  beforeEach(async () => {
+    await dbApi.users.record(
+      Array.from({ length: 10 }, (_, i) => ({
+        id: i.toString(),
+        updated_at: new Date().toISOString(),
+        blocking: true,
+        followers_count: 10,
+        friends_count: 10,
+        is_blue_verified: false,
+      })) as User[],
+    )
+  })
+  it('should be able to record', async () => {
+    await dbApi.pendingCheckUsers.record(['1', '2'])
+    const r = await dbApi.pendingCheckUsers.list()
+    expect(r.map((it) => it.user.id)).toEqual(['1', '2'])
+  })
+  it('should be able to update status', async () => {
+    await dbApi.pendingCheckUsers.record(['1', '2'])
+    expect(
+      (await dbApi.pendingCheckUsers.list()).map((it) => it.user.id),
+    ).toEqual(['1', '2'])
+    await dbApi.pendingCheckUsers.updateStatus(['1', '2'], 'checked')
+    expect(
+      (await dbApi.pendingCheckUsers.list()).map((it) => it.user.id),
+    ).toEqual([])
+  })
+  it('should be able to get tweets', async () => {
+    const now = dayjs()
+    await dbApi.tweets.record(
+      range(0, 100).map((i) => ({
+        id: i.toString(),
+        user_id: '1',
+        created_at: now.add(i, 'milliseconds').toISOString(),
+      })) as Tweet[],
+    )
+    await dbApi.pendingCheckUsers.record(['1'])
+    const r = await dbApi.pendingCheckUsers.list()
+    expect(r).length(1)
+    expect(r[0].user.id).toBe('1')
+    expect(r[0].tweets.length).toBe(10)
+    expect(r[0].tweets.map((it) => it.id)).toEqual(
+      rangeRight(90, 100).map(String),
+    )
+  })
+  it('should be able to record duplicate', async () => {
+    await dbApi.pendingCheckUsers.record(['1'])
+    await dbApi.pendingCheckUsers.updateStatus(['1'], 'checked')
+    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
+      'checked',
+    )
+    await dbApi.pendingCheckUsers.record(['1'])
+    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
+      'checked',
+    )
+  })
+  it('should not check if the user is checked in the last 24 hours', async () => {
+    vi.useFakeTimers()
+    await dbApi.pendingCheckUsers.record(['1'])
+    await dbApi.pendingCheckUsers.updateStatus(['1'], 'checked')
+    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
+      'checked',
+    )
+    await dbApi.pendingCheckUsers.record(['1'])
+    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
+      'checked',
+    )
+    vi.setSystemTime(dayjs().add(1, 'day').toDate())
+    await dbApi.pendingCheckUsers.record(['1'])
+    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
+      'pending',
+    )
+    vi.clearAllTimers()
+  })
+  it('should not check if the user is reviewed', async () => {
+    vi.useFakeTimers()
+    await dbApi.pendingCheckUsers.record(['1'])
+    await dbApi.pendingCheckUsers.updateStatus(['1'], 'checked')
+    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
+      'checked',
+    )
+    await dbApi.spamUsers.record(['1'])
+    vi.setSystemTime(dayjs().add(1, 'day').toDate())
+    await dbApi.pendingCheckUsers.record(['1'])
+    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
+      'checked',
+    )
+    vi.clearAllTimers()
+  })
+  it('should not upload user with undefined followers_count, friends_count, is_blue_verified', async () => {
+    await dbApi.users.record([
+      {
+        id: '1000',
+        updated_at: new Date().toISOString(),
+        blocking: true,
+      } as User,
+    ])
+    await dbApi.pendingCheckUsers.record(['1000'])
+    expect(await dbApi.pendingCheckUsers.list()).length(0)
+    await dbApi.pendingCheckUsers.record(['1'])
+    expect(await dbApi.pendingCheckUsers.list()).length(1)
+  })
+})
+
+describe('spam user', () => {
+  beforeEach(async () => {
+    await dbApi.users.record(
+      Array.from({ length: 10 }, (_, i) => ({
+        id: i.toString(),
+        updated_at: new Date().toISOString(),
+        blocking: true,
+      })) as User[],
+    )
+  })
+  it('should be able to record', async () => {
+    await dbApi.spamUsers.record(['1'])
+    expect(await dbApi.spamUsers.has('1')).true
+    expect(await dbApi.spamUsers.has('2')).false
   })
 })

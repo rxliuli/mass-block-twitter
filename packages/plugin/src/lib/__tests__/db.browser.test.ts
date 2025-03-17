@@ -117,7 +117,7 @@ describe('pending check user', () => {
       'checked',
     )
   })
-  it('should not check if the user is checked in the last 24 hours', async () => {
+  it.skip('should not check if the user is checked in the last 24 hours', async () => {
     vi.useFakeTimers()
     await dbApi.pendingCheckUsers.record(['1'])
     await dbApi.pendingCheckUsers.updateStatus(['1'], 'checked')

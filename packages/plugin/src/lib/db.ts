@@ -322,12 +322,13 @@ class PendingCheckUserDAO {
       userIds.map(async (it) => {
         const store = await dbStore.idb.get('pendingCheckUsers', it)
         if (store) {
-          if (
-            new Date().getTime() - new Date(store.created_at).getTime() <
-            1000 * 60 * 60 * 24
-          ) {
-            return
-          }
+          // if (
+          //   new Date().getTime() - new Date(store.created_at).getTime() <
+          //   1000 * 60 * 60 * 24
+          // ) {
+          //   return
+          // }
+          return
         }
         if (await dbStore.idb.get('spamUsers', it)) {
           return

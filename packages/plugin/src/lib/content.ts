@@ -12,6 +12,8 @@ import { SERVER_URL } from './constants'
 import { ModListSubscribedUsersKey } from './shared'
 import { crossFetch } from './query'
 import { dbApi } from './db'
+import { chunk } from 'lodash-es'
+import { getSettings } from './settings'
 
 export async function refreshModListSubscribedUsers(
   force?: boolean,
@@ -78,29 +80,32 @@ export async function refreshAuthInfo() {
 
 export async function autoCheckPendingUsers() {
   const interval = setInterval(async () => {
-    const pendingUsers = await dbApi.pendingCheckUsers.list()
-    // console.log('autoCheckPendingUsers', pendingUsers)
-    if (pendingUsers.length === 0) {
+    const _pendingUsers = await dbApi.pendingCheckUsers.list()
+    // console.log('autoCheckPendingUsers', _pendingUsers)
+    if (_pendingUsers.length === 0) {
       return
     }
-    const resp = await fetch(SERVER_URL + '/api/twitter/spam-users/check', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(pendingUsers satisfies CheckSpamUserRequest),
-    })
-    if (!resp.ok) {
-      return
+    const list = chunk(_pendingUsers, 50)
+    for (const pendingUsers of list) {
+      const resp = await fetch(SERVER_URL + '/api/twitter/spam-users/check', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(pendingUsers satisfies CheckSpamUserRequest),
+      })
+      if (!resp.ok) {
+        return
+      }
+      const data = (await resp.json()) as CheckSpamUserResponse
+      await dbApi.spamUsers.record(
+        data.filter((it) => it.isSpamByManualReview).map((it) => it.userId),
+      )
+      await dbApi.pendingCheckUsers.updateStatus(
+        pendingUsers.map((it) => it.user.id),
+        'checked',
+      )
     }
-    const data = (await resp.json()) as CheckSpamUserResponse
-    await dbApi.spamUsers.record(
-      data.filter((it) => it.isSpamByManualReview).map((it) => it.userId),
-    )
-    await dbApi.pendingCheckUsers.updateStatus(
-      pendingUsers.map((it) => it.user.id),
-      'checked',
-    )
   }, 1000 * 10)
   return () => clearInterval(interval)
 }

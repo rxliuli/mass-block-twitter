@@ -427,4 +427,35 @@ describe('check spam user', () => {
     const r2 = await c.db.select().from(tweet).all()
     expect(r2[0].text).eq('test B')
   })
+  it('should be able to prevent duplicate update user and tweet', async () => {
+    await c.db.insert(user).values({
+      id: 'user-1',
+      screenName: 'user-1',
+      name: 'user-1',
+    })
+    const request: CheckSpamUserRequest = [
+      {
+        user: { id: 'user-1', screen_name: 'user-1', name: 'user-1' },
+        tweets: [],
+      },
+    ]
+    await checkSpamUser(request)
+    const r1 = await c.db.select().from(user).all()
+    expect(r1[0].screenName).eq('user-1')
+    request[0].user.name = 'user-2'
+    await checkSpamUser(request)
+    const r2 = await c.db.select().from(user).all()
+    expect(r2[0].name).eq('user-1')
+    request[0].user.followers_count = 100
+    request[0].user.friends_count = 100
+    await checkSpamUser(request)
+    const r3 = await c.db.select().from(user).all()
+    expect(r3[0].name).eq('user-2')
+    expect(r3[0].followersCount).eq(100)
+    expect(r3[0].followingCount).eq(100)
+    request[0].user.name = 'user-3'
+    await checkSpamUser(request)
+    const r4 = await c.db.select().from(user).all()
+    expect(r4[0].name).eq('user-2')
+  })
 })

@@ -23,7 +23,8 @@ export const user = sqliteTable('User', {
     .$defaultFn(() => new Date().toISOString()),
   updatedAt: text('updatedAt')
     .notNull()
-    .$defaultFn(() => new Date().toISOString()),
+    .$defaultFn(() => new Date().toISOString())
+    .$onUpdateFn(() => new Date().toISOString()),
   followersCount: integer('followersCount'),
   followingCount: integer('followingCount'),
   blueVerified: integer('blueVerified', { mode: 'boolean' }),
@@ -53,7 +54,8 @@ export const tweet = sqliteTable('Tweet', {
     .$defaultFn(() => new Date().toISOString()),
   updatedAt: text('updatedAt')
     .notNull()
-    .$defaultFn(() => new Date().toISOString()),
+    .$defaultFn(() => new Date().toISOString())
+    .$onUpdateFn(() => new Date().toISOString()),
   spamReportCount: integer('spamReportCount').default(0),
 })
 

@@ -14,11 +14,14 @@ import {
   and,
   desc,
   eq,
+  gt,
   gte,
   inArray,
   InferInsertModel,
   InferSelectModel,
   isNull,
+  lt,
+  or,
   sql,
 } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
@@ -297,6 +300,19 @@ twitter.post(
             .onConflictDoUpdate({
               target: user.id,
               set: omit(_user, ['id']),
+              setWhere: and(
+                or(
+                  isNull(user.followersCount),
+                  isNull(user.followingCount),
+                  // 24 hours ago
+                  lt(
+                    user.updatedAt,
+                    new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+                  ),
+                ),
+                sql`${_user.followersCount ?? null} IS NOT NULL`,
+                sql`${_user.followingCount ?? null} IS NOT NULL`,
+              ),
             })
         }),
         ...item.flatMap((userParam) =>

@@ -7,7 +7,7 @@ import {
   userSchema,
 } from '../lib/request'
 import { HonoEnv } from '../lib/bindings'
-import { z } from 'zod'
+import { object, z } from 'zod'
 import { drizzle } from 'drizzle-orm/d1'
 import { spamReport, tweet, user, userSpamAnalysis } from '../db/schema'
 import {
@@ -22,7 +22,7 @@ import {
   sql,
 } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
-import { omit, uniqBy } from 'es-toolkit'
+import { chunk, omit, uniqBy } from 'es-toolkit'
 
 export function convertUserParamsToDBUser(
   userParams: typeof userSchema._type,
@@ -286,33 +286,36 @@ twitter.post(
   async (c) => {
     const validated = c.req.valid('json')
     const db = drizzle(c.env.DB)
-    await db.batch([
-      ...validated.map((it) => {
-        const _user = convertUserParamsToDBUser(it.user)
-        return db
-          .insert(user)
-          .values(_user)
-          .onConflictDoUpdate({
-            target: user.id,
-            set: omit(_user, ['id']),
-          })
-      }),
-      ...validated.flatMap((userParam) =>
-        userParam.tweets.map((it) => {
-          const _tweet = convertTweet({
-            ...it,
-            user_id: userParam.user.id,
-          })
+    for (const item of chunk(validated, 100)) {
+      await db.batch([
+        ...item.map((it) => {
+          const _user = convertUserParamsToDBUser(it.user)
           return db
-            .insert(tweet)
-            .values(_tweet)
+            .insert(user)
+            .values(_user)
             .onConflictDoUpdate({
-              target: tweet.id,
-              set: omit(_tweet, ['id']),
+              target: user.id,
+              set: omit(_user, ['id']),
             })
         }),
-      ),
-    ] as any)
+        ...item.flatMap((userParam) =>
+          userParam.tweets.map((it) => {
+            const _tweet = convertTweet({
+              ...it,
+              user_id: userParam.user.id,
+            })
+            return db
+              .insert(tweet)
+              .values(_tweet)
+              .onConflictDoUpdate({
+                target: tweet.id,
+                set: omit(_tweet, ['id']),
+              })
+          }),
+        ),
+      ] as any)
+    }
+
     const spamAnalysis = await db
       .select({
         userId: userSpamAnalysis.userId,
@@ -323,7 +326,8 @@ twitter.post(
         and(
           inArray(
             userSpamAnalysis.userId,
-            validated.map((it) => it.user.id),
+            // TODO: why d1 can't inArray query more than 100 params?
+            validated.slice(0, 99).map((it) => it.user.id),
           ),
           eq(userSpamAnalysis.isSpamByManualReview, true),
         ),

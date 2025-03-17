@@ -7,6 +7,7 @@ import type {
 import { initCloudflareTest } from './utils'
 import { tweet, user, userSpamAnalysis } from '../src/db/schema'
 import { eq, gt } from 'drizzle-orm'
+import { range } from 'es-toolkit'
 
 let c = initCloudflareTest()
 
@@ -338,5 +339,14 @@ describe('check spam user', () => {
     expect(r2).length(1)
     expect(r2[0].userId).eq('user-1')
     expect(r2[0].isSpamByManualReview).eq(true)
+  })
+  it('should be able to check spam user with batch', async () => {
+    const r1 = await checkSpamUser(
+      range(1000).map((it) => ({
+        id: `user-${it}`,
+        tweetIds: range(10).map((it) => `tweet-${it}`),
+      })),
+    )
+    expect(r1).length(0)
   })
 })

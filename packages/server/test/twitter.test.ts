@@ -6,7 +6,7 @@ import type {
 } from '../src/lib'
 import { initCloudflareTest } from './utils'
 import { tweet, user, userSpamAnalysis } from '../src/db/schema'
-import { eq, gt } from 'drizzle-orm'
+import { eq, gt, sql } from 'drizzle-orm'
 import { range } from 'es-toolkit'
 
 let c = initCloudflareTest()
@@ -282,36 +282,42 @@ describe('get spam users for type', () => {
 })
 
 describe('check spam user', () => {
-  async function checkSpamUser(users: { id: string; tweetIds: string[] }[]) {
+  async function checkSpamUser(request: CheckSpamUserRequest) {
     const resp = await fetch('/api/twitter/spam-users/check', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(
-        users.map((it) => ({
-          user: {
-            id: it.id,
-            screen_name: `test ${it.id}`,
-            name: `test ${it.id}`,
-          },
-          tweets: it.tweetIds.map((tweetId) => ({
-            id: tweetId,
-            created_at: new Date().toISOString(),
-            text: 'test',
-            user_id: it.id,
-          })),
-        })) satisfies CheckSpamUserRequest,
-      ),
+      body: JSON.stringify(request),
     })
     expect(resp.ok).true
     return (await resp.json()) as CheckSpamUserResponse
   }
+  function genCheckSpamUserRequest(
+    users: { id: string; tweetIds: string[] }[],
+  ): CheckSpamUserRequest {
+    return users.map((it) => ({
+      user: {
+        id: it.id,
+        screen_name: `test ${it.id}`,
+        name: `test ${it.id}`,
+      },
+      tweets: it.tweetIds.map((tweetId) => ({
+        id: tweetId,
+        created_at: new Date().toISOString(),
+        text: 'test',
+        user_id: it.id,
+        conversation_id_str: tweetId,
+      })),
+    }))
+  }
   it('should be able to check spam user', async () => {
-    const r1 = await checkSpamUser([
-      { id: 'user-1', tweetIds: ['tweet-1', 'tweet-2'] },
-      { id: 'user-2', tweetIds: ['tweet-3', 'tweet-4'] },
-    ])
+    const r1 = await checkSpamUser(
+      genCheckSpamUserRequest([
+        { id: 'user-1', tweetIds: ['tweet-1', 'tweet-2'] },
+        { id: 'user-2', tweetIds: ['tweet-3', 'tweet-4'] },
+      ]),
+    )
     expect(r1).length(0)
     expect(await c.db.$count(user)).eq(2)
     expect(await c.db.$count(tweet)).eq(4)
@@ -331,22 +337,94 @@ describe('check spam user', () => {
         manualReviewedAt: new Date().toISOString(),
       },
     ])
-    const r2 = await checkSpamUser([
-      { id: 'user-1', tweetIds: ['tweet-1', 'tweet-2'] },
-      { id: 'user-2', tweetIds: ['tweet-3', 'tweet-4'] },
-      { id: 'user-3', tweetIds: ['tweet-5', 'tweet-6'] },
-    ])
+    const r2 = await checkSpamUser(
+      genCheckSpamUserRequest([
+        { id: 'user-1', tweetIds: ['tweet-1', 'tweet-2'] },
+        { id: 'user-2', tweetIds: ['tweet-3', 'tweet-4'] },
+        { id: 'user-3', tweetIds: ['tweet-5', 'tweet-6'] },
+      ]),
+    )
     expect(r2).length(1)
     expect(r2[0].userId).eq('user-1')
     expect(r2[0].isSpamByManualReview).eq(true)
   })
   it('should be able to check spam user with batch', async () => {
     const r1 = await checkSpamUser(
-      range(1000).map((it) => ({
-        id: `user-${it}`,
-        tweetIds: range(10).map((it) => `tweet-${it}`),
-      })),
+      genCheckSpamUserRequest(
+        range(1000).map((it) => ({
+          id: `user-${it}`,
+          tweetIds: range(10).map((it) => `tweet-${it}`),
+        })),
+      ),
     )
     expect(r1).length(0)
+  })
+  it('should be able to disallow duplicate tweet', async () => {
+    const user: CheckSpamUserRequest[number]['user'] = {
+      id: 'user-1',
+      screen_name: 'user-1',
+      name: 'user-1',
+    }
+    const tweets: CheckSpamUserRequest[number]['tweets'] = [
+      {
+        id: 'tweet-1',
+        created_at: new Date().toISOString(),
+        text: 'test A',
+        user_id: 'user-1',
+        conversation_id_str: 'tweet-1',
+      },
+    ]
+    await checkSpamUser([{ user, tweets }])
+    const r1 = await c.db.select().from(tweet).all()
+    expect(r1[0].text).eq('test A')
+    tweets[0].text = 'test B'
+    await checkSpamUser([{ user, tweets }])
+    const r2 = await c.db.select().from(tweet).all()
+    expect(r2[0].text).eq('test A')
+  })
+  it('should be able to allow duplicate tweet with not complete', async () => {
+    const request: CheckSpamUserRequest = [
+      {
+        user: {
+          id: 'user-1',
+          screen_name: 'user-1',
+          name: 'user-1',
+        },
+        tweets: [
+          {
+            id: 'tweet-1',
+            created_at: new Date().toISOString(),
+            text: 'test B',
+            user_id: 'user-1',
+            conversation_id_str: 'tweet-1',
+          },
+        ],
+      },
+    ]
+
+    await c.db.insert(user).values({
+      id: 'user-1',
+      screenName: 'user-1',
+      name: 'user-1',
+    })
+    await c.db.insert(tweet).values({
+      id: 'tweet-1',
+      text: 'test A',
+      userId: 'user-1',
+      publishedAt: new Date().toString(),
+      conversationId: 'tweet-1',
+    })
+    await checkSpamUser(request)
+    const r1 = await c.db.select().from(tweet).all()
+    expect(r1[0].text).eq('test A')
+    await c.db
+      .update(tweet)
+      .set({
+        conversationId: null,
+      })
+      .where(eq(tweet.id, 'tweet-1'))
+    await checkSpamUser(request)
+    const r2 = await c.db.select().from(tweet).all()
+    expect(r2[0].text).eq('test B')
   })
 })

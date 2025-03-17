@@ -13,4 +13,10 @@ describe('miniflare', () => {
     // expect(await _env.MY_KV.get('a')).undefined
     vi.useRealTimers()
   })
+  it('should be able to setTimeout', async () => {
+    const start = Date.now()
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    const end = Date.now()
+    expect(end - start).gte(100)
+  })
 })

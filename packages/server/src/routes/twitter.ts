@@ -7,7 +7,7 @@ import {
   userSchema,
 } from '../lib/request'
 import { HonoEnv } from '../lib/bindings'
-import { object, z } from 'zod'
+import { z } from 'zod'
 import { drizzle } from 'drizzle-orm/d1'
 import { spamReport, tweet, user, userSpamAnalysis } from '../db/schema'
 import {
@@ -18,7 +18,7 @@ import {
   inArray,
   InferInsertModel,
   InferSelectModel,
-  isNotNull,
+  isNull,
   sql,
 } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
@@ -48,6 +48,7 @@ export function convertUserParamsToDBUser(
 
 const tweetSchemaWithUserId = tweetSchema.extend({
   user_id: z.string(),
+  conversation_id_str: z.string(),
 })
 function convertTweet(
   tweetParams: z.infer<typeof tweetSchemaWithUserId>,
@@ -310,6 +311,7 @@ twitter.post(
               .onConflictDoUpdate({
                 target: tweet.id,
                 set: omit(_tweet, ['id']),
+                setWhere: isNull(tweet.conversationId),
               })
           }),
         ),

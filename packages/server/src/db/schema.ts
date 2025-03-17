@@ -40,7 +40,7 @@ export const tweet = sqliteTable('Tweet', {
   id: text('id').primaryKey(),
   text: text('text'),
   media: text('media', { mode: 'json' }),
-  publishedAt: text('publishedAt'),
+  publishedAt: text('publishedAt').notNull(),
   userId: text('userId')
     .references(() => user.id)
     .notNull(),

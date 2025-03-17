@@ -51,7 +51,7 @@ export function convertUserParamsToDBUser(
 
 const tweetSchemaWithUserId = tweetSchema.extend({
   user_id: z.string(),
-  conversation_id_str: z.string(),
+  // conversation_id_str: z.string(),
 })
 function convertTweet(
   tweetParams: z.infer<typeof tweetSchemaWithUserId>,
@@ -327,7 +327,10 @@ twitter.post(
               .onConflictDoUpdate({
                 target: tweet.id,
                 set: omit(_tweet, ['id']),
-                setWhere: isNull(tweet.conversationId),
+                setWhere: and(
+                  isNull(tweet.conversationId),
+                  sql`${_tweet.conversationId ?? null} IS NOT NULL`,
+                ),
               })
           }),
         ),

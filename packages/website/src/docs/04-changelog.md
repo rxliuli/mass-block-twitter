@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.18.1
+
+- 🐛 Fix the issue of sharing links and batch blocking
+
+## 0.18.0
+
+- ✨ Support importing users in moderation lists from JSON/CSV files
+- ✨ Support batch blocking users in moderation lists
+- ✨ Support sharing moderation lists
+
+## 0.17.0
+
+- ✨ Start trying to analyze whether a user is a spam account based on LLM
+- 🚀 Performance optimization: Only update users and tweets when necessary
+
 ## 0.16.0
 
 - ✨ Support creating custom rules in moderation lists - Use powerful rule matching for any user or tweet

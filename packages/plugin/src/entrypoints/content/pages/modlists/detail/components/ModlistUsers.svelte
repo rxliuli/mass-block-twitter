@@ -28,6 +28,9 @@
   import { crossFetch } from '$lib/query'
   import ModlistUserItem from './ModlistUserItem.svelte'
   import ModlistAddUser from './ModlistAddUser.svelte'
+  import { fileSelector } from '$lib/util/fileSelector'
+  import { parse } from 'csv-parse/browser/esm/sync'
+  import { chunk } from 'lodash-es'
 
   let {
     owner,
@@ -36,14 +39,9 @@
     owner: boolean
     ref?: {
       onOpenUserAdd: () => void
+      onImportUsers: () => void
     }
   } = $props()
-
-  ref = {
-    onOpenUserAdd: () => {
-      userAddOpen = true
-    },
-  }
 
   const route = useRoute()
   const query = createInfiniteQuery({
@@ -102,7 +100,7 @@
       toast.error('Add to list failed')
     },
   })
-  const addUsersMutation = createMutation({
+  const innerAddUsersMutation = createMutation({
     mutationFn: async (users: User[]) => {
       const resp = await crossFetch(`${SERVER_URL}/api/modlists/users`, {
         method: 'POST',
@@ -135,6 +133,14 @@
         }),
       )
     },
+  })
+  const addUsersMutation = createMutation({
+    mutationFn: async (users: User[]) => {
+      const lists = chunk(users, 50)
+      for (const it of lists) {
+        await $innerAddUsersMutation.mutateAsync(it)
+      }
+    },
     onSuccess: () => {
       toast.success('Added to list')
     },
@@ -142,6 +148,107 @@
       toast.error('Add to list failed')
     },
   })
+
+  const onImportUsers = async () => {
+    const users = await selectImportFile()
+    if (!users) {
+      return
+    }
+    const allCount = users.length
+    const abortController = new AbortController()
+    const toastId = toast.info('Importing users...', {
+      action: {
+        label: 'Stop',
+        onClick: () => {
+          abortController.abort()
+        },
+      },
+    })
+    let count = 0
+    try {
+      for (const it of chunk(users, 50)) {
+        if (abortController.signal.aborted) {
+          break
+        }
+        await $innerAddUsersMutation.mutateAsync(it)
+        count += it.length
+        toast.info(`Imported ${count}/${allCount} users...`, {
+          id: toastId,
+          action: {
+            label: 'Stop',
+            onClick: () => {
+              abortController.abort()
+            },
+          },
+        })
+      }
+      toast.dismiss(toastId)
+      toast.success(`Imported ${count}/${allCount} users successfully`)
+    } catch (err) {
+      toast.dismiss(toastId)
+      toast.error('Failed to import users')
+    }
+  }
+
+  async function selectImportFile() {
+    const files = await fileSelector({
+      accept: '.json, .csv',
+    })
+    if (!files) {
+      return
+    }
+    const str = await files[0].text()
+    let users: User[]
+    if (files[0].name.endsWith('.json')) {
+      users = JSON.parse(str) as User[]
+    } else {
+      try {
+        users = (
+          parse(str, {
+            columns: [
+              'id',
+              'screen_name',
+              'name',
+              'description',
+              'profile_image_url',
+            ],
+          }) as User[]
+        ).slice(1)
+      } catch (err) {
+        toast.error(
+          'Your import file is not valid, check includes id, screen_name, name, description, profile_image_url',
+        )
+        return
+      }
+    }
+    if (users.length === 0) {
+      toast.error('No users to import')
+      return
+    }
+    for (const it of users) {
+      if (!(it.id && it.screen_name && it.name && it.profile_image_url)) {
+        toast.error(
+          'Your import file is not valid, check includes id, screen_name, name, description, profile_image_url',
+        )
+        return
+      }
+    }
+    const confirmed = confirm(
+      `Are you sure you want to import ${users.length} users?`,
+    )
+    if (!confirmed) {
+      return
+    }
+    return users
+  }
+
+  ref = {
+    onOpenUserAdd: () => {
+      userAddOpen = true
+    },
+    onImportUsers: onImportUsers,
+  }
+
   const { loadings, withLoading } = useLoading()
   const removeUserMutation = createMutation({
     mutationFn: withLoading(

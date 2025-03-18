@@ -1,14 +1,8 @@
 <script lang="ts">
   import { dbApi, type Tweet, type User } from '$lib/db'
-  import { renderComponent } from '$lib/components/ui/data-table'
-  import AvatarWrapper from './components/AvatarWrapper.svelte'
-  import BlockingWrapper from './components/BlockingWrapper.svelte'
-  import type { Column } from '$lib/components/logic/a-data-table'
   import { ADataTable } from '$lib/components/logic/a-data-table'
   import { Input } from '$lib/components/ui/input'
   import { filterUser, type SearchParams } from './utils/filterUser'
-  import TextWrapper from './components/TextWrapper.svelte'
-  import VerifiedWrapper from './components/VerifiedWrapper.svelte'
   import SelectFilter from './components/SelectFilter.svelte'
   import { type LabelValue } from './components/SelectFilter.types'
   import {
@@ -19,7 +13,7 @@
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
   import { blockUser, searchPeople, unblockUser } from '$lib/api'
   import { debounce, groupBy } from 'lodash-es'
-  import { Button, buttonVariants } from '$lib/components/ui/button'
+  import { buttonVariants } from '$lib/components/ui/button'
   import {
     DownloadIcon,
     EyeIcon,

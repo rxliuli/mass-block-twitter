@@ -15,6 +15,7 @@
   import {
     BanIcon,
     EllipsisIcon,
+    ImportIcon,
     ListFilterPlusIcon,
     MessageCircleOffIcon,
     PencilIcon,
@@ -35,6 +36,7 @@
   import ModlistUsers from './components/ModlistUsers.svelte'
   import ModlistRules from './components/ModlistRules.svelte'
   import { cn } from '$lib/utils'
+  import { type User } from '$lib/db'
 
   const route = useRoute()
 
@@ -197,6 +199,7 @@
   let currentTab = $state<'users' | 'rules'>('users')
   let usersRef = $state<{
     onOpenUserAdd: () => void
+    onImportUsers: () => void
   }>()
   let rulesRef = $state<{
     onOpenRuleEdit: () => void
@@ -275,28 +278,45 @@
                 <Tabs.Trigger value="rules">Rules</Tabs.Trigger>
               </Tabs.List>
             </Tabs.Root>
-            <Button
-              variant="ghost"
-              class={cn('text-blue-400 flex items-center gap-2', {
+            <div
+              class={cn('flex items-center', {
                 hidden: currentTab !== 'users',
               })}
-              onclick={() => usersRef?.onOpenUserAdd()}
-              disabled={!$metadata.data.owner}
             >
-              <UserPlusIcon class="h-4 w-4" />
-              Add people
-            </Button>
-            <Button
-              variant="ghost"
-              class={cn('text-blue-400 flex items-center gap-2', {
+              <Button
+                variant="ghost"
+                class="text-blue-400 flex items-center gap-2"
+                onclick={() => usersRef?.onImportUsers()}
+                disabled={!$metadata.data.owner}
+              >
+                <ImportIcon class="h-4 w-4" />
+                Import users
+              </Button>
+              <Button
+                variant="ghost"
+                class="text-blue-400 flex items-center gap-2"
+                onclick={() => usersRef?.onOpenUserAdd()}
+                disabled={!$metadata.data.owner}
+              >
+                <UserPlusIcon class="h-4 w-4" />
+                Add users
+              </Button>
+            </div>
+            <div
+              class={cn('flex items-center', {
                 hidden: currentTab !== 'rules',
               })}
-              onclick={() => rulesRef?.onOpenRuleEdit()}
-              disabled={!$metadata.data.owner}
             >
-              <ListFilterPlusIcon class="h-4 w-4" />
-              Add rule
-            </Button>
+              <Button
+                variant="ghost"
+                class="text-blue-400 flex items-center gap-2"
+                onclick={() => rulesRef?.onOpenRuleEdit()}
+                disabled={!$metadata.data.owner}
+              >
+                <ListFilterPlusIcon class="h-4 w-4" />
+                Add rule
+              </Button>
+            </div>
           </div>
         {/snippet}
       </ModlistDesc>

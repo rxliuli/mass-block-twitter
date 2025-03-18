@@ -2,7 +2,6 @@
   import { useRoute } from '$lib/components/logic/router'
   import { createMutation, createQuery } from '@tanstack/svelte-query'
   import type {
-    ModList,
     ModListGetResponse,
     ModListRemoveErrorResponse,
     ModListSubscribeRequest,
@@ -42,16 +41,25 @@
   import ms from 'ms'
   import { ulid } from 'ulidx'
   import { useModlistUsers } from './utils/useModlistUsers'
-  import { wait } from '@liuli-util/async'
 
   const route = useRoute()
+  console.log('[route] ', $state.snapshot(route))
+  $inspect('route', route)
 
+  let controller = $state<AbortController>(new AbortController())
+  onDestroy(() => {
+    controller.abort()
+  })
   const metadata = createQuery({
     queryKey: ['modlistMetadata', route.search?.get('id')],
     queryFn: async () => {
+      const modListId = route.search?.get('id')
+      if (!modListId) {
+        return
+      }
       const authInfo = await getAuthInfo()
       const resp = await crossFetch(
-        `${SERVER_URL}/api/modlists/get/${route.search?.get('id')}`,
+        `${SERVER_URL}/api/modlists/get/${modListId}`,
         {
           headers: {
             Authorization: `Bearer ${authInfo?.token}`,
@@ -76,7 +84,8 @@
   )
   const batchBlockMutation = createMutation({
     mutationFn: async () => {
-      const controller = new AbortController()
+      controller.abort()
+      controller = new AbortController()
       const toastId = toast.loading('Blocking users...', {
         action: {
           label: 'Stop',
@@ -413,7 +422,7 @@
   }>()
 
   function onCopyLink() {
-    const url = `http://localhost:5173/modlist/${route.search?.get('id')}`
+    const url = `https://mass-block-twitter.rxliuli.com/modlist/${route.search?.get('id')}`
     navigator.clipboard.writeText(url)
     toast.success('Link copied to clipboard', {
       description: url,
@@ -457,22 +466,13 @@
       <DropdownMenu.Item disabled={!$metadata.data?.owner} onclick={onCopyLink}>
         Copy Link to list
         <DropdownMenu.Shortcut>
-          <ShareIcon />
+          <ShareIcon class="text-blue-500" />
         </DropdownMenu.Shortcut>
       </DropdownMenu.Item>
       <DropdownMenu.Item disabled={!$metadata.data?.owner} onclick={onOpenEdit}>
         Edit list details
         <DropdownMenu.Shortcut>
-          <PencilIcon />
-        </DropdownMenu.Shortcut>
-      </DropdownMenu.Item>
-      <DropdownMenu.Item
-        disabled={!$metadata.data?.owner}
-        onclick={() => $deleteMutation.mutate()}
-      >
-        Delete list
-        <DropdownMenu.Shortcut>
-          <Trash2Icon />
+          <PencilIcon class="text-blue-500" />
         </DropdownMenu.Shortcut>
       </DropdownMenu.Item>
       <DropdownMenu.Item
@@ -481,7 +481,16 @@
       >
         Block users
         <DropdownMenu.Shortcut>
-          <BanIcon />
+          <BanIcon class="text-red-500" />
+        </DropdownMenu.Shortcut>
+      </DropdownMenu.Item>
+      <DropdownMenu.Item
+        disabled={!$metadata.data?.owner}
+        onclick={() => $deleteMutation.mutate()}
+      >
+        Delete list
+        <DropdownMenu.Shortcut>
+          <Trash2Icon class="text-red-500" />
         </DropdownMenu.Shortcut>
       </DropdownMenu.Item>
     </DropdownMenu.Content>
@@ -511,7 +520,7 @@
                 variant="ghost"
                 class="text-blue-400 flex items-center gap-2"
                 onclick={() => usersRef?.onImportUsers()}
-                disabled={!$metadata.data.owner}
+                disabled={!$metadata.data?.owner}
               >
                 <ImportIcon class="h-4 w-4" />
                 Import users
@@ -520,7 +529,7 @@
                 variant="ghost"
                 class="text-blue-400 flex items-center gap-2"
                 onclick={() => usersRef?.onOpenUserAdd()}
-                disabled={!$metadata.data.owner}
+                disabled={!$metadata.data?.owner}
               >
                 <UserPlusIcon class="h-4 w-4" />
                 Add users
@@ -535,7 +544,7 @@
                 variant="ghost"
                 class="text-blue-400 flex items-center gap-2"
                 onclick={() => rulesRef?.onOpenRuleEdit()}
-                disabled={!$metadata.data.owner}
+                disabled={!$metadata.data?.owner}
               >
                 <ListFilterPlusIcon class="h-4 w-4" />
                 Add rule

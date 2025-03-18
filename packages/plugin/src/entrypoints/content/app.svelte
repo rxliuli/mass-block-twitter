@@ -24,6 +24,8 @@
   import DashboardActivitiesPage from './pages/dashboard/activities/page.svelte'
   import AppNotifications from '$lib/components/layout/AppNotifications.svelte'
 
+  let { initialPath }: { initialPath?: string } = $props()
+
   let open = $state(true)
 
   function lockScroll() {
@@ -83,7 +85,7 @@
 <QueryClientProvider client={queryClient}>
   <ShadcnConfig portal={root}>
     <Router
-      initialPath={import.meta.env.VITE_INITIAL_PATH}
+      initialPath={import.meta.env.VITE_INITIAL_PATH ?? initialPath}
       routes={[
         {
           path: '/',

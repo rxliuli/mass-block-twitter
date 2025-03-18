@@ -25,6 +25,10 @@ declare global {
     }
     export default meta
   }
+
+  declare interface ImportMetaEnv {
+    VITE_API_URL: string
+  }
 }
 
 export {}

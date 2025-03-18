@@ -71,6 +71,12 @@ export async function blockUser(user: Pick<User, 'id'>) {
     if (r.status === 404) {
       throw new ExpectedError('notFound', 'User not found')
     }
+    if (r.status === 401) {
+      throw new ExpectedError('unauthorized', 'Unauthorized')
+    }
+    if (r.status === 403) {
+      throw new ExpectedError('forbidden', 'Forbidden')
+    }
     throw new Error(r.statusText)
   }
 }
@@ -87,12 +93,14 @@ export async function batchBlockUsers(
         index: number
         total: number
         time: number
+        averageTime: number
         wait: number
         error?: unknown
+        result?: 'skip'
       },
     ) => Promise<void>
     signal: AbortSignal
-    blockUser: (user: User) => Promise<'skip' | void>
+    blockUser: (user: User) => Promise<'skip' | undefined>
   },
 ) {
   const startTime = Date.now()
@@ -104,8 +112,9 @@ export async function batchBlockUsers(
       break
     }
     let error: unknown
+    let result: undefined | 'skip'
     try {
-      const result = await options.blockUser(user)
+      result = await options.blockUser(user)
       if (result === 'skip') {
         skipCount++
       }
@@ -114,12 +123,15 @@ export async function batchBlockUsers(
     }
     const time = Date.now() - startTime
     const index = i + 1
+    const averageTime = time / Math.max(1, index - skipCount)
     await options.onProcessed(user, {
       index,
       total: _users.length,
       time,
-      wait: (_users.length - index) * (time / Math.max(1, index - skipCount)),
+      averageTime,
+      wait: (_users.length - index) * averageTime,
       error,
+      result,
     })
     _users = typeof users === 'function' ? users() : users
   }
@@ -498,6 +510,12 @@ const notificationCommunitiesSchema = z.object({
   }),
   template: templateSchema,
 })
+const notificationSecurityAlertSchema = z.object({
+  icon: z.object({
+    id: z.literal('security_alert_icon'),
+  }),
+  template: templateSchema,
+})
 const notificationBirdSchema = z.object({
   icon: z.object({
     id: z.literal('bird_icon'),
@@ -514,6 +532,7 @@ const notificationSchema = z.object({
           notificationCommunitiesSchema,
           notificationRetweetSchema,
           notificationBirdSchema,
+          notificationSecurityAlertSchema,
         ]),
       )
       .optional(),

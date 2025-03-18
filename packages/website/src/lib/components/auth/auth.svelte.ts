@@ -1,4 +1,4 @@
-import { createMutation, createQuery } from '@tanstack/svelte-query'
+import { createMutation } from '@tanstack/svelte-query'
 import { onMount } from 'svelte'
 
 export interface AuthInfo {

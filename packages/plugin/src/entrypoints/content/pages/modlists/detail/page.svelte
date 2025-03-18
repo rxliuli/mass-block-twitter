@@ -19,6 +19,7 @@
     ListFilterPlusIcon,
     MessageCircleOffIcon,
     PencilIcon,
+    ShareIcon,
     Trash2Icon,
     UserPlusIcon,
   } from 'lucide-svelte'
@@ -40,8 +41,8 @@
   import { batchBlockUsers, blockUser, ExpectedError } from '$lib/api'
   import ms from 'ms'
   import { ulid } from 'ulidx'
-  import { wait } from '@liuli-util/async'
   import { useModlistUsers } from './utils/useModlistUsers'
+  import { wait } from '@liuli-util/async'
 
   const route = useRoute()
 
@@ -85,8 +86,11 @@
           },
         },
       })
+      console.log('[batchBlockMutation] startTime ' + new Date().toISOString())
+      let errorToastId = ulid()
       try {
-        let blockCount = 0
+        let lastBlockedIndex = 0
+        let realBlockedCount = 1
         const MAX_BLOCK_COUNT = 100
         await batchBlockUsers(() => users, {
           signal: controller.signal,
@@ -95,14 +99,55 @@
             if (_user && (_user.following || _user.blocking)) {
               return 'skip'
             }
-            await Promise.all([blockUser(user), wait(2000)])
+            await blockUser(user)
+            realBlockedCount++
           },
           onProcessed: async (user, meta) => {
+            const allCount = $metadata.data?.userCount ?? users.length
+            // 每 150 个用户等待 5 分钟
+            if (realBlockedCount % 150 === 0) {
+              toast.loading(
+                `Blocked ${user.screen_name} (${meta.index}/${allCount})`,
+                {
+                  id: toastId,
+                  description: `Twitter API rate limit exceeded, please wait 5 minutes...`,
+                },
+              )
+              let now = Date.now()
+              const waitTime = 5 * 60 * 1000
+              await new Promise<void>((resolve) => {
+                const interval = setInterval(() => {
+                  toast.loading(
+                    `Blocked ${user.screen_name} (${meta.index}/${allCount})`,
+                    {
+                      id: toastId,
+                      description: `Twitter API rate limit exceeded, please wait ${ms(
+                        waitTime - (Date.now() - now),
+                      )}...`,
+                    },
+                  )
+                }, 1000)
+                const abortListener = () => {
+                  clearInterval(interval)
+                  clearTimeout(timer)
+                  resolve()
+                }
+                const timer = setTimeout(() => {
+                  abortListener()
+                  controller.signal.removeEventListener('abort', abortListener)
+                }, waitTime)
+                controller.signal.addEventListener('abort', abortListener)
+              })
+            }
+            console.log(
+              `[batchBlockMutation] onProcessed ${meta.index} ${user.screen_name} ` +
+                new Date().toISOString(),
+            )
             toast.loading(
-              `Blocked ${user.screen_name} (${meta.index}/${meta.total})`,
+              `Blocked ${user.screen_name} (${meta.index}/${allCount})`,
               {
                 id: toastId,
-                description: `Wait ${ms(meta.wait)}`,
+                description: `Wait ${ms(meta.averageTime * (allCount - meta.index))}`,
               },
             )
             if (meta.error) {
@@ -111,46 +156,77 @@
                   toast.error(
                     'Twitter API rate limit exceeded, please try again later',
                   )
+                  controller.abort()
+                  return
+                }
+                if (meta.error.code === 'forbidden') {
+                  toast.error('Forbidden, please try again later', {
+                    dismissable: false,
+                    action: {
+                      label: 'Refresh',
+                      onClick: () => {
+                        location.reload()
+                      },
+                    },
+                  })
+                  controller.abort()
+                  return
+                }
+                if (meta.error.code === 'unauthorized') {
+                  toast.error('Unauthorized, please login again', {
+                    dismissable: false,
+                    action: {
+                      label: 'Refresh',
+                      onClick: () => {
+                        location.reload()
+                      },
+                    },
+                  })
+                  controller.abort()
                   return
                 }
                 if (meta.error.code === 'notFound') {
-                  toast.error(`User ${user.screen_name} not found`)
+                  toast.error(`User ${user.screen_name} not found`, {
+                    id: errorToastId,
+                  })
                   return
                 }
               }
               toast.error(`User ${user.screen_name} block failed.`)
               return
             }
-            await dbApi.users.block(user)
-            await dbApi.activitys.record([
-              {
-                id: ulid().toString(),
-                action: 'block',
-                trigger_type: 'manual',
-                match_type: 'user',
-                match_filter: 'modList',
-                user_id: user.id,
-                user_name: user.name,
-                user_screen_name: user.screen_name,
-                user_profile_image_url: user.profile_image_url,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-              },
-            ])
-            blockCount = meta.index
+            if (meta.result !== 'skip') {
+              await dbApi.users.block(user)
+              await dbApi.activitys.record([
+                {
+                  id: ulid().toString(),
+                  action: 'block',
+                  trigger_type: 'manual',
+                  match_type: 'user',
+                  match_filter: 'modList',
+                  user_id: user.id,
+                  user_name: user.name,
+                  user_screen_name: user.screen_name,
+                  user_profile_image_url: user.profile_image_url,
+                  created_at: new Date().toISOString(),
+                  updated_at: new Date().toISOString(),
+                },
+              ])
+            }
+            lastBlockedIndex = meta.index
             if (meta.index % 10 === 0) {
               await $query.fetchNextPage()
             }
             // if not pro user and blocked users >= 100, abort
-            if (blockCount >= MAX_BLOCK_COUNT && !authInfo.value?.isPro) {
+            if (lastBlockedIndex >= MAX_BLOCK_COUNT && !authInfo.value?.isPro) {
               controller.abort()
             }
           },
         })
 
-        if (!authInfo.value?.isPro && blockCount >= MAX_BLOCK_COUNT) {
+        if (!authInfo.value?.isPro && lastBlockedIndex >= MAX_BLOCK_COUNT) {
           toast.info('You have reached the maximum number of blocked users.', {
-            description: `${blockCount}/${$metadata.data?.userCount ?? users.length} users blocked, please upgrade to Pro to block unlimited users.`,
+            description: `${lastBlockedIndex}/${$metadata.data?.userCount ?? users.length} users blocked, please upgrade to Pro to block unlimited users.`,
             action: {
               label: 'Upgrade Now',
               onClick: () => {
@@ -160,7 +236,7 @@
           })
         } else {
           toast.success('Blocked users', {
-            description: `${blockCount}/${$metadata.data?.userCount ?? users.length} users blocked`,
+            description: `${lastBlockedIndex}/${$metadata.data?.userCount ?? users.length} users blocked`,
           })
         }
       } catch (err) {
@@ -337,6 +413,14 @@
   let rulesRef = $state<{
     onOpenRuleEdit: () => void
   }>()
+
+  function onCopyLink() {
+    const url = `http://localhost:5173/modlist/${route.search?.get('id')}`
+    navigator.clipboard.writeText(url)
+    toast.success('Link copied to clipboard', {
+      description: url,
+    })
+  }
 </script>
 
 <LayoutNav title="Moderation Lists Detail">
@@ -372,12 +456,12 @@
       </Button>
     </DropdownMenu.Trigger>
     <DropdownMenu.Content portalProps={{ to: shadcnConfig.get().portal }}>
-      <!-- <DropdownMenu.Item>
+      <DropdownMenu.Item disabled={!$metadata.data?.owner} onclick={onCopyLink}>
         Copy Link to list
         <DropdownMenu.Shortcut>
           <ShareIcon />
         </DropdownMenu.Shortcut>
-      </DropdownMenu.Item> -->
+      </DropdownMenu.Item>
       <DropdownMenu.Item disabled={!$metadata.data?.owner} onclick={onOpenEdit}>
         Edit list details
         <DropdownMenu.Shortcut>

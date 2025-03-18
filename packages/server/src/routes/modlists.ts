@@ -710,6 +710,7 @@ export type ModListGetResponse = InferSelectModel<typeof modList> & {
   owner: boolean
   twitterUser: InferSelectModel<typeof user>
   action: 'block' | 'hide'
+  ruleCount: number
 }
 export type ModListGetErrorResponse = {
   code: 'modListNotFound'
@@ -720,7 +721,7 @@ search
     const id = c.req.param('id')
     const db = drizzle(c.env.DB)
     const tokenInfo = await getTokenInfo(c)
-    const [_modList, _subscribed] = await db.batch([
+    const [_modList, ruleCount, _subscribed] = await db.batch([
       db
         .select({
           modList: getTableAliasedColumns(modList),
@@ -730,6 +731,12 @@ search
         .innerJoin(user, eq(modList.twitterUserId, user.id))
         .where(eq(modList.id, id))
         .limit(1),
+      db
+        .select({
+          ruleCount: sql<number>`count(${modListRule.id})`,
+        })
+        .from(modListRule)
+        .where(eq(modListRule.modListId, id)),
       ...(tokenInfo
         ? [
             db
@@ -756,6 +763,7 @@ search
       owner,
       twitterUser: _modList[0].user,
       action: subscribed ? 'block' : 'hide',
+      ruleCount: ruleCount[0].ruleCount,
     })
   })
 

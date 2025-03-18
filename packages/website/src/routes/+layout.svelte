@@ -6,9 +6,7 @@
   import { Toaster } from '$lib/components/ui/sonner'
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
   import { onMount } from 'svelte'
-  import { toast } from 'svelte-sonner'
-  import { installExt } from '@/installExt'
-  import { getAuthInfo } from '@/components/auth/auth.svelte'
+  import { showInstallToast, ShowInstallToastFlag } from '@/showToast'
 
   let { children } = $props()
   const queryClient = new QueryClient()
@@ -19,13 +17,10 @@
     if (meta) {
       return
     }
-    toast.info('You haven’t installed the plugin yet, please install it', {
-      action: {
-        label: 'Install',
-        onClick: installExt,
-      },
-      duration: 10000,
-    })
+    if (ShowInstallToastFlag) {
+      return
+    }
+    showInstallToast()
   })
 </script>
 

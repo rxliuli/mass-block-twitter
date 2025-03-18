@@ -55,7 +55,7 @@ export default defineContentScript({
       )
     ).openExtensionPath
     if (openExtensionPath) {
-      console.log('openExtensionPath', openExtensionPath)
+      // console.log('openExtensionPath', openExtensionPath)
       await openExtensionDash(openExtensionPath)
       await browser.storage.local.remove('openExtensionPath')
     }

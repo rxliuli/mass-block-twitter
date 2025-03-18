@@ -52,8 +52,6 @@
         form?.reportValidity()
         return
       }
-      const formData = new FormData(form)
-      formState.visibility = formData.get('visibility') as ModList['visibility']
       await props.onSave($state.snapshot(formState))
       onCancel()
     },

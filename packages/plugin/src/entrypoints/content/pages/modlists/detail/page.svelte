@@ -43,8 +43,6 @@
   import { useModlistUsers } from './utils/useModlistUsers'
 
   const route = useRoute()
-  console.log('[route] ', $state.snapshot(route))
-  $inspect('route', route)
 
   let controller = $state<AbortController>(new AbortController())
   onDestroy(() => {

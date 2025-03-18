@@ -6,8 +6,6 @@
     useQueryClient,
   } from '@tanstack/svelte-query'
   import type {
-    ModListAddTwitterUserRequest,
-    ModListAddTwitterUserResponse,
     ModListAddTwitterUsersRequest,
     ModListAddTwitterUsersResponse,
     ModListRemoveTwitterUserRequest,
@@ -62,44 +60,7 @@
     initialPageParam: undefined as string | undefined,
   })
   const queryClient = useQueryClient()
-  const addUserMutation = createMutation({
-    mutationFn: async (user: User) => {
-      const resp = await crossFetch(`${SERVER_URL}/api/modlists/user`, {
-        method: 'POST',
-        headers: {
-          Authorization: 'Bearer ' + (await getAuthInfo())?.token,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          modListId: route.search?.get('id')!,
-          twitterUser: user,
-        } satisfies ModListAddTwitterUserRequest),
-      })
-      if (!resp.ok) {
-        throw new Error('Failed to add user')
-      }
-      const data = (await resp.json()) as ModListAddTwitterUserResponse
-      if (!$query.data) {
-        await $query.refetch()
-        return
-      }
-      queryClient.setQueryData(
-        ['modlistUsers', route.search?.get('id')],
-        produce((old: typeof $query.data) => {
-          old?.pages[0]?.data.unshift({
-            ...data,
-            modListUserId: data.id,
-          })
-        }),
-      )
-    },
-    onSuccess: () => {
-      toast.success('Added to list')
-    },
-    onError: () => {
-      toast.error('Add to list failed')
-    },
-  })
+
   const innerAddUsersMutation = createMutation({
     mutationFn: async (users: User[]) => {
       const resp = await crossFetch(`${SERVER_URL}/api/modlists/users`, {
@@ -124,28 +85,20 @@
       queryClient.setQueryData(
         ['modlistUsers', route.search?.get('id')],
         produce((old: typeof $query.data) => {
+          const oldData = (old?.pages[0]?.data ?? []).map((it) => it.id)
+          const newData = data.filter((it) => !oldData.includes(it.id))
+          if (oldData.length === 0) {
+            $query.refetch()
+            return
+          }
           old?.pages[0]?.data.unshift(
-            ...data.map((it) => ({
+            ...newData.map((it) => ({
               ...it,
               modListUserId: it.id,
             })),
           )
         }),
       )
-    },
-  })
-  const addUsersMutation = createMutation({
-    mutationFn: async (users: User[]) => {
-      const lists = chunk(users, 50)
-      for (const it of lists) {
-        await $innerAddUsersMutation.mutateAsync(it)
-      }
-    },
-    onSuccess: () => {
-      toast.success('Added to list')
-    },
-    onError: () => {
-      toast.error('Add to list failed')
     },
   })
 
@@ -355,7 +308,6 @@
 <ModlistAddUser
   bind:open={userAddOpen}
   modListId={route.search?.get('id')!}
-  onAdd={$addUserMutation.mutateAsync}
-  onAddUsers={$addUsersMutation.mutateAsync}
+  onAddUsers={$innerAddUsersMutation.mutateAsync}
   onRemove={(user) => $removeUserMutation.mutateAsync(user.id)}
 />

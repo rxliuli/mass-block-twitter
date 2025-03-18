@@ -35,6 +35,7 @@
   } from '$lib/components/custom/multiple-select'
   import { Input } from '$lib/components/ui/input'
   import { ThreeCheckbox } from '$lib/components/custom/checkbox'
+  import { untrack } from 'svelte'
 
   let {
     open = $bindable(false),
@@ -43,7 +44,6 @@
   }: {
     open: boolean
     modListId: string
-    onAdd: (user: User) => Promise<void>
     onAddUsers: (users: User[]) => Promise<void>
     onRemove: (user: User) => Promise<void>
   } = $props()
@@ -111,6 +111,12 @@
     retry: false,
   })
 
+  $effect(() => {
+    if (open) {
+      untrack(() => $query.refetch())
+    }
+  })
+
   const { loadings, withLoading } = useLoading()
 
   const queryClient = useQueryClient()
@@ -134,18 +140,6 @@
     )
   }
 
-  const addUserMutation = createMutation({
-    mutationFn: withLoading(
-      async (user: User) => {
-        await props.onAdd(user)
-        updateUser([user.id], true)
-      },
-      (user) => user.id,
-    ),
-    onError: () => {
-      toast.error('Failed to add user')
-    },
-  })
   const removeUserMutation = createMutation({
     mutationFn: withLoading(
       async (user: User) => {
@@ -198,11 +192,13 @@
           true,
         )
         selected = []
+        toast.success('Added to list')
       },
       (users) => users.map((it) => it.id),
     ),
-    onError: () => {
-      toast.error('Failed to add user')
+    onError: (err) => {
+      console.error(err)
+      toast.error('Add to list failed')
     },
   })
   // const removeUsersMutation = createMutation({
@@ -318,7 +314,7 @@
                       onclick={() =>
                         user.added
                           ? $removeUserMutation.mutate(user)
-                          : $addUserMutation.mutate(user)}
+                          : $addUsersMutation.mutate([user])}
                       disabled={loadings[user.id]}
                     >
                       {user.added ? 'Remove' : 'Add'}

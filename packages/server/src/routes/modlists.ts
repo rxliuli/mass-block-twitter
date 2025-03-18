@@ -288,6 +288,7 @@ export const addTwitterUserSchema = z.object({
 
 export type ModListAddTwitterUserRequest = z.infer<typeof addTwitterUserSchema>
 export type ModListAddTwitterUserResponse = InferSelectModel<typeof user>
+// @deprecated v0.17.3
 modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
   const validated = c.req.valid('json')
   const db = drizzle(c.env.DB)

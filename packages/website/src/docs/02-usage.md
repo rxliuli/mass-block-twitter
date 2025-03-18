@@ -56,10 +56,19 @@ Moderation lists are powerful community content management tools that allow user
 
 ### Adding Users to a List
 
-1. Click the **Add people** button
+1. Click the **Add Users** button
 2. Search for Twitter users to add
 3. Check relevant users (multiple selection supported)
 4. Click **Add** to confirm
+
+### Importing Users to a List
+
+1. Click the **Import Users** button
+2. Select import method:
+   - From CSV file
+   - From JSON file
+
+<iframe class="horizontal-video" src="https://www.youtube.com/embed/zqd9Hjg0JiA?si=dqowzG4FXEoUy844" title="Mass Block Twitter: Import Users from JSON/CSV in Moderation List" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ### Adding Rules to a List
 
@@ -80,6 +89,17 @@ Moderation lists are powerful community content management tools that allow user
 5. Confirm subscription
 
 ![subscribe to moderation list](/docs/modlist-subscribe.png)
+
+You can also choose to block the list immediately after subscribing. Please note that due to Twitter API rate limits, Twitter may require you to log in again.
+
+<iframe class="horizontal-video" src="https://www.youtube.com/embed/ZhQNfv4SLGw?si=60tGBBG3CoOOBjKx" title="Mass Block Twitter: Import Users from JSON/CSV in Moderation List" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+### Sharing Moderation Lists
+
+1. Click the **Copy Link to list** button
+2. Share the link with others
+
+<iframe class="horizontal-video" src="https://www.youtube.com/embed/-5q6IfDV5LU?si=hjMi8YDxSG6wRcV8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ### Managing Subscriptions
 

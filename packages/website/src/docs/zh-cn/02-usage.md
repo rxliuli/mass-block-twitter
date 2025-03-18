@@ -63,10 +63,19 @@
 
 ### 添加用户到列表
 
-1. 点击 **Add people** 按钮
+1. 点击 **Add Users** 按钮
 2. 搜索要添加的 Twitter 用户
 3. 勾选相关用户(支持多选)
 4. 点击 **Add** 确认
+
+### 导入用户到列表
+
+1. 点击 **Import Users** 按钮
+2. 选择导入方式:
+   - 从 CSV 文件导入
+   - 从 JSON 文件导入
+
+<iframe class="horizontal-video" src="https://www.youtube.com/embed/zqd9Hjg0JiA?si=dqowzG4FXEoUy844" title="Mass Block Twitter: Import Users from JSON/CSV in Moderation List" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ### 添加规则到列表
 
@@ -87,6 +96,18 @@
 5. 确认订阅
 
 ![订阅审核列表](/docs/modlist-subscribe.png)
+
+您还可以订阅时选择是否立刻屏蔽，如果选择立刻屏蔽，则订阅后会立刻屏蔽列表中的所有用户。请注意，由于 Twitter API 速率限制，Twitter 可能会要求您重新登录。
+
+<iframe class="horizontal-video" src="https://www.youtube.com/embed/ZhQNfv4SLGw?si=60tGBBG3CoOOBjKx" title="Mass Block Twitter: Import Users from JSON/CSV in Moderation List" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+### 分享审核列表
+
+1. 在审核列表详情页面，点击右上角的菜单
+2. 选择 **Copy Link to list** 按钮
+3. 在任何地方粘贴该链接，即可分享给其他人
+
+<iframe class="horizontal-video" src="https://www.youtube.com/embed/-5q6IfDV5LU?si=hjMi8YDxSG6wRcV8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ### 管理订阅
 

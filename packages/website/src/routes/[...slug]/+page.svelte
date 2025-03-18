@@ -14,11 +14,19 @@
 </article>
 
 <style>
-  :global(iframe[src*='youtube']) {
+  :global(iframe[src*='youtube'].vertical-video) {
     max-width: 100%;
     max-height: 80dvh;
     width: 800px;
     aspect-ratio: 9/16;
+    height: auto;
+  }
+
+  :global(iframe[src*='youtube'].horizontal-video) {
+    max-width: 100%;
+    max-height: 80dvh;
+    width: 800px;
+    aspect-ratio: 16/9;
     height: auto;
   }
 </style>

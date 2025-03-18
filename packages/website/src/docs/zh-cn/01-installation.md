@@ -23,7 +23,7 @@
 5. 点击 **Install**，扩展将会安装
 6. 打开 <https://x.com>，点击 **底部菜单 > 扩展 > Mass Block Twitter** 即可显示扩展面板
 
-<iframe src="https://www.youtube.com/embed/OScDgsQ4uJg?si=T7kjUpJiwIsK8mSD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe class="vertical-video" src="https://www.youtube.com/embed/OScDgsQ4uJg?si=T7kjUpJiwIsK8mSD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ### 通过 Kiwi（安卓）浏览器安装
 

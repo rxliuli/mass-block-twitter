@@ -23,7 +23,7 @@ Currently not supported. Mac users can use Chrome browser instead.
 5. Click **Install** to install the extension
 6. Open <https://x.com>, tap **Bottom menu > Extensions > Mass Block Twitter** to display the extension panel
 
-<iframe src="https://www.youtube.com/embed/C4OxOQ0Z_YY?si=y03_BCErEA-XdQiB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe class="vertical-video" src="https://www.youtube.com/embed/C4OxOQ0Z_YY?si=y03_BCErEA-XdQiB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ### Installation via Kiwi Browser (Android)
 

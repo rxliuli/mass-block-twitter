@@ -463,25 +463,22 @@
       </Button>
     </DropdownMenu.Trigger>
     <DropdownMenu.Content portalProps={{ to: shadcnConfig.get().portal }}>
-      <DropdownMenu.Item disabled={!$metadata.data?.owner} onclick={onCopyLink}>
+      <DropdownMenu.Item onclick={onCopyLink}>
         Copy Link to list
         <DropdownMenu.Shortcut>
           <ShareIcon class="text-blue-500" />
+        </DropdownMenu.Shortcut>
+      </DropdownMenu.Item>
+      <DropdownMenu.Item onclick={() => $batchBlockMutation.mutate()}>
+        Block users
+        <DropdownMenu.Shortcut>
+          <BanIcon class="text-red-500" />
         </DropdownMenu.Shortcut>
       </DropdownMenu.Item>
       <DropdownMenu.Item disabled={!$metadata.data?.owner} onclick={onOpenEdit}>
         Edit list details
         <DropdownMenu.Shortcut>
           <PencilIcon class="text-blue-500" />
-        </DropdownMenu.Shortcut>
-      </DropdownMenu.Item>
-      <DropdownMenu.Item
-        disabled={!$metadata.data?.owner}
-        onclick={() => $batchBlockMutation.mutate()}
-      >
-        Block users
-        <DropdownMenu.Shortcut>
-          <BanIcon class="text-red-500" />
         </DropdownMenu.Shortcut>
       </DropdownMenu.Item>
       <DropdownMenu.Item

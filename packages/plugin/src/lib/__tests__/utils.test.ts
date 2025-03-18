@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { extractObjects } from '$lib/util/extractObjects'
-import { it, expect, describe } from 'vitest'
+import { it, expect, describe, vi } from 'vitest'
 import all from './assets/all.json'
 import timeline from './assets/timeline.json'
 import { z } from 'zod'
@@ -593,6 +593,32 @@ describe('filterNotifications', () => {
   })
   it('filterNotifications for notifications3', () => {
     filterNotifications(notifications3 as any, () => true)
+  })
+  it.only('filterNotifications for unknown notification', () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const r = filterNotifications(
+      {
+        globalObjects: {
+          notifications: {
+            '1': {
+              icon: {
+                id: 'bell_icon',
+              },
+              template: {
+                aggregateUserActionsV1: {
+                  fromUsers: [{ user: { id: 'user-1' } }],
+                },
+              },
+            },
+          },
+        },
+        timeline: {
+          instructions: [],
+        },
+      } as any,
+      () => true,
+    )
+    expect(log).not.toHaveBeenCalled()
   })
   it('flowFilter', () => {
     const isHide = flowFilter([

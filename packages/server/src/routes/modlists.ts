@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { ulid } from 'ulidx'
 import { userSchema } from '../lib/request'
 import { auth, getTokenInfo } from '../middlewares/auth'
-import { drizzle } from 'drizzle-orm/d1'
+import { drizzle, DrizzleD1Database } from 'drizzle-orm/d1'
 import {
   modList,
   modListRule,
@@ -13,7 +13,7 @@ import {
   modListUser,
   user,
 } from '../db/schema'
-import { convertUserParamsToDBUser } from './twitter'
+import { convertUserParamsToDBUser, upsertUser } from './twitter'
 import {
   and,
   desc,
@@ -27,23 +27,18 @@ import {
 } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
 import { getTableAliasedColumns } from '../lib/drizzle'
-import { groupBy, omit } from 'es-toolkit'
+import { chunk, groupBy, omit } from 'es-toolkit'
 
 const modlists = new Hono<HonoEnv>().use(auth())
 
-function upsertUser(
-  db: ReturnType<typeof drizzle>,
+function _upsertUser(
+  db: DrizzleD1Database<Record<string, never>> & {
+    $client: D1Database
+  },
   userParams: z.infer<typeof userSchema>,
 ) {
   const twitterUser = convertUserParamsToDBUser(userParams)
-  return db
-    .insert(user)
-    .values(twitterUser)
-    .onConflictDoUpdate({
-      target: user.id,
-      set: omit(twitterUser, ['id']),
-    })
-    .returning()
+  return upsertUser(db, twitterUser)
 }
 
 export const createSchema = z.object({
@@ -61,7 +56,7 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
   const tokenInfo = c.get('jwtPayload')
   const modListId = ulid()
   const [, [r]] = await db.batch([
-    upsertUser(db, validated.twitterUser),
+    _upsertUser(db, validated.twitterUser),
     db
       .insert(modList)
       .values({
@@ -324,8 +319,8 @@ modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
   if (userAlreadyInList.length > 0) {
     return c.json({ code: 'userAlreadyInModList' }, 400)
   }
-  const [[user]] = await db.batch([
-    upsertUser(db, validated.twitterUser),
+  await db.batch([
+    _upsertUser(db, validated.twitterUser),
     db.insert(modListUser).values({
       id: ulid(),
       modListId: validated.modListId,
@@ -336,16 +331,27 @@ modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
       .set({ userCount: sql`userCount + 1` })
       .where(eq(modList.id, validated.modListId)),
   ])
-  return c.json(user)
+  const result = await db
+    .select()
+    .from(user)
+    .where(eq(user.id, validated.twitterUser.id))
+    .get()
+  if (!result) {
+    return c.json({ code: 'userNotFound' }, 404)
+  }
+  return c.json<ModListAddTwitterUserResponse>(result)
 })
 export const addTwitterUsersSchema = z.object({
   modListId: z.string(),
-  twitterUsers: z.array(userSchema),
+  twitterUsers: z.array(userSchema).min(1).max(99),
 })
 export type ModListAddTwitterUsersRequest = z.infer<
   typeof addTwitterUsersSchema
 >
-export type ModListAddTwitterUsersResponse = InferSelectModel<typeof user>[]
+export type ModListAddTwitterUsersResponse = Pick<
+  InferSelectModel<typeof user>,
+  'id' | 'screenName' | 'name' | 'profileImageUrl' | 'description'
+>[]
 modlists.post(
   '/users',
   zValidator('json', addTwitterUsersSchema),
@@ -364,7 +370,7 @@ modlists.post(
       return c.json({ code: 'modListNotFound' }, 404)
     }
     const results = (await db.batch([
-      ...validated.twitterUsers.map((it) => upsertUser(db, it)),
+      ...validated.twitterUsers.map((it) => _upsertUser(db, it)),
       ...validated.twitterUsers.map((it) =>
         db
           .insert(modListUser)
@@ -379,16 +385,27 @@ modlists.post(
           .returning({ inserted: sql`changes()` }),
       ),
     ] as any)) as (InferInsertModel<typeof user>[] | { inserted: 0 }[])[]
-    const { users = [], inserts = [] } = groupBy(results.flat(), (it) =>
-      'id' in it ? 'users' : 'inserts',
-    )
+    const inserts = results.flat().filter((it) => 'inserted' in it)
     await db
       .update(modList)
       .set({ userCount: sql`userCount + ${inserts.length}` })
       .where(eq(modList.id, validated.modListId))
-    return c.json<ModListAddTwitterUsersResponse>(
-      users as ModListAddTwitterUsersResponse,
-    )
+    const list = await db
+      .select({
+        id: user.id,
+        screenName: user.screenName,
+        name: user.name,
+        description: user.description,
+        profileImageUrl: user.profileImageUrl,
+      })
+      .from(user)
+      .where(
+        inArray(
+          user.id,
+          validated.twitterUsers.map((it) => it.id),
+        ),
+      )
+    return c.json<ModListAddTwitterUsersResponse>(list)
   },
 )
 
@@ -464,7 +481,7 @@ async function checkUsers(c: Context, validated: ModListUserCheckPostRequest) {
   const db = drizzle(c.env.DB)
   if (validated.users.length > 0) {
     // async upsert users, avoid blocking
-    db.batch([...validated.users.map((it) => upsertUser(db, it))] as any)
+    db.batch([...validated.users.map((it) => _upsertUser(db, it))] as any)
   }
   const subscriptions = await db
     .select({ twitterUserId: modListUser.twitterUserId })

@@ -26,12 +26,7 @@ import type {
 } from '../src/lib'
 import { TwitterUser } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
-import {
-  modListRule,
-  modListSubscription,
-  modListUser,
-  user,
-} from '../src/db/schema'
+import { modListSubscription, modListUser, user } from '../src/db/schema'
 
 describe('modlists', () => {
   const context = initCloudflareTest()
@@ -757,6 +752,7 @@ describe('modlists', () => {
         return (await resp1.json()) as ModListAddTwitterUsersResponse
       }
       const r1 = await req()
+      console.log(r1)
       expect(r1.length).toBe(2)
       expect(r1[0].id).toBe('twitter-user-1')
       expect(r1[1].id).toBe('twitter-user-2')

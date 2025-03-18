@@ -8,7 +8,7 @@ import {
 } from '../lib/request'
 import { HonoEnv } from '../lib/bindings'
 import { z } from 'zod'
-import { drizzle } from 'drizzle-orm/d1'
+import { drizzle, DrizzleD1Database } from 'drizzle-orm/d1'
 import { spamReport, tweet, user, userSpamAnalysis } from '../db/schema'
 import {
   and,
@@ -26,6 +26,55 @@ import {
 } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
 import { chunk, omit, uniqBy } from 'es-toolkit'
+import { SQLiteUpdateSetSource } from 'drizzle-orm/sqlite-core'
+
+export function upsertTweet(
+  db: DrizzleD1Database<Record<string, never>> & {
+    $client: D1Database
+  },
+  _tweet: InferInsertModel<typeof tweet>,
+) {
+  return db
+    .insert(tweet)
+    .values(_tweet)
+    .onConflictDoUpdate({
+      target: tweet.id,
+      set: omit(_tweet, ['id']),
+      setWhere: and(
+        isNull(tweet.conversationId),
+        sql`${_tweet.conversationId ?? null} IS NOT NULL`,
+      ),
+    })
+}
+
+export function upsertUser(
+  db: DrizzleD1Database<Record<string, never>> & {
+    $client: D1Database
+  },
+  _user: InferInsertModel<typeof user>,
+  _updated?: SQLiteUpdateSetSource<typeof user>,
+) {
+  return db
+    .insert(user)
+    .values(_user)
+    .onConflictDoUpdate({
+      target: user.id,
+      set: _updated ? omit(_updated, ['id']) : omit(_user, ['id']),
+      setWhere: and(
+        or(
+          isNull(user.followersCount),
+          isNull(user.followingCount),
+          // 24 hours ago
+          lt(
+            user.updatedAt,
+            new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+          ),
+        ),
+        sql`${_user.followersCount ?? null} IS NOT NULL`,
+        sql`${_user.followingCount ?? null} IS NOT NULL`,
+      ),
+    })
+}
 
 export function convertUserParamsToDBUser(
   userParams: typeof userSchema._type,
@@ -294,26 +343,7 @@ twitter.post(
       await db.batch([
         ...item.map((it) => {
           const _user = convertUserParamsToDBUser(it.user)
-          return db
-            .insert(user)
-            .values(_user)
-            .onConflictDoUpdate({
-              target: user.id,
-              set: omit(_user, ['id']),
-              setWhere: and(
-                or(
-                  isNull(user.followersCount),
-                  isNull(user.followingCount),
-                  // 24 hours ago
-                  lt(
-                    user.updatedAt,
-                    new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-                  ),
-                ),
-                sql`${_user.followersCount ?? null} IS NOT NULL`,
-                sql`${_user.followingCount ?? null} IS NOT NULL`,
-              ),
-            })
+          return upsertUser(db, _user)
         }),
         ...item.flatMap((userParam) =>
           userParam.tweets.map((it) => {
@@ -321,17 +351,7 @@ twitter.post(
               ...it,
               user_id: userParam.user.id,
             })
-            return db
-              .insert(tweet)
-              .values(_tweet)
-              .onConflictDoUpdate({
-                target: tweet.id,
-                set: omit(_tweet, ['id']),
-                setWhere: and(
-                  isNull(tweet.conversationId),
-                  sql`${_tweet.conversationId ?? null} IS NOT NULL`,
-                ),
-              })
+            return upsertTweet(db, _tweet)
           }),
         ),
       ] as any)

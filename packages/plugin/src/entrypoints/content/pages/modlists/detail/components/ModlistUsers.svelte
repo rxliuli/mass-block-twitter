@@ -29,6 +29,7 @@
   import { fileSelector } from '$lib/util/fileSelector'
   import { parse } from 'csv-parse/browser/esm/sync'
   import { chunk } from 'lodash-es'
+  import { useModlistUsers } from '../utils/useModlistUsers'
 
   let {
     owner,
@@ -42,23 +43,7 @@
   } = $props()
 
   const route = useRoute()
-  const query = createInfiniteQuery({
-    queryKey: ['modlistUsers', route.search?.get('id')],
-    queryFn: async ({ pageParam }) => {
-      const authInfo = await getAuthInfo()
-      const url = new URL(`${SERVER_URL}/api/modlists/users`)
-      url.searchParams.set('modListId', route.search?.get('id')!)
-      if (pageParam) {
-        url.searchParams.set('cursor', pageParam)
-      }
-      const resp = await crossFetch(url, {
-        headers: { Authorization: `Bearer ${authInfo?.token}` },
-      })
-      return (await resp.json()) as ModListUsersPageResponse
-    },
-    getNextPageParam: (lastPage) => lastPage.cursor,
-    initialPageParam: undefined as string | undefined,
-  })
+  const query = useModlistUsers(route.search?.get('id')!)
   const queryClient = useQueryClient()
 
   const innerAddUsersMutation = createMutation({

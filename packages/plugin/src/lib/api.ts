@@ -1,8 +1,9 @@
 import { z } from 'zod'
 import { extractObjects } from './util/extractObjects'
-import { TweetMediaType, User } from './db'
+import { dbApi, TweetMediaType, User } from './db'
 import { FilterData } from './filter'
 import { uniqBy } from 'lodash-es'
+import { wait } from '@liuli-util/async'
 
 export function setRequestHeaders(headers: Headers) {
   const old = getRequestHeaders()
@@ -17,6 +18,12 @@ export function setRequestHeaders(headers: Headers) {
 
 export function getRequestHeaders(): Headers {
   return new Headers(JSON.parse(localStorage.getItem('requestHeaders') ?? '{}'))
+}
+
+export class ExpectedError extends Error {
+  constructor(public readonly code: string, message: string) {
+    super(message)
+  }
 }
 
 export async function blockUser(user: Pick<User, 'id'>) {
@@ -58,7 +65,63 @@ export async function blockUser(user: Pick<User, 'id'>) {
     credentials: 'include',
   })
   if (!r.ok) {
+    if (r.status === 429) {
+      throw new ExpectedError('rateLimit', 'Rate limit exceeded')
+    }
+    if (r.status === 404) {
+      throw new ExpectedError('notFound', 'User not found')
+    }
     throw new Error(r.statusText)
+  }
+}
+
+// don't know the rate limit, so limit 2s request once, refer to
+// https://devcommunity.x.com/t/what-is-the-rate-limit-on-post-request-and-post-blocks-create/102434/2
+// https://github.com/d60/twikit/blob/main/ratelimits.md
+export async function batchBlockUsers(
+  users: User[] | (() => User[]),
+  options: {
+    onProcessed: (
+      user: User,
+      meta: {
+        index: number
+        total: number
+        time: number
+        wait: number
+        error?: unknown
+      },
+    ) => Promise<void>
+    signal: AbortSignal
+    blockUser: (user: User) => Promise<'skip' | void>
+  },
+) {
+  const startTime = Date.now()
+  let _users = typeof users === 'function' ? users() : users
+  let skipCount = 0
+  for (let i = 0; i < _users.length; i++) {
+    const user = _users[i]
+    if (options.signal.aborted) {
+      break
+    }
+    let error: unknown
+    try {
+      const result = await options.blockUser(user)
+      if (result === 'skip') {
+        skipCount++
+      }
+    } catch (err) {
+      error = err
+    }
+    const time = Date.now() - startTime
+    const index = i + 1
+    await options.onProcessed(user, {
+      index,
+      total: _users.length,
+      time,
+      wait: (_users.length - index) * (time / Math.max(1, index - skipCount)),
+      error,
+    })
+    _users = typeof users === 'function' ? users() : users
   }
 }
 

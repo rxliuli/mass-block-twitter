@@ -14,7 +14,7 @@ import {
   parseUserRecords,
 } from '../api'
 import allSpam from './assets/all-spam.json'
-import { conforms, omit, pick } from 'lodash-es'
+import { omit, pick } from 'lodash-es'
 import notificationsSpam from './assets/notifications-spam.json'
 import profile from './assets/ProfileSpotlightsQuery.json'
 import HomeTimeline from './assets/HomeTimeline.json'

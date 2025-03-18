@@ -36,7 +36,12 @@
   import ModlistUsers from './components/ModlistUsers.svelte'
   import ModlistRules from './components/ModlistRules.svelte'
   import { cn } from '$lib/utils'
-  import { type User } from '$lib/db'
+  import { dbApi, type User } from '$lib/db'
+  import { batchBlockUsers, blockUser, ExpectedError } from '$lib/api'
+  import ms from 'ms'
+  import { ulid } from 'ulidx'
+  import { wait } from '@liuli-util/async'
+  import { useModlistUsers } from './utils/useModlistUsers'
 
   const route = useRoute()
 
@@ -53,6 +58,116 @@
         },
       )
       return (await resp.json()) as ModListGetResponse
+    },
+  })
+  const query = useModlistUsers(route.search?.get('id')!)
+  const users = $derived.by(() =>
+    ($query.data?.pages.flatMap((it) => it.data) ?? []).map(
+      (it) =>
+        ({
+          id: it.id,
+          screen_name: it.screenName,
+          name: it.name,
+          description: it.description,
+          profile_image_url: it.profileImageUrl,
+        }) as User,
+    ),
+  )
+  const batchBlockMutation = createMutation({
+    mutationFn: async () => {
+      const controller = new AbortController()
+      const toastId = toast.loading('Blocking users...', {
+        action: {
+          label: 'Stop',
+          onClick: () => {
+            controller.abort()
+            toast.dismiss(toastId)
+          },
+        },
+      })
+      try {
+        let blockCount = 0
+        const MAX_BLOCK_COUNT = 100
+        await batchBlockUsers(() => users, {
+          signal: controller.signal,
+          blockUser: async (user) => {
+            const _user = await dbApi.users.get(user.id)
+            if (_user && (_user.following || _user.blocking)) {
+              return 'skip'
+            }
+            await Promise.all([blockUser(user), wait(2000)])
+          },
+          onProcessed: async (user, meta) => {
+            toast.loading(
+              `Blocked ${user.screen_name} (${meta.index}/${meta.total})`,
+              {
+                id: toastId,
+                description: `Wait ${ms(meta.wait)}`,
+              },
+            )
+            if (meta.error) {
+              if (meta.error instanceof ExpectedError) {
+                if (meta.error.code === 'rateLimit') {
+                  toast.error(
+                    'Twitter API rate limit exceeded, please try again later',
+                  )
+                  return
+                }
+                if (meta.error.code === 'notFound') {
+                  toast.error(`User ${user.screen_name} not found`)
+                  return
+                }
+              }
+              toast.error(`User ${user.screen_name} block failed.`)
+              return
+            }
+            await dbApi.users.block(user)
+            await dbApi.activitys.record([
+              {
+                id: ulid().toString(),
+                action: 'block',
+                trigger_type: 'manual',
+                match_type: 'user',
+                match_filter: 'modList',
+                user_id: user.id,
+                user_name: user.name,
+                user_screen_name: user.screen_name,
+                user_profile_image_url: user.profile_image_url,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              },
+            ])
+            blockCount = meta.index
+            if (meta.index % 10 === 0) {
+              await $query.fetchNextPage()
+            }
+            // if not pro user and blocked users >= 100, abort
+            if (blockCount >= MAX_BLOCK_COUNT && !authInfo.value?.isPro) {
+              controller.abort()
+            }
+          },
+        })
+
+        if (!authInfo.value?.isPro && blockCount >= MAX_BLOCK_COUNT) {
+          toast.info('You have reached the maximum number of blocked users.', {
+            description: `${blockCount}/${$metadata.data?.userCount ?? users.length} users blocked, please upgrade to Pro to block unlimited users.`,
+            action: {
+              label: 'Upgrade Now',
+              onClick: () => {
+                window.open('https://mass-block-twitter.rxliuli.com/pricing')
+              },
+            },
+          })
+        } else {
+          toast.success('Blocked users', {
+            description: `${blockCount}/${$metadata.data?.userCount ?? users.length} users blocked`,
+          })
+        }
+      } catch (err) {
+        toast.error('Block users failed')
+      } finally {
+        toast.dismiss(toastId)
+      }
     },
   })
 
@@ -95,9 +210,27 @@
         throw resp
       }
     },
-    onSuccess: async () => {
+    onSuccess: async (_data, action) => {
       await $metadata.refetch()
       refreshModListSubscribedUsers(true)
+      if (action === 'block') {
+        const toastId = toast.success('Subscribe modlist success', {
+          description: 'Do you want to block all accounts now?',
+          action: {
+            label: 'Block now',
+            onClick: () => {
+              toast.dismiss(toastId)
+              $batchBlockMutation.mutate()
+            },
+          },
+          cancel: {
+            label: 'Later',
+            onClick: () => {
+              toast.dismiss(toastId)
+            },
+          },
+        })
+      }
     },
     onError: () => {
       toast.error('Subscribe modlist failed')
@@ -258,6 +391,15 @@
         Delete list
         <DropdownMenu.Shortcut>
           <Trash2Icon />
+        </DropdownMenu.Shortcut>
+      </DropdownMenu.Item>
+      <DropdownMenu.Item
+        disabled={!$metadata.data?.owner}
+        onclick={() => $batchBlockMutation.mutate()}
+      >
+        Block users
+        <DropdownMenu.Shortcut>
+          <BanIcon />
         </DropdownMenu.Shortcut>
       </DropdownMenu.Item>
     </DropdownMenu.Content>

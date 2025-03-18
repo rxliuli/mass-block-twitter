@@ -162,5 +162,5 @@
 </QueryClientProvider>
 
 <ModeWatcher />
-<Toaster richColors closeButton />
+<Toaster richColors closeButton expand />
 <AppNotifications />

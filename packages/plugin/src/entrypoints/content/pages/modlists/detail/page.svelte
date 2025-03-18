@@ -140,7 +140,7 @@
               })
             }
             console.log(
-              `[batchBlockMutation] onProcessed ${meta.index} ${user.screen_name} ` +
+              `[batchBlockMutation] onProcesssed ${meta.index} ${user.screen_name} ` +
                 new Date().toISOString(),
             )
             toast.loading(
@@ -161,7 +161,7 @@
                 }
                 if (meta.error.code === 'forbidden') {
                   toast.error('Forbidden, please try again later', {
-                    dismissable: false,
+                    duration: 1000000,
                     action: {
                       label: 'Refresh',
                       onClick: () => {
@@ -174,7 +174,7 @@
                 }
                 if (meta.error.code === 'unauthorized') {
                   toast.error('Unauthorized, please login again', {
-                    dismissable: false,
+                    duration: 1000000,
                     action: {
                       label: 'Refresh',
                       onClick: () => {
@@ -376,9 +376,7 @@
     metadataEditOpen = true
   }
   const updateModlist = createMutation({
-    mutationFn: async (
-      modlist: Pick<ModList, 'name' | 'description' | 'avatar'>,
-    ) => {
+    mutationFn: async (modlist: Omit<ModListUpdateRequest, 'twitterUser'>) => {
       const authInfo = await getAuthInfo()
       const resp = await crossFetch(
         `${SERVER_URL}/api/modlists/update/${route.search?.get('id')}`,
@@ -561,6 +559,6 @@
 <ModListEdit
   bind:open={metadataEditOpen}
   title="Edit Moderation List"
-  data={$metadata.data}
+  data={$metadata.data!}
   onSave={$updateModlist.mutateAsync}
 />

@@ -47,9 +47,7 @@
   }
 
   const mutation = createMutation({
-    mutationFn: async (
-      modList: Pick<ModList, 'name' | 'description' | 'avatar'>,
-    ) => {
+    mutationFn: async (modList: Omit<ModListCreateRequest, 'twitterUser'>) => {
       const authInfo = await getAuthInfo()
       const userId = extractCurrentUserId()
       if (!userId) {
@@ -62,9 +60,7 @@
       const resp = await crossFetch(`${SERVER_URL}/api/modlists/create`, {
         method: 'POST',
         body: JSON.stringify({
-          name: modList.name,
-          description: modList.description!,
-          avatar: modList.avatar!,
+          ...modList,
           twitterUser,
         } satisfies ModListCreateRequest),
         headers: {

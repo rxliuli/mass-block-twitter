@@ -7,17 +7,17 @@
   import { Label } from '$lib/components/ui/label'
   import { Textarea } from '$lib/components/ui/textarea'
   import { FileReader } from '$lib/util/FileReader'
-  import type { ModList } from '@mass-block-twitter/server'
+  import type {
+    ModList,
+    ModListCreateRequest,
+  } from '@mass-block-twitter/server'
   import { createMutation } from '@tanstack/svelte-query'
   import { UserRoundIcon } from 'lucide-svelte'
   import { untrack } from 'svelte'
   import * as RadioGroup from '$lib/components/ui/radio-group'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
 
-  type FormData = Pick<
-    ModList,
-    'name' | 'description' | 'avatar' | 'visibility'
-  >
+  type FormData = Omit<ModListCreateRequest, 'twitterUser'>
 
   let {
     open = $bindable(false),

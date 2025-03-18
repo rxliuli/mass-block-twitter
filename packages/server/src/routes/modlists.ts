@@ -43,8 +43,8 @@ function _upsertUser(
 
 export const createSchema = z.object({
   name: z.string().max(100),
-  description: z.string().max(300).optional(),
-  avatar: z.string().optional(),
+  description: z.string().max(300).nullable().optional(),
+  avatar: z.string().nullable().optional(),
   twitterUser: userSchema,
   visibility: z.enum(['public', 'protected']).optional(),
 })

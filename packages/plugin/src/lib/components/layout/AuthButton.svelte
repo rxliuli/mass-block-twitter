@@ -7,7 +7,7 @@
   import { Badge } from '$lib/components/ui/badge'
   import * as DropdownMenu from '../ui/dropdown-menu'
   import { shadcnConfig } from '../logic/config'
-  import { createMutation } from '@tanstack/svelte-query'
+  import { createMutation, useQueryClient } from '@tanstack/svelte-query'
   import { SERVER_URL } from '$lib/constants'
   import { crossFetch } from '$lib/query'
 
@@ -16,6 +16,7 @@
   let interval = $state<number>()
   const webUrl =
     import.meta.env.VITE_WEB_URL ?? 'https://mass-block-twitter.rxliuli.com'
+  const queryClient = useQueryClient()
   function onLogin() {
     openLoginWindow(webUrl + '/accounts/login?from=plugin')
     if (interval) {
@@ -29,6 +30,7 @@
       authInfo.value = info
       clearInterval(interval)
       toast.success('Login successful')
+      queryClient.refetchQueries()
     }, 1000) as unknown as number
   }
 
@@ -63,6 +65,7 @@
     },
     onSuccess: () => {
       toast.success('Logged out')
+      queryClient.refetchQueries()
     },
   })
 

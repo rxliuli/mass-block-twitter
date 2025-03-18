@@ -1,17 +1,41 @@
 <script lang="ts">
-  import { getAuthInfo, useLogout, userState } from './auth.svelte'
+  import { clearAuthInfo, getAuthInfo, userState } from './auth.svelte'
   import Loading from '../ui/Loading.svelte'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import { UserIcon } from 'lucide-svelte'
   import { Button } from '../ui/button'
-  import { createQuery } from '@tanstack/svelte-query'
+  import {
+    createMutation,
+    createQuery,
+    useQueryClient,
+  } from '@tanstack/svelte-query'
 
   const query = createQuery({
     queryKey: ['authInfo'],
     queryFn: getAuthInfo,
   })
 
-  const logout = useLogout()
+  const queryClient = useQueryClient()
+  const logoutMutation = createMutation({
+    mutationFn: async () => {
+      const authInfo = await getAuthInfo()
+      if (!authInfo) {
+        throw new Error('No auth info')
+      }
+      const resp = await fetch(
+        import.meta.env.VITE_API_URL + '/api/auth/logout',
+        {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${authInfo.token}` },
+        },
+      )
+      if (!resp.ok) {
+        throw new Error('Failed to logout')
+      }
+      clearAuthInfo()
+      queryClient.invalidateQueries()
+    },
+  })
 </script>
 
 {#if $query.isLoading}
@@ -46,7 +70,7 @@
         </DropdownMenu.Item>
         <DropdownMenu.Item
           class="cursor-pointer"
-          onclick={() => $logout.mutate()}
+          onclick={() => $logoutMutation.mutate()}
         >
           Logout
         </DropdownMenu.Item>

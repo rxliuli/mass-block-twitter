@@ -24,18 +24,18 @@ export async function refreshModListSubscribedUsers(
   if (!token) {
     return
   }
-  const headers: Record<string, string> = {
-    Authorization: `Bearer ${token}`,
+  const init: RequestInit = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   }
   if (force) {
-    headers['no-cache'] = 'true'
+    init.cache = 'no-cache'
   }
   const resp = await crossFetch(
     `${SERVER_URL}/api/modlists/subscribed/users?version=` +
       browser.runtime.getManifest().version,
-    {
-      headers,
-    },
+    init,
   )
   if (!resp.ok) {
     if (resp.status === 401) {

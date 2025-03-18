@@ -49,3 +49,5 @@ export const entries: EntryGenerator = () => {
     { slug: 'docs/refund' },
   ]
 }
+
+export const prerender = true

@@ -4,6 +4,7 @@
   import { AutoSizer, List } from '@rxliuli/svelte-window'
   import { createInfiniteQuery } from '@tanstack/svelte-query'
   import ActivityItem from './components/ActivityItem.svelte'
+  import { t } from '$lib/i18n'
 
   const query = createInfiniteQuery({
     queryKey: ['activities'],
@@ -27,11 +28,11 @@
   }
 </script>
 
-<LayoutNav title="Activities" />
+<LayoutNav title={$t('dashboard.recentActivities.title')} />
 
 {#if $query.error}
   <div class="flex items-center justify-center h-full">
-    <p class="text-red-500">Error: {$query.error.message}</p>
+    <p class="text-red-500">{$t('common.error')}: {$query.error.message}</p>
   </div>
 {/if}
 

@@ -14,6 +14,7 @@
     GridComponent,
     LegendComponent,
   } from 'echarts/components'
+  import { t } from '$lib/i18n'
 
   use([
     SVGRenderer,
@@ -36,7 +37,12 @@
       trigger: 'axis',
     },
     legend: {
-      data: ['Total', 'Auto Blocked', 'Manual Blocked', 'Hidden Tweets'],
+      data: [
+        $t('dashboard.stats.total'),
+        $t('dashboard.stats.auto'),
+        $t('dashboard.stats.manual'),
+        $t('dashboard.stats.hidden'),
+      ],
     },
     grid: {
       left: '3%',
@@ -54,22 +60,22 @@
     },
     series: [
       {
-        name: 'Total',
+        name: $t('dashboard.stats.total'),
         type: 'line',
         data: data.all.map((it) => it.value),
       },
       {
-        name: 'Auto Blocked',
+        name: $t('dashboard.stats.auto'),
         type: 'line',
         data: data.auto.map((it) => it.value),
       },
       {
-        name: 'Manual Blocked',
+        name: $t('dashboard.stats.manual'),
         type: 'line',
         data: data.manual.map((it) => it.value),
       },
       {
-        name: 'Hidden Tweets',
+        name: $t('dashboard.stats.hidden'),
         type: 'line',
         data: data.hidden.map((it) => it.value),
       },

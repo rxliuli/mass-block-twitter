@@ -3,27 +3,31 @@
   import type { Activity } from '$lib/db'
   import dayjs from 'dayjs'
   import * as Avatar from '$lib/components/ui/avatar'
+  import { t } from '$lib/i18n'
 
   const { activity }: { activity: Activity } = $props()
 
   const actionMap = {
-    block: { label: 'Block', color: 'destructive' },
-    hide: { label: 'Hide', color: 'secondary' },
+    block: {
+      label: $t('dashboard.recentActivities.block'),
+      color: 'destructive',
+    },
+    hide: { label: $t('dashboard.recentActivities.hide'), color: 'secondary' },
   } as const
 
-  const ruleMap: Record<Activity['match_filter'], string> = {
-    mutedWords: 'Muted Words',
-    modList: 'Mod List',
-    blueVerified: 'Blue Verified',
-    defaultProfile: 'Default Profile',
-    sharedSpam: 'Shared Spam',
-    language: 'Language',
-    batchSelected: 'Batch Selected',
-  }
-  const triggerMap: Record<Activity['trigger_type'], string> = {
-    auto: 'Auto',
-    manual: 'Manual',
-  }
+  const ruleMap: Record<Activity['match_filter'], string> = $derived({
+    mutedWords: $t('dashboard.rules.mutedWords'),
+    modList: $t('dashboard.rules.modList'),
+    blueVerified: $t('dashboard.rules.blueVerified'),
+    defaultProfile: $t('dashboard.rules.defaultProfile'),
+    sharedSpam: $t('dashboard.rules.sharedSpam'),
+    language: $t('dashboard.rules.language'),
+    batchSelected: $t('dashboard.rules.batchSelected'),
+  })
+  const triggerMap: Record<Activity['trigger_type'], string> = $derived({
+    auto: $t('dashboard.recentActivities.trigger.auto'),
+    manual: $t('dashboard.recentActivities.trigger.manual'),
+  })
 </script>
 
 <div class="py-2">
@@ -60,12 +64,16 @@
       </Badge>
     </div>
     <div class="text-sm flex items-center">
-      <span class="text-muted-foreground">Rule:</span>
+      <span class="text-muted-foreground"
+        >{$t('dashboard.recentActivities.rule.title')}:</span
+      >
       <span class="inline-block w-24 truncate"
         >{ruleMap[activity.match_filter]}</span
       >
       <span class="text-muted-foreground mx-1">·</span>
-      <span class="text-muted-foreground">Trigger:</span>
+      <span class="text-muted-foreground"
+        >{$t('dashboard.recentActivities.trigger.title')}:</span
+      >
       <span class="inline-block w-24 truncate"
         >{triggerMap[activity.trigger_type]}</span
       >
@@ -73,14 +81,16 @@
   </div>
 
   <div class="text-sm">
-    <span class="text-muted-foreground">Action:</span>
+    <span class="text-muted-foreground"
+      >{$t('dashboard.recentActivities.action.title')}:</span
+    >
     <span class="font-medium">
       {#if activity.action === 'block'}
-        Blocked this account
+        {$t('dashboard.recentActivities.details.block')}
       {:else if activity.action === 'hide'}
-        Hidden this account's tweets
+        {$t('dashboard.recentActivities.details.hide')}
       {:else}
-        Performed an action
+        {$t('dashboard.recentActivities.details.performed')}
       {/if}
     </span>
   </div>

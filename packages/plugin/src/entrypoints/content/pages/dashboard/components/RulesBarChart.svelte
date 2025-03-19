@@ -13,6 +13,7 @@
     GridComponent,
     LegendComponent,
   } from 'echarts/components'
+  import { t } from '$lib/i18n'
 
   use([
     SVGRenderer,
@@ -27,13 +28,13 @@
 
   const data = $derived.by(() => {
     const ruleMap: Record<Activity['match_filter'], string> = {
-      mutedWords: 'Muted Words',
-      modList: 'Mod List',
-      blueVerified: 'Blue Verified',
-      defaultProfile: 'Default Profile',
-      sharedSpam: 'Shared Spam',
-      language: 'Language',
-      batchSelected: 'Batch Selected',
+      mutedWords: $t('dashboard.rules.mutedWords'),
+      modList: $t('dashboard.rules.modList'),
+      blueVerified: $t('dashboard.rules.blueVerified'),
+      defaultProfile: $t('dashboard.rules.defaultProfile'),
+      sharedSpam: $t('dashboard.rules.sharedSpam'),
+      language: $t('dashboard.rules.language'),
+      batchSelected: $t('dashboard.rules.batchSelected'),
     }
     const group = groupBy(activities, (it) => it.match_filter)
     return Object.entries(group)

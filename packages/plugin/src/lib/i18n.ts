@@ -8,6 +8,7 @@ import {
 import enUS from '../i18n/en-US.json'
 import zhCN from '../i18n/zh-CN.json'
 import es from '../i18n/es.json'
+import { getSettings } from './settings'
 
 export function initI18n(language: string) {
   addMessages('en-US', enUS)
@@ -27,6 +28,13 @@ export function setLocale(language: string) {
 export const t = format
 
 export function getLocaleLanguage(): 'en-US' | 'zh-CN' | 'es' {
+  const settings = getSettings()
+  if (
+    settings.language &&
+    ['en-US', 'zh-CN', 'es'].includes(settings.language)
+  ) {
+    return settings.language as 'en-US' | 'zh-CN' | 'es'
+  }
   const r = getLocaleFromNavigator()
   if (r && ['en-US', 'zh-CN', 'es'].includes(r)) {
     return r as 'en-US' | 'zh-CN' | 'es'

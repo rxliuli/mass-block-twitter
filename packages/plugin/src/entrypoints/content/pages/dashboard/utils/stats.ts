@@ -57,28 +57,28 @@ export function calcStats(now: Activity[], before: Activity[]): Stats {
 export function formatStats(stats: Stats) {
   return [
     {
-      title: 'Total',
+      title: 'dashboard.stats.total',
       ...stats.total,
       icon: '🛡️',
     },
     {
-      title: 'Auto Blocked',
+      title: 'dashboard.stats.auto',
       ...stats.auto,
       icon: '⚙️',
     },
     {
-      title: 'Manual Blocked',
+      title: 'dashboard.stats.manual',
       ...stats.manual,
       icon: '👆',
     },
     {
-      title: 'Hidden Tweets',
+      title: 'dashboard.stats.hidden',
       ...stats.hidden,
       icon: '👁️',
     },
   ].map((it) => ({
     ...it,
     trend: it.change.startsWith('-') ? 'down' : 'up',
-    period: 'This Week',
+    period: 'dashboard.stats.period',
   }))
 }

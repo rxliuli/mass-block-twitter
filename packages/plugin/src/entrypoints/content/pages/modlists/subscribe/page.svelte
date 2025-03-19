@@ -6,6 +6,7 @@
   import { SERVER_URL } from '$lib/constants'
   import type { ModListSubscribeResponse } from '@mass-block-twitter/server'
   import { crossFetch } from '$lib/query'
+  import { t } from '$lib/i18n'
 
   const query = createQuery({
     queryKey: ['modlists', 'subscribed'],
@@ -21,6 +22,6 @@
   })
 </script>
 
-<LayoutNav title="Subscribed Moderation Lists" />
+<LayoutNav title={$t('modlists.subscribed.title')} />
 
 <ModLists query={$query} />

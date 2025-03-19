@@ -41,6 +41,7 @@
   import ms from 'ms'
   import { ulid } from 'ulidx'
   import { useModlistUsers } from './utils/useModlistUsers'
+  import { t } from '$lib/i18n'
 
   const route = useRoute()
 
@@ -84,9 +85,9 @@
     mutationFn: async () => {
       controller.abort()
       controller = new AbortController()
-      const toastId = toast.loading('Blocking users...', {
+      const toastId = toast.loading($t('modlists.detail.toast.blocking'), {
         action: {
-          label: 'Stop',
+          label: $t('modlists.detail.toast.blockingStop'),
           onClick: () => {
             controller.abort()
             toast.dismiss(toastId)
@@ -114,10 +115,14 @@
             // 每 150 个用户等待 5 分钟
             if (realBlockedCount % 150 === 0) {
               toast.loading(
-                `Blocked ${user.screen_name} (${meta.index}/${allCount})`,
+                $t('modlists.detail.toast.rateLimit', {
+                  values: {
+                    time: ms(5 * 60 * 1000 - (Date.now() - Date.now())),
+                  },
+                }),
                 {
                   id: toastId,
-                  description: `Twitter API rate limit exceeded, please wait 5 minutes...`,
+                  description: $t('modlists.detail.toast.rateLimitExceeded'),
                 },
               )
               let now = Date.now()
@@ -125,12 +130,16 @@
               await new Promise<void>((resolve) => {
                 const interval = setInterval(() => {
                   toast.loading(
-                    `Blocked ${user.screen_name} (${meta.index}/${allCount})`,
+                    $t('modlists.detail.toast.rateLimit', {
+                      values: {
+                        time: ms(waitTime - (Date.now() - now)),
+                      },
+                    }),
                     {
                       id: toastId,
-                      description: `Twitter API rate limit exceeded, please wait ${ms(
-                        waitTime - (Date.now() - now),
-                      )}...`,
+                      description: $t(
+                        'modlists.detail.toast.rateLimitExceeded',
+                      ),
                     },
                   )
                 }, 1000)
@@ -151,26 +160,34 @@
                 new Date().toISOString(),
             )
             toast.loading(
-              `Blocked ${user.screen_name} (${meta.index}/${allCount})`,
+              $t('modlists.detail.toast.blocked', {
+                values: {
+                  name: user.screen_name,
+                  index: meta.index,
+                  total: allCount,
+                },
+              }),
               {
                 id: toastId,
-                description: `Wait ${ms(meta.averageTime * (allCount - meta.index))}`,
+                description: $t('modlists.detail.toast.wait', {
+                  values: {
+                    time: ms(meta.averageTime * (allCount - meta.index)),
+                  },
+                }),
               },
             )
             if (meta.error) {
               if (meta.error instanceof ExpectedError) {
                 if (meta.error.code === 'rateLimit') {
-                  toast.error(
-                    'Twitter API rate limit exceeded, please try again later',
-                  )
+                  toast.error($t('modlists.detail.toast.rateLimitExceeded'))
                   controller.abort()
                   return
                 }
                 if (meta.error.code === 'forbidden') {
-                  toast.error('Forbidden, please try again later', {
+                  toast.error($t('modlists.detail.toast.forbidden'), {
                     duration: 1000000,
                     action: {
-                      label: 'Refresh',
+                      label: $t('modlists.detail.toast.refresh'),
                       onClick: () => {
                         location.reload()
                       },
@@ -180,10 +197,10 @@
                   return
                 }
                 if (meta.error.code === 'unauthorized') {
-                  toast.error('Unauthorized, please login again', {
+                  toast.error($t('modlists.detail.toast.unauthorized'), {
                     duration: 1000000,
                     action: {
-                      label: 'Refresh',
+                      label: $t('modlists.detail.toast.refresh'),
                       onClick: () => {
                         location.reload()
                       },
@@ -193,13 +210,26 @@
                   return
                 }
                 if (meta.error.code === 'notFound') {
-                  toast.error(`User ${user.screen_name} not found`, {
-                    id: errorToastId,
-                  })
+                  toast.error(
+                    $t('modlists.detail.toast.userNotFound', {
+                      values: {
+                        name: user.screen_name,
+                      },
+                    }),
+                    {
+                      id: errorToastId,
+                    },
+                  )
                   return
                 }
               }
-              toast.error(`User ${user.screen_name} block failed.`)
+              toast.error(
+                $t('modlists.detail.toast.userBlockFailed', {
+                  values: {
+                    name: user.screen_name,
+                  },
+                }),
+              )
               return
             }
             if (meta.result !== 'skip') {
@@ -232,22 +262,32 @@
         })
 
         if (!authInfo.value?.isPro && lastBlockedIndex >= MAX_BLOCK_COUNT) {
-          toast.info('You have reached the maximum number of blocked users.', {
-            description: `${lastBlockedIndex}/${$metadata.data?.userCount ?? users.length} users blocked, please upgrade to Pro to block unlimited users.`,
+          toast.info($t('modlists.detail.toast.maxBlockedUsers'), {
+            description: $t('modlists.detail.toast.maxBlockedUsersDesc', {
+              values: {
+                current: lastBlockedIndex,
+                total: $metadata.data?.userCount ?? users.length,
+              },
+            }),
             action: {
-              label: 'Upgrade Now',
+              label: $t('modlists.detail.toast.upgradeNow'),
               onClick: () => {
                 window.open('https://mass-block-twitter.rxliuli.com/pricing')
               },
             },
           })
         } else {
-          toast.success('Blocked users', {
-            description: `${lastBlockedIndex}/${$metadata.data?.userCount ?? users.length} users blocked`,
+          toast.success($t('modlists.detail.toast.blockSuccess'), {
+            description: $t('modlists.detail.toast.blockSuccess.description', {
+              values: {
+                current: lastBlockedIndex,
+                total: $metadata.data?.userCount ?? users.length,
+              },
+            }),
           })
         }
       } catch (err) {
-        toast.error('Block users failed')
+        toast.error($t('modlists.detail.toast.blockFailed'))
       } finally {
         toast.dismiss(toastId)
       }
@@ -266,11 +306,10 @@
           })
         ).json()) as ModListSubscribeResponse
         if (subscribed.length >= 3) {
-          toast.info('You have reached the maximum number of subscribed.', {
-            description:
-              'Please upgrade to Pro to create unlimited subscribed.',
+          toast.info($t('modlists.detail.toast.maxSubscribed'), {
+            description: $t('modlists.detail.toast.maxSubscribedDesc'),
             action: {
-              label: 'Upgrade Now',
+              label: $t('modlists.detail.toast.upgradeNow'),
               onClick: () => {
                 window.open('https://mass-block-twitter.rxliuli.com/pricing')
               },
@@ -297,17 +336,17 @@
       await $metadata.refetch()
       refreshModListSubscribedUsers(true)
       if (action === 'block') {
-        const toastId = toast.success('Subscribe modlist success', {
-          description: 'Do you want to block all accounts now?',
+        const toastId = toast.success($t('modlists.detail.toast.subscribe.success'), {
+          description: $t('modlists.detail.toast.subscribe.success.description'),
           action: {
-            label: 'Block now',
+            label: $t('modlists.detail.toast.subscribe.success.action'),
             onClick: () => {
               toast.dismiss(toastId)
               $batchBlockMutation.mutate()
             },
           },
           cancel: {
-            label: 'Later',
+            label: $t('modlists.detail.toast.subscribe.success.cancel'),
             onClick: () => {
               toast.dismiss(toastId)
             },
@@ -316,7 +355,7 @@
       }
     },
     onError: () => {
-      toast.error('Subscribe modlist failed')
+      toast.error($t('modlists.detail.toast.subscribe.failed'))
     },
   })
   const unsubscribeMutation = createMutation({
@@ -340,7 +379,7 @@
       refreshModListSubscribedUsers(true)
     },
     onError: async (error) => {
-      toast.error('Unsubscribe modlist failed')
+      toast.error($t('modlists.detail.toast.unsubscribe.failed'))
     },
   })
   const deleteMutation = createMutation({
@@ -360,22 +399,22 @@
       }
     },
     onSuccess: async () => {
-      toast.success('Delete modlist success')
+      toast.success($t('modlists.detail.toast.delete.success'))
       goBack()
     },
     onError: async (error) => {
       if (error instanceof Response) {
         const data = (await error.json()) as ModListRemoveErrorResponse
         if (data.code === 'modListNotFound') {
-          toast.error('Modlist not found')
+          toast.error($t('modlists.detail.toast.delete.notFound'))
           return
         }
         if (data.code === 'modListHasSubscriptions') {
-          toast.error('Modlist has subscriptions')
+          toast.error($t('modlists.detail.toast.delete.hasSubscriptions'))
           return
         }
       }
-      toast.error('Delete modlist failed')
+      toast.error($t('modlists.detail.toast.delete.failed'))
     },
   })
   let metadataEditOpen = $state(false)
@@ -401,11 +440,11 @@
       }
     },
     onSuccess: async () => {
-      toast.success('Update modlist success')
+      toast.success($t('modlists.detail.toast.update.success'))
       await $metadata.refetch()
     },
     onError: () => {
-      toast.error('Update modlist failed')
+      toast.error($t('modlists.detail.toast.update.failed'))
     },
   })
   const authInfo = useAuthInfo()
@@ -422,34 +461,34 @@
   function onCopyLink() {
     const url = `https://mass-block-twitter.rxliuli.com/modlist/${route.search?.get('id')}`
     navigator.clipboard.writeText(url)
-    toast.success('Link copied to clipboard', {
+    toast.success($t('modlists.detail.toast.copyLink'), {
       description: url,
     })
   }
 </script>
 
-<LayoutNav title="Moderation Lists Detail">
+<LayoutNav title={$t('modlists.detail.title')}>
   {#if $metadata.data?.subscribed}
     <Button
       variant="outline"
       onclick={() => $unsubscribeMutation.mutate()}
       disabled={!authInfo.value || $unsubscribeMutation.isPending}
     >
-      {$metadata.data.action === 'block' ? 'Unblock' : 'Unmute'}
+      {$metadata.data.action === 'block' ? $t('modlists.detail.actions.unblock') : $t('modlists.detail.actions.unmute')}
     </Button>
   {:else}
     <DropdownMenu.Root>
       <DropdownMenu.Trigger
         disabled={!authInfo.value || $subscribeMutation.isPending}
       >
-        Subscribe
+        {$t('modlists.detail.actions.subscribe')}
       </DropdownMenu.Trigger>
       <DropdownMenu.Content portalProps={{ to: shadcnConfig.get().portal }}>
         <DropdownMenu.Item onclick={() => $subscribeMutation.mutate('hide')}>
-          Mute accounts <MessageCircleOffIcon class="w-4 h-4" />
+          {$t('modlists.detail.actions.muteAccounts')} <MessageCircleOffIcon class="w-4 h-4" />
         </DropdownMenu.Item>
         <DropdownMenu.Item onclick={() => $subscribeMutation.mutate('block')}>
-          Block accounts <BanIcon class="w-4 h-4" />
+          {$t('modlists.detail.actions.blockAccounts')} <BanIcon class="w-4 h-4" />
         </DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
@@ -462,19 +501,19 @@
     </DropdownMenu.Trigger>
     <DropdownMenu.Content portalProps={{ to: shadcnConfig.get().portal }}>
       <DropdownMenu.Item onclick={onCopyLink}>
-        Copy Link to list
+        {$t('modlists.detail.actions.copyLink')}
         <DropdownMenu.Shortcut>
           <ShareIcon class="text-blue-500" />
         </DropdownMenu.Shortcut>
       </DropdownMenu.Item>
       <DropdownMenu.Item onclick={() => $batchBlockMutation.mutate()}>
-        Block users
+        {$t('modlists.detail.actions.blockUsers')}
         <DropdownMenu.Shortcut>
           <BanIcon class="text-red-500" />
         </DropdownMenu.Shortcut>
       </DropdownMenu.Item>
       <DropdownMenu.Item disabled={!$metadata.data?.owner} onclick={onOpenEdit}>
-        Edit list details
+        {$t('modlists.detail.actions.editList')}
         <DropdownMenu.Shortcut>
           <PencilIcon class="text-blue-500" />
         </DropdownMenu.Shortcut>
@@ -483,7 +522,7 @@
         disabled={!$metadata.data?.owner}
         onclick={() => $deleteMutation.mutate()}
       >
-        Delete list
+        {$t('modlists.detail.actions.deleteList')}
         <DropdownMenu.Shortcut>
           <Trash2Icon class="text-red-500" />
         </DropdownMenu.Shortcut>
@@ -502,8 +541,8 @@
           <div class="flex items-center justify-between">
             <Tabs.Root bind:value={currentTab}>
               <Tabs.List>
-                <Tabs.Trigger value="users">Users</Tabs.Trigger>
-                <Tabs.Trigger value="rules">Rules</Tabs.Trigger>
+                <Tabs.Trigger value="users">{$t('modlists.detail.tabs.users')}</Tabs.Trigger>
+                <Tabs.Trigger value="rules">{$t('modlists.detail.tabs.rules')}</Tabs.Trigger>
               </Tabs.List>
             </Tabs.Root>
             <div
@@ -518,7 +557,7 @@
                 disabled={!$metadata.data?.owner}
               >
                 <ImportIcon class="h-4 w-4" />
-                Import users
+                {$t('modlists.detail.actions.importUsers')}
               </Button>
               <Button
                 variant="ghost"
@@ -527,7 +566,7 @@
                 disabled={!$metadata.data?.owner}
               >
                 <UserPlusIcon class="h-4 w-4" />
-                Add users
+                {$t('modlists.detail.actions.addUsers')}
               </Button>
             </div>
             <div
@@ -542,14 +581,14 @@
                 disabled={!$metadata.data?.owner}
               >
                 <ListFilterPlusIcon class="h-4 w-4" />
-                Add rule
+                {$t('modlists.detail.actions.addRule')}
               </Button>
             </div>
           </div>
         {/snippet}
       </ModlistDesc>
     {:else}
-      <QueryError description={'Load modlist detail failed'} />
+      <QueryError description={$t('modlists.detail.error.loadFailed')} />
     {/if}
   </div>
 
@@ -562,7 +601,7 @@
 
 <ModListEdit
   bind:open={metadataEditOpen}
-  title="Edit Moderation List"
+  title={$t('modlists.detail.modal.edit.title')}
   data={$metadata.data!}
   onSave={$updateModlist.mutateAsync}
 />

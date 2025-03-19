@@ -1,7 +1,7 @@
 <script lang="ts">
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import { localStore, localStorageAdapter } from '$lib/util/localStore'
-  import { getSettings, Settings } from '$lib/settings'
+  import { getSettings, type Settings } from '$lib/settings'
   import { SETTINGS_KEY } from '$lib/constants'
   import { Label } from '$lib/components/ui/label'
   import { SelectGroup } from '$lib/components/custom/select'

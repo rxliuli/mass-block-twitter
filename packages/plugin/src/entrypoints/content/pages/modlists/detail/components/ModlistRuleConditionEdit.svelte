@@ -8,6 +8,7 @@
   import type { Snippet } from 'svelte'
   import { capitalCase } from 'change-case'
   import { Switch } from '$lib/components/ui/switch'
+  import { t } from '$lib/i18n'
 
   let {
     value: condition = $bindable(),
@@ -36,9 +37,9 @@
 
 <div class="flex flex-col py-2 md:py-0 md:flex-row items-center gap-2">
   <div class="w-full md:w-48 px-1">
-    <Label for={`${name}.field`} class={cn({ 'md:hidden': !first })}
-      >Field</Label
-    >
+    <Label for={`${name}.field`} class={cn({ 'md:hidden': !first })}>
+      {$t('modlists.detail.rule.form.condition.field.label')}
+    </Label>
     <SelectGroup
       name={`${name}.field`}
       bind:value={condition.field}
@@ -57,9 +58,9 @@
     />
   </div>
   <div class="w-full md:w-36 px-1">
-    <Label for={`${name}.operator`} class={cn({ 'md:hidden': !first })}
-      >Operator</Label
-    >
+    <Label for={`${name}.operator`} class={cn({ 'md:hidden': !first })}>
+      {$t('modlists.detail.rule.form.condition.operator.label')}
+    </Label>
     <SelectGroup
       name={`${name}.operator`}
       bind:value={condition.operator}
@@ -69,9 +70,9 @@
     />
   </div>
   <div class="w-full md:flex-1 px-1">
-    <Label for={`${name}.value`} class={cn({ 'md:hidden': !first })}
-      >Value</Label
-    >
+    <Label for={`${name}.value`} class={cn({ 'md:hidden': !first })}>
+      {$t('modlists.detail.rule.form.condition.value.label')}
+    </Label>
     {#if field}
       {#if field.type === 'string'}
         {#if field.enum}

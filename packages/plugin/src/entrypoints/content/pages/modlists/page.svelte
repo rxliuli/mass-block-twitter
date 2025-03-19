@@ -9,6 +9,7 @@
   import { crossFetch } from '$lib/query'
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import ModListCreator from './components/ModListCreator.svelte'
+  import { t } from '$lib/i18n'
 
   const query = createQuery({
     queryKey: ['modlists'],
@@ -24,30 +25,30 @@
   const authInfo = useAuthInfo()
   async function onGotoCreated() {
     if (!authInfo.value) {
-      toast.info('Please login to view your created modlists')
+      toast.info($t('modlists.toast.login.created'))
       return
     }
     navigate(`/modlists/created`)
   }
   async function onGotoSubscribed() {
     if (!authInfo.value) {
-      toast.info('Please login to view your subscribed modlists')
+      toast.info($t('modlists.toast.login.subscribed'))
       return
     }
     navigate('/modlists/subscribe')
   }
 </script>
 
-<LayoutNav title="Moderation Lists">
+<LayoutNav title={$t('modlists.title')}>
   <ModListCreator />
 </LayoutNav>
 
 <nav class="flex items-center gap-4">
   <RouterLink class="text-blue-500 cursor-pointer" onclick={onGotoCreated}>
-    Created
+    {$t('modlists.nav.created')}
   </RouterLink>
   <RouterLink class="text-blue-500 cursor-pointer" onclick={onGotoSubscribed}>
-    Subscribed
+    {$t('modlists.nav.subscribed')}
   </RouterLink>
 </nav>
 

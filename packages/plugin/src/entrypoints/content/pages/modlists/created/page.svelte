@@ -7,6 +7,7 @@
   import { getAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { crossFetch } from '$lib/query'
   import ModListCreator from '../components/ModListCreator.svelte'
+  import { t } from '$lib/i18n'
 
   const query = createQuery({
     queryKey: ['modlists', 'created'],
@@ -22,7 +23,7 @@
   })
 </script>
 
-<LayoutNav title="My Moderation Lists">
+<LayoutNav title={$t('modlists.created.title')}>
   <ModListCreator />
 </LayoutNav>
 

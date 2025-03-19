@@ -2,6 +2,7 @@
   import * as Avatar from '$lib/components/ui/avatar'
   import type { ModListGetResponse } from '@mass-block-twitter/server'
   import type { Snippet } from 'svelte'
+  import { t } from '$lib/i18n'
 
   const props: {
     modlist: ModListGetResponse
@@ -23,7 +24,7 @@
           {props.modlist.name}
         </h1>
         <p>
-          Moderation list by
+          {$t('modlists.detail.desc.by')}
           <a
             href={`https://x.com/${props.modlist.twitterUser.screenName}`}
             target="_blank"

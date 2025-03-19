@@ -19,6 +19,7 @@
   import { PencilIcon, Trash2Icon } from 'lucide-svelte'
   import { cn } from '$lib/utils'
   import ModlistRulePreview from './ModlistRulePreview.svelte'
+  import { t } from '$lib/i18n'
 
   let {
     owner,
@@ -86,10 +87,10 @@
   function onOpenAddRuleEdit() {
     if (!authInfo.value?.isPro) {
       if (($query.data?.pages.flatMap((it) => it.data) ?? []).length >= 10) {
-        toast.info('You have reached the maximum number of rules.', {
-          description: 'Please upgrade to Pro to create unlimited rules.',
+        toast.info($t('modlists.detail.rules.limit.reached'), {
+          description: $t('modlists.detail.rules.limit.upgrade'),
           action: {
-            label: 'Upgrade Now',
+            label: $t('modlists.detail.rules.limit.upgrade.action'),
             onClick: () => {
               window.open('https://mass-block-twitter.rxliuli.com/pricing')
             },
@@ -123,13 +124,13 @@
     },
     onSuccess: () => {
       $query.refetch()
-      toast.success('Rule added')
+      toast.success($t('modlists.detail.rules.add.success'))
       ruleEditOpen = false
       rule = createRule()
     },
     onError: (error) => {
       console.error('Failed to add rule', error)
-      toast.error('Failed to add rule')
+      toast.error($t('modlists.detail.rules.add.failed'))
     },
   })
   const updateRule = createMutation({
@@ -155,13 +156,13 @@
     },
     onSuccess: () => {
       $query.refetch()
-      toast.success('Rule updated')
+      toast.success($t('modlists.detail.rules.update.success'))
       ruleEditOpen = false
       rule = createRule()
     },
     onError: (error) => {
       console.error('Failed to update rule', error)
-      toast.error('Failed to update rule')
+      toast.error($t('modlists.detail.rules.update.failed'))
     },
   })
   const removeRule = createMutation({
@@ -177,10 +178,10 @@
     },
     onSuccess: () => {
       $query.refetch()
-      toast.success('Rule removed')
+      toast.success($t('modlists.detail.rules.remove.success'))
     },
     onError: () => {
-      toast.error('Failed to remove rule')
+      toast.error($t('modlists.detail.rules.remove.failed'))
     },
   })
   function onOpenUpdateRuleEdit(item: ModListRule) {
@@ -203,7 +204,7 @@
         {@const users = $query.data.pages.flatMap((it) => it.data) ?? []}
         {#if users.length === 0}
           {#if !$query.isFetching}
-            <div class="text-center text-zinc-400">No rules in this list</div>
+            <div class="text-center text-zinc-400">{$t('modlists.detail.rules.empty')}</div>
           {/if}
         {:else}
           <List
@@ -256,16 +257,13 @@
             {/snippet}
           </List>
         {/if}
+      {:else if $query.isError}
+        <QueryError />
+      {:else}
+        <QueryLoading />
       {/if}
     {/snippet}
   </AutoSizer>
-  <div class="sticky bottom-0">
-    {#if $query.isFetching}
-      <QueryLoading class="h-auto" />
-    {:else if $query.error}
-      <QueryError description={'Load modlist rules failed'} />
-    {/if}
-  </div>
 </div>
 
 <ModlistRuleEdit

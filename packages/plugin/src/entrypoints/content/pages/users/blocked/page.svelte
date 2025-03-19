@@ -10,6 +10,7 @@
   import { serializeError } from 'serialize-error'
   import { blockUser, unblockUser } from '$lib/api'
   import { ulid } from 'ulidx'
+  import { t } from '$lib/i18n'
 
   const query = createInfiniteQuery({
     queryKey: ['blocked-users'],
@@ -47,14 +48,26 @@
     }) => {
       let failedNames: string[] = []
       const loadingId = toast.loading(
-        action === 'block' ? 'Blocking users...' : 'Unblocking users...',
+        action === 'block'
+          ? $t('blocked-users.toast.blocking')
+          : $t('blocked-users.toast.unblocking'),
       )
       for (let i = 0; i < users.length; i++) {
         const it = users[i]
-        const blockingText = action === 'block' ? 'blocking' : 'unblocking'
+        const blockingText =
+          action === 'block'
+            ? $t('blocked-users.toast.blocking')
+            : $t('blocked-users.toast.unblocking')
         try {
           toast.loading(
-            `[${i + 1}/${users.length}] ${blockingText} ${it.name}...`,
+            $t('blocked-users.toast.blockingProgress', {
+              values: {
+                current: i + 1,
+                total: users.length,
+                action: blockingText,
+                name: it.name,
+              },
+            }),
             { id: loadingId },
           )
           if (action === 'block') {
@@ -83,7 +96,14 @@
           failedNames.push(it.name)
           console.log(`${blockingText} ${it.id} ${it.name} failed`, e)
           toast.error(
-            `[${i + 1}/${users.length}] ${blockingText} ${it.name} failed`,
+            $t('blocked-users.toast.blockingFailed', {
+              values: {
+                current: i + 1,
+                total: users.length,
+                action: blockingText,
+                name: it.name,
+              },
+            }),
             {
               description: serializeError(e).message,
             },
@@ -92,9 +112,16 @@
       }
       toast.dismiss(loadingId)
       toast.success(
-        `${users.length - failedNames.length} users ${
-          action === 'block' ? 'blocked' : 'unblocked'
-        }, ${failedNames.length} failed`,
+        $t('blocked-users.toast.blockingSuccess', {
+          values: {
+            success: users.length - failedNames.length,
+            failed: failedNames.length,
+            action:
+              action === 'block'
+                ? $t('search-and-block.filter.blocking.blocked')
+                : $t('search-and-block.filter.blocking.unblocked'),
+          },
+        }),
         {
           description: failedNames.join(', '),
           duration: 5000,
@@ -113,14 +140,21 @@
         .flatMap((it) => it.data)
         .filter((it) => selectedRowKeys.includes(it.id)) ?? []
     if (users.length === 0) {
-      toast.error('No users selected')
+      toast.error($t('blocked-users.toast.noSelection'))
       return
     }
     await $mutation.mutateAsync({ users, action: 'unblock' })
   }
+
+  const columns = $derived(
+    userColumns.map((it) => ({
+      ...it,
+      title: $t(it.title),
+    })),
+  )
 </script>
 
-<LayoutNav title="Blocked Users" />
+<LayoutNav title={$t('blocked-users.title')} />
 
 <div class="h-full flex flex-col">
   <header class="flex items-center gap-2 justify-end">
@@ -130,12 +164,12 @@
       disabled={$mutation.isPending}
     >
       <ShieldCheckIcon color={'gray'} class="w-4 h-4" />
-      Unblock
+      {$t('blocked-users.actions.unblock')}
     </Button>
   </header>
   <div class="flex-1 overflow-y-auto">
     <ADataTable
-      columns={userColumns}
+      columns={columns}
       dataSource={$query.data?.pages.flatMap((it) => it.data) ?? []}
       rowKey="id"
       rowSelection={{

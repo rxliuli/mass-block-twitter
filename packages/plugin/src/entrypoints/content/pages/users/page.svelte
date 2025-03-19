@@ -11,7 +11,7 @@
     removeTweets,
   } from '$lib/observe'
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
-  import { blockUser, searchPeople, unblockUser } from '$lib/api'
+  import { blockUser, ExpectedError, searchPeople, unblockUser } from '$lib/api'
   import { debounce, groupBy } from 'lodash-es'
   import { buttonVariants } from '$lib/components/ui/button'
   import {
@@ -35,6 +35,7 @@
   import { ulid } from 'ulidx'
   import { navigate } from '$lib/components/logic/router'
   import { userColumns } from './utils/columns'
+  import { t } from '$lib/i18n'
 
   let term = $state('')
   const query = createInfiniteQuery({
@@ -58,8 +59,8 @@
           data: twitterPage.data,
         }
       } catch (err) {
-        if (err instanceof Response && err.status === 429) {
-          toast.error('Rate limit exceeded, please try again later')
+        if (err instanceof ExpectedError && err.code === 'rateLimit') {
+          toast.error($t('search-and-block.error.rateLimit'))
         }
         throw err
       }
@@ -107,19 +108,34 @@
     filteredData.filter((it) => selectedRowKeys.includes(it.id)),
   )
   const filterVerifiedOptions: LabelValue<SearchParams['filterVerified']>[] = [
-    { value: 'all', label: 'All' },
-    { value: 'verified', label: 'Verified' },
-    { value: 'unverified', label: 'Unverified' },
+    { value: 'all', label: $t('search-and-block.filter.all') },
+    {
+      value: 'verified',
+      label: $t('search-and-block.filter.verified.verified'),
+    },
+    {
+      value: 'unverified',
+      label: $t('search-and-block.filter.verified.unverified'),
+    },
   ]
   const filterBlockedOptions: LabelValue<SearchParams['filterBlocked']>[] = [
-    { value: 'all', label: 'All' },
-    { value: 'blocked', label: 'Blocked' },
-    { value: 'unblocked', label: 'Unblocked' },
+    { value: 'all', label: $t('search-and-block.filter.all') },
+    { value: 'blocked', label: $t('search-and-block.filter.blocking.blocked') },
+    {
+      value: 'unblocked',
+      label: $t('search-and-block.filter.blocking.unblocked'),
+    },
   ]
   const showFollowedOptions: LabelValue<SearchParams['filterFollowed']>[] = [
-    { value: 'all', label: 'All' },
-    { value: 'followed', label: 'Followed' },
-    { value: 'unfollowed', label: 'Unfollowed' },
+    { value: 'all', label: $t('search-and-block.filter.all') },
+    {
+      value: 'followed',
+      label: $t('search-and-block.filter.followed.followed'),
+    },
+    {
+      value: 'unfollowed',
+      label: $t('search-and-block.filter.followed.unfollowed'),
+    },
   ]
 
   const mutation = createMutation({
@@ -132,14 +148,26 @@
     }) => {
       let failedNames: string[] = []
       const loadingId = toast.loading(
-        action === 'block' ? 'Blocking users...' : 'Unblocking users...',
+        action === 'block'
+          ? $t('search-and-block.toast.blocking')
+          : $t('search-and-block.toast.unblocking'),
       )
       for (let i = 0; i < users.length; i++) {
         const it = users[i]
-        const blockingText = action === 'block' ? 'blocking' : 'unblocking'
+        const blockingText =
+          action === 'block'
+            ? $t('search-and-block.toast.blocking')
+            : $t('search-and-block.toast.unblocking')
         try {
           toast.loading(
-            `[${i + 1}/${users.length}] ${blockingText} ${it.name}...`,
+            $t('search-and-block.toast.blockingProgress', {
+              values: {
+                current: i + 1,
+                total: users.length,
+                action: blockingText,
+                name: it.name,
+              },
+            }),
             { id: loadingId },
           )
           if (action === 'block') {
@@ -168,7 +196,14 @@
           failedNames.push(it.name)
           console.log(`${blockingText} ${it.id} ${it.name} failed`, e)
           toast.error(
-            `[${i + 1}/${users.length}] ${blockingText} ${it.name} failed`,
+            $t('search-and-block.toast.blockingFailed', {
+              values: {
+                current: i + 1,
+                total: users.length,
+                action: blockingText,
+                name: it.name,
+              },
+            }),
             {
               description: serializeError(e).message,
             },
@@ -177,9 +212,16 @@
       }
       toast.dismiss(loadingId)
       toast.success(
-        `${users.length - failedNames.length} users ${
-          action === 'block' ? 'blocked' : 'unblocked'
-        }, ${failedNames.length} failed`,
+        $t('search-and-block.toast.blockingSuccess', {
+          values: {
+            success: users.length - failedNames.length,
+            failed: failedNames.length,
+            action:
+              action === 'block'
+                ? $t('search-and-block.filter.blocking.blocked')
+                : $t('search-and-block.filter.blocking.unblocked'),
+          },
+        }),
         {
           description: failedNames.join(', '),
           duration: 5000,
@@ -197,7 +239,14 @@
     })
     const csv = parser.parse(selectedRows)
     saveAs(new Blob([csv]), `block_list_${new Date().toISOString()}.csv`)
-    toast.success(`Exported ${selectedRows.length} users`, { duration: 5000 })
+    toast.success(
+      $t('search-and-block.toast.exportSuccess', {
+        values: {
+          count: selectedRows.length,
+        },
+      }),
+      { duration: 5000 },
+    )
   }
 
   async function onImportBlockList() {
@@ -235,7 +284,12 @@
     )
     await $mutation.mutateAsync({ users: newUsers, action: 'block' })
     toast.info(
-      `Imported ${newUsers.length} users, ignored ${users.length - newUsers.length} users`,
+      $t('search-and-block.toast.importSuccess', {
+        values: {
+          new: newUsers.length,
+          ignored: users.length - newUsers.length,
+        },
+      }),
     )
   }
 
@@ -244,9 +298,7 @@
     const grouped = groupBy(users, (it) => it.following)
     let blockList: User[] = users
     if ((grouped.true ?? []).length > 0) {
-      const confirmed = confirm(
-        'You are trying to block following users, do you want to include them?',
-      )
+      const confirmed = confirm($t('search-and-block.confirm.blockFollowing'))
       if (!confirmed) {
         blockList = grouped.false ?? []
       }
@@ -264,7 +316,6 @@
     const tweetsToRemove = tweets.filter(
       (it) => it && blockUserIds.includes(it.user_id),
     ) as Tweet[]
-    // console.log('tweetsToRemove', tweetsToRemove)
     removeTweets(tweetsToRemove.map((it) => it.id))
   }
 
@@ -276,19 +327,29 @@
   function onViewBlockedUsers() {
     navigate('/search-and-block/blocked')
   }
+
+  const columns = $derived(
+    userColumns.map((it) => ({
+      ...it,
+      title: $t(it.title),
+    })),
+  )
 </script>
 
 <div class="h-full flex flex-col">
   <div class="flex gap-2 mb-2">
     <Input
-      placeholder="Search..."
+      placeholder={$t('search-and-block.search.placeholder')}
       bind:value={term}
       oninput={onSearch}
       oncompositionstart={() => (isCompositionOn = true)}
       oncompositionend={() => (isCompositionOn = false)}
       class="flex-1"
     />
-    <TableExtraButton onclick={onBlock} text="Block Selected">
+    <TableExtraButton
+      onclick={onBlock}
+      text={$t('search-and-block.actions.blockSelected')}
+    >
       {#snippet icon()}
         <ShieldBanIcon color={'red'} class="w-4 h-4" />
       {/snippet}
@@ -303,19 +364,19 @@
         <DropdownMenu.Group>
           <DropdownMenu.Item onclick={onUnblock}>
             <ShieldCheckIcon color={'gray'} class="w-4 h-4" />
-            Unblock Selected
+            {$t('search-and-block.actions.unblockSelected')}
           </DropdownMenu.Item>
           <DropdownMenu.Item onclick={onExport}>
             <DownloadIcon class="w-4 h-4" />
-            Export Selected
+            {$t('search-and-block.actions.exportSelected')}
           </DropdownMenu.Item>
           <DropdownMenu.Item onclick={onImportBlockList}>
             <ImportIcon class="w-4 h-4" />
-            Import Block List
+            {$t('search-and-block.actions.importBlockList')}
           </DropdownMenu.Item>
           <DropdownMenu.Item onclick={onViewBlockedUsers}>
             <EyeIcon class="w-4 h-4" />
-            View Blocked Users
+            {$t('search-and-block.actions.viewBlockedUsers')}
           </DropdownMenu.Item>
         </DropdownMenu.Group>
       </DropdownMenu.Content>
@@ -323,17 +384,17 @@
   </div>
   <div class="hidden md:flex items-center gap-2 mb-2">
     <SelectFilter
-      label="Blocking"
+      label={$t('search-and-block.filter.blocking')}
       options={filterBlockedOptions}
       bind:value={searchParams.filterBlocked}
     />
     <SelectFilter
-      label="Verified"
+      label={$t('search-and-block.filter.verified')}
       options={filterVerifiedOptions}
       bind:value={searchParams.filterVerified}
     />
     <SelectFilter
-      label="Followed"
+      label={$t('search-and-block.filter.followed')}
       options={showFollowedOptions}
       bind:value={searchParams.filterFollowed}
       class="w-36"
@@ -342,7 +403,7 @@
   <div class="flex-1 overflow-hidden">
     <ADataTable
       class="flex-1"
-      columns={userColumns}
+      {columns}
       dataSource={filteredData}
       rowKey="id"
       rowSelection={{

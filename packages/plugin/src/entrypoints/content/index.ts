@@ -9,6 +9,7 @@ import {
   spamReport,
 } from '$lib/content'
 import { initXTransactionId } from '$lib/api'
+import { getLocaleLanguage, initI18n, t } from '$lib/i18n'
 
 export default defineContentScript({
   matches: ['https://x.com/**'],
@@ -21,6 +22,7 @@ export default defineContentScript({
     refreshModListSubscribedUsers()
     refreshAuthInfo()
     autoCheckPendingUsers()
+    initI18n(getLocaleLanguage() ?? 'en-US')
 
     async function openExtensionDash(initialPath: string) {
       const ui = await createShadowRootUi(ctx, {

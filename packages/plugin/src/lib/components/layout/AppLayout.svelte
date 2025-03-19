@@ -20,6 +20,7 @@
   import type { MenuItem } from './types'
   import { setContext } from 'svelte'
   import { Button } from '../ui/button'
+  import { t } from '$lib/i18n'
 
   let {
     open,
@@ -29,40 +30,41 @@
     children: Snippet
   } = $props()
 
-  const menuItems: MenuItem[] = [
+  const menuItems: MenuItem[] = $derived([
     {
-      title: 'Dashboard',
+      title: $t('dashboard.title'),
       url: '/',
       icon: HomeIcon,
       to: 'content',
     },
     {
-      title: 'Search and Block',
+      title: $t('search-and-block.title'),
       url: '/search-and-block',
       icon: UserIcon,
       to: 'content',
     },
     {
-      title: 'Moderation Lists',
+      title: $t('modlists.title'),
       url: '/modlists',
       icon: UsersIcon,
       to: 'content',
     },
     {
-      title: 'Muted Words',
+      title: $t('muted-words.title'),
       url: '/muted-words',
       icon: MessageCircleOffIcon,
       to: 'content',
     },
     {
-      title: 'Settings',
+      title: $t('settings.title'),
       url: '/settings',
       icon: SettingsIcon,
       to: 'footer',
     },
-  ]
+  ])
   const autoTitle = $derived(
-    menuItems.find((it) => it.url === router.path)?.title ?? 'Record Users',
+    menuItems.find((it) => it.url === router.path)?.title ??
+      $t('dashboard.title'),
   )
   let title = $state<string>()
   setContext('GlobalState', {

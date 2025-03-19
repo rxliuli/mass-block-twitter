@@ -84,6 +84,7 @@
     "runed": "^0.23.2",
     "serialize-error": "^11.0.3",
     "svelte-dnd-action": "^0.9.54",
+    "svelte-i18n": "^4.0.1",
     "svelte-legos": "^0.2.5",
     "svelte-tiny-virtual-list": "^2.1.2",
     "svelte-toolbelt": "^0.7.1",

@@ -23,6 +23,7 @@
   import SettingsPrivacyPage from './pages/settings/privacy/page.svelte'
   import DashboardActivitiesPage from './pages/dashboard/activities/page.svelte'
   import AppNotifications from '$lib/components/layout/AppNotifications.svelte'
+  import SettingsLanguagesPage from './pages/settings/languages/page.svelte'
 
   let { initialPath }: { initialPath?: string } = $props()
 
@@ -138,6 +139,10 @@
         {
           path: '/settings/privacy',
           component: SettingsPrivacyPage,
+        },
+        {
+          path: '/settings/languages',
+          component: SettingsLanguagesPage,
         },
         {
           path: '/pro',

@@ -1,4 +1,4 @@
-export interface LabelValue {
-  value: string
+export interface LabelValue<T extends string = string> {
+  value: T
   label: string
 }

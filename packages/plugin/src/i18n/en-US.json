@@ -119,5 +119,31 @@
   "blocked-users.toast.unblocking": "Unblocking users...",
   "blocked-users.toast.blockingProgress": "[{current}/{total}] {action} {name}...",
   "blocked-users.toast.blockingFailed": "[{current}/{total}] {action} {name} failed",
-  "blocked-users.toast.blockingSuccess": "{success} users {action}, {failed} failed"
+  "blocked-users.toast.blockingSuccess": "{success} users {action}, {failed} failed",
+
+  "muted-words.description": "Add keyword rules to hide posts or automatically block users. Rules apply to usernames, display names, bios, and tweet content.",
+  "muted-words.actions.add": "Add Keyword",
+  "muted-words.actions.edit": "Edit",
+  "muted-words.actions.delete": "Delete",
+  "muted-words.actions.hide": "Hide",
+  "muted-words.actions.block": "Block",
+  "muted-words.modal.create.title": "Create Muted Word Rule",
+  "muted-words.modal.edit.title": "Edit Muted Word Rule",
+  "muted-words.toast.limit.title": "Free version has 100-keyword limit",
+  "muted-words.toast.limit.description": "please upgrade to Pro to add more keyword rules",
+  "muted-words.toast.limit.action": "Upgrade Now",
+
+  "muted-words.form.keyword.label": "Keyword",
+  "muted-words.form.type.label": "Type",
+  "muted-words.form.type.hide": "Hide",
+  "muted-words.form.type.block": "Block",
+  "muted-words.form.checkpoints.label": "Checkpoints",
+  "muted-words.form.checkpoints.name": "Name",
+  "muted-words.form.checkpoints.screenName": "Screen Name",
+  "muted-words.form.checkpoints.description": "Description",
+  "muted-words.form.checkpoints.location": "Location",
+  "muted-words.form.checkpoints.tweet": "Tweet",
+  "muted-words.form.actions.save": "Save",
+  "muted-words.form.actions.saving": "Saving...",
+  "muted-words.form.actions.cancel": "Cancel"
 }

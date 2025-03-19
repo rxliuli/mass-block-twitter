@@ -116,5 +116,31 @@
   "blocked-users.toast.unblocking": "正在取消屏蔽用户...",
   "blocked-users.toast.blockingProgress": "[{current}/{total}] 正在{action}{name}...",
   "blocked-users.toast.blockingFailed": "[{current}/{total}] {action}{name}失败",
-  "blocked-users.toast.blockingSuccess": "{success}个用户{action}，{failed}个失败"
+  "blocked-users.toast.blockingSuccess": "{success}个用户{action}，{failed}个失败",
+
+  "muted-words.description": "添加关键词规则以隐藏推文或自动屏蔽用户。规则适用于用户名、显示名称、个人简介和推文内容。",
+  "muted-words.actions.add": "添加关键词",
+  "muted-words.actions.edit": "编辑",
+  "muted-words.actions.delete": "删除",
+  "muted-words.actions.hide": "隐藏",
+  "muted-words.actions.block": "屏蔽",
+  "muted-words.modal.create.title": "创建关键词规则",
+  "muted-words.modal.edit.title": "编辑关键词规则",
+  "muted-words.toast.limit.title": "免费版本限制100个关键词",
+  "muted-words.toast.limit.description": "请升级到专业版以添加更多关键词规则",
+  "muted-words.toast.limit.action": "立即升级",
+
+  "muted-words.form.keyword.label": "关键词",
+  "muted-words.form.type.label": "类型",
+  "muted-words.form.type.hide": "隐藏",
+  "muted-words.form.type.block": "屏蔽",
+  "muted-words.form.checkpoints.label": "检查点",
+  "muted-words.form.checkpoints.name": "名称",
+  "muted-words.form.checkpoints.screenName": "用户名",
+  "muted-words.form.checkpoints.description": "简介",
+  "muted-words.form.checkpoints.location": "位置",
+  "muted-words.form.checkpoints.tweet": "推文",
+  "muted-words.form.actions.save": "保存",
+  "muted-words.form.actions.saving": "保存中...",
+  "muted-words.form.actions.cancel": "取消"
 }

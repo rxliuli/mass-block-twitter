@@ -9,6 +9,7 @@
   import { getMutedWordRules, type MutedWordRule } from '$lib/filter'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { toast } from 'svelte-sonner'
+  import { t } from '$lib/i18n'
 
   let rules = localStore<MutedWordRule[]>(
     MUTED_WORD_RULES_KEY,
@@ -36,10 +37,10 @@
   const authInfo = useAuthInfo()
   function onAddKeyword() {
     if ($rules.length >= 100 && !authInfo.value?.isPro) {
-      toast.info('Free version has 100-keyword limit', {
-        description: 'please upgrade to Pro to add more keyword rules',
+      toast.info($t('muted-words.toast.limit.title'), {
+        description: $t('muted-words.toast.limit.description'),
         action: {
-          label: 'Upgrade Now',
+          label: $t('muted-words.toast.limit.action'),
           onClick: () => {
             window.open('https://mass-block-twitter.rxliuli.com/pricing')
           },
@@ -81,8 +82,7 @@
 
 <div class="max-w-3xl mx-auto">
   <p class="text-sm text-gray-500 mb-2">
-    Add keyword rules to hide posts or automatically block users. Rules apply to
-    usernames, display names, bios, and tweet content.
+    {$t('muted-words.description')}
   </p>
   <ul class="flex flex-col divide-y divide-muted">
     {#each $rules as rune, index}
@@ -92,7 +92,7 @@
         <div class="flex-1 flex flex-col">
           <span class="font-medium">{rune.keyword}</span>
           <span class="text-sm text-muted-foreground"
-            >{rune.type === 'hide' ? 'Hide' : 'Block'}</span
+            >{rune.type === 'hide' ? $t('muted-words.actions.hide') : $t('muted-words.actions.block')}</span
           >
         </div>
         <Button
@@ -118,5 +118,5 @@
   bind:open={editState.open}
   bind:rule={editState.rule}
   {onUpdate}
-  title={editState.index ? 'Edit Muted Word Rule' : 'Create Muted Word Rule'}
+  title={editState.index ? $t('muted-words.modal.edit.title') : $t('muted-words.modal.create.title')}
 />

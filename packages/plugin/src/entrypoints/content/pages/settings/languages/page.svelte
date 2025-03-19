@@ -13,7 +13,7 @@
     localStorageAdapter(),
   )
 
-  function onChangeLanguage(value?: 'en-US' | 'zh-CN') {
+  function onChangeLanguage(value?: Settings['language']) {
     if (!value) {
       return
     }
@@ -40,6 +40,7 @@
       options={[
         { label: 'English', value: 'en-US' },
         { label: '简体中文 - Simplified Chinese', value: 'zh-CN' },
+        { label: 'Español - Spanish', value: 'es' },
       ]}
     />
   </Label>

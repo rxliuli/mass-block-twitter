@@ -7,6 +7,7 @@
   import { getSettings, type Settings } from '$lib/settings'
   import { localStorageAdapter, localStore } from '$lib/util/localStore'
   import { languages } from '$lib/constants/languages'
+  import { t } from '$lib/i18n'
 
   const settings = localStore<Settings>(
     SETTINGS_KEY,
@@ -15,15 +16,16 @@
   )
 </script>
 
-<LayoutNav title="Filter Control" />
+<LayoutNav title={$t('settings.filter.title')} />
 
 <div class="max-w-3xl mx-auto">
   <Label class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
-      <span class="block text-base font-medium">Hide Suspicious Accounts</span>
+      <span class="block text-base font-medium">
+        {$t('settings.filter.hideSuspiciousAccounts')}
+      </span>
       <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets from accounts with default avatars, no bio and zero
-        followers. Their content will be automatically hidden.
+        {$t('settings.filter.hideSuspiciousAccounts.description')}
       </span>
     </div>
     <Checkbox
@@ -33,38 +35,44 @@
   </Label>
   <Label class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
-      <span class="block text-base font-medium">Hide Spam Accounts</span>
+      <span class="block text-base font-medium">
+        {$t('settings.filter.hideSpamAccounts')}
+      </span>
       <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets from accounts that are marked as spam.
+        {$t('settings.filter.hideSpamAccounts.description')}
       </span>
     </div>
     <Checkbox class="shrink-0" bind:checked={$settings.hideSpamAccounts} />
   </Label>
   <Label class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
-      <span class="block text-base font-medium">Hide Mute Words</span>
+      <span class="block text-base font-medium">
+        {$t('settings.filter.hideMutedWords')}
+      </span>
       <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets that contain muted words.
+        {$t('settings.filter.hideMutedWords.description')}
       </span>
     </div>
     <Checkbox class="shrink-0" bind:checked={$settings.hideMutedWords} />
   </Label>
   <Label class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
-      <span class="block text-base font-medium">Hide Moderation Lists</span>
+      <span class="block text-base font-medium">
+        {$t('settings.filter.hideModListAccounts')}
+      </span>
       <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets from accounts that are subscribed to a Moderation Lists.
+        {$t('settings.filter.hideModListAccounts.description')}
       </span>
     </div>
     <Checkbox class="shrink-0" bind:checked={$settings.hideModListAccounts} />
   </Label>
   <Label class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
-      <span class="block text-base font-medium"
-        >Hide Blue Verified Accounts</span
-      >
+      <span class="block text-base font-medium">
+        {$t('settings.filter.hideBlueVerifiedAccounts')}
+      </span>
       <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets from blue verified accounts, except those you follow.
+        {$t('settings.filter.hideBlueVerifiedAccounts.description')}
       </span>
     </div>
     <Checkbox
@@ -74,13 +82,16 @@
   </Label>
   <Label class="py-4 block">
     <div class="mb-2">
-      <span class="block text-base font-medium">Hide Languages</span>
+      <span class="block text-base font-medium">
+        {$t('settings.filter.hideLanguages')}
+      </span>
       <span class="block mt-1 text-sm text-gray-500">
-        Hide tweets from specific languages.
+        {$t('settings.filter.hideLanguages.description')}
       </span>
     </div>
     <FancyMultiSelect
       options={languages}
+      placeholder={$t('settings.filter.hideLanguages.placeholder')}
       bind:value={$settings.hideLanguages}
     />
   </Label>

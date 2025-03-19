@@ -20,9 +20,11 @@
   let {
     value = $bindable<T[]>([]),
     options,
+    placeholder = 'Select options...',
   }: {
     value: T[]
     options: LabelValue[]
+    placeholder?: string
   } = $props()
 
   let open = $state(false)
@@ -104,7 +106,7 @@
         bind:value={inputValue}
         onblur={() => (open = false)}
         onfocus={() => (open = true)}
-        placeholder="Select frameworks..."
+        placeholder={placeholder}
         class="ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
       />
     </div>

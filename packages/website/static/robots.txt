@@ -1,0 +1,14 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://mass-block-twitter.rxliuli.com/sitemap.xml
+
+# Disallow admin or private routes if any
+Disallow: /api/
+Disallow: /private/
+Disallow: /accounts/
+
+# Crawl-delay for all bots
+Crawl-delay: 10

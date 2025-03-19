@@ -10,8 +10,6 @@
   } from '$lib/components/ui/card'
   import { Badge } from '$lib/components/ui/badge'
   import { Users, Shield, ExternalLink } from 'lucide-svelte'
-  import { toast } from 'svelte-sonner'
-  import { installExt } from '@/installExt'
   import { onMount } from 'svelte'
   import { showInstallToast } from '@/showToast'
 
@@ -25,7 +23,6 @@
 
   function openExtension() {
     if (!data) {
-      toast.error('Modlist not found')
       return
     }
     const meta = document.querySelector('meta[name="mass-block-twitter"]')
@@ -42,9 +39,6 @@
   }
 
   onMount(() => {
-    if (!data) {
-      return
-    }
     openExtension()
   })
 </script>

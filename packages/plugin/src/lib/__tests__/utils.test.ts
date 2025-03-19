@@ -594,9 +594,9 @@ describe('filterNotifications', () => {
   it('filterNotifications for notifications3', () => {
     filterNotifications(notifications3 as any, () => true)
   })
-  it.only('filterNotifications for unknown notification', () => {
+  it('filterNotifications for unknown notification', () => {
     const log = vi.spyOn(console, 'error').mockImplementation(() => {})
-    const r = filterNotifications(
+    filterNotifications(
       {
         globalObjects: {
           notifications: {

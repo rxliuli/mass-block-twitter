@@ -11,6 +11,9 @@ patchedDependencies:
   lodash-es:
     hash: 7775b188f9f3f21a8066f136e65a713a26ce80a70a91cbabd887a5f3dca5f9c8
     path: patches/lodash-es.patch
+  mode-watcher@0.5.0:
+    hash: 77ca024b48082902075dbd717a41d844234b789418042314429ca2e1b0b04793
+    path: patches/mode-watcher@0.5.0.patch
   svelte-i18n:
     hash: 8bf0f268386c72cd96537393dc0d1f5136e8c62cdd4a58e4c9558c86ba66c058
     path: patches/svelte-i18n.patch
@@ -211,7 +214,7 @@ importers:
         version: 0.469.0(svelte@5.20.5)
       mode-watcher:
         specifier: ^0.5.0
-        version: 0.5.0(svelte@5.20.5)
+        version: 0.5.0(patch_hash=77ca024b48082902075dbd717a41d844234b789418042314429ca2e1b0b04793)(svelte@5.20.5)
       playwright:
         specifier: ^1.49.1
         version: 1.50.1
@@ -501,7 +504,7 @@ importers:
         version: 3.0.0
       mode-watcher:
         specifier: ^0.5.0
-        version: 0.5.0(svelte@5.16.0)
+        version: 0.5.0(patch_hash=77ca024b48082902075dbd717a41d844234b789418042314429ca2e1b0b04793)(svelte@5.16.0)
       shiki:
         specifier: ^3.1.0
         version: 3.1.0
@@ -11146,11 +11149,11 @@ snapshots:
       pkg-types: 1.3.0
       ufo: 1.5.4
 
-  mode-watcher@0.5.0(svelte@5.16.0):
+  mode-watcher@0.5.0(patch_hash=77ca024b48082902075dbd717a41d844234b789418042314429ca2e1b0b04793)(svelte@5.16.0):
     dependencies:
       svelte: 5.16.0
 
-  mode-watcher@0.5.0(svelte@5.20.5):
+  mode-watcher@0.5.0(patch_hash=77ca024b48082902075dbd717a41d844234b789418042314429ca2e1b0b04793)(svelte@5.20.5):
     dependencies:
       svelte: 5.20.5
 

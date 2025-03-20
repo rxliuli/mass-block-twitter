@@ -1,0 +1,13 @@
+diff --git a/dist/stores.js b/dist/stores.js
+index e9bcd673ba22f2e24db0d194d200df5991525fec..e942593457666c344c50f93367b42b8439056cef 100644
+--- a/dist/stores.js
++++ b/dist/stores.js
+@@ -173,7 +173,7 @@ function createDerivedMode() {
+         const sanitizedDarkClassNames = sanitizeClassNames($darkClassNames);
+         const sanitizedLightClassNames = sanitizeClassNames($lightClassNames);
+         function update() {
+-            const htmlEl = document.documentElement;
++            const htmlEl = document.querySelector('mass-block-twitter') ?? document.documentElement;
+             const themeColorEl = document.querySelector('meta[name="theme-color"]');
+             if (derivedMode === "light") {
+                 if (sanitizedDarkClassNames.length)

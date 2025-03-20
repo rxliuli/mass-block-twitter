@@ -28,7 +28,7 @@
   import AppNotifications from '$lib/components/layout/AppNotifications.svelte'
   import SettingsLanguagesPage from './pages/settings/languages/page.svelte'
   import { FloatingButton } from '$lib/components/logic/floating'
-  import { useOpen } from '$lib/store.svelte'
+  import { useOpen } from '$lib/stores/open.svelte'
 
   let { initialPath }: { initialPath?: string } = $props()
 
@@ -120,17 +120,19 @@
       initialPath={import.meta.env.VITE_INITIAL_PATH ?? initialPath}
       {routes}
     >
-      <AppLayout open={openState.open}>
-        <RouterView />
-        <Button
-          variant="ghost"
-          size="icon"
-          class="absolute top-0 right-0"
-          onclick={openState.closeModal}
-        >
-          <XIcon class="w-4 h-4" />
-        </Button>
-      </AppLayout>
+      {#if openState.opened}
+        <AppLayout open={openState.open}>
+          <RouterView />
+          <Button
+            variant="ghost"
+            size="icon"
+            class="absolute top-0 right-0"
+            onclick={openState.closeModal}
+          >
+            <XIcon class="w-4 h-4" />
+          </Button>
+        </AppLayout>
+      {/if}
     </Router>
     <FloatingButton />
   </ShadcnConfig>

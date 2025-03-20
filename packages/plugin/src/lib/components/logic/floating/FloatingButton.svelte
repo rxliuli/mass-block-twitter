@@ -4,7 +4,7 @@
   import { shadcnConfig } from '../config'
   import { SquareArrowOutUpRightIcon, XIcon } from 'lucide-svelte'
   import * as Command from '$lib/components/ui/command'
-  import { useOpen } from '$lib/store.svelte'
+  import { useOpen } from '$lib/stores/open.svelte'
   import { useSettings } from '$lib/settings'
 
   const openState = useOpen()

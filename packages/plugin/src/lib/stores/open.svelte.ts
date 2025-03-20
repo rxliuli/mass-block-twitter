@@ -1,4 +1,5 @@
 let open = $state(false)
+let opened = $state(false)
 
 function lockScroll() {
   document.documentElement.style.overflowY = 'hidden'
@@ -13,15 +14,20 @@ function unlockScroll() {
 export function useOpen(initial?: boolean) {
   if (initial !== undefined) {
     open = initial
+    opened = initial
   }
   return {
     get open() {
       return open
     },
+    get opened() {
+      return opened
+    },
     openModal() {
       if (open) {
         return
       }
+      opened = true
       const scrollbarWidth =
         window.innerWidth - document.documentElement.clientWidth
       document.documentElement.style.setProperty(

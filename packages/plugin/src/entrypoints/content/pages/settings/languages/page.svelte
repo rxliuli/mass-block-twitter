@@ -40,7 +40,7 @@
       options={[
         { label: 'English', value: 'en-US' },
         { label: '简体中文 - Simplified Chinese', value: 'zh-CN' },
-        { label: 'Español - Spanish', value: 'es' },
+        // { label: 'Español - Spanish', value: 'es' },
       ]}
     />
   </Label>

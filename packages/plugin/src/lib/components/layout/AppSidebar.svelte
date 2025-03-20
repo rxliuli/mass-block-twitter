@@ -12,8 +12,8 @@
     items: MenuItem[]
   } = $props()
 
-  const content = $state(items.filter((it) => it.to === 'content'))
-  const footer = $state(items.filter((it) => it.to === 'footer'))
+  const content = $derived(items.filter((it) => it.to === 'content'))
+  const footer = $derived(items.filter((it) => it.to === 'footer'))
   const sidebar = Sidebar.useSidebar()
 
   function onClickMenuUrl(url: string) {

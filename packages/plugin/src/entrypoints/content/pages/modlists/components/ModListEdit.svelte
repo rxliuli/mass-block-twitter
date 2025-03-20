@@ -16,6 +16,7 @@
   import { untrack } from 'svelte'
   import * as RadioGroup from '$lib/components/ui/radio-group'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
+  import { t } from '$lib/i18n'
 
   type FormData = Omit<ModListCreateRequest, 'twitterUser'>
 
@@ -93,7 +94,7 @@
       onsubmit={(ev) => $mutation.mutate(ev)}
     >
       <div>
-        <Label for="avatar" class="block mb-2">List Avatar</Label>
+        <Label for="avatar" class="block mb-2">{$t('modlists.edit.form.avatar.label')}</Label>
         <Avatar.Root onclick={onUploadImage} class="w-24 h-24 cursor-pointer">
           <Avatar.Image src={formState.avatar} />
           <Avatar.Fallback>
@@ -111,44 +112,44 @@
         />
       </div>
       <div>
-        <Label for="name" class="block mb-2">List Name</Label>
+        <Label for="name" class="block mb-2">{$t('modlists.edit.form.name.label')}</Label>
         <Input
           id="name"
           name="name"
-          placeholder="e.g. Spammers"
+          placeholder={$t('modlists.edit.form.name.placeholder')}
           bind:value={formState.name}
           required
         />
       </div>
       <div>
-        <Label for="description" class="block mb-2">Description</Label>
+        <Label for="description" class="block mb-2">{$t('modlists.edit.form.description.label')}</Label>
         <Textarea
           id="description"
           name="description"
-          placeholder="e.g. Users that repeatedly reply with ads."
+          placeholder={$t('modlists.edit.form.description.placeholder')}
           rows={4}
           bind:value={formState.description}
         />
       </div>
       <div>
-        <Label for="visibility" class="block mb-2">Visibility</Label>
+        <Label for="visibility" class="block mb-2">{$t('modlists.edit.form.visibility.label')}</Label>
         <RadioGroup.Root
           id="visibility"
           name="visibility"
           disabled={!authInfo.value?.isPro}
           title={authInfo.value?.isPro
             ? ''
-            : 'Upgrade to Pro to make your list private'}
+            : $t('modlists.edit.form.visibility.upgrade')}
           bind:value={formState.visibility}
           class="flex gap-2"
         >
           <div class="flex items-center space-x-2">
             <RadioGroup.Item value="public" id="visibility-public" />
-            <Label for="visibility-public">Public</Label>
+            <Label for="visibility-public">{$t('modlists.edit.form.visibility.public')}</Label>
           </div>
           <div class="flex items-center space-x-2">
             <RadioGroup.Item value="protected" id="visibility-protected" />
-            <Label for="visibility-protected">Protected</Label>
+            <Label for="visibility-protected">{$t('modlists.edit.form.visibility.protected')}</Label>
           </div>
         </RadioGroup.Root>
       </div>
@@ -159,14 +160,14 @@
         disabled={$mutation.isPending}
         onclick={() => form?.dispatchEvent(new Event('submit'))}
       >
-        {$mutation.isPending ? 'Saving...' : 'Save'}
+        {$mutation.isPending ? $t('modlists.edit.form.actions.saving') : $t('modlists.edit.form.actions.save')}
       </Button>
       <Button
         variant="secondary"
         disabled={$mutation.isPending}
         onclick={onCancel}
       >
-        Cancel
+        {$t('modlists.edit.form.actions.cancel')}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>

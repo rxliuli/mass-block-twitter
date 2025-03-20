@@ -12,6 +12,7 @@
   import { Input } from '$lib/components/ui/input'
   import { Label } from '$lib/components/ui/label'
   import { cn } from '$lib/utils'
+  import { t } from '$lib/i18n'
 
   let {
     open = $bindable(false),
@@ -44,21 +45,22 @@
   >
     <Dialog.Header class="px-4">
       <Dialog.Title>
-        {rule ? 'Edit Rule' : 'Add Rule'}
+        {rule
+          ? $t('modlists.detail.rule.modal.edit.title')
+          : $t('modlists.detail.rule.modal.add.title')}
       </Dialog.Title>
     </Dialog.Header>
     <form bind:this={formRef} class="h-[60dvh] px-4 overflow-y-auto">
       <div>
-        <Label for="name">Name</Label>
+        <Label for="name">{$t('modlists.detail.rule.form.name.label')}</Label>
         <Input id="name" name="name" bind:value={rule.name} required />
         <p class="text-sm text-muted-foreground">
-          Give your rule a descriptive name.
+          {$t('modlists.detail.rule.form.name.description')}
         </p>
       </div>
       {#each rule.rule.or as or, orIndex (orIndex)}
         {#each or.and as _, andIndex (andIndex)}
-          {@const hasOne =
-            rule.rule.or.length === 1 && or.and.length === 1}
+          {@const hasOne = rule.rule.or.length === 1 && or.and.length === 1}
           <div
             class={cn(
               'flex md:hidden items-center justify-end gap-2',
@@ -91,7 +93,7 @@
                   or.and.splice(andIndex + 1, 0, {} as ModListConditionItem)
                 }}
               >
-                And
+                {$t('modlists.detail.rule.form.condition.and')}
               </Button>
               {#if andIndex === or.and.length - 1}
                 <Button
@@ -102,7 +104,7 @@
                     })
                   }}
                 >
-                  Or
+                  {$t('modlists.detail.rule.form.condition.or')}
                 </Button>
               {/if}
               {#if !hasOne}
@@ -124,7 +126,7 @@
           {#if andIndex !== or.and.length - 1}
             <div class="flex md:w-fit flex-col items-center">
               <div class="h-2 border-l"></div>
-              <Badge>And</Badge>
+              <Badge>{$t('modlists.detail.rule.form.condition.and')}</Badge>
               <div class="h-2 border-l"></div>
             </div>
           {/if}
@@ -136,7 +138,7 @@
                   or.and.splice(andIndex + 1, 0, {} as ModListConditionItem)
                 }}
               >
-                And
+                {$t('modlists.detail.rule.form.condition.and')}
               </Button>
               <Button
                 variant="secondary"
@@ -146,7 +148,7 @@
                   })
                 }}
               >
-                Or
+                {$t('modlists.detail.rule.form.condition.or')}
               </Button>
             </div>
           {/if}
@@ -154,7 +156,7 @@
         {#if orIndex !== rule.rule.or.length - 1}
           <div class="flex w-fit flex-col items-center">
             <div class="h-4"></div>
-            <Badge>Or</Badge>
+            <Badge>{$t('modlists.detail.rule.form.condition.or')}</Badge>
             <div class="h-4"></div>
           </div>
         {/if}
@@ -162,8 +164,12 @@
     </form>
 
     <Dialog.Footer class="px-4">
-      <Button variant="secondary" onclick={onCancel}>Cancel</Button>
-      <Button onclick={onSubmit}>Save</Button>
+      <Button variant="secondary" onclick={onCancel}
+        >{$t('modlists.detail.rule.form.actions.cancel')}</Button
+      >
+      <Button onclick={onSubmit}
+        >{$t('modlists.detail.rule.form.actions.save')}</Button
+      >
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

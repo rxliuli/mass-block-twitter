@@ -16,6 +16,7 @@
   import { groupBy, sortBy } from 'lodash-es'
   import { calcStats, formatStats } from './utils/stats'
   import { RouterLink } from '$lib/components/logic/router'
+  import { t } from '$lib/i18n'
 
   let dateRange = {
     from: dayjs().subtract(1, 'week'),
@@ -44,21 +45,21 @@
 
   const recentActivities = $derived.by(() => {
     const actionMap: Record<Activity['action'], string> = {
-      block: 'Blocked',
-      hide: 'Hidden',
+      block: $t('dashboard.recentActivities.block'),
+      hide: $t('dashboard.recentActivities.hide'),
     }
     const matchTypeMap: Record<Activity['match_type'], string> = {
-      tweet: 'Tweet',
-      user: 'User',
+      tweet: $t('dashboard.recentActivities.tweet'),
+      user: $t('dashboard.recentActivities.user'),
     }
     const ruleMap: Record<Activity['match_filter'], string> = {
-      blueVerified: 'Blue Verified',
-      defaultProfile: 'Default Profile',
-      modList: 'Mod List',
-      mutedWords: 'Muted Words',
-      sharedSpam: 'Shared Spam',
-      language: 'Language',
-      batchSelected: 'Batch Selected',
+      blueVerified: $t('dashboard.recentActivities.blueVerified'),
+      defaultProfile: $t('dashboard.recentActivities.defaultProfile'),
+      modList: $t('dashboard.recentActivities.modList'),
+      mutedWords: $t('dashboard.recentActivities.mutedWords'),
+      sharedSpam: $t('dashboard.recentActivities.sharedSpam'),
+      language: $t('dashboard.recentActivities.language'),
+      batchSelected: $t('dashboard.recentActivities.batchSelected'),
     }
     return sortBy(now, (it) => -new Date(it.created_at).getTime())
       .slice(0, 4)
@@ -72,13 +73,13 @@
   })
 </script>
 
-<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+<div class="grid gap-4 mb-8 md:grid-cols-2 lg:grid-cols-4">
   {#each stats as stat}
     <Card>
       <CardHeader
         class="flex flex-row items-center justify-between space-y-0 pb-2"
       >
-        <CardTitle class="text-sm font-medium">{stat.title}</CardTitle>
+        <CardTitle class="text-sm font-medium">{$t(stat.title)}</CardTitle>
         <div
           class="rounded-full w-8 h-8 flex items-center justify-center bg-muted"
         >
@@ -93,7 +94,7 @@
           {:else}
             <span class="text-red-500">{stat.change}</span>
           {/if}
-          <span class="ml-1">{stat.period}</span>
+          <span class="ml-1">{$t(stat.period)}</span>
         </p>
       </CardContent>
     </Card>
@@ -102,7 +103,7 @@
 
 <Card class="mb-8">
   <CardHeader>
-    <CardTitle>Activity Trend Chart</CardTitle>
+    <CardTitle>{$t('dashboard.activity.title')}</CardTitle>
   </CardHeader>
   <CardContent class="h-[300px] pt-4">
     <ActivityChart activities={now} range={dateRange} />
@@ -112,7 +113,7 @@
 <div class="grid gap-4 md:grid-cols-2">
   <Card>
     <CardHeader>
-      <CardTitle>Rules Effect Statistics</CardTitle>
+      <CardTitle>{$t('dashboard.rules.title')}</CardTitle>
     </CardHeader>
     <CardContent class="h-72">
       <RulesBarChart activities={now} />
@@ -121,7 +122,7 @@
 
   <Card>
     <CardHeader>
-      <CardTitle>Recent Activities</CardTitle>
+      <CardTitle>{$t('dashboard.recentActivities.title')}</CardTitle>
     </CardHeader>
     <CardContent class="px-2">
       <div class="space-y-4">
@@ -157,7 +158,7 @@
 
         <div class="flex justify-center pt-2">
           <RouterLink href="/dashboard/activities">
-            <Button variant="outline" size="sm">View All</Button>
+            <Button variant="outline" size="sm">{$t('dashboard.recentActivities.viewAll')}</Button>
           </RouterLink>
         </div>
       </div>

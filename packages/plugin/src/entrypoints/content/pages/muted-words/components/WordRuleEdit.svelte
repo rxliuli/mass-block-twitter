@@ -8,6 +8,7 @@
   import { shadcnConfig } from '$lib/components/logic/config'
   import { Button } from '$lib/components/ui/button'
   import { createMutation } from '@tanstack/svelte-query'
+  import { t } from '$lib/i18n'
 
   let {
     open = $bindable(false),
@@ -48,29 +49,29 @@
       onsubmit={() => $mutation.mutate()}
     >
       <div class="flex flex-col gap-4">
-        <Label for="keyword">Keyword</Label>
+        <Label for="keyword">{$t('muted-words.form.keyword.label')}</Label>
         <Input id="keyword" bind:value={rule.keyword} />
       </div>
       <div class="flex flex-col gap-4">
-        <Label for="type">Type</Label>
+        <Label for="type">{$t('muted-words.form.type.label')}</Label>
         <RadioGroup
           options={[
-            { value: 'hide', label: 'Hide' },
-            { value: 'block', label: 'Block' },
+            { value: 'hide', label: $t('muted-words.form.type.hide') },
+            { value: 'block', label: $t('muted-words.form.type.block') },
           ]}
           bind:value={rule.type}
         />
       </div>
       <div class="flex flex-col gap-4">
-        <Label for="checkpoints">Checkpoints</Label>
+        <Label for="checkpoints">{$t('muted-words.form.checkpoints.label')}</Label>
         <CheckboxGroup
           class="flex-col"
           options={[
-            { value: 'name', label: 'Name' },
-            { value: 'screen_name', label: 'Screen Name' },
-            { value: 'description', label: 'Description' },
-            { value: 'location', label: 'Location' },
-            { value: 'tweet', label: 'Tweet' },
+            { value: 'name', label: $t('muted-words.form.checkpoints.name') },
+            { value: 'screen_name', label: $t('muted-words.form.checkpoints.screenName') },
+            { value: 'description', label: $t('muted-words.form.checkpoints.description') },
+            { value: 'location', label: $t('muted-words.form.checkpoints.location') },
+            { value: 'tweet', label: $t('muted-words.form.checkpoints.tweet') },
           ]}
           bind:value={() => rule.checkpoints,
           (value) => {
@@ -85,14 +86,14 @@
         disabled={$mutation.isPending}
         onclick={() => form?.dispatchEvent(new Event('submit'))}
       >
-        {$mutation.isPending ? 'Saving...' : 'Save'}
+        {$mutation.isPending ? $t('muted-words.form.actions.saving') : $t('muted-words.form.actions.save')}
       </Button>
       <Button
         variant="secondary"
         disabled={$mutation.isPending}
         onclick={onCancel}
       >
-        Cancel
+        {$t('muted-words.form.actions.cancel')}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>

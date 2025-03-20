@@ -1,7 +1,6 @@
-<script lang="ts">
+<script lang="ts" generics="T extends string">
   import { shadcnConfig } from '$lib/components/logic/config'
   import * as Select from '$lib/components/ui/select'
-  import { cn } from '$lib/utils'
   import type { LabelValue } from './types'
 
   let {
@@ -14,9 +13,9 @@
     disabled,
     required,
   }: {
-    value?: string
-    onChange?: (value: string) => void
-    options: LabelValue[]
+    value?: T
+    onChange?: (value?: T) => void
+    options: LabelValue<T>[]
     name?: string
     placeholder?: string
     class?: string
@@ -29,7 +28,7 @@
   type="single"
   {name}
   bind:value
-  onValueChange={onChange}
+  onValueChange={onChange as any}
   {disabled}
   {required}
 >

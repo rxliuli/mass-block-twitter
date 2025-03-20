@@ -36,6 +36,7 @@
   import { Input } from '$lib/components/ui/input'
   import { ThreeCheckbox } from '$lib/components/custom/checkbox'
   import { untrack } from 'svelte'
+  import { t } from '$lib/i18n'
 
   let {
     open = $bindable(false),
@@ -76,7 +77,7 @@
         })
       } catch (err) {
         if (err instanceof Response && err.status === 429) {
-          toast.error('Rate limit exceeded, please try again later')
+          toast.error($t('modlists.addUser.error.rateLimit'))
         }
         throw err
       }
@@ -149,7 +150,7 @@
       (user) => user.id,
     ),
     onError: () => {
-      toast.error('Failed to remove user')
+      toast.error($t('modlists.addUser.toast.removeFailed'))
     },
   })
 
@@ -183,7 +184,7 @@
       async (users: (User & { added: boolean })[]) => {
         const addUsers = users.filter((it) => !it.added)
         if (addUsers.length === 0) {
-          toast.error('No users to add')
+          toast.error($t('modlists.addUser.toast.noUsers'))
           return
         }
         await props.onAddUsers(addUsers)
@@ -192,13 +193,13 @@
           true,
         )
         selected = []
-        toast.success('Added to list')
+        toast.success($t('modlists.addUser.toast.addSuccess'))
       },
       (users) => users.map((it) => it.id),
     ),
     onError: (err) => {
       console.error(err)
-      toast.error('Add to list failed')
+      toast.error($t('modlists.addUser.toast.addFailed'))
     },
   })
   // const removeUsersMutation = createMutation({
@@ -245,7 +246,7 @@
             autofocus
             bind:value={searchTerm}
             oninput={onSearch}
-            placeholder="Search for user"
+            placeholder={$t('modlists.addUser.search.placeholder')}
             oncompositionstart={() => (isCompositionOn = true)}
             oncompositionend={() => (isCompositionOn = false)}
           />
@@ -253,7 +254,7 @@
             variant="secondary"
             onclick={() => $addUsersMutation.mutate(selectedUsers)}
           >
-            Add
+            {$t('modlists.addUser.actions.add')}
           </Button>
         </div>
       </Dialog.Header>
@@ -262,7 +263,7 @@
           {@const users = $query.data?.pages.flatMap((page) => page.data) ?? []}
           {#if users.length === 0}
             {#if !$query.isFetching}
-              <div class="text-center text-zinc-400">No results found for</div>
+              <div class="text-center text-zinc-400">{$t('modlists.addUser.search.noResults')}</div>
             {/if}
           {/if}
 
@@ -317,7 +318,7 @@
                           : $addUsersMutation.mutate([user])}
                       disabled={loadings[user.id]}
                     >
-                      {user.added ? 'Remove' : 'Add'}
+                      {user.added ? $t('modlists.addUser.actions.remove') : $t('modlists.addUser.actions.add')}
                     </Button>
                   </div>
                 {/snippet}
@@ -329,14 +330,14 @@
           {#if $query.isFetching}
             <QueryLoading class="h-auto" />
           {:else if $query.isError}
-            <QueryError description="Failed to search users" />
+            <QueryError description={$t('modlists.addUser.error.searchFailed')} />
           {/if}
         </div>
       </div>
 
       <Dialog.Footer>
         <Button class="w-full" variant="secondary" onclick={onCancel}>
-          Close
+          {$t('modlists.addUser.actions.close')}
         </Button>
       </Dialog.Footer>
     </Dialog.Content>

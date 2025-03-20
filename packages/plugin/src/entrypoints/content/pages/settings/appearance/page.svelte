@@ -6,12 +6,13 @@
   import { SETTINGS_KEY } from '$lib/constants'
   import { setMode } from 'mode-watcher'
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
+  import { t } from '$lib/i18n'
 
-  const themes = [
-    { label: 'System', value: 'system' },
-    { label: 'Light', value: 'light' },
-    { label: 'Dark', value: 'dark' },
-  ]
+  const themes = $derived([
+    { label: $t('settings.appearance.theme.system'), value: 'system' },
+    { label: $t('settings.appearance.theme.light'), value: 'light' },
+    { label: $t('settings.appearance.theme.dark'), value: 'dark' },
+  ])
 
   const settings = localStore<Settings>(
     SETTINGS_KEY,
@@ -24,14 +25,16 @@
   }
 </script>
 
-<LayoutNav title="Appearance" />
+<LayoutNav title={$t('settings.appearance.title')} />
 
 <div class="max-w-3xl mx-auto">
   <Label class="py-4 block">
     <div class="mb-2">
-      <span class="block text-base font-medium">Theme</span>
+      <span class="block text-base font-medium"
+        >{$t('settings.appearance.theme.title')}</span
+      >
       <span class="block mt-1 text-sm text-gray-500">
-        Choose the theme you want to use.
+        {$t('settings.appearance.theme.description')}
       </span>
     </div>
     <RadioGroup

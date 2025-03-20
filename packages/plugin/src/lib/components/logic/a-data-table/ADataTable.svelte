@@ -17,34 +17,6 @@
 
   const props: Props<TData> = $props()
 
-  const allSelected = $derived(
-    props.dataSource.length !== 0 &&
-      props.rowSelection?.selectedRowKeys.length === props.dataSource.length,
-  )
-  function toggleAllSelection(checked: boolean) {
-    if (checked) {
-      props.rowSelection!.onChange(
-        props.dataSource.map((it) => it[props.rowKey as keyof TData] as string),
-        props.dataSource,
-      )
-    } else {
-      props.rowSelection!.onChange([], [])
-    }
-  }
-  function toggleSelection(key: string, row: TData, checked: boolean) {
-    if (checked) {
-      props.rowSelection!.onChange(
-        uniq([...props.rowSelection!.selectedRowKeys, key]),
-        uniq([...props.dataSource, row]),
-      )
-    } else {
-      props.rowSelection!.onChange(
-        difference(props.rowSelection!.selectedRowKeys, [key]),
-        difference(props.dataSource, [row]),
-      )
-    }
-  }
-
   let tableRef = $state<HTMLElement>()
   let scrollTop = $state(0)
   let itemHeight = $state(40)
@@ -155,7 +127,7 @@
                 </th>
               {/if}
               {#each props.columns as column (column.dataIndex)}
-                <th class="table-cell">{column.title}</th>
+                <th class="table-cell whitespace-nowrap">{column.title}</th>
               {/each}
             </tr>
           </thead>

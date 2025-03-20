@@ -16,6 +16,7 @@
   import { SERVER_URL } from '$lib/constants'
   import { PlusIcon } from 'lucide-svelte'
   import { navigate } from '$lib/components/logic/router'
+  import { t } from '$lib/i18n'
 
   let open = $state(false)
   async function onOpenModal() {
@@ -29,11 +30,10 @@
         })
       ).json()) as ModListGetCreatedResponse
       if (created.length >= 3) {
-        toast.info('You have reached the maximum number of moderation lists.', {
-          description:
-            'Please upgrade to Pro to create unlimited moderation lists.',
+        toast.info($t('modlists.creator.toast.limit.title'), {
+          description: $t('modlists.creator.toast.limit.description'),
           action: {
-            label: 'Upgrade Now',
+            label: $t('modlists.creator.toast.limit.action'),
             onClick: () => {
               window.open('https://mass-block-twitter.rxliuli.com/pricing')
             },
@@ -51,11 +51,11 @@
       const authInfo = await getAuthInfo()
       const userId = extractCurrentUserId()
       if (!userId) {
-        throw new Error('Twitter User ID not found, please login again.')
+        throw new Error($t('modlists.creator.error.userId'))
       }
       const twitterUser = await dbApi.users.get(userId)
       if (!twitterUser) {
-        throw new Error('User not found, please login again.')
+        throw new Error($t('modlists.creator.error.userNotFound'))
       }
       const resp = await crossFetch(`${SERVER_URL}/api/modlists/create`, {
         method: 'POST',
@@ -70,25 +70,25 @@
       })
       if (!resp.ok) {
         if (resp.status === 401) {
-          toast.info('Please login to create a Moderation List!')
+          toast.info($t('modlists.creator.toast.login'))
         }
         throw resp
       }
       const r = (await resp.json()) as ModListCreateResponse
-      toast.success('Modlist created')
+      toast.success($t('modlists.creator.toast.success'))
       navigate(`/modlists/detail?id=${r.id}`)
     },
     onSuccess: async () => {},
     onError: (resp) => {
       if (resp instanceof Response && resp.status === 401) {
-        toast.info('Please login to create a Moderation List!')
+        toast.info($t('modlists.creator.toast.login'))
         return
       }
       if (resp instanceof Error) {
         toast.error(resp.message)
         return
       }
-      toast.error('Failed to create modlist')
+      toast.error($t('modlists.creator.toast.error'))
     },
   })
 
@@ -106,6 +106,6 @@
 
 <ModListEdit
   bind:open
-  title="New Moderation List"
+  title={$t('modlists.creator.title')}
   onSave={$mutation.mutateAsync}
 />

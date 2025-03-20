@@ -7,7 +7,7 @@ import VerifiedWrapper from '../components/VerifiedWrapper.svelte'
 
 export const userColumns: Column<User>[] = [
   {
-    title: 'Avatar',
+    title: 'search-and-block.columns.avatar',
     dataIndex: 'profile_image_url',
     render: (value, record) =>
       renderComponent(AvatarWrapper, {
@@ -17,7 +17,7 @@ export const userColumns: Column<User>[] = [
       }),
   },
   {
-    title: 'Screen Name',
+    title: 'search-and-block.columns.screenName',
     dataIndex: 'screen_name',
     render: (value) =>
       renderComponent(TextWrapper, {
@@ -27,7 +27,7 @@ export const userColumns: Column<User>[] = [
       }),
   },
   {
-    title: 'Name',
+    title: 'search-and-block.columns.name',
     dataIndex: 'name',
     render: (value) =>
       renderComponent(TextWrapper, {
@@ -37,17 +37,17 @@ export const userColumns: Column<User>[] = [
       }),
   },
   {
-    title: 'Blocking',
+    title: 'search-and-block.columns.blocking',
     dataIndex: 'blocking',
     render: (value) => renderComponent(BlockingWrapper, { blocking: value }),
   },
   {
-    title: 'Verified',
+    title: 'search-and-block.columns.verified',
     dataIndex: 'is_blue_verified',
     render: (value) => renderComponent(VerifiedWrapper, { verified: value }),
   },
   {
-    title: 'Description',
+    title: 'search-and-block.columns.description',
     dataIndex: 'description',
     render: (value) =>
       renderComponent(TextWrapper, {

@@ -2,6 +2,8 @@ import { SETTINGS_KEY } from './constants'
 
 export type Settings = {
   theme?: 'system' | 'light' | 'dark'
+  language?: 'en-US' | 'zh-CN' | 'es'
+
   hideSuspiciousAccounts: boolean
   hideSpamAccounts: boolean
   hideBlueVerifiedAccounts: boolean

@@ -30,6 +30,7 @@
   import { parse } from 'csv-parse/browser/esm/sync'
   import { chunk } from 'lodash-es'
   import { useModlistUsers } from '../utils/useModlistUsers'
+  import { t } from '$lib/i18n'
 
   let {
     owner,
@@ -94,9 +95,9 @@
     }
     const allCount = users.length
     const abortController = new AbortController()
-    const toastId = toast.info('Importing users...', {
+    const toastId = toast.info($t('modlists.detail.users.import.importing'), {
       action: {
-        label: 'Stop',
+        label: $t('modlists.detail.users.import.stop'),
         onClick: () => {
           abortController.abort()
         },
@@ -110,10 +111,15 @@
         }
         await $innerAddUsersMutation.mutateAsync(it)
         count += it.length
-        toast.info(`Imported ${count}/${allCount} users...`, {
+        toast.info($t('modlists.detail.users.import.progress', {
+          values: {
+            count,
+            total: allCount,
+          },
+        }), {
           id: toastId,
           action: {
-            label: 'Stop',
+            label: $t('modlists.detail.users.import.stop'),
             onClick: () => {
               abortController.abort()
             },
@@ -121,10 +127,15 @@
         })
       }
       toast.dismiss(toastId)
-      toast.success(`Imported ${count}/${allCount} users successfully`)
+      toast.success($t('modlists.detail.users.import.success', {
+        values: {
+          count,
+          total: allCount,
+        },
+      }))
     } catch (err) {
       toast.dismiss(toastId)
-      toast.error('Failed to import users')
+      toast.error($t('modlists.detail.users.import.failed'))
     }
   }
 
@@ -153,27 +164,25 @@
           }) as User[]
         ).slice(1)
       } catch (err) {
-        toast.error(
-          'Your import file is not valid, check includes id, screen_name, name, description, profile_image_url',
-        )
+        toast.error($t('modlists.detail.users.import.invalid'))
         return
       }
     }
     if (users.length === 0) {
-      toast.error('No users to import')
+      toast.error($t('modlists.detail.users.import.empty'))
       return
     }
     for (const it of users) {
       if (!(it.id && it.screen_name && it.name && it.profile_image_url)) {
-        toast.error(
-          'Your import file is not valid, check includes id, screen_name, name, description, profile_image_url',
-        )
+        toast.error($t('modlists.detail.users.import.invalid'))
         return
       }
     }
-    const confirmed = confirm(
-      `Are you sure you want to import ${users.length} users?`,
-    )
+    const confirmed = confirm($t('modlists.detail.users.import.confirm', {
+      values: {
+        count: users.length,
+      },
+    }))
     if (!confirmed) {
       return
     }
@@ -217,10 +226,10 @@
       (twitterUserId) => twitterUserId,
     ),
     onSuccess: () => {
-      toast.success('Removed from list')
+      toast.success($t('modlists.detail.users.remove.success'))
     },
     onError: () => {
-      toast.error('Remove from list failed')
+      toast.error($t('modlists.detail.users.remove.failed'))
     },
   })
   let userAddOpen = $state(false)
@@ -247,7 +256,7 @@
         {@const users = $query.data.pages.flatMap((it) => it.data) ?? []}
         {#if users.length === 0}
           {#if !$query.isFetching}
-            <div class="text-center text-zinc-400">No users in this list</div>
+            <div class="text-center text-zinc-400">{$t('modlists.detail.users.empty')}</div>
           {/if}
         {:else}
           <List
@@ -270,7 +279,7 @@
                       }}
                       disabled={loadings[item.id]}
                     >
-                      Remove
+                      {$t('modlists.detail.users.remove')}
                     </Button>
                   {/if}
                 {/snippet}
@@ -278,16 +287,13 @@
             {/snippet}
           </List>
         {/if}
+      {:else if $query.isError}
+        <QueryError />
+      {:else}
+        <QueryLoading />
       {/if}
     {/snippet}
   </AutoSizer>
-  <div class="sticky bottom-0">
-    {#if $query.isFetching}
-      <QueryLoading class="h-auto" />
-    {:else if $query.error}
-      <QueryError description={'Load modlist users failed'} />
-    {/if}
-  </div>
 </div>
 
 <ModlistAddUser

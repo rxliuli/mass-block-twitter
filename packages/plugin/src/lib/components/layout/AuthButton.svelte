@@ -10,6 +10,7 @@
   import { createMutation, useQueryClient } from '@tanstack/svelte-query'
   import { SERVER_URL } from '$lib/constants'
   import { crossFetch } from '$lib/query'
+  import { t } from '$lib/i18n'
 
   const authInfo = useAuthInfo()
 
@@ -29,7 +30,7 @@
       }
       authInfo.value = info
       clearInterval(interval)
-      toast.success('Login successful')
+      toast.success($t('account.login.success'))
       queryClient.refetchQueries()
     }, 1000) as unknown as number
   }
@@ -59,12 +60,12 @@
         headers: { Authorization: `Bearer ${authInfo.value?.token}` },
       })
       if (!resp.ok) {
-        throw new Error('Failed to logout')
+        throw new Error($t('account.logout.failed'))
       }
       authInfo.value = null
     },
     onSuccess: () => {
-      toast.success('Logged out')
+      toast.success($t('account.logout.success'))
       queryClient.refetchQueries()
     },
   })
@@ -84,7 +85,7 @@
         onclick={onOpenUpgrade}
       >
         <CircleFadingArrowUpIcon />
-        Upgrade
+        {$t('account.upgrade.title')}
       </Sidebar.MenuButton>
     </Sidebar.MenuItem>
   {/if}
@@ -101,9 +102,11 @@
       </Sidebar.MenuItem>
     </DropdownMenu.Trigger>
     <DropdownMenu.Content portalProps={{ to: shadcnConfig.get().portal }}>
-      <DropdownMenu.Item onclick={onGotoSettings}>Profile</DropdownMenu.Item>
+      <DropdownMenu.Item onclick={onGotoSettings}>
+        {$t('account.profile.title')}
+      </DropdownMenu.Item>
       <DropdownMenu.Item onclick={() => $logoutMutation.mutate()}>
-        Logout
+        {$t('account.logout.title')}
       </DropdownMenu.Item>
     </DropdownMenu.Content>
   </DropdownMenu.Root>
@@ -113,7 +116,7 @@
       class="bg-blue-500 text-white hover:bg-blue-600 hover:text-white rounded-md transition-colors"
     >
       <UserIcon />
-      <span>Login</span>
+      <span>{$t('account.login.title')}</span>
     </Sidebar.MenuButton>
   </Sidebar.MenuItem>
 {/if}

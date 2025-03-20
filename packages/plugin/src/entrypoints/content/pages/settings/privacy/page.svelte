@@ -4,21 +4,24 @@
   import { dbApi } from '$lib/db'
   import { Trash2Icon } from 'lucide-svelte'
   import { toast } from 'svelte-sonner'
+  import { t } from '$lib/i18n'
 
   async function onClearCache() {
     await dbApi.clear()
-    toast.success('Cache cleared')
+    toast.success($t('settings.privacy.clearAllCache.success'))
   }
 </script>
 
-<LayoutNav title="Privacy and Security" />
+<LayoutNav title={$t('settings.privacy.title')} />
 
 <div class="max-w-3xl mx-auto">
   <div class="flex items-center gap-4 py-4 cursor-pointer">
     <div class="flex-1">
-      <span class="block text-base font-medium">Clear All Cache</span>
+      <span class="block text-base font-medium">
+        {$t('settings.privacy.clearAllCache.title')}
+      </span>
       <span class="block mt-1 text-sm text-gray-500">
-        Clear all cache data, including record users and tweets.
+        {$t('settings.privacy.clearAllCache.description')}
       </span>
     </div>
     <Button

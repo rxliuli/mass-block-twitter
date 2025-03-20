@@ -8,9 +8,10 @@ export default defineConfig({
   manifestVersion: 3,
   manifest: (env) => {
     const manifest: UserManifest = {
-      name: 'Mass Block Twitter',
-      description:
-        'Mass Block Twitter - Efficiently block multiple spam accounts on Twitter/X with just a few clicks.',
+      // languages https://developer.chrome.com/docs/extensions/reference/api/i18n?hl=zh-cn#locales
+      name: '__MSG_extName__',
+      description: '__MSG_extDescription__',
+      default_locale: 'en',
       permissions: ['contextMenus', 'scripting', 'storage'],
       web_accessible_resources: [],
       action: {

@@ -10,6 +10,7 @@ import {
 } from '$lib/content'
 import { initXTransactionId } from '$lib/api'
 import { getLocaleLanguage, initI18n, t } from '$lib/i18n'
+import { wait } from '@liuli-util/async'
 
 export default defineContentScript({
   matches: ['https://x.com/**'],
@@ -22,8 +23,10 @@ export default defineContentScript({
     refreshModListSubscribedUsers()
     refreshAuthInfo()
     autoCheckPendingUsers()
-    initI18n(getLocaleLanguage() ?? 'en-US')
 
+    await wait(() => !!document.body)
+
+    initI18n(getLocaleLanguage() ?? 'en-US')
     const openExtensionPath = (
       await browser.storage.local.get<{ openExtensionPath?: string }>(
         'openExtensionPath',

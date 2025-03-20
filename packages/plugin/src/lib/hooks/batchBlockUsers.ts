@@ -208,6 +208,8 @@ export const batchBlockUsersMutation = async (options: {
         }
         // the rate limit is 150 users per 30s
         if (realBlockedCount !== 0) {
+          // rate limit ref: https://developer.x.com/en/docs/x-api/v1/accounts-and-users/mute-block-report-users/api-reference/post-blocks-create
+          // ref: https://devcommunity.x.com/t/what-is-the-rate-limit-on-post-request-and-post-blocks-create/102434/2
           if (realBlockedCount === 450) {
             const r = await new Promise<'stop' | 'continue'>((resolve) => {
               toast.info(tP('modlists.detail.toast.approachingLimit'), {

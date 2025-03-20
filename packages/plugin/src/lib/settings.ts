@@ -1,8 +1,10 @@
 import { SETTINGS_KEY } from './constants'
+import { localStorageAdapter, localStore } from './util/localStore'
 
 export type Settings = {
   theme?: 'system' | 'light' | 'dark'
   language?: 'en-US' | 'zh-CN' | 'es'
+  showFloatingButton?: boolean
 
   hideSuspiciousAccounts: boolean
   hideSpamAccounts: boolean
@@ -33,4 +35,8 @@ export function getSettings(): Settings {
     hideLanguages: [],
     theme: 'system',
   } as Settings)
+}
+
+export function useSettings() {
+  return localStore<Settings>(SETTINGS_KEY, getSettings, localStorageAdapter())
 }

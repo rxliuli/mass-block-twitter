@@ -8,7 +8,11 @@
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
   import { Toaster } from '$lib/components/ui/sonner/index.js'
   import { ModeWatcher, mode } from 'mode-watcher'
-  import { Router, RouterView } from '$lib/components/logic/router'
+  import {
+    type RouteConfig,
+    Router,
+    RouterView,
+  } from '$lib/components/logic/router'
   import AppLayout from '$lib/components/layout/AppLayout.svelte'
   import { Button } from '$lib/components/ui/button'
   import { XIcon } from 'lucide-svelte'
@@ -23,47 +27,16 @@
   import DashboardActivitiesPage from './pages/dashboard/activities/page.svelte'
   import AppNotifications from '$lib/components/layout/AppNotifications.svelte'
   import SettingsLanguagesPage from './pages/settings/languages/page.svelte'
+  import { FloatingButton } from '$lib/components/logic/floating'
+  import { useOpen } from '$lib/store.svelte'
 
   let { initialPath }: { initialPath?: string } = $props()
 
-  let open = $state(!!initialPath)
-
-  function lockScroll() {
-    document.documentElement.style.overflowY = 'hidden'
-    document.documentElement.style.marginRight = '0px'
-  }
-
-  function unlockScroll() {
-    document.documentElement.style.overflowY = 'scroll'
-    document.documentElement.style.marginRight = ''
-  }
-
-  $effect(() => {
-    if (open) {
-      lockScroll()
-    } else {
-      unlockScroll()
-    }
-  })
-
-  function openModal() {
-    const scrollbarWidth =
-      window.innerWidth - document.documentElement.clientWidth
-    document.documentElement.style.setProperty(
-      '--scrollbar-width',
-      `${scrollbarWidth}px`,
-    )
-    document.documentElement.classList.add('modal-open')
-  }
-
-  function closeModal() {
-    document.documentElement.classList.remove('modal-open')
-  }
+  let openState = useOpen(!!initialPath)
 
   onMount(() => {
     onMessage('show', () => {
-      open = true
-      openModal()
+      openState.openModal()
     })
     return removeAllListeners
   })
@@ -80,86 +53,86 @@
       root.className = `color-scheme: ${current}`
     }
   })
+
+  const routes: RouteConfig[] = [
+    {
+      path: '/',
+      component: DashboardPage,
+    },
+    {
+      path: '/dashboard/activities',
+      component: DashboardActivitiesPage,
+    },
+    {
+      path: '/search-and-block',
+      component: SearchBlockPage,
+    },
+    {
+      path: '/search-and-block/blocked',
+      component: BlockedUsersPage,
+    },
+    {
+      path: '/muted-words',
+      component: MutedWordsPage,
+    },
+    {
+      path: '/modlists',
+      component: ModListsPage,
+    },
+    {
+      path: '/modlists/created',
+      component: ModListsCreatedPage,
+    },
+    {
+      path: '/modlists/subscribe',
+      component: ModListsSubscribePage,
+    },
+    {
+      path: '/modlists/detail',
+      component: ModListsDetailPage,
+    },
+    {
+      path: '/settings',
+      component: SettingsPage,
+    },
+    {
+      path: '/settings/appearance',
+      component: SettingsAppearancePage,
+    },
+    {
+      path: '/settings/filter',
+      component: SettingsFilterPage,
+    },
+    {
+      path: '/settings/privacy',
+      component: SettingsPrivacyPage,
+    },
+    {
+      path: '/settings/languages',
+      component: SettingsLanguagesPage,
+    },
+  ]
 </script>
 
 <QueryClientProvider client={queryClient}>
   <ShadcnConfig portal={root}>
     <Router
       initialPath={import.meta.env.VITE_INITIAL_PATH ?? initialPath}
-      routes={[
-        {
-          path: '/',
-          component: DashboardPage,
-        },
-        {
-          path: '/dashboard/activities',
-          component: DashboardActivitiesPage,
-        },
-        {
-          path: '/search-and-block',
-          component: SearchBlockPage,
-        },
-        {
-          path: '/search-and-block/blocked',
-          component: BlockedUsersPage,
-        },
-        {
-          path: '/muted-words',
-          component: MutedWordsPage,
-        },
-        {
-          path: '/modlists',
-          component: ModListsPage,
-        },
-        {
-          path: '/modlists/created',
-          component: ModListsCreatedPage,
-        },
-        {
-          path: '/modlists/subscribe',
-          component: ModListsSubscribePage,
-        },
-        {
-          path: '/modlists/detail',
-          component: ModListsDetailPage,
-        },
-        {
-          path: '/settings',
-          component: SettingsPage,
-        },
-        {
-          path: '/settings/appearance',
-          component: SettingsAppearancePage,
-        },
-        {
-          path: '/settings/filter',
-          component: SettingsFilterPage,
-        },
-        {
-          path: '/settings/privacy',
-          component: SettingsPrivacyPage,
-        },
-        {
-          path: '/settings/languages',
-          component: SettingsLanguagesPage,
-        },
-      ]}
+      {routes}
     >
-      <AppLayout {open}>
+      <AppLayout open={openState.open}>
         <RouterView />
         <Button
           variant="ghost"
           size="icon"
           class="absolute top-0 right-0"
-          onclick={() => {
-            open = false
-            closeModal()
-          }}
+          onclick={openState.closeModal}
         >
           <XIcon class="w-4 h-4" />
         </Button>
       </AppLayout>
     </Router>
+    <FloatingButton />
   </ShadcnConfig>
 </QueryClientProvider>
 

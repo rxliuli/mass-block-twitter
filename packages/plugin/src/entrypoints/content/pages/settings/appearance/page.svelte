@@ -1,12 +1,11 @@
 <script lang="ts">
   import RadioGroup from '$lib/components/custom/radio/RadioGroup.svelte'
   import { Label } from '$lib/components/ui/label'
-  import { getSettings, type Settings } from '$lib/settings'
-  import { localStorageAdapter, localStore } from '$lib/util/localStore'
-  import { SETTINGS_KEY } from '$lib/constants'
+  import { useSettings } from '$lib/settings'
   import { setMode } from 'mode-watcher'
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import { t } from '$lib/i18n'
+  import { Switch } from '$lib/components/ui/switch'
 
   const themes = $derived([
     { label: $t('settings.appearance.theme.system'), value: 'system' },
@@ -14,14 +13,14 @@
     { label: $t('settings.appearance.theme.dark'), value: 'dark' },
   ])
 
-  const settings = localStore<Settings>(
-    SETTINGS_KEY,
-    getSettings,
-    localStorageAdapter(),
-  )
+  const settings = useSettings()
 
   function onChangeTheme(value: string) {
     setMode(value as any)
+  }
+
+  function onChangeFloatingButton(checked: boolean) {
+    $settings.showFloatingButton = checked
   }
 </script>
 
@@ -41,6 +40,20 @@
       bind:value={$settings.theme}
       options={themes}
       onChange={onChangeTheme}
+    />
+  </Label>
+  <Label class="py-4 block">
+    <div class="mb-2">
+      <span class="block text-base font-medium"
+        >{$t('settings.appearance.floatingButton.title')}</span
+      >
+      <span class="block mt-1 text-sm text-gray-500">
+        {$t('settings.appearance.floatingButton.description')}
+      </span>
+    </div>
+    <Switch
+      checked={$settings.showFloatingButton ?? true}
+      onCheckedChange={onChangeFloatingButton}
     />
   </Label>
 </div>

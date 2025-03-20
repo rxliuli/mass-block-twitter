@@ -33,20 +33,24 @@ async function sendEmail(
   token: string,
   options: CreateEmailOptions,
 ): Promise<{ error?: any }> {
-  const resp = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(options),
-  })
-  if (!resp.ok) {
-    return {
-      error: await resp.json(),
+  try {
+    const resp = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(options),
+    })
+    if (!resp.ok) {
+      return {
+        error: await resp.json(),
+      }
     }
+    return await resp.json()
+  } catch (error) {
+    return { error }
   }
-  return await resp.json()
 }
 
 async function sendVerifyEmail(c: Context<HonoEnv>, email: string) {

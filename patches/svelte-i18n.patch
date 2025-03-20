@@ -1,0 +1,13 @@
+diff --git a/dist/runtime.js b/dist/runtime.js
+index 7c96bf1ec2b8ba8f0d9af6478cd57c1d0f9346ce..4dcab711e852f3ee401bb69db7017567b29e469b 100644
+--- a/dist/runtime.js
++++ b/dist/runtime.js
+@@ -313,7 +313,7 @@ function getCurrentLocale() {
+ internalLocale.subscribe((newLocale) => {
+   current = newLocale != null ? newLocale : void 0;
+   if (typeof window !== "undefined" && newLocale != null) {
+-    document.documentElement.setAttribute("lang", newLocale);
++    // document.documentElement.setAttribute("lang", newLocale);
+   }
+ });
+ const set = (newLocale) => {

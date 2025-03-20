@@ -30,16 +30,14 @@ export const t = format
 type UnwrapStore<T> = T extends Readable<infer U> ? U : T
 export const tP: UnwrapStore<typeof format> = (...args) => get(format)(...args)
 
+const supportLanguages = ['en-US', 'zh-CN' /*, 'es' */]
 export function getLocaleLanguage(): 'en-US' | 'zh-CN' | 'es' {
   const settings = getSettings()
-  if (
-    settings.language &&
-    ['en-US', 'zh-CN', 'es'].includes(settings.language)
-  ) {
+  if (settings.language && supportLanguages.includes(settings.language)) {
     return settings.language as 'en-US' | 'zh-CN' | 'es'
   }
   const r = getLocaleFromNavigator()
-  if (r && ['en-US', 'zh-CN', 'es'].includes(r)) {
+  if (r && supportLanguages.includes(r)) {
     return r as 'en-US' | 'zh-CN' | 'es'
   }
   return 'en-US'

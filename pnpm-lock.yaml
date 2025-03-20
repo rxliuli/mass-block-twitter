@@ -11,6 +11,9 @@ patchedDependencies:
   lodash-es:
     hash: 7775b188f9f3f21a8066f136e65a713a26ce80a70a91cbabd887a5f3dca5f9c8
     path: patches/lodash-es.patch
+  svelte-i18n:
+    hash: 8bf0f268386c72cd96537393dc0d1f5136e8c62cdd4a58e4c9558c86ba66c058
+    path: patches/svelte-i18n.patch
   svelte-toolbelt:
     hash: ec72d447ce0d636170dd7345a73d0e521c9b44b242b960401602f0c8917c2a9f
     path: patches/svelte-toolbelt.patch
@@ -123,7 +126,7 @@ importers:
         version: 0.9.54(svelte@5.20.5)
       svelte-i18n:
         specifier: ^4.0.1
-        version: 4.0.1(svelte@5.20.5)
+        version: 4.0.1(patch_hash=8bf0f268386c72cd96537393dc0d1f5136e8c62cdd4a58e4c9558c86ba66c058)(svelte@5.20.5)
       svelte-legos:
         specifier: ^0.2.5
         version: 0.2.5(svelte@5.20.5)
@@ -12147,7 +12150,7 @@ snapshots:
     dependencies:
       svelte: 5.20.5
 
-  svelte-i18n@4.0.1(svelte@5.20.5):
+  svelte-i18n@4.0.1(patch_hash=8bf0f268386c72cd96537393dc0d1f5136e8c62cdd4a58e4c9558c86ba66c058)(svelte@5.20.5):
     dependencies:
       cli-color: 2.0.4
       deepmerge: 4.3.1

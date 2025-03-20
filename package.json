@@ -8,7 +8,8 @@
   "pnpm": {
     "patchedDependencies": {
       "lodash-es": "patches/lodash-es.patch",
-      "svelte-toolbelt": "patches/svelte-toolbelt.patch"
+      "svelte-toolbelt": "patches/svelte-toolbelt.patch",
+      "svelte-i18n": "patches/svelte-i18n.patch"
     },
     "onlyBuiltDependencies": [
       "esbuild"

@@ -2,9 +2,12 @@ import { derived, type Writable, writable } from 'svelte/store'
 import { set, get } from 'idb-keyval'
 
 export interface LocalStoreAdapter<T> {
+  type: 'indexedDB' | 'localStorage' | 'browserStorage'
   write(key: string, value: T): void | Promise<void>
   read(key: string): T | Promise<T>
 }
+
+const storeCache = new Map<string, any>()
 
 export function localStore<T>(
   key: string,
@@ -13,6 +16,11 @@ export function localStore<T>(
 ): Writable<T> & {
   getValue(): Promise<T>
 } {
+  const cacheKey = `${adapter.type}:${key}`
+  if (storeCache.has(cacheKey)) {
+    return storeCache.get(cacheKey)
+  }
+
   const s1 = writable(
     typeof initial === 'function' ? (initial as any)() : initial,
   )
@@ -26,13 +34,13 @@ export function localStore<T>(
       ? (initial as any)($value)
       : $value ?? initial,
   )
-  return {
+  const storeInstance = {
     subscribe: store.subscribe,
-    set: (value) => {
+    set: (value: T) => {
       adapter.write(key, value)
       return set(value)
     },
-    update: (updater) => {
+    update: (updater: (value: T) => T) => {
       return update((draft) => {
         const value = updater(draft)
         adapter.write(key, value)
@@ -48,10 +56,18 @@ export function localStore<T>(
       return r ?? initial
     },
   }
+
+  storeCache.set(cacheKey, storeInstance)
+  return storeInstance
+}
+
+export function clearLocalStore() {
+  storeCache.clear()
 }
 
 export function indexedDBAdapter<T>(): LocalStoreAdapter<T> {
   return {
+    type: 'indexedDB',
     write(key, value) {
       return set(key, value)
     },
@@ -63,6 +79,7 @@ export function indexedDBAdapter<T>(): LocalStoreAdapter<T> {
 
 export function localStorageAdapter<T>(): LocalStoreAdapter<T> {
   return {
+    type: 'localStorage',
     write(key: string, value: T): void {
       localStorage.setItem(key, JSON.stringify(value))
     },
@@ -79,6 +96,7 @@ export function localStorageAdapter<T>(): LocalStoreAdapter<T> {
 
 export function browserStorageAdapter<T>(): LocalStoreAdapter<T> {
   return {
+    type: 'browserStorage',
     async write(key, value) {
       await browser.storage.local.set({ [key]: value })
     },

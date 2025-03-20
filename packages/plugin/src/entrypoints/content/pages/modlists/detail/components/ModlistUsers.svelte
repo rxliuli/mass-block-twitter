@@ -31,6 +31,7 @@
   import { chunk } from 'lodash-es'
   import { useModlistUsers } from '../utils/useModlistUsers'
   import { t } from '$lib/i18n'
+  import { selectImportFile } from '$lib/hooks/batchBlockUsers'
 
   let {
     owner,
@@ -111,82 +112,37 @@
         }
         await $innerAddUsersMutation.mutateAsync(it)
         count += it.length
-        toast.info($t('modlists.detail.users.import.progress', {
+        toast.info(
+          $t('modlists.detail.users.import.progress', {
+            values: {
+              count,
+              total: allCount,
+            },
+          }),
+          {
+            id: toastId,
+            action: {
+              label: $t('modlists.detail.users.import.stop'),
+              onClick: () => {
+                abortController.abort()
+              },
+            },
+          },
+        )
+      }
+      toast.dismiss(toastId)
+      toast.success(
+        $t('modlists.detail.users.import.success', {
           values: {
             count,
             total: allCount,
           },
-        }), {
-          id: toastId,
-          action: {
-            label: $t('modlists.detail.users.import.stop'),
-            onClick: () => {
-              abortController.abort()
-            },
-          },
-        })
-      }
-      toast.dismiss(toastId)
-      toast.success($t('modlists.detail.users.import.success', {
-        values: {
-          count,
-          total: allCount,
-        },
-      }))
+        }),
+      )
     } catch (err) {
       toast.dismiss(toastId)
       toast.error($t('modlists.detail.users.import.failed'))
     }
-  }
-
-  async function selectImportFile() {
-    const files = await fileSelector({
-      accept: '.json, .csv',
-    })
-    if (!files) {
-      return
-    }
-    const str = await files[0].text()
-    let users: User[]
-    if (files[0].name.endsWith('.json')) {
-      users = JSON.parse(str) as User[]
-    } else {
-      try {
-        users = (
-          parse(str, {
-            columns: [
-              'id',
-              'screen_name',
-              'name',
-              'description',
-              'profile_image_url',
-            ],
-          }) as User[]
-        ).slice(1)
-      } catch (err) {
-        toast.error($t('modlists.detail.users.import.invalid'))
-        return
-      }
-    }
-    if (users.length === 0) {
-      toast.error($t('modlists.detail.users.import.empty'))
-      return
-    }
-    for (const it of users) {
-      if (!(it.id && it.screen_name && it.name && it.profile_image_url)) {
-        toast.error($t('modlists.detail.users.import.invalid'))
-        return
-      }
-    }
-    const confirmed = confirm($t('modlists.detail.users.import.confirm', {
-      values: {
-        count: users.length,
-      },
-    }))
-    if (!confirmed) {
-      return
-    }
-    return users
   }
 
   ref = {
@@ -256,7 +212,9 @@
         {@const users = $query.data.pages.flatMap((it) => it.data) ?? []}
         {#if users.length === 0}
           {#if !$query.isFetching}
-            <div class="text-center text-zinc-400">{$t('modlists.detail.users.empty')}</div>
+            <div class="text-center text-zinc-400">
+              {$t('modlists.detail.users.empty')}
+            </div>
           {/if}
         {:else}
           <List

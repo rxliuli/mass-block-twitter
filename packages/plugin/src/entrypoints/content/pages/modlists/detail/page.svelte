@@ -42,6 +42,7 @@
   import { ulid } from 'ulidx'
   import { useModlistUsers } from './utils/useModlistUsers'
   import { t } from '$lib/i18n'
+  import { batchBlockUsersMutation } from '$lib/hooks/batchBlockUsers'
 
   const route = useRoute()
 
@@ -85,212 +86,17 @@
     mutationFn: async () => {
       controller.abort()
       controller = new AbortController()
-      const toastId = toast.loading($t('modlists.detail.toast.blocking'), {
-        action: {
-          label: $t('modlists.detail.toast.blockingStop'),
-          onClick: () => {
-            controller.abort()
-            toast.dismiss(toastId)
-          },
+      await batchBlockUsersMutation({
+        controller,
+        users: () => users,
+        blockUser,
+        getAuthInfo: async () => authInfo.value!,
+        onProcessed: async (_user, meta) => {
+          if (meta.index % 10 === 0) {
+            await $query.fetchNextPage()
+          }
         },
       })
-      console.log('[batchBlockMutation] startTime ' + new Date().toISOString())
-      let errorToastId = ulid()
-      try {
-        let lastBlockedIndex = 0
-        let realBlockedCount = 1
-        const MAX_BLOCK_COUNT = 100
-        await batchBlockUsers(() => users, {
-          signal: controller.signal,
-          blockUser: async (user) => {
-            const _user = await dbApi.users.get(user.id)
-            if (_user && (_user.following || _user.blocking)) {
-              return 'skip'
-            }
-            await blockUser(user)
-            realBlockedCount++
-          },
-          onProcessed: async (user, meta) => {
-            const allCount = $metadata.data?.userCount ?? users.length
-            // 每 150 个用户等待 5 分钟
-            if (realBlockedCount % 150 === 0) {
-              toast.loading(
-                $t('modlists.detail.toast.rateLimit', {
-                  values: {
-                    time: ms(5 * 60 * 1000 - (Date.now() - Date.now())),
-                  },
-                }),
-                {
-                  id: toastId,
-                  description: $t('modlists.detail.toast.rateLimitExceeded'),
-                },
-              )
-              let now = Date.now()
-              const waitTime = 5 * 60 * 1000
-              await new Promise<void>((resolve) => {
-                const interval = setInterval(() => {
-                  toast.loading(
-                    $t('modlists.detail.toast.rateLimit', {
-                      values: {
-                        time: ms(waitTime - (Date.now() - now)),
-                      },
-                    }),
-                    {
-                      id: toastId,
-                      description: $t(
-                        'modlists.detail.toast.rateLimitExceeded',
-                      ),
-                    },
-                  )
-                }, 1000)
-                const abortListener = () => {
-                  clearInterval(interval)
-                  clearTimeout(timer)
-                  resolve()
-                }
-                const timer = setTimeout(() => {
-                  abortListener()
-                  controller.signal.removeEventListener('abort', abortListener)
-                }, waitTime)
-                controller.signal.addEventListener('abort', abortListener)
-              })
-            }
-            console.log(
-              `[batchBlockMutation] onProcesssed ${meta.index} ${user.screen_name} ` +
-                new Date().toISOString(),
-            )
-            toast.loading(
-              $t('modlists.detail.toast.blocked', {
-                values: {
-                  name: user.screen_name,
-                  index: meta.index,
-                  total: allCount,
-                },
-              }),
-              {
-                id: toastId,
-                description: $t('modlists.detail.toast.wait', {
-                  values: {
-                    time: ms(meta.averageTime * (allCount - meta.index)),
-                  },
-                }),
-              },
-            )
-            if (meta.error) {
-              if (meta.error instanceof ExpectedError) {
-                if (meta.error.code === 'rateLimit') {
-                  toast.error($t('modlists.detail.toast.rateLimitExceeded'))
-                  controller.abort()
-                  return
-                }
-                if (meta.error.code === 'forbidden') {
-                  toast.error($t('modlists.detail.toast.forbidden'), {
-                    duration: 1000000,
-                    action: {
-                      label: $t('modlists.detail.toast.refresh'),
-                      onClick: () => {
-                        location.reload()
-                      },
-                    },
-                  })
-                  controller.abort()
-                  return
-                }
-                if (meta.error.code === 'unauthorized') {
-                  toast.error($t('modlists.detail.toast.unauthorized'), {
-                    duration: 1000000,
-                    action: {
-                      label: $t('modlists.detail.toast.refresh'),
-                      onClick: () => {
-                        location.reload()
-                      },
-                    },
-                  })
-                  controller.abort()
-                  return
-                }
-                if (meta.error.code === 'notFound') {
-                  toast.error(
-                    $t('modlists.detail.toast.userNotFound', {
-                      values: {
-                        name: user.screen_name,
-                      },
-                    }),
-                    {
-                      id: errorToastId,
-                    },
-                  )
-                  return
-                }
-              }
-              toast.error(
-                $t('modlists.detail.toast.userBlockFailed', {
-                  values: {
-                    name: user.screen_name,
-                  },
-                }),
-              )
-              return
-            }
-            if (meta.result !== 'skip') {
-              await dbApi.users.block(user)
-              await dbApi.activitys.record([
-                {
-                  id: ulid().toString(),
-                  action: 'block',
-                  trigger_type: 'manual',
-                  match_type: 'user',
-                  match_filter: 'modList',
-                  user_id: user.id,
-                  user_name: user.name,
-                  user_screen_name: user.screen_name,
-                  user_profile_image_url: user.profile_image_url,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString(),
-                },
-              ])
-            }
-            lastBlockedIndex = meta.index
-            if (meta.index % 10 === 0) {
-              await $query.fetchNextPage()
-            }
-            // if not pro user and blocked users >= 100, abort
-            if (lastBlockedIndex >= MAX_BLOCK_COUNT && !authInfo.value?.isPro) {
-              controller.abort()
-            }
-          },
-        })
-
-        if (!authInfo.value?.isPro && lastBlockedIndex >= MAX_BLOCK_COUNT) {
-          toast.info($t('modlists.detail.toast.maxBlockedUsers'), {
-            description: $t('modlists.detail.toast.maxBlockedUsersDesc', {
-              values: {
-                current: lastBlockedIndex,
-                total: $metadata.data?.userCount ?? users.length,
-              },
-            }),
-            action: {
-              label: $t('modlists.detail.toast.upgradeNow'),
-              onClick: () => {
-                window.open('https://mass-block-twitter.rxliuli.com/pricing')
-              },
-            },
-          })
-        } else {
-          toast.success($t('modlists.detail.toast.blockSuccess'), {
-            description: $t('modlists.detail.toast.blockSuccess.description', {
-              values: {
-                current: lastBlockedIndex,
-                total: $metadata.data?.userCount ?? users.length,
-              },
-            }),
-          })
-        }
-      } catch (err) {
-        toast.error($t('modlists.detail.toast.blockFailed'))
-      } finally {
-        toast.dismiss(toastId)
-      }
     },
   })
 
@@ -336,22 +142,27 @@
       await $metadata.refetch()
       refreshModListSubscribedUsers(true)
       if (action === 'block') {
-        const toastId = toast.success($t('modlists.detail.toast.subscribe.success'), {
-          description: $t('modlists.detail.toast.subscribe.success.description'),
-          action: {
-            label: $t('modlists.detail.toast.subscribe.success.action'),
-            onClick: () => {
-              toast.dismiss(toastId)
-              $batchBlockMutation.mutate()
+        const toastId = toast.success(
+          $t('modlists.detail.toast.subscribe.success'),
+          {
+            description: $t(
+              'modlists.detail.toast.subscribe.success.description',
+            ),
+            action: {
+              label: $t('modlists.detail.toast.subscribe.success.action'),
+              onClick: () => {
+                toast.dismiss(toastId)
+                $batchBlockMutation.mutate()
+              },
+            },
+            cancel: {
+              label: $t('modlists.detail.toast.subscribe.success.cancel'),
+              onClick: () => {
+                toast.dismiss(toastId)
+              },
             },
           },
-          cancel: {
-            label: $t('modlists.detail.toast.subscribe.success.cancel'),
-            onClick: () => {
-              toast.dismiss(toastId)
-            },
-          },
-        })
+        )
       }
     },
     onError: () => {
@@ -474,7 +285,9 @@
       onclick={() => $unsubscribeMutation.mutate()}
       disabled={!authInfo.value || $unsubscribeMutation.isPending}
     >
-      {$metadata.data.action === 'block' ? $t('modlists.detail.actions.unblock') : $t('modlists.detail.actions.unmute')}
+      {$metadata.data.action === 'block'
+        ? $t('modlists.detail.actions.unblock')
+        : $t('modlists.detail.actions.unmute')}
     </Button>
   {:else}
     <DropdownMenu.Root>
@@ -485,10 +298,12 @@
       </DropdownMenu.Trigger>
       <DropdownMenu.Content portalProps={{ to: shadcnConfig.get().portal }}>
         <DropdownMenu.Item onclick={() => $subscribeMutation.mutate('hide')}>
-          {$t('modlists.detail.actions.muteAccounts')} <MessageCircleOffIcon class="w-4 h-4" />
+          {$t('modlists.detail.actions.muteAccounts')}
+          <MessageCircleOffIcon class="w-4 h-4" />
         </DropdownMenu.Item>
         <DropdownMenu.Item onclick={() => $subscribeMutation.mutate('block')}>
-          {$t('modlists.detail.actions.blockAccounts')} <BanIcon class="w-4 h-4" />
+          {$t('modlists.detail.actions.blockAccounts')}
+          <BanIcon class="w-4 h-4" />
         </DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
@@ -541,8 +356,12 @@
           <div class="flex items-center justify-between">
             <Tabs.Root bind:value={currentTab}>
               <Tabs.List>
-                <Tabs.Trigger value="users">{$t('modlists.detail.tabs.users')}</Tabs.Trigger>
-                <Tabs.Trigger value="rules">{$t('modlists.detail.tabs.rules')}</Tabs.Trigger>
+                <Tabs.Trigger value="users"
+                  >{$t('modlists.detail.tabs.users')}</Tabs.Trigger
+                >
+                <Tabs.Trigger value="rules"
+                  >{$t('modlists.detail.tabs.rules')}</Tabs.Trigger
+                >
               </Tabs.List>
             </Tabs.Root>
             <div

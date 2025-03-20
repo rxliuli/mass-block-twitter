@@ -1,15 +1,11 @@
 <script lang="ts">
-  import { dbApi, type Tweet, type User } from '$lib/db'
+  import { dbApi, type User } from '$lib/db'
   import { ADataTable } from '$lib/components/logic/a-data-table'
   import { Input } from '$lib/components/ui/input'
   import { filterUser, type SearchParams } from './utils/filterUser'
   import SelectFilter from './components/SelectFilter.svelte'
   import { type LabelValue } from './components/SelectFilter.types'
-  import {
-    extractCurrentUserId,
-    extractTweet,
-    removeTweets,
-  } from '$lib/observe'
+  import { extractCurrentUserId } from '$lib/observe'
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
   import { blockUser, ExpectedError, searchPeople, unblockUser } from '$lib/api'
   import { debounce, groupBy } from 'lodash-es'
@@ -22,20 +18,21 @@
     ShieldBanIcon,
     ShieldCheckIcon,
   } from 'lucide-svelte'
-  import { parse } from 'csv-parse/browser/esm/sync'
-  import { fileSelector } from '$lib/util/fileSelector'
   import { toast } from 'svelte-sonner'
   import saveAs from 'file-saver'
   import { Parser } from '@json2csv/plainjs'
   import { serializeError } from 'serialize-error'
-  import { AsyncArray } from '@liuli-util/async'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import { shadcnConfig } from '$lib/components/logic/config'
   import TableExtraButton from '$lib/components/logic/TableExtraButton.svelte'
-  import { ulid } from 'ulidx'
   import { navigate } from '$lib/components/logic/router'
   import { userColumns } from './utils/columns'
   import { t } from '$lib/i18n'
+  import {
+    batchBlockUsersMutation,
+    selectImportFile,
+  } from '$lib/hooks/batchBlockUsers'
+  import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
 
   let term = $state('')
   const query = createInfiniteQuery({
@@ -118,14 +115,6 @@
       label: $t('search-and-block.filter.verified.unverified'),
     },
   ]
-  const filterBlockedOptions: LabelValue<SearchParams['filterBlocked']>[] = [
-    { value: 'all', label: $t('search-and-block.filter.all') },
-    { value: 'blocked', label: $t('search-and-block.filter.blocking.blocked') },
-    {
-      value: 'unblocked',
-      label: $t('search-and-block.filter.blocking.unblocked'),
-    },
-  ]
   const showFollowedOptions: LabelValue<SearchParams['filterFollowed']>[] = [
     { value: 'all', label: $t('search-and-block.filter.all') },
     {
@@ -138,60 +127,33 @@
     },
   ]
 
-  const mutation = createMutation({
+  const unBlockMutation = createMutation({
     mutationFn: async ({
       users,
-      action,
     }: {
       users: User[]
       action: 'block' | 'unblock'
     }) => {
       let failedNames: string[] = []
-      const loadingId = toast.loading(
-        action === 'block'
-          ? $t('search-and-block.toast.blocking')
-          : $t('search-and-block.toast.unblocking'),
-      )
+      const loadingId = toast.loading($t('search-and-block.toast.unblocking'))
       for (let i = 0; i < users.length; i++) {
         const it = users[i]
-        const blockingText =
-          action === 'block'
-            ? $t('search-and-block.toast.blocking')
-            : $t('search-and-block.toast.unblocking')
+        const blockingText = $t('search-and-block.toast.unblocking')
         try {
           toast.loading(
             $t('search-and-block.toast.blockingProgress', {
               values: {
                 current: i + 1,
                 total: users.length,
-                action: blockingText,
+                action: $t('search-and-block.toast.blockingProgress'),
                 name: it.name,
               },
             }),
             { id: loadingId },
           )
-          if (action === 'block') {
-            await blockUser(it)
-            await dbApi.users.block(it)
-            await dbApi.activitys.record([
-              {
-                id: ulid().toString(),
-                action: 'block',
-                trigger_type: 'manual',
-                match_type: 'user',
-                match_filter: 'batchSelected',
-                user_id: it.id,
-                user_name: it.name,
-                user_screen_name: it.screen_name,
-                user_profile_image_url: it.profile_image_url,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-              },
-            ])
-          } else {
-            await unblockUser(it.id)
-            await dbApi.users.unblock(it)
-          }
+
+          await unblockUser(it.id)
+          await dbApi.users.unblock(it)
         } catch (e) {
           failedNames.push(it.name)
           console.log(`${blockingText} ${it.id} ${it.name} failed`, e)
@@ -216,10 +178,7 @@
           values: {
             success: users.length - failedNames.length,
             failed: failedNames.length,
-            action:
-              action === 'block'
-                ? $t('search-and-block.filter.blocking.blocked')
-                : $t('search-and-block.filter.blocking.unblocked'),
+            action: $t('search-and-block.filter.blocking.unblocked'),
           },
         }),
         {
@@ -249,79 +208,51 @@
     )
   }
 
-  async function onImportBlockList() {
-    const files = await fileSelector({
-      accept: '.csv',
+  let controller = $state(new AbortController())
+  onDestroy(() => {
+    controller.abort()
+  })
+  async function onBlock(users: User[]) {
+    controller.abort()
+    controller = new AbortController()
+    await batchBlockUsersMutation({
+      controller,
+      users: () => users,
+      blockUser,
+      getAuthInfo: async () => authInfo.value!,
+      onProcessed: async () => {},
     })
-    if (!files) return
-    const csv = await files[0].text()
-    const users = (
-      parse(csv, {
-        columns: [
-          'id',
-          'screen_name',
-          'name',
-          'description',
-          'profile_image_url',
-        ],
-      }) as User[]
-    ).slice(1)
-    const allUsers = await dbApi.users.getAll()
-    const allIds = new Set(
-      allUsers.filter((it) => it.blocking).map((it) => it.id),
-    )
-    const newUsers = users.filter((it) => !allIds.has(it.id))
-    await dbApi.users.record(
-      newUsers.map(
-        (it) =>
-          ({
-            ...it,
-            blocking: false,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          }) as User,
-      ),
-    )
-    await $mutation.mutateAsync({ users: newUsers, action: 'block' })
-    toast.info(
-      $t('search-and-block.toast.importSuccess', {
-        values: {
-          new: newUsers.length,
-          ignored: users.length - newUsers.length,
-        },
-      }),
-    )
   }
 
-  async function onBlock() {
-    const users = selectedRows.filter((it) => !it.blocking)
-    const grouped = groupBy(users, (it) => it.following)
-    let blockList: User[] = users
-    if ((grouped.true ?? []).length > 0) {
-      const confirmed = confirm($t('search-and-block.confirm.blockFollowing'))
-      if (!confirmed) {
-        blockList = grouped.false ?? []
-      }
+  async function onImportBlockList() {
+    const users = await selectImportFile()
+    if (!users || users.length === 0) {
+      return
     }
-    await $mutation.mutateAsync({ users: blockList, action: 'block' })
-    const elements = document.querySelectorAll(
-      '[data-testid="cellInnerDiv"]:has([data-testid="reply"])',
-    ) as NodeListOf<HTMLElement>
-    const blockUserIds = blockList.map((it) => it.id)
-    const tweets = await AsyncArray.map([...elements], async (it) => {
-      const { tweetId } = extractTweet(it)
-      const tweet = await dbApi.tweets.get(tweetId)
-      return tweet
-    })
-    const tweetsToRemove = tweets.filter(
-      (it) => it && blockUserIds.includes(it.user_id),
-    ) as Tweet[]
-    removeTweets(tweetsToRemove.map((it) => it.id))
+    await onBlock(users)
   }
+
+  const authInfo = useAuthInfo()
+
+  const blockMutation = createMutation({
+    mutationFn: async () => {
+      const users = selectedRows.filter((it) => !it.blocking)
+      const grouped = groupBy(users, (it) => it.following)
+      let blockList: User[] = users
+      if ((grouped.true ?? []).length > 0) {
+        const confirmed = confirm($t('search-and-block.confirm.blockFollowing'))
+        if (!confirmed) {
+          blockList = grouped.false ?? []
+        }
+      }
+      await onBlock(blockList)
+      await $query.refetch()
+    },
+  })
 
   function onUnblock() {
     const users = selectedRows.filter((it) => it.blocking)
-    $mutation.mutateAsync({ users, action: 'unblock' })
+    $unBlockMutation.mutateAsync({ users, action: 'unblock' })
   }
 
   function onViewBlockedUsers() {
@@ -347,7 +278,7 @@
       class="flex-1"
     />
     <TableExtraButton
-      onclick={onBlock}
+      onclick={$blockMutation.mutate}
       text={$t('search-and-block.actions.blockSelected')}
     >
       {#snippet icon()}
@@ -383,11 +314,6 @@
     </DropdownMenu.Root>
   </div>
   <div class="hidden md:flex items-center gap-2 mb-2">
-    <SelectFilter
-      label={$t('search-and-block.filter.blocking')}
-      options={filterBlockedOptions}
-      bind:value={searchParams.filterBlocked}
-    />
     <SelectFilter
       label={$t('search-and-block.filter.verified')}
       options={filterVerifiedOptions}

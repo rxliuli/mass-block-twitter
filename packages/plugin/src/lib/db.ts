@@ -433,6 +433,9 @@ export const dbApi = {
   pendingCheckUsers: wrap(new PendingCheckUserDAO()),
   spamUsers: wrap(new SpamUserDAO()),
   clear: async () => {
+    if (!dbStore.idb) {
+      await initDB()
+    }
     await dbStore.idb.clear('users')
     await dbStore.idb.clear('tweets')
     await dbStore.idb.clear('activitys')

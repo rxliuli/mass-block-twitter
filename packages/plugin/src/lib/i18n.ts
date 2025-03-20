@@ -9,6 +9,7 @@ import enUS from '../i18n/en-US.json'
 import zhCN from '../i18n/zh-CN.json'
 import es from '../i18n/es.json'
 import { getSettings } from './settings'
+import { get, Readable } from 'svelte/store'
 
 export function initI18n(language: string) {
   addMessages('en-US', enUS)
@@ -26,6 +27,8 @@ export function setLocale(language: string) {
 }
 
 export const t = format
+type UnwrapStore<T> = T extends Readable<infer U> ? U : T
+export const tP: UnwrapStore<typeof format> = (...args) => get(format)(...args)
 
 export function getLocaleLanguage(): 'en-US' | 'zh-CN' | 'es' {
   const settings = getSettings()

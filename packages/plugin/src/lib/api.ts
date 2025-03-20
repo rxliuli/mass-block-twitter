@@ -81,6 +81,16 @@ export async function blockUser(user: Pick<User, 'id'>) {
   }
 }
 
+export interface BatchBlockUsersProcessedMeta {
+  index: number
+  total: number
+  time: number
+  averageTime: number
+  wait: number
+  error?: unknown
+  result?: 'skip'
+}
+
 // don't know the rate limit, so limit 2s request once, refer to
 // https://devcommunity.x.com/t/what-is-the-rate-limit-on-post-request-and-post-blocks-create/102434/2
 // https://github.com/d60/twikit/blob/main/ratelimits.md
@@ -89,15 +99,7 @@ export async function batchBlockUsers(
   options: {
     onProcessed: (
       user: User,
-      meta: {
-        index: number
-        total: number
-        time: number
-        averageTime: number
-        wait: number
-        error?: unknown
-        result?: 'skip'
-      },
+      meta: BatchBlockUsersProcessedMeta,
     ) => Promise<void>
     signal: AbortSignal
     blockUser: (user: User) => Promise<'skip' | undefined>
@@ -829,7 +831,7 @@ const SEARCH_TIMELINE_FLAGS = {
   rweb_video_timestamps_enabled: true,
   longform_notetweets_rich_text_read_enabled: true,
   longform_notetweets_inline_media_enabled: true,
-  responsive_web_grok_image_annotation_enabled: true,
+  responsive_web_grok_image_annotation_enabled: false,
   responsive_web_enhance_cards_enabled: false,
 }
 
@@ -842,6 +844,7 @@ export function buildSearchTimelineGraphqlUrl(options: {
   const url = new URL(
     `https://x.com/i/api/graphql/${options.graphqlId}/SearchTimeline`,
   )
+  // {"rawQuery":"电子烟","count":20,"querySource":"typed_query","product":"People"}
   url.searchParams.set(
     'variables',
     JSON.stringify({
@@ -918,6 +921,7 @@ export async function searchPeople(options: {
         // q=%E7%90%89%E7%92%83&src=typed_query
         q: options.term,
         src: 'typed_query',
+        f: 'user',
       }).toString(),
   })
   if (!r.ok) {
@@ -927,6 +931,8 @@ export async function searchPeople(options: {
   return parseSearchPeople(json)
 }
 
+// ref: https://antibot.blog/posts/1741552163416
+// ref: https://blog.nest.moe/posts/twitter-header-part-4
 let _2DArray: number[][]
 export function getXTransactionId() {
   function encode(n: number[]) {

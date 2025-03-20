@@ -59,6 +59,8 @@
   "settings.appearance.theme.system": "System",
   "settings.appearance.theme.light": "Light",
   "settings.appearance.theme.dark": "Dark",
+  "settings.appearance.floatingButton.title": "Floating Button",
+  "settings.appearance.floatingButton.description": "Show the floating button on x.com.",
   "settings.filter.hideSuspiciousAccounts": "Hide Suspicious Accounts",
   "settings.filter.hideSuspiciousAccounts.description": "Hide tweets from accounts with default avatars, no bio and zero followers. Their content will be automatically hidden.",
   "settings.filter.hideSpamAccounts": "Block Spam Accounts",

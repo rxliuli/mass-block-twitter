@@ -53,6 +53,8 @@
   "settings.appearance.theme.system": "自动",
   "settings.appearance.theme.light": "浅色",
   "settings.appearance.theme.dark": "深色",
+  "settings.appearance.floatingButton.title": "悬浮球",
+  "settings.appearance.floatingButton.description": "在 x.com 页面上显示悬浮球。",
   "settings.filter.title": "过滤控制",
   "settings.filter.hideSuspiciousAccounts": "隐藏可疑账户",
   "settings.filter.hideSuspiciousAccounts.description": "隐藏默认头像、没有简介和零粉丝的账户。他们的内容将被自动隐藏。",

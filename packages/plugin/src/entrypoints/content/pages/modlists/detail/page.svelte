@@ -41,6 +41,7 @@
   import ms from 'ms'
   import { ulid } from 'ulidx'
   import { useModlistUsers } from './utils/useModlistUsers'
+  import * as localModlistSubscriptions from '$lib/localModlistSubscriptions'
   import { t } from '$lib/i18n'
   import { batchBlockUsersMutation } from '$lib/hooks/batchBlockUsers'
 
@@ -66,7 +67,15 @@
           },
         },
       )
-      return (await resp.json()) as ModListGetResponse
+      const modlist = (await resp.json()) as ModListGetResponse
+      if (!authInfo) {
+        const subscription = await localModlistSubscriptions.getSubscription(modListId)
+        if (subscription) {
+          modlist.action = subscription
+          modlist.subscribed = true
+        }
+      }
+      return modlist
     },
   })
   const query = useModlistUsers(route.search?.get('id')!)
@@ -102,16 +111,23 @@
 
   const subscribeMutation = createMutation({
     mutationFn: async (action: ModListSubscribeRequest['action']) => {
+      const modlistId = route.search?.get('id')!
       const authInfo = await getAuthInfo()
       if (!authInfo?.isPro) {
-        const subscribed = (await (
-          await crossFetch(`${SERVER_URL}/api/modlists/subscribed/metadata`, {
-            headers: {
-              Authorization: `Bearer ${authInfo?.token}`,
-            },
-          })
-        ).json()) as ModListSubscribeResponse
-        if (subscribed.length >= 3) {
+        let nSubscribed: number
+        if (authInfo) {
+          const subscribed = (await (
+            await crossFetch(`${SERVER_URL}/api/modlists/subscribed/metadata`, {
+              headers: {
+                Authorization: `Bearer ${authInfo?.token}`,
+              },
+            })
+          ).json()) as ModListSubscribeResponse
+          nSubscribed = subscribed.length
+        } else {
+          nSubscribed = Object.keys(await localModlistSubscriptions.getAllSubscriptions()).length
+        }
+        if (nSubscribed >= 3) {
           toast.info($t('modlists.detail.toast.maxSubscribed'), {
             description: $t('modlists.detail.toast.maxSubscribedDesc'),
             action: {
@@ -123,19 +139,23 @@
           })
         }
       }
-      const resp = await crossFetch(
-        `${SERVER_URL}/api/modlists/subscribe/${route.search?.get('id')}`,
-        {
-          method: 'POST',
-          body: JSON.stringify({ action } satisfies ModListSubscribeRequest),
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${authInfo?.token}`,
+      if (authInfo) {
+        const resp = await crossFetch(
+          `${SERVER_URL}/api/modlists/subscribe/${modlistId}`,
+          {
+            method: 'POST',
+            body: JSON.stringify({ action } satisfies ModListSubscribeRequest),
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${authInfo?.token}`,
+            },
           },
-        },
-      )
-      if (!resp.ok) {
-        throw resp
+        )
+        if (!resp.ok) {
+          throw resp
+        }
+      } else {
+        await localModlistSubscriptions.setSubscription(modlistId, action)
       }
     },
     onSuccess: async (_data, action) => {
@@ -172,6 +192,10 @@
   const unsubscribeMutation = createMutation({
     mutationFn: async () => {
       const authInfo = await getAuthInfo()
+      if (!authInfo) {
+        await localModlistSubscriptions.removeSubscription(route.search?.get('id')!)
+        return
+      }
       const resp = await crossFetch(
         `${SERVER_URL}/api/modlists/subscribe/${route.search?.get('id')}`,
         {
@@ -283,7 +307,7 @@
     <Button
       variant="outline"
       onclick={() => $unsubscribeMutation.mutate()}
-      disabled={!authInfo.value || $unsubscribeMutation.isPending}
+      disabled={$unsubscribeMutation.isPending}
     >
       {$metadata.data.action === 'block'
         ? $t('modlists.detail.actions.unblock')
@@ -292,7 +316,7 @@
   {:else}
     <DropdownMenu.Root>
       <DropdownMenu.Trigger
-        disabled={!authInfo.value || $subscribeMutation.isPending}
+        disabled={$subscribeMutation.isPending}
       >
         {$t('modlists.detail.actions.subscribe')}
       </DropdownMenu.Trigger>

@@ -14,6 +14,8 @@ import { crossFetch } from './query'
 import { dbApi } from './db'
 import { chunk } from 'lodash-es'
 import { getSettings } from './settings'
+import * as localModlistSubscriptions from '$lib/localModlistSubscriptions'
+import { ModListIdsResponse } from 'node_modules/@mass-block-twitter/server/src/routes/modlists'
 
 export async function refreshModListSubscribedUsers(
   force?: boolean,
@@ -22,6 +24,20 @@ export async function refreshModListSubscribedUsers(
     await browser.storage.local.get<{ authInfo: AuthInfo | null }>('authInfo')
   ).authInfo?.token
   if (!token) {
+    const subscriptions = await localModlistSubscriptions.getAllSubscriptions()
+    // TODO: implement fetching rules, currently only twitterUserIds
+    const modlistPromises = Object.entries(subscriptions).map(([modListId, action]) =>
+      fetch(`${SERVER_URL}/api/modlists/ids/${modListId}`)
+        .then((res) => res.json() as Promise<ModListIdsResponse>)
+        .then((data) => ({
+          modListId,
+          action,
+          twitterUserIds: data.twitterUserIds,
+          rules: [],
+        }))
+    );
+    const modlistData = await Promise.all(modlistPromises);
+    await set(ModListSubscribedUsersKey, modlistData);
     return
   }
   const init: RequestInit = {

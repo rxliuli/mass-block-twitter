@@ -25,8 +25,6 @@ describe('DatePicker', () => {
       )
       ?.click()
     await new Promise((resolve) => setTimeout(resolve, 100))
-
-    console.log(screen.baseElement)
     // console.log(screen.getByText('2025-01-01').element())
     // await expect.element(screen.getByText('2025-01-01')).toBeInTheDocument()
   })

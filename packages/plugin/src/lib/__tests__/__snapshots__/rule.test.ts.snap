@@ -315,135 +315,135 @@ exports[`getRuleFileds > should return the correct fields 1`] = `
   {
     "enum": [
       {
-        "label": "Arabic",
+        "label": "العربية - Arabic",
         "value": "ar",
       },
       {
-        "label": "Bengali",
+        "label": "বাংলা - Bengali",
         "value": "bn",
       },
       {
-        "label": "Chinese",
+        "label": "简体中文 - Simplified Chinese",
         "value": "zh",
       },
       {
-        "label": "Czech",
+        "label": "Čeština - Czech",
         "value": "cs",
       },
       {
-        "label": "Danish",
+        "label": "Dansk - Danish",
         "value": "da",
       },
       {
-        "label": "Dutch",
+        "label": "Nederlands - Dutch",
         "value": "nl",
       },
       {
-        "label": "English",
+        "label": "English - English",
         "value": "en",
       },
       {
-        "label": "Finnish",
+        "label": "Suomi - Finnish",
         "value": "fi",
       },
       {
-        "label": "French",
+        "label": "Français - French",
         "value": "fr",
       },
       {
-        "label": "German",
+        "label": "Deutsch - German",
         "value": "de",
       },
       {
-        "label": "Greek",
+        "label": "Ελληνικά - Greek",
         "value": "el",
       },
       {
-        "label": "Hebrew",
+        "label": "עברית - Hebrew",
         "value": "he",
       },
       {
-        "label": "Hindi",
+        "label": "हिन्दी - Hindi",
         "value": "hi",
       },
       {
-        "label": "Hungarian",
+        "label": "Magyar - Hungarian",
         "value": "hu",
       },
       {
-        "label": "Indonesian",
+        "label": "Bahasa Indonesia - Indonesian",
         "value": "id",
       },
       {
-        "label": "Italian",
+        "label": "Italiano - Italian",
         "value": "it",
       },
       {
-        "label": "Japanese",
+        "label": "日本語 - Japanese",
         "value": "ja",
       },
       {
-        "label": "Korean",
+        "label": "한국어 - Korean",
         "value": "ko",
       },
       {
-        "label": "Malay",
+        "label": "Bahasa Melayu - Malay",
         "value": "ms",
       },
       {
-        "label": "Norwegian",
+        "label": "Norsk - Norwegian",
         "value": "no",
       },
       {
-        "label": "Persian",
+        "label": "فارسی - Persian",
         "value": "fa",
       },
       {
-        "label": "Polish",
+        "label": "Polski - Polish",
         "value": "pl",
       },
       {
-        "label": "Portuguese",
+        "label": "Português - Portuguese",
         "value": "pt",
       },
       {
-        "label": "Romanian",
+        "label": "Română - Romanian",
         "value": "ro",
       },
       {
-        "label": "Russian",
+        "label": "Русский - Russian",
         "value": "ru",
       },
       {
-        "label": "Spanish",
+        "label": "Español - Spanish",
         "value": "es",
       },
       {
-        "label": "Swahili",
+        "label": "Kiswahili - Swahili",
         "value": "sw",
       },
       {
-        "label": "Swedish",
+        "label": "Svenska - Swedish",
         "value": "sv",
       },
       {
-        "label": "Thai",
+        "label": "ไทย - Thai",
         "value": "th",
       },
       {
-        "label": "Turkish",
+        "label": "Türkçe - Turkish",
         "value": "tr",
       },
       {
-        "label": "Ukrainian",
+        "label": "Українська - Ukrainian",
         "value": "uk",
       },
       {
-        "label": "Urdu",
+        "label": "اردو - Urdu",
         "value": "ur",
       },
       {
-        "label": "Vietnamese",
+        "label": "Tiếng Việt - Vietnamese",
         "value": "vi",
       },
     ],

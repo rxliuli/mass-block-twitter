@@ -12,7 +12,7 @@ import { Activity, dbApi, User } from '$lib/db'
 import { omit, throttle } from 'lodash-es'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { wait } from '@liuli-util/async'
-import { addBlockButton, alertWarning, extractTweet } from '$lib/observe'
+import { addBlockButton, extractTweet } from '$lib/observe'
 import css from './style.css?inline'
 import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'
@@ -27,7 +27,6 @@ import {
   modListFilter,
   mutedWordsFilter,
   sharedSpamFilter,
-  spamContext,
   TweetFilter,
   selfFilter,
 } from '$lib/filter'

@@ -6,6 +6,7 @@
   import * as Popover from '$lib/components/ui/popover'
   import dayjs from 'dayjs'
   import { CalendarIcon } from 'lucide-svelte'
+  import { shadcnConfig } from '$lib/components/logic/config'
 
   let {
     value = $bindable(),

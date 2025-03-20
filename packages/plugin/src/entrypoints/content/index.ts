@@ -24,43 +24,37 @@ export default defineContentScript({
     autoCheckPendingUsers()
     initI18n(getLocaleLanguage() ?? 'en-US')
 
-    async function openExtensionDash(initialPath: string) {
-      const ui = await createShadowRootUi(ctx, {
-        name: 'mass-block-twitter',
-        position: 'inline',
-        anchor: 'body',
-        onMount: () => {
-          const shadowDOM = document
-            .querySelector('mass-block-twitter')
-            ?.shadowRoot?.querySelector('body')
-          if (!shadowDOM) {
-            throw new Error('mass-block-twitter not found')
-          }
-          mount(App, {
-            target: shadowDOM,
-            props: {
-              initialPath,
-            },
-          })
-        },
-        onRemove: () => {
-          unmount(App)
-        },
-      })
-      ui.mount()
-      removeListener()
-    }
-    const removeListener = onMessage('show', () => openExtensionDash('/'))
     const openExtensionPath = (
       await browser.storage.local.get<{ openExtensionPath?: string }>(
         'openExtensionPath',
       )
     ).openExtensionPath
     if (openExtensionPath) {
-      // console.log('openExtensionPath', openExtensionPath)
-      await openExtensionDash(openExtensionPath)
       await browser.storage.local.remove('openExtensionPath')
     }
+    const ui = await createShadowRootUi(ctx, {
+      name: 'mass-block-twitter',
+      position: 'inline',
+      anchor: 'body',
+      onMount: () => {
+        const shadowDOM = document
+          .querySelector('mass-block-twitter')
+          ?.shadowRoot?.querySelector('body')
+        if (!shadowDOM) {
+          throw new Error('mass-block-twitter not found')
+        }
+        mount(App, {
+          target: shadowDOM,
+          props: {
+            initialPath: openExtensionPath,
+          },
+        })
+      },
+      onRemove: () => {
+        unmount(App)
+      },
+    })
+    ui.mount()
 
     window.addEventListener('SpamReportRequest', (event) => {
       const request = (event as CustomEvent).detail

@@ -5,7 +5,6 @@
   import ModListsPage from './pages/modlists/page.svelte'
   import MutedWordsPage from './pages/muted-words/page.svelte'
   import SettingsPage from './pages/settings/page.svelte'
-  import ProPage from './pages/pro/page.svelte'
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
   import { Toaster } from '$lib/components/ui/sonner/index.js'
   import { ModeWatcher, mode } from 'mode-watcher'
@@ -27,7 +26,7 @@
 
   let { initialPath }: { initialPath?: string } = $props()
 
-  let open = $state(true)
+  let open = $state(!!initialPath)
 
   function lockScroll() {
     document.documentElement.style.overflowY = 'hidden'
@@ -143,10 +142,6 @@
         {
           path: '/settings/languages',
           component: SettingsLanguagesPage,
-        },
-        {
-          path: '/pro',
-          component: ProPage,
         },
       ]}
     >

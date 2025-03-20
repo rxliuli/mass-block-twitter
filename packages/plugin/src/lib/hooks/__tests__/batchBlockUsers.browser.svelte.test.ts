@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest'
 import { render, RenderResult } from 'vitest-browser-svelte'
-import BatchBlockUserDemo from './BatchBlockUser.demo.svelte'
+import BatchBlockUserDemo from './BatchBlockUsers.demo.svelte'
 import { batchBlockUsersMutation } from '../batchBlockUsers'
 import { initI18n } from '$lib/i18n'
 import { dbApi, User } from '$lib/db'
@@ -138,11 +138,12 @@ describe('batchBlockUsers', () => {
       getAuthInfo,
     })
     await expect
-      .element(screen.getByText('1/2 users blocked'))
+      .element(screen.getByText('2/2 users blocked'))
       .toBeInTheDocument()
     await expect
       .element(screen.getByText('User test1 not found'))
       .toBeInTheDocument()
+    expect(await dbApi.users.getAll()).length(1)
     expect(blockUser).toHaveBeenCalledTimes(2)
     expect(onProcessed).toHaveBeenCalledTimes(2)
   })
@@ -230,7 +231,7 @@ describe('batchBlockUsers', () => {
       getAuthInfo,
     })
     await expect
-      .element(screen.getByText('1/2 users blocked'))
+      .element(screen.getByText('2/2 users blocked'))
       .toBeInTheDocument()
     expect(blockUser).toHaveBeenCalledTimes(1)
     expect(onProcessed).toHaveBeenCalledTimes(2)

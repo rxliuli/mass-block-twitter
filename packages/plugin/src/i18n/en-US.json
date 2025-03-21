@@ -288,5 +288,11 @@
   "modlists.addUser.error.rateLimit": "Rate limit exceeded, please try again later",
   "modlists.addUser.error.searchFailed": "Failed to search users",
   "modlists.created.title": "My Moderation Lists",
-  "modlists.subscribed.title": "Subscribed Moderation Lists"
+  "modlists.subscribed.title": "Subscribed Moderation Lists",
+
+  "floatingButton.close.confirm.title": "Are you sure you want to close the floating button?",
+  "floatingButton.close.confirm.description.before": "You can reopen it in",
+  "floatingButton.close.confirm.description.after": " ",
+  "floatingButton.openDashboard": "Open Plugin Dashboard",
+  "floatingButton.close": "Close Floating Button"
 }

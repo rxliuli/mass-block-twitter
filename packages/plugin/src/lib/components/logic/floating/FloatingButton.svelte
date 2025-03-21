@@ -2,10 +2,17 @@
   import * as Popover from '$lib/components/ui/popover'
   import icon from './assets/48.png'
   import { shadcnConfig } from '../config'
-  import { SquareArrowOutUpRightIcon, XIcon } from 'lucide-svelte'
+  import {
+    ShieldBanIcon,
+    SquareArrowOutUpRightIcon,
+    XIcon,
+  } from 'lucide-svelte'
   import * as Command from '$lib/components/ui/command'
   import { useOpen } from '$lib/stores/open.svelte'
   import { useSettings } from '$lib/settings'
+  import { toast } from 'svelte-sonner'
+  import CloseFloatingButtonToast from './components/CloseFloatingButtonToast.svelte'
+  import { t } from '$lib/i18n'
 
   const openState = useOpen()
 
@@ -17,13 +24,17 @@
   const settings = useSettings()
 
   function onCloseFloatingButton() {
-    const confirmed = confirm(
-      'Are you sure you want to close the floating button?',
-    )
-    if (!confirmed) {
-      return
-    }
-    $settings.showFloatingButton = false
+    const toastId = toast(CloseFloatingButtonToast as any, {
+      duration: 1000000,
+      position: 'top-center',
+      action: {
+        label: 'Close',
+        onClick: () => {
+          $settings.showFloatingButton = false
+          toast.dismiss(toastId)
+        },
+      },
+    })
   }
 
   let open = $state(false)
@@ -57,21 +68,21 @@
         <Command.List>
           <Command.Item
             onclick={() => {
-              openState.openModal()
               open = false
+              openState.openModal()
             }}
           >
             <SquareArrowOutUpRightIcon />
-            <span>Open Plugin Dashboard</span>
+            <span>{$t('floatingButton.openDashboard')}</span>
           </Command.Item>
           <Command.Item
             onclick={() => {
-              onCloseFloatingButton()
               open = false
+              onCloseFloatingButton()
             }}
           >
             <XIcon />
-            <span>Close Floating Button</span>
+            <span>{$t('floatingButton.close')}</span>
           </Command.Item>
         </Command.List>
       </Command.Root>

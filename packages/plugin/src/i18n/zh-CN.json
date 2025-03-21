@@ -278,5 +278,11 @@
   "modlists.addUser.error.rateLimit": "已达到速率限制，请稍后再试",
   "modlists.addUser.error.searchFailed": "搜索用户失败",
   "modlists.created.title": "我的审核列表",
-  "modlists.subscribed.title": "已订阅的审核列表"
+  "modlists.subscribed.title": "已订阅的审核列表",
+
+  "floatingButton.close.confirm.title": "确定要关闭悬浮球吗？",
+  "floatingButton.close.confirm.description.before": "你可以在",
+  "floatingButton.close.confirm.description.after": "中重新打开",
+  "floatingButton.openDashboard": "打开插件仪表盘",
+  "floatingButton.close": "关闭悬浮球"
 }

@@ -3,12 +3,16 @@
   import { t } from 'svelte-i18n'
   import * as Command from '$lib/components/ui/command'
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
-  import { getCommunityInfo, getCommunityMembers } from '$lib/api/twitter'
+  import {
+    extractCommunityQueryGraphqlId,
+    extractMembersSliceTimelineGraphqlId,
+    getCommunityInfo,
+    getCommunityMembers,
+  } from '$lib/api/twitter'
   import { blockUser } from '$lib/api'
   import { batchBlockUsersMutation } from '$lib/hooks/batchBlockUsers'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { toast } from 'svelte-sonner'
-  import { wait } from '@liuli-util/async'
 
   function getCommunityId() {
     // https://x.com/i/communities/1900366536683987325/members
@@ -95,6 +99,11 @@
   }: {
     onclick?: () => void
   } = $props()
+
+  onMount(async () => {
+    await extractMembersSliceTimelineGraphqlId()
+    await extractCommunityQueryGraphqlId()
+  })
 </script>
 
 <Command.Item

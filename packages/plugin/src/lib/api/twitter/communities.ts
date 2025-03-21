@@ -6,6 +6,7 @@ import {
 } from '$lib/api'
 import { User } from '$lib/db'
 import { extractObjects } from '$lib/util/extractObjects'
+import { once } from '@liuli-util/async'
 import { get } from 'lodash-es'
 import { z } from 'zod'
 
@@ -55,6 +56,45 @@ export function parseCommunityMembers(json: any): {
   }
 }
 
+export function extractParamsData(scriptContent: string) {
+  // params:{id:"V7OdnMvujMPsCctT_daznQ",metadata:{features:["responsive_web_graphql_timeline_navigation_enabled"],sliceInfoPath:["communityResults","result","members_slice","slice_info"]},name:"membersSliceTimeline_Query"
+  const paramsRegex = /params:{id:"([\w_]+)",[\s\S]*?name:"([^"]+)"/
+  const match = scriptContent.match(paramsRegex)
+  if (!match) {
+    return
+  }
+  return {
+    id: match[1],
+    name: match[2],
+  }
+}
+export async function extractCommunityGraphqlId(
+  name: 'membersSliceTimeline_Query' | 'CommunityQuery',
+): Promise<string | undefined> {
+  const swStr = await (await fetch('https://x.com/sw.js')).text()
+  const communitiesRegex = new RegExp(
+    '"(https://abs.twimg.com/responsive-web/client-web/bundle.Communities-\\w+?.\\w+?.js)"',
+    'g',
+  )
+  const scriptUrls: string[] = []
+  swStr.matchAll(communitiesRegex).forEach((it) => {
+    scriptUrls.push(it[1])
+  })
+  for (const url of scriptUrls) {
+    const scriptStr = await (await fetch(url)).text()
+    const r = extractParamsData(scriptStr)
+    if (r?.name === name) {
+      return r.id
+    }
+  }
+}
+
+export const extractMembersSliceTimelineGraphqlId = once(() =>
+  extractCommunityGraphqlId('membersSliceTimeline_Query'),
+)
+export const extractCommunityQueryGraphqlId = once(() =>
+  extractCommunityGraphqlId('CommunityQuery'),
+)
 export async function getCommunityMembers(options: {
   communityId: string
   cursor?: string
@@ -62,8 +102,12 @@ export async function getCommunityMembers(options: {
   data: CommunityMember[]
   cursor: string
 }> {
+  const queryId = await extractMembersSliceTimelineGraphqlId()
+  if (!queryId) {
+    throw new Error('queryId not found')
+  }
   const url = new URL(
-    `https://x.com/i/api/graphql/V7OdnMvujMPsCctT_daznQ/membersSliceTimeline_Query`,
+    `https://x.com/i/api/graphql/${queryId}/membersSliceTimeline_Query`,
   )
   url.searchParams.set(
     'variables',
@@ -139,9 +183,11 @@ export function parseCommunityInfo(json: any): CommunityInfo {
 }
 
 export async function getCommunityInfo(options: { communityId: string }) {
-  const url = new URL(
-    `https://x.com/i/api/graphql/YDYGxdoPEu0zNC2eWP_0MQ/CommunityQuery`,
-  )
+  const queryId = await extractCommunityQueryGraphqlId()
+  if (!queryId) {
+    throw new Error('queryId not found')
+  }
+  const url = new URL(`https://x.com/i/api/graphql/${queryId}/CommunityQuery`)
   url.searchParams.set(
     'variables',
     JSON.stringify({ communityId: options.communityId }),

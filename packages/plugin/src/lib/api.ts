@@ -94,15 +94,12 @@ export interface BatchBlockUsersProcessedMeta {
 // don't know the rate limit, so limit 2s request once, refer to
 // https://devcommunity.x.com/t/what-is-the-rate-limit-on-post-request-and-post-blocks-create/102434/2
 // https://github.com/d60/twikit/blob/main/ratelimits.md
-export async function batchBlockUsers(
-  users: User[] | (() => User[]),
+export async function batchBlockUsers<T extends User>(
+  users: T[] | (() => T[]),
   options: {
-    onProcessed: (
-      user: User,
-      meta: BatchBlockUsersProcessedMeta,
-    ) => Promise<void>
+    onProcessed: (user: T, meta: BatchBlockUsersProcessedMeta) => Promise<void>
     signal: AbortSignal
-    blockUser: (user: User) => Promise<'skip' | undefined>
+    blockUser: (user: T) => Promise<'skip' | undefined>
   },
 ) {
   const startTime = Date.now()
@@ -181,7 +178,7 @@ const urlSchema = z.object({
   url: z.string(),
 })
 
-const timelineUserSchema = z.object({
+export const timelineUserSchema = z.object({
   __typename: z.literal('User'),
   rest_id: z.string(),
   is_blue_verified: z.boolean(),
@@ -199,14 +196,16 @@ const timelineUserSchema = z.object({
     default_profile_image: z.boolean().optional(),
     location: z.string().optional().nullable(),
     url: z.string().optional().nullable(),
-    entities: z.object({
-      description: z.object({ urls: z.array(urlSchema) }),
-      url: z.object({ urls: z.array(urlSchema) }).optional(),
-    }),
+    entities: z
+      .object({
+        description: z.object({ urls: z.array(urlSchema) }),
+        url: z.object({ urls: z.array(urlSchema) }).optional(),
+      })
+      .optional(),
   }),
 })
 
-function parseTimelineUser(
+export function parseTimelineUser(
   twitterUser: z.infer<typeof timelineUserSchema>,
 ): User {
   const user: User = {
@@ -230,7 +229,7 @@ function parseTimelineUser(
   }
   if (
     twitterUser.legacy.description &&
-    twitterUser.legacy.entities.description.urls
+    twitterUser.legacy.entities?.description?.urls
   ) {
     twitterUser.legacy.entities.description.urls.forEach((url) => {
       user.description = user.description?.replace(url.url, url.expanded_url)

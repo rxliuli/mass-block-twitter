@@ -290,9 +290,10 @@
   "modlists.created.title": "My Moderation Lists",
   "modlists.subscribed.title": "Subscribed Moderation Lists",
 
+  "floatingButton.openDashboard": "Open Plugin Dashboard",
+  "floatingButton.close": "Close Floating Button",
   "floatingButton.close.confirm.title": "Are you sure you want to close the floating button?",
   "floatingButton.close.confirm.description.before": "You can reopen it in",
   "floatingButton.close.confirm.description.after": " ",
-  "floatingButton.openDashboard": "Open Plugin Dashboard",
-  "floatingButton.close": "Close Floating Button"
+  "floatingButton.blockCommunicationMembers": "Block Communication Members"
 }

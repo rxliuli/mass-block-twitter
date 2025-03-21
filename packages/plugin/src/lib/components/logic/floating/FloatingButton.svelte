@@ -2,17 +2,15 @@
   import * as Popover from '$lib/components/ui/popover'
   import icon from './assets/48.png'
   import { shadcnConfig } from '../config'
-  import {
-    ShieldBanIcon,
-    SquareArrowOutUpRightIcon,
-    XIcon,
-  } from 'lucide-svelte'
+  import { SquareArrowOutUpRightIcon, XIcon } from 'lucide-svelte'
   import * as Command from '$lib/components/ui/command'
   import { useOpen } from '$lib/stores/open.svelte'
   import { useSettings } from '$lib/settings'
   import { toast } from 'svelte-sonner'
   import CloseFloatingButtonToast from './components/CloseFloatingButtonToast.svelte'
   import { t } from '$lib/i18n'
+  import { useLocation } from '$lib/hooks/useLocation.svelte'
+  import BlockCommunicationMembers from './components/BlockCommunicationMembers.svelte'
 
   const openState = useOpen()
 
@@ -38,6 +36,20 @@
   }
 
   let open = $state(false)
+
+  const loc = useLocation()
+  const page = $derived.by<'home' | 'community' | undefined>(() => {
+    const url = loc.url
+    if (!url) {
+      return
+    }
+    if (url.pathname === '/home') {
+      return 'home'
+    }
+    if (url.pathname.startsWith('/i/communities/')) {
+      return 'community'
+    }
+  })
 </script>
 
 {#if $settings.showFloatingButton ?? true}
@@ -75,6 +87,13 @@
             <SquareArrowOutUpRightIcon />
             <span>{$t('floatingButton.openDashboard')}</span>
           </Command.Item>
+          {#if page === 'community'}
+            <BlockCommunicationMembers
+              onclick={() => {
+                open = false
+              }}
+            />
+          {/if}
           <Command.Item
             onclick={() => {
               open = false

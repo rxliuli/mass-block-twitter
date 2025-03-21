@@ -1,0 +1,233 @@
+{
+  "data": {
+    "communityResults": {
+      "result": {
+        "__typename": "Community",
+        "is_member": false,
+        "name": "Misa",
+        "role": "NonMember",
+        "rest_id": "1900366536683987325",
+        "actions": {
+          "join_action_result": {
+            "__typename": "CommunityJoinActionUnavailable"
+          },
+          "id": "Q29tbXVuaXR5QWN0aW9uczoxOTAwMzY2NTM2NjgzOTg3MzI1"
+        },
+        "description": "Misa",
+        "creator_results": {
+          "result": {
+            "__typename": "User",
+            "id": "VXNlcjoxNzU5NjQ2NjkxMzE2MTA1MjE2",
+            "is_blue_verified": true,
+            "legacy": {
+              "screen_name": "TonioAbrazo",
+              "verified": false
+            }
+          },
+          "id": "VXNlclJlc3VsdHM6MTc1OTY0NjY5MTMxNjEwNTIxNg=="
+        },
+        "join_policy": "RestrictedJoinRequestsRequireModeratorApproval",
+        "created_at": 1741917664108,
+        "rules": [
+          {
+            "rest_id": "1900366536738574620",
+            "name": "No te desvíes del Tema en tus posts.",
+            "id": "Q29tbXVuaXR5UnVsZToxOTAwMzY2NTM2NzM4NTc0NjIw"
+          },
+          {
+            "rest_id": "1900369813567914135",
+            "name": "No pasarse de trolo ni de degenerado.",
+            "id": "Q29tbXVuaXR5UnVsZToxOTAwMzY5ODEzNTY3OTE0MTM1"
+          },
+          {
+            "rest_id": "1900369838306189681",
+            "name": "No spamear",
+            "id": "Q29tbXVuaXR5UnVsZToxOTAwMzY5ODM4MzA2MTg5Njgx"
+          },
+          {
+            "rest_id": "1900388356116119989",
+            "name": "Si rogas seguidores AFUERA",
+            "id": "Q29tbXVuaXR5UnVsZToxOTAwMzg4MzU2MTE2MTE5OTg5"
+          },
+          {
+            "rest_id": "1900388404920984014",
+            "name": "Si haces seguime y te sigo AFUERA",
+            "id": "Q29tbXVuaXR5UnVsZToxOTAwMzg4NDA0OTIwOTg0MDE0"
+          }
+        ],
+        "custom_banner_media": {
+          "media_info": {
+            "__typename": "ApiImage",
+            "color_info": {
+              "palette": [
+                {
+                  "rgb": {
+                    "red": 22,
+                    "green": 24,
+                    "blue": 38
+                  },
+                  "percentage": 65.79
+                },
+                {
+                  "rgb": {
+                    "red": 44,
+                    "green": 52,
+                    "blue": 106
+                  },
+                  "percentage": 17.05
+                },
+                {
+                  "rgb": {
+                    "red": 141,
+                    "green": 110,
+                    "blue": 179
+                  },
+                  "percentage": 7.83
+                },
+                {
+                  "rgb": {
+                    "red": 78,
+                    "green": 48,
+                    "blue": 52
+                  },
+                  "percentage": 2.76
+                },
+                {
+                  "rgb": {
+                    "red": 90,
+                    "green": 57,
+                    "blue": 97
+                  },
+                  "percentage": 1.46
+                }
+              ]
+            },
+            "original_img_url": "https://pbs.twimg.com/community_banner_img/1900367466443751425/-oXIyyAb?format=jpg&name=orig",
+            "original_img_width": 1023,
+            "original_img_height": 409
+          },
+          "id": "QXBpTWVkaWE6DAATCgABGl92JGQWwAEAAA=="
+        },
+        "default_banner_media": {
+          "media_info": {
+            "__typename": "ApiImage",
+            "color_info": {
+              "palette": [
+                {
+                  "rgb": {
+                    "red": 3,
+                    "green": 171,
+                    "blue": 178
+                  },
+                  "percentage": 57.34
+                },
+                {
+                  "rgb": {
+                    "red": 247,
+                    "green": 117,
+                    "blue": 129
+                  },
+                  "percentage": 23.51
+                },
+                {
+                  "rgb": {
+                    "red": 224,
+                    "green": 149,
+                    "blue": 159
+                  },
+                  "percentage": 6.99
+                },
+                {
+                  "rgb": {
+                    "red": 159,
+                    "green": 188,
+                    "blue": 194
+                  },
+                  "percentage": 4.78
+                },
+                {
+                  "rgb": {
+                    "red": 246,
+                    "green": 90,
+                    "blue": 103
+                  },
+                  "percentage": 1.32
+                }
+              ]
+            },
+            "original_img_url": "https://pbs.twimg.com/media/FECTH-kUUAQMe8W.jpg",
+            "original_img_width": 1200,
+            "original_img_height": 480
+          },
+          "id": "QXBpTWVkaWE6DAABCgABFECTH+kUUAQKAAITiFWq8lUQBAAA"
+        },
+        "members_facepile_results": [
+          {
+            "result": {
+              "__typename": "User",
+              "legacy": {
+                "profile_image_url_https": "https://pbs.twimg.com/profile_images/1825654889688481792/AGw5QSoa_normal.jpg"
+              },
+              "id": "VXNlcjoxNzU5NjQ2NjkxMzE2MTA1MjE2"
+            },
+            "id": "VXNlclJlc3VsdHM6MTc1OTY0NjY5MTMxNjEwNTIxNg=="
+          },
+          {
+            "result": {
+              "__typename": "User",
+              "legacy": {
+                "profile_image_url_https": "https://pbs.twimg.com/profile_images/1802552118953353216/BHbrhQZq_normal.jpg"
+              },
+              "id": "VXNlcjoxMzczMTIzNDcy"
+            },
+            "id": "VXNlclJlc3VsdHM6MTM3MzEyMzQ3Mg=="
+          },
+          {
+            "result": {
+              "__typename": "User",
+              "legacy": {
+                "profile_image_url_https": "https://pbs.twimg.com/profile_images/1697688444124680192/iPhLGOks_normal.jpg"
+              },
+              "id": "VXNlcjoxOTg5MDU2OTE="
+            },
+            "id": "VXNlclJlc3VsdHM6MTk4OTA1Njkx"
+          },
+          {
+            "result": {
+              "__typename": "User",
+              "legacy": {
+                "profile_image_url_https": "https://pbs.twimg.com/profile_images/1828650277727010816/uV2Cb3eC_normal.jpg"
+              },
+              "id": "VXNlcjo5MzQ2MDI0ODkxMzkyNTMyNDk="
+            },
+            "id": "VXNlclJlc3VsdHM6OTM0NjAyNDg5MTM5MjUzMjQ5"
+          },
+          {
+            "result": {
+              "__typename": "User",
+              "legacy": {
+                "profile_image_url_https": "https://pbs.twimg.com/profile_images/1691232050458632192/A_rfO5Z1_normal.jpg"
+              },
+              "id": "VXNlcjoxNDA1MTg2MDIyMDUzNDQ5NzMy"
+            },
+            "id": "VXNlclJlc3VsdHM6MTQwNTE4NjAyMjA1MzQ0OTczMg=="
+          }
+        ],
+        "member_count": 6700,
+        "invites_result": {
+          "__typename": "CommunityInvitesUnavailable"
+        },
+        "join_requests_result": {
+          "__typename": "CommunityJoinRequestsUnavailable"
+        },
+        "is_nsfw": false,
+        "trending_hashtags_slice": {
+          "__typename": "CommunityHashtagSlice",
+          "items": []
+        },
+        "id": "Q29tbXVuaXR5OjE5MDAzNjY1MzY2ODM5ODczMjU="
+      },
+      "id": "Q29tbXVuaXR5UmVzdWx0czoxOTAwMzY2NTM2NjgzOTg3MzI1"
+    }
+  }
+}

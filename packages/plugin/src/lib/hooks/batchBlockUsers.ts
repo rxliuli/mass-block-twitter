@@ -64,26 +64,27 @@ export async function selectImportFile() {
   return users
 }
 
-export const batchBlockUsersMutation = async (options: {
+export const batchBlockUsersMutation = async <T extends User>(options: {
   controller: AbortController
-  users: () => User[]
+  users: () => T[]
   total?: number
   waitTime?: number
-  blockUser: (user: User) => Promise<void>
+  blockUser: (user: T) => Promise<'skip' | undefined | void>
   getAuthInfo: () => Promise<AuthInfo>
-  onProcessed: (user: User, meta: BatchBlockUsersProcessedMeta) => Promise<void>
+  onProcessed: (user: T, meta: BatchBlockUsersProcessedMeta) => Promise<void>
 }) => {
   const { controller, users } = options
   // controller.abort()
   // controller = new AbortController()
-  const toastId = toast.loading(tP('modlists.detail.toast.blocking'), {
-    cancel: {
-      label: tP('modlists.detail.toast.blockingStop'),
-      onClick: () => {
-        controller.abort()
-        toast.dismiss(toastId)
-      },
+  const cancel = {
+    label: tP('modlists.detail.toast.blockingStop'),
+    onClick: () => {
+      controller.abort()
+      toast.dismiss(toastId)
     },
+  }
+  const toastId = toast.loading(tP('modlists.detail.toast.blocking'), {
+    cancel,
   })
   // console.log('[batchBlockMutation] startTime ' + new Date().toISOString())
   let errorToastId = ulid()
@@ -94,11 +95,17 @@ export const batchBlockUsersMutation = async (options: {
     await batchBlockUsers(users, {
       signal: controller.signal,
       blockUser: async (user) => {
+        if (user.following || user.blocking) {
+          return 'skip'
+        }
         const _user = await dbApi.users.get(user.id)
         if (_user && (_user.following || _user.blocking)) {
           return 'skip'
         }
-        await options.blockUser(user)
+        const r = await options.blockUser(user)
+        if (r === 'skip') {
+          return 'skip'
+        }
         realBlockedCount++
       },
       onProcessed: async (user, meta) => {
@@ -123,6 +130,7 @@ export const batchBlockUsersMutation = async (options: {
                 time: ms(meta.averageTime * (allCount - meta.index)),
               },
             }),
+            cancel,
           },
         )
         if (meta.error) {

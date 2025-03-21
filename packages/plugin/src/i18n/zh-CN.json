@@ -281,8 +281,9 @@
   "modlists.subscribed.title": "已订阅的审核列表",
 
   "floatingButton.close.confirm.title": "确定要关闭悬浮球吗？",
+  "floatingButton.openDashboard": "打开插件仪表盘",
+  "floatingButton.close": "关闭悬浮球",
   "floatingButton.close.confirm.description.before": "你可以在",
   "floatingButton.close.confirm.description.after": "中重新打开",
-  "floatingButton.openDashboard": "打开插件仪表盘",
-  "floatingButton.close": "关闭悬浮球"
+  "floatingButton.blockCommunicationMembers": "屏蔽社区成员"
 }

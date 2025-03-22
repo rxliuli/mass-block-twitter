@@ -251,6 +251,7 @@
   "modlists.detail.users.remove.success": "Removed from list",
   "modlists.detail.users.remove.failed": "Remove from list failed",
   "modlists.detail.users.empty": "No users in this list",
+  "modlists.detail.users.search": "Search users",
   "modlists.detail.rules.empty": "No rules in this list",
   "modlists.detail.rules.add.success": "Rule added",
   "modlists.detail.rules.add.failed": "Failed to add rule",

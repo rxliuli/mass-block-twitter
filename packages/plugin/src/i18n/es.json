@@ -248,6 +248,7 @@
   "modlists.detail.users.remove": "Eliminar",
   "modlists.detail.users.remove.success": "Eliminado de la lista",
   "modlists.detail.users.remove.failed": "Eliminación de la lista fallida",
+  "modlists.detail.users.search": "Buscar usuarios",
   "modlists.detail.users.empty": "No hay usuarios en esta lista",
   "modlists.detail.rules.empty": "No hay reglas en esta lista",
   "modlists.detail.rules.add.success": "Regla agregada",

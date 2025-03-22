@@ -5,13 +5,16 @@ import { crossFetch } from "$lib/query"
 import { ModListUsersPageResponse } from "@mass-block-twitter/server"
 import { createInfiniteQuery } from "@tanstack/svelte-query"
 
-export function useModlistUsers(modListId: string) {
+export function useModlistUsers(modListId: string, searchQuery?: string) {
   const query = createInfiniteQuery({
-    queryKey: ['modlistUsers', modListId],
+    queryKey: ['modlistUsers', modListId, searchQuery],
     queryFn: async ({ pageParam }) => {
       const authInfo = await getAuthInfo()
       const url = new URL(`${SERVER_URL}/api/modlists/users`)
       url.searchParams.set('modListId', modListId)
+      if (searchQuery) {
+        url.searchParams.set('query', searchQuery)
+      }
       if (pageParam) {
         url.searchParams.set('cursor', pageParam)
       }

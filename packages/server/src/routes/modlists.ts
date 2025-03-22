@@ -19,10 +19,12 @@ import {
   desc,
   eq,
   exists,
+  ilike,
   inArray,
   InferInsertModel,
   InferSelectModel,
   lt,
+  or,
   sql,
 } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
@@ -770,6 +772,7 @@ search
 const usersSchema = z.object({
   modListId: z.string(),
   cursor: z.string().optional(),
+  query: z.string().optional(),
   limit: zodStringNumber().optional(),
 })
 export type ModListUsersRequest = z.infer<typeof usersSchema>
@@ -791,6 +794,13 @@ search
     const conditions = [eq(modListUser.modListId, validated.modListId)]
     if (validated.cursor) {
       conditions.push(lt(modListUser.id, validated.cursor))
+    }
+    if (validated.query) {
+      conditions.push(or(
+        ilike(user.screenName, `%${validated.query}%`),
+        ilike(user.name, `%${validated.query}%`),
+        ilike(user.description, `%${validated.query}%`),
+      )!)
     }
     const modListUsers = await db
       .select()

@@ -32,6 +32,7 @@
   import { useModlistUsers } from '../utils/useModlistUsers'
   import { t } from '$lib/i18n'
   import { selectImportFile } from '$lib/hooks/batchBlockUsers'
+  import { Input } from '$lib/components/ui/input';
 
   let {
     owner,
@@ -44,8 +45,10 @@
     }
   } = $props()
 
+  let searchQuery = $state('')
+
   const route = useRoute()
-  const query = useModlistUsers(route.search?.get('id')!)
+  const query = $derived(useModlistUsers(route.search?.get('id')!, searchQuery))
   const queryClient = useQueryClient()
 
   const innerAddUsersMutation = createMutation({
@@ -206,6 +209,11 @@
 </script>
 
 <div class="flex-1 overflow-y-hidden">
+  <Input
+    placeholder={$t('modlists.detail.users.search')}
+    bind:value={searchQuery}
+    class="mb-4"
+  />
   <AutoSizer>
     {#snippet child({ height })}
       {#if $query.data}

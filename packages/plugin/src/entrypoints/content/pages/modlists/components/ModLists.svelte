@@ -22,6 +22,8 @@
     <QueryLoading />
   {:else if query.error}
     <QueryError description={query.error.message} />
+  {:else if query.data?.length === 0}
+    <p class="text-muted-foreground">No subscribed modlists</p>
   {:else}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {#each query.data ?? [] as list (list.id)}

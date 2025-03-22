@@ -1,19 +1,12 @@
-# Frequently Asked Questions
+# FAQ
 
-## Installation Related
+## Security and Privacy
 
-- Installation failures
-- Compatibility issues
-- Permission issues
+### Is this extension safe?
 
-## Usage Related
+Yes, completely safe. Our extension:
 
-- Feature usage
-- Settings issues
-- Performance issues
-
-## Account Related
-
-- Login issues
-- Subscription issues
-- Data synchronization
+- Is 100% open-source (including the server-side code)
+- All source code can be reviewed on GitHub: <https://github.com/rxliuli/mass-block-twitter>
+- Despite having premium features, we've maintained our open-source policy from the start
+- We understand the importance of your Twitter account security

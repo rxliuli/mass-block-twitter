@@ -1,8 +1,24 @@
 # Changelog
 
+## 0.18.9
+
+- ✨ Added floating action button on the right side of page
+- ✨ Now supports blocking all followers from community lists
+- 🐛 Fixed server authentication error
+- 🐛 Fixed issue where plugin changed Twitter language to English [kaisermann/svelte-i18n#265](https://github.com/kaisermann/svelte-i18n/pull/265)
+- 🐛 Fixed theme mismatch when closing floating button [svecosystem/mode-watcher#105](https://github.com/svecosystem/mode-watcher/pull/105)
+
+## 0.18.3
+
+- 🐛 fix(plugin): refresh modlist after subscription changes
+
+## 0.18.2
+
+- 🐛 fix: fix visibility field being null
+
 ## 0.18.1
 
-- 🐛 Fix the issue of sharing links and batch blocking
+- 🐛 fix(plugin): fix permission error
 
 ## 0.18.0
 

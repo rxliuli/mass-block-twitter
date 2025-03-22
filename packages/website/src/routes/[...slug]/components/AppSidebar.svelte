@@ -21,6 +21,10 @@
       href: '/docs/02-usage',
     },
     {
+      label: 'FAQ',
+      href: '/docs/03-faq',
+    },
+    {
       label: 'Changelog',
       href: '/docs/04-changelog',
     },

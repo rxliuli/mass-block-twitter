@@ -2,6 +2,7 @@
   import { shadcnConfig } from '$lib/components/logic/config'
   import * as Select from '$lib/components/ui/select'
   import type { LabelValue } from './types'
+  import { t } from '$lib/i18n'
 
   let {
     value = $bindable(),
@@ -36,7 +37,7 @@
     <span class="truncate">
       {options.find((it) => it.value === value)?.label ??
         placeholder ??
-        'Select a value'}
+        $t('select.default')}
     </span>
   </Select.Trigger>
   <Select.Content portalProps={{ to: shadcnConfig.get().portal }}>

@@ -36,7 +36,7 @@
   })
   const authInfo = useAuthInfo()
   function onAddKeyword() {
-    if ($rules.length >= 100 && !authInfo.value?.isPro) {
+    if ($rules.length >= 400 && !authInfo.value?.isPro) {
       toast.info($t('muted-words.toast.limit.title'), {
         description: $t('muted-words.toast.limit.description'),
         action: {

@@ -81,7 +81,6 @@
             `[batchBlockMutation] onProcesssed ${meta.index} ${user.screen_name} ` +
               new Date().toISOString(),
           )
-          debugger
           if (meta.index % 10 === 0) {
             // console.log('fetchNextPage before')
             if (!$query.isPending) {

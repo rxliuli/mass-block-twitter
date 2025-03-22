@@ -13,9 +13,8 @@ import { ModListSubscribedUsersKey } from './shared'
 import { crossFetch } from './query'
 import { dbApi } from './db'
 import { chunk } from 'lodash-es'
-import { getSettings } from './settings'
 import * as localModlistSubscriptions from '$lib/localModlistSubscriptions'
-import { ModListIdsResponse } from 'node_modules/@mass-block-twitter/server/src/routes/modlists'
+import { type ModListIdsResponse } from '@mass-block-twitter/server'
 
 export async function refreshModListSubscribedUsers(
   force?: boolean,

@@ -49,6 +49,7 @@ export type {
   ModListUpdateRuleResponse,
   ModListAddTwitterUsersResponse,
   ModListAddTwitterUsersRequest,
+  ModListIdsResponse,
 } from './routes/modlists'
 export type { CheckoutCompleteRequest } from './routes/billing'
 export type {

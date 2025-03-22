@@ -91,4 +91,14 @@ describe('d1 batch', () => {
       }[]
     >(r1)
   })
+  it('should be able to upsert user', async () => {
+    const db = context.db
+    const r = await db
+      .update(user)
+      .set({
+        screenName: 'test',
+      })
+      .where(eq(user.id, 'test'))
+    expect(r.meta.rows_written).eq(0)
+  })
 })

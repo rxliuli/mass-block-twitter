@@ -25,7 +25,7 @@ import {
   sql,
 } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
-import { chunk, omit, uniqBy } from 'es-toolkit'
+import { chunk, groupBy, omit, uniqBy } from 'es-toolkit'
 import { SQLiteUpdateSetSource } from 'drizzle-orm/sqlite-core'
 
 export function upsertTweet(
@@ -322,12 +322,14 @@ twitter
     return c.json(res)
   })
 
-const checkSpamUserSchema = z.array(
-  z.object({
-    user: userSchema,
-    tweets: z.array(tweetSchemaWithUserId),
-  }),
-)
+const checkSpamUserSchema = z
+  .array(
+    z.object({
+      user: userSchema,
+      tweets: z.array(tweetSchemaWithUserId),
+    }),
+  )
+  .max(99)
 export type CheckSpamUserRequest = z.infer<typeof checkSpamUserSchema>
 export type CheckSpamUserResponse = Pick<
   InferSelectModel<typeof userSpamAnalysis>,
@@ -339,23 +341,121 @@ twitter.post(
   async (c) => {
     const validated = c.req.valid('json')
     const db = drizzle(c.env.DB)
-    for (const item of chunk(validated, 100)) {
-      await db.batch([
-        ...item.map((it) => {
-          const _user = convertUserParamsToDBUser(it.user)
-          return upsertUser(db, _user)
-        }),
-        ...item.flatMap((userParam) =>
-          userParam.tweets.map((it) => {
-            const _tweet = convertTweet({
-              ...it,
-              user_id: userParam.user.id,
-            })
-            return upsertTweet(db, _tweet)
-          }),
+    const usersToProcess = validated.map((it) =>
+      convertUserParamsToDBUser(it.user),
+    )
+    const tweetsToProcess = validated.flatMap((it) =>
+      it.tweets.map((userParam) =>
+        convertTweet({ ...userParam, user_id: it.user.id }),
+      ),
+    )
+    const existingUsers = await db
+      .select()
+      .from(user)
+      .where(
+        inArray(
+          user.id,
+          usersToProcess.map((it) => it.id),
         ),
-      ] as any)
+      )
+    const tweets = (
+      await Promise.all(
+        chunk(
+          tweetsToProcess.map((it) => it.id),
+          99,
+        ).map((ids) => db.select().from(tweet).where(inArray(tweet.id, ids))),
+      )
+    ).flatMap((it) => it)
+    const existingUsersMap = existingUsers.reduce((acc, it) => {
+      acc[it.id] = it
+      return acc
+    }, {} as Record<string, InferSelectModel<typeof user>>)
+    const usersToProcessGroupBy = groupBy(usersToProcess, (it) => {
+      const old = existingUsersMap[it.id]
+      if (!old) {
+        return 'new'
+      }
+      if (
+        typeof it.followersCount !== 'number' ||
+        typeof it.followingCount !== 'number'
+      ) {
+        return 'skip'
+      }
+      if (old.followersCount === null || old.followingCount === null) {
+        return 'update'
+      }
+      if (
+        it.updatedAt &&
+        it.updatedAt < new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString()
+      ) {
+        return 'update'
+      }
+      existingUsersMap[it.id]
+      return 'skip'
+    })
+    const list: BatchItem<'sqlite'>[] = []
+    if (usersToProcessGroupBy['new']) {
+      list.push(db.insert(user).values(usersToProcessGroupBy['new']))
     }
+    if (usersToProcessGroupBy['update']) {
+      list.push(
+        ...usersToProcessGroupBy['update'].map((it) =>
+          db
+            .update(user)
+            .set(omit(it, ['id']))
+            .where(eq(user.id, it.id)),
+        ),
+      )
+    }
+    const tweetsMap = tweets.reduce((acc, it) => {
+      acc[it.id] = it
+      return acc
+    }, {} as Record<string, InferSelectModel<typeof tweet>>)
+    const tweetsToProcessGroupBy = groupBy(tweetsToProcess, (it) => {
+      const old = tweetsMap[it.id]
+      if (!old) {
+        return 'new'
+      }
+      if (!old.conversationId && it.conversationId) {
+        return 'update'
+      }
+      return 'skip'
+    })
+    if (tweetsToProcessGroupBy['new']) {
+      list.push(db.insert(tweet).values(tweetsToProcessGroupBy['new']))
+    }
+    if (tweetsToProcessGroupBy['update']) {
+      list.push(
+        ...tweetsToProcessGroupBy['update'].map((it) =>
+          db
+            .update(tweet)
+            .set(omit(it, ['id']))
+            .where(eq(tweet.id, it.id)),
+        ),
+      )
+    }
+
+    if (list.length > 0) {
+      await db.batch(list as any)
+    }
+
+    // for (const item of chunk(validated, 100)) {
+    //   await db.batch([
+    //     ...item.map((it) => {
+    //       const _user = convertUserParamsToDBUser(it.user)
+    //       return upsertUser(db, _user)
+    //     }),
+    //     ...item.flatMap((userParam) =>
+    //       userParam.tweets.map((it) => {
+    //         const _tweet = convertTweet({
+    //           ...it,
+    //           user_id: userParam.user.id,
+    //         })
+    //         return upsertTweet(db, _tweet)
+    //       }),
+    //     ),
+    //   ] as any)
+    // }
 
     const spamAnalysis = await db
       .select({

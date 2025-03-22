@@ -10,6 +10,8 @@
   import { createMutation, useQueryClient } from '@tanstack/svelte-query'
   import { SERVER_URL } from '$lib/constants'
   import { crossFetch } from '$lib/query'
+  import * as localModlistSubscriptions from '$lib/localModlistSubscriptions'
+  import { ModListSubscribeRequest } from '@mass-block-twitter/server';
   import { t } from '$lib/i18n'
 
   const authInfo = useAuthInfo()
@@ -31,6 +33,23 @@
       authInfo.value = info
       clearInterval(interval)
       toast.success($t('account.login.success'))
+      const localSubs = await localModlistSubscriptions.getAllSubscriptions()
+      for (const [modlistId, action] of Object.entries(localSubs)) {
+        const resp = await crossFetch(
+          `${SERVER_URL}/api/modlists/subscribe/${modlistId}`,
+          {
+            method: 'POST',
+            body: JSON.stringify({ action } satisfies ModListSubscribeRequest),
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${info.token}`,
+            },
+          },
+        )
+        if (!resp.ok) {
+          toast.error(`Failed to subscribe to previously locally subscribed modlist ${modlistId}`)
+        }
+      }
       queryClient.refetchQueries()
     }, 1000) as unknown as number
   }

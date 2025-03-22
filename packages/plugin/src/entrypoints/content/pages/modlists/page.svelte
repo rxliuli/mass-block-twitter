@@ -31,10 +31,6 @@
     navigate(`/modlists/created`)
   }
   async function onGotoSubscribed() {
-    if (!authInfo.value) {
-      toast.info($t('modlists.toast.login.subscribed'))
-      return
-    }
     navigate('/modlists/subscribe')
   }
 </script>

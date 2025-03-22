@@ -212,7 +212,7 @@
   <Input
     placeholder={$t('modlists.detail.users.search')}
     bind:value={searchQuery}
-    class="mb-4"
+    class="mb-4 max-w-3xl mx-auto"
   />
   <AutoSizer>
     {#snippet child({ height })}

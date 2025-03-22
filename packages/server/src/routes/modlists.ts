@@ -680,33 +680,6 @@ modlists.get('/subscribed/users', async (c) => {
     },
   )
 })
-export interface ModListIdsResponse {
-  twitterUserIds: string[]
-}
-
-modlists.get('/ids/:id', zValidator('param', z.object({ id: z.string() })), async (c) => {
-  const id = c.req.param('id')
-  const db = drizzle(c.env.DB)
-  
-  const _modList = await db
-    .select()
-    .from(modList)
-    .where(eq(modList.id, id))
-    .limit(1)
-    
-  if (_modList.length === 0) {
-    return c.json({ code: 'modListNotFound' }, 404)
-  }
-  
-  const users = await db
-    .select({ twitterUserId: modListUser.twitterUserId })
-    .from(modListUser)
-    .where(eq(modListUser.modListId, id))
-    
-  return c.json<ModListIdsResponse>({ twitterUserIds: users.map(u => u.twitterUserId) })
-})
-
-
 
 const searchSchema = z.object({
   cursor: z.string().optional(),
@@ -869,6 +842,37 @@ search.get('/rules', zValidator('query', rulesSchema), async (c) => {
     cursor: rules.length === limit ? rules[rules.length - 1]?.id : undefined,
   })
 })
+
+export interface ModListIdsResponse {
+  twitterUserIds: string[]
+}
+search.get(
+  '/ids/:id',
+  zValidator('param', z.object({ id: z.string() })),
+  async (c) => {
+    const id = c.req.param('id')
+    const db = drizzle(c.env.DB)
+
+    const _modList = await db
+      .select()
+      .from(modList)
+      .where(eq(modList.id, id))
+      .limit(1)
+
+    if (_modList.length === 0) {
+      return c.json({ code: 'modListNotFound' }, 404)
+    }
+
+    const users = await db
+      .select({ twitterUserId: modListUser.twitterUserId })
+      .from(modListUser)
+      .where(eq(modListUser.modListId, id))
+
+    return c.json<ModListIdsResponse>({
+      twitterUserIds: users.map((u) => u.twitterUserId),
+    })
+  },
+)
 
 export { modlists, search as modlistSearch }
 export type { ModListConditionItem } from '../db/schema'

@@ -23,6 +23,7 @@ import type {
   ModListUpdateRuleResponse,
   ModListAddTwitterUsersRequest,
   ModListAddTwitterUsersResponse,
+  ModListIdsResponse,
 } from '../src/lib'
 import { TwitterUser } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
@@ -760,6 +761,27 @@ describe('modlists', () => {
       expect(r2.length).toBe(2)
       expect(r2[0].id).toBe('twitter-user-1')
       expect(r2[1].id).toBe('twitter-user-2')
+    })
+    it('should be able to get ids', async () => {
+      await addUserToModList(
+        {
+          id: 'twitter-user-1',
+          screen_name: 'test-user-1',
+          name: 'test-user-1',
+          created_at: new Date().toISOString(),
+          is_blue_verified: false,
+          followers_count: 100,
+          friends_count: 100,
+          default_profile: false,
+          default_profile_image: false,
+        },
+        modListId,
+      )
+      const resp1 = await fetch(`/api/modlists/ids/${modListId}`)
+      expect(resp1.ok).true
+      const r1 = (await resp1.json()) as ModListIdsResponse
+      expect(r1.twitterUserIds).length(1)
+      expect(r1.twitterUserIds[0]).toBe('twitter-user-1')
     })
   })
   describe('rule', () => {

@@ -32,7 +32,10 @@ export async function generateToken(
 
 export function auth(): MiddlewareHandler<HonoEnv> {
   return async (c, next) => {
-    if (c.req.url === '/api/modlists/search') {
+    if (
+      c.req.url === '/api/modlists/search' ||
+      c.req.url.startsWith('/api/modlists/ids/')
+    ) {
       return next()
     }
     const token = c.req.header('Authorization')?.replace('Bearer ', '')

@@ -4,6 +4,8 @@
   "modlists.title": "Moderation Lists",
   "muted-words.title": "Muted Words",
 
+  "select.default": "Select a value",
+
   "dashboard.stats.total": "Total",
   "dashboard.stats.auto": "Auto Blocked",
   "dashboard.stats.manual": "Manual Blocked",

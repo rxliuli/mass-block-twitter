@@ -5,6 +5,7 @@
   import type { QueryObserverResult } from '@tanstack/svelte-query'
   import type { ModListSubscribeResponse } from '@mass-block-twitter/server'
   import { navigate } from '$lib/components/logic/router'
+  import { t } from '$lib/i18n';
 
   const {
     query,
@@ -23,7 +24,7 @@
   {:else if query.error}
     <QueryError description={query.error.message} />
   {:else if query.data?.length === 0}
-    <p class="text-muted-foreground">No subscribed modlists</p>
+    <p class="text-muted-foreground">{t('modlists.subscribed.noSubscribed')}</p>
   {:else}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {#each query.data ?? [] as list (list.id)}

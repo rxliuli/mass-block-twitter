@@ -47,7 +47,7 @@
           },
         )
         if (!resp.ok) {
-          toast.error(`Failed to subscribe to previously locally subscribed modlist ${modlistId}`)
+                toast.error($t('account.login.toast.subscribeLocal.failed', {values: {modlistId}}))
         }
       }
       queryClient.refetchQueries()

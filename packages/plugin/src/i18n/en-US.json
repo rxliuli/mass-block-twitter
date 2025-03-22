@@ -48,6 +48,8 @@
   "account.logout.success": "Logged out",
   "account.logout.failed": "Logout failed",
   "account.upgrade.title": "Upgrade",
+  "account.login.toast.subscribeLocal.failed": "Failed to subscribe to previously locally subscribed modlist {modlistId}",
+
 
   "settings.title": "Settings",
   "settings.appearance.title": "Appearance",
@@ -152,7 +154,7 @@
   "modlists.nav.created": "Created",
   "modlists.nav.subscribed": "Subscribed",
   "modlists.toast.login.created": "Please login to view your created modlists",
-  "modlists.toast.login.subscribed": "Please login to view your subscribed modlists",
+  "modlists.subscribed.noSubscribed": "No subscribed modlists",
   "modlists.creator.title": "New Moderation List",
   "modlists.creator.toast.limit.title": "You have reached the maximum number of moderation lists.",
   "modlists.creator.toast.limit.description": "Please upgrade to Pro to create unlimited moderation lists.",

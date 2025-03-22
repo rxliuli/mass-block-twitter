@@ -149,7 +149,6 @@
   "modlists.nav.created": "已创建",
   "modlists.nav.subscribed": "已订阅",
   "modlists.toast.login.created": "请登录以查看你创建的审核列表",
-  "modlists.toast.login.subscribed": "请登录以查看你订阅的审核列表",
   "modlists.creator.error.userId": "未找到 Twitter 用户 ID，请重新登录。",
   "modlists.creator.error.userNotFound": "未找到用户，请重新登录。",
 

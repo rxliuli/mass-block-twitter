@@ -18,18 +18,16 @@ import {
   and,
   desc,
   eq,
-  exists,
-  ilike,
   inArray,
   InferInsertModel,
   InferSelectModel,
+  like,
   lt,
   or,
   sql,
 } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
 import { getTableAliasedColumns } from '../lib/drizzle'
-import { chunk, groupBy, omit } from 'es-toolkit'
 
 const modlists = new Hono<HonoEnv>().use(auth())
 
@@ -797,9 +795,9 @@ search
     }
     if (validated.query) {
       conditions.push(or(
-        ilike(user.screenName, `%${validated.query}%`),
-        ilike(user.name, `%${validated.query}%`),
-        ilike(user.description, `%${validated.query}%`),
+        like(user.screenName, `%${validated.query}%`),
+        like(user.name, `%${validated.query}%`),
+        like(user.description, `%${validated.query}%`),
       )!)
     }
     const modListUsers = await db

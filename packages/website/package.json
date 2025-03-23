@@ -15,6 +15,7 @@
     "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@lucide/svelte": "^0.483.0",
     "@mass-block-twitter/server": "workspace:*",
     "@playwright/test": "^1.49.1",
     "@sveltejs/adapter-cloudflare": "^5.0.1",

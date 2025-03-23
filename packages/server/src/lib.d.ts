@@ -68,3 +68,4 @@ export type {
   LlmAnalyzeResponse,
   UserSpamAnalyze,
 } from './routes/analyze'
+export type { FeedbackRequest } from './routes/feedback'

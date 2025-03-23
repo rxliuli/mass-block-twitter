@@ -330,6 +330,20 @@ export const llmRequestLog = sqliteTable(
   ],
 )
 
+export const feedback = sqliteTable('Feedback', {
+  id: text('id').primaryKey().$defaultFn(ulid),
+  localUserId: text('localUserId').references(() => localUser.id),
+  reason: text('reason').notNull(),
+  suggestion: text('suggestion'),
+  context: text('context', { mode: 'json' }),
+  createdAt: text('createdAt')
+    .notNull()
+    .$defaultFn(() => new Date().toISOString()),
+  updatedAt: text('updatedAt')
+    .notNull()
+    .$defaultFn(() => new Date().toISOString()),
+})
+
 // Relations
 export const userRelations = relations(user, ({ many }) => ({
   tweets: many(tweet),

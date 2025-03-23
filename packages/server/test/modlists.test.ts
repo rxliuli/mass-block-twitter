@@ -1021,4 +1021,34 @@ describe('modlists', () => {
       expect(r1.data).length(0)
     })
   })
+
+  describe('search with query filter', () => {
+    it('should filter modlists based on user name', async () => {
+      const headers = {
+        Authorization: `Bearer ${context.token1}`,
+        'Content-Type': 'application/json',
+      }
+      const resp1 = await fetch('/api/modlists/create', {
+        method: 'POST',
+        body: JSON.stringify({ ...newModList }),
+        headers,
+      })
+      expect(resp1.ok).true
+      const modListId = ((await resp1.json()) as any).id
+      
+      await addUserToModList({...newModList.twitterUser, name: 'Unique Filter Test'}, modListId)
+      await addUserToModList(
+        { ...newModList.twitterUser, id: '1234', name: "Unique Filter Test" },
+        modListId
+      );
+
+      const searchResp = await fetch(
+        `/api/modlists/users?modListId=${modListId}&query=unique%20filter`,
+        { headers }
+      );
+      expect(searchResp.ok).true
+      const searchResults = (await searchResp.json()) as ModListUsersPageResponse
+      expect(searchResults.data.length).toBe(1)
+    })
+  })
 })

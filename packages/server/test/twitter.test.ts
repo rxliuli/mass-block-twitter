@@ -8,6 +8,7 @@ import { initCloudflareTest } from './utils'
 import { tweet, user, userSpamAnalysis } from '../src/db/schema'
 import { eq, gt, sql } from 'drizzle-orm'
 import { range } from 'es-toolkit'
+import { drizzle } from 'drizzle-orm/d1'
 
 let c = initCloudflareTest()
 
@@ -360,7 +361,7 @@ describe('check spam user', () => {
       ),
     ).rejects.toThrowError()
   })
-  it.todo('should be able to disallow duplicate tweet', async () => {
+  it('should be able to disallow duplicate tweet', async () => {
     const user: CheckSpamUserRequest[number]['user'] = {
       id: 'user-1',
       screen_name: 'user-1',
@@ -376,12 +377,12 @@ describe('check spam user', () => {
       },
     ]
     await checkSpamUser([{ user, tweets }])
-    // const r1 = await c.db.select().from(tweet).all()
-    // expect(r1[0].text).eq('test A')
-    // tweets[0].text = 'test B'
-    // await checkSpamUser([{ user, tweets }])
-    // const r2 = await c.db.select().from(tweet).all()
-    // expect(r2[0].text).eq('test A')
+    const r1 = await c.db.select().from(tweet).all()
+    expect(r1[0].text).eq('test A')
+    tweets[0].text = 'test B'
+    await checkSpamUser([{ user, tweets }])
+    const r2 = await c.db.select().from(tweet).all()
+    expect(r2[0].text).eq('test A')
   })
   it('should be able to allow duplicate tweet with not complete', async () => {
     const request: CheckSpamUserRequest = [
@@ -428,7 +429,7 @@ describe('check spam user', () => {
     const r2 = await c.db.select().from(tweet).all()
     expect(r2[0].text).eq('test B')
   })
-  it.only('should be able to prevent duplicate update user and tweet', async () => {
+  it('should be able to prevent duplicate update user and tweet', async () => {
     await c.db.insert(user).values({
       id: 'user-1',
       screenName: 'user-1',
@@ -458,5 +459,25 @@ describe('check spam user', () => {
     await checkSpamUser(request)
     const r4 = await c.db.select().from(user).all()
     expect(r4[0].name).eq('user-2')
+  })
+  it('fix: D1_ERROR: too many SQL variables at offset 633: SQLITE_ERROR', async () => {
+    await checkSpamUser(
+      range(10).map((it) => {
+        const userId = `user-${it}`
+        return {
+          user: {
+            id: userId,
+            screen_name: `user-${it}`,
+            name: `user-${it}`,
+          },
+          tweets: range(20).map((it) => ({
+            id: `tweet-${userId}-${it}`,
+            created_at: new Date().toISOString(),
+            text: `test ${it}`,
+            user_id: userId,
+          })),
+        }
+      }),
+    )
   })
 })

@@ -1,6 +1,7 @@
 import { DBSchema, IDBPDatabase, openDB } from 'idb'
 import { pickBy, sortBy } from 'lodash-es'
 import { ulid } from 'ulidx'
+import { createKeyVal, KeyValItem } from './keyval'
 
 export const dbStore: DBStore = {} as any
 
@@ -113,6 +114,14 @@ export interface MyDB extends DBSchema {
     key: string
     value: SpamUser
   }
+  pendingCheckUserIds: {
+    key: string
+    value: KeyValItem
+  }
+  uploadedCheckUserIds: {
+    key: string
+    value: KeyValItem
+  }
 }
 
 export type DBStore = {
@@ -120,7 +129,7 @@ export type DBStore = {
 }
 
 export async function initDB() {
-  dbStore.idb = await openDB<MyDB>('mass-db', 16, {
+  dbStore.idb = await openDB<MyDB>('mass-db', 17, {
     async upgrade(db, oldVersion, newVersion, transaction) {
       if (db.objectStoreNames.length === 0) {
         // init users store
@@ -142,6 +151,10 @@ export async function initDB() {
           'status',
         )
         db.createObjectStore('spamUsers')
+      }
+      if (oldVersion < 17) {
+        db.createObjectStore('pendingCheckUserIds')
+        db.createObjectStore('uploadedCheckUserIds')
       }
     },
   })
@@ -317,32 +330,25 @@ class ActivityDAO {
 }
 
 class PendingCheckUserDAO {
+  private get pendingCheckUserIds() {
+    return createKeyVal({
+      dbName: 'mass-db',
+      storeName: 'pendingCheckUserIds',
+    })
+  }
+  private get uploadedCheckUserIds() {
+    return createKeyVal({
+      dbName: 'mass-db',
+      storeName: 'uploadedCheckUserIds',
+    })
+  }
   async record(userIds: string[]): Promise<void> {
     await Promise.all(
       userIds.map(async (it) => {
-        const store = await dbStore.idb.get('pendingCheckUsers', it)
-        if (store) {
-          // if (
-          //   new Date().getTime() - new Date(store.created_at).getTime() <
-          //   1000 * 60 * 60 * 24
-          // ) {
-          //   return
-          // }
+        if (await this.uploadedCheckUserIds.get(it)) {
           return
         }
-        if (await dbStore.idb.get('spamUsers', it)) {
-          return
-        }
-        await dbStore.idb.put(
-          'pendingCheckUsers',
-          {
-            id: it,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            status: 'pending',
-          },
-          it,
-        )
+        await this.pendingCheckUserIds.set(it, true)
       }),
     )
   }
@@ -352,13 +358,13 @@ class PendingCheckUserDAO {
       tweets: Tweet[]
     }[]
   > {
-    const userIds = await dbStore.idb.getAllKeysFromIndex(
-      'pendingCheckUsers',
-      'status_index',
-      'pending',
-    )
+    const userIds = await this.pendingCheckUserIds.keys()
     const list = await Promise.all(
       userIds.map(async (userId) => {
+        if (await this.uploadedCheckUserIds.get(userId)) {
+          await this.pendingCheckUserIds.del(userId)
+          return
+        }
         const user = await dbStore.idb.get('users', userId)
         if (
           !user ||
@@ -366,6 +372,7 @@ class PendingCheckUserDAO {
           user.friends_count === undefined ||
           user.is_blue_verified === undefined
         ) {
+          await this.pendingCheckUserIds.del(userId)
           return
         }
         const tweets = sortBy(
@@ -381,25 +388,13 @@ class PendingCheckUserDAO {
     return list.filter((it) => it !== undefined)
   }
 
-  async updateStatus(
-    userIds: string[],
-    status: 'pending' | 'checked',
-  ): Promise<void> {
+  async uploaded(userIds: string[], ttl?: number): Promise<void> {
     await Promise.all(
       userIds.map(async (userId) => {
-        const user = await dbStore.idb.get('pendingCheckUsers', userId)
-        if (!user) {
-          return
-        }
-        await dbStore.idb.put(
-          'pendingCheckUsers',
-          {
-            ...user,
-            updated_at: new Date().toISOString(),
-            status,
-          },
-          userId,
-        )
+        await this.pendingCheckUserIds.del(userId)
+        await this.uploadedCheckUserIds.set(userId, true, {
+          expirationTtl: ttl,
+        })
       }),
     )
   }

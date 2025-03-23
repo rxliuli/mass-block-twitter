@@ -27,6 +27,7 @@ import {
 import { BatchItem } from 'drizzle-orm/batch'
 import { chunk, groupBy, omit, uniqBy } from 'es-toolkit'
 import { SQLiteUpdateSetSource } from 'drizzle-orm/sqlite-core'
+import { safeChunkInsertValues } from '../lib/drizzle'
 
 export function upsertTweet(
   db: DrizzleD1Database<Record<string, never>> & {
@@ -395,7 +396,11 @@ twitter.post(
     })
     const list: BatchItem<'sqlite'>[] = []
     if (usersToProcessGroupBy['new']) {
-      list.push(db.insert(user).values(usersToProcessGroupBy['new']))
+      list.push(
+        ...safeChunkInsertValues(user, usersToProcessGroupBy['new']).map((it) =>
+          db.insert(user).values(it),
+        ),
+      )
     }
     if (usersToProcessGroupBy['update']) {
       list.push(
@@ -422,7 +427,11 @@ twitter.post(
       return 'skip'
     })
     if (tweetsToProcessGroupBy['new']) {
-      list.push(db.insert(tweet).values(tweetsToProcessGroupBy['new']))
+      list.push(
+        ...safeChunkInsertValues(tweet, tweetsToProcessGroupBy['new']).map(
+          (it) => db.insert(tweet).values(it),
+        ),
+      )
     }
     if (tweetsToProcessGroupBy['update']) {
       list.push(
@@ -434,7 +443,6 @@ twitter.post(
         ),
       )
     }
-
     if (list.length > 0) {
       await db.batch(list as any)
     }
@@ -467,8 +475,7 @@ twitter.post(
         and(
           inArray(
             userSpamAnalysis.userId,
-            // TODO: why d1 can't inArray query more than 100 params?
-            validated.slice(0, 99).map((it) => it.user.id),
+            validated.map((it) => it.user.id),
           ),
           eq(userSpamAnalysis.isSpamByManualReview, true),
         ),

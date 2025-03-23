@@ -2,8 +2,20 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { initCloudflareTest } from './utils'
 import { drizzle } from 'drizzle-orm/d1'
 import { localUser, modList, user } from '../src/db/schema'
-import { eq, InferSelectModel } from 'drizzle-orm'
-import { getTableAliasedColumns } from '../src/lib/drizzle'
+import {
+  AnyTable,
+  eq,
+  getTableColumns,
+  getTableName,
+  InferInsertModel,
+  InferSelectModel,
+  TableConfig,
+} from 'drizzle-orm'
+import {
+  getTableAliasedColumns,
+  safeChunkInsertValues,
+} from '../src/lib/drizzle'
+import { last, range, uniq } from 'es-toolkit'
 
 const context = initCloudflareTest()
 
@@ -100,5 +112,17 @@ describe('d1 batch', () => {
       })
       .where(eq(user.id, 'test'))
     expect(r.meta.rows_written).eq(0)
+  })
+  it('should be able to auto chunk with d1 batch', async () => {
+    const db = drizzle(context.env.DB)
+    const list = range(17).map((it) => ({
+      id: `test-user-${it}`,
+      screenName: `user-${it}`,
+      name: `user-${it}`,
+    }))
+    await expect(db.insert(user).values(list)).rejects.toThrowError()
+    const chunks = safeChunkInsertValues(user, list)
+    expect(chunks.length).eq(2)
+    await db.batch(chunks.map((it) => db.insert(user).values(it)) as any)
   })
 })

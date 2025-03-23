@@ -24,7 +24,7 @@ export default defineWorkersConfig(async () => {
           miniflare: {
             bindings: {
               APP_ENV: 'development',
-
+              JWT_SECRET: 'RNpiG6kspWuxjWEcL8I4s', // Add JWT secret for tests
               TEST_INIT_SQL: await getInitSql(),
             },
           },

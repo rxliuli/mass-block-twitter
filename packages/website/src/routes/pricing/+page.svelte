@@ -9,7 +9,7 @@
       price: '$0',
       description: 'Perfect for getting started',
       features: [
-        'Scan and batch blocking of suspicious accounts',
+        'Scan and batch blocking',
         'Create and Subscribe to Moderation List',
         'One-click instant blocking',
         'Enhanced keyword filtering',
@@ -26,9 +26,9 @@
       description: 'Everything you need for advanced spam control',
       features: [
         'All Free features',
-        'Unlimited muted keywords',
+        'Unlimited batch blocking (no 150 account limit)',
         'Unlimited Moderation Lists',
-        '(Dev) AI-powered spam detection',
+        'Unlimited muted keywords',
         '(Dev) Settings sync across devices',
         'Priority access to new features',
         'Premium support',

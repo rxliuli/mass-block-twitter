@@ -37,15 +37,15 @@
   const proFeatures = [
     {
       title: 'Unlimited Keywords',
-      desc: 'No 100-keyword limit like free version',
+      desc: 'No 400-keyword limit like free version',
     },
     {
       title: 'Unlimited Moderation Lists',
       desc: 'Create and subscribe to unlimited moderation lists',
     },
     {
-      title: '(Dev) AI-Powered Detection',
-      desc: 'Smart spam tweet identification',
+      title: 'Unlimited Batch Block',
+      desc: 'Block unlimited accounts at once (free version limited to 150)',
     },
     { title: 'Early Access', desc: 'Try new features before others' },
   ]
@@ -78,18 +78,29 @@
         <img src="/edge.png" alt="Edge Add-ons" class="h-12" />
       </a>
     </div>
-    <img
-      src="/screenshot.jpg"
-      alt="Product Screenshot"
-      class="rounded-lg shadow-xl mx-auto w-full max-w-3xl"
-    />
+    <div class="max-w-5xl mx-auto">
+      <img
+        src="/screenshot.jpg"
+        alt="Mass Block Twitter interface showing the batch blocking feature and moderation list management"
+        class="w-full rounded-lg shadow-2xl border border-gray-200 dark:border-gray-700"
+        width="1280"
+        height="720"
+        loading="eager"
+        decoding="async"
+      />
+    </div>
   </section>
 
   <!-- Features Section -->
   <section class="bg-gray-50 dark:bg-gray-900 py-20">
     <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-12">Key Features</h2>
-      <div class="grid md:grid-cols-3 gap-8">
+      <h2 class="text-3xl font-bold text-center mb-4">Features</h2>
+      <p class="text-xl text-gray-600 dark:text-gray-400 text-center mb-12">
+        Powerful tools to keep your Twitter feed clean and safe
+      </p>
+
+      <!-- Core Features -->
+      <div class="grid md:grid-cols-3 gap-8 mb-20">
         {#each features as feature}
           <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
             <div class="text-4xl mb-4">{feature.icon}</div>
@@ -98,23 +109,47 @@
           </div>
         {/each}
       </div>
+
+      <!-- Pro Features -->
+      <div class="max-w-4xl mx-auto">
+        <h3 class="text-2xl font-bold text-center mb-8">Pro Features</h3>
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          {#each proFeatures as feature}
+            <div
+              class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border-2 border-blue-500"
+            >
+              <h3 class="text-xl font-semibold mb-2">{feature.title}</h3>
+              <p class="text-gray-600 dark:text-gray-400">{feature.desc}</p>
+            </div>
+          {/each}
+        </div>
+        <div class="text-center">
+          <UpgradeToPro size="lg" />
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Pro Features Section -->
+  <!-- Demo Video Section -->
   <section class="py-20">
     <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-12">Pro Features</h2>
-      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        {#each proFeatures as feature}
-          <div class="border p-6 rounded-lg">
-            <h3 class="text-xl font-semibold mb-2">{feature.title}</h3>
-            <p class="text-gray-600 dark:text-gray-400">{feature.desc}</p>
-          </div>
-        {/each}
-      </div>
-      <div class="text-center mt-12">
-        <UpgradeToPro size="lg" />
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl font-bold mb-4">Watch How It Works</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-8">
+          See how Mass Block Twitter helps you clean up your Twitter feed by
+          blocking spam accounts, suspicious profiles, and unwanted content in
+          just a few clicks.
+        </p>
+        <iframe
+          class="rounded-lg shadow-xl w-full aspect-video"
+          src="https://www.youtube.com/embed/cOzua5ffLGw?si=O61zH7PRUrsacRt_"
+          title="Mass Block Twitter - Product Demo Video"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          loading="lazy"
+          allowfullscreen
+        ></iframe>
       </div>
     </div>
   </section>

@@ -201,7 +201,8 @@ export function sharedSpamFilter(): TweetFilter {
 export function modListFilter(): TweetFilter {
   function f(data: RuleData) {
     for (const modlist of spamContext.modlists) {
-      if (data.user && modlist.twitterUserIds.includes(data.user.id)) {
+      // TODO: tweets parse error TypeError: Cannot read properties of undefined (reading 'includes')
+      if (data.user && modlist.twitterUserIds?.includes(data.user.id)) {
         if (modlist.action === 'block') {
           return 'block'
         } else {

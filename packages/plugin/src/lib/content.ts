@@ -1,4 +1,4 @@
-import { set } from 'idb-keyval'
+import { get, set } from 'idb-keyval'
 import { sendMessage } from './messaging'
 import {
   AccountSettingsResponse,
@@ -26,15 +26,26 @@ export async function refreshModListSubscribedUsers(
     const subscriptions = await localModlistSubscriptions.getAllSubscriptions()
     // TODO: implement fetching rules, currently only twitterUserIds
     const modlistPromises = Object.entries(subscriptions).map(
-      ([modListId, action]) =>
-        fetch(`${SERVER_URL}/api/modlists/ids/${modListId}`)
-          .then((res) => res.json() as Promise<ModListIdsResponse>)
-          .then((data) => ({
+      async ([modListId, action]) => {
+        const resp = await crossFetch(
+          `${SERVER_URL}/api/modlists/ids/${modListId}`,
+        )
+        if (!resp.ok) {
+          return {
             modListId,
             action,
-            twitterUserIds: data.twitterUserIds,
+            twitterUserIds: [],
             rules: [],
-          })),
+          }
+        }
+        const data = (await resp.json()) as ModListIdsResponse
+        return {
+          modListId,
+          action,
+          twitterUserIds: data.twitterUserIds,
+          rules: [],
+        }
+      },
     )
     const modlistData = await Promise.all(modlistPromises)
     await set(ModListSubscribedUsersKey, modlistData)

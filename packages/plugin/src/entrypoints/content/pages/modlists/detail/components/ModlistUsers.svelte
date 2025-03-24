@@ -208,7 +208,7 @@
   }
 </script>
 
-<div class="flex-1 overflow-y-hidden">
+<div class="flex-1 overflow-y-hidden p-1">
   <Input
     placeholder={$t('modlists.detail.users.search')}
     bind:value={searchQuery}

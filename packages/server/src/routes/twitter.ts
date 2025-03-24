@@ -21,6 +21,7 @@ import {
   InferSelectModel,
   isNull,
   lt,
+  notInArray,
   or,
   sql,
 } from 'drizzle-orm'
@@ -398,7 +399,9 @@ twitter.post(
     if (usersToProcessGroupBy['new']) {
       list.push(
         ...safeChunkInsertValues(user, usersToProcessGroupBy['new']).map((it) =>
-          db.insert(user).values(it),
+          db.insert(user).values(it).onConflictDoNothing({
+            target: user.id,
+          }),
         ),
       )
     }
@@ -429,7 +432,10 @@ twitter.post(
     if (tweetsToProcessGroupBy['new']) {
       list.push(
         ...safeChunkInsertValues(tweet, tweetsToProcessGroupBy['new']).map(
-          (it) => db.insert(tweet).values(it),
+          (it) =>
+            db.insert(tweet).values(it).onConflictDoNothing({
+              target: tweet.id,
+            }),
         ),
       )
     }

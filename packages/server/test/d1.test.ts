@@ -9,6 +9,7 @@ import {
   getTableName,
   InferInsertModel,
   InferSelectModel,
+  sql,
   TableConfig,
 } from 'drizzle-orm'
 import {
@@ -124,5 +125,27 @@ describe('d1 batch', () => {
     const chunks = safeChunkInsertValues(user, list)
     expect(chunks.length).eq(2)
     await db.batch(chunks.map((it) => db.insert(user).values(it)) as any)
+  })
+  it('should be able to upsert users', async () => {
+    const db = context.db
+    await db.insert(user).values([
+      {
+        id: 'test-user-1',
+        screenName: 'test-user-1',
+        name: 'test-user-1',
+      },
+    ])
+    await db
+      .insert(user)
+      .values([
+        {
+          id: 'test-user-1',
+          screenName: 'test-user-1',
+          name: 'test-user-1',
+        },
+      ])
+      .onConflictDoNothing({
+        target: user.id,
+      })
   })
 })

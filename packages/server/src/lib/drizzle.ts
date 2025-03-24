@@ -47,7 +47,7 @@ export function safeChunkInsertValues<T extends AnyTable<TableConfig>>(
     const args = uniq([...Object.keys(it), ...defaultColumns])
     if (chunkArgsLength + args.length >= D1_MAX_SQL_VARIABLES) {
       chunks.push([it])
-      chunkArgsLength = 0
+      chunkArgsLength = args.length
       continue
     }
     const lastChunk = last(chunks)

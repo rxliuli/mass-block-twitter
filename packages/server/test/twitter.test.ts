@@ -9,6 +9,8 @@ import { tweet, user, userSpamAnalysis } from '../src/db/schema'
 import { eq, gt, sql } from 'drizzle-orm'
 import { range } from 'es-toolkit'
 import { drizzle } from 'drizzle-orm/d1'
+import { safeChunkInsertValues } from '../src/lib/drizzle'
+import { convertUserParamsToDBUser } from '../src/routes/twitter'
 
 let c = initCloudflareTest()
 
@@ -479,5 +481,17 @@ describe('check spam user', () => {
         }
       }),
     )
+  })
+  it('fix: D1_ERROR: too many SQL variables at offset 633: SQLITE_ERROR(real json)', async () => {
+    const data = (await import('./assets/check.json'))
+      .default as CheckSpamUserRequest
+    await checkSpamUser(data)
+  })
+  it('D1_ERROR: UNIQUE constraint failed: User.id: SQLITE_CONSTRAINT', async () => {
+    const data = genCheckSpamUserRequest([
+      { id: 'user-1', tweetIds: ['tweet-1', 'tweet-2'] },
+      { id: 'user-2', tweetIds: ['tweet-3', 'tweet-4'] },
+    ])
+    await Promise.all([checkSpamUser(data), checkSpamUser(data)])
   })
 })

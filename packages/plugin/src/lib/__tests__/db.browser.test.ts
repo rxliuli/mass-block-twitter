@@ -83,7 +83,7 @@ describe('pending check user', () => {
     expect(
       (await dbApi.pendingCheckUsers.list()).map((it) => it.user.id),
     ).toEqual(['1', '2'])
-    await dbApi.pendingCheckUsers.updateStatus(['1', '2'], 'checked')
+    await dbApi.pendingCheckUsers.uploaded(['1', '2'], 'checked')
     expect(
       (await dbApi.pendingCheckUsers.list()).map((it) => it.user.id),
     ).toEqual([])
@@ -108,7 +108,7 @@ describe('pending check user', () => {
   })
   it('should be able to record duplicate', async () => {
     await dbApi.pendingCheckUsers.record(['1'])
-    await dbApi.pendingCheckUsers.updateStatus(['1'], 'checked')
+    await dbApi.pendingCheckUsers.uploaded(['1'], 'checked')
     expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
       'checked',
     )
@@ -120,7 +120,7 @@ describe('pending check user', () => {
   it.skip('should not check if the user is checked in the last 24 hours', async () => {
     vi.useFakeTimers()
     await dbApi.pendingCheckUsers.record(['1'])
-    await dbApi.pendingCheckUsers.updateStatus(['1'], 'checked')
+    await dbApi.pendingCheckUsers.uploaded(['1'], 'checked')
     expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
       'checked',
     )
@@ -138,7 +138,7 @@ describe('pending check user', () => {
   it('should not check if the user is reviewed', async () => {
     vi.useFakeTimers()
     await dbApi.pendingCheckUsers.record(['1'])
-    await dbApi.pendingCheckUsers.updateStatus(['1'], 'checked')
+    await dbApi.pendingCheckUsers.uploaded(['1'], 'checked')
     expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
       'checked',
     )

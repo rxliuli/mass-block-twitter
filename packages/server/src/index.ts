@@ -9,6 +9,7 @@ import { HonoEnv } from './lib/bindings'
 import { modlists, modlistSearch } from './routes/modlists'
 import { errorHandler } from './middlewares/error'
 import { analyze } from './routes/analyze'
+import { feedback } from './routes/feedback'
 
 const app = new Hono<HonoEnv>()
 
@@ -17,6 +18,7 @@ app
   .use(errorHandler())
   .route('/api/twitter', twitter)
   .route('/api/auth', authRoutes)
+  .route('/api/feedback', feedback)
   .route('/api/modlists', modlistSearch)
   .route('/api/analyze', analyze)
   .route('/api/accounts', accounts)

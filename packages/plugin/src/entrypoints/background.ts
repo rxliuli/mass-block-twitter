@@ -8,6 +8,9 @@ export default defineBackground(() => {
       contexts: ['page'],
     })
   })
+  browser.runtime.setUninstallURL(
+    'https://mass-block-twitter.rxliuli.com/feedback',
+  )
 
   async function onShow(tabId?: number) {
     if (!tabId) {

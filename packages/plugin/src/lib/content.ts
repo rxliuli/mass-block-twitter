@@ -25,18 +25,19 @@ export async function refreshModListSubscribedUsers(
   if (!token) {
     const subscriptions = await localModlistSubscriptions.getAllSubscriptions()
     // TODO: implement fetching rules, currently only twitterUserIds
-    const modlistPromises = Object.entries(subscriptions).map(([modListId, action]) =>
-      fetch(`${SERVER_URL}/api/modlists/ids/${modListId}`)
-        .then((res) => res.json() as Promise<ModListIdsResponse>)
-        .then((data) => ({
-          modListId,
-          action,
-          twitterUserIds: data.twitterUserIds,
-          rules: [],
-        }))
-    );
-    const modlistData = await Promise.all(modlistPromises);
-    await set(ModListSubscribedUsersKey, modlistData);
+    const modlistPromises = Object.entries(subscriptions).map(
+      ([modListId, action]) =>
+        fetch(`${SERVER_URL}/api/modlists/ids/${modListId}`)
+          .then((res) => res.json() as Promise<ModListIdsResponse>)
+          .then((data) => ({
+            modListId,
+            action,
+            twitterUserIds: data.twitterUserIds,
+            rules: [],
+          })),
+    )
+    const modlistData = await Promise.all(modlistPromises)
+    await set(ModListSubscribedUsersKey, modlistData)
     return
   }
   const init: RequestInit = {
@@ -110,15 +111,18 @@ export async function autoCheckPendingUsers() {
         body: JSON.stringify(pendingUsers satisfies CheckSpamUserRequest),
       })
       if (!resp.ok) {
+        await dbApi.pendingCheckUsers.uploaded(
+          pendingUsers.map((it) => it.user.id),
+          60 * 60 * 1, // 1 hour
+        )
         return
       }
       const data = (await resp.json()) as CheckSpamUserResponse
+      await dbApi.pendingCheckUsers.uploaded(
+        pendingUsers.map((it) => it.user.id),
+      )
       await dbApi.spamUsers.record(
         data.filter((it) => it.isSpamByManualReview).map((it) => it.userId),
-      )
-      await dbApi.pendingCheckUsers.updateStatus(
-        pendingUsers.map((it) => it.user.id),
-        'checked',
       )
     }
   }, 1000 * 10)

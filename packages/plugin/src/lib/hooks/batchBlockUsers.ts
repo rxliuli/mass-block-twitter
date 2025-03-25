@@ -11,6 +11,7 @@ import { ulid } from 'ulidx'
 import { AuthInfo } from '@mass-block-twitter/server'
 import { fileSelector } from '$lib/util/fileSelector'
 import { parse } from 'csv-parse/browser/esm/sync'
+import { getSettings } from '$lib/settings'
 
 export async function selectImportFile() {
   const files = await fileSelector({
@@ -68,7 +69,6 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
   controller: AbortController
   users: () => T[]
   total?: number
-  waitTime?: number
   blockUser: (user: T) => Promise<'skip' | undefined | void>
   getAuthInfo: () => Promise<AuthInfo>
   onProcessed: (user: T, meta: BatchBlockUsersProcessedMeta) => Promise<void>
@@ -216,9 +216,54 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
         }
         // the rate limit is 150 users per 30s
         if (realBlockedCount !== 0) {
+          const blockSpeed = getSettings().blockSpeed
+
           // rate limit ref: https://developer.x.com/en/docs/x-api/v1/accounts-and-users/mute-block-report-users/api-reference/post-blocks-create
           // ref: https://devcommunity.x.com/t/what-is-the-rate-limit-on-post-request-and-post-blocks-create/102434/2
-          if (realBlockedCount === 450) {
+          if (blockSpeed) {
+            // If the user sets the maximum number of users to block per minute,
+            // then calculate the time to block each user
+            const waitTime = (60 * 1000) / Math.max(blockSpeed, 1)
+            toast.loading(
+              tP('modlists.detail.toast.blockSpeed', {
+                values: {
+                  count: blockSpeed,
+                  time: ms(waitTime),
+                },
+              }),
+              {
+                id: toastId,
+                description: '',
+              },
+            )
+            let now = Date.now()
+            await new Promise<void>((resolve) => {
+              const interval = setInterval(() => {
+                toast.loading(
+                  tP('modlists.detail.toast.blockSpeed', {
+                    values: {
+                      count: blockSpeed,
+                      time: ms(Math.max(0, waitTime - (Date.now() - now))),
+                    },
+                  }),
+                  {
+                    id: toastId,
+                    description: '',
+                  },
+                )
+              }, 1000)
+              const abortListener = () => {
+                clearInterval(interval)
+                clearTimeout(timer)
+                resolve()
+              }
+              const timer = setTimeout(() => {
+                abortListener()
+                controller.signal.removeEventListener('abort', abortListener)
+              }, waitTime)
+              controller.signal.addEventListener('abort', abortListener)
+            })
+          } else if (realBlockedCount === 450) {
             const r = await new Promise<'stop' | 'continue'>((resolve) => {
               toast.info(tP('modlists.detail.toast.approachingLimit'), {
                 id: toastId,
@@ -243,7 +288,7 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
               return
             }
           } else if (realBlockedCount % 150 === 0) {
-            const waitTime = options.waitTime ?? 30 * 1000
+            const waitTime = 30 * 1000
             toast.loading(
               tP('modlists.detail.toast.rateLimit', {
                 values: {

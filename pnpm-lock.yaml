@@ -196,7 +196,7 @@ importers:
         version: 2.0.2(svelte@5.20.5)(vite@6.2.0(@types/node@22.10.2)(jiti@1.21.7)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0))(wxt@0.19.27(@types/node@22.10.2)(lightningcss@1.29.1)(rollup@4.34.9)(tsx@4.19.3)(yaml@2.7.0))
       autoprefixer:
         specifier: ^10.4.20
-        version: 10.4.20(postcss@8.5.3)
+        version: 10.4.20(postcss@8.4.49)
       bits-ui:
         specifier: ^1.1.0
         version: 1.1.0(svelte@5.20.5)
@@ -468,7 +468,7 @@ importers:
         version: 3.0.9(@types/node@22.10.2)(playwright@1.50.1)(typescript@5.7.2)(vite@6.0.11(@types/node@22.10.2)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0))(vitest@3.0.9)
       autoprefixer:
         specifier: ^10.4.20
-        version: 10.4.20(postcss@8.4.49)
+        version: 10.4.20(postcss@8.5.3)
       bits-ui:
         specifier: 1.0.0-next.91
         version: 1.0.0-next.91(svelte@5.16.0)

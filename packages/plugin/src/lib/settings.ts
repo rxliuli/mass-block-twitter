@@ -12,6 +12,7 @@ export type Settings = {
   hideMutedWords: boolean
   hideModListAccounts: boolean
   hideLanguages: string[]
+  blockSpeed?: number
 }
 
 function getLocalStorage<T>(key: string, defaultValue: T): T {

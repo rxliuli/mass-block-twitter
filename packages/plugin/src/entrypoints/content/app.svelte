@@ -29,6 +29,7 @@
   import SettingsLanguagesPage from './pages/settings/languages/page.svelte'
   import { FloatingButton } from '$lib/components/logic/floating'
   import { useOpen } from '$lib/stores/open.svelte'
+  import SettingsBlockPage from './pages/settings/block/page.svelte'
 
   let { initialPath }: { initialPath?: string } = $props()
 
@@ -110,6 +111,10 @@
     {
       path: '/settings/languages',
       component: SettingsLanguagesPage,
+    },
+    {
+      path: '/settings/block',
+      component: SettingsBlockPage,
     },
   ]
 </script>

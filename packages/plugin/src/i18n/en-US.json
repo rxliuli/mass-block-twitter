@@ -52,7 +52,6 @@
   "account.upgrade.title": "Upgrade",
   "account.login.toast.subscribeLocal.failed": "Failed to subscribe to previously locally subscribed modlist {modlistId}",
 
-
   "settings.title": "Settings",
   "settings.appearance.title": "Appearance",
   "settings.filter.title": "Filter Control",
@@ -82,6 +81,9 @@
   "settings.privacy.clearAllCache.description": "Clear all cache data, including record users and tweets.",
   "settings.privacy.clearAllCache.success": "Cache cleared",
   "settings.languages.description": "Select which language to use for the extension's user interface.",
+  "settings.block.title": "Block Control",
+  "settings.block.blockSpeed.title": "Block Speed",
+  "settings.block.blockSpeed.description": "The number of users blocked per minute, 0 (default) means no limit.",
 
   "common.error": "Error",
 
@@ -187,6 +189,7 @@
   "modlists.detail.toast.blocking": "Blocking users...",
   "modlists.detail.toast.blockingStop": "Stop",
   "modlists.detail.toast.rateLimit": "Twitter API rate limit exceeded, please wait {time}...",
+  "modlists.detail.toast.blockSpeed": "Blocking users per minute: {count}, please wait {time}...",
   "modlists.detail.toast.rateLimitExceeded": "Twitter API rate limit exceeded, please try again later",
   "modlists.detail.toast.forbidden": "Forbidden, please try again later",
   "modlists.detail.toast.unauthorized": "Unauthorized, please login again",

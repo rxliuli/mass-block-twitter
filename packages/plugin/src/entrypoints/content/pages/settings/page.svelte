@@ -6,6 +6,7 @@
     LanguagesIcon,
     LockIcon,
     PaintRollerIcon,
+    ShieldBanIcon,
   } from 'lucide-svelte'
   import RouterLink from '$lib/components/logic/router/RouterLink.svelte'
   import { t } from '$lib/i18n'
@@ -20,6 +21,11 @@
       icon: HandIcon,
       label: $t('settings.filter.title'),
       href: '/settings/filter',
+    },
+    {
+      icon: ShieldBanIcon,
+      label: $t('settings.block.title'),
+      href: '/settings/block',
     },
     {
       icon: LockIcon,

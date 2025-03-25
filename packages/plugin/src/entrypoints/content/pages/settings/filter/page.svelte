@@ -3,17 +3,11 @@
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
   import Label from '$lib/components/ui/label/label.svelte'
-  import { SETTINGS_KEY } from '$lib/constants'
-  import { getSettings, type Settings } from '$lib/settings'
-  import { localStorageAdapter, localStore } from '$lib/util/localStore'
+  import { useSettings } from '$lib/settings'
   import { languages } from '$lib/constants/languages'
   import { t } from '$lib/i18n'
 
-  const settings = localStore<Settings>(
-    SETTINGS_KEY,
-    (value) => ({ ...getSettings(), ...(value ?? {}) }),
-    localStorageAdapter(),
-  )
+  const settings = useSettings()
 </script>
 
 <LayoutNav title={$t('settings.filter.title')} />

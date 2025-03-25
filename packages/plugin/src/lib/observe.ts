@@ -1,7 +1,6 @@
-import { ulid } from 'ulidx'
-import { blockUser } from './api'
 import { dbApi, Tweet } from './db'
 import type { TwitterSpamReportRequest } from '@mass-block-twitter/server'
+import { eventMessage } from './shared'
 
 export function extractCurrentUserId(): string | undefined {
   return /"id_str":"(\d*)"/.exec(document.body.innerHTML)?.[1]
@@ -42,6 +41,16 @@ export function removeTweets(tweetIds: string[]) {
   })
 }
 
+export function getTweetElement(tweetId: string): HTMLElement | undefined {
+  const elements = document.querySelectorAll(
+    '[data-testid="cellInnerDiv"]:has([data-testid="reply"])',
+  ) as NodeListOf<HTMLElement>
+  return [...elements].find((tweetElement) => {
+    const { tweetId: tweetElementId } = extractTweet(tweetElement)
+    return tweetElementId === tweetId
+  })
+}
+
 export function addBlockButton(tweetElement: HTMLElement, tweet: Tweet) {
   const actionBar = tweetElement.querySelector('[role="group"]')
   if (actionBar) {
@@ -61,28 +70,14 @@ export function addBlockButton(tweetElement: HTMLElement, tweet: Tweet) {
           detail: request,
         }),
       )
-      await blockUser({ id: tweet.user_id })
       const user = await dbApi.users.get(tweet.user_id)
-      if (user) {
-        await dbApi.activitys.record([
-          {
-            id: ulid(),
-            action: 'block',
-            trigger_type: 'manual',
-            match_filter: 'batchSelected',
-            match_type: 'tweet',
-            tweet_id: tweet.id,
-            tweet_content: tweet.text,
-            user_id: user.id,
-            user_name: user.name,
-            user_screen_name: user.screen_name,
-            user_profile_image_url: user.profile_image_url,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          },
-        ])
+      if (!user) {
+        return
       }
-      tweetElement.style.display = 'none'
+      await eventMessage.sendMessage('QuickBlock', {
+        user,
+        tweet,
+      })
     })
     actionBar.appendChild(customButton)
   }

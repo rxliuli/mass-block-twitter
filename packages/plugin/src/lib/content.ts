@@ -1,5 +1,4 @@
-import { get, set } from 'idb-keyval'
-import { sendMessage } from './messaging'
+import { set } from 'idb-keyval'
 import {
   AccountSettingsResponse,
   AuthInfo,
@@ -7,14 +6,19 @@ import {
   CheckSpamUserResponse,
   ModListSubscribedUserAndRulesResponse,
   TwitterSpamReportRequest,
+  ModListIdsResponse,
 } from '@mass-block-twitter/server'
 import { SERVER_URL } from './constants'
 import { ModListSubscribedUsersKey } from './shared'
 import { crossFetch } from './query'
-import { dbApi } from './db'
+import { dbApi, Tweet, User } from './db'
 import { chunk } from 'lodash-es'
 import * as localModlistSubscriptions from '$lib/localModlistSubscriptions'
-import { type ModListIdsResponse } from '@mass-block-twitter/server'
+import { getTweetElement } from './observe'
+import { ShieldBanIcon, ShieldCheckIcon } from 'lucide-svelte'
+import { toast } from 'svelte-sonner'
+import { ulid } from 'ulidx'
+import { blockUser } from './api'
 
 export async function refreshModListSubscribedUsers(
   force?: boolean,
@@ -151,4 +155,70 @@ export async function spamReport(request: TwitterSpamReportRequest) {
   if (!resp.ok) {
     throw new Error('Failed to report spam' + resp.statusText)
   }
+}
+
+export function quickBlock(options: {
+  user: User
+  tweet: Tweet
+  blockUser?: (user: User) => Promise<void>
+}) {
+  const { user, tweet } = options
+  const tweetElement = getTweetElement(tweet.id)
+  if (tweetElement) {
+    tweetElement.style.display = 'none'
+  }
+  let isDismissed = false
+  const toastId = toast.info('User blocked', {
+    duration: 6000,
+    icon: ShieldBanIcon,
+    cancel: {
+      label: 'Undo',
+      onClick: async () => {
+        if (tweetElement) {
+          tweetElement.style.display = 'block'
+        }
+        toast.info('Block undone.', {
+          id: toastId,
+          icon: ShieldCheckIcon,
+          duration: 3000,
+          cancel: undefined,
+        })
+        clearTimeout(timer)
+      },
+    },
+    onDismiss: () => {
+      isDismissed = true
+    },
+  })
+  const timer = setTimeout(async () => {
+    if (options.blockUser) {
+      await options.blockUser(user)
+    } else {
+      await blockUser({ id: user.id })
+    }
+    await dbApi.activitys.record([
+      {
+        id: ulid(),
+        action: 'block',
+        trigger_type: 'manual',
+        match_filter: 'batchSelected',
+        match_type: 'tweet',
+        tweet_id: tweet.id,
+        tweet_content: tweet.text,
+        user_id: user.id,
+        user_name: user.name,
+        user_screen_name: user.screen_name,
+        user_profile_image_url: user.profile_image_url,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+    ])
+    if (!isDismissed) {
+      toast.info('User blocked', {
+        id: toastId,
+        icon: ShieldBanIcon,
+        duration: 3000,
+      })
+    }
+  }, 3000)
 }

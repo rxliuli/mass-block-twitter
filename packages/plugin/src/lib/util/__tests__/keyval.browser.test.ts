@@ -1,4 +1,4 @@
-import { createKeyVal } from '$lib/keyval'
+import { createKeyVal } from '$lib/util/keyval'
 import { clear, createStore, keys, set } from 'idb-keyval'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 

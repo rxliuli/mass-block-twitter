@@ -1,7 +1,7 @@
 import { DBSchema, IDBPDatabase, openDB } from 'idb'
 import { pickBy, sortBy } from 'lodash-es'
 import { ulid } from 'ulidx'
-import { createKeyVal, KeyValItem } from './keyval'
+import { createKeyVal, KeyValItem } from './util/keyval'
 
 export const dbStore: DBStore = {} as any
 

@@ -1,9 +1,10 @@
 import { get } from 'idb-keyval'
 import { spamContext } from './filter'
 import { ModListSubscribedUserAndRulesResponse } from '@mass-block-twitter/server'
-import { dbApi } from './db'
+import { dbApi, Tweet, User } from './db'
 import { blockUser } from './api'
 import { ulid } from 'ulidx'
+import { defineCustomEventMessage } from './util/CustomEventMessage'
 
 export async function refreshSpamUsers(userIds: string[]): Promise<void> {
   const list = await Promise.all(
@@ -46,3 +47,7 @@ export async function refreshSubscribedModLists(): Promise<void> {
   spamContext.modlists = ((await get(ModListSubscribedUsersKey)) ??
     []) as ModListSubscribedUserAndRulesResponse
 }
+
+export const eventMessage = defineCustomEventMessage<{
+  QuickBlock: (data: { user: User; tweet: Tweet }) => void
+}>()

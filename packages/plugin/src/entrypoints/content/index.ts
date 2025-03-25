@@ -1,16 +1,22 @@
 import { mount, unmount } from 'svelte'
 import App from './app.svelte'
 import './app.css'
-import { onMessage } from '$lib/messaging'
 import {
   autoCheckPendingUsers,
+  quickBlock,
   refreshAuthInfo,
   refreshModListSubscribedUsers,
   spamReport,
 } from '$lib/content'
-import { initXTransactionId } from '$lib/api'
-import { getLocaleLanguage, initI18n, t } from '$lib/i18n'
+import { blockUser, initXTransactionId } from '$lib/api'
+import { getLocaleLanguage, initI18n } from '$lib/i18n'
 import { wait } from '@liuli-util/async'
+import { dbApi } from '$lib/db'
+import { ulid } from 'ulidx'
+import { getTweetElement, removeTweets } from '$lib/observe'
+import { toast } from 'svelte-sonner'
+import { ShieldBanIcon, ShieldCheckIcon } from 'lucide-svelte'
+import { eventMessage } from '$lib/shared'
 
 export default defineContentScript({
   matches: ['https://x.com/**'],
@@ -64,5 +70,7 @@ export default defineContentScript({
       // console.log('spamReport isolation content script', request)
       spamReport(request)
     })
+
+    eventMessage.onMessage('QuickBlock', quickBlock)
   },
 })

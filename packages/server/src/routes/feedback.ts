@@ -11,6 +11,7 @@ const feedbackRoute = new Hono<HonoEnv>()
 const feedbackSchema = z.object({
   reason: z.enum(['missing', 'broken', 'confused', 'alternative', 'other']),
   suggestion: z.string().optional(),
+  email: z.string().email().optional(),
   context: z.object({
     os: z.enum(['windows', 'macos', 'linux', 'ios', 'android', 'other']),
     browser: z.enum(['chrome', 'firefox', 'edge', 'safari', 'other']),
@@ -28,13 +29,11 @@ export type FeedbackRequest = z.infer<typeof feedbackSchema>
 
 feedbackRoute.post('/submit', zValidator('json', feedbackSchema), async (c) => {
   const db = drizzle(c.env.DB)
-  const { reason, suggestion, context } = await c.req.json()
+  const validated = await c.req.json()
   const tokenInfo = await getTokenInfo(c)
   await db.insert(feedback).values({
-    reason,
-    suggestion,
+    ...validated,
     localUserId: tokenInfo?.sub,
-    context,
   })
   return c.json({ success: true })
 })

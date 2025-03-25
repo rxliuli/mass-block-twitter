@@ -43,6 +43,13 @@
       "when": 1742718314487,
       "tag": "0005_famous_kingpin",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1742878107666,
+      "tag": "0006_confused_nekra",
+      "breakpoints": true
     }
   ]
 }

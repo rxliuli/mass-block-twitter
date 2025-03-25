@@ -32,3 +32,9 @@ declare global {
 }
 
 export {}
+
+declare module '@vitest/browser/context' {
+  interface Locator {
+    element(): HTMLElement
+  }
+}

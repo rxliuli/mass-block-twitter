@@ -13,13 +13,19 @@
   import { createMutation } from '@tanstack/svelte-query'
   import { toast } from 'svelte-sonner'
   import { getContext } from './utils/getContext'
-  import { onMount } from 'svelte'
   import { getAuthInfo } from '@/components/auth/auth.svelte'
   import { cn } from '@/utils'
+  import { Input } from '@/components/ui/input'
 
-  let selectedReason = $state<FeedbackRequest['reason']>('missing')
-  let suggestion = $state('')
-
+  let formState = $state<{
+    reason: FeedbackRequest['reason']
+    suggestion: string
+    email: string
+  }>({
+    reason: 'missing',
+    suggestion: '',
+    email: '',
+  })
   const reasons = [
     { value: 'missing', label: 'Missing features' },
     { value: 'broken', label: 'Features not working properly' },
@@ -30,16 +36,14 @@
 
   const mutation = createMutation({
     mutationFn: async () => {
-      if (!selectedReason) {
-        return
-      }
       const resp = await fetch(
         import.meta.env.VITE_API_URL + '/api/feedback/submit',
         {
           method: 'POST',
           body: JSON.stringify({
-            reason: selectedReason,
-            suggestion,
+            reason: formState.reason,
+            suggestion: formState.suggestion,
+            email: formState.email,
             context: getContext(),
           } satisfies FeedbackRequest),
           headers: {
@@ -94,10 +98,16 @@
           please let us know why you're uninstalling.
         </p>
 
-        <form onsubmit={() => $mutation.mutate()} class="space-y-6">
+        <form
+          onsubmit={(ev) => {
+            ev.preventDefault()
+            $mutation.mutate()
+          }}
+          class="space-y-6"
+        >
           <div class="space-y-4">
             <Label>Please select a reason for uninstalling</Label>
-            <RadioGroup bind:value={selectedReason} class="grid gap-4">
+            <RadioGroup bind:value={formState.reason} class="grid gap-4">
               {#each reasons as reason}
                 <div class="flex items-center space-x-2">
                   <RadioGroupItem value={reason.value} id={reason.value} />
@@ -111,17 +121,25 @@
             <Label for="suggestion">Do you have any suggestions?</Label>
             <Textarea
               id="suggestion"
-              bind:value={suggestion}
+              name="suggestion"
+              bind:value={formState.suggestion}
               placeholder="Please share your thoughts..."
               rows={4}
             />
           </div>
 
-          <Button
-            type="submit"
-            class="w-full"
-            disabled={!selectedReason || $mutation.isPending}
-          >
+          <div class="space-y-2">
+            <Label for="email">Please enter your email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              bind:value={formState.email}
+              placeholder="Your email"
+            />
+          </div>
+
+          <Button type="submit" class="w-full" disabled={$mutation.isPending}>
             {$mutation.isPending ? 'Submitting...' : 'Submit Feedback'}
           </Button>
         </form>

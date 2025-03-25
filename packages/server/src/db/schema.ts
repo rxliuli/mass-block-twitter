@@ -335,6 +335,7 @@ export const feedback = sqliteTable('Feedback', {
   localUserId: text('localUserId').references(() => localUser.id),
   reason: text('reason').notNull(),
   suggestion: text('suggestion'),
+  email: text('email'),
   context: text('context', { mode: 'json' }),
   createdAt: text('createdAt')
     .notNull()

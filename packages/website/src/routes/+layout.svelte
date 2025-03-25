@@ -159,7 +159,7 @@
 </svelte:head>
 
 <ModeWatcher />
-<Toaster richColors />
+<Toaster richColors closeButton expand />
 
 <QueryClientProvider client={queryClient}>
   <Header />

@@ -8,7 +8,6 @@ const c = initCloudflareTest()
 describe('feedback', () => {
   const req: FeedbackRequest = {
     reason: 'missing',
-    suggestion: 'test',
     context: {
       os: 'windows',
       browser: 'chrome',
@@ -31,7 +30,7 @@ describe('feedback', () => {
     const feedbacks = await c.db.select().from(feedback).all()
     expect(feedbacks).length(1)
     expect(feedbacks[0].reason).toBe('missing')
-    expect(feedbacks[0].suggestion).toBe('test')
+    expect(feedbacks[0].suggestion).toBeNull()
     expect(feedbacks[0].localUserId).null
   })
   it('should not create a feedback if the user is not logged in', async () => {
@@ -47,5 +46,25 @@ describe('feedback', () => {
     const feedbacks = await c.db.select().from(feedback).all()
     expect(feedbacks).length(1)
     expect(feedbacks[0].localUserId).eq('test-user-1')
+  })
+  it('should create a feedback with full fields', async () => {
+    const resp = await fetch('/api/feedback/submit', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...req,
+        reason: 'broken',
+        suggestion: 'test',
+        email: 'test@test.com',
+      } satisfies FeedbackRequest),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    expect(resp.ok).true
+    const feedbacks = await c.db.select().from(feedback).all()
+    expect(feedbacks).length(1)
+    expect(feedbacks[0].reason).toBe('broken')
+    expect(feedbacks[0].suggestion).toBe('test')
+    expect(feedbacks[0].email).toBe('test@test.com')
   })
 })

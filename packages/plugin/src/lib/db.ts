@@ -1,4 +1,4 @@
-import { DBSchema, IDBPDatabase, openDB } from 'idb'
+import { DBSchema, deleteDB, IDBPDatabase, openDB } from 'idb'
 import { pickBy, sortBy } from 'lodash-es'
 import { ulid } from 'ulidx'
 import { createKeyVal, KeyValItem } from './util/keyval'
@@ -435,6 +435,8 @@ export const dbApi = {
     await dbStore.idb.clear('tweets')
     await dbStore.idb.clear('activitys')
     await dbStore.idb.clear('pendingCheckUsers')
+    await dbStore.idb.clear('pendingCheckUserIds')
+    await dbStore.idb.clear('uploadedCheckUserIds')
     await dbStore.idb.clear('spamUsers')
   },
 }

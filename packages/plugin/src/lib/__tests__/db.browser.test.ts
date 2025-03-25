@@ -83,7 +83,7 @@ describe('pending check user', () => {
     expect(
       (await dbApi.pendingCheckUsers.list()).map((it) => it.user.id),
     ).toEqual(['1', '2'])
-    await dbApi.pendingCheckUsers.uploaded(['1', '2'], 'checked')
+    await dbApi.pendingCheckUsers.uploaded(['1', '2'])
     expect(
       (await dbApi.pendingCheckUsers.list()).map((it) => it.user.id),
     ).toEqual([])
@@ -108,46 +108,30 @@ describe('pending check user', () => {
   })
   it('should be able to record duplicate', async () => {
     await dbApi.pendingCheckUsers.record(['1'])
-    await dbApi.pendingCheckUsers.uploaded(['1'], 'checked')
-    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
-      'checked',
-    )
-    await dbApi.pendingCheckUsers.record(['1'])
-    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
-      'checked',
-    )
+    await dbApi.pendingCheckUsers.uploaded(['1'])
+    expect(await dbApi.pendingCheckUsers.list()).length(0)
   })
-  it.skip('should not check if the user is checked in the last 24 hours', async () => {
+  it('should not check if the user is checked in the last 24 hours', async () => {
     vi.useFakeTimers()
     await dbApi.pendingCheckUsers.record(['1'])
-    await dbApi.pendingCheckUsers.uploaded(['1'], 'checked')
-    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
-      'checked',
-    )
+    await dbApi.pendingCheckUsers.uploaded(['1'], 24 * 60 * 60)
+    expect(await dbApi.pendingCheckUsers.list()).length(0)
     await dbApi.pendingCheckUsers.record(['1'])
-    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
-      'checked',
-    )
+    expect(await dbApi.pendingCheckUsers.list()).length(0)
     vi.setSystemTime(dayjs().add(1, 'day').toDate())
     await dbApi.pendingCheckUsers.record(['1'])
-    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
-      'pending',
-    )
+    expect(await dbApi.pendingCheckUsers.list()).length(1)
     vi.clearAllTimers()
   })
   it('should not check if the user is reviewed', async () => {
     vi.useFakeTimers()
     await dbApi.pendingCheckUsers.record(['1'])
-    await dbApi.pendingCheckUsers.uploaded(['1'], 'checked')
-    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
-      'checked',
-    )
+    await dbApi.pendingCheckUsers.uploaded(['1'])
+    expect(await dbApi.pendingCheckUsers.list()).length(0)
     await dbApi.spamUsers.record(['1'])
     vi.setSystemTime(dayjs().add(1, 'day').toDate())
     await dbApi.pendingCheckUsers.record(['1'])
-    expect((await dbStore.idb.get('pendingCheckUsers', '1'))?.status).eq(
-      'checked',
-    )
+    expect(await dbApi.pendingCheckUsers.list()).length(0)
     vi.clearAllTimers()
   })
   it('should not upload user with undefined followers_count, friends_count, is_blue_verified', async () => {

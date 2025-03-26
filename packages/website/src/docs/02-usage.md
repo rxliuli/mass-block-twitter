@@ -65,7 +65,7 @@ Moderation lists are powerful community content management tools that allow user
 
 1. Click the **Import Users** button
 2. Select import method:
-   - From CSV file
+   - From CSV file [Example](/docs/block-list.csv)
    - From JSON file
 
 <iframe class="horizontal-video" src="https://www.youtube.com/embed/zqd9Hjg0JiA?si=dqowzG4FXEoUy844" title="Mass Block Twitter: Import Users from JSON/CSV in Moderation List" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>

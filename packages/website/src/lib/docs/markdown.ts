@@ -13,6 +13,7 @@ import { toString } from 'mdast-util-to-string'
 import { createHighlighter, type Highlighter } from 'shiki'
 import type { Element } from 'hast'
 import { inspect } from 'unist-util-inspect'
+import path from 'path'
 
 export function parseMarkdown(md: string): Root {
   return fromMarkdown(md, {
@@ -39,8 +40,12 @@ export function renderMarkdown(root: Root, highlighter: Highlighter): string {
   })
   const links = selectAll('[tagName="a"]', hast) as Element[]
   links.forEach((link) => {
-    if ((link.properties?.href as string)?.startsWith('http')) {
+    const href = link.properties?.href as string | undefined
+    if (href?.startsWith('http')) {
       link.properties.target = '_blank'
+    }
+    if (href?.endsWith('.csv')) {
+      link.properties.download = path.basename(href)
     }
   })
   return toHtml(hast, { allowDangerousHtml: true })

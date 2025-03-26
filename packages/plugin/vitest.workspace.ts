@@ -1,5 +1,6 @@
 import { defineWorkspace } from 'vitest/config'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
+import { customCommands } from '$lib/test/commands'
 
 const browserIncludes = [
   'src/**/*.browser.test.ts',
@@ -36,6 +37,7 @@ export default defineWorkspace([
           // { browser: 'firefox' },
           // { browser: 'webkit' },
         ],
+        commands: customCommands,
       },
     },
     plugins: [svelte()],

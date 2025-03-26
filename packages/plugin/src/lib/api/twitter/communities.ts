@@ -1,7 +1,6 @@
 import {
   getRequestHeaders,
   getXTransactionId,
-  parseTimelineUser,
   timelineUserSchema,
 } from '$lib/api'
 import { User } from '$lib/db'
@@ -10,7 +9,7 @@ import { once } from '@liuli-util/async'
 import { get } from 'lodash-es'
 import { z } from 'zod'
 
-type CommunityMember = User & {
+export type CommunityMember = User & {
   community_role: 'Member' | 'Moderator' | 'Admin'
 }
 

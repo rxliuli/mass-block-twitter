@@ -9,8 +9,15 @@ declare global {
 }
 
 declare module '@vitest/browser/context' {
+  import type { BrowserCommand } from '@vitest/browser/context'
   interface Locator {
     element(): HTMLElement
+  }
+  interface BrowserCommands {
+    waitForDownload: () => Promise<{
+      suggestedFilename: string
+      text: string
+    }>
   }
 }
 

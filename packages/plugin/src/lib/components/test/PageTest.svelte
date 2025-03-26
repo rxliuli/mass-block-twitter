@@ -21,4 +21,5 @@
 </QueryClientProvider>
 
 <ModeWatcher />
-<Toaster richColors closeButton expand />
+<!-- TODO https://github.com/vitest-dev/vitest/issues/7742 -->
+<Toaster richColors closeButton expand position="top-right" />

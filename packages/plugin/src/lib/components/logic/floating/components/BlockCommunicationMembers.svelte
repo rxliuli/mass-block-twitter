@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ShieldBanIcon } from 'lucide-svelte'
+  import { FileDownIcon, ShieldBanIcon } from 'lucide-svelte'
   import { t } from 'svelte-i18n'
   import * as Command from '$lib/components/ui/command'
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
@@ -13,6 +13,7 @@
   import { batchBlockUsersMutation } from '$lib/hooks/batchBlockUsers'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { toast } from 'svelte-sonner'
+  import { exportCommunityMembersToCSV } from '../hooks/exportCommunityMembersToCSV'
 
   function getCommunityId() {
     // https://x.com/i/communities/1900366536683987325/members
@@ -25,6 +26,8 @@
     }
     return match[1]
   }
+  // https://developer.x.com/en/docs/x-api/v1/rate-limits#:~:text=15-,GET%20lists/members,-900
+  // 900 requests per 15 minutes, max get 18000 members
   const query = createInfiniteQuery({
     queryKey: ['community-members', getCommunityId()],
     queryFn: async ({ pageParam }) => {
@@ -93,6 +96,35 @@
     },
   })
 
+  const exportCsvMutation = createMutation({
+    mutationFn: async () => {
+      const communityId = getCommunityId()
+      if (!communityId) {
+        toast.error('Not found community id')
+        return
+      }
+      await $query.fetchNextPage()
+      controller.abort()
+      controller = new AbortController()
+      await exportCommunityMembersToCSV({
+        communityId,
+        getCommunityInfo,
+        query: {
+          get hasNextPage() {
+            return $query.hasNextPage
+          },
+          fetchNextPage: async () => {
+            await $query.fetchNextPage()
+          },
+          get data() {
+            return $query.data?.pages.flatMap((it) => it.data) ?? []
+          },
+        },
+        controller,
+      })
+    },
+  })
+
   let {
     onclick,
   }: {
@@ -110,7 +142,18 @@
     onclick?.()
     $blockCommunicationMembersMutation.mutate()
   }}
+  disabled={$blockCommunicationMembersMutation.isPending}
 >
   <ShieldBanIcon color={'red'} />
-  <span>{$t('floatingButton.blockCommunicationMembers')}</span>
+  <span>{$t('floatingButton.community.blockMembers')}</span>
+</Command.Item>
+<Command.Item
+  onclick={() => {
+    onclick?.()
+    $exportCsvMutation.mutate()
+  }}
+  disabled={$exportCsvMutation.isPending}
+>
+  <FileDownIcon />
+  <span>{$t('floatingButton.community.exportMembers')}</span>
 </Command.Item>

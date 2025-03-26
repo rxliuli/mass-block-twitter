@@ -303,5 +303,6 @@
   "floatingButton.close.confirm.title": "Are you sure you want to close the floating button?",
   "floatingButton.close.confirm.description.before": "You can reopen it in",
   "floatingButton.close.confirm.description.after": " ",
-  "floatingButton.blockCommunicationMembers": "Block Communication Members"
+  "floatingButton.community.blockMembers": "Block Communication Members",
+  "floatingButton.community.exportMembers": "Export Communication Members"
 }

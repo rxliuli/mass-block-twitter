@@ -17,9 +17,7 @@ describe('toast', () => {
   it('should render close button', async () => {
     const screen = render(PageTest)
     toast.info('test')
-    await tick()
-    screen.getByLabelText('Close toast').element().click()
-    await tick()
+    await screen.getByLabelText('Close toast').click()
     await expect.element(screen.getByText('test')).not.toBeInTheDocument()
   })
   describe('action/cancel/auto close', () => {
@@ -59,17 +57,17 @@ describe('toast', () => {
     })
     it('action', async () => {
       await showToast()
-      screen.getByText('action').element().click()
+      await screen.getByText('action').click()
       expect(result).toBe('action')
     })
     it('cancel', async () => {
       await showToast()
-      screen.getByText('cancel').element().click()
+      await screen.getByText('cancel').click()
       expect(result).toBe('cancel')
     })
     it('close button', async () => {
       await showToast()
-      screen.getByLabelText('Close toast').element().click()
+      await screen.getByLabelText('Close toast').click()
       expect(result).undefined
     })
     it('manual close', async () => {

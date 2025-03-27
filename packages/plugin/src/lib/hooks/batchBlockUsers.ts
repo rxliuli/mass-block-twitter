@@ -229,6 +229,8 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
                 values: {
                   count: blockSpeed,
                   time: ms(waitTime),
+                  current: meta.index,
+                  total: allCount,
                 },
               }),
               {
@@ -244,6 +246,8 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
                     values: {
                       count: blockSpeed,
                       time: ms(Math.max(0, waitTime - (Date.now() - now))),
+                      current: meta.index,
+                      total: allCount,
                     },
                   }),
                   {

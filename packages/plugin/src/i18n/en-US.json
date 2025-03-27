@@ -190,7 +190,7 @@
   "modlists.detail.toast.blocking": "Blocking users...",
   "modlists.detail.toast.blockingStop": "Stop",
   "modlists.detail.toast.rateLimit": "Twitter API rate limit exceeded, please wait {time}...",
-  "modlists.detail.toast.blockSpeed": "Blocking users per minute: {count}, please wait {time}...",
+  "modlists.detail.toast.blockSpeed": "Blocking users per minute: {count}, progress: {current}/{total}, please wait {time}...",
   "modlists.detail.toast.rateLimitExceeded": "Twitter API rate limit exceeded, please try again later",
   "modlists.detail.toast.forbidden": "Forbidden, please try again later",
   "modlists.detail.toast.unauthorized": "Unauthorized, please login again",

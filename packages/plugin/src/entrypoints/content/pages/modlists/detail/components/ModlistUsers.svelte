@@ -28,7 +28,7 @@
   import ModlistAddUser from './ModlistAddUser.svelte'
   import { fileSelector } from '$lib/util/fileSelector'
   import { parse } from 'csv-parse/browser/esm/sync'
-  import { chunk } from 'lodash-es'
+  import { chunk, debounce } from 'lodash-es'
   import { useModlistUsers } from '../utils/useModlistUsers'
   import { t } from '$lib/i18n'
   import { selectImportFile } from '$lib/hooks/batchBlockUsers'
@@ -46,9 +46,16 @@
   } = $props()
 
   let searchQuery = $state('')
+  let isCompositionOn = $state(false)
+  const onSearch = debounce((event: Event) => {
+    if (isCompositionOn) {
+      return
+    }
+    $query.refetch()
+  }, 500)
 
   const route = useRoute()
-  const query = $derived(useModlistUsers(route.search?.get('id')!, searchQuery))
+  const query = useModlistUsers(route.search?.get('id')!, () => searchQuery)
   const queryClient = useQueryClient()
 
   const innerAddUsersMutation = createMutation({
@@ -201,6 +208,9 @@
   <Input
     placeholder={$t('modlists.detail.users.search')}
     bind:value={searchQuery}
+    oninput={onSearch}
+    oncompositionstart={() => (isCompositionOn = true)}
+    oncompositionend={() => (isCompositionOn = false)}
     class="mb-4 max-w-3xl mx-auto"
   />
   <AutoSizer>

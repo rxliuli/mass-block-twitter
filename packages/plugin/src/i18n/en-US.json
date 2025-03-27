@@ -304,5 +304,15 @@
   "floatingButton.close.confirm.description.before": "You can reopen it in",
   "floatingButton.close.confirm.description.after": " ",
   "floatingButton.community.blockMembers": "Block Communication Members",
-  "floatingButton.community.exportMembers": "Export Communication Members"
+  "floatingButton.community.exportMembers": "Export Communication Members",
+  "floatingButton.community.exportMembers.toast.title": "Exporting...",
+  "floatingButton.community.exportMembers.toast.description": "Please wait a moment, {current}/{total}",
+  "floatingButton.community.exportMembers.toast.stop": "Stop",
+  "floatingButton.community.exportMembers.toast.continue": "Continue",
+  "floatingButton.community.exportMembers.toast.stop.confirm": "You have fetched {count} requests, do you want to continue?",
+  "floatingButton.community.exportMembers.toast.success": "Export success",
+  "floatingButton.community.exportMembers.toast.success.description": "Exported {count} users",
+  "floatingButton.community.exportMembers.toast.failed": "Export failed",
+  "floatingButton.community.exportMembers.toast.failed.description": "Export failed, {error}",
+  "floatingButton.community.exportMembers.toast.download": "Download"
 }

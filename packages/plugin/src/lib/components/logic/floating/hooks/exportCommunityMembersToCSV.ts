@@ -2,6 +2,7 @@ import { generateCSV } from '$lib/util/csv'
 import { CommunityInfo, CommunityMember } from '$lib/api/twitter'
 import { toast } from 'svelte-sonner'
 import saveAs from 'file-saver'
+import { tP } from '$lib/i18n'
 
 const MAX_REQUESTS = 850
 export async function exportCommunityMembersToCSV(options: {
@@ -17,47 +18,68 @@ export async function exportCommunityMembersToCSV(options: {
   const { communityId, getCommunityInfo, query, controller } = options
   const info = await getCommunityInfo({ communityId })
   const getUsers = () => query.data
-  const toastId = toast.info('Exporting...', {
-    description: `Please wait a moment, ${getUsers().length} / ${
-      info.member_count
-    }`,
-    duration: 1000000,
-    cancel: {
-      label: 'Stop',
-      onClick: () => {
-        controller.abort()
+  const toastId = toast.info(
+    tP('floatingButton.community.exportMembers.toast.title'),
+    {
+      description: tP(
+        'floatingButton.community.exportMembers.toast.description',
+        {
+          values: {
+            current: getUsers().length,
+            total: info.member_count,
+          },
+        },
+      ),
+      duration: 1000000,
+      cancel: {
+        label: tP('floatingButton.community.exportMembers.toast.stop'),
+        onClick: () => {
+          controller.abort()
+        },
       },
     },
-  })
+  )
   let i = 0
   try {
     while (query.hasNextPage && !controller.signal.aborted) {
       await query.fetchNextPage()
-      toast.info('Exporting...', {
+      toast.info(tP('floatingButton.community.exportMembers.toast.title'), {
         id: toastId,
         duration: 1000000,
         // TODO calculate the time
-        description: `Please wait a moment, ${getUsers().length} / ${
-          info.member_count
-        }`,
+        description: tP(
+          'floatingButton.community.exportMembers.toast.description',
+          {
+            values: {
+              current: getUsers().length,
+              total: info.member_count,
+            },
+          },
+        ),
       })
       i++
       if (i === MAX_REQUESTS) {
         const r = await new Promise<'stop' | 'continue'>((resolve) => {
           toast.info(
-            `You have fetched ${MAX_REQUESTS} requests, do you want to continue?`,
+            tP('floatingButton.community.exportMembers.toast.stop.confirm', {
+              values: {
+                count: MAX_REQUESTS,
+              },
+            }),
             {
               id: toastId,
               duration: 1000000,
               cancel: {
-                label: 'Stop',
+                label: tP('floatingButton.community.exportMembers.toast.stop'),
                 onClick: () => {
                   controller.abort()
                   resolve('stop')
                 },
               },
               action: {
-                label: 'Continue',
+                label: tP(
+                  'floatingButton.community.exportMembers.toast.continue',
+                ),
                 onClick: () => {
                   resolve('continue')
                 },
@@ -71,12 +93,19 @@ export async function exportCommunityMembersToCSV(options: {
       }
       // await wait(1000)
     }
-    toast.success('Export success', {
+    toast.success(tP('floatingButton.community.exportMembers.toast.success'), {
       duration: 1000000,
-      description: `Export success, ${getUsers().length} users`,
+      description: tP(
+        'floatingButton.community.exportMembers.toast.success.description',
+        {
+          values: {
+            count: getUsers().length,
+          },
+        },
+      ),
       cancel: undefined,
       action: {
-        label: 'Download',
+        label: tP('floatingButton.community.exportMembers.toast.download'),
         onClick: () => {
           const users = getUsers()
           const csv = generateCSV(users, {
@@ -98,11 +127,16 @@ export async function exportCommunityMembersToCSV(options: {
     })
   } catch (err) {
     console.error('exportCommunityMembersToCSV error', err)
-    toast.error('Export failed', {
+    toast.error(tP('floatingButton.community.exportMembers.toast.failed'), {
       duration: 1000000,
-      description: `Export failed, ${
-        err instanceof Error ? err.message : 'Unknown error'
-      }`,
+      description: tP(
+        'floatingButton.community.exportMembers.toast.failed.description',
+        {
+          values: {
+            error: err instanceof Error ? err.message : 'Unknown error',
+          },
+        },
+      ),
       cancel: undefined,
     })
   } finally {

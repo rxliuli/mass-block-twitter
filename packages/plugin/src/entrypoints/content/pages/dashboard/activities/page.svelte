@@ -20,8 +20,8 @@
 
   function onScroll(ev: Event) {
     const { scrollTop, scrollHeight, clientHeight } = ev.target as HTMLElement
-    if (scrollTop + clientHeight >= scrollHeight) {
-      if ($query.hasNextPage && !$query.isFetchingNextPage) {
+    if (scrollTop + clientHeight + 1 >= scrollHeight) {
+      if ($query.hasNextPage && !$query.isPending) {
         $query.fetchNextPage()
       }
     }

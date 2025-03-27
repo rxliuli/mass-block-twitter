@@ -10,7 +10,7 @@
   "dashboard.stats.auto": "Auto Blocked",
   "dashboard.stats.manual": "Manual Blocked",
   "dashboard.stats.hidden": "Hidden Tweets",
-  "dashboard.stats.period": "This Week",
+  "dashboard.stats.period": "This Month",
   "dashboard.activity.title": "Activity Trend Chart",
   "dashboard.rules.title": "Rules Effect Statistics",
   "dashboard.rules.mutedWords": "Muted Words",

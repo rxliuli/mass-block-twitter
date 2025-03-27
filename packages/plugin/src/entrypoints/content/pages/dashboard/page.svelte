@@ -19,7 +19,7 @@
   import { t } from '$lib/i18n'
 
   let dateRange = {
-    from: dayjs().subtract(1, 'week'),
+    from: dayjs().subtract(1, 'month'),
     to: dayjs(),
   }
 
@@ -27,7 +27,7 @@
     queryKey: ['dashboard'],
     queryFn: async () => {
       return dbApi.activitys.getByRange(
-        dateRange.from.subtract(1, 'week').toDate(),
+        dateRange.from.subtract(1, 'month').toDate(),
         dateRange.to.toDate(),
       )
     },

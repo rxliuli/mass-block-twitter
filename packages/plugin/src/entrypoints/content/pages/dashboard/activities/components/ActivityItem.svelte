@@ -40,7 +40,7 @@
     </Avatar.Root>
 
     <div class="flex-1">
-      <div class="font-medium">{activity.user_name}</div>
+      <div class="font-medium break-all">{activity.user_name}</div>
       <div class="text-sm text-muted-foreground">
         <a
           href={`https://x.com/${activity.user_screen_name}`}
@@ -58,7 +58,7 @@
       </div>
       <Badge
         variant={actionMap[activity.action].color}
-        class="w-14 text-center truncate"
+        class="w-20 text-center truncate justify-center"
       >
         {actionMap[activity.action].label}
       </Badge>

@@ -10,7 +10,7 @@
   "dashboard.stats.auto": "Bloqueados Automáticamente",
   "dashboard.stats.manual": "Bloqueados Manualmente",
   "dashboard.stats.hidden": "Tweets Ocultos",
-  "dashboard.stats.period": "Esta Semana",
+  "dashboard.stats.period": "Este Mes",
   "dashboard.activity.title": "Gráfico de Tendencia de Actividad",
   "dashboard.rules.title": "Estadísticas de Efecto de Reglas",
   "dashboard.rules.mutedWords": "Palabras Silenciadas",

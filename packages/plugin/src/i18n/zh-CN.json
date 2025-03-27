@@ -4,7 +4,7 @@
   "dashboard.stats.auto": "自动屏蔽",
   "dashboard.stats.manual": "手动屏蔽",
   "dashboard.stats.hidden": "隐藏推文",
-  "dashboard.stats.period": "本周",
+  "dashboard.stats.period": "本月",
   "dashboard.activity.title": "活动趋势图",
   "dashboard.rules.title": "规则效果统计",
   "dashboard.rules.mutedWords": "关键词屏蔽",

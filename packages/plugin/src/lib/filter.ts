@@ -1,11 +1,13 @@
 import { ulid } from 'ulidx'
 import { MUTED_WORD_RULES_KEY, MUTED_WORDS_KEY, ParsedTweet } from './api'
-import { dbApi, User } from './db'
+import { User } from './db'
 import { extractCurrentUserId } from './observe'
 import { matchByKeyword } from './util/matchByKeyword'
 import { pick } from 'lodash-es'
 import { ModListSubscribedUserAndRulesResponse } from '@mass-block-twitter/server'
 import { matchRule, Rule, RuleData } from './rule'
+import { Lru } from 'toad-cache'
+import { memoize, MemoizeCache } from 'es-toolkit'
 
 export type FilterResult = 'show' | 'hide' | 'next' | 'block'
 export type FilterData =
@@ -18,6 +20,8 @@ export interface TweetFilter {
   userCondition?: (user: User) => FilterResult
 }
 
+export const flowFilterCacheMap = new Lru<{ value: boolean; reason?: string }>(1000)
+
 export function flowFilter(
   filters: TweetFilter[],
   onAction?: (
@@ -26,45 +30,59 @@ export function flowFilter(
     filterName: TweetFilter['name'],
   ) => void,
 ): (options: FilterData) => { value: boolean; reason?: string } {
-  return (data) => {
-    for (const filter of filters) {
-      let result: FilterResult = 'next'
-      if (data.type === 'tweet') {
-        if (filter.tweetCondition) {
-          result = filter.tweetCondition(data.tweet)
-        } else if (filter.userCondition) {
-          result = filter.userCondition(data.tweet.user)
+  return memoize(
+    (data): { value: boolean; reason?: string } => {
+      for (const filter of filters) {
+        let result: FilterResult = 'next'
+        if (data.type === 'tweet') {
+          if (filter.tweetCondition) {
+            result = filter.tweetCondition(data.tweet)
+          } else if (filter.userCondition) {
+            result = filter.userCondition(data.tweet.user)
+          }
+        } else {
+          if (filter.userCondition) {
+            result = filter.userCondition(data.user)
+          }
         }
-      } else {
-        if (filter.userCondition) {
-          result = filter.userCondition(data.user)
+        if (result === 'show') {
+          return {
+            value: true,
+            reason: filter.name,
+          }
+        }
+        if (result === 'hide') {
+          onAction?.(data, 'hide', filter.name)
+          return {
+            value: false,
+            reason: filter.name,
+          }
+        }
+        if (result === 'block') {
+          onAction?.(data, 'block', filter.name)
+          return {
+            value: false,
+            reason: filter.name,
+          }
         }
       }
-      if (result === 'show') {
-        return {
-          value: true,
-          reason: filter.name,
-        }
+      return {
+        value: true,
       }
-      if (result === 'hide') {
-        onAction?.(data, 'hide', filter.name)
-        return {
-          value: false,
-          reason: filter.name,
-        }
-      }
-      if (result === 'block') {
-        onAction?.(data, 'block', filter.name)
-        return {
-          value: false,
-          reason: filter.name,
-        }
-      }
-    }
-    return {
-      value: true,
-    }
-  }
+    },
+    {
+      getCacheKey: (data) => {
+        return data.type === 'tweet'
+          ? 'tweet:' + data.tweet.id
+          : 'user:' + data.user.id
+      },
+      cache: {
+        get: (key) => flowFilterCacheMap.get(key),
+        set: (key, value) => flowFilterCacheMap.set(key, value),
+        has: (key) => flowFilterCacheMap.get(key) !== undefined,
+      } as MemoizeCache<string, { value: boolean; reason?: string }>,
+    },
+  )
 }
 
 export function selfFilter(): TweetFilter {

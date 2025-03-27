@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { extractObjects } from '$lib/util/extractObjects'
-import { it, expect, describe, vi } from 'vitest'
+import { it, expect, describe, vi, beforeEach, afterEach } from 'vitest'
 import all from './assets/all.json'
 import timeline from './assets/timeline.json'
 import { z } from 'zod'
@@ -40,6 +40,7 @@ import {
   flowFilter,
   mutedWordsFilter,
   MutedWordRule,
+  flowFilterCacheMap,
 } from '$lib/filter'
 import TweetDetail8ProbableSpam from './assets/TweetDetail8ProbableSpam.json'
 import CreateTweet from './assets/CreateTweet.json'
@@ -444,6 +445,12 @@ describe('filterTweets', () => {
 })
 
 describe('filterNotifications', () => {
+  beforeEach(() => {
+    flowFilterCacheMap.clear()
+  })
+  afterEach(() => {
+    flowFilterCacheMap.clear()
+  })
   const users = {
     'user-1': {
       id_str: 'user-1',
@@ -621,7 +628,7 @@ describe('filterNotifications', () => {
     expect(log).not.toHaveBeenCalled()
   })
   it('flowFilter', () => {
-    const isHide = flowFilter([
+    const isShow = flowFilter([
       {
         name: 'filter1',
         userCondition: (user) => {
@@ -638,33 +645,33 @@ describe('filterNotifications', () => {
       },
     ])
     expect(
-      isHide({
+      isShow({
         type: 'tweet',
         tweet: { id: 'test-1', user: {} } as ParsedTweet,
       }).value,
     ).false
     expect(
-      isHide({
+      isShow({
         type: 'tweet',
-        tweet: { id: 'test-1', user: { id: 'user-3' } } as ParsedTweet,
+        tweet: { id: 'test-2', user: { id: 'user-3' } } as ParsedTweet,
       }).value,
     ).true
     expect(
-      isHide({
+      isShow({
         type: 'tweet',
-        tweet: { id: 'test-2', user: {} } as ParsedTweet,
+        tweet: { id: 'test-3', user: {} } as ParsedTweet,
       }).value,
     ).true
     expect(
-      isHide({
+      isShow({
         type: 'tweet',
-        tweet: { id: 'test-3', user: { id: 'user-1' } } as ParsedTweet,
+        tweet: { id: 'test-4', user: { id: 'user-1' } } as ParsedTweet,
       }).value,
     ).false
     expect(
-      isHide({
+      isShow({
         type: 'tweet',
-        tweet: { id: 'test-4', user: { id: 'user-2' } } as ParsedTweet,
+        tweet: { id: 'test-5', user: { id: 'user-2' } } as ParsedTweet,
       }).value,
     ).true
   })

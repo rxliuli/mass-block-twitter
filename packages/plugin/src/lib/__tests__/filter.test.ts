@@ -3,10 +3,17 @@ import { MUTED_WORD_RULES_KEY, ParsedTweet } from '$lib/api'
 import { User } from '$lib/db'
 import {
   defaultProfileFilter,
+  FilterData,
+  flowFilter,
+  flowFilterCacheMap,
+  modListFilter,
   MutedWordRule,
   mutedWordsFilter,
+  spamContext,
+  TweetFilter,
 } from '$lib/filter'
-import { describe, expect, it } from 'vitest'
+import { Rule } from '$lib/rule'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('defaultProfileFilter', () => {
   const filter = defaultProfileFilter()
@@ -109,5 +116,150 @@ describe('mutedWordsFilter', () => {
     )
     const filter = mutedWordsFilter()
     expect(filter.userCondition!({ location: 'test1' } as User)).toBe('block')
+  })
+})
+
+describe('modListFilter', () => {
+  beforeEach(() => {
+    spamContext.modlists = []
+  })
+  it('should return next when no rules', () => {
+    const filter = modListFilter()
+    expect(
+      filter.userCondition!({
+        id: '1',
+        screen_name: 'test',
+        name: 'test',
+        profile_image_url: 'test',
+        description: 'test',
+      } as User),
+    ).eq('next')
+  })
+  it('should return block when rule matches', () => {
+    spamContext.modlists = [
+      {
+        modListId: '1',
+        action: 'block',
+        twitterUserIds: ['1'],
+        rules: [
+          {
+            or: [
+              {
+                and: [
+                  {
+                    field: 'user.description',
+                    operator: 'cont',
+                    value: 'test',
+                  },
+                ],
+              },
+            ],
+          } satisfies Rule,
+        ],
+      },
+    ]
+    const filter = modListFilter()
+    expect(
+      filter.userCondition!({
+        id: '1',
+        description: 'test user',
+      } as User),
+    ).eq('block')
+  })
+  it('should return hide when rule matches', () => {
+    spamContext.modlists = [
+      {
+        modListId: '1',
+        action: 'hide',
+        twitterUserIds: ['1'],
+        rules: [],
+      },
+    ]
+    const filter = modListFilter()
+    expect(
+      filter.userCondition!({
+        id: '1',
+        description: 'test user',
+      } as User),
+    ).eq('hide')
+  })
+  it('should return block when real rule matches', () => {
+    spamContext.modlists = [
+      {
+        modListId: '01JQAQPVHGS8HZBDBAQ6D10BNF',
+        action: 'block',
+        twitterUserIds: [],
+        rules: [
+          {
+            or: [
+              {
+                and: [
+                  {
+                    field: 'user.description',
+                    operator: 'cont',
+                    value: '58fans.com',
+                  },
+                ],
+              },
+              {
+                and: [
+                  {
+                    field: 'user.description',
+                    operator: 'cont',
+                    value: '58mhao.com',
+                  },
+                ],
+              },
+              {
+                and: [
+                  {
+                    field: 'user.description',
+                    operator: 'cont',
+                    value: 'fens88.com',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ]
+    const filter = modListFilter()
+    expect(
+      filter.userCondition!({
+        id: '1',
+        description: '58fans.com',
+      } as User),
+    ).eq('block')
+  })
+})
+
+describe('flowFilter', () => {
+  beforeEach(() => {
+    flowFilterCacheMap.clear()
+  })
+  afterEach(() => {
+    flowFilterCacheMap.clear()
+  })
+  it('should return true when no rules', () => {
+    const filter = flowFilter([])
+    expect(filter({ type: 'tweet', tweet: {} } as FilterData).value).true
+  })
+  it('should return false when hide', () => {
+    const filter = flowFilter([{ name: 'test', userCondition: () => 'hide' }])
+    expect(filter({ type: 'tweet', tweet: {} } as FilterData).value).false
+  })
+  it('should return cache with same key', () => {
+    const f = vi.fn().mockImplementation(() => 'next')
+    const filters: TweetFilter[] = [{ name: 'test', userCondition: f }]
+    expect(
+      flowFilter(filters)({ type: 'tweet', tweet: { id: '1' } } as FilterData)
+        .value,
+    ).true
+    expect(
+      flowFilter(filters)({ type: 'tweet', tweet: { id: '1' } } as FilterData)
+        .value,
+    ).true
+    expect(f).toHaveBeenCalledTimes(1)
   })
 })

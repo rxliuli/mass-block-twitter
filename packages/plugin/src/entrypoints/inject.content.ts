@@ -82,7 +82,18 @@ function loggerUsers(): Middleware {
         refreshSpamUsers(users.map((it) => it.id)),
         refreshSubscribedModLists(),
       ])
+      handleUsers(users)
     }
+  }
+}
+
+function handleUsers(users: User[]) {
+  const isShow = flowFilter(getFilters(getSettings()), onAction)
+  for (const user of users) {
+    isShow({
+      type: 'user',
+      user,
+    })
   }
 }
 

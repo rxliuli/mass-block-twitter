@@ -32,7 +32,7 @@
   import { useModlistUsers } from '../utils/useModlistUsers'
   import { t } from '$lib/i18n'
   import { selectImportFile } from '$lib/hooks/batchBlockUsers'
-  import { Input } from '$lib/components/ui/input';
+  import { Input } from '$lib/components/ui/input'
 
   let {
     owner,
@@ -72,23 +72,9 @@
         await $query.refetch()
         return
       }
-      queryClient.setQueryData(
-        ['modlistUsers', route.search?.get('id')],
-        produce((old: typeof $query.data) => {
-          const oldData = (old?.pages[0]?.data ?? []).map((it) => it.id)
-          const newData = data.filter((it) => !oldData.includes(it.id))
-          if (oldData.length === 0) {
-            $query.refetch()
-            return
-          }
-          old?.pages[0]?.data.unshift(
-            ...newData.map((it) => ({
-              ...it,
-              modListUserId: it.id,
-            })),
-          )
-        }),
-      )
+      queryClient.invalidateQueries({
+        queryKey: ['modlistUsers', route.search?.get('id')],
+      })
     },
   })
 
@@ -173,14 +159,17 @@
         if (!resp.ok) {
           throw new Error('Failed to remove user')
         }
-        queryClient.setQueryData(
-          ['modlistUsers', route.search?.get('id')],
-          produce((old: typeof $query.data) => {
-            old?.pages.forEach((page) => {
-              page.data = page.data.filter((it) => it.id !== twitterUserId)
-            })
-          }),
-        )
+        queryClient.invalidateQueries({
+          queryKey: ['modlistUsers', route.search?.get('id')],
+        })
+        // queryClient.setQueryData(
+        //   ['modlistUsers', route.search?.get('id')],
+        //   produce((old: typeof $query.data) => {
+        //     old?.pages.forEach((page) => {
+        //       page.data = page.data.filter((it) => it.id !== twitterUserId)
+        //     })
+        //   }),
+        // )
       },
       (twitterUserId) => twitterUserId,
     ),

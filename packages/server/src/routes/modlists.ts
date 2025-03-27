@@ -540,16 +540,23 @@ export type ModListAddRuleResponse = InferSelectModel<typeof modListRule>
 modlists.post('/rule', zValidator('json', addRuleSchema), async (c) => {
   const validated = c.req.valid('json')
   const db = drizzle(c.env.DB)
-  const r = await db
-    .insert(modListRule)
-    .values({
-      id: ulid(),
-      name: validated.name,
-      modListId: validated.modListId,
-      rule: validated.rule,
-    })
-    .returning()
-    .get()
+  const [[r]] = await db.batch([
+    db
+      .insert(modListRule)
+      .values({
+        id: ulid(),
+        name: validated.name,
+        modListId: validated.modListId,
+        rule: validated.rule,
+      })
+      .returning(),
+    db
+      .update(modList)
+      .set({
+        updatedAt: new Date().toISOString(),
+      })
+      .where(eq(modList.id, validated.modListId)),
+  ])
   return c.json<ModListAddRuleResponse>(r)
 })
 
@@ -582,15 +589,22 @@ modlists.put(
     if (!_modListRule) {
       return c.json({ code: 'modListRuleNotFound' }, 404)
     }
-    const r = await db
-      .update(modListRule)
-      .set({
-        name: validatedJson.name,
-        rule: validatedJson.rule,
-      })
-      .where(eq(modListRule.id, validated.id))
-      .returning()
-      .get()
+    const [[r]] = await db.batch([
+      db
+        .update(modListRule)
+        .set({
+          name: validatedJson.name,
+          rule: validatedJson.rule,
+        })
+        .where(eq(modListRule.id, validated.id))
+        .returning(),
+      db
+        .update(modList)
+        .set({
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(modList.id, _modListRule.ModList.id)),
+    ])
     return c.json<ModListUpdateRuleResponse>(r)
   },
 )
@@ -621,7 +635,15 @@ modlists.delete(
     if (!_modListRule) {
       return c.json({ code: 'modListRuleNotFound' }, 404)
     }
-    await db.delete(modListRule).where(eq(modListRule.id, validated.id))
+    await db.batch([
+      db.delete(modListRule).where(eq(modListRule.id, validated.id)),
+      db
+        .update(modList)
+        .set({
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(modList.id, _modListRule.ModList.id)),
+    ])
     return c.json({ code: 'success' })
   },
 )
@@ -794,11 +816,13 @@ search
       conditions.push(lt(modListUser.id, validated.cursor))
     }
     if (validated.query) {
-      conditions.push(or(
-        like(user.screenName, `%${validated.query}%`),
-        like(user.name, `%${validated.query}%`),
-        like(user.description, `%${validated.query}%`),
-      )!)
+      conditions.push(
+        or(
+          like(user.screenName, `%${validated.query}%`),
+          like(user.name, `%${validated.query}%`),
+          like(user.description, `%${validated.query}%`),
+        )!,
+      )
     }
     const modListUsers = await db
       .select()

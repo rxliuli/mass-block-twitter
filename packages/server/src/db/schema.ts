@@ -168,7 +168,8 @@ export const modList = sqliteTable(
       .$defaultFn(() => new Date().toISOString()),
     updatedAt: text('updatedAt')
       .notNull()
-      .$defaultFn(() => new Date().toISOString()),
+      .$defaultFn(() => new Date().toISOString())
+      .$onUpdateFn(() => new Date().toISOString()),
   },
   (table) => [
     index('ModList_name_idx').on(table.name),

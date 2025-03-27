@@ -116,6 +116,7 @@
   "search-and-block.toast.blockingFailed": "[{current}/{total}] {action} {name} failed",
   "search-and-block.toast.blockingSuccess": "{success} users {action}, {failed} failed",
   "search-and-block.toast.exportSuccess": "Exported {count} users",
+  "search-and-block.toast.exportEmpty": "No users selected",
   "search-and-block.toast.importSuccess": "Imported {new} users, ignored {ignored} users",
   "search-and-block.confirm.blockFollowing": "You are trying to block following users, do you want to include them?",
   "search-and-block.error.rateLimit": "Rate limit exceeded, please try again later",

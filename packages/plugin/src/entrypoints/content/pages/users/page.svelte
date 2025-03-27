@@ -193,6 +193,10 @@
   })
 
   function onExport() {
+    if (selectedRows.length === 0) {
+      toast.info($t('search-and-block.toast.exportEmpty'))
+      return
+    }
     const parser = new Parser({
       fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
     })

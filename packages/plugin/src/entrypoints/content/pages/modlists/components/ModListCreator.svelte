@@ -8,7 +8,6 @@
   import { crossFetch } from '$lib/query'
   import { toast } from 'svelte-sonner'
   import type {
-    ModList,
     ModListCreateRequest,
     ModListCreateResponse,
     ModListGetCreatedResponse,
@@ -100,6 +99,7 @@
   size={'icon'}
   onclick={onOpenModal}
   disabled={!authInfo.value}
+  data-testid="modlist-creator"
 >
   <PlusIcon class="w-4 h-4" />
 </Button>

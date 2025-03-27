@@ -7,16 +7,12 @@
   import { Label } from '$lib/components/ui/label'
   import { Textarea } from '$lib/components/ui/textarea'
   import { FileReader } from '$lib/util/FileReader'
-  import type {
-    ModList,
-    ModListCreateRequest,
-  } from '@mass-block-twitter/server'
+  import type { ModListCreateRequest } from '@mass-block-twitter/server'
   import { createMutation } from '@tanstack/svelte-query'
   import { UserRoundIcon } from 'lucide-svelte'
   import { untrack } from 'svelte'
-  import * as RadioGroup from '$lib/components/ui/radio-group'
-  import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { t } from '$lib/i18n'
+  import RadioGroup from '$lib/components/custom/radio/RadioGroup.svelte'
 
   type FormData = Omit<ModListCreateRequest, 'twitterUser'>
 
@@ -34,14 +30,14 @@
     name: props.data?.name!,
     description: props.data?.description!,
     avatar: props.data?.avatar!,
-    visibility: props.data?.visibility ?? 'public',
+    visibility: props.data?.visibility ?? 'protected',
   })
   let form = $state<HTMLFormElement>()
   $effect(() => {
     if (open) {
       untrack(() => {
         Object.assign(formState, props.data)
-        formState.visibility = props.data?.visibility ?? 'public'
+        formState.visibility = props.data?.visibility ?? 'protected'
       })
     }
   })
@@ -76,8 +72,6 @@
       formState.avatar = await reader.readAsDataURL()
     }
   }
-
-  const authInfo = useAuthInfo()
 </script>
 
 <Dialog.Root bind:open>
@@ -94,7 +88,9 @@
       onsubmit={(ev) => $mutation.mutate(ev)}
     >
       <div>
-        <Label for="avatar" class="block mb-2">{$t('modlists.edit.form.avatar.label')}</Label>
+        <Label for="avatar" class="block mb-2"
+          >{$t('modlists.edit.form.avatar.label')}</Label
+        >
         <Avatar.Root onclick={onUploadImage} class="w-24 h-24 cursor-pointer">
           <Avatar.Image src={formState.avatar} />
           <Avatar.Fallback>
@@ -112,7 +108,9 @@
         />
       </div>
       <div>
-        <Label for="name" class="block mb-2">{$t('modlists.edit.form.name.label')}</Label>
+        <Label for="name" class="block mb-2"
+          >{$t('modlists.edit.form.name.label')}</Label
+        >
         <Input
           id="name"
           name="name"
@@ -122,7 +120,9 @@
         />
       </div>
       <div>
-        <Label for="description" class="block mb-2">{$t('modlists.edit.form.description.label')}</Label>
+        <Label for="description" class="block mb-2"
+          >{$t('modlists.edit.form.description.label')}</Label
+        >
         <Textarea
           id="description"
           name="description"
@@ -132,26 +132,23 @@
         />
       </div>
       <div>
-        <Label for="visibility" class="block mb-2">{$t('modlists.edit.form.visibility.label')}</Label>
-        <RadioGroup.Root
-          id="visibility"
-          name="visibility"
-          disabled={!authInfo.value?.isPro}
-          title={authInfo.value?.isPro
-            ? ''
-            : $t('modlists.edit.form.visibility.upgrade')}
-          bind:value={formState.visibility}
-          class="flex gap-2"
+        <Label for="visibility" class="block mb-2"
+          >{$t('modlists.edit.form.visibility.label')}</Label
         >
-          <div class="flex items-center space-x-2">
-            <RadioGroup.Item value="public" id="visibility-public" />
-            <Label for="visibility-public">{$t('modlists.edit.form.visibility.public')}</Label>
-          </div>
-          <div class="flex items-center space-x-2">
-            <RadioGroup.Item value="protected" id="visibility-protected" />
-            <Label for="visibility-protected">{$t('modlists.edit.form.visibility.protected')}</Label>
-          </div>
-        </RadioGroup.Root>
+        <RadioGroup
+          bind:value={formState.visibility}
+          id="visibility"
+          options={[
+            {
+              label: $t('modlists.edit.form.visibility.protected'),
+              value: 'protected',
+            },
+            {
+              label: $t('modlists.edit.form.visibility.public'),
+              value: 'public',
+            },
+          ]}
+        />
       </div>
     </form>
     <Dialog.Footer>
@@ -160,7 +157,9 @@
         disabled={$mutation.isPending}
         onclick={() => form?.dispatchEvent(new Event('submit'))}
       >
-        {$mutation.isPending ? $t('modlists.edit.form.actions.saving') : $t('modlists.edit.form.actions.save')}
+        {$mutation.isPending
+          ? $t('modlists.edit.form.actions.saving')
+          : $t('modlists.edit.form.actions.save')}
       </Button>
       <Button
         variant="secondary"

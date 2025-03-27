@@ -14,25 +14,15 @@
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { toast } from 'svelte-sonner'
   import { exportCommunityMembersToCSV } from '../hooks/exportCommunityMembersToCSV'
+  import { getCommunityId } from '../utils/getCommunityId'
 
-  function getCommunityId() {
-    // https://x.com/i/communities/1900366536683987325/members
-    // https://x.com/i/communities/1900366536683987325
-    const match = location.pathname.match(
-      /^\/i\/communities\/(\d+)(\/members)?$/,
-    )
-    if (!match) {
-      return
-    }
-    return match[1]
-  }
   // https://developer.x.com/en/docs/x-api/v1/rate-limits#:~:text=15-,GET%20lists/members,-900
   // 900 requests per 15 minutes, max get 18000 members
   const query = createInfiniteQuery({
-    queryKey: ['community-members', getCommunityId()],
+    queryKey: ['community-members', getCommunityId(location.href)],
     queryFn: async ({ pageParam }) => {
       const r = await getCommunityMembers({
-        communityId: getCommunityId()!,
+        communityId: getCommunityId(location.href)!,
         cursor: pageParam,
       })
       // console.log('getCommunityMembers', r)
@@ -56,9 +46,11 @@
       if ($blockCommunicationMembersMutation.isPending) {
         return
       }
-      const communityId = getCommunityId()
+      const communityId = getCommunityId(location.href)
       if (!communityId) {
-        toast.error('Not found community id')
+        toast.error(
+          $t('floatingButton.community.exportMembers.toast.notFoundId'),
+        )
         return
       }
       const [info, _] = await Promise.all([
@@ -98,10 +90,12 @@
 
   const exportCsvMutation = createMutation({
     mutationFn: async () => {
-      const communityId = getCommunityId()
+      const communityId = getCommunityId(location.href)
       console.log('exportCsvMutation', location.href, communityId)
       if (!communityId) {
-        toast.error('Not found community id')
+        toast.error(
+          $t('floatingButton.community.exportMembers.toast.notFoundId'),
+        )
         return
       }
       await $query.fetchNextPage()

@@ -113,6 +113,28 @@ exports[`getRuleFileds > should return the correct fields 1`] = `
     "type": "string",
   },
   {
+    "field": "user.url",
+    "operator": [
+      {
+        "label": "Equal",
+        "value": "eq",
+      },
+      {
+        "label": "Not Equal",
+        "value": "neq",
+      },
+      {
+        "label": "Contains",
+        "value": "cont",
+      },
+      {
+        "label": "Not Contains",
+        "value": "notCont",
+      },
+    ],
+    "type": "string",
+  },
+  {
     "field": "user.profile_image_url",
     "operator": [
       {

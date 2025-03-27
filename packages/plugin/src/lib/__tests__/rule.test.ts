@@ -1,4 +1,3 @@
-import { initI18n } from '$lib/i18n'
 import { getRuleFileds, matchRule, Rule, visit } from '$lib/rule'
 import { describe, expect, it } from 'vitest'
 import { z, ZodArray, ZodEnum } from 'zod'

@@ -21,6 +21,7 @@ const ruleDataSchema = z.object({
       name: z.string(),
       description: z.string().optional(),
       location: z.string().optional(),
+      url: z.string().optional(),
       profile_image_url: z.string().optional(),
       created_at: z.string().optional(),
       is_blue_verified: z.boolean().optional(),

@@ -99,6 +99,7 @@
   const exportCsvMutation = createMutation({
     mutationFn: async () => {
       const communityId = getCommunityId()
+      console.log('exportCsvMutation', location.href, communityId)
       if (!communityId) {
         toast.error('Not found community id')
         return

@@ -62,7 +62,7 @@
   const sidebar = useSidebar()
 </script>
 
-<aside class={cn('h-full w-64 border-r py-2', className)}>
+<aside class={cn('h-full md:w-64 md:border-r py-2', className)}>
   {#each sidebarItems as item}
     <a href={item.href}>
       <Button

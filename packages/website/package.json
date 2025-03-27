@@ -28,7 +28,7 @@
     "@types/mdast": "^4.0.4",
     "@vitest/browser": "^3.0.9",
     "autoprefixer": "^10.4.20",
-    "bits-ui": "1.0.0-next.91",
+    "bits-ui": "1.3.14",
     "clsx": "^2.1.1",
     "fast-glob": "^3.3.3",
     "hast-util-raw": "^9.1.0",

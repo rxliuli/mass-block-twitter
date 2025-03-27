@@ -1,0 +1,1 @@
+CREATE INDEX `ModListUser_modListId_id_idx` ON `ModListUser` (`modListId`,`id`);

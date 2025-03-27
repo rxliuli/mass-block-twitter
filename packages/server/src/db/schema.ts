@@ -200,6 +200,7 @@ export const modListUser = sqliteTable(
       table.modListId,
       table.twitterUserId,
     ),
+    index('ModListUser_modListId_id_idx').on(table.modListId, table.id),
   ],
 )
 

@@ -1,14 +1,17 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { initCloudflareTest } from './utils'
 import { drizzle } from 'drizzle-orm/d1'
-import { localUser, modList, user } from '../src/db/schema'
+import { localUser, modList, modListUser, user } from '../src/db/schema'
 import {
+  and,
   AnyTable,
+  desc,
   eq,
   getTableColumns,
   getTableName,
   InferInsertModel,
   InferSelectModel,
+  lt,
   sql,
   TableConfig,
 } from 'drizzle-orm'
@@ -147,5 +150,62 @@ describe('d1 batch', () => {
       .onConflictDoNothing({
         target: user.id,
       })
+  })
+})
+
+describe('performance', () => {
+  beforeEach(async () => {
+    const db = context.db
+    const users = range(1000).map((it) => ({
+      id: `test-user-${it}`,
+      screenName: `user-${it}`,
+      name: `user-${it}`,
+    }))
+    await db.batch(
+      safeChunkInsertValues(user, users).map((it) =>
+        db.insert(user).values(it),
+      ) as any,
+    )
+    await db.insert(localUser).values({
+      id: 'local-user-1',
+      email: 'local-user-1@example.com',
+      password: 'password',
+    })
+    await db.insert(modList).values({
+      id: 'modlist-1',
+      name: 'modlist-name',
+      twitterUserId: 'test-user-1',
+      localUserId: 'local-user-1',
+    })
+    const modListUsers = range(1000).map((it) => ({
+      id: `modlist-user-${it}`,
+      modListId: 'modlist-1',
+      twitterUserId: `test-user-${it}`,
+    }))
+    await db.batch(
+      safeChunkInsertValues(modListUser, modListUsers).map((it) =>
+        db.insert(modListUser).values(it),
+      ) as any,
+    )
+  })
+  it('should be able to use index', async () => {
+    const db = context.db
+    const sql = db
+      .select()
+      .from(modListUser)
+      .innerJoin(user, eq(modListUser.twitterUserId, user.id))
+      .where(
+        and(
+          eq(modListUser.modListId, 'modlist-1'),
+          lt(modListUser.id, 'modlist-user-500'),
+        ),
+      )
+      .orderBy(desc(modListUser.id))
+      .limit(10)
+      .toSQL()
+    const r2 = await context.env.DB.prepare(sql.sql)
+      .bind(...sql.params)
+      .run()
+    expect(r2.meta.rows_read).eq(20)
   })
 })

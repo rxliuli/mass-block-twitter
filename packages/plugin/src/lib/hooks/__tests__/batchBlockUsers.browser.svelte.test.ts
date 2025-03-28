@@ -8,6 +8,7 @@ import { BatchBlockUsersProcessedMeta, ExpectedError } from '$lib/api'
 import { range } from 'lodash-es'
 import { useSettings } from '$lib/settings'
 import { PageTest } from '$lib/components/test'
+import { tick } from 'svelte'
 
 describe('batchBlockUsers', () => {
   let screen: RenderResult<any>
@@ -377,12 +378,20 @@ describe('batchBlockUsers', () => {
       getAuthInfo,
     })
     await expect
-      .element(screen.getByText('Blocking users per minute: 1, please wait '))
+      .element(
+        screen.getByText(
+          'Blocking users per minute: 1, progress: 1/2, please wait',
+        ),
+      )
       .toBeInTheDocument()
     vi.setSystemTime(new Date().getTime() + 60 * 1000)
     await vi.runAllTimersAsync()
     await expect
-      .element(screen.getByText('Blocking users per minute: 1, please wait '))
+      .element(
+        screen.getByText(
+          'Blocking users per minute: 1, progress: 1/2, please wait',
+        ),
+      )
       .not.toBeInTheDocument()
     expect(blockUser).toHaveBeenCalledTimes(2)
     expect(onProcessed).toHaveBeenCalledTimes(2)

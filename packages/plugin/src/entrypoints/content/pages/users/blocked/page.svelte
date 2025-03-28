@@ -1,19 +1,21 @@
 <script lang="ts">
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import { ADataTable } from '$lib/components/logic/a-data-table'
-  import { dbApi, type User } from '$lib/db'
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
   import { userColumns } from '../utils/columns'
   import Button from '$lib/components/ui/button/button.svelte'
   import { DownloadIcon, ShieldCheckIcon } from 'lucide-svelte'
   import { toast } from 'svelte-sonner'
-  import { serializeError } from 'serialize-error'
-  import { blockUser, unblockUser } from '$lib/api'
-  import { ulid } from 'ulidx'
+  import { unblockUser } from '$lib/api'
   import { t, tP } from '$lib/i18n'
   import { getBlockedUsers } from '$lib/api/twitter'
-  import { generateCSV } from '$lib/util/csv'
-  import saveAs from 'file-saver'
+  import { useController } from '$lib/stores/controller'
+  import {
+    onExportBlockedUsersProcessed,
+    onBatchUnblockProcessed,
+  } from '../utils/batchExportBlockedUsers'
+  import { downloadUsersToCSV } from '$lib/util/downloadUsersToCSV'
+  import { batchExecute, batchQuery } from '$lib/util/batch'
 
   const query = createInfiniteQuery({
     queryKey: ['blocked-users'],
@@ -55,113 +57,45 @@
     }
   }
 
+  const controller = useController()
+  onDestroy(controller.abort)
+
   const unblockMutation = createMutation({
-    mutationFn: async ({
-      users,
-      action,
-    }: {
-      users: User[]
-      action: 'block' | 'unblock'
-    }) => {
-      let failedNames: string[] = []
-      const loadingId = toast.loading(
-        action === 'block'
-          ? $t('blocked-users.toast.blocking')
-          : $t('blocked-users.toast.unblocking'),
-      )
-      for (let i = 0; i < users.length; i++) {
-        const it = users[i]
-        const blockingText =
-          action === 'block'
-            ? $t('blocked-users.toast.blocking')
-            : $t('blocked-users.toast.unblocking')
-        try {
-          toast.loading(
-            $t('blocked-users.toast.blockingProgress', {
-              values: {
-                current: i + 1,
-                total: users.length,
-                action: blockingText,
-                name: it.name,
-              },
-            }),
-            { id: loadingId },
-          )
-          if (action === 'block') {
-            await blockUser(it)
-            await dbApi.users.block(it)
-            await dbApi.activitys.record([
-              {
-                id: ulid().toString(),
-                action: 'block',
-                trigger_type: 'manual',
-                match_type: 'user',
-                match_filter: 'batchSelected',
-                user_id: it.id,
-                user_name: it.name,
-                user_screen_name: it.screen_name,
-                user_profile_image_url: it.profile_image_url,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-              },
-            ])
-          } else {
-            await unblockUser(it.id)
-            await dbApi.users.unblock(it)
-          }
-        } catch (e) {
-          failedNames.push(it.name)
-          console.log(`${blockingText} ${it.id} ${it.name} failed`, e)
-          toast.error(
-            $t('blocked-users.toast.blockingFailed', {
-              values: {
-                current: i + 1,
-                total: users.length,
-                action: blockingText,
-                name: it.name,
-              },
-            }),
-            {
-              description: serializeError(e).message,
-            },
-          )
-        }
+    mutationFn: async () => {
+      const users =
+        $query.data?.pages
+          .flatMap((it) => it.data)
+          .filter((it) => selectedRowKeys.includes(it.id)) ?? []
+      if (users.length === 0) {
+        toast.error(tP('blocked-users.toast.noSelection'))
+        return
       }
-      toast.dismiss(loadingId)
-      toast.success(
-        $t('blocked-users.toast.blockingSuccess', {
-          values: {
-            success: users.length - failedNames.length,
-            failed: failedNames.length,
-            action:
-              action === 'block'
-                ? $t('search-and-block.filter.blocking.blocked')
-                : $t('search-and-block.filter.blocking.unblocked'),
+      controller.create()
+      const toastId = toast.loading(tP('blocked-users.toast.unblocking'))
+      try {
+        const result = await batchExecute({
+          controller,
+          getItems: () => users,
+          execute: async (it) => {
+            await unblockUser(it.id)
           },
-        }),
-        {
-          description: failedNames.join(', '),
-          duration: 5000,
-        },
-      )
+          onProcessed: (context) => onBatchUnblockProcessed(context, toastId),
+        })
+        toast.success(
+          tP('blocked-users.toast.unblockingSuccess', {
+            values: { success: result.success, failed: result.failed },
+          }),
+          { duration: 5000 },
+        )
+      } finally {
+        toast.dismiss(toastId)
+      }
     },
     onSuccess: async () => {
-      await $query.refetch()
       selectedRowKeys = []
+      await $query.refetch()
     },
   })
-
-  async function onUnblock() {
-    const users =
-      $query.data?.pages
-        .flatMap((it) => it.data)
-        .filter((it) => selectedRowKeys.includes(it.id)) ?? []
-    if (users.length === 0) {
-      toast.error($t('blocked-users.toast.noSelection'))
-      return
-    }
-    await $unblockMutation.mutateAsync({ users, action: 'unblock' })
-  }
 
   const columns = $derived(
     userColumns.map((it) => ({
@@ -170,77 +104,20 @@
     })),
   )
 
-  const MAX_REQUESTS = 850
-  let controller = $state(new AbortController())
-  onDestroy(() => {
-    controller.abort()
-  })
   const getUsers = () => $query.data?.pages.flatMap((it) => it.data) ?? []
   const exportMutation = createMutation({
     mutationFn: async () => {
-      controller.abort()
-      controller = new AbortController()
-      const toastId = toast.info('Exporting...', {
-        description: `Exporting ${getUsers().length} blocked users`,
-        duration: 1000000,
-        cancel: {
-          label: 'Stop',
-          onClick: () => {
-            controller.abort()
-            toast.dismiss(toastId)
-          },
-        },
-      })
+      controller.create()
+      const toastId = toast.loading('Starting export...')
       try {
-        let i = 0
-        while ($query.hasNextPage && !controller.signal.aborted) {
-          try {
-            await $query.fetchNextPage()
-          } catch (e) {
-            console.error('exportBlockedUsers failed', e)
-            toast.error('Save failed, please try again later')
-            break
-          }
-          i++
-          toast.info(`Exporting...`, {
-            id: toastId,
-            description: `Exporting ${getUsers().length} blocked users`,
-            cancel: {
-              label: 'Stop',
-              onClick: () => {
-                controller.abort()
-                toast.dismiss(toastId)
-              },
-            },
-          })
-          if (i >= MAX_REQUESTS) {
-            const r = await new Promise<'stop' | 'continue'>((resolve) => {
-              toast.info(
-                `You have reached the maximum number of requests, do you want to continue?`,
-                {
-                  id: toastId,
-                  duration: 1000000,
-                  cancel: {
-                    label: 'Stop',
-                    onClick: () => {
-                      controller.abort()
-                      resolve('stop')
-                    },
-                  },
-                  action: {
-                    label: 'Continue',
-                    onClick: () => {
-                      resolve('continue')
-                    },
-                  },
-                },
-              )
-            })
-            if (r === 'stop') {
-              break
-            }
-          }
-        }
+        await batchQuery({
+          controller,
+          getItems: () => getUsers(),
+          hasNext: () => $query.hasNextPage,
+          fetchNextPage: () => $query.fetchNextPage(),
+          onProcessed: (context) =>
+            onExportBlockedUsersProcessed(context, toastId),
+        })
         toast.success('Export success', {
           duration: 1000000,
           description: `Exported ${getUsers().length} blocked users`,
@@ -249,19 +126,7 @@
             label: 'Download',
             onClick: () => {
               const users = getUsers()
-              const csv = generateCSV(users, {
-                fields: [
-                  'id',
-                  'screen_name',
-                  'name',
-                  'description',
-                  'profile_image_url',
-                ],
-              })
-              saveAs(
-                new Blob([csv]),
-                `blocked_users_${new Date().toISOString()}.csv`,
-              )
+              downloadUsersToCSV(users, 'blocked_users')
               toast.dismiss(toastId)
             },
           },
@@ -283,11 +148,11 @@
       onclick={() => $exportMutation.mutate()}
     >
       <DownloadIcon class="w-4 h-4" />
-      Export
+      Export All
     </Button>
     <Button
       variant="outline"
-      onclick={onUnblock}
+      onclick={() => $unblockMutation.mutate()}
       disabled={$unblockMutation.isPending || $query.isFetching}
     >
       <ShieldCheckIcon class="w-4 h-4" />

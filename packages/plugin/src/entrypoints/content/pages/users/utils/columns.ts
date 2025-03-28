@@ -4,6 +4,7 @@ import AvatarWrapper from '../components/AvatarWrapper.svelte'
 import TextWrapper from '../components/TextWrapper.svelte'
 import BlockingWrapper from '../components/BlockingWrapper.svelte'
 import VerifiedWrapper from '../components/VerifiedWrapper.svelte'
+import ScreenNameWrapper from '../components/ScreenNameWrapper.svelte'
 
 export const userColumns: Column<User>[] = [
   {
@@ -20,7 +21,7 @@ export const userColumns: Column<User>[] = [
     title: 'search-and-block.columns.screenName',
     dataIndex: 'screen_name',
     render: (value) =>
-      renderComponent(TextWrapper, {
+      renderComponent(ScreenNameWrapper, {
         class: 'w-40 truncate',
         title: value,
         children: value,

@@ -1,10 +1,87 @@
-import { generateCSV } from '$lib/util/csv'
 import { CommunityInfo, CommunityMember } from '$lib/api/twitter'
 import { toast } from 'svelte-sonner'
-import saveAs from 'file-saver'
 import { tP } from '$lib/i18n'
+import { batchQuery, QueryOperationContext } from '$lib/util/batch'
+import { middleware } from '$lib/util/middleware'
+import { confirmToast } from '$lib/components/custom/toast'
+import { downloadUsersToCSV } from '$lib/util/downloadUsersToCSV'
+import ms from 'ms'
 
 const MAX_REQUESTS = 850
+
+export async function onExportCommunityMembersToCSVProcessed(
+  context: QueryOperationContext<CommunityMember>,
+  toastId: string | number,
+) {
+  await middleware({
+    context,
+    toastId,
+  })
+    .use(async ({ context }, next) => {
+      if (context.error) {
+        toast.error(tP('floatingButton.community.exportMembers.toast.failed'), {
+          duration: 1000000,
+          description: tP(
+            'floatingButton.community.exportMembers.toast.failed.description',
+            {
+              values: {
+                error:
+                  context.error instanceof Error
+                    ? context.error.message
+                    : 'Unknown error',
+              },
+            },
+          ),
+        })
+        context.controller.abort()
+        return
+      }
+      await next()
+    })
+    .use(async ({ context, toastId }, next) => {
+      toast.loading(tP('floatingButton.community.exportMembers.toast.title'), {
+        id: toastId,
+        duration: 1000000,
+        // TODO calculate the time
+        description: tP(
+          'floatingButton.community.exportMembers.toast.description',
+          {
+            values: {
+              current: context.items.length,
+              total: context.progress.total,
+              time: ms(context.progress.remainingTime ?? 0),
+            },
+          },
+        ),
+        cancel: {
+          label: tP('floatingButton.community.exportMembers.toast.stop'),
+          onClick: () => {
+            context.controller.abort()
+          },
+        },
+      })
+      await next()
+    })
+    .use(async ({ context, toastId }, next) => {
+      if (context.progress.processed === MAX_REQUESTS) {
+        const r = await confirmToast(
+          tP('floatingButton.community.exportMembers.toast.stop.confirm', {
+            values: {
+              count: MAX_REQUESTS,
+            },
+          }),
+          { id: toastId, description: undefined },
+        )
+        if (r === 'stop') {
+          context.controller.abort()
+          return
+        }
+      }
+      await next()
+    })
+    .run()
+}
+
 export async function exportCommunityMembersToCSV(options: {
   communityId: string
   getCommunityInfo: (options: { communityId: string }) => Promise<CommunityInfo>
@@ -17,127 +94,36 @@ export async function exportCommunityMembersToCSV(options: {
 }) {
   const { communityId, getCommunityInfo, query, controller } = options
   const info = await getCommunityInfo({ communityId })
-  const getUsers = () => query.data
-  const toastId = toast.info(
-    tP('floatingButton.community.exportMembers.toast.title'),
-    {
-      description: tP(
-        'floatingButton.community.exportMembers.toast.description',
-        {
-          values: {
-            current: getUsers().length,
-            total: info.member_count,
-          },
-        },
-      ),
-      duration: 1000000,
-      cancel: {
-        label: tP('floatingButton.community.exportMembers.toast.stop'),
-        onClick: () => {
-          controller.abort()
-        },
-      },
-    },
+  const toastId = toast.loading(
+    tP('floatingButton.community.exportMembers.toast.loading'),
   )
-  let i = 0
+  const getUsers = () => query.data
   try {
-    while (query.hasNextPage && !controller.signal.aborted) {
-      await query.fetchNextPage()
-      toast.info(tP('floatingButton.community.exportMembers.toast.title'), {
-        id: toastId,
-        duration: 1000000,
-        // TODO calculate the time
-        description: tP(
-          'floatingButton.community.exportMembers.toast.description',
-          {
-            values: {
-              current: getUsers().length,
-              total: info.member_count,
-            },
-          },
-        ),
-      })
-      i++
-      if (i === MAX_REQUESTS) {
-        const r = await new Promise<'stop' | 'continue'>((resolve) => {
-          toast.info(
-            tP('floatingButton.community.exportMembers.toast.stop.confirm', {
-              values: {
-                count: MAX_REQUESTS,
-              },
-            }),
-            {
-              id: toastId,
-              duration: 1000000,
-              cancel: {
-                label: tP('floatingButton.community.exportMembers.toast.stop'),
-                onClick: () => {
-                  controller.abort()
-                  resolve('stop')
-                },
-              },
-              action: {
-                label: tP(
-                  'floatingButton.community.exportMembers.toast.continue',
-                ),
-                onClick: () => {
-                  resolve('continue')
-                },
-              },
-            },
-          )
-        })
-        if (r === 'stop') {
-          break
-        }
-      }
-      // await wait(1000)
-    }
+    await batchQuery({
+      controller,
+      getItems: () => getUsers(),
+      total: info.member_count,
+      fetchNextPage: async () => query.fetchNextPage(),
+      hasNext: () => query.hasNextPage,
+      onProcessed: (context) =>
+        onExportCommunityMembersToCSVProcessed(context, toastId),
+    })
     toast.success(tP('floatingButton.community.exportMembers.toast.success'), {
       duration: 1000000,
       description: tP(
         'floatingButton.community.exportMembers.toast.success.description',
-        {
-          values: {
-            count: getUsers().length,
-          },
-        },
+        { values: { count: getUsers().length } },
       ),
-      cancel: undefined,
       action: {
         label: tP('floatingButton.community.exportMembers.toast.download'),
         onClick: () => {
           const users = getUsers()
-          const csv = generateCSV(users, {
-            fields: [
-              'id',
-              'screen_name',
-              'name',
-              'description',
-              'profile_image_url',
-            ],
-          })
-          saveAs(
-            new Blob([csv]),
+          downloadUsersToCSV(
+            users,
             `community_${communityId}_${new Date().toISOString()}.csv`,
           )
-          toast.dismiss(toastId)
         },
       },
-    })
-  } catch (err) {
-    console.error('exportCommunityMembersToCSV error', err)
-    toast.error(tP('floatingButton.community.exportMembers.toast.failed'), {
-      duration: 1000000,
-      description: tP(
-        'floatingButton.community.exportMembers.toast.failed.description',
-        {
-          values: {
-            error: err instanceof Error ? err.message : 'Unknown error',
-          },
-        },
-      ),
-      cancel: undefined,
     })
   } finally {
     toast.dismiss(toastId)

@@ -13,8 +13,12 @@
   import { batchBlockUsersMutation } from '$lib/hooks/batchBlockUsers'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { toast } from 'svelte-sonner'
-  import { exportCommunityMembersToCSV } from '../hooks/exportCommunityMembersToCSV'
+  import { onExportCommunityMembersToCSVProcessed } from '../hooks/exportCommunityMembersToCSV'
   import { getCommunityId } from '../utils/getCommunityId'
+  import { useController } from '$lib/stores/controller'
+  import { batchQuery } from '$lib/util/batch'
+  import { tP } from '$lib/i18n'
+  import { downloadUsersToCSV } from '$lib/util/downloadUsersToCSV'
 
   // https://developer.x.com/en/docs/x-api/v1/rate-limits#:~:text=15-,GET%20lists/members,-900
   // 900 requests per 15 minutes, max get 18000 members
@@ -36,10 +40,7 @@
   })
   const getUsers = () => $query.data?.pages.flatMap((it) => it.data) ?? []
 
-  let controller = $state(new AbortController())
-  onDestroy(() => {
-    controller.abort()
-  })
+  let controller = useController()
   const authInfo = useAuthInfo()
   const blockCommunicationMembersMutation = createMutation({
     mutationFn: async () => {
@@ -58,8 +59,7 @@
         $query.fetchNextPage(),
       ])
       // console.log('onMount after', getUsers())
-      controller.abort()
-      controller = new AbortController()
+      controller.create()
       await batchBlockUsersMutation({
         controller,
         users: getUsers,
@@ -99,24 +99,62 @@
         return
       }
       await $query.fetchNextPage()
-      controller.abort()
-      controller = new AbortController()
-      await exportCommunityMembersToCSV({
-        communityId,
-        getCommunityInfo,
-        query: {
-          get hasNextPage() {
-            return $query.hasNextPage
+      controller.create()
+      const info = await getCommunityInfo({ communityId })
+      const toastId = toast.loading(
+        tP('floatingButton.community.exportMembers.toast.loading'),
+      )
+      try {
+        await batchQuery({
+          controller,
+          getItems: () => $query.data?.pages.flatMap((it) => it.data) ?? [],
+          total: info.member_count,
+          fetchNextPage: async () => $query.fetchNextPage(),
+          hasNext: () => $query.hasNextPage,
+          onProcessed: (context) =>
+            onExportCommunityMembersToCSVProcessed(context, toastId),
+        })
+        toast.success(
+          tP('floatingButton.community.exportMembers.toast.success'),
+          {
+            duration: 1000000,
+            description: tP(
+              'floatingButton.community.exportMembers.toast.success.description',
+              { values: { count: getUsers().length } },
+            ),
+            action: {
+              label: tP(
+                'floatingButton.community.exportMembers.toast.download',
+              ),
+              onClick: () => {
+                const users = getUsers()
+                downloadUsersToCSV(
+                  users,
+                  `community_${communityId}_${new Date().toISOString()}.csv`,
+                )
+              },
+            },
           },
-          fetchNextPage: async () => {
-            await $query.fetchNextPage()
-          },
-          get data() {
-            return $query.data?.pages.flatMap((it) => it.data) ?? []
-          },
-        },
-        controller,
-      })
+        )
+      } finally {
+        toast.dismiss(toastId)
+      }
+      // await exportCommunityMembersToCSV({
+      //   communityId,
+      //   getCommunityInfo,
+      //   query: {
+      //     get hasNextPage() {
+      //       return $query.hasNextPage
+      //     },
+      //     fetchNextPage: async () => {
+      //       await $query.fetchNextPage()
+      //     },
+      //     get data() {
+      //       return $query.data?.pages.flatMap((it) => it.data) ?? []
+      //     },
+      //   },
+      //   controller,
+      // })
     },
   })
 

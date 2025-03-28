@@ -5,40 +5,57 @@
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
   import { userColumns } from '../utils/columns'
   import Button from '$lib/components/ui/button/button.svelte'
-  import { ShieldCheckIcon } from 'lucide-svelte'
+  import { DownloadIcon, ShieldCheckIcon } from 'lucide-svelte'
   import { toast } from 'svelte-sonner'
   import { serializeError } from 'serialize-error'
   import { blockUser, unblockUser } from '$lib/api'
   import { ulid } from 'ulidx'
-  import { t } from '$lib/i18n'
+  import { t, tP } from '$lib/i18n'
+  import { getBlockedUsers } from '$lib/api/twitter'
+  import { generateCSV } from '$lib/util/csv'
+  import saveAs from 'file-saver'
 
   const query = createInfiniteQuery({
     queryKey: ['blocked-users'],
     queryFn: async ({ pageParam }) => {
-      const r = await dbApi.users.getByPage({
-        limit: 100,
+      const r = await getBlockedUsers({
         cursor: pageParam,
+        count: 20,
       })
+      // const r = await dbApi.users.getByPage({
+      //   limit: 100,
+      //   cursor: pageParam,
+      // })
       return r
     },
-    initialPageParam: 0,
+    initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.cursor,
   })
 
+  onMount(async () => {
+    await $query.fetchNextPage()
+    await $query.fetchNextPage()
+  })
+
   let selectedRowKeys = $state<string[]>([])
-  function onScroll(event: UIEvent) {
+  async function onScroll(event: UIEvent) {
     const target = event.target as HTMLElement
     const scrollTop = target.scrollTop
     const clientHeight = target.clientHeight
     const scrollHeight = target.scrollHeight
-    if (Math.abs(scrollHeight - scrollTop - clientHeight) <= 1) {
+    if (
+      Math.abs(scrollHeight - scrollTop - clientHeight) <=
+      window.innerHeight / 2
+    ) {
       if ($query.hasNextPage && !$query.isFetchingNextPage) {
-        $query.fetchNextPage()
+        await $query.fetchNextPage()
+        await $query.fetchNextPage()
+        await $query.fetchNextPage()
       }
     }
   }
 
-  const mutation = createMutation({
+  const unblockMutation = createMutation({
     mutationFn: async ({
       users,
       action,
@@ -143,7 +160,7 @@
       toast.error($t('blocked-users.toast.noSelection'))
       return
     }
-    await $mutation.mutateAsync({ users, action: 'unblock' })
+    await $unblockMutation.mutateAsync({ users, action: 'unblock' })
   }
 
   const columns = $derived(
@@ -152,6 +169,108 @@
       title: $t(it.title),
     })),
   )
+
+  const MAX_REQUESTS = 850
+  let controller = $state(new AbortController())
+  onDestroy(() => {
+    controller.abort()
+  })
+  const getUsers = () => $query.data?.pages.flatMap((it) => it.data) ?? []
+  const exportMutation = createMutation({
+    mutationFn: async () => {
+      controller.abort()
+      controller = new AbortController()
+      const toastId = toast.info('Exporting...', {
+        description: `Exporting ${getUsers().length} blocked users`,
+        duration: 1000000,
+        cancel: {
+          label: 'Stop',
+          onClick: () => {
+            controller.abort()
+            toast.dismiss(toastId)
+          },
+        },
+      })
+      try {
+        let i = 0
+        while ($query.hasNextPage && !controller.signal.aborted) {
+          try {
+            await $query.fetchNextPage()
+          } catch (e) {
+            console.error('exportBlockedUsers failed', e)
+            toast.error('Save failed, please try again later')
+            break
+          }
+          i++
+          toast.info(`Exporting...`, {
+            id: toastId,
+            description: `Exporting ${getUsers().length} blocked users`,
+            cancel: {
+              label: 'Stop',
+              onClick: () => {
+                controller.abort()
+                toast.dismiss(toastId)
+              },
+            },
+          })
+          if (i >= MAX_REQUESTS) {
+            const r = await new Promise<'stop' | 'continue'>((resolve) => {
+              toast.info(
+                `You have reached the maximum number of requests, do you want to continue?`,
+                {
+                  id: toastId,
+                  duration: 1000000,
+                  cancel: {
+                    label: 'Stop',
+                    onClick: () => {
+                      controller.abort()
+                      resolve('stop')
+                    },
+                  },
+                  action: {
+                    label: 'Continue',
+                    onClick: () => {
+                      resolve('continue')
+                    },
+                  },
+                },
+              )
+            })
+            if (r === 'stop') {
+              break
+            }
+          }
+        }
+        toast.success('Export success', {
+          duration: 1000000,
+          description: `Exported ${getUsers().length} blocked users`,
+          cancel: undefined,
+          action: {
+            label: 'Download',
+            onClick: () => {
+              const users = getUsers()
+              const csv = generateCSV(users, {
+                fields: [
+                  'id',
+                  'screen_name',
+                  'name',
+                  'description',
+                  'profile_image_url',
+                ],
+              })
+              saveAs(
+                new Blob([csv]),
+                `blocked_users_${new Date().toISOString()}.csv`,
+              )
+              toast.dismiss(toastId)
+            },
+          },
+        })
+      } finally {
+        toast.dismiss(toastId)
+      }
+    },
+  })
 </script>
 
 <LayoutNav title={$t('blocked-users.title')} />
@@ -159,17 +278,25 @@
 <div class="h-full flex flex-col">
   <header class="flex items-center gap-2 justify-end">
     <Button
+      variant={'outline'}
+      disabled={$exportMutation.isPending || $query.isFetching}
+      onclick={() => $exportMutation.mutate()}
+    >
+      <DownloadIcon class="w-4 h-4" />
+      Export
+    </Button>
+    <Button
       variant="outline"
       onclick={onUnblock}
-      disabled={$mutation.isPending}
+      disabled={$unblockMutation.isPending || $query.isFetching}
     >
-      <ShieldCheckIcon color={'gray'} class="w-4 h-4" />
+      <ShieldCheckIcon class="w-4 h-4" />
       {$t('blocked-users.actions.unblock')}
     </Button>
   </header>
   <div class="flex-1 overflow-y-auto">
     <ADataTable
-      columns={columns}
+      {columns}
       dataSource={$query.data?.pages.flatMap((it) => it.data) ?? []}
       rowKey="id"
       rowSelection={{

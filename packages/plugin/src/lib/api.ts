@@ -893,7 +893,6 @@ export async function searchPeople(options: {
   })
 
   const headers = getRequestHeaders()
-  headers.set('Content-Type', 'application/json')
   const xTransactionId = await getXTransactionId()(new URL(url).pathname, 'GET')
   const r = await fetch(url, {
     headers: {

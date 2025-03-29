@@ -123,6 +123,8 @@
 
   "blocked-users.title": "Blocked Users",
   "blocked-users.actions.unblock": "Unblock Selected",
+  "blocked-users.actions.export": "Export All",
+  "blocked-users.actions.import": "Import",
   "blocked-users.toast.noSelection": "No users selected",
   "blocked-users.toast.blocking": "Blocking users...",
   "blocked-users.toast.unblocking": "Unblocking users...",

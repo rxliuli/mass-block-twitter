@@ -230,14 +230,6 @@
     })
   }
 
-  async function onImportBlockList() {
-    const users = await selectImportFile()
-    if (!users || users.length === 0) {
-      return
-    }
-    await onBlock(users)
-  }
-
   const authInfo = useAuthInfo()
 
   const blockMutation = createMutation({
@@ -262,7 +254,7 @@
   }
 
   function onViewBlockedUsers() {
-    navigate('/search-and-block/blocked')
+    navigate('/search-and-block/blocked-users')
   }
 
   const columns = $derived(
@@ -306,10 +298,6 @@
           <DropdownMenu.Item onclick={onExport}>
             <DownloadIcon class="w-4 h-4" />
             {$t('search-and-block.actions.exportSelected')}
-          </DropdownMenu.Item>
-          <DropdownMenu.Item onclick={onImportBlockList}>
-            <ImportIcon class="w-4 h-4" />
-            {$t('search-and-block.actions.importBlockList')}
           </DropdownMenu.Item>
           <DropdownMenu.Item onclick={onViewBlockedUsers}>
             <EyeIcon class="w-4 h-4" />

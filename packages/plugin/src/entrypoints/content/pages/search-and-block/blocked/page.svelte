@@ -2,20 +2,25 @@
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import { ADataTable } from '$lib/components/logic/a-data-table'
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
-  import { userColumns } from '../utils/columns'
   import Button from '$lib/components/ui/button/button.svelte'
-  import { DownloadIcon, ShieldCheckIcon } from 'lucide-svelte'
+  import { DownloadIcon, ShieldCheckIcon, UploadIcon } from 'lucide-svelte'
   import { toast } from 'svelte-sonner'
-  import { unblockUser } from '$lib/api/twitter'
+  import { blockUser, unblockUser } from '$lib/api/twitter'
   import { t, tP } from '$lib/i18n'
   import { getBlockedUsers } from '$lib/api/twitter'
   import { useController } from '$lib/stores/controller'
-  import {
-    onExportBlockedUsersProcessed,
-    onBatchUnblockProcessed,
-  } from '../utils/batchExportBlockedUsers'
   import { downloadUsersToCSV } from '$lib/util/downloadUsersToCSV'
   import { batchExecute, batchQuery } from '$lib/util/batch'
+  import { userColumns } from '../utils/columns'
+  import {
+    onBatchUnblockProcessed,
+    onExportBlockedUsersProcessed,
+  } from '../utils/batchExportBlockedUsers'
+  import {
+    batchBlockUsersMutation,
+    selectImportFile,
+  } from '$lib/hooks/batchBlockUsers'
+  import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
 
   const query = createInfiniteQuery({
     queryKey: ['blocked-users'],
@@ -136,6 +141,24 @@
       }
     },
   })
+
+  const authInfo = useAuthInfo()
+  const importMutation = createMutation({
+    mutationFn: async () => {
+      const users = await selectImportFile()
+      if (!users || users.length === 0) {
+        return
+      }
+      controller.create()
+      await batchBlockUsersMutation({
+        controller,
+        users: () => users,
+        blockUser,
+        getAuthInfo: async () => authInfo.value!,
+        onProcessed: async () => {},
+      })
+    },
+  })
 </script>
 
 <LayoutNav title={$t('blocked-users.title')} />
@@ -143,20 +166,30 @@
 <div class="h-full flex flex-col">
   <header class="flex items-center gap-2 justify-end">
     <Button
+      variant="outline"
+      onclick={() => $unblockMutation.mutate()}
+      disabled={$unblockMutation.isPending ||
+        $query.isFetching ||
+        selectedRowKeys.length === 0}
+    >
+      <ShieldCheckIcon />
+      <span class="hidden md:block">{$t('blocked-users.actions.unblock')}</span>
+    </Button>
+    <Button
       variant={'outline'}
       disabled={$exportMutation.isPending || $query.isFetching}
       onclick={() => $exportMutation.mutate()}
     >
-      <DownloadIcon class="w-4 h-4" />
-      Export All
+      <DownloadIcon />
+      <span class="hidden md:block">{$t('blocked-users.actions.export')}</span>
     </Button>
     <Button
       variant="outline"
-      onclick={() => $unblockMutation.mutate()}
-      disabled={$unblockMutation.isPending || $query.isFetching}
+      onclick={() => $importMutation.mutate()}
+      disabled={$importMutation.isPending || $query.isFetching}
     >
-      <ShieldCheckIcon class="w-4 h-4" />
-      {$t('blocked-users.actions.unblock')}
+      <UploadIcon />
+      <span class="hidden md:block">{$t('blocked-users.actions.import')}</span>
     </Button>
   </header>
   <div class="flex-1 overflow-y-auto">

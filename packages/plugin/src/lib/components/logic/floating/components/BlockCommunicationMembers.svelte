@@ -2,14 +2,19 @@
   import { FileDownIcon, ShieldBanIcon } from 'lucide-svelte'
   import { t } from 'svelte-i18n'
   import * as Command from '$lib/components/ui/command'
-  import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
+  import {
+    createInfiniteQuery,
+    createMutation,
+    createQuery,
+    useMutationState,
+  } from '@tanstack/svelte-query'
   import {
     extractCommunityQueryGraphqlId,
     extractMembersSliceTimelineGraphqlId,
     getCommunityInfo,
     getCommunityMembers,
   } from '$lib/api/twitter'
-  import { blockUser } from '$lib/api'
+  import { blockUser } from '$lib/api/twitter'
   import { batchBlockUsersMutation } from '$lib/hooks/batchBlockUsers'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { toast } from 'svelte-sonner'
@@ -19,6 +24,8 @@
   import { batchQuery } from '$lib/util/batch'
   import { tP } from '$lib/i18n'
   import { downloadUsersToCSV } from '$lib/util/downloadUsersToCSV'
+  import { wait } from '@liuli-util/async'
+  import { useLoading } from '../../query'
 
   // https://developer.x.com/en/docs/x-api/v1/rate-limits#:~:text=15-,GET%20lists/members,-900
   // 900 requests per 15 minutes, max get 18000 members
@@ -42,120 +49,119 @@
 
   let controller = useController()
   const authInfo = useAuthInfo()
+  const { loadings, withLoading } = useLoading<{
+    exportCommunicationMembersToCsv: boolean
+    blockCommunicationMembers: boolean
+  }>(true)
+
   const blockCommunicationMembersMutation = createMutation({
-    mutationFn: async () => {
-      if ($blockCommunicationMembersMutation.isPending) {
-        return
-      }
-      const communityId = getCommunityId(location.href)
-      if (!communityId) {
-        toast.error(
-          $t('floatingButton.community.exportMembers.toast.notFoundId'),
-        )
-        return
-      }
-      const [info, _] = await Promise.all([
-        getCommunityInfo({ communityId }),
-        $query.fetchNextPage(),
-      ])
-      // console.log('onMount after', getUsers())
-      controller.create()
-      await batchBlockUsersMutation({
-        controller,
-        users: getUsers,
-        total: info.member_count,
-        blockUser: async (user) => {
-          if (user.community_role !== 'Member') {
-            return 'skip'
-          }
-          await blockUser(user)
-        },
-        getAuthInfo: async () => authInfo.value!,
-        onProcessed: async (user, meta) => {
-          console.log(
-            `[batchBlockMutation] onProcesssed ${meta.index} ${user.screen_name} ` +
-              new Date().toISOString(),
+    mutationFn: withLoading(
+      async () => {
+        if ($blockCommunicationMembersMutation.isPending) {
+          return
+        }
+        const communityId = getCommunityId(location.href)
+        if (!communityId) {
+          toast.error(
+            $t('floatingButton.community.exportMembers.toast.notFoundId'),
           )
-          if (meta.index % 10 === 0) {
-            // console.log('fetchNextPage before')
-            if (!$query.isPending) {
-              await $query.fetchNextPage()
+          return
+        }
+        const [info, _] = await Promise.all([
+          getCommunityInfo({ communityId }),
+          $query.fetchNextPage(),
+        ])
+        // console.log('onMount after', getUsers())
+        controller.create()
+        await batchBlockUsersMutation({
+          controller,
+          users: () => $query.data?.pages.flatMap((it) => it.data) ?? [],
+          total: info.member_count,
+          blockUser: async (user) => {
+            if (user.community_role !== 'Member') {
+              return 'skip'
             }
-            // console.log('fetchNextPage after', getUsers())
-          }
-        },
-      })
-    },
+            await blockUser(user)
+          },
+          getAuthInfo: async () => authInfo.value!,
+          onProcessed: async (user, meta) => {
+            console.log(
+              `[batchBlockMutation] onProcesssed ${meta.index} ${user.screen_name} ` +
+                new Date().toISOString(),
+            )
+            if (meta.index % 10 === 0) {
+              // console.log('fetchNextPage before')
+              if (!$query.isPending) {
+                await $query.fetchNextPage()
+              }
+              // console.log('fetchNextPage after', getUsers())
+            }
+          },
+        })
+      },
+      () => 'blockCommunicationMembers',
+    ),
   })
 
   const exportCsvMutation = createMutation({
-    mutationFn: async () => {
-      const communityId = getCommunityId(location.href)
-      console.log('exportCsvMutation', location.href, communityId)
-      if (!communityId) {
-        toast.error(
-          $t('floatingButton.community.exportMembers.toast.notFoundId'),
+    mutationKey: ['exportCommunicationMembersToCsv'],
+    mutationFn: withLoading(
+      async () => {
+        const communityId = getCommunityId(location.href)
+        console.log('exportCsvMutation', location.href, communityId)
+        if (!communityId) {
+          toast.error(
+            $t('floatingButton.community.exportMembers.toast.notFoundId'),
+          )
+          return
+        }
+        await $query.fetchNextPage()
+        controller.create()
+        const info = await getCommunityInfo({ communityId })
+        const toastId = toast.loading(
+          tP('floatingButton.community.exportMembers.toast.title'),
         )
-        return
-      }
-      await $query.fetchNextPage()
-      controller.create()
-      const info = await getCommunityInfo({ communityId })
-      const toastId = toast.loading(
-        tP('floatingButton.community.exportMembers.toast.loading'),
-      )
-      try {
-        await batchQuery({
-          controller,
-          getItems: () => $query.data?.pages.flatMap((it) => it.data) ?? [],
-          total: info.member_count,
-          fetchNextPage: async () => $query.fetchNextPage(),
-          hasNext: () => $query.hasNextPage,
-          onProcessed: (context) =>
-            onExportCommunityMembersToCSVProcessed(context, toastId),
-        })
-        toast.success(
-          tP('floatingButton.community.exportMembers.toast.success'),
-          {
-            duration: 1000000,
-            description: tP(
-              'floatingButton.community.exportMembers.toast.success.description',
-              { values: { count: getUsers().length } },
-            ),
-            action: {
-              label: tP(
-                'floatingButton.community.exportMembers.toast.download',
+        try {
+          await batchQuery({
+            controller,
+            getItems: getUsers,
+            total: info.member_count,
+            fetchNextPage: async () => $query.fetchNextPage(),
+            hasNext: () => $query.hasNextPage,
+            onProcessed: async (context) => {
+              console.log('exportCsvMutation', $exportCsvMutation.isPending)
+              await wait(1000)
+              await onExportCommunityMembersToCSVProcessed(context, toastId)
+            },
+          })
+          toast.success(
+            tP('floatingButton.community.exportMembers.toast.success'),
+            {
+              duration: 1000000,
+              description: tP(
+                'floatingButton.community.exportMembers.toast.success.description',
+                { values: { count: getUsers().length } },
               ),
-              onClick: () => {
-                const users = getUsers()
-                downloadUsersToCSV(
-                  users,
-                  `community_${communityId}_${new Date().toISOString()}.csv`,
-                )
+              action: {
+                label: tP(
+                  'floatingButton.community.exportMembers.toast.download',
+                ),
+                onClick: () => {
+                  const users = getUsers()
+                  downloadUsersToCSV(
+                    users,
+                    `community_${communityId}_${new Date().toISOString()}.csv`,
+                  )
+                },
               },
             },
-          },
-        )
-      } finally {
-        toast.dismiss(toastId)
-      }
-      // await exportCommunityMembersToCSV({
-      //   communityId,
-      //   getCommunityInfo,
-      //   query: {
-      //     get hasNextPage() {
-      //       return $query.hasNextPage
-      //     },
-      //     fetchNextPage: async () => {
-      //       await $query.fetchNextPage()
-      //     },
-      //     get data() {
-      //       return $query.data?.pages.flatMap((it) => it.data) ?? []
-      //     },
-      //   },
-      //   controller,
-      // })
-    },
+          )
+        } finally {
+          toast.dismiss(toastId)
+        }
+      },
+      () => 'exportCommunicationMembersToCsv',
+    ),
   })
 
   let {
@@ -163,11 +169,6 @@
   }: {
     onclick?: () => void
   } = $props()
-
-  onMount(async () => {
-    await extractMembersSliceTimelineGraphqlId()
-    await extractCommunityQueryGraphqlId()
-  })
 </script>
 
 <Command.Item
@@ -175,17 +176,17 @@
     onclick?.()
     $blockCommunicationMembersMutation.mutate()
   }}
-  disabled={$blockCommunicationMembersMutation.isPending}
+  disabled={loadings.blockCommunicationMembers}
 >
   <ShieldBanIcon color={'red'} />
   <span>{$t('floatingButton.community.blockMembers')}</span>
 </Command.Item>
 <Command.Item
   onclick={() => {
-    onclick?.()
     $exportCsvMutation.mutate()
+    onclick?.()
   }}
-  disabled={$exportCsvMutation.isPending}
+  disabled={loadings.exportCommunicationMembersToCsv}
 >
   <FileDownIcon />
   <span>{$t('floatingButton.community.exportMembers')}</span>

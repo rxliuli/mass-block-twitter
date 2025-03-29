@@ -37,7 +37,7 @@
   import ModlistRules from './components/ModlistRules.svelte'
   import { cn } from '$lib/utils'
   import { dbApi, type User } from '$lib/db'
-  import { batchBlockUsers, blockUser, ExpectedError } from '$lib/api'
+  import { blockUser } from '$lib/api/twitter'
   import ms from 'ms'
   import { ulid } from 'ulidx'
   import { useModlistUsers } from './utils/useModlistUsers'

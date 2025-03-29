@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { searchPeople } from '$lib/api'
+  import { searchPeople } from '$lib/api/twitter'
   import { shadcnConfig } from '$lib/components/logic/config'
   import {
     QueryError,

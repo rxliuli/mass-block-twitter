@@ -7,7 +7,7 @@
   import { type LabelValue } from './components/SelectFilter.types'
   import { extractCurrentUserId } from '$lib/observe'
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
-  import { blockUser, ExpectedError, searchPeople, unblockUser } from '$lib/api'
+  import { blockUser, unblockUser } from '$lib/api/twitter'
   import { debounce, groupBy } from 'lodash-es'
   import { buttonVariants } from '$lib/components/ui/button'
   import {
@@ -33,6 +33,8 @@
     selectImportFile,
   } from '$lib/hooks/batchBlockUsers'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
+  import { searchPeople } from '$lib/api/twitter'
+  import { ExpectedError } from '$lib/api'
 
   let term = $state('')
   const query = createInfiniteQuery({

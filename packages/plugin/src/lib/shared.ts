@@ -2,7 +2,7 @@ import { get } from 'idb-keyval'
 import { spamContext } from './filter'
 import { ModListSubscribedUserAndRulesResponse } from '@mass-block-twitter/server'
 import { dbApi, Tweet, User } from './db'
-import { blockUser } from './api'
+import { blockUser } from './api/twitter'
 import { ulid } from 'ulidx'
 import { defineCustomEventMessage } from './util/CustomEventMessage'
 

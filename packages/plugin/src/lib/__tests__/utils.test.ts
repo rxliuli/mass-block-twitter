@@ -9,7 +9,6 @@ import {
   filterTweets,
   MUTED_WORD_RULES_KEY,
   ParsedTweet,
-  parseSearchPeople,
   parseTweets,
   parseUserRecords,
 } from '../api'
@@ -29,8 +28,6 @@ import TweetDetail9 from './assets/TweetDetail9.json'
 import UserTweetsAndReplies from './assets/UserTweetsAndReplies.json'
 import UserTweets from './assets/UserTweets.json'
 import SearchTimeline from './assets/SearchTimeline.json'
-import SearchTimelinePeople from './assets/SearchTimelinePeople.json'
-import SearchTimelinePeople2 from './assets/SearchTimelinePeople2.json'
 import HomeLatestTimeline from './assets/HomeLatestTimeline.json'
 import notifications1 from './assets/notifications1.json'
 import notifications2 from './assets/notifications2.json'
@@ -674,33 +671,5 @@ describe('filterNotifications', () => {
         tweet: { id: 'test-5', user: { id: 'user-2' } } as ParsedTweet,
       }).value,
     ).true
-  })
-})
-
-describe('parseSearchPeople', () => {
-  function extractCursor(json: any) {
-    const schema = z.object({
-      entryType: z.literal('TimelineTimelineCursor'),
-      value: z.string(),
-      cursorType: z.literal('Bottom'),
-    })
-    return (
-      extractObjects(json, (it) => schema.safeParse(it).success) as z.infer<
-        typeof schema
-      >[]
-    )[0].value
-  }
-
-  it('parseSearchPeople p1', async () => {
-    const r = parseSearchPeople(SearchTimelinePeople)
-    expect(r.data).length(20)
-    const cursor = extractCursor(SearchTimelinePeople)
-    expect(r.cursor).eq(cursor)
-  })
-  it('parseSearchPeople p2', async () => {
-    const r = parseSearchPeople(SearchTimelinePeople2)
-    expect(r.data).length(20)
-    const cursor = extractCursor(SearchTimelinePeople2)
-    expect(r.cursor).eq(cursor)
   })
 })

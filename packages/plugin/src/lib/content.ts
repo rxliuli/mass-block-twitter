@@ -18,7 +18,7 @@ import { getTweetElement } from './observe'
 import { ShieldBanIcon, ShieldCheckIcon } from 'lucide-svelte'
 import { toast } from 'svelte-sonner'
 import { ulid } from 'ulidx'
-import { blockUser } from './api'
+import { blockUser } from './api/twitter'
 
 export async function refreshModListSubscribedUsers(
   force?: boolean,

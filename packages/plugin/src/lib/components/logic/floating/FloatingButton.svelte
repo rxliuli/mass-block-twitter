@@ -57,7 +57,9 @@
     <Popover.Trigger>
       {#snippet child({ props })}
         <button
-          class="fixed right-0 top-0 outline-none transition-opacity {open ? 'opacity-100' : 'opacity-50 hover:opacity-100'}"
+          class="fixed right-0 top-0 outline-none transition-opacity {open
+            ? 'opacity-100'
+            : 'opacity-50 hover:opacity-100'}"
           {...props}
           style={`top: ${top}px`}
         >

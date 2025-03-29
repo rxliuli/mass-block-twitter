@@ -6,6 +6,9 @@ import { middleware } from '$lib/util/middleware'
 import { confirmToast } from '$lib/components/custom/toast'
 import { downloadUsersToCSV } from '$lib/util/downloadUsersToCSV'
 import ms from 'ms'
+import { createMutation } from '@tanstack/svelte-query'
+import { once } from 'es-toolkit'
+import { wait } from '@liuli-util/async'
 
 const MAX_REQUESTS = 850
 
@@ -95,7 +98,7 @@ export async function exportCommunityMembersToCSV(options: {
   const { communityId, getCommunityInfo, query, controller } = options
   const info = await getCommunityInfo({ communityId })
   const toastId = toast.loading(
-    tP('floatingButton.community.exportMembers.toast.loading'),
+    tP('floatingButton.community.exportMembers.toast.title'),
   )
   const getUsers = () => query.data
   try {

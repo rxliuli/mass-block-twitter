@@ -6,7 +6,7 @@
   import Button from '$lib/components/ui/button/button.svelte'
   import { DownloadIcon, ShieldCheckIcon } from 'lucide-svelte'
   import { toast } from 'svelte-sonner'
-  import { unblockUser } from '$lib/api'
+  import { unblockUser } from '$lib/api/twitter'
   import { t, tP } from '$lib/i18n'
   import { getBlockedUsers } from '$lib/api/twitter'
   import { useController } from '$lib/stores/controller'

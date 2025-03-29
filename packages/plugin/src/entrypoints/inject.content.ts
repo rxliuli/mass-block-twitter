@@ -1,5 +1,4 @@
 import {
-  blockUser,
   filterNotifications,
   filterTweets,
   initXTransactionId,
@@ -32,6 +31,7 @@ import {
 } from '$lib/filter'
 import { getSettings, Settings } from '$lib/settings'
 import { ulid } from 'ulidx'
+import { blockUser } from '$lib/api/twitter'
 
 function blockClientEvent(): Middleware {
   const pattern = new URLPattern(

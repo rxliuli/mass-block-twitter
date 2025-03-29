@@ -76,16 +76,19 @@ export async function onExportBlockedUsersProcessed(
   })
     .use(async (context, next) => {
       if (context.error) {
-        toast.error('Export failed, please try again later')
+        toast.error(tP('blocked-users.toast.export.failed'), {
+          description: serializeError(context.error).message,
+        })
         context.controller.abort()
         return
       }
       await next()
     })
     .use(async (context, next) => {
-      if (context.progress.processed >= MAX_REQUESTS) {
+      console.log('context.progress.processed', context.progress.processed)
+      if (context.progress.processed === MAX_REQUESTS) {
         const r = await confirmToast(
-          `You have reached the maximum number of requests, do you want to continue?`,
+          tP('blocked-users.toast.export.maxRequests'),
           { id: toastId },
         )
         if (r === 'stop') {
@@ -96,12 +99,14 @@ export async function onExportBlockedUsersProcessed(
       await next()
     })
     .use(async (context, next) => {
-      toast.loading(`Exporting...`, {
+      toast.loading(tP('blocked-users.toast.export.progress.title'), {
         id: toastId,
-        description: `Exporting ${context.items.length} blocked users`,
+        description: tP('blocked-users.toast.export.progress.description', {
+          values: { count: context.items.length },
+        }),
         duration: 1000000,
         cancel: {
-          label: 'Stop',
+          label: tP('common.actions.stop'),
           onClick: () => {
             context.controller.abort()
           },

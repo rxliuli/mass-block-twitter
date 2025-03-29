@@ -1,25 +1,26 @@
+import { tP } from '$lib/i18n'
 import { toast } from 'svelte-sonner'
 
 export async function confirmToast(
   title: string,
-  options: {
-    id: string | number
+  options?: {
+    id?: string | number
     description?: string
   },
 ) {
   return await new Promise<'stop' | 'continue'>((resolve) => {
     toast.info(title, {
-      id: options.id,
-      description: options.description,
+      id: options?.id,
+      description: options?.description,
       duration: 1000000,
       cancel: {
-        label: 'Stop',
+        label: tP('common.actions.stop'),
         onClick: () => {
           resolve('stop')
         },
       },
       action: {
-        label: 'Continue',
+        label: tP('common.actions.continue'),
         onClick: () => {
           resolve('continue')
         },

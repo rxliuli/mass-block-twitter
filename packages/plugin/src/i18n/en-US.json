@@ -125,7 +125,13 @@
   "blocked-users.actions.unblock": "Unblock Selected",
   "blocked-users.actions.export": "Export All",
   "blocked-users.actions.import": "Import",
-  "blocked-users.toast.noSelection": "No users selected",
+  "blocked-users.toast.export.start": "Starting export...",
+  "blocked-users.toast.export.success": "Export success",
+  "blocked-users.toast.export.success.description": "Exported {count} users",
+  "blocked-users.toast.export.progress.title": "Exporting...",
+  "blocked-users.toast.export.progress.description": "Exporting {count} users...",
+  "blocked-users.toast.export.failed": "Export failed",
+  "blocked-users.toast.export.maxRequests": "You have reached the maximum number of requests, do you want to continue?",
   "blocked-users.toast.blocking": "Blocking users...",
   "blocked-users.toast.unblocking": "Unblocking users...",
   "blocked-users.toast.blockingProgress": "[{current}/{total}] {action} {name}...",
@@ -322,5 +328,13 @@
   "floatingButton.community.exportMembers.toast.success.description": "Exported {count} users",
   "floatingButton.community.exportMembers.toast.failed": "Export failed",
   "floatingButton.community.exportMembers.toast.failed.description": "Export failed, {error}",
-  "floatingButton.community.exportMembers.toast.download": "Download"
+  "floatingButton.community.exportMembers.toast.download": "Download",
+
+  "common.actions.stop": "Stop",
+  "common.actions.continue": "Continue",
+  "common.actions.cancel": "Cancel",
+  "common.actions.confirm": "Confirm",
+  "common.actions.close": "Close",
+  "common.actions.delete": "Delete",
+  "common.actions.download": "Download"
 }

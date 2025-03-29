@@ -27,8 +27,15 @@ export function parseBlockedUsers(json: any): {
   data: User[]
   cursor?: string
 } {
+  const data = parseUserRecords(json)
+  if (data.length === 0) {
+    return {
+      data,
+      cursor: undefined,
+    }
+  }
   return {
-    data: parseUserRecords(json),
+    data,
     cursor: parseTimelineUserNextCursor(json),
   }
 }

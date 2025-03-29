@@ -113,7 +113,7 @@
   const exportMutation = createMutation({
     mutationFn: async () => {
       controller.create()
-      const toastId = toast.loading('Starting export...')
+      const toastId = toast.loading(tP('blocked-users.toast.export.start'))
       try {
         await batchQuery({
           controller,
@@ -123,16 +123,17 @@
           onProcessed: (context) =>
             onExportBlockedUsersProcessed(context, toastId),
         })
-        toast.success('Export success', {
+        toast.success(tP('blocked-users.toast.export.success'), {
           duration: 1000000,
-          description: `Exported ${getUsers().length} blocked users`,
+          description: tP('blocked-users.toast.export.success.description', {
+            values: { count: getUsers().length },
+          }),
           cancel: undefined,
           action: {
-            label: 'Download',
+            label: tP('common.actions.download'),
             onClick: () => {
               const users = getUsers()
               downloadUsersToCSV(users, 'blocked_users')
-              toast.dismiss(toastId)
             },
           },
         })

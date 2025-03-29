@@ -30,6 +30,7 @@
   import { FloatingButton } from '$lib/components/logic/floating'
   import { useOpen } from '$lib/stores/open.svelte'
   import SettingsBlockPage from './pages/settings/block/page.svelte'
+  import DevPage from './pages/dev/page.svelte'
 
   let { initialPath }: { initialPath?: string } = $props()
 
@@ -115,6 +116,10 @@
     {
       path: '/settings/block',
       component: SettingsBlockPage,
+    },
+    {
+      path: '/dev',
+      component: DevPage,
     },
   ]
 </script>

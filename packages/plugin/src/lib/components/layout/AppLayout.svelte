@@ -10,6 +10,7 @@
     SettingsIcon,
     UserIcon,
     UsersIcon,
+    CodeIcon,
   } from 'lucide-svelte'
   import {
     goBack,
@@ -61,6 +62,16 @@
       icon: SettingsIcon,
       to: 'footer',
     },
+    ...(import.meta.env.DEV
+      ? [
+          {
+            title: 'Dev',
+            url: '/dev',
+            icon: CodeIcon,
+            to: 'content',
+          } satisfies MenuItem,
+        ]
+      : []),
   ])
   const autoTitle = $derived(
     menuItems.find((it) => it.url === router.path)?.title ??

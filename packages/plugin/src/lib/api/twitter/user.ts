@@ -33,6 +33,7 @@ const GET_BLOCKED_USERS_GRAPHQL_FLAGS = {
   longform_notetweets_consumption_enabled: true,
   responsive_web_twitter_article_tweet_consumption_enabled: true,
   tweet_awards_web_tipping_enabled: false,
+  responsive_web_grok_show_grok_translated_post: false,
   responsive_web_grok_analysis_button_from_backend: true,
   creator_subscriptions_quote_tweet_preview_enabled: false,
   freedom_of_speech_not_reach_fetch_enabled: true,

@@ -72,7 +72,6 @@
       try {
         twitterPage = await searchPeople({
           term,
-          count: 20,
           cursor: pageParam,
         })
       } catch (err) {

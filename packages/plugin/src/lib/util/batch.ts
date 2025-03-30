@@ -81,7 +81,7 @@ export type QueryOperationContext<T> = {
   controller: AbortController
 }
 
-type BatchQueryOptions<T> = {
+export type BatchQueryOptions<T> = {
   controller: AbortController
   getItems: () => T[]
   onProcessed: (c: QueryOperationContext<T>) => Promise<void>
@@ -100,7 +100,6 @@ export async function batchQuery<T>(options: BatchQueryOptions<T>) {
     const context = {
       controller: options.controller,
       index: i,
-      items: options.getItems(),
     } as QueryOperationContext<T>
     try {
       await options.fetchNextPage()
@@ -108,6 +107,7 @@ export async function batchQuery<T>(options: BatchQueryOptions<T>) {
       failed++
       context.error = error
     }
+    context.items = options.getItems()
     const averageTime = (Date.now() - startTime) / (i + 1)
     context.progress = {
       processed: i + 1,

@@ -8,7 +8,6 @@ import { BatchBlockUsersProcessedMeta, ExpectedError } from '$lib/api'
 import { range } from 'lodash-es'
 import { useSettings } from '$lib/settings'
 import { PageTest } from '$lib/components/test'
-import { tick } from 'svelte'
 
 describe('batchBlockUsers', () => {
   let screen: RenderResult<any>

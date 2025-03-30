@@ -2,18 +2,8 @@
   import { FileDownIcon, ShieldBanIcon } from 'lucide-svelte'
   import { t } from 'svelte-i18n'
   import * as Command from '$lib/components/ui/command'
-  import {
-    createInfiniteQuery,
-    createMutation,
-    createQuery,
-    useMutationState,
-  } from '@tanstack/svelte-query'
-  import {
-    extractCommunityQueryGraphqlId,
-    extractMembersSliceTimelineGraphqlId,
-    getCommunityInfo,
-    getCommunityMembers,
-  } from '$lib/api/twitter'
+  import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
+  import { getCommunityInfo, getCommunityMembers } from '$lib/api/twitter'
   import { blockUser } from '$lib/api/twitter'
   import { batchBlockUsersMutation } from '$lib/hooks/batchBlockUsers'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
@@ -24,7 +14,6 @@
   import { batchQuery } from '$lib/util/batch'
   import { tP } from '$lib/i18n'
   import { downloadUsersToCSV } from '$lib/util/downloadUsersToCSV'
-  import { wait } from '@liuli-util/async'
   import { useLoading } from '../../query'
 
   // https://developer.x.com/en/docs/x-api/v1/rate-limits#:~:text=15-,GET%20lists/members,-900
@@ -108,7 +97,6 @@
     mutationFn: withLoading(
       async () => {
         const communityId = getCommunityId(location.href)
-        console.log('exportCsvMutation', location.href, communityId)
         if (!communityId) {
           toast.error(
             $t('floatingButton.community.exportMembers.toast.notFoundId'),
@@ -121,6 +109,7 @@
         const toastId = toast.loading(
           tP('floatingButton.community.exportMembers.toast.title'),
         )
+
         try {
           await batchQuery({
             controller,
@@ -128,11 +117,8 @@
             total: info.member_count,
             fetchNextPage: async () => $query.fetchNextPage(),
             hasNext: () => $query.hasNextPage,
-            onProcessed: async (context) => {
-              console.log('exportCsvMutation', $exportCsvMutation.isPending)
-              await wait(1000)
-              await onExportCommunityMembersToCSVProcessed(context, toastId)
-            },
+            onProcessed: (context) =>
+              onExportCommunityMembersToCSVProcessed(context, toastId),
           })
           toast.success(
             tP('floatingButton.community.exportMembers.toast.success'),

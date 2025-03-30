@@ -132,6 +132,7 @@
   "blocked-users.toast.export.progress.description": "Exporting {count} users...",
   "blocked-users.toast.export.failed": "Export failed",
   "blocked-users.toast.export.maxRequests": "You have reached the maximum number of requests, do you want to continue?",
+  "blocked-users.toast.export.notProLimit": "You need upgrade to pro to export more than {count} users",
   "blocked-users.toast.blocking": "Blocking users...",
   "blocked-users.toast.unblocking": "Unblocking users...",
   "blocked-users.toast.blockingProgress": "[{current}/{total}] {action} {name}...",
@@ -336,5 +337,6 @@
   "common.actions.confirm": "Confirm",
   "common.actions.close": "Close",
   "common.actions.delete": "Delete",
-  "common.actions.download": "Download"
+  "common.actions.download": "Download",
+  "common.actions.upgrade": "Upgrade Now"
 }

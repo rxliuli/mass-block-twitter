@@ -9,19 +9,19 @@
   import { t, tP } from '$lib/i18n'
   import { getBlockedUsers } from '$lib/api/twitter'
   import { useController } from '$lib/stores/controller'
-  import { downloadUsersToCSV } from '$lib/util/downloadUsersToCSV'
-  import { batchExecute, batchQuery } from '$lib/util/batch'
+  import { batchExecute } from '$lib/util/batch'
   import { userColumns } from '../utils/columns'
   import {
+    batchExportBlockedUsers,
     onBatchUnblockProcessed,
-    onExportBlockedUsersProcessed,
-  } from '../utils/batchExportBlockedUsers'
+  } from './utils/batchExportBlockedUsers'
   import {
     batchBlockUsersMutation,
     selectImportFile,
   } from '$lib/hooks/batchBlockUsers'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
 
+  let hasNextPage = $state(true) // TODO @tanstack/svelte-query's bug, after check
   const query = createInfiniteQuery({
     queryKey: ['blocked-users'],
     queryFn: async ({ pageParam }) => {
@@ -29,10 +29,7 @@
         cursor: pageParam,
         count: 20,
       })
-      // const r = await dbApi.users.getByPage({
-      //   limit: 100,
-      //   cursor: pageParam,
-      // })
+      hasNextPage = !!r.cursor
       return r
     },
     initialPageParam: undefined as string | undefined,
@@ -54,7 +51,7 @@
       Math.abs(scrollHeight - scrollTop - clientHeight) <=
       window.innerHeight / 2
     ) {
-      if ($query.hasNextPage && !$query.isFetchingNextPage) {
+      if (hasNextPage && !$query.isFetching) {
         await $query.fetchNextPage()
         await $query.fetchNextPage()
         await $query.fetchNextPage()
@@ -113,33 +110,12 @@
   const exportMutation = createMutation({
     mutationFn: async () => {
       controller.create()
-      const toastId = toast.loading(tP('blocked-users.toast.export.start'))
-      try {
-        await batchQuery({
-          controller,
-          getItems: () => getUsers(),
-          hasNext: () => $query.hasNextPage,
-          fetchNextPage: () => $query.fetchNextPage(),
-          onProcessed: (context) =>
-            onExportBlockedUsersProcessed(context, toastId),
-        })
-        toast.success(tP('blocked-users.toast.export.success'), {
-          duration: 1000000,
-          description: tP('blocked-users.toast.export.success.description', {
-            values: { count: getUsers().length },
-          }),
-          cancel: undefined,
-          action: {
-            label: tP('common.actions.download'),
-            onClick: () => {
-              const users = getUsers()
-              downloadUsersToCSV(users, 'blocked_users')
-            },
-          },
-        })
-      } finally {
-        toast.dismiss(toastId)
-      }
+      await batchExportBlockedUsers({
+        controller,
+        getItems: getUsers,
+        hasNext: () => hasNextPage,
+        fetchNextPage: () => $query.fetchNextPage(),
+      })
     },
   })
 

@@ -1,8 +1,14 @@
 import { describe, expect, it, vi } from 'vitest'
-import { batchExecute, ExecuteOperationContext } from '../batch'
-import { Handler, middleware } from '../middleware'
+import {
+  batchExecute,
+  batchQuery,
+  ExecuteOperationContext,
+  QueryOperationContext,
+} from '../batch'
+import { MiddlewareHandler, middleware } from '../middleware'
 import { range } from 'lodash-es'
 import { wait } from '@liuli-util/async'
+import { last } from 'es-toolkit'
 
 describe('batchExecute', () => {
   it('should execute the batch', async () => {
@@ -167,7 +173,7 @@ describe('batchExecute', () => {
     expect(result.results).toEqual(array)
   })
   it('should execute the batch and middleware', async () => {
-    const catchError = vi.fn<Handler<ExecuteOperationContext<number, number>>>(
+    const catchError = vi.fn<MiddlewareHandler<ExecuteOperationContext<number, number>>>(
       async (c, next) => {
         if (c.error) {
           return
@@ -175,7 +181,7 @@ describe('batchExecute', () => {
         await next()
       },
     )
-    const logger = vi.fn<Handler<ExecuteOperationContext<number, number>>>()
+    const logger = vi.fn<MiddlewareHandler<ExecuteOperationContext<number, number>>>()
     const result = await batchExecute({
       controller: new AbortController(),
       getItems: () => [1, 2, 3],
@@ -189,5 +195,41 @@ describe('batchExecute', () => {
     })
     expect(catchError.mock.calls.length).toBe(3)
     expect(logger.mock.calls.length).toBe(2)
+  })
+})
+
+describe('batchQuery', () => {
+  it('should query the batch', async () => {
+    const f = vi.fn()
+    const items = range(1000)
+    let index = 0
+    await batchQuery({
+      controller: new AbortController(),
+      getItems: () => items.slice(0, index),
+      fetchNextPage: async () => (index += 20),
+      hasNext: () => index < items.length,
+      onProcessed: f,
+    })
+    expect(f).toHaveBeenCalledTimes(50)
+  })
+  it('should query the batch with abort', async () => {
+    const f = vi
+      .fn<(c: QueryOperationContext<number>) => Promise<void>>()
+      .mockImplementation(async (c) => {
+        if (c.progress.processed === 20) {
+          c.controller.abort()
+        }
+      })
+    const items = range(1000)
+    let index = 0
+    await batchQuery({
+      controller: new AbortController(),
+      getItems: () => items.slice(0, index),
+      fetchNextPage: async () => (index += 20),
+      hasNext: () => index < items.length,
+      onProcessed: f,
+    })
+    expect(f).toHaveBeenCalledTimes(20)
+    expect(last(f.mock.calls)![0].items).toEqual(items.slice(0, 400))
   })
 })

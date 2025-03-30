@@ -1,12 +1,12 @@
-export type Handler<C> = (
+export type MiddlewareHandler<C> = (
   c: C,
   next: () => Promise<void>,
 ) => void | Promise<void>
 
 class Middleware<C> {
   constructor(private c: C) {}
-  private stack: Handler<C>[] = []
-  use(handler: Handler<C>) {
+  private stack: MiddlewareHandler<C>[] = []
+  use(handler: MiddlewareHandler<C>) {
     this.stack.push(handler)
     return this
   }

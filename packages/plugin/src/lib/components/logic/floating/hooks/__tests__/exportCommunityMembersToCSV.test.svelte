@@ -25,17 +25,11 @@
         member_count: data.length,
         is_nsfw: false,
       }),
-      query: {
-        get hasNextPage() {
-          return index < data.length
-        },
-        fetchNextPage: async () => {
-          index += 20
-          await onFetchNextPage?.()
-        },
-        get data() {
-          return data.slice(0, index)
-        },
+      getItems: () => data.slice(0, index),
+      hasNext: () => index < data.length,
+      fetchNextPage: async () => {
+        index += 20
+        await onFetchNextPage?.()
       },
       controller,
     })

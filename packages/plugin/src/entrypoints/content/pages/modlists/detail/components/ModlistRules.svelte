@@ -16,16 +16,19 @@
   import ModlistRuleEdit from './ModlistRuleEdit.svelte'
   import { toast } from 'svelte-sonner'
   import { Button } from '$lib/components/ui/button'
-  import { PencilIcon, Trash2Icon } from 'lucide-svelte'
+  import { PencilIcon, Proportions, Trash2Icon } from 'lucide-svelte'
   import { cn } from '$lib/utils'
   import ModlistRulePreview from './ModlistRulePreview.svelte'
   import { t } from '$lib/i18n'
+  import { refreshModListSubscribedUsers } from '$lib/content'
 
   let {
     owner,
+    subscribed,
     ref = $bindable(),
   }: {
     owner: boolean
+    subscribed: boolean
     ref?: { onOpenRuleEdit: () => void }
   } = $props()
 
@@ -127,6 +130,9 @@
       toast.success($t('modlists.detail.rules.add.success'))
       ruleEditOpen = false
       rule = createRule()
+      if (subscribed) {
+        refreshModListSubscribedUsers(true)
+      }
     },
     onError: (error) => {
       console.error('Failed to add rule', error)
@@ -159,6 +165,9 @@
       toast.success($t('modlists.detail.rules.update.success'))
       ruleEditOpen = false
       rule = createRule()
+      if (subscribed) {
+        refreshModListSubscribedUsers(true)
+      }
     },
     onError: (error) => {
       console.error('Failed to update rule', error)
@@ -179,6 +188,9 @@
     onSuccess: () => {
       $query.refetch()
       toast.success($t('modlists.detail.rules.remove.success'))
+      if (subscribed) {
+        refreshModListSubscribedUsers(true)
+      }
     },
     onError: () => {
       toast.error($t('modlists.detail.rules.remove.failed'))
@@ -204,7 +216,9 @@
         {@const users = $query.data.pages.flatMap((it) => it.data) ?? []}
         {#if users.length === 0}
           {#if !$query.isFetching}
-            <div class="text-center text-zinc-400">{$t('modlists.detail.rules.empty')}</div>
+            <div class="text-center text-zinc-400">
+              {$t('modlists.detail.rules.empty')}
+            </div>
           {/if}
         {:else}
           <List

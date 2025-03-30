@@ -37,14 +37,17 @@
   import { ThreeCheckbox } from '$lib/components/custom/checkbox'
   import { untrack } from 'svelte'
   import { t } from '$lib/i18n'
+  import { refreshModListSubscribedUsers } from '$lib/content'
 
   let {
     open = $bindable(false),
     modListId,
+    subscribed,
     ...props
   }: {
     open: boolean
     modListId: string
+    subscribed: boolean
     onAddUsers: (users: User[]) => Promise<void>
     onRemove: (user: User) => Promise<void>
   } = $props()
@@ -148,6 +151,11 @@
       },
       (user) => user.id,
     ),
+    onSuccess: () => {
+      if (subscribed) {
+        refreshModListSubscribedUsers(true)
+      }
+    },
     onError: () => {
       toast.error($t('modlists.addUser.toast.removeFailed'))
     },
@@ -196,6 +204,11 @@
       },
       (users) => users.map((it) => it.id),
     ),
+    onSuccess: () => {
+      if (subscribed) {
+        refreshModListSubscribedUsers(true)
+      }
+    },
     onError: (err) => {
       console.error(err)
       toast.error($t('modlists.addUser.toast.addFailed'))
@@ -262,7 +275,9 @@
           {@const users = $query.data?.pages.flatMap((page) => page.data) ?? []}
           {#if users.length === 0}
             {#if !$query.isFetching}
-              <div class="text-center text-zinc-400">{$t('modlists.addUser.search.noResults')}</div>
+              <div class="text-center text-zinc-400">
+                {$t('modlists.addUser.search.noResults')}
+              </div>
             {/if}
           {/if}
 
@@ -317,7 +332,9 @@
                           : $addUsersMutation.mutate([user])}
                       disabled={loadings[user.id]}
                     >
-                      {user.added ? $t('modlists.addUser.actions.remove') : $t('modlists.addUser.actions.add')}
+                      {user.added
+                        ? $t('modlists.addUser.actions.remove')
+                        : $t('modlists.addUser.actions.add')}
                     </Button>
                   </div>
                 {/snippet}
@@ -329,7 +346,9 @@
           {#if $query.isFetching}
             <QueryLoading class="h-auto" />
           {:else if $query.isError}
-            <QueryError description={$t('modlists.addUser.error.searchFailed')} />
+            <QueryError
+              description={$t('modlists.addUser.error.searchFailed')}
+            />
           {/if}
         </div>
       </div>

@@ -69,7 +69,8 @@
       )
       const modlist = (await resp.json()) as ModListGetResponse
       if (!authInfo) {
-        const subscription = await localModlistSubscriptions.getSubscription(modListId)
+        const subscription =
+          await localModlistSubscriptions.getSubscription(modListId)
         if (subscription) {
           modlist.action = subscription
           modlist.subscribed = true
@@ -125,7 +126,9 @@
           ).json()) as ModListSubscribeResponse
           nSubscribed = subscribed.length
         } else {
-          nSubscribed = Object.keys(await localModlistSubscriptions.getAllSubscriptions()).length
+          nSubscribed = Object.keys(
+            await localModlistSubscriptions.getAllSubscriptions(),
+          ).length
         }
         if (nSubscribed >= 3) {
           toast.info($t('modlists.detail.toast.maxSubscribed'), {
@@ -193,7 +196,9 @@
     mutationFn: async () => {
       const authInfo = await getAuthInfo()
       if (!authInfo) {
-        await localModlistSubscriptions.removeSubscription(route.search?.get('id')!)
+        await localModlistSubscriptions.removeSubscription(
+          route.search?.get('id')!,
+        )
         return
       }
       const resp = await crossFetch(
@@ -315,9 +320,7 @@
     </Button>
   {:else}
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger
-        disabled={$subscribeMutation.isPending}
-      >
+      <DropdownMenu.Trigger disabled={$subscribeMutation.isPending}>
         {$t('modlists.detail.actions.subscribe')}
       </DropdownMenu.Trigger>
       <DropdownMenu.Content portalProps={{ to: shadcnConfig.get().portal }}>
@@ -438,7 +441,11 @@
   {#if currentTab === 'users'}
     <ModlistUsers owner={!!$metadata.data?.owner} bind:ref={usersRef} />
   {:else}
-    <ModlistRules owner={!!$metadata.data?.owner} bind:ref={rulesRef} />
+    <ModlistRules
+      owner={!!$metadata.data?.owner}
+      subscribed={!!$metadata.data?.subscribed}
+      bind:ref={rulesRef}
+    />
   {/if}
 </div>
 

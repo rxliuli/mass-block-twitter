@@ -1,6 +1,6 @@
 import { PageTest } from '$lib/components/test'
 import { initI18n } from '$lib/i18n'
-import { omit, range } from 'lodash-es'
+import { omit, range } from 'es-toolkit'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { render, RenderResult } from 'vitest-browser-svelte'
 import { CommunityMember } from '$lib/api/twitter'
@@ -55,7 +55,7 @@ describe('exportCommunityMembersToCSV', () => {
     const r = parseCSV<User>(download.text, {
       fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
     })
-    expect(r).toEqual(data.map((it) => omit(it, 'community_role')))
+    expect(r).toEqual(data.map((it) => omit(it, ['community_role'])))
   })
   it('should export community members to CSV with click stop button', async () => {
     let i = 0

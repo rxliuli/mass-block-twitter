@@ -3,7 +3,7 @@
   import { faker } from '@faker-js/faker'
   import type { UIEventHandler } from 'svelte/elements'
   import { createInfiniteQuery } from '@tanstack/svelte-query'
-  import { last } from 'lodash-es'
+  import { last } from 'es-toolkit'
 
   const query = createInfiniteQuery({
     queryKey: ['infinite-list'],

@@ -13,7 +13,7 @@
   import dayjs from 'dayjs'
   import { createQuery } from '@tanstack/svelte-query'
   import { type Activity, dbApi } from '$lib/db'
-  import { groupBy, sortBy } from 'lodash-es'
+  import { groupBy, sortBy } from 'es-toolkit'
   import { calcStats, formatStats } from './utils/stats'
   import { RouterLink } from '$lib/components/logic/router'
   import { t } from '$lib/i18n'

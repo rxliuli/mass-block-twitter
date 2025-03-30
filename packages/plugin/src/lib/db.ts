@@ -1,5 +1,5 @@
 import { DBSchema, deleteDB, IDBPDatabase, openDB } from 'idb'
-import { pickBy, sortBy } from 'lodash-es'
+import { pickBy, sortBy } from 'es-toolkit'
 import { ulid } from 'ulidx'
 import { createKeyVal, KeyValItem } from './util/keyval'
 
@@ -377,7 +377,7 @@ class PendingCheckUserDAO {
         }
         const tweets = sortBy(
           await dbStore.idb.getAllFromIndex('tweets', 'user_id_index', userId),
-          (it) => -new Date(it.created_at).getTime(),
+          [(it) => -new Date(it.created_at).getTime()],
         ).slice(0, 10)
         return {
           user,

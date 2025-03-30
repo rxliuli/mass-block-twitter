@@ -8,7 +8,7 @@ import {
   setRequestHeaders,
 } from '$lib/api'
 import { Activity, dbApi, User } from '$lib/db'
-import { omit, throttle } from 'lodash-es'
+import { omit, throttle } from 'es-toolkit'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { wait } from '@liuli-util/async'
 import { addBlockButton, extractTweet } from '$lib/observe'
@@ -131,7 +131,7 @@ function loggerTweets(): Middleware {
       }
       await dbApi.tweets.record(
         tweets.map((it) => ({
-          ...omit(it, 'user'),
+          ...omit(it, ['user']),
           updated_at: new Date().toISOString(),
           user_id: it.user.id,
         })),

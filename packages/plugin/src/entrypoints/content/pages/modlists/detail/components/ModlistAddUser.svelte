@@ -17,7 +17,7 @@
     createMutation,
     useQueryClient,
   } from '@tanstack/svelte-query'
-  import { debounce } from 'lodash-es'
+  import { debounce } from 'es-toolkit'
   import type {
     ModListUserCheckPostRequest,
     ModListUserCheckResponse,

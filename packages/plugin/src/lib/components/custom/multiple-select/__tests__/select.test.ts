@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import { Selector } from '../select'
-import { sortBy } from 'lodash-es'
 
 describe('Selector', () => {
   it('should be select', () => {
@@ -32,9 +31,9 @@ describe('Selector', () => {
     selector.click('e')
     expect(selector.selected).toEqual(['c', 'd', 'e'])
     selector.click('a')
-    expect(sortBy(selector.selected)).toEqual(['a', 'b', 'c'])
+    expect([...selector.selected].sort()).toEqual(['a', 'b', 'c'])
     selector.shiftUp()
-    expect(sortBy(selector.selected)).toEqual(['a', 'b', 'c'])
+    expect([...selector.selected].sort()).toEqual(['a', 'b', 'c'])
   })
   it('should be remove mode', () => {
     const selector = new Selector(['a', 'b', 'c', 'd', 'e'])
@@ -64,9 +63,9 @@ describe('Selector', () => {
     expect(selector.selected).toEqual(['a', 'b', 'c', 'e'])
     selector.shiftDown()
     selector.click('b')
-    expect(sortBy(selector.selected)).toEqual(['a', 'b', 'c', 'd', 'e'])
+    expect([...selector.selected].sort()).toEqual(['a', 'b', 'c', 'd', 'e'])
     selector.shiftUp()
-    expect(sortBy(selector.selected)).toEqual(['a', 'b', 'c', 'd', 'e'])
+    expect([...selector.selected].sort()).toEqual(['a', 'b', 'c', 'd', 'e'])
   })
   it('should be set keys', () => {
     const selector = new Selector(['a', 'b', 'c', 'd', 'e'])
@@ -89,9 +88,9 @@ describe('Selector', () => {
     selector.click('i')
     selector.shiftDown()
     selector.click('k')
-    expect(sortBy(selector.selected)).toEqual(['h', 'i', 'j', 'k'])
+    expect([...selector.selected].sort()).toEqual(['h', 'i', 'j', 'k'])
     selector.shiftUp()
-    expect(sortBy(selector.selected)).toEqual(['h', 'i', 'j', 'k'])
+    expect([...selector.selected].sort()).toEqual(['h', 'i', 'j', 'k'])
   })
   it('async set keys', async () => {
     const selector = new Selector([])

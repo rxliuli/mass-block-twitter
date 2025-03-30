@@ -1,6 +1,6 @@
 <script lang="ts" generics="TData extends any">
   import { Checkbox } from '$lib/components/ui/checkbox'
-  import { difference, uniq } from 'lodash-es'
+  import { difference, uniq } from 'es-toolkit'
   import type { Props } from './props'
   import { isComponent, isComponentConfig, isSnippetConfig } from './utils'
   import { getVirtualizedRange } from './virtual'

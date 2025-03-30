@@ -1,6 +1,6 @@
-import { Activity, dbApi, dbStore, initDB, Tweet, User } from '$lib/db'
+import { Activity, dbApi, initDB, Tweet, User } from '$lib/db'
 import dayjs from 'dayjs'
-import { range, rangeRight } from 'lodash-es'
+import { range, rangeRight } from 'es-toolkit'
 import { ulid } from 'ulidx'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 

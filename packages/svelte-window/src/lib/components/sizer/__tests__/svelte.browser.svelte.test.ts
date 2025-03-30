@@ -152,7 +152,7 @@ it('render in programmatic way', async () => {
       createElement('div', 'test-child-3'),
     ]).component,
   )
-  console.log(screen.baseElement)
+  screen.debug()
 
   // const screen = render(
   //   createElement(

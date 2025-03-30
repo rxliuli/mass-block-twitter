@@ -1,6 +1,6 @@
 import { Activity } from '$lib/db'
 import dayjs, { Dayjs } from 'dayjs'
-import { groupBy } from 'lodash-es'
+import { groupBy } from 'es-toolkit'
 
 export function formatActivity(now: Activity[], start: Dayjs, end: Dayjs) {
   const format = (activities: Activity[]) => {

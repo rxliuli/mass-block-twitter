@@ -11,7 +11,7 @@ import {
   ZodType,
 } from 'zod'
 import { languages } from './constants/languages'
-import { get } from 'lodash-es'
+import { get } from 'es-toolkit/compat'
 
 const ruleDataSchema = z.object({
   user: z

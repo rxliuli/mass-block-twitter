@@ -6,7 +6,7 @@ import {
 import { User } from '$lib/db'
 import { extractObjects } from '$lib/util/extractObjects'
 import { once } from '@liuli-util/async'
-import { get } from 'lodash-es'
+import { get } from 'es-toolkit/compat'
 import { z } from 'zod'
 
 export type CommunityMember = User & {

@@ -8,7 +8,7 @@ import {
 } from '../communities'
 import CommunityQuery from './assets/CommunityQuery.json'
 import MembersSliceTimelineQuery from './assets/MembersSliceTimeline_Query.json'
-import { omit } from 'lodash-es'
+import { omit } from 'es-toolkit'
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { existsSync } from 'node:fs'
@@ -21,7 +21,7 @@ describe('parseCommunityMembers', () => {
     expect(users.cursor).not.undefined
     expect(users.cursor).toMatchSnapshot()
     expect(
-      users.data.map((it) => omit(it, 'created_at', 'updated_at')),
+      users.data.map((it) => omit(it, ['created_at', 'updated_at'])),
     ).toMatchSnapshot()
   })
 })

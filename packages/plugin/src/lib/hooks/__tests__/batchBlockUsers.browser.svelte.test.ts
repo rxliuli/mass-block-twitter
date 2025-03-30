@@ -5,7 +5,7 @@ import { initI18n } from '$lib/i18n'
 import { dbApi, User } from '$lib/db'
 import { AuthInfo } from '@mass-block-twitter/server'
 import { BatchBlockUsersProcessedMeta, ExpectedError } from '$lib/api'
-import { range } from 'lodash-es'
+import { range } from 'es-toolkit'
 import { useSettings } from '$lib/settings'
 import { PageTest } from '$lib/components/test'
 

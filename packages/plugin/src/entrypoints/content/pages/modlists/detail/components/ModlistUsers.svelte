@@ -1,15 +1,10 @@
 <script lang="ts">
   import { useRoute } from '$lib/components/logic/router'
-  import {
-    createInfiniteQuery,
-    createMutation,
-    useQueryClient,
-  } from '@tanstack/svelte-query'
+  import { createMutation, useQueryClient } from '@tanstack/svelte-query'
   import type {
     ModListAddTwitterUsersRequest,
     ModListAddTwitterUsersResponse,
     ModListRemoveTwitterUserRequest,
-    ModListUsersPageResponse,
   } from '@mass-block-twitter/server'
   import { Button } from '$lib/components/ui/button'
   import { getAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
@@ -21,14 +16,11 @@
   import { SERVER_URL } from '$lib/constants'
   import { toast } from 'svelte-sonner'
   import { type User } from '$lib/db'
-  import { produce } from 'immer'
   import { AutoSizer, List } from '@rxliuli/svelte-window'
   import { crossFetch } from '$lib/query'
   import ModlistUserItem from './ModlistUserItem.svelte'
   import ModlistAddUser from './ModlistAddUser.svelte'
-  import { fileSelector } from '$lib/util/fileSelector'
-  import { parse } from 'csv-parse/browser/esm/sync'
-  import { chunk, debounce } from 'lodash-es'
+  import { chunk, debounce } from 'es-toolkit'
   import { useModlistUsers } from '../utils/useModlistUsers'
   import { t } from '$lib/i18n'
   import { selectImportFile } from '$lib/hooks/batchBlockUsers'
@@ -36,9 +28,11 @@
 
   let {
     owner,
+    subscribed,
     ref = $bindable(),
   }: {
     owner: boolean
+    subscribed: boolean
     ref?: {
       onOpenUserAdd: () => void
       onImportUsers: () => void
@@ -263,6 +257,7 @@
 
 <ModlistAddUser
   bind:open={userAddOpen}
+  {subscribed}
   modListId={route.search?.get('id')!}
   onAddUsers={$innerAddUsersMutation.mutateAsync}
   onRemove={(user) => $removeUserMutation.mutateAsync(user.id)}

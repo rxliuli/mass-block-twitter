@@ -154,7 +154,7 @@ export async function onExportBlockedUsersProcessed(
     .use(errorHandler)
     .use(maxRequestsHandler)
     .use(progressHandler)
-    // .use(notProLimitHandler)
+    .use(notProLimitHandler)
     .run()
 }
 

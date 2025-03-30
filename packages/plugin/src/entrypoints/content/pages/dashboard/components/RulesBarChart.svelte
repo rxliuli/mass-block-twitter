@@ -3,7 +3,7 @@
   import { init, use } from 'echarts/core'
   import { Chart } from '$lib/components/chart'
   import type { Activity } from '$lib/db'
-  import { groupBy } from 'lodash-es'
+  import { groupBy } from 'es-toolkit'
   import { mode } from 'mode-watcher'
   import { SVGRenderer } from 'echarts/renderers'
   import { BarChart } from 'echarts/charts'

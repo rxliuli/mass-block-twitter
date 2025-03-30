@@ -6,7 +6,7 @@ import {
   QueryOperationContext,
 } from '../batch'
 import { MiddlewareHandler, middleware } from '../middleware'
-import { range } from 'lodash-es'
+import { range } from 'es-toolkit'
 import { wait } from '@liuli-util/async'
 import { last } from 'es-toolkit'
 

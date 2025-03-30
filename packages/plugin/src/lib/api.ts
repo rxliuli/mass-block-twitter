@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { extractObjects } from './util/extractObjects'
 import { dbApi, TweetMediaType, User } from './db'
 import { FilterData } from './filter'
-import { uniqBy } from 'lodash-es'
+import { uniqBy } from 'es-toolkit'
 import { wait } from '@liuli-util/async'
 
 export function setRequestHeaders(headers: Headers) {

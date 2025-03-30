@@ -1,19 +1,32 @@
 import { defineWorkspace } from 'vitest/config'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
 
 export default defineWorkspace([
-  // If you want to keep running your existing tests in Node.js, uncomment the next line.
-  // 'vitest.config.ts',
   {
-    extends: 'vitest.config.ts',
     test: {
+      include: ['src/**/*.test.ts'],
+      exclude: ['src/**/*.browser.test.ts', 'src/**/*.browser.svelte.test.ts'],
+      name: 'unit',
+      environment: 'node',
+    },
+    plugins: [svelte()],
+  },
+  {
+    test: {
+      include: ['src/**/*.browser.test.ts', 'src/**/*.browser.svelte.test.ts'],
+      name: 'browser',
       browser: {
         enabled: true,
+        name: 'chromium',
         provider: 'playwright',
-        // https://vitest.dev/guide/browser/playwright
+        headless: true,
         instances: [
-        { browser: 'chromium' },
+          { browser: 'chromium' },
+          // { browser: 'firefox' },
+          // { browser: 'webkit' },
         ],
       },
     },
+    plugins: [svelte()],
   },
 ])

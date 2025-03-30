@@ -13,7 +13,7 @@ import {
   parseUserRecords,
 } from '../api'
 import allSpam from './assets/all-spam.json'
-import { omit, pick } from 'lodash-es'
+import { omit, pick } from 'es-toolkit'
 import notificationsSpam from './assets/notifications-spam.json'
 import profile from './assets/ProfileSpotlightsQuery.json'
 import HomeTimeline from './assets/HomeTimeline.json'
@@ -97,7 +97,7 @@ describe('parseUserRecords', () => {
     expect(users).length(20)
     expect(users.some((it) => it.description?.includes('t.co'))).false
     expect(
-      users.map((it) => omit(it, 'created_at', 'updated_at')),
+      users.map((it) => omit(it, ['created_at', 'updated_at'])),
     ).toMatchSnapshot()
   })
 
@@ -106,7 +106,7 @@ describe('parseUserRecords', () => {
     expect(users.map((it) => it.name).some((it) => it.includes('比特币'))).true
     expect(users).length(201)
     expect(
-      users.map((it) => omit(it, 'created_at', 'updated_at')),
+      users.map((it) => omit(it, ['created_at', 'updated_at'])),
     ).toMatchSnapshot()
   })
 
@@ -116,14 +116,14 @@ describe('parseUserRecords', () => {
     expect(users.map((it) => it.name).some((it) => it.includes('比特币'))).true
     expect(users.map((it) => it.name).some((it) => it.includes('币圈'))).true
     expect(
-      users.map((it) => omit(it, 'created_at', 'updated_at')),
+      users.map((it) => omit(it, ['created_at', 'updated_at'])),
     ).toMatchSnapshot()
   })
 
   it('parse profile', () => {
     const users = parseUserRecords(profile)
     expect(users).length(1)
-    expect(pick(users[0], 'id', 'name', 'screen_name')).toEqual({
+    expect(pick(users[0], ['id', 'name', 'screen_name'])).toEqual({
       id: '1575013182686777344',
       name: '比特币矿机',
       screen_name: 'bitmain_miner',
@@ -163,7 +163,7 @@ describe('parseTweets', () => {
     expect(
       tweets.map((it) => ({
         ...it,
-        user: omit(it.user, 'updated_at'),
+        user: omit(it.user, ['updated_at']),
       })),
     ).toMatchSnapshot()
   })
@@ -189,7 +189,7 @@ describe('parseTweets', () => {
     expect(
       tweets.map((it) => ({
         ...it,
-        user: omit(it.user, 'updated_at'),
+        user: omit(it.user, ['updated_at']),
       })),
     ).toMatchSnapshot()
   })
@@ -214,7 +214,7 @@ describe('parseTweets', () => {
     expect(
       tweets.map((it) => ({
         ...it,
-        user: omit(it.user, 'updated_at'),
+        user: omit(it.user, ['updated_at']),
       })),
     ).toMatchSnapshot()
   })
@@ -224,7 +224,7 @@ describe('parseTweets', () => {
     expect(
       tweets.map((it) => ({
         ...it,
-        user: omit(it.user, 'updated_at'),
+        user: omit(it.user, ['updated_at']),
       })),
     ).toMatchSnapshot()
   })
@@ -233,7 +233,7 @@ describe('parseTweets', () => {
     expect(tweets).length(4)
     expect(
       tweets.map((it) =>
-        pick(it, 'id', 'conversation_id_str', 'in_reply_to_status_id_str'),
+        pick(it, ['id', 'conversation_id_str', 'in_reply_to_status_id_str']),
       ),
     ).toEqual([
       {
@@ -261,7 +261,7 @@ describe('parseTweets', () => {
   it('parseTweets for detail 5', () => {
     const tweets = parseTweets(TweetDetail5)
     expect(tweets).length(5)
-    expect(tweets.map((it) => pick(it, 'id', 'quoted_status_id_str'))).toEqual([
+    expect(tweets.map((it) => pick(it, ['id', 'quoted_status_id_str']))).toEqual([
       {
         id: '1892375497062945112',
         quoted_status_id_str: '1884801439886713064',
@@ -292,7 +292,7 @@ describe('parseTweets', () => {
     expect(
       tweets.map((it) => ({
         ...it,
-        user: omit(it.user, 'updated_at'),
+        user: omit(it.user, ['updated_at']),
       })),
     ).toMatchSnapshot()
   })
@@ -315,7 +315,7 @@ describe('parseTweets', () => {
     expect(
       tweets.map((it) => ({
         ...it,
-        user: omit(it.user, 'updated_at'),
+        user: omit(it.user, ['updated_at']),
       })),
     ).toMatchSnapshot()
   })
@@ -323,7 +323,7 @@ describe('parseTweets', () => {
     const tweets = parseTweets(notifications1)
     expect(tweets).length(20)
     expect(
-      tweets.map((it) => omit(it, 'created_at', 'updated_at', 'user')),
+      tweets.map((it) => omit(it, ['created_at', 'user'])),
     ).toMatchSnapshot()
   })
   it('parseTweets for probable spam', () => {

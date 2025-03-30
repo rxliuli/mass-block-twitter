@@ -439,7 +439,11 @@
   </div>
 
   {#if currentTab === 'users'}
-    <ModlistUsers owner={!!$metadata.data?.owner} bind:ref={usersRef} />
+    <ModlistUsers
+      owner={!!$metadata.data?.owner}
+      subscribed={!!$metadata.data?.subscribed}
+      bind:ref={usersRef}
+    />
   {:else}
     <ModlistRules
       owner={!!$metadata.data?.owner}

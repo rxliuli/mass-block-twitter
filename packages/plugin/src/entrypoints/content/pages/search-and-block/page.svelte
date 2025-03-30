@@ -8,7 +8,7 @@
   import { extractCurrentUserId } from '$lib/observe'
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
   import { blockUser, unblockUser } from '$lib/api/twitter'
-  import { debounce, groupBy } from 'lodash-es'
+  import { debounce, groupBy } from 'es-toolkit'
   import { buttonVariants } from '$lib/components/ui/button'
   import {
     DownloadIcon,
@@ -235,7 +235,7 @@
   const blockMutation = createMutation({
     mutationFn: async () => {
       const users = selectedRows.filter((it) => !it.blocking)
-      const grouped = groupBy(users, (it) => it.following)
+      const grouped = groupBy(users, (it) => String(it.following))
       let blockList: User[] = users
       if ((grouped.true ?? []).length > 0) {
         const confirmed = confirm($t('search-and-block.confirm.blockFollowing'))

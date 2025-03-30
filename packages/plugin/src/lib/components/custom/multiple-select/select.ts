@@ -1,4 +1,4 @@
-import { uniq } from 'lodash-es'
+import { uniq } from 'es-toolkit'
 
 function order(a: number, b: number): [number, number] {
   return a > b ? [b, a] : [a, b]

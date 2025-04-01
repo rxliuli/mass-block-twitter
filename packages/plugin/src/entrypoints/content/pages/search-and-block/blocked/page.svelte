@@ -37,8 +37,11 @@
   })
 
   onMount(async () => {
-    await $query.fetchNextPage()
-    await $query.fetchNextPage()
+    let first = true
+    while (getUsers().length < 40 && (first || hasNextPage)) {
+      first = false
+      await $query.fetchNextPage()
+    }
   })
 
   let selectedRowKeys = $state<string[]>([])

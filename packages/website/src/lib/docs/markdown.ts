@@ -35,6 +35,29 @@ export function renderMarkdown(root: Root, highlighter: Highlighter): string {
         r.properties.code = code.value
         return r
       },
+      heading: (_state, node, _parent) => {
+        const heading = node as Heading
+        const text = toString(heading)
+        const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+        return {
+          type: 'element',
+          tagName: `h${heading.depth}`,
+          properties: { id },
+          children: [
+            {
+              type: 'element',
+              tagName: 'a',
+              properties: {
+                href: `#${id}`,
+                class: 'header-anchor',
+                'aria-hidden': true,
+              },
+              children: [{ type: 'text', value: '#' }],
+            },
+            ...(_state.all(node) as any),
+          ],
+        }
+      },
     },
     allowDangerousHtml: true,
   })

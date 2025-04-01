@@ -92,18 +92,16 @@
   onscroll={handleScroll}
 >
   <MultipleSelectRoot
-    bind:selected={
-      () => props.rowSelection?.selectedRowKeys ?? [],
-      (newVal) => {
-        const newSet = new Set(newVal)
-        props.rowSelection?.onChange(
-          newVal,
-          props.dataSource.filter((it) =>
-            newSet.has(it[props.rowKey as keyof TData] as string),
-          ),
-        )
-      }
-    }
+    selected={props.rowSelection?.selectedRowKeys ?? []}
+    onChange={(newVal) => {
+      const newSet = new Set(newVal)
+      props.rowSelection?.onChange(
+        newVal,
+        props.dataSource.filter((it) =>
+          newSet.has(it[props.rowKey as keyof TData] as string),
+        ),
+      )
+    }}
     keys={props.dataSource.map(
       (it) => it[props.rowKey as keyof TData] as string,
     )}

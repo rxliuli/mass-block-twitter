@@ -5,10 +5,13 @@
 
   let {
     selected = $bindable([]),
+    onChange,
     keys,
     children,
   }: {
     selected: string[]
+    // disabled warning: https://svelte.dev/docs/svelte/runtime-warnings#Client-warnings-ownership_invalid_binding
+    onChange?: (selected: string[]) => void
     keys: string[]
     children: Snippet
   } = $props()
@@ -62,10 +65,12 @@
     click: (key: string) => {
       selector.click(key)
       selected = selector.selected
+      onChange?.(selected)
     },
     selectAll: () => {
       selector.selectAll()
       selected = selector.selected
+      onChange?.(selected)
     },
   } satisfies MultipleSelectRootContext)
 </script>

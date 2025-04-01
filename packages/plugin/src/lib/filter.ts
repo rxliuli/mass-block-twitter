@@ -20,7 +20,9 @@ export interface TweetFilter {
   userCondition?: (user: User) => FilterResult
 }
 
-export const flowFilterCacheMap = new Lru<{ value: boolean; reason?: string }>(1000)
+export const flowFilterCacheMap = new Lru<{ value: boolean; reason?: string }>(
+  1000,
+)
 
 export function flowFilter(
   filters: TweetFilter[],
@@ -254,6 +256,21 @@ export function languageFilter(languages: string[]): TweetFilter {
     name: 'language',
     tweetCondition: (tweet: ParsedTweet) => {
       if (languages.includes(tweet.lang)) {
+        return 'hide'
+      }
+      return 'next'
+    },
+  }
+}
+
+export function grokFilter(): TweetFilter {
+  return {
+    name: 'grok',
+    tweetCondition: (tweet: ParsedTweet) => {
+      if (tweet.text.includes('@grok')) {
+        return 'hide'
+      }
+      if (tweet.user.screen_name === 'grok') {
         return 'hide'
       }
       return 'next'

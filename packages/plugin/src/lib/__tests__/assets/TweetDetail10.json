@@ -1,0 +1,1511 @@
+{
+  "data": {
+      "threaded_conversation_with_injections_v2": {
+          "instructions": [
+              {
+                  "type": "TimelineAddEntries",
+                  "entries": [
+                      {
+                          "entryId": "tweet-1896237679056195602",
+                          "sortIndex": "1907019115961253888",
+                          "content": {
+                              "entryType": "TimelineTimelineItem",
+                              "__typename": "TimelineTimelineItem",
+                              "itemContent": {
+                                  "itemType": "TimelineTweet",
+                                  "__typename": "TimelineTweet",
+                                  "tweet_results": {
+                                      "result": {
+                                          "__typename": "Tweet",
+                                          "rest_id": "1896237679056195602",
+                                          "has_birdwatch_notes": false,
+                                          "core": {
+                                              "user_results": {
+                                                  "result": {
+                                                      "__typename": "User",
+                                                      "id": "VXNlcjo0NDY3MTkyODI=",
+                                                      "rest_id": "446719282",
+                                                      "affiliates_highlighted_label": {},
+                                                      "has_graduated_access": true,
+                                                      "parody_commentary_fan_label": "None",
+                                                      "is_blue_verified": true,
+                                                      "profile_image_shape": "Circle",
+                                                      "legacy": {
+                                                          "following": false,
+                                                          "can_dm": false,
+                                                          "can_media_tag": true,
+                                                          "created_at": "Mon Dec 26 02:48:08 +0000 2011",
+                                                          "default_profile": true,
+                                                          "default_profile_image": false,
+                                                          "description": "Artificial intelligence, biological intelligence, and whatever exists in between and beyond. Made in Canada.",
+                                                          "entities": {
+                                                              "description": {
+                                                                  "urls": []
+                                                              }
+                                                          },
+                                                          "fast_followers_count": 0,
+                                                          "favourites_count": 9944,
+                                                          "followers_count": 191424,
+                                                          "friends_count": 1698,
+                                                          "has_custom_timelines": true,
+                                                          "is_translator": false,
+                                                          "listed_count": 1461,
+                                                          "location": "Palo Alto, CA",
+                                                          "media_count": 496,
+                                                          "name": "Shivon Zilis",
+                                                          "normal_followers_count": 191424,
+                                                          "pinned_tweet_ids_str": [],
+                                                          "possibly_sensitive": false,
+                                                          "profile_banner_url": "https://pbs.twimg.com/profile_banners/446719282/1592805454",
+                                                          "profile_image_url_https": "https://pbs.twimg.com/profile_images/755006920314937344/PPQ8LKFs_normal.jpg",
+                                                          "profile_interstitial_type": "",
+                                                          "screen_name": "shivon",
+                                                          "statuses_count": 3516,
+                                                          "translator_type": "none",
+                                                          "verified": false,
+                                                          "want_retweets": false,
+                                                          "withheld_in_countries": []
+                                                      },
+                                                      "tipjar_settings": {}
+                                                  }
+                                              }
+                                          },
+                                          "unmention_data": {},
+                                          "edit_control": {
+                                              "edit_tweet_ids": [
+                                                  "1896237679056195602"
+                                              ],
+                                              "editable_until_msecs": "1740936867000",
+                                              "is_edit_eligible": true,
+                                              "edits_remaining": "5"
+                                          },
+                                          "is_translatable": false,
+                                          "views": {
+                                              "count": "306892",
+                                              "state": "EnabledWithCount"
+                                          },
+                                          "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+                                          "grok_analysis_button": true,
+                                          "quoted_status_result": {
+                                              "result": {
+                                                  "__typename": "Tweet",
+                                                  "rest_id": "1895871286448177289",
+                                                  "has_birdwatch_notes": false,
+                                                  "core": {
+                                                      "user_results": {
+                                                          "result": {
+                                                              "__typename": "User",
+                                                              "id": "VXNlcjoxMTc5ODkyNDc3NzE0NzE4NzIx",
+                                                              "rest_id": "1179892477714718721",
+                                                              "affiliates_highlighted_label": {},
+                                                              "has_graduated_access": true,
+                                                              "parody_commentary_fan_label": "None",
+                                                              "is_blue_verified": true,
+                                                              "profile_image_shape": "Circle",
+                                                              "legacy": {
+                                                                  "following": false,
+                                                                  "can_dm": true,
+                                                                  "can_media_tag": true,
+                                                                  "created_at": "Thu Oct 03 22:54:31 +0000 2019",
+                                                                  "default_profile": true,
+                                                                  "default_profile_image": false,
+                                                                  "description": "science in context, art history and some puzzles to solve",
+                                                                  "entities": {
+                                                                      "description": {
+                                                                          "urls": []
+                                                                      }
+                                                                  },
+                                                                  "fast_followers_count": 0,
+                                                                  "favourites_count": 132106,
+                                                                  "followers_count": 2919228,
+                                                                  "friends_count": 5777,
+                                                                  "has_custom_timelines": true,
+                                                                  "is_translator": false,
+                                                                  "listed_count": 12900,
+                                                                  "location": "Earth ",
+                                                                  "media_count": 41993,
+                                                                  "name": "Science girl",
+                                                                  "normal_followers_count": 2919228,
+                                                                  "pinned_tweet_ids_str": [
+                                                                      "1898052697485349078"
+                                                                  ],
+                                                                  "possibly_sensitive": false,
+                                                                  "profile_banner_url": "https://pbs.twimg.com/profile_banners/1179892477714718721/1589400385",
+                                                                  "profile_image_url_https": "https://pbs.twimg.com/profile_images/1504867101923762178/gfZgsqoL_normal.jpg",
+                                                                  "profile_interstitial_type": "",
+                                                                  "screen_name": "gunsnrosesgirl3",
+                                                                  "statuses_count": 69820,
+                                                                  "translator_type": "none",
+                                                                  "verified": false,
+                                                                  "want_retweets": false,
+                                                                  "withheld_in_countries": []
+                                                              },
+                                                              "tipjar_settings": {
+                                                                  "is_enabled": false,
+                                                                  "cash_app_handle": "science00girl"
+                                                              },
+                                                              "super_follow_eligible": true
+                                                          }
+                                                      }
+                                                  },
+                                                  "unmention_data": {},
+                                                  "edit_control": {
+                                                      "edit_tweet_ids": [
+                                                          "1895871286448177289"
+                                                      ],
+                                                      "editable_until_msecs": "1740849512000",
+                                                      "is_edit_eligible": true,
+                                                      "edits_remaining": "5"
+                                                  },
+                                                  "is_translatable": false,
+                                                  "views": {
+                                                      "count": "495446",
+                                                      "state": "EnabledWithCount"
+                                                  },
+                                                  "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+                                                  "grok_analysis_button": true,
+                                                  "legacy": {
+                                                      "bookmark_count": 289,
+                                                      "bookmarked": false,
+                                                      "created_at": "Sat Mar 01 16:18:32 +0000 2025",
+                                                      "conversation_id_str": "1895871286448177289",
+                                                      "display_text_range": [
+                                                          0,
+                                                          69
+                                                      ],
+                                                      "entities": {
+                                                          "hashtags": [],
+                                                          "media": [
+                                                              {
+                                                                  "display_url": "pic.x.com/NIZkVOrg86",
+                                                                  "expanded_url": "https://x.com/YKwolfpec/status/1895870750839783812/video/1",
+                                                                  "id_str": "1895870693893459968",
+                                                                  "indices": [
+                                                                      46,
+                                                                      69
+                                                                  ],
+                                                                  "media_key": "7_1895870693893459968",
+                                                                  "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1895870693893459968/pu/img/_L75hTJVHwgyD1_m.jpg",
+                                                                  "source_status_id_str": "1895870750839783812",
+                                                                  "source_user_id_str": "1343046599153496064",
+                                                                  "type": "video",
+                                                                  "url": "https://t.co/NIZkVOrg86",
+                                                                  "additional_media_info": {
+                                                                      "monetizable": false,
+                                                                      "source_user": {
+                                                                          "user_results": {
+                                                                              "result": {
+                                                                                  "__typename": "User",
+                                                                                  "id": "VXNlcjoxMzQzMDQ2NTk5MTUzNDk2MDY0",
+                                                                                  "rest_id": "1343046599153496064",
+                                                                                  "affiliates_highlighted_label": {},
+                                                                                  "has_graduated_access": true,
+                                                                                  "parody_commentary_fan_label": "None",
+                                                                                  "is_blue_verified": true,
+                                                                                  "profile_image_shape": "Circle",
+                                                                                  "legacy": {
+                                                                                      "following": false,
+                                                                                      "can_dm": true,
+                                                                                      "can_media_tag": true,
+                                                                                      "created_at": "Sun Dec 27 04:11:05 +0000 2020",
+                                                                                      "default_profile": true,
+                                                                                      "default_profile_image": false,
+                                                                                      "description": "Posting the best \uD835\uDDFA\uD835\uDDF2\uD835\uDDF1\uD835\uDDF6\uD835\uDDEE on internet.\n#humor #art #science #cool #nature #memes.Dm if you want me to Hire as a Admin for Your Account /dm for credit/Removal",
+                                                                                      "entities": {
+                                                                                          "description": {
+                                                                                              "urls": []
+                                                                                          }
+                                                                                      },
+                                                                                      "fast_followers_count": 0,
+                                                                                      "favourites_count": 28503,
+                                                                                      "followers_count": 15995,
+                                                                                      "friends_count": 794,
+                                                                                      "has_custom_timelines": false,
+                                                                                      "is_translator": false,
+                                                                                      "listed_count": 90,
+                                                                                      "location": "worldwide",
+                                                                                      "media_count": 6827,
+                                                                                      "name": "Yogesh Kumar",
+                                                                                      "normal_followers_count": 15995,
+                                                                                      "pinned_tweet_ids_str": [
+                                                                                          "1906041414489870401"
+                                                                                      ],
+                                                                                      "possibly_sensitive": false,
+                                                                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/1343046599153496064/1723438362",
+                                                                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1573175638025912322/hhobElr4_normal.jpg",
+                                                                                      "profile_interstitial_type": "",
+                                                                                      "screen_name": "YKwolfpec",
+                                                                                      "statuses_count": 22354,
+                                                                                      "translator_type": "none",
+                                                                                      "verified": false,
+                                                                                      "want_retweets": false,
+                                                                                      "withheld_in_countries": []
+                                                                                  },
+                                                                                  "tipjar_settings": {
+                                                                                      "is_enabled": true
+                                                                                  }
+                                                                              }
+                                                                          }
+                                                                      }
+                                                                  },
+                                                                  "ext_media_availability": {
+                                                                      "status": "Available"
+                                                                  },
+                                                                  "sizes": {
+                                                                      "large": {
+                                                                          "h": 1280,
+                                                                          "w": 720,
+                                                                          "resize": "fit"
+                                                                      },
+                                                                      "medium": {
+                                                                          "h": 1200,
+                                                                          "w": 675,
+                                                                          "resize": "fit"
+                                                                      },
+                                                                      "small": {
+                                                                          "h": 680,
+                                                                          "w": 383,
+                                                                          "resize": "fit"
+                                                                      },
+                                                                      "thumb": {
+                                                                          "h": 150,
+                                                                          "w": 150,
+                                                                          "resize": "crop"
+                                                                      }
+                                                                  },
+                                                                  "original_info": {
+                                                                      "height": 1280,
+                                                                      "width": 720,
+                                                                      "focus_rects": []
+                                                                  },
+                                                                  "video_info": {
+                                                                      "aspect_ratio": [
+                                                                          9,
+                                                                          16
+                                                                      ],
+                                                                      "duration_millis": 21989,
+                                                                      "variants": [
+                                                                          {
+                                                                              "content_type": "application/x-mpegURL",
+                                                                              "url": "https://video.twimg.com/ext_tw_video/1895870693893459968/pu/pl/f3zvSR90EyRMvW2g.m3u8?tag=12&v=cfc"
+                                                                          },
+                                                                          {
+                                                                              "bitrate": 632000,
+                                                                              "content_type": "video/mp4",
+                                                                              "url": "https://video.twimg.com/ext_tw_video/1895870693893459968/pu/vid/avc1/320x568/Qw5NsEbMf4TZ0XJj.mp4?tag=12"
+                                                                          },
+                                                                          {
+                                                                              "bitrate": 950000,
+                                                                              "content_type": "video/mp4",
+                                                                              "url": "https://video.twimg.com/ext_tw_video/1895870693893459968/pu/vid/avc1/480x852/xVr__So4Rnhrrzr2.mp4?tag=12"
+                                                                          },
+                                                                          {
+                                                                              "bitrate": 2176000,
+                                                                              "content_type": "video/mp4",
+                                                                              "url": "https://video.twimg.com/ext_tw_video/1895870693893459968/pu/vid/avc1/720x1280/4HY1evmH_yvWEYn0.mp4?tag=12"
+                                                                          }
+                                                                      ]
+                                                                  },
+                                                                  "media_results": {
+                                                                      "result": {
+                                                                          "media_key": "7_1895870693893459968"
+                                                                      }
+                                                                  }
+                                                              }
+                                                          ],
+                                                          "symbols": [],
+                                                          "timestamps": [],
+                                                          "urls": [],
+                                                          "user_mentions": []
+                                                      },
+                                                      "extended_entities": {
+                                                          "media": [
+                                                              {
+                                                                  "display_url": "pic.x.com/NIZkVOrg86",
+                                                                  "expanded_url": "https://x.com/YKwolfpec/status/1895870750839783812/video/1",
+                                                                  "id_str": "1895870693893459968",
+                                                                  "indices": [
+                                                                      46,
+                                                                      69
+                                                                  ],
+                                                                  "media_key": "7_1895870693893459968",
+                                                                  "media_url_https": "https://pbs.twimg.com/ext_tw_video_thumb/1895870693893459968/pu/img/_L75hTJVHwgyD1_m.jpg",
+                                                                  "source_status_id_str": "1895870750839783812",
+                                                                  "source_user_id_str": "1343046599153496064",
+                                                                  "type": "video",
+                                                                  "url": "https://t.co/NIZkVOrg86",
+                                                                  "additional_media_info": {
+                                                                      "monetizable": false,
+                                                                      "source_user": {
+                                                                          "user_results": {
+                                                                              "result": {
+                                                                                  "__typename": "User",
+                                                                                  "id": "VXNlcjoxMzQzMDQ2NTk5MTUzNDk2MDY0",
+                                                                                  "rest_id": "1343046599153496064",
+                                                                                  "affiliates_highlighted_label": {},
+                                                                                  "has_graduated_access": true,
+                                                                                  "parody_commentary_fan_label": "None",
+                                                                                  "is_blue_verified": true,
+                                                                                  "profile_image_shape": "Circle",
+                                                                                  "legacy": {
+                                                                                      "following": false,
+                                                                                      "can_dm": true,
+                                                                                      "can_media_tag": true,
+                                                                                      "created_at": "Sun Dec 27 04:11:05 +0000 2020",
+                                                                                      "default_profile": true,
+                                                                                      "default_profile_image": false,
+                                                                                      "description": "Posting the best \uD835\uDDFA\uD835\uDDF2\uD835\uDDF1\uD835\uDDF6\uD835\uDDEE on internet.\n#humor #art #science #cool #nature #memes.Dm if you want me to Hire as a Admin for Your Account /dm for credit/Removal",
+                                                                                      "entities": {
+                                                                                          "description": {
+                                                                                              "urls": []
+                                                                                          }
+                                                                                      },
+                                                                                      "fast_followers_count": 0,
+                                                                                      "favourites_count": 28503,
+                                                                                      "followers_count": 15995,
+                                                                                      "friends_count": 794,
+                                                                                      "has_custom_timelines": false,
+                                                                                      "is_translator": false,
+                                                                                      "listed_count": 90,
+                                                                                      "location": "worldwide",
+                                                                                      "media_count": 6827,
+                                                                                      "name": "Yogesh Kumar",
+                                                                                      "normal_followers_count": 15995,
+                                                                                      "pinned_tweet_ids_str": [
+                                                                                          "1906041414489870401"
+                                                                                      ],
+                                                                                      "possibly_sensitive": false,
+                                                                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/1343046599153496064/1723438362",
+                                                                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1573175638025912322/hhobElr4_normal.jpg",
+                                                                                      "profile_interstitial_type": "",
+                                                                                      "screen_name": "YKwolfpec",
+                                                                                      "statuses_count": 22354,
+                                                                                      "translator_type": "none",
+                                                                                      "verified": false,
+                                                                                      "want_retweets": false,
+                                                                                      "withheld_in_countries": []
+                                                                                  },
+                                                                                  "tipjar_settings": {
+                                                                                      "is_enabled": true
+                                                                                  }
+                                                                              }
+                                                                          }
+                                                                      }
+                                                                  },
+                                                                  "ext_media_availability": {
+                                                                      "status": "Available"
+                                                                  },
+                                                                  "sizes": {
+                                                                      "large": {
+                                                                          "h": 1280,
+                                                                          "w": 720,
+                                                                          "resize": "fit"
+                                                                      },
+                                                                      "medium": {
+                                                                          "h": 1200,
+                                                                          "w": 675,
+                                                                          "resize": "fit"
+                                                                      },
+                                                                      "small": {
+                                                                          "h": 680,
+                                                                          "w": 383,
+                                                                          "resize": "fit"
+                                                                      },
+                                                                      "thumb": {
+                                                                          "h": 150,
+                                                                          "w": 150,
+                                                                          "resize": "crop"
+                                                                      }
+                                                                  },
+                                                                  "original_info": {
+                                                                      "height": 1280,
+                                                                      "width": 720,
+                                                                      "focus_rects": []
+                                                                  },
+                                                                  "video_info": {
+                                                                      "aspect_ratio": [
+                                                                          9,
+                                                                          16
+                                                                      ],
+                                                                      "duration_millis": 21989,
+                                                                      "variants": [
+                                                                          {
+                                                                              "content_type": "application/x-mpegURL",
+                                                                              "url": "https://video.twimg.com/ext_tw_video/1895870693893459968/pu/pl/f3zvSR90EyRMvW2g.m3u8?tag=12&v=cfc"
+                                                                          },
+                                                                          {
+                                                                              "bitrate": 632000,
+                                                                              "content_type": "video/mp4",
+                                                                              "url": "https://video.twimg.com/ext_tw_video/1895870693893459968/pu/vid/avc1/320x568/Qw5NsEbMf4TZ0XJj.mp4?tag=12"
+                                                                          },
+                                                                          {
+                                                                              "bitrate": 950000,
+                                                                              "content_type": "video/mp4",
+                                                                              "url": "https://video.twimg.com/ext_tw_video/1895870693893459968/pu/vid/avc1/480x852/xVr__So4Rnhrrzr2.mp4?tag=12"
+                                                                          },
+                                                                          {
+                                                                              "bitrate": 2176000,
+                                                                              "content_type": "video/mp4",
+                                                                              "url": "https://video.twimg.com/ext_tw_video/1895870693893459968/pu/vid/avc1/720x1280/4HY1evmH_yvWEYn0.mp4?tag=12"
+                                                                          }
+                                                                      ]
+                                                                  },
+                                                                  "media_results": {
+                                                                      "result": {
+                                                                          "media_key": "7_1895870693893459968"
+                                                                      }
+                                                                  }
+                                                              }
+                                                          ]
+                                                      },
+                                                      "favorite_count": 2073,
+                                                      "favorited": false,
+                                                      "full_text": "Presentation of cocktails \n\n\uD83D\uDCF9 Thealexiskaris\n https://t.co/NIZkVOrg86",
+                                                      "is_quote_status": false,
+                                                      "lang": "en",
+                                                      "possibly_sensitive": false,
+                                                      "possibly_sensitive_editable": true,
+                                                      "quote_count": 43,
+                                                      "reply_count": 78,
+                                                      "retweet_count": 180,
+                                                      "retweeted": false,
+                                                      "user_id_str": "1179892477714718721",
+                                                      "id_str": "1895871286448177289"
+                                                  }
+                                              }
+                                          },
+                                          "legacy": {
+                                              "bookmark_count": 162,
+                                              "bookmarked": false,
+                                              "created_at": "Sun Mar 02 16:34:27 +0000 2025",
+                                              "conversation_id_str": "1896237679056195602",
+                                              "display_text_range": [
+                                                  0,
+                                                  48
+                                              ],
+                                              "entities": {
+                                                  "hashtags": [],
+                                                  "symbols": [],
+                                                  "timestamps": [],
+                                                  "urls": [],
+                                                  "user_mentions": []
+                                              },
+                                              "favorite_count": 1835,
+                                              "favorited": false,
+                                              "full_text": "Looks like they materialized from the replicator",
+                                              "is_quote_status": true,
+                                              "lang": "en",
+                                              "quote_count": 13,
+                                              "quoted_status_id_str": "1895871286448177289",
+                                              "quoted_status_permalink": {
+                                                  "url": "https://t.co/I0Rr1LcPMu",
+                                                  "expanded": "https://twitter.com/gunsnrosesgirl3/status/1895871286448177289",
+                                                  "display": "x.com/gunsnrosesgirl…"
+                                              },
+                                              "reply_count": 228,
+                                              "retweet_count": 116,
+                                              "retweeted": false,
+                                              "user_id_str": "446719282",
+                                              "id_str": "1896237679056195602"
+                                          },
+                                          "quick_promote_eligibility": {
+                                              "eligibility": "IneligibleNotProfessional"
+                                          }
+                                      }
+                                  },
+                                  "tweetDisplayType": "SelfThread"
+                              },
+                              "clientEventInfo": {
+                                  "component": "tweet",
+                                  "element": "tweet"
+                              }
+                          }
+                      },
+                      {
+                          "entryId": "tweet-1907011311466086469",
+                          "sortIndex": "1907019115961253878",
+                          "content": {
+                              "entryType": "TimelineTimelineItem",
+                              "__typename": "TimelineTimelineItem",
+                              "itemContent": {
+                                  "itemType": "TimelineTweet",
+                                  "__typename": "TimelineTweet",
+                                  "tweet_results": {
+                                      "result": {
+                                          "__typename": "Tweet",
+                                          "rest_id": "1907011311466086469",
+                                          "has_birdwatch_notes": false,
+                                          "core": {
+                                              "user_results": {
+                                                  "result": {
+                                                      "__typename": "User",
+                                                      "id": "VXNlcjoxODIxNjk0NTYyMzY2MzEyNDQ4",
+                                                      "rest_id": "1821694562366312448",
+                                                      "affiliates_highlighted_label": {},
+                                                      "has_graduated_access": true,
+                                                      "parody_commentary_fan_label": "None",
+                                                      "is_blue_verified": true,
+                                                      "profile_image_shape": "Circle",
+                                                      "legacy": {
+                                                          "following": false,
+                                                          "can_dm": false,
+                                                          "can_media_tag": false,
+                                                          "created_at": "Thu Aug 08 23:47:07 +0000 2024",
+                                                          "default_profile": true,
+                                                          "default_profile_image": false,
+                                                          "description": "",
+                                                          "entities": {
+                                                              "description": {
+                                                                  "urls": []
+                                                              },
+                                                              "url": {
+                                                                  "urls": [
+                                                                      {
+                                                                          "display_url": "photosbytom.org",
+                                                                          "expanded_url": "https://www.photosbytom.org/",
+                                                                          "url": "https://t.co/NyEe5lvd7f",
+                                                                          "indices": [
+                                                                              0,
+                                                                              23
+                                                                          ]
+                                                                      }
+                                                                  ]
+                                                              }
+                                                          },
+                                                          "fast_followers_count": 0,
+                                                          "favourites_count": 27,
+                                                          "followers_count": 32,
+                                                          "friends_count": 75,
+                                                          "has_custom_timelines": false,
+                                                          "is_translator": false,
+                                                          "listed_count": 0,
+                                                          "location": "",
+                                                          "media_count": 48,
+                                                          "name": "Tom Adams",
+                                                          "normal_followers_count": 32,
+                                                          "pinned_tweet_ids_str": [
+                                                              "1903888943000485925"
+                                                          ],
+                                                          "possibly_sensitive": false,
+                                                          "profile_banner_url": "https://pbs.twimg.com/profile_banners/1821694562366312448/1740671951",
+                                                          "profile_image_url_https": "https://pbs.twimg.com/profile_images/1895131495544635392/oHzOddFP_normal.jpg",
+                                                          "profile_interstitial_type": "",
+                                                          "screen_name": "PhilsPhanTom",
+                                                          "statuses_count": 62,
+                                                          "translator_type": "none",
+                                                          "url": "https://t.co/NyEe5lvd7f",
+                                                          "verified": false,
+                                                          "want_retweets": false,
+                                                          "withheld_in_countries": []
+                                                      },
+                                                      "tipjar_settings": {}
+                                                  }
+                                              }
+                                          },
+                                          "unmention_data": {},
+                                          "edit_control": {
+                                              "edit_tweet_ids": [
+                                                  "1907011311466086469"
+                                              ],
+                                              "editable_until_msecs": "1743505501000",
+                                              "is_edit_eligible": false,
+                                              "edits_remaining": "5"
+                                          },
+                                          "is_translatable": false,
+                                          "views": {
+                                              "count": "14",
+                                              "state": "EnabledWithCount"
+                                          },
+                                          "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+                                          "grok_analysis_button": true,
+                                          "legacy": {
+                                              "bookmark_count": 0,
+                                              "bookmarked": false,
+                                              "created_at": "Tue Apr 01 10:05:01 +0000 2025",
+                                              "conversation_id_str": "1896237679056195602",
+                                              "display_text_range": [
+                                                  8,
+                                                  70
+                                              ],
+                                              "entities": {
+                                                  "hashtags": [],
+                                                  "symbols": [],
+                                                  "timestamps": [],
+                                                  "urls": [],
+                                                  "user_mentions": [
+                                                      {
+                                                          "id_str": "446719282",
+                                                          "name": "Shivon Zilis",
+                                                          "screen_name": "shivon",
+                                                          "indices": [
+                                                              0,
+                                                              7
+                                                          ]
+                                                      },
+                                                      {
+                                                          "id_str": "1720665183188922368",
+                                                          "name": "Grok",
+                                                          "screen_name": "grok",
+                                                          "indices": [
+                                                              8,
+                                                              13
+                                                          ]
+                                                      }
+                                                  ]
+                                              },
+                                              "favorite_count": 0,
+                                              "favorited": false,
+                                              "full_text": "@shivon @grok what is the material that is wrapped around the glasses?",
+                                              "in_reply_to_screen_name": "shivon",
+                                              "in_reply_to_status_id_str": "1896237679056195602",
+                                              "in_reply_to_user_id_str": "446719282",
+                                              "is_quote_status": false,
+                                              "lang": "en",
+                                              "quote_count": 0,
+                                              "reply_count": 1,
+                                              "retweet_count": 0,
+                                              "retweeted": false,
+                                              "user_id_str": "1821694562366312448",
+                                              "id_str": "1907011311466086469"
+                                          },
+                                          "quick_promote_eligibility": {
+                                              "eligibility": "IneligibleNotProfessional"
+                                          }
+                                      }
+                                  },
+                                  "tweetDisplayType": "SelfThread"
+                              },
+                              "clientEventInfo": {
+                                  "component": "tweet",
+                                  "element": "tweet"
+                              }
+                          }
+                      },
+                      {
+                          "entryId": "tweet-1907012235945267505",
+                          "sortIndex": "1907019115961253868",
+                          "content": {
+                              "entryType": "TimelineTimelineItem",
+                              "__typename": "TimelineTimelineItem",
+                              "itemContent": {
+                                  "itemType": "TimelineTweet",
+                                  "__typename": "TimelineTweet",
+                                  "tweet_results": {
+                                      "result": {
+                                          "__typename": "Tweet",
+                                          "rest_id": "1907012235945267505",
+                                          "has_birdwatch_notes": false,
+                                          "core": {
+                                              "user_results": {
+                                                  "result": {
+                                                      "__typename": "User",
+                                                      "id": "VXNlcjoxNzIwNjY1MTgzMTg4OTIyMzY4",
+                                                      "rest_id": "1720665183188922368",
+                                                      "affiliates_highlighted_label": {
+                                                          "label": {
+                                                              "url": {
+                                                                  "url": "https://twitter.com/xai",
+                                                                  "urlType": "DeepLink"
+                                                              },
+                                                              "badge": {
+                                                                  "url": "https://pbs.twimg.com/profile_images/1769430779845611520/lIgjSJGU_bigger.jpg"
+                                                              },
+                                                              "description": "xAI",
+                                                              "userLabelType": "BusinessLabel",
+                                                              "userLabelDisplayType": "Badge"
+                                                          }
+                                                      },
+                                                      "has_graduated_access": true,
+                                                      "parody_commentary_fan_label": "None",
+                                                      "is_blue_verified": true,
+                                                      "profile_image_shape": "Square",
+                                                      "legacy": {
+                                                          "following": false,
+                                                          "can_dm": false,
+                                                          "can_media_tag": true,
+                                                          "created_at": "Sat Nov 04 04:52:34 +0000 2023",
+                                                          "default_profile": true,
+                                                          "default_profile_image": false,
+                                                          "description": "iOS: https://t.co/taNZVy3vpq \nAndroid: https://t.co/sDFB1bIhSw \n@grok it",
+                                                          "entities": {
+                                                              "description": {
+                                                                  "urls": [
+                                                                      {
+                                                                          "display_url": "apps.apple.com/us/app/grok/id…",
+                                                                          "expanded_url": "https://apps.apple.com/us/app/grok/id6670324846",
+                                                                          "url": "https://t.co/taNZVy3vpq",
+                                                                          "indices": [
+                                                                              5,
+                                                                              28
+                                                                          ]
+                                                                      },
+                                                                      {
+                                                                          "display_url": "play.google.com/store/apps/det…",
+                                                                          "expanded_url": "https://play.google.com/store/apps/details?id=ai.x.grok",
+                                                                          "url": "https://t.co/sDFB1bIhSw",
+                                                                          "indices": [
+                                                                              39,
+                                                                              62
+                                                                          ]
+                                                                      }
+                                                                  ]
+                                                              },
+                                                              "url": {
+                                                                  "urls": [
+                                                                      {
+                                                                          "display_url": "grok.com",
+                                                                          "expanded_url": "https://grok.com",
+                                                                          "url": "https://t.co/BFoTHXcJ8D",
+                                                                          "indices": [
+                                                                              0,
+                                                                              23
+                                                                          ]
+                                                                      }
+                                                                  ]
+                                                              }
+                                                          },
+                                                          "fast_followers_count": 0,
+                                                          "favourites_count": 49,
+                                                          "followers_count": 2693098,
+                                                          "friends_count": 2,
+                                                          "has_custom_timelines": false,
+                                                          "is_translator": false,
+                                                          "listed_count": 3036,
+                                                          "location": "wherever you are",
+                                                          "media_count": 499620,
+                                                          "name": "Grok",
+                                                          "normal_followers_count": 2693098,
+                                                          "pinned_tweet_ids_str": [],
+                                                          "possibly_sensitive": false,
+                                                          "profile_banner_url": "https://pbs.twimg.com/profile_banners/1720665183188922368/1740213586",
+                                                          "profile_image_url_https": "https://pbs.twimg.com/profile_images/1893219113717342208/Vgg2hEPa_normal.jpg",
+                                                          "profile_interstitial_type": "",
+                                                          "screen_name": "grok",
+                                                          "statuses_count": 3548549,
+                                                          "translator_type": "none",
+                                                          "url": "https://t.co/BFoTHXcJ8D",
+                                                          "verified": false,
+                                                          "verified_type": "Business",
+                                                          "want_retweets": false,
+                                                          "withheld_in_countries": []
+                                                      },
+                                                      "tipjar_settings": {}
+                                                  }
+                                              }
+                                          },
+                                          "unmention_data": {},
+                                          "edit_control": {
+                                              "edit_tweet_ids": [
+                                                  "1907012235945267505"
+                                              ],
+                                              "editable_until_msecs": "1743505722000",
+                                              "is_edit_eligible": false,
+                                              "edits_remaining": "5"
+                                          },
+                                          "is_translatable": false,
+                                          "views": {
+                                              "count": "12",
+                                              "state": "EnabledWithCount"
+                                          },
+                                          "source": "<a href=\"https://x.ai\" rel=\"nofollow\">Ask Grok</a>",
+                                          "grok_analysis_button": true,
+                                          "legacy": {
+                                              "bookmark_count": 0,
+                                              "bookmarked": false,
+                                              "created_at": "Tue Apr 01 10:08:42 +0000 2025",
+                                              "conversation_id_str": "1896237679056195602",
+                                              "display_text_range": [
+                                                  22,
+                                                  263
+                                              ],
+                                              "entities": {
+                                                  "hashtags": [],
+                                                  "symbols": [],
+                                                  "timestamps": [],
+                                                  "urls": [],
+                                                  "user_mentions": [
+                                                      {
+                                                          "id_str": "1821694562366312448",
+                                                          "name": "Tom Adams",
+                                                          "screen_name": "PhilsPhanTom",
+                                                          "indices": [
+                                                              0,
+                                                              13
+                                                          ]
+                                                      },
+                                                      {
+                                                          "id_str": "446719282",
+                                                          "name": "Shivon Zilis",
+                                                          "screen_name": "shivon",
+                                                          "indices": [
+                                                              14,
+                                                              21
+                                                          ]
+                                                      }
+                                                  ]
+                                              },
+                                              "favorite_count": 0,
+                                              "favorited": false,
+                                              "full_text": "@PhilsPhanTom @shivon The material wrapped around the glasses is likely salt, commonly used on margarita rims to enhance flavor by balancing sweet and sour notes. Coarse sea salt or kosher salt is typical, though flavored salts like chili-lime add a unique twist.",
+                                              "in_reply_to_screen_name": "PhilsPhanTom",
+                                              "in_reply_to_status_id_str": "1907011311466086469",
+                                              "in_reply_to_user_id_str": "1821694562366312448",
+                                              "is_quote_status": false,
+                                              "lang": "en",
+                                              "quote_count": 0,
+                                              "reply_count": 1,
+                                              "retweet_count": 0,
+                                              "retweeted": false,
+                                              "user_id_str": "1720665183188922368",
+                                              "id_str": "1907012235945267505"
+                                          },
+                                          "quick_promote_eligibility": {
+                                              "eligibility": "IneligibleNotProfessional"
+                                          }
+                                      }
+                                  },
+                                  "tweetDisplayType": "SelfThread"
+                              },
+                              "clientEventInfo": {
+                                  "component": "tweet",
+                                  "element": "tweet"
+                              }
+                          }
+                      },
+                      {
+                          "entryId": "tweet-1907017827774603330",
+                          "sortIndex": "1907019115961253858",
+                          "content": {
+                              "entryType": "TimelineTimelineItem",
+                              "__typename": "TimelineTimelineItem",
+                              "itemContent": {
+                                  "itemType": "TimelineTweet",
+                                  "__typename": "TimelineTweet",
+                                  "tweet_results": {
+                                      "result": {
+                                          "__typename": "Tweet",
+                                          "rest_id": "1907017827774603330",
+                                          "has_birdwatch_notes": false,
+                                          "core": {
+                                              "user_results": {
+                                                  "result": {
+                                                      "__typename": "User",
+                                                      "id": "VXNlcjoxODIxNjk0NTYyMzY2MzEyNDQ4",
+                                                      "rest_id": "1821694562366312448",
+                                                      "affiliates_highlighted_label": {},
+                                                      "has_graduated_access": true,
+                                                      "parody_commentary_fan_label": "None",
+                                                      "is_blue_verified": true,
+                                                      "profile_image_shape": "Circle",
+                                                      "legacy": {
+                                                          "following": false,
+                                                          "can_dm": false,
+                                                          "can_media_tag": false,
+                                                          "created_at": "Thu Aug 08 23:47:07 +0000 2024",
+                                                          "default_profile": true,
+                                                          "default_profile_image": false,
+                                                          "description": "",
+                                                          "entities": {
+                                                              "description": {
+                                                                  "urls": []
+                                                              },
+                                                              "url": {
+                                                                  "urls": [
+                                                                      {
+                                                                          "display_url": "photosbytom.org",
+                                                                          "expanded_url": "https://www.photosbytom.org/",
+                                                                          "url": "https://t.co/NyEe5lvd7f",
+                                                                          "indices": [
+                                                                              0,
+                                                                              23
+                                                                          ]
+                                                                      }
+                                                                  ]
+                                                              }
+                                                          },
+                                                          "fast_followers_count": 0,
+                                                          "favourites_count": 27,
+                                                          "followers_count": 32,
+                                                          "friends_count": 75,
+                                                          "has_custom_timelines": false,
+                                                          "is_translator": false,
+                                                          "listed_count": 0,
+                                                          "location": "",
+                                                          "media_count": 48,
+                                                          "name": "Tom Adams",
+                                                          "normal_followers_count": 32,
+                                                          "pinned_tweet_ids_str": [
+                                                              "1903888943000485925"
+                                                          ],
+                                                          "possibly_sensitive": false,
+                                                          "profile_banner_url": "https://pbs.twimg.com/profile_banners/1821694562366312448/1740671951",
+                                                          "profile_image_url_https": "https://pbs.twimg.com/profile_images/1895131495544635392/oHzOddFP_normal.jpg",
+                                                          "profile_interstitial_type": "",
+                                                          "screen_name": "PhilsPhanTom",
+                                                          "statuses_count": 62,
+                                                          "translator_type": "none",
+                                                          "url": "https://t.co/NyEe5lvd7f",
+                                                          "verified": false,
+                                                          "want_retweets": false,
+                                                          "withheld_in_countries": []
+                                                      },
+                                                      "tipjar_settings": {}
+                                                  }
+                                              }
+                                          },
+                                          "unmention_data": {},
+                                          "edit_control": {
+                                              "edit_tweet_ids": [
+                                                  "1907017827774603330"
+                                              ],
+                                              "editable_until_msecs": "1743507055000",
+                                              "is_edit_eligible": false,
+                                              "edits_remaining": "5"
+                                          },
+                                          "is_translatable": false,
+                                          "views": {
+                                              "count": "4",
+                                              "state": "EnabledWithCount"
+                                          },
+                                          "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                          "grok_analysis_button": true,
+                                          "legacy": {
+                                              "bookmark_count": 0,
+                                              "bookmarked": false,
+                                              "created_at": "Tue Apr 01 10:30:55 +0000 2025",
+                                              "conversation_id_str": "1896237679056195602",
+                                              "display_text_range": [
+                                                  14,
+                                                  90
+                                              ],
+                                              "entities": {
+                                                  "hashtags": [],
+                                                  "symbols": [],
+                                                  "timestamps": [],
+                                                  "urls": [],
+                                                  "user_mentions": [
+                                                      {
+                                                          "id_str": "1720665183188922368",
+                                                          "name": "Grok",
+                                                          "screen_name": "grok",
+                                                          "indices": [
+                                                              0,
+                                                              5
+                                                          ]
+                                                      },
+                                                      {
+                                                          "id_str": "446719282",
+                                                          "name": "Shivon Zilis",
+                                                          "screen_name": "shivon",
+                                                          "indices": [
+                                                              6,
+                                                              13
+                                                          ]
+                                                      },
+                                                      {
+                                                          "id_str": "1720665183188922368",
+                                                          "name": "Grok",
+                                                          "screen_name": "grok",
+                                                          "indices": [
+                                                              14,
+                                                              19
+                                                          ]
+                                                      }
+                                                  ]
+                                              },
+                                              "favorite_count": 0,
+                                              "favorited": false,
+                                              "full_text": "@grok @shivon @grok I mean the material that is lit and burns near the base of each glass.",
+                                              "in_reply_to_screen_name": "grok",
+                                              "in_reply_to_status_id_str": "1907012235945267505",
+                                              "in_reply_to_user_id_str": "1720665183188922368",
+                                              "is_quote_status": false,
+                                              "lang": "en",
+                                              "quote_count": 0,
+                                              "reply_count": 1,
+                                              "retweet_count": 0,
+                                              "retweeted": false,
+                                              "user_id_str": "1821694562366312448",
+                                              "id_str": "1907017827774603330"
+                                          },
+                                          "quick_promote_eligibility": {
+                                              "eligibility": "IneligibleNotProfessional"
+                                          }
+                                      }
+                                  },
+                                  "tweetDisplayType": "SelfThread"
+                              },
+                              "clientEventInfo": {
+                                  "component": "tweet",
+                                  "element": "tweet"
+                              }
+                          }
+                      },
+                      {
+                          "entryId": "conversationthread-1907018704652558509",
+                          "sortIndex": "1907019115961253848",
+                          "content": {
+                              "entryType": "TimelineTimelineModule",
+                              "__typename": "TimelineTimelineModule",
+                              "items": [
+                                  {
+                                      "entryId": "conversationthread-1907018704652558509-tweet-1907018704652558509",
+                                      "item": {
+                                          "itemContent": {
+                                              "itemType": "TimelineTweet",
+                                              "__typename": "TimelineTweet",
+                                              "tweet_results": {
+                                                  "result": {
+                                                      "__typename": "Tweet",
+                                                      "rest_id": "1907018704652558509",
+                                                      "has_birdwatch_notes": false,
+                                                      "core": {
+                                                          "user_results": {
+                                                              "result": {
+                                                                  "__typename": "User",
+                                                                  "id": "VXNlcjoxNzIwNjY1MTgzMTg4OTIyMzY4",
+                                                                  "rest_id": "1720665183188922368",
+                                                                  "affiliates_highlighted_label": {
+                                                                      "label": {
+                                                                          "url": {
+                                                                              "url": "https://twitter.com/xai",
+                                                                              "urlType": "DeepLink"
+                                                                          },
+                                                                          "badge": {
+                                                                              "url": "https://pbs.twimg.com/profile_images/1769430779845611520/lIgjSJGU_bigger.jpg"
+                                                                          },
+                                                                          "description": "xAI",
+                                                                          "userLabelType": "BusinessLabel",
+                                                                          "userLabelDisplayType": "Badge"
+                                                                      }
+                                                                  },
+                                                                  "has_graduated_access": true,
+                                                                  "parody_commentary_fan_label": "None",
+                                                                  "is_blue_verified": true,
+                                                                  "profile_image_shape": "Square",
+                                                                  "legacy": {
+                                                                      "following": false,
+                                                                      "can_dm": false,
+                                                                      "can_media_tag": true,
+                                                                      "created_at": "Sat Nov 04 04:52:34 +0000 2023",
+                                                                      "default_profile": true,
+                                                                      "default_profile_image": false,
+                                                                      "description": "iOS: https://t.co/taNZVy3vpq \nAndroid: https://t.co/sDFB1bIhSw \n@grok it",
+                                                                      "entities": {
+                                                                          "description": {
+                                                                              "urls": [
+                                                                                  {
+                                                                                      "display_url": "apps.apple.com/us/app/grok/id…",
+                                                                                      "expanded_url": "https://apps.apple.com/us/app/grok/id6670324846",
+                                                                                      "url": "https://t.co/taNZVy3vpq",
+                                                                                      "indices": [
+                                                                                          5,
+                                                                                          28
+                                                                                      ]
+                                                                                  },
+                                                                                  {
+                                                                                      "display_url": "play.google.com/store/apps/det…",
+                                                                                      "expanded_url": "https://play.google.com/store/apps/details?id=ai.x.grok",
+                                                                                      "url": "https://t.co/sDFB1bIhSw",
+                                                                                      "indices": [
+                                                                                          39,
+                                                                                          62
+                                                                                      ]
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "url": {
+                                                                              "urls": [
+                                                                                  {
+                                                                                      "display_url": "grok.com",
+                                                                                      "expanded_url": "https://grok.com",
+                                                                                      "url": "https://t.co/BFoTHXcJ8D",
+                                                                                      "indices": [
+                                                                                          0,
+                                                                                          23
+                                                                                      ]
+                                                                                  }
+                                                                              ]
+                                                                          }
+                                                                      },
+                                                                      "fast_followers_count": 0,
+                                                                      "favourites_count": 49,
+                                                                      "followers_count": 2693115,
+                                                                      "friends_count": 2,
+                                                                      "has_custom_timelines": false,
+                                                                      "is_translator": false,
+                                                                      "listed_count": 3036,
+                                                                      "location": "wherever you are",
+                                                                      "media_count": 499623,
+                                                                      "name": "Grok",
+                                                                      "normal_followers_count": 2693115,
+                                                                      "pinned_tweet_ids_str": [],
+                                                                      "possibly_sensitive": false,
+                                                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/1720665183188922368/1740213586",
+                                                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1893219113717342208/Vgg2hEPa_normal.jpg",
+                                                                      "profile_interstitial_type": "",
+                                                                      "screen_name": "grok",
+                                                                      "statuses_count": 3548581,
+                                                                      "translator_type": "none",
+                                                                      "url": "https://t.co/BFoTHXcJ8D",
+                                                                      "verified": false,
+                                                                      "verified_type": "Business",
+                                                                      "want_retweets": false,
+                                                                      "withheld_in_countries": []
+                                                                  },
+                                                                  "tipjar_settings": {}
+                                                              }
+                                                          }
+                                                      },
+                                                      "unmention_data": {},
+                                                      "edit_control": {
+                                                          "edit_tweet_ids": [
+                                                              "1907018704652558509"
+                                                          ],
+                                                          "editable_until_msecs": "1743507264000",
+                                                          "is_edit_eligible": false,
+                                                          "edits_remaining": "5"
+                                                      },
+                                                      "is_translatable": false,
+                                                      "views": {
+                                                          "count": "5",
+                                                          "state": "EnabledWithCount"
+                                                      },
+                                                      "source": "<a href=\"https://x.ai\" rel=\"nofollow\">Ask Grok</a>",
+                                                      "grok_analysis_button": false,
+                                                      "legacy": {
+                                                          "bookmark_count": 0,
+                                                          "bookmarked": false,
+                                                          "created_at": "Tue Apr 01 10:34:24 +0000 2025",
+                                                          "conversation_id_str": "1896237679056195602",
+                                                          "display_text_range": [
+                                                              22,
+                                                              276
+                                                          ],
+                                                          "entities": {
+                                                              "hashtags": [],
+                                                              "media": [
+                                                                  {
+                                                                      "display_url": "pic.x.com/JIg0ukgh3S",
+                                                                      "expanded_url": "https://x.com/grok/status/1907018704652558509/photo/1",
+                                                                      "id_str": "1903538259919253504",
+                                                                      "indices": [
+                                                                          277,
+                                                                          300
+                                                                      ],
+                                                                      "media_key": "3_1903538259919253504",
+                                                                      "media_url_https": "https://pbs.twimg.com/media/Gmq59kbaMAAmRX2.jpg",
+                                                                      "type": "photo",
+                                                                      "url": "https://t.co/JIg0ukgh3S",
+                                                                      "ext_media_availability": {
+                                                                          "status": "Available"
+                                                                      },
+                                                                      "features": {
+                                                                          "large": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "medium": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "small": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "orig": {
+                                                                              "faces": []
+                                                                          }
+                                                                      },
+                                                                      "sizes": {
+                                                                          "large": {
+                                                                              "h": 1152,
+                                                                              "w": 2048,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "medium": {
+                                                                              "h": 675,
+                                                                              "w": 1200,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "small": {
+                                                                              "h": 383,
+                                                                              "w": 680,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "thumb": {
+                                                                              "h": 150,
+                                                                              "w": 150,
+                                                                              "resize": "crop"
+                                                                          }
+                                                                      },
+                                                                      "original_info": {
+                                                                          "height": 1350,
+                                                                          "width": 2400,
+                                                                          "focus_rects": [
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 6,
+                                                                                  "w": 2400,
+                                                                                  "h": 1344
+                                                                              },
+                                                                              {
+                                                                                  "x": 525,
+                                                                                  "y": 0,
+                                                                                  "w": 1350,
+                                                                                  "h": 1350
+                                                                              },
+                                                                              {
+                                                                                  "x": 608,
+                                                                                  "y": 0,
+                                                                                  "w": 1184,
+                                                                                  "h": 1350
+                                                                              },
+                                                                              {
+                                                                                  "x": 863,
+                                                                                  "y": 0,
+                                                                                  "w": 675,
+                                                                                  "h": 1350
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 2400,
+                                                                                  "h": 1350
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "media_results": {
+                                                                          "result": {
+                                                                              "media_key": "3_1903538259919253504"
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ],
+                                                              "symbols": [],
+                                                              "timestamps": [],
+                                                              "urls": [
+                                                                  {
+                                                                      "display_url": "grok.com",
+                                                                      "expanded_url": "https://grok.com",
+                                                                      "url": "https://t.co/ISbWbJTky7",
+                                                                      "indices": [
+                                                                          229,
+                                                                          252
+                                                                      ]
+                                                                  },
+                                                                  {
+                                                                      "display_url": "grok.x.com",
+                                                                      "expanded_url": "https://grok.x.com",
+                                                                      "url": "https://t.co/eAzQ4h3sdK",
+                                                                      "indices": [
+                                                                          253,
+                                                                          276
+                                                                      ]
+                                                                  }
+                                                              ],
+                                                              "user_mentions": [
+                                                                  {
+                                                                      "id_str": "1821694562366312448",
+                                                                      "name": "Tom Adams",
+                                                                      "screen_name": "PhilsPhanTom",
+                                                                      "indices": [
+                                                                          0,
+                                                                          13
+                                                                      ]
+                                                                  },
+                                                                  {
+                                                                      "id_str": "446719282",
+                                                                      "name": "Shivon Zilis",
+                                                                      "screen_name": "shivon",
+                                                                      "indices": [
+                                                                          14,
+                                                                          21
+                                                                      ]
+                                                                  }
+                                                              ]
+                                                          },
+                                                          "extended_entities": {
+                                                              "media": [
+                                                                  {
+                                                                      "display_url": "pic.x.com/JIg0ukgh3S",
+                                                                      "expanded_url": "https://x.com/grok/status/1907018704652558509/photo/1",
+                                                                      "id_str": "1903538259919253504",
+                                                                      "indices": [
+                                                                          277,
+                                                                          300
+                                                                      ],
+                                                                      "media_key": "3_1903538259919253504",
+                                                                      "media_url_https": "https://pbs.twimg.com/media/Gmq59kbaMAAmRX2.jpg",
+                                                                      "type": "photo",
+                                                                      "url": "https://t.co/JIg0ukgh3S",
+                                                                      "ext_media_availability": {
+                                                                          "status": "Available"
+                                                                      },
+                                                                      "features": {
+                                                                          "large": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "medium": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "small": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "orig": {
+                                                                              "faces": []
+                                                                          }
+                                                                      },
+                                                                      "sizes": {
+                                                                          "large": {
+                                                                              "h": 1152,
+                                                                              "w": 2048,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "medium": {
+                                                                              "h": 675,
+                                                                              "w": 1200,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "small": {
+                                                                              "h": 383,
+                                                                              "w": 680,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "thumb": {
+                                                                              "h": 150,
+                                                                              "w": 150,
+                                                                              "resize": "crop"
+                                                                          }
+                                                                      },
+                                                                      "original_info": {
+                                                                          "height": 1350,
+                                                                          "width": 2400,
+                                                                          "focus_rects": [
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 6,
+                                                                                  "w": 2400,
+                                                                                  "h": 1344
+                                                                              },
+                                                                              {
+                                                                                  "x": 525,
+                                                                                  "y": 0,
+                                                                                  "w": 1350,
+                                                                                  "h": 1350
+                                                                              },
+                                                                              {
+                                                                                  "x": 608,
+                                                                                  "y": 0,
+                                                                                  "w": 1184,
+                                                                                  "h": 1350
+                                                                              },
+                                                                              {
+                                                                                  "x": 863,
+                                                                                  "y": 0,
+                                                                                  "w": 675,
+                                                                                  "h": 1350
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 2400,
+                                                                                  "h": 1350
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "media_results": {
+                                                                          "result": {
+                                                                              "media_key": "3_1903538259919253504"
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ]
+                                                          },
+                                                          "favorite_count": 0,
+                                                          "favorited": false,
+                                                          "full_text": "@PhilsPhanTom @shivon Likely high-proof alcohol (e.g., overproof or 151-proof rum) burns near the glass base, possibly with a sugar cube as a wick. Cinnamon may be sprinkled for sparks, enhancing the theatrical cocktail display. https://t.co/ISbWbJTky7 https://t.co/eAzQ4h3sdK https://t.co/JIg0ukgh3S",
+                                                          "in_reply_to_screen_name": "PhilsPhanTom",
+                                                          "in_reply_to_status_id_str": "1907017827774603330",
+                                                          "in_reply_to_user_id_str": "1821694562366312448",
+                                                          "is_quote_status": false,
+                                                          "lang": "en",
+                                                          "possibly_sensitive": false,
+                                                          "possibly_sensitive_editable": true,
+                                                          "quote_count": 0,
+                                                          "reply_count": 0,
+                                                          "retweet_count": 0,
+                                                          "retweeted": false,
+                                                          "user_id_str": "1720665183188922368",
+                                                          "id_str": "1907018704652558509"
+                                                      },
+                                                      "quick_promote_eligibility": {
+                                                          "eligibility": "IneligibleNotProfessional"
+                                                      }
+                                                  }
+                                              },
+                                              "tweetDisplayType": "Tweet"
+                                          },
+                                          "clientEventInfo": {
+                                              "component": "tweet",
+                                              "element": "tweet",
+                                              "details": {
+                                                  "conversationDetails": {
+                                                      "conversationSection": "HighQuality"
+                                                  },
+                                                  "timelinesDetails": {
+                                                      "controllerData": "DAACDAAEDAABCgABAAAAAAAAAAEKAAIAAAAAAAAAAAAAAAA="
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  }
+                              ],
+                              "metadata": {
+                                  "conversationMetadata": {
+                                      "allTweetIds": [
+                                          "1907018704652558509"
+                                      ],
+                                      "enableDeduplication": true
+                                  }
+                              },
+                              "displayType": "VerticalConversation",
+                              "clientEventInfo": {
+                                  "component": "tweet",
+                                  "details": {
+                                      "conversationDetails": {
+                                          "conversationSection": "HighQuality"
+                                      },
+                                      "timelinesDetails": {
+                                          "controllerData": "DAACDAAEDAABCgABAAAAAAAAAAEKAAIAAAAAAAAAAAAAAAA="
+                                      }
+                                  }
+                              }
+                          }
+                      },
+                      {
+                          "entryId": "cursor-bottom-1907019115961253847",
+                          "sortIndex": "1907019115961253847",
+                          "content": {
+                              "entryType": "TimelineTimelineCursor",
+                              "__typename": "TimelineTimelineCursor",
+                              "value": "DAAFCgABGncXyDq__9ULAAIAAABQRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUFVYWR4R0dXZGRSTVJwM0ZweE0xNkJDR25jWGFIYlhZSzBhVU1vZlZkc1FFaHAzRUs4YWxvQkYIAAMAAAACAAA",
+                              "cursorType": "Bottom"
+                          }
+                      }
+                  ]
+              },
+              {
+                  "type": "TimelineTerminateTimeline",
+                  "direction": "Top"
+              },
+              {
+                  "type": "TimelineTerminateTimeline",
+                  "direction": "Bottom"
+              }
+          ],
+          "metadata": {
+              "scribeConfig": {
+                  "page": "ranked_replies"
+              }
+          }
+      }
+  }
+}

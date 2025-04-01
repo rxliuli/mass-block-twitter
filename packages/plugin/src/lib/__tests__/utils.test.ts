@@ -25,6 +25,7 @@ import TweetDetail5 from './assets/TweetDetail5.json'
 import TweetDetail6 from './assets/TweetDetail6.json'
 import TweetDetail7 from './assets/TweetDetail7.json'
 import TweetDetail9 from './assets/TweetDetail9.json'
+import TweetDetail10 from './assets/TweetDetail10.json'
 import UserTweetsAndReplies from './assets/UserTweetsAndReplies.json'
 import UserTweets from './assets/UserTweets.json'
 import SearchTimeline from './assets/SearchTimeline.json'
@@ -38,6 +39,7 @@ import {
   mutedWordsFilter,
   MutedWordRule,
   flowFilterCacheMap,
+  grokFilter,
 } from '$lib/filter'
 import TweetDetail8ProbableSpam from './assets/TweetDetail8ProbableSpam.json'
 import CreateTweet from './assets/CreateTweet.json'
@@ -261,7 +263,9 @@ describe('parseTweets', () => {
   it('parseTweets for detail 5', () => {
     const tweets = parseTweets(TweetDetail5)
     expect(tweets).length(5)
-    expect(tweets.map((it) => pick(it, ['id', 'quoted_status_id_str']))).toEqual([
+    expect(
+      tweets.map((it) => pick(it, ['id', 'quoted_status_id_str'])),
+    ).toEqual([
       {
         id: '1892375497062945112',
         quoted_status_id_str: '1884801439886713064',
@@ -438,6 +442,14 @@ describe('filterTweets', () => {
     )
     const r2 = parseTweets(filtered)
     expect(r2.some((it) => it.text.includes('Manus'))).false
+  })
+  it('filterTweets for grok', () => {
+    const json = filterTweets(
+      TweetDetail10,
+      (it) => grokFilter().tweetCondition!(it) === 'next',
+    )
+    const tweets = parseTweets(json)
+    expect(tweets.some((it) => it.text.includes('grok'))).false
   })
 })
 

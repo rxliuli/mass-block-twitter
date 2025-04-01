@@ -28,6 +28,7 @@ import {
   sharedSpamFilter,
   TweetFilter,
   selfFilter,
+  grokFilter,
 } from '$lib/filter'
 import { getSettings, Settings } from '$lib/settings'
 import { ulid } from 'ulidx'
@@ -116,6 +117,9 @@ function getFilters(settings: Settings) {
   }
   if (settings.hideLanguages.length > 0) {
     filters.push(languageFilter(settings.hideLanguages))
+  }
+  if (settings.hideGrok) {
+    filters.push(grokFilter())
   }
   return filters
 }

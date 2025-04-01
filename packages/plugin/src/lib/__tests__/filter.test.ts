@@ -6,6 +6,7 @@ import {
   FilterData,
   flowFilter,
   flowFilterCacheMap,
+  grokFilter,
   modListFilter,
   MutedWordRule,
   mutedWordsFilter,
@@ -261,5 +262,26 @@ describe('flowFilter', () => {
         .value,
     ).true
     expect(f).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('grokFilter', () => {
+  it('should return hide when tweet contains @grok', () => {
+    const filter = grokFilter()
+    expect(
+      filter.tweetCondition!({ text: '@grok', user: {} } as ParsedTweet),
+    ).toBe('hide')
+    expect(
+      filter.tweetCondition!({
+        text: 'test',
+        user: { screen_name: 'grok' },
+      } as ParsedTweet),
+    ).toBe('hide')
+    expect(
+      filter.tweetCondition!({
+        text: 'test',
+        user: { screen_name: 'test' },
+      } as ParsedTweet),
+    ).toBe('next')
   })
 })

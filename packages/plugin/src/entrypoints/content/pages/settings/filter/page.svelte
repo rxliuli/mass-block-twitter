@@ -89,4 +89,21 @@
       bind:value={$settings.hideLanguages}
     />
   </Label>
+  <Label class="flex items-center gap-4 py-4 cursor-pointer">
+    <div class="flex-1">
+      <span class="block text-base font-medium">
+        {$t('settings.filter.hideGrok')}
+      </span>
+      <span class="block mt-1 text-sm text-gray-500">
+        {$t('settings.filter.hideGrok.description')}
+      </span>
+    </div>
+    <Checkbox
+      class="shrink-0"
+      checked={$settings.hideGrok ?? false}
+      onCheckedChange={(checked) => {
+        $settings.hideGrok = checked
+      }}
+    />
+  </Label>
 </div>

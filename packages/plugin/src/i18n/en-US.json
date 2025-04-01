@@ -77,6 +77,8 @@
   "settings.filter.hideLanguages": "Hide Languages",
   "settings.filter.hideLanguages.description": "Hide tweets from specific languages.",
   "settings.filter.hideLanguages.placeholder": "Select languages...",
+  "settings.filter.hideGrok": "Hide Grok",
+  "settings.filter.hideGrok.description": "Hide tweets from Grok.",
   "settings.privacy.clearAllCache.title": "Clear All Cache",
   "settings.privacy.clearAllCache.description": "Clear all cache data, including record users and tweets.",
   "settings.privacy.clearAllCache.success": "Cache cleared",

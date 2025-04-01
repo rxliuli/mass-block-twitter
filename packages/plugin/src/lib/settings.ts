@@ -12,6 +12,8 @@ export type Settings = {
   hideMutedWords: boolean
   hideModListAccounts: boolean
   hideLanguages: string[]
+
+  hideGrok?: boolean
   blockSpeed?: number
 }
 

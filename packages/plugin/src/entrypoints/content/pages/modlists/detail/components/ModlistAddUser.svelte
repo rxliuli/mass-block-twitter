@@ -5,6 +5,7 @@
     QueryError,
     QueryLoading,
     useLoading,
+    useScroll,
   } from '$lib/components/logic/query'
   import * as Avatar from '$lib/components/ui/avatar'
   import { Button } from '$lib/components/ui/button'
@@ -170,19 +171,7 @@
     $query.refetch()
   }, 500)
 
-  function onScroll(event: UIEvent) {
-    const target = event.target as HTMLElement
-    const scrollTop = target.scrollTop
-    const clientHeight = target.clientHeight
-    const scrollHeight = target.scrollHeight
-    if (Math.abs(scrollHeight - scrollTop - clientHeight) <= 1) {
-      requestAnimationFrame(() => {
-        if ($query.hasNextPage) {
-          $query.fetchNextPage()
-        }
-      })
-    }
-  }
+  const { onScroll } = useScroll(() => $query)
 
   let selected = $state<string[]>([])
 

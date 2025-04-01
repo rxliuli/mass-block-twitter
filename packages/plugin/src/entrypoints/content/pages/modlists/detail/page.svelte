@@ -374,7 +374,7 @@
 <div class="h-full flex flex-col">
   <div class="w-full max-w-3xl mx-auto">
     {#if $metadata.isLoading}
-      <QueryLoading />
+      <QueryLoading class={cn($query.isFetching && 'hidden')} />
     {:else if $metadata.data}
       <ModlistDesc modlist={$metadata.data}>
         {#snippet actions()}

@@ -12,6 +12,7 @@
     QueryError,
     QueryLoading,
     useLoading,
+    useScroll,
   } from '$lib/components/logic/query'
   import { SERVER_URL } from '$lib/constants'
   import { toast } from 'svelte-sonner'
@@ -191,19 +192,7 @@
   })
   let userAddOpen = $state(false)
 
-  function onScroll(event: UIEvent) {
-    const target = event.target as HTMLElement
-    const scrollTop = target.scrollTop
-    const clientHeight = target.clientHeight
-    const scrollHeight = target.scrollHeight
-    if (Math.abs(scrollHeight - scrollTop - clientHeight) <= 1) {
-      requestAnimationFrame(() => {
-        if ($query.hasNextPage) {
-          $query.fetchNextPage()
-        }
-      })
-    }
-  }
+  const { onScroll } = useScroll(() => $query)
 </script>
 
 <div class="flex-1 overflow-y-hidden p-1">

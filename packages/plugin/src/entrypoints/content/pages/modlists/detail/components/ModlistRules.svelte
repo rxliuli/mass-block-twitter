@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { QueryError, QueryLoading } from '$lib/components/logic/query'
+  import {
+    QueryError,
+    QueryLoading,
+    useScroll,
+  } from '$lib/components/logic/query'
   import { useRoute } from '$lib/components/logic/router'
   import { SERVER_URL } from '$lib/constants'
   import { getAuthInfo, useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
@@ -55,19 +59,8 @@
     getNextPageParam: (lastPage) => lastPage.cursor,
     initialPageParam: undefined as string | undefined,
   })
-  function onScroll(event: UIEvent) {
-    const target = event.target as HTMLElement
-    const scrollTop = target.scrollTop
-    const clientHeight = target.clientHeight
-    const scrollHeight = target.scrollHeight
-    if (Math.abs(scrollHeight - scrollTop - clientHeight) <= 1) {
-      requestAnimationFrame(() => {
-        if ($query.hasNextPage) {
-          $query.fetchNextPage()
-        }
-      })
-    }
-  }
+  const { onScroll } = useScroll(() => $query)
+
   let ruleEditOpen = $state(false)
   const createRule = () =>
     ({

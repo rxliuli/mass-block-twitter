@@ -35,6 +35,7 @@
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { searchPeople } from '$lib/api/twitter'
   import { ExpectedError } from '$lib/api'
+  import { useScroll } from '$lib/components/logic/query'
 
   let term = $state('')
   const query = createInfiniteQuery({
@@ -75,17 +76,7 @@
     }
     $query.refetch()
   }, 500)
-  const onScroll = (event: UIEvent) => {
-    const target = event.target as HTMLElement
-    const scrollTop = target.scrollTop
-    const clientHeight = target.clientHeight
-    const scrollHeight = target.scrollHeight
-    if (Math.abs(scrollHeight - scrollTop - clientHeight) <= 1) {
-      if ($query.hasNextPage && !$query.isFetchingNextPage) {
-        $query.fetchNextPage()
-      }
-    }
-  }
+  const { onScroll } = useScroll(() => $query)
 
   let selectedRowKeys = $state<string[]>([])
   let searchParams = $state<SearchParams>({

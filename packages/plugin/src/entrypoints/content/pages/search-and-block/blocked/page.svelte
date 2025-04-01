@@ -20,6 +20,7 @@
     selectImportFile,
   } from '$lib/hooks/batchBlockUsers'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
+  import { useScroll } from '$lib/components/logic/query'
 
   let hasNextPage = $state(true) // TODO @tanstack/svelte-query's bug, after check
   const query = createInfiniteQuery({
@@ -45,22 +46,7 @@
   })
 
   let selectedRowKeys = $state<string[]>([])
-  async function onScroll(event: UIEvent) {
-    const target = event.target as HTMLElement
-    const scrollTop = target.scrollTop
-    const clientHeight = target.clientHeight
-    const scrollHeight = target.scrollHeight
-    if (
-      Math.abs(scrollHeight - scrollTop - clientHeight) <=
-      window.innerHeight / 2
-    ) {
-      if (hasNextPage && !$query.isFetching) {
-        await $query.fetchNextPage()
-        await $query.fetchNextPage()
-        await $query.fetchNextPage()
-      }
-    }
-  }
+  const { onScroll } = useScroll(() => $query)
 
   const controller = useController()
   onDestroy(controller.abort)

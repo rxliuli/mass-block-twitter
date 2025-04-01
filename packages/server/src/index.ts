@@ -1,7 +1,6 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { twitter } from './routes/twitter'
-import { auth } from './middlewares/auth'
 import { auth as authRoutes } from './routes/auth'
 import { accounts } from './routes/accounts'
 import { billing } from './routes/billing'

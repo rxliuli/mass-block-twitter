@@ -18,13 +18,15 @@ export async function getTokenInfo(
   }
 }
 
+export const JWT_EXPIRE_TIME = 60 * 60 * 24 * 30
+
 export async function generateToken(
   env: { JWT_SECRET: string },
   tokenInfo: Omit<TokenInfo, 'updatedAt'>,
 ): Promise<string> {
   const payload = {
     ...tokenInfo,
-    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
+    exp: Math.floor(Date.now() / 1000) + JWT_EXPIRE_TIME,
     iat: Math.floor(Date.now() / 1000),
   }
   return sign(payload, env.JWT_SECRET)

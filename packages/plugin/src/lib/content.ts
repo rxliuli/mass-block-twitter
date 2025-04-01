@@ -100,11 +100,13 @@ export async function refreshAuthInfo() {
     }
     return
   }
-  const settings = (await resp.json()) as AccountSettingsResponse
+  const { newToken, ...settings } =
+    (await resp.json()) as AccountSettingsResponse
   await browser.storage.local.set({
     authInfo: {
       ...authInfo,
       isPro: settings.isPro,
+      token: newToken ?? authInfo.token,
     } satisfies AuthInfo,
   })
 }

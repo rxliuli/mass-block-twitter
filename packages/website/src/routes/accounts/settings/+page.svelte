@@ -7,7 +7,7 @@
   import Loading from '@/components/ui/Loading.svelte'
   import type { AccountSettingsResponse } from '@mass-block-twitter/server'
 
-  const query = createQuery<AccountSettingsResponse>({
+  const query = createQuery({
     queryKey: ['settings'],
     retry: false,
     queryFn: async () => {
@@ -25,7 +25,7 @@
         }
         throw new Error('Failed to fetch settings')
       }
-      return await resp.json()
+      return (await resp.json()) as AccountSettingsResponse
     },
   })
 </script>

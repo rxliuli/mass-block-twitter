@@ -25,6 +25,7 @@
   import { t } from '$lib/i18n'
   import { selectImportFile } from '$lib/hooks/batchBlockUsers'
   import { Input } from '$lib/components/ui/input'
+  import { cn } from '$lib/utils'
 
   let {
     owner,
@@ -51,6 +52,13 @@
   const route = useRoute()
   const query = useModlistUsers(route.search?.get('id')!, () => searchQuery)
   const queryClient = useQueryClient()
+
+  let init = $state(false)
+  $effect(() => {
+    if ($query.status === 'success' && !init) {
+      init = true
+    }
+  })
 
   const innerAddUsersMutation = createMutation({
     mutationFn: async (users: User[]) => {
@@ -205,7 +213,7 @@
     oninput={onSearch}
     oncompositionstart={() => (isCompositionOn = true)}
     oncompositionend={() => (isCompositionOn = false)}
-    class="mb-4 max-w-3xl mx-auto"
+    class={cn('mb-4 max-w-3xl mx-auto', !init && 'hidden')}
   />
   <AutoSizer>
     {#snippet child({ height })}

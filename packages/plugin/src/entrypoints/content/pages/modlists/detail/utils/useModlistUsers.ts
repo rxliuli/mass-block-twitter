@@ -1,4 +1,3 @@
-import { useRoute } from '$lib/components/logic/router'
 import { SERVER_URL } from '$lib/constants'
 import { getAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
 import { crossFetch } from '$lib/query'

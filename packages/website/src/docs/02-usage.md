@@ -29,13 +29,15 @@ Batch operations allow you to manage multiple Twitter accounts at once, improvin
 
 ![batch blocking](/docs/batch-block.png)
 
+> Please note that the batch blocking feature is limited to 500 accounts. If you have more, please use Moderation Lists or batch blocking one day at a time, otherwise you will be logged out of Twitter.
+> You can also define the number of blocks per minute in the **Settings > Block Control > Block Speed** to avoid triggering Twitter API rate limits.
+
 ### Advanced Filtering
 
 Batch operations support various advanced filtering conditions:
 
 - Whether the account is blocked
 - Whether it's a verified account
-- Whether you're following them
 
 By combining these conditions, you can precisely target potential spam accounts.
 

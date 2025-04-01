@@ -126,6 +126,8 @@
 
 <QueryClientProvider client={queryClient}>
   <ShadcnConfig portal={root}>
+    <FloatingButton />
+
     <Router
       initialPath={import.meta.env.VITE_INITIAL_PATH ?? initialPath}
       {routes}
@@ -144,7 +146,6 @@
         </AppLayout>
       {/if}
     </Router>
-    <FloatingButton />
   </ShadcnConfig>
 </QueryClientProvider>
 

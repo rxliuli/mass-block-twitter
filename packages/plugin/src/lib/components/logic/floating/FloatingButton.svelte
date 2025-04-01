@@ -12,6 +12,19 @@
   import { useLocation } from '$lib/hooks/useLocation.svelte'
   import BlockCommunicationMembers from './components/BlockCommunicationMembers.svelte'
 
+  function isElementInPortal(
+    element: Element | null,
+    portal: Element | null | undefined,
+  ): boolean {
+    if (!element || !portal) return false
+    let current: Element | null = element
+    while (current) {
+      if (current === portal) return true
+      current = current.parentElement
+    }
+    return false
+  }
+
   const openState = useOpen()
 
   let top = $state(0)
@@ -48,6 +61,36 @@
     }
     if (url.pathname.startsWith('/i/communities/')) {
       return 'community'
+    }
+  })
+
+  onMount(() => {
+    const onClick = (ev: MouseEvent) => {
+      const target = ev.target
+      if (
+        target &&
+        target instanceof Element &&
+        target.tagName === 'mass-block-twitter'.toUpperCase()
+      ) {
+        return
+      }
+      open = false
+    }
+    document.addEventListener('click', onClick)
+    const onTouchEnd = (ev: TouchEvent) => {
+      const touch = ev.changedTouches[0]
+      if (touch) {
+        const target = document.elementFromPoint(touch.clientX, touch.clientY)
+        if (target && target.tagName === 'mass-block-twitter'.toUpperCase()) {
+          return
+        }
+      }
+      open = false
+    }
+    document.addEventListener('touchend', onTouchEnd)
+    return () => {
+      document.removeEventListener('click', onClick)
+      document.removeEventListener('touchend', onTouchEnd)
     }
   })
 </script>

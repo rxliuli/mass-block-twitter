@@ -9,7 +9,7 @@
   type ComponentProps<T extends Component<any>> =
     T extends Component<infer P> ? P : never
 
-  let { component, props }: { component?: T; props: ComponentProps<T> } =
+  let { component, props }: { component?: T; props?: ComponentProps<T> } =
     $props()
 
   initI18n('en-US')

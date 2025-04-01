@@ -5,7 +5,10 @@ import { PageTest } from '$lib/components/test'
 import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
 import { tick } from 'svelte'
 import { dbApi } from '$lib/db'
-import { ModListCreateRequest } from '@mass-block-twitter/server'
+import {
+  ModListCreateRequest,
+  ModListGetCreatedResponse,
+} from '@mass-block-twitter/server'
 import { router } from '$lib/components/logic/router'
 
 describe('ModListCreator', () => {
@@ -13,12 +16,18 @@ describe('ModListCreator', () => {
     localStorage.clear()
     vi.clearAllMocks()
     vi.restoreAllMocks()
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
+      if (new URL(input.toString()).pathname === '/api/modlists/created') {
+        return new Response(
+          JSON.stringify([] satisfies ModListGetCreatedResponse),
+        )
+      }
+      throw new Error()
+    })
   })
   it('should render', async () => {
     const screen = render(PageTest, {
-      props: {
-        component: ModListCreator,
-      },
+      component: ModListCreator,
     })
     const modCreatorBtn = screen.getByTestId('modlist-creator')
     await expect.element(modCreatorBtn).toBeInTheDocument()

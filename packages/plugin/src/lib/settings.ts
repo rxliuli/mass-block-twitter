@@ -15,6 +15,7 @@ export type Settings = {
 
   hideGrok?: boolean
   blockSpeed?: number
+  devMode?: boolean
 }
 
 function getLocalStorage<T>(key: string, defaultValue: T): T {

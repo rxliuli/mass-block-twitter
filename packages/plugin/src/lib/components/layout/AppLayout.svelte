@@ -23,6 +23,7 @@
   import { setContext } from 'svelte'
   import { Button } from '../ui/button'
   import { t } from '$lib/i18n'
+  import { getSettings } from '$lib/settings'
 
   let {
     open,
@@ -63,7 +64,7 @@
       icon: SettingsIcon,
       to: 'footer',
     },
-    ...(import.meta.env.DEV
+    ...(import.meta.env.DEV || getSettings().devMode
       ? [
           {
             title: 'Dev',

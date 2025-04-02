@@ -8,6 +8,8 @@
     getCommunityMembers,
     getCommunityInfo,
     getUserFollowers,
+    getUserFollowing,
+    getUserBlueVerifiedFollowers,
   } from '$lib/api/twitter'
   import { Button } from '$lib/components/ui/button'
   import { Badge } from '$lib/components/ui/badge'
@@ -48,7 +50,7 @@
       name: 'searchPeople',
       fn: () =>
         searchPeople({
-          term: 'rxliuli',
+          term: 'trump',
           count: 10,
         }),
     },
@@ -61,8 +63,16 @@
       fn: () => getCommunityMembers({ communityId: '1900366536683987325' }),
     },
     {
+      name: 'getUserBlueVerifiedFollowers',
+      fn: () => getUserBlueVerifiedFollowers({ userId: '736267842681602048' }),
+    },
+    {
       name: 'getUserFollowers',
       fn: () => getUserFollowers({ userId: '736267842681602048' }),
+    },
+    {
+      name: 'getUserFollowing',
+      fn: () => getUserFollowing({ userId: '736267842681602048' }),
     },
   ]
 
@@ -98,13 +108,13 @@
   function getStatusColor(status: Task['status']) {
     switch (status) {
       case 'idle':
-        return cn('bg-gray-500')
+        return cn('bg-gray-500 hover:bg-gray-600')
       case 'running':
-        return cn('bg-blue-500')
+        return cn('bg-blue-500 hover:bg-blue-600')
       case 'success':
-        return cn('bg-green-500')
+        return cn('bg-green-500 hover:bg-green-600')
       case 'error':
-        return cn('bg-red-500')
+        return cn('bg-red-500 hover:bg-red-600')
     }
   }
 

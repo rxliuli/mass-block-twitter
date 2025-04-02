@@ -253,6 +253,9 @@ export class UserDAO {
       cursor: data.length === params.limit ? cursor : undefined,
     }
   }
+  async getByScreenName(screenName: string): Promise<User | undefined> {
+    return dbStore.idb.getFromIndex('users', 'screen_name_index', screenName)
+  }
 }
 
 class TweetDAO {

@@ -44,53 +44,15 @@ export async function getBlockedUsers(options: {
   count: number
   cursor?: string
 }) {
-  const args = await extractGQLArgsByName('BlockedAccountsAll')
-  if (!args) {
-    throw new Error('Failed to extract get blocked users graphql id')
-  }
-  const url = new URL(
-    `https://x.com/i/api/graphql/${args.queryId}/BlockedAccountsAll`,
-  )
-  url.searchParams.set(
-    'variables',
-    JSON.stringify({
+  const json = await graphqlQuery({
+    operationName: 'BlockedAccountsAll',
+    variables: {
       count: options.count,
       cursor: options.cursor,
       includePromotedContent: false,
-    }),
-  )
-  url.searchParams.set('features', JSON.stringify(args.flags))
-  const headers = getRequestHeaders()
-  const xTransactionId = await getXTransactionId()(url.pathname, 'GET')
-  const r = await fetch(url, {
-    headers: {
-      accept: '*/*',
-      'accept-language': 'es,zh-CN;q=0.9,zh;q=0.8,en;q=0.7',
-      authorization: headers.get('authorization')!,
-      'content-type': 'application/json',
-      priority: 'u=1, i',
-      'sec-ch-ua':
-        '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
-      'sec-ch-ua-mobile': '?0',
-      'sec-ch-ua-platform': '"macOS"',
-      'sec-fetch-dest': 'empty',
-      'sec-fetch-mode': 'cors',
-      'sec-fetch-site': 'same-origin',
-      'x-client-transaction-id': xTransactionId,
-      'x-client-uuid': headers.get('x-client-uuid')!,
-      'x-csrf-token': headers.get('x-csrf-token')!,
-      'x-twitter-active-user': 'yes',
-      'x-twitter-auth-type': 'OAuth2Session',
-      'x-twitter-client-language': 'en',
     },
-    referrer: 'https://x.com/settings/blocked/all',
-    body: null,
-    method: 'GET',
+    referer: 'https://x.com/settings/blocked/all',
   })
-  if (!r.ok) {
-    throw r
-  }
-  const json = await r.json()
   return parseBlockedUsers(json)
 }
 
@@ -183,4 +145,95 @@ export async function unblockUser(userId: string) {
   if (!r.ok) {
     throw new Error(r.statusText)
   }
+}
+
+export async function graphqlQuery(options: {
+  operationName: Parameters<typeof extractGQLArgsByName>[0]
+  variables: Record<string, any>
+  referer?: string
+}) {
+  const args = await extractGQLArgsByName(options.operationName)
+  if (!args) {
+    throw new Error('Failed to extract get blocked users graphql id')
+  }
+  const url = new URL(
+    `https://x.com/i/api/graphql/${args.queryId}/${options.operationName}`,
+  )
+  url.searchParams.set('variables', JSON.stringify(options.variables))
+  url.searchParams.set('features', JSON.stringify(args.flags))
+  url.searchParams.set('features', JSON.stringify(args.flags))
+  const headers = getRequestHeaders()
+  const xTransactionId = await getXTransactionId()(url.pathname, 'GET')
+  const resp = await fetch(url, {
+    headers: {
+      'content-type': 'application/json',
+      'x-twitter-active-user': 'yes',
+      'x-twitter-auth-type': 'OAuth2Session',
+      'x-twitter-client-language': 'en',
+      ...headers,
+      authorization: headers.get('authorization')!,
+      'x-client-transaction-id': xTransactionId,
+      'x-client-uuid': headers.get('x-client-uuid')!,
+      'x-csrf-token': headers.get('x-csrf-token')!,
+    },
+    referrer: options.referer ?? location.href,
+  })
+  if (!resp.ok) {
+    throw resp
+  }
+  return await resp.json()
+}
+
+export async function getUserFollowers(options: {
+  userId: string
+  cursor?: string
+  count?: number
+}): Promise<{
+  data: User[]
+  cursor?: string
+}> {
+  const json = await graphqlQuery({
+    operationName: 'Followers',
+    variables: {
+      userId: options.userId,
+      count: options.count ?? 20,
+      cursor: options.cursor,
+      includePromotedContent: false,
+    },
+  })
+  return parseBlockedUsers(json)
+}
+
+export async function getUserFollowing(options: {
+  userId: string
+  cursor?: string
+  count?: number
+}) {
+  const json = await graphqlQuery({
+    operationName: 'Following',
+    variables: {
+      userId: options.userId,
+      count: options.count ?? 20,
+      cursor: options.cursor,
+      includePromotedContent: false,
+    },
+  })
+  return parseBlockedUsers(json)
+}
+
+export async function getUserBlueVerifiedFollowers(options: {
+  userId: string
+  cursor?: string
+  count?: number
+}) {
+  const json = await graphqlQuery({
+    operationName: 'BlueVerifiedFollowers',
+    variables: {
+      userId: options.userId,
+      count: options.count ?? 20,
+      cursor: options.cursor,
+      includePromotedContent: false,
+    },
+  })
+  return parseBlockedUsers(json)
 }

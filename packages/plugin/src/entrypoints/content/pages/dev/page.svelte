@@ -7,6 +7,7 @@
     unblockUser,
     getCommunityMembers,
     getCommunityInfo,
+    getUserFollowers,
   } from '$lib/api/twitter'
   import { Button } from '$lib/components/ui/button'
   import { Badge } from '$lib/components/ui/badge'
@@ -58,6 +59,10 @@
     {
       name: 'getCommunityMembers',
       fn: () => getCommunityMembers({ communityId: '1900366536683987325' }),
+    },
+    {
+      name: 'getUserFollowers',
+      fn: () => getUserFollowers({ userId: '736267842681602048' }),
     },
   ]
 

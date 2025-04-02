@@ -11,19 +11,10 @@
   import { t } from '$lib/i18n'
   import { useLocation } from '$lib/hooks/useLocation.svelte'
   import BlockCommunicationMembers from './components/BlockCommunicationMembers.svelte'
-
-  function isElementInPortal(
-    element: Element | null,
-    portal: Element | null | undefined,
-  ): boolean {
-    if (!element || !portal) return false
-    let current: Element | null = element
-    while (current) {
-      if (current === portal) return true
-      current = current.parentElement
-    }
-    return false
-  }
+  import ExportUserBlueVerifiedFollowers from './components/ExportUserBlueVerifiedFollowers.svelte'
+  import ExportUserFollowers from './components/ExportUserFollowers.svelte'
+  import ExportUserFollowing from './components/ExportUserFollowing.svelte'
+  import { type Component } from 'svelte'
 
   const openState = useOpen()
 
@@ -51,18 +42,36 @@
   let open = $state(false)
 
   const loc = useLocation()
-  const page = $derived.by<'home' | 'community' | undefined>(() => {
-    const url = loc.url
-    if (!url) {
-      return
-    }
-    if (url.pathname === '/home') {
-      return 'home'
-    }
-    if (url.pathname.startsWith('/i/communities/')) {
-      return 'community'
-    }
-  })
+
+  interface FloatingButtonItem {
+    isMatch: () => boolean | undefined
+    component: Component
+  }
+
+  const list: FloatingButtonItem[] = [
+    {
+      isMatch: () => loc.url?.pathname === '/home',
+      component: BlockCommunicationMembers,
+    },
+    {
+      isMatch: () => loc.url?.pathname.startsWith('/i/communities/'),
+      component: BlockCommunicationMembers,
+    },
+    {
+      isMatch: () => loc.url?.pathname.endsWith('/verified_followers'),
+      component: ExportUserBlueVerifiedFollowers,
+    },
+    {
+      isMatch: () => loc.url?.pathname.endsWith('/followers'),
+      component: ExportUserFollowers,
+    },
+    {
+      isMatch: () => loc.url?.pathname.endsWith('/following'),
+      component: ExportUserFollowing,
+    },
+  ]
+
+  const render = $derived(list.filter((it) => it.isMatch()))
 
   onMount(() => {
     const onClick = (ev: MouseEvent) => {
@@ -132,13 +141,13 @@
             <SquareArrowOutUpRightIcon />
             <span>{$t('floatingButton.openDashboard')}</span>
           </Command.Item>
-          {#if page === 'community'}
-            <BlockCommunicationMembers
+          {#each render as item}
+            <item.component
               onclick={() => {
                 open = false
               }}
             />
-          {/if}
+          {/each}
           <Command.Item
             onclick={() => {
               open = false

@@ -31,6 +31,9 @@ describe('extractFlags', () => {
     expect(args.some((it) => it.operationName === 'BlockedAccountsAll')).true
     expect(args.some((it) => it.operationName === 'getAltTextPromptPreference'))
       .true
+    expect(args.some((it) => it.operationName === 'Followers')).true
+    expect(args.some((it) => it.operationName === 'Following')).true
+    expect(args.some((it) => it.operationName === 'BlueVerifiedFollowers')).true
     expect(args).toMatchSnapshot()
   })
   it('extractGQLArgsForBlockedAccountsAll', async () => {

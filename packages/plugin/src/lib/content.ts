@@ -64,8 +64,7 @@ export async function refreshModListSubscribedUsers(
     init.cache = 'no-cache'
   }
   const resp = await crossFetch(
-    `${SERVER_URL}/api/modlists/subscribed/users?version=` +
-      browser.runtime.getManifest().version,
+    `${SERVER_URL}/api/modlists/subscribed/users`,
     init,
   )
   if (!resp.ok) {

@@ -57,8 +57,13 @@ export async function extractMainScript(): Promise<string> {
   return text
 }
 
-async function extractGQLArgsByName(
-  name: 'BlockedAccountsAll' | 'SearchTimeline',
+async function _extractGQLArgsByName(
+  operationName:
+    | 'BlockedAccountsAll'
+    | 'SearchTimeline'
+    | 'Followers'
+    | 'Following'
+    | 'BlueVerifiedFollowers',
 ): Promise<
   | {
       queryId: string
@@ -71,7 +76,9 @@ async function extractGQLArgsByName(
     extractAllFlags(),
   ])
   const args = extractGQLArgsFromString(text)
-  const blockedAccountsAll = args.find((it) => it.operationName === name)
+  const blockedAccountsAll = args.find(
+    (it) => it.operationName === operationName,
+  )
   if (!blockedAccountsAll) {
     return undefined
   }
@@ -90,5 +97,4 @@ async function extractGQLArgsByName(
     flags,
   }
 }
-const _extractGQLArgsByName = memoize(extractGQLArgsByName)
-export { _extractGQLArgsByName as extractGQLArgsByName }
+export const extractGQLArgsByName = memoize(_extractGQLArgsByName)

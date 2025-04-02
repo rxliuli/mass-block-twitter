@@ -25,6 +25,9 @@ export async function confirmToast(
           resolve('continue')
         },
       },
+      onAutoClose: () => {
+        resolve('stop')
+      },
       onDismiss: () => {
         resolve('stop')
       },

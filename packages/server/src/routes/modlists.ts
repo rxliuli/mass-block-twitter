@@ -28,7 +28,7 @@ import {
 } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
 import { getTableAliasedColumns } from '../lib/drizzle'
-import { groupBy, omit } from 'es-toolkit'
+import { groupBy } from 'es-toolkit'
 
 const modlists = new Hono<HonoEnv>().use(auth())
 
@@ -659,8 +659,11 @@ async function queryModListSubscribedUserAndRulesByCache(
   _modListIds: {
     modListId: string
     updatedAt: string
+    action: InferSelectModel<typeof modListSubscription>['action']
   }[],
 ): Promise<ModListSubscribedUserAndRulesResponse> {
+  const modListGrouped = groupBy(_modListIds, (it) => it.modListId)
+
   const db = drizzle(c.env.DB)
   let cacheIds: string[] = []
 
@@ -684,41 +687,42 @@ async function queryModListSubscribedUserAndRulesByCache(
   const queryIds = _modListIds
     .filter((it) => !cacheIds.includes(it.modListId))
     .map((it) => it.modListId)
-  const _modLists = await db
-    .select({
-      modListId: modList.id,
-      updatedAt: modList.updatedAt,
-      action: modListSubscription.action,
-      modListUsers: sql<string>`json_group_array(DISTINCT ${modListUser.twitterUserId})`,
-      modListRules: sql<string>`json_group_array(DISTINCT ${modListRule.rule})`,
-    })
-    .from(modList)
-    .leftJoin(
-      modListSubscription,
-      eq(modList.id, modListSubscription.modListId),
-    )
-    .leftJoin(modListUser, eq(modList.id, modListUser.modListId))
-    .leftJoin(modListRule, eq(modList.id, modListRule.modListId))
-    .where(inArray(modList.id, queryIds))
-    .groupBy(modList.id, modListSubscription.action)
-  const grouped = _modLists
-    .map((item) => {
-      const twitterUserIds = JSON.parse(item.modListUsers).filter(
-        (id: any) => id !== null && id !== undefined && id !== '',
-      ) as string[]
-      const rulesStr = JSON.parse(item.modListRules).filter(
-        (c: any) => c !== null && c !== undefined && c !== '',
-      ) as string[]
-      const rules = rulesStr.map((c: string) =>
-        JSON.parse(c),
-      ) as InferSelectModel<typeof modListRule>['rule'][]
+  const [modListUsers, modListRules] = await Promise.all([
+    db
+      .select({
+        twitterUserId: modListUser.twitterUserId,
+        modListId: modListUser.modListId,
+      })
+      .from(modListUser)
+      .where(inArray(modListUser.modListId, queryIds)),
+    db
+      .select({
+        rule: modListRule.rule,
+        modListId: modListRule.modListId,
+      })
+      .from(modListRule)
+      .where(inArray(modListRule.modListId, queryIds)),
+  ])
+  const modListUsersGrouped = groupBy(modListUsers, (it) => it.modListId)
+  const modListRulesGrouped = groupBy(modListRules, (it) => it.modListId)
+  const grouped = queryIds
+    .map((it) => {
+      const modListUsers = modListUsersGrouped[it] ?? []
+      const modListRules = modListRulesGrouped[it] ?? []
+      const modList = modListGrouped[it][0]
+      if (!modList) {
+        throw new Error('modList is required ' + it)
+      }
+      if (!modList.action) {
+        throw new Error('action is required ' + it)
+      }
       return {
-        updatedAt: item.updatedAt,
+        updatedAt: modList.updatedAt,
         data: {
-          modListId: item.modListId,
-          action: item.action ?? 'hide',
-          twitterUserIds,
-          rules,
+          modListId: it,
+          action: modList.action,
+          twitterUserIds: modListUsers.map((it) => it.twitterUserId),
+          rules: modListRules.map((it) => it.rule),
         },
       } satisfies CacheItem
     })
@@ -752,6 +756,7 @@ modlists.get('/subscribed/users', async (c) => {
   const _modListIds = await db
     .select({
       modListId: modListSubscription.modListId,
+      action: modListSubscription.action,
       updatedAt: modList.updatedAt,
     })
     .from(modListSubscription)
@@ -763,50 +768,6 @@ modlists.get('/subscribed/users', async (c) => {
       'Cache-Control': 'public, max-age=86400',
     },
   })
-  // const _modLists = await db
-  //   .select({
-  //     modListId: modListSubscription.modListId,
-  //     action: modListSubscription.action,
-  //     modListUsers: sql<string>`json_group_array(DISTINCT ${modListUser.twitterUserId})`,
-  //     modListRules: sql<string>`json_group_array(DISTINCT ${modListRule.rule})`,
-  //   })
-  //   .from(modListSubscription)
-  //   .leftJoin(
-  //     modListUser,
-  //     eq(modListSubscription.modListId, modListUser.modListId),
-  //   )
-  //   .leftJoin(
-  //     modListRule,
-  //     eq(modListSubscription.modListId, modListRule.modListId),
-  //   )
-  //   .where(eq(modListSubscription.localUserId, tokenInfo.sub))
-  //   .groupBy(modListSubscription.modListId, modListSubscription.action)
-  // return c.json<ModListSubscribedUserAndRulesResponse>(
-  //   _modLists
-  //     .map((item) => {
-  //       const twitterUserIds = JSON.parse(item.modListUsers).filter(
-  //         (id: any) => id !== null && id !== undefined && id !== '',
-  //       ) as string[]
-  //       const rulesStr = JSON.parse(item.modListRules).filter(
-  //         (c: any) => c !== null && c !== undefined && c !== '',
-  //       ) as string[]
-  //       const rules = rulesStr.map((c: string) =>
-  //         JSON.parse(c),
-  //       ) as InferSelectModel<typeof modListRule>['rule'][]
-  //       return {
-  //         modListId: item.modListId,
-  //         action: item.action as 'block' | 'hide',
-  //         twitterUserIds,
-  //         rules,
-  //       }
-  //     })
-  //     .filter((it) => it.rules.length > 0 || it.twitterUserIds.length > 0),
-  //   {
-  //     headers: {
-  //       'Cache-Control': 'public, max-age=86400',
-  //     },
-  //   },
-  // )
 })
 
 const searchSchema = z.object({
@@ -995,6 +956,9 @@ search.get(
       .select({
         modListId: modList.id,
         updatedAt: modList.updatedAt,
+        action: sql<
+          InferSelectModel<typeof modListSubscription>['action']
+        >`"hide"`,
       })
       .from(modList)
       .where(eq(modList.id, id))
@@ -1007,15 +971,6 @@ search.get(
       { twitterUserIds: resp[0].twitterUserIds },
       { headers: { 'Cache-Control': 'public, max-age=86400' } },
     )
-
-    // const users = await db
-    //   .select({ twitterUserId: modListUser.twitterUserId })
-    //   .from(modListUser)
-    //   .where(eq(modListUser.modListId, id))
-
-    // return c.json<ModListIdsResponse>({
-    //   twitterUserIds: users.map((u) => u.twitterUserId),
-    // })
   },
 )
 

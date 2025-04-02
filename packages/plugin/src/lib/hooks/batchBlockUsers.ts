@@ -223,12 +223,16 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
           if (blockSpeed) {
             // If the user sets the maximum number of users to block per minute,
             // then calculate the time to block each user
-            const waitTime = (60 * 1000) / Math.max(blockSpeed, 1)
+            // const waitTime = (60 * 1000) / Math.max(blockSpeed, 1)
+            const _waitTime = (60 * 1000) / Math.max(blockSpeed, 1)
+            const waitTime = Math.floor(
+              _waitTime / 2 + Math.random() * _waitTime,
+            )
             toast.loading(
               tP('modlists.detail.toast.blockSpeed', {
                 values: {
                   count: blockSpeed,
-                  time: ms(waitTime),
+                  time: ms(Math.max(1000, waitTime)),
                   current: meta.index,
                   total: allCount,
                 },
@@ -245,7 +249,7 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
                   tP('modlists.detail.toast.blockSpeed', {
                     values: {
                       count: blockSpeed,
-                      time: ms(Math.max(0, waitTime - (Date.now() - now))),
+                      time: ms(Math.max(1000, waitTime - (Date.now() - now))),
                       current: meta.index,
                       total: allCount,
                     },
@@ -296,7 +300,7 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
             toast.loading(
               tP('modlists.detail.toast.rateLimit', {
                 values: {
-                  time: ms(Math.max(0, waitTime - (Date.now() - Date.now()))),
+                  time: ms(Math.max(1000, waitTime - (Date.now() - Date.now()))),
                 },
               }),
               {
@@ -310,7 +314,7 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
                 toast.loading(
                   tP('modlists.detail.toast.rateLimit', {
                     values: {
-                      time: ms(Math.max(0, waitTime - (Date.now() - now))),
+                      time: ms(Math.max(1000, waitTime - (Date.now() - now))),
                     },
                   }),
                   {

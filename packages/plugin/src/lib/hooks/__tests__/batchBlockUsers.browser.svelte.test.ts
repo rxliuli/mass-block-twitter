@@ -5,7 +5,7 @@ import { initI18n } from '$lib/i18n'
 import { dbApi, User } from '$lib/db'
 import { AuthInfo } from '@mass-block-twitter/server'
 import { BatchBlockUsersProcessedMeta, ExpectedError } from '$lib/api'
-import { range } from 'es-toolkit'
+import { range, uniq } from 'es-toolkit'
 import { useSettings } from '$lib/settings'
 import { PageTest } from '$lib/components/test'
 
@@ -394,6 +394,33 @@ describe('batchBlockUsers', () => {
       .not.toBeInTheDocument()
     expect(blockUser).toHaveBeenCalledTimes(2)
     expect(onProcessed).toHaveBeenCalledTimes(2)
+    vi.useRealTimers()
+  })
+  it('should block users with random interval', async () => {
+    const times: Date[] = []
+    blockUser.mockImplementation(async () => {
+      times.push(new Date())
+    })
+    const interval = setInterval(() => {
+      vi.advanceTimersByTime(1000)
+    }, 1)
+    vi.useFakeTimers()
+    const users = range(10).map((i) => genUser(i.toString()))
+    useSettings().update((settings) => ({
+      ...settings,
+      blockSpeed: 1,
+    }))
+    await batchBlockUsersMutation({
+      controller: new AbortController(),
+      users: () => users,
+      blockUser,
+      onProcessed,
+      getAuthInfo,
+    })
+    expect(onProcessed).toHaveBeenCalledTimes(users.length)
+    expect(blockUser).toHaveBeenCalledTimes(users.length)
+    expect(uniq(times.map((it) => it.getSeconds())).length).gt(3)
+    clearInterval(interval)
     vi.useRealTimers()
   })
 })

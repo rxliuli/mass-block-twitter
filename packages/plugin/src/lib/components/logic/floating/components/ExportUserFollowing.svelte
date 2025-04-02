@@ -12,7 +12,6 @@
 
 <ExportUsers
   getProps={() => ({
-    title: `Export ${extractScreenName(location.href)} following`,
     name: 'following',
     queryKey: ['user-following', extractScreenName(location.href)!],
     queryFn: async ({ cursor }) => {

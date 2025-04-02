@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="T extends User">
   import { type User } from '$lib/db'
   import { useController } from '$lib/stores/controller'
   import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
@@ -8,8 +8,11 @@
   import { batchQuery } from '$lib/util/batch'
   import { downloadUsersToCSV } from '$lib/util/downloadUsersToCSV'
   import { toast } from 'svelte-sonner'
-  import { FileDownIcon } from 'lucide-svelte'
+  import { FileDownIcon, ShieldBanIcon } from 'lucide-svelte'
   import * as Command from '$lib/components/ui/command'
+  import { batchBlockUsersMutation } from '$lib/hooks/batchBlockUsers'
+  import { blockUser } from '$lib/api/twitter'
+  import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
 
   let {
     onclick,
@@ -19,17 +22,18 @@
     getProps: () => {
       queryKey: string | string[]
       queryFn: (options: { cursor?: string }) => Promise<{
-        data: User[]
+        data: T[]
         cursor?: string
       }>
-      title: string
       getTotal: () => Promise<number>
       downloadFileName: () => string
       name: string
+      blockUser?: (user: T) => Promise<void | 'skip'>
+      maxQueryCount?: number
     }
   } = $props()
 
-  const { title, name, queryKey, queryFn, getTotal, downloadFileName } =
+  const { name, queryKey, queryFn, getTotal, downloadFileName, ..._props } =
     getProps()
 
   const query = createInfiniteQuery({
@@ -61,6 +65,7 @@
               context,
               toastId,
               name,
+              maxQueryCount: _props.maxQueryCount,
             }),
         })
         toast.success('Export success', {
@@ -79,6 +84,42 @@
       }
     },
   })
+
+  const authInfo = useAuthInfo()
+  const blockUsersMutation = createMutation({
+    mutationFn: async () => {
+      if ($blockUsersMutation.isPending) {
+        return
+      }
+
+      const [total, _] = await Promise.all([getTotal(), $query.fetchNextPage()])
+      // console.log('onMount after', getUsers())
+      controller.create()
+      await batchBlockUsersMutation({
+        controller,
+        users: () => $query.data?.pages.flatMap((it) => it.data) ?? [],
+        total: total,
+        blockUser: async (user) => {
+          if (user.following) {
+            return 'skip'
+          }
+          return await (_props.blockUser ?? blockUser)(user)
+        },
+        getAuthInfo: async () => authInfo.value!,
+        onProcessed: async (user, meta) => {
+          console.log(
+            `[batchBlockMutation] onProcesssed ${meta.index} ${user.screen_name} ` +
+              new Date().toISOString(),
+          )
+          if (meta.index % 10 === 0) {
+            if (!$query.isPending) {
+              await $query.fetchNextPage()
+            }
+          }
+        },
+      })
+    },
+  })
 </script>
 
 <Command.Item
@@ -89,5 +130,16 @@
   disabled={$query.isFetching || $exportCsvMutation.isPending}
 >
   <FileDownIcon />
-  <span>{title}</span>
+  <span>Export {name}</span>
+</Command.Item>
+
+<Command.Item
+  onclick={() => {
+    $blockUsersMutation.mutate()
+    onclick?.()
+  }}
+  disabled={$query.isFetching || $blockUsersMutation.isPending}
+>
+  <ShieldBanIcon color={'red'} />
+  <span>Block {name}</span>
 </Command.Item>

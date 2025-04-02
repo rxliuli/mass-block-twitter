@@ -9,7 +9,6 @@ import { toast } from 'svelte-sonner'
 interface QueryOperationContextWithToastId {
   context: QueryOperationContext<any>
   toastId: string | number
-  name: string
 }
 
 function errorHandler<T extends QueryOperationContextWithToastId>(options: {
@@ -42,27 +41,38 @@ function errorHandler<T extends QueryOperationContextWithToastId>(options: {
   }
 }
 
-function sleepHandler<T extends QueryOperationContextWithToastId>(options: {
-  time: number | (() => number)
-}): MiddlewareHandler<T> {
+export function sleepHandler<
+  T extends {
+    context: {
+      controller: AbortController
+      items: any[]
+      progress: {
+        total?: number
+      }
+    }
+  },
+>(options: { time: number | (() => number) }): MiddlewareHandler<T> {
   return async ({ context }, next) => {
     if (context.items.length === context.progress.total) {
       await next()
       return
     }
-    await new Promise<void>((resolve) => {
+    const r = await new Promise<'next' | 'abort'>((resolve) => {
       const waitTime =
         typeof options.time === 'number' ? options.time : options.time()
       const abortListener = () => {
         clearTimeout(timer)
-        resolve()
+        resolve('abort')
       }
       const timer = setTimeout(() => {
-        abortListener()
+        resolve('next')
         context.controller.signal.removeEventListener('abort', abortListener)
       }, waitTime)
       context.controller.signal.addEventListener('abort', abortListener)
     })
+    if (r === 'abort') {
+      return
+    }
     await next()
   }
 }
@@ -90,7 +100,7 @@ function loadingHandler<T extends QueryOperationContextWithToastId>(options: {
   }
 }
 
-function maxRequestsHandler<
+export function maxRequestsHandler<
   T extends QueryOperationContextWithToastId,
 >(options: { title: string; maxRequests: number }): MiddlewareHandler<T> {
   return async ({ context, toastId }, next) => {
@@ -112,13 +122,14 @@ export async function onExportUsersProcessed(options: {
   context: QueryOperationContext<User>
   toastId: string | number
   name: string
+  maxQueryCount?: number
 }) {
   await middleware(options)
     .use(errorHandler({ title: 'Export failed' }))
     .use(
       maxRequestsHandler({
         title: `Exporting ${options.name}...`,
-        maxRequests: 450,
+        maxRequests: options.maxQueryCount ?? 450,
       }),
     )
     .use(loadingHandler({ title: 'Exporting followers...' }))

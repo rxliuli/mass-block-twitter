@@ -290,7 +290,7 @@ twitter
         if (Date.now() / 1000 < expireTime) {
           return c.json(data, {
             headers: {
-              'Cache-Control': 'public, max-age=3600',
+              'Cache-Control': 'public, max-age=86400',
             },
           })
         }

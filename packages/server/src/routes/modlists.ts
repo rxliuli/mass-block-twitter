@@ -28,6 +28,7 @@ import {
 } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
 import { getTableAliasedColumns } from '../lib/drizzle'
+import { groupBy, omit } from 'es-toolkit'
 
 const modlists = new Hono<HonoEnv>().use(auth())
 
@@ -75,7 +76,7 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
 })
 
 const updateSchema = z.object({
-  name: z.string().max(100),
+  name: z.string().max(100).optional(),
   description: z.string().max(300).nullable().optional(),
   avatar: z.string().nullable().optional(),
   visibility: z.enum(['public', 'protected']).optional(),
@@ -648,6 +649,97 @@ modlists.delete(
   },
 )
 
+interface CacheItem {
+  updatedAt: string
+  data: ModListSubscribedUserAndRulesResponse[number]
+}
+
+async function queryModListSubscribedUserAndRulesByCache(
+  c: Context,
+  _modListIds: {
+    modListId: string
+    updatedAt: string
+  }[],
+): Promise<ModListSubscribedUserAndRulesResponse> {
+  const db = drizzle(c.env.DB)
+  let cacheIds: string[] = []
+
+  const cached = (
+    await Promise.all(
+      _modListIds.map(async (it) => {
+        const cachedStr = await c.env.MY_KV.get('modlist:' + it.modListId)
+        if (!cachedStr) {
+          return
+        }
+        try {
+          const cached = JSON.parse(cachedStr) as CacheItem
+          if (cached && cached.updatedAt === it.updatedAt) {
+            cacheIds.push(it.modListId)
+            return cached.data
+          }
+        } catch {}
+      }),
+    )
+  ).filter(Boolean) as ModListSubscribedUserAndRulesResponse
+  const queryIds = _modListIds
+    .filter((it) => !cacheIds.includes(it.modListId))
+    .map((it) => it.modListId)
+  const _modLists = await db
+    .select({
+      modListId: modList.id,
+      updatedAt: modList.updatedAt,
+      action: modListSubscription.action,
+      modListUsers: sql<string>`json_group_array(DISTINCT ${modListUser.twitterUserId})`,
+      modListRules: sql<string>`json_group_array(DISTINCT ${modListRule.rule})`,
+    })
+    .from(modList)
+    .leftJoin(
+      modListSubscription,
+      eq(modList.id, modListSubscription.modListId),
+    )
+    .leftJoin(modListUser, eq(modList.id, modListUser.modListId))
+    .leftJoin(modListRule, eq(modList.id, modListRule.modListId))
+    .where(inArray(modList.id, queryIds))
+    .groupBy(modList.id, modListSubscription.action)
+  const grouped = _modLists
+    .map((item) => {
+      const twitterUserIds = JSON.parse(item.modListUsers).filter(
+        (id: any) => id !== null && id !== undefined && id !== '',
+      ) as string[]
+      const rulesStr = JSON.parse(item.modListRules).filter(
+        (c: any) => c !== null && c !== undefined && c !== '',
+      ) as string[]
+      const rules = rulesStr.map((c: string) =>
+        JSON.parse(c),
+      ) as InferSelectModel<typeof modListRule>['rule'][]
+      return {
+        updatedAt: item.updatedAt,
+        data: {
+          modListId: item.modListId,
+          action: item.action ?? 'hide',
+          twitterUserIds,
+          rules,
+        },
+      } satisfies CacheItem
+    })
+    .filter(
+      (it) => it.data.rules.length > 0 || it.data.twitterUserIds.length > 0,
+    )
+  await Promise.all(
+    grouped.map(async (it) => {
+      await c.env.MY_KV.put(
+        'modlist:' + it.data.modListId,
+        JSON.stringify(it),
+        {
+          // cache 7 days
+          expirationTtl: 60 * 60 * 24 * 7,
+        },
+      )
+    }),
+  )
+  return [...cached, ...grouped.map((it) => it.data)]
+}
+
 export type ModListSubscribedUserAndRulesResponse = {
   modListId: string
   action: 'block' | 'hide'
@@ -657,50 +749,64 @@ export type ModListSubscribedUserAndRulesResponse = {
 modlists.get('/subscribed/users', async (c) => {
   const tokenInfo = c.get('jwtPayload')
   const db = drizzle(c.env.DB)
-  const _modLists = await db
+  const _modListIds = await db
     .select({
       modListId: modListSubscription.modListId,
-      action: modListSubscription.action,
-      modListUsers: sql<string>`json_group_array(DISTINCT ${modListUser.twitterUserId})`,
-      modListRules: sql<string>`json_group_array(DISTINCT ${modListRule.rule})`,
+      updatedAt: modList.updatedAt,
     })
     .from(modListSubscription)
-    .leftJoin(
-      modListUser,
-      eq(modListSubscription.modListId, modListUser.modListId),
-    )
-    .leftJoin(
-      modListRule,
-      eq(modListSubscription.modListId, modListRule.modListId),
-    )
+    .innerJoin(modList, eq(modListSubscription.modListId, modList.id))
     .where(eq(modListSubscription.localUserId, tokenInfo.sub))
-    .groupBy(modListSubscription.modListId, modListSubscription.action)
-  return c.json<ModListSubscribedUserAndRulesResponse>(
-    _modLists
-      .map((item) => {
-        const twitterUserIds = JSON.parse(item.modListUsers).filter(
-          (id: any) => id !== null && id !== undefined && id !== '',
-        ) as string[]
-        const rulesStr = JSON.parse(item.modListRules).filter(
-          (c: any) => c !== null && c !== undefined && c !== '',
-        ) as string[]
-        const rules = rulesStr.map((c: string) =>
-          JSON.parse(c),
-        ) as InferSelectModel<typeof modListRule>['rule'][]
-        return {
-          modListId: item.modListId,
-          action: item.action as 'block' | 'hide',
-          twitterUserIds,
-          rules,
-        }
-      })
-      .filter((it) => it.rules.length > 0 || it.twitterUserIds.length > 0),
-    {
-      headers: {
-        'Cache-Control': 'public, max-age=3600',
-      },
+  const resp = await queryModListSubscribedUserAndRulesByCache(c, _modListIds)
+  return c.json<ModListSubscribedUserAndRulesResponse>(resp, {
+    headers: {
+      'Cache-Control': 'public, max-age=86400',
     },
-  )
+  })
+  // const _modLists = await db
+  //   .select({
+  //     modListId: modListSubscription.modListId,
+  //     action: modListSubscription.action,
+  //     modListUsers: sql<string>`json_group_array(DISTINCT ${modListUser.twitterUserId})`,
+  //     modListRules: sql<string>`json_group_array(DISTINCT ${modListRule.rule})`,
+  //   })
+  //   .from(modListSubscription)
+  //   .leftJoin(
+  //     modListUser,
+  //     eq(modListSubscription.modListId, modListUser.modListId),
+  //   )
+  //   .leftJoin(
+  //     modListRule,
+  //     eq(modListSubscription.modListId, modListRule.modListId),
+  //   )
+  //   .where(eq(modListSubscription.localUserId, tokenInfo.sub))
+  //   .groupBy(modListSubscription.modListId, modListSubscription.action)
+  // return c.json<ModListSubscribedUserAndRulesResponse>(
+  //   _modLists
+  //     .map((item) => {
+  //       const twitterUserIds = JSON.parse(item.modListUsers).filter(
+  //         (id: any) => id !== null && id !== undefined && id !== '',
+  //       ) as string[]
+  //       const rulesStr = JSON.parse(item.modListRules).filter(
+  //         (c: any) => c !== null && c !== undefined && c !== '',
+  //       ) as string[]
+  //       const rules = rulesStr.map((c: string) =>
+  //         JSON.parse(c),
+  //       ) as InferSelectModel<typeof modListRule>['rule'][]
+  //       return {
+  //         modListId: item.modListId,
+  //         action: item.action as 'block' | 'hide',
+  //         twitterUserIds,
+  //         rules,
+  //       }
+  //     })
+  //     .filter((it) => it.rules.length > 0 || it.twitterUserIds.length > 0),
+  //   {
+  //     headers: {
+  //       'Cache-Control': 'public, max-age=86400',
+  //     },
+  //   },
+  // )
 })
 
 const searchSchema = z.object({
@@ -886,23 +992,30 @@ search.get(
     const db = drizzle(c.env.DB)
 
     const _modList = await db
-      .select()
+      .select({
+        modListId: modList.id,
+        updatedAt: modList.updatedAt,
+      })
       .from(modList)
       .where(eq(modList.id, id))
       .limit(1)
-
     if (_modList.length === 0) {
       return c.json({ code: 'modListNotFound' }, 404)
     }
+    const resp = await queryModListSubscribedUserAndRulesByCache(c, _modList)
+    return c.json<ModListIdsResponse>(
+      { twitterUserIds: resp[0].twitterUserIds },
+      { headers: { 'Cache-Control': 'public, max-age=86400' } },
+    )
 
-    const users = await db
-      .select({ twitterUserId: modListUser.twitterUserId })
-      .from(modListUser)
-      .where(eq(modListUser.modListId, id))
+    // const users = await db
+    //   .select({ twitterUserId: modListUser.twitterUserId })
+    //   .from(modListUser)
+    //   .where(eq(modListUser.modListId, id))
 
-    return c.json<ModListIdsResponse>({
-      twitterUserIds: users.map((u) => u.twitterUserId),
-    })
+    // return c.json<ModListIdsResponse>({
+    //   twitterUserIds: users.map((u) => u.twitterUserId),
+    // })
   },
 )
 

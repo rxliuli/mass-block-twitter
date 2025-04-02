@@ -27,7 +27,14 @@ import type {
 } from '../src/lib'
 import { TwitterUser } from '../src/routes/twitter'
 import { initCloudflareTest } from './utils'
-import { modListSubscription, modListUser, user } from '../src/db/schema'
+import {
+  modList,
+  modListSubscription,
+  modListUser,
+  user,
+} from '../src/db/schema'
+import { eq, InferInsertModel } from 'drizzle-orm'
+import { range } from 'es-toolkit'
 
 describe('modlists', () => {
   const context = initCloudflareTest()
@@ -252,6 +259,23 @@ describe('modlists', () => {
     })
     expect(resp1.ok).true
   }
+  const removeUserFromModList = async (
+    twitterUserId: string,
+    modListId: string,
+  ) => {
+    const resp1 = await fetch('/api/modlists/user', {
+      method: 'DELETE',
+      body: JSON.stringify({
+        modListId,
+        twitterUserId,
+      } satisfies ModListRemoveTwitterUserRequest),
+      headers: {
+        Authorization: `Bearer ${context.token1}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    expect(resp1.ok).true
+  }
   const unsubscribe = (modListId: string) =>
     fetch(`/api/modlists/subscribe/${modListId}`, {
       method: 'DELETE',
@@ -430,6 +454,128 @@ describe('modlists', () => {
           rules: [],
         },
       ] satisfies ModListSubscribedUserAndRulesResponse)
+    })
+    const subscribe = () =>
+      fetch(`/api/modlists/subscribe/${modListId}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${context.token1}` },
+      })
+    describe('should be able to subscribe to get modlist uesrs/rules with cache', async () => {
+      beforeEach(async () => {
+        const users = range(10)
+          .map((i) => i + 1)
+          .map(
+            (it) =>
+              ({
+                id: `twitter-user-${it}`,
+                screenName: `test-user-${it}`,
+                name: `test-user-${it}`,
+                profileImageUrl: `test-user-${it}`,
+                accountCreatedAt: new Date().toISOString(),
+              } satisfies InferInsertModel<typeof user>),
+          )
+        const db = context.db
+        await db.insert(user).values(users)
+        await subscribe()
+        await db.insert(modListUser).values({
+          id: 'modlist-user-1',
+          modListId,
+          twitterUserId: 'twitter-user-1',
+        })
+      })
+      it('update modlist updatedAt column', async () => {
+        const db = context.db
+        const r1 = await getSubscribedUsers()
+        await db.insert(modListUser).values({
+          id: 'modlist-user-2',
+          modListId,
+          twitterUserId: 'twitter-user-2',
+        })
+        const r2 = await getSubscribedUsers()
+        expect(r1).toEqual(r2)
+        await db
+          .update(modList)
+          .set({
+            updatedAt: new Date().toISOString(),
+          })
+          .where(eq(modList.id, modListId))
+        const r3 = await getSubscribedUsers()
+        expect(r1).not.toEqual(r3)
+      })
+      it('should be able to clear cache when update modlist metadata', async () => {
+        const db = context.db
+        const r1 = await getSubscribedUsers()
+        await db.insert(modListUser).values({
+          id: 'modlist-user-2',
+          modListId,
+          twitterUserId: 'twitter-user-2',
+        })
+        const r2 = await getSubscribedUsers()
+        expect(r1).toEqual(r2)
+        const resp3 = await fetch('/api/modlists/update/' + modListId, {
+          method: 'PUT',
+          body: JSON.stringify({
+            visibility: 'public',
+          } satisfies ModListUpdateRequest),
+          headers: {
+            Authorization: `Bearer ${context.token1}`,
+            'Content-Type': 'application/json',
+          },
+        })
+        expect(resp3.ok).true
+        const r3 = await getSubscribedUsers()
+        expect(r1).not.toEqual(r3)
+      })
+      it('should be able to clear cache when add or remove modlistUsers', async () => {
+        const db = context.db
+        const r1 = await getSubscribedUsers()
+        await addUserToModList(
+          {
+            id: 'twitter-user-2',
+            screen_name: 'test-user-2',
+            name: 'test-user-2',
+          },
+          modListId,
+        )
+        const r2 = await getSubscribedUsers()
+        expect(r2).not.toEqual(r1)
+        await removeUserFromModList('twitter-user-2', modListId)
+        const r3 = await getSubscribedUsers()
+        expect(r3).not.toEqual(r2)
+        expect(r3).toEqual(r1)
+      })
+      it('should be able to clear cache when add or remove modlistRules', async () => {
+        const r1 = await getSubscribedUsers()
+        const rule = await addRule(
+          {
+            or: [
+              {
+                and: [{ value: 'test-rule-1', field: 'rule', operator: 'eq' }],
+              },
+            ],
+          },
+          modListId,
+        )
+        const r2 = await getSubscribedUsers()
+        expect(r2).not.toEqual(r1)
+        await updateRule({
+          id: rule.id,
+          rule: {
+            or: [
+              {
+                and: [{ value: 'test-rule-2', field: 'rule', operator: 'eq' }],
+              },
+            ],
+          },
+          name: 'test-rule-1',
+        })
+        const r3 = await getSubscribedUsers()
+        expect(r3).not.toEqual(r2)
+        await removeRule(rule.id)
+        const r4 = await getSubscribedUsers()
+        expect(r4).not.toEqual(r3)
+        expect(r4).toEqual(r1)
+      })
     })
   })
   describe('user', () => {
@@ -802,6 +948,15 @@ describe('modlists', () => {
     })
     expect(resp1.ok).true
     return (await resp1.json()) as ModListAddRuleResponse
+  }
+  async function removeRule(id: string) {
+    const resp1 = await fetch(`/api/modlists/rule/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${context.token1}`,
+      },
+    })
+    expect(resp1.ok).true
   }
   async function updateRule(options: {
     id: string

@@ -1,10 +1,7 @@
 import { onDestroy } from 'svelte'
 
-let url = $state<URL | undefined>(
-  typeof location !== 'undefined' ? new URL(location.href) : undefined,
-)
-
 export function useLocation() {
+  let url = $state<URL>(new URL(location.href))
   const interval = setInterval(() => {
     if (typeof location !== 'undefined' && url?.href !== location.href) {
       url = new URL(location.href)

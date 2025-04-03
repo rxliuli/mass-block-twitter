@@ -48,30 +48,26 @@
     component: Component
   }
 
-  const list: FloatingButtonItem[] = [
-    {
-      isMatch: () => loc.url?.pathname === '/home',
-      component: BlockCommunicationMembers,
-    },
-    {
-      isMatch: () => loc.url?.pathname.startsWith('/i/communities/'),
-      component: BlockCommunicationMembers,
-    },
-    {
-      isMatch: () => loc.url?.pathname.endsWith('/verified_followers'),
-      component: ExportUserBlueVerifiedFollowers,
-    },
-    {
-      isMatch: () => loc.url?.pathname.endsWith('/followers'),
-      component: ExportUserFollowers,
-    },
-    {
-      isMatch: () => loc.url?.pathname.endsWith('/following'),
-      component: ExportUserFollowing,
-    },
-  ]
-
-  const render = $derived(list.filter((it) => it.isMatch()))
+  const renderItems: FloatingButtonItem[] = $derived(
+    [
+      {
+        isMatch: () => loc.url.pathname.startsWith('/i/communities/'),
+        component: BlockCommunicationMembers,
+      },
+      {
+        isMatch: () => loc.url.pathname.endsWith('/verified_followers'),
+        component: ExportUserBlueVerifiedFollowers,
+      },
+      {
+        isMatch: () => loc.url.pathname.endsWith('/followers'),
+        component: ExportUserFollowers,
+      },
+      {
+        isMatch: () => loc.url.pathname.endsWith('/following'),
+        component: ExportUserFollowing,
+      },
+    ].filter((it) => it.isMatch()),
+  )
 
   onMount(() => {
     const onClick = (ev: MouseEvent) => {
@@ -141,7 +137,7 @@
             <SquareArrowOutUpRightIcon />
             <span>{$t('floatingButton.openDashboard')}</span>
           </Command.Item>
-          {#each render as item}
+          {#each renderItems as item}
             <item.component
               onclick={() => {
                 open = false

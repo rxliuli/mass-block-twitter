@@ -10,7 +10,7 @@ import {
 import { Activity, dbApi, User } from '$lib/db'
 import { omit, throttle } from 'es-toolkit'
 import { Vista, Middleware } from '@rxliuli/vista'
-import { wait } from '@liuli-util/async'
+import { asyncLimiting, wait } from '@liuli-util/async'
 import { addBlockButton, extractTweet } from '$lib/observe'
 import css from './style.css?inline'
 import { injectCSS } from '$lib/injectCSS'
@@ -145,7 +145,7 @@ function loggerTweets(): Middleware {
 }
 
 const queue: User[] = []
-async function onAction(
+async function _onAction(
   filterData: FilterData,
   result: Extract<FilterResult, 'hide' | 'block'>,
   filterName: TweetFilter['name'],
@@ -198,6 +198,7 @@ async function onAction(
     window.open(`https://x.com/${user.screen_name}`, '_blank')
   }
 }
+const onAction = asyncLimiting(_onAction, 1)
 function handleNotifications(): Middleware {
   return async (c, next) => {
     await next()

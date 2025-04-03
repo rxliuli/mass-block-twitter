@@ -10,6 +10,7 @@ import {
 } from 'drizzle-orm'
 import { uniq, last } from 'es-toolkit'
 
+// https://github.com/drizzle-team/drizzle-orm/issues/555
 export function getTableAliasedColumns<T extends AnyTable<TableConfig>>(
   table: T,
 ) {
@@ -31,6 +32,7 @@ export function getTableAliasedColumns<T extends AnyTable<TableConfig>>(
 
 // https://developers.cloudflare.com/d1/platform/limits/#:~:text=Maximum%20number%20of%20columns%20per%20table
 const D1_MAX_SQL_VARIABLES = 100
+// https://github.com/drizzle-team/drizzle-orm/issues/2479
 export function safeChunkInsertValues<T extends AnyTable<TableConfig>>(
   table: T,
   values: InferInsertModel<T>[],

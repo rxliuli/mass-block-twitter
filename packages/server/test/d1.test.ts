@@ -1,7 +1,14 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { initCloudflareTest } from './utils'
 import { drizzle } from 'drizzle-orm/d1'
-import { localUser, modList, modListUser, user } from '../src/db/schema'
+import {
+  localUser,
+  modList,
+  modListRule,
+  modListUser,
+  tweet,
+  user,
+} from '../src/db/schema'
 import {
   and,
   AnyTable,
@@ -19,7 +26,7 @@ import {
   getTableAliasedColumns,
   safeChunkInsertValues,
 } from '../src/lib/drizzle'
-import { last, range, uniq } from 'es-toolkit'
+import { last, omit, range, sum, uniq } from 'es-toolkit'
 
 const context = initCloudflareTest()
 
@@ -154,7 +161,7 @@ describe('d1 batch', () => {
 })
 
 describe('performance', () => {
-  beforeEach(async () => {
+  it('should be able to use index', async () => {
     const db = context.db
     const users = range(1000).map((it) => ({
       id: `test-user-${it}`,
@@ -187,9 +194,7 @@ describe('performance', () => {
         db.insert(modListUser).values(it),
       ) as any,
     )
-  })
-  it('should be able to use index', async () => {
-    const db = context.db
+
     const sql = db
       .select()
       .from(modListUser)
@@ -203,9 +208,140 @@ describe('performance', () => {
       .orderBy(desc(modListUser.id))
       .limit(10)
       .toSQL()
-    const r2 = await context.env.DB.prepare(sql.sql)
+    const r = await context.env.DB.prepare(sql.sql)
       .bind(...sql.params)
       .run()
-    expect(r2.meta.rows_read).eq(20)
+    expect(r.meta.rows_read).eq(20)
+  })
+  // update 时应该永远排除 id
+  it('should be able to update user', async () => {
+    const db = context.db
+    await db.batch([
+      db.insert(user).values({
+        id: `test-user-1`,
+        screenName: `test-screen-name-1`,
+        name: `test-name-1`,
+      }),
+      ...range(1000).map((it) =>
+        db.insert(tweet).values({
+          id: `test-tweet-${it}`,
+          userId: `test-user-1`,
+          text: `test-text-${it}`,
+          publishedAt: new Date().toISOString(),
+        }),
+      ),
+    ] as any)
+    const userParam: InferInsertModel<typeof user> = {
+      id: 'test-user-1',
+      screenName: 'test',
+    }
+    const r1 = await db
+      .update(user)
+      .set(userParam)
+      .where(eq(user.id, userParam.id))
+    expect(r1.meta.rows_read).gt(2000)
+    const r2 = await db
+      .update(user)
+      .set(omit(userParam, ['id']))
+      .where(eq(user.id, userParam.id))
+    expect(r2.meta.rows_read).eq(1)
+  })
+  // 不要大量使用 leftJoin 查询
+  it('should be able to use leftJoin', async () => {
+    const db = context.db
+    await db.batch([
+      ...range(100).map((it) =>
+        db.insert(user).values({
+          id: `test-user-${it}`,
+          screenName: `user-${it}`,
+          name: `user-${it}`,
+        }),
+      ),
+      db.insert(localUser).values({
+        id: `local-user-1`,
+        email: `local-user-1@example.com`,
+        password: `password`,
+      }),
+      db.insert(modList).values({
+        id: `modlist-1`,
+        name: `modlist-name`,
+        localUserId: `local-user-1`,
+        twitterUserId: `test-user-1`,
+      }),
+      ...range(100).map((it) =>
+        db.insert(modListUser).values({
+          id: `modlist-user-${it}`,
+          modListId: `modlist-1`,
+          twitterUserId: `test-user-${it}`,
+        }),
+      ),
+      ...range(100).map((it) =>
+        db.insert(modListRule).values({
+          id: `modlist-rule-${it}`,
+          modListId: `modlist-1`,
+          name: `rule-${it}`,
+          rule: { or: [] },
+        }),
+      ),
+    ] as any)
+    const stmt1 = db
+      .select()
+      .from(modList)
+      .leftJoin(modListUser, eq(modList.id, modListUser.modListId))
+      .leftJoin(modListRule, eq(modList.id, modListRule.modListId))
+      .where(eq(modList.id, 'modlist-1'))
+      .toSQL()
+    const r1 = await context.env.DB.prepare(stmt1.sql)
+      .bind(...stmt1.params)
+      .run()
+    expect(r1.meta.rows_read).gt(10000)
+
+    const stmt2 = db
+      .select()
+      .from(modListUser)
+      .where(eq(modListUser.modListId, 'modlist-1'))
+      .toSQL()
+    const stmt3 = db
+      .select()
+      .from(modListRule)
+      .where(eq(modListRule.modListId, 'modlist-1'))
+      .toSQL()
+    const r2 = await context.env.DB.prepare(stmt2.sql)
+      .bind(...stmt2.params)
+      .run()
+    const r3 = await context.env.DB.prepare(stmt3.sql)
+      .bind(...stmt3.params)
+      .run()
+    expect(r2.meta.rows_read).eq(100)
+    expect(r3.meta.rows_read).eq(100)
+  })
+  // 插入时尽可能在一条 insert 中插入多个记录
+  it('should be able to insert multiple records', async () => {
+    const db = context.db
+    const len = 5000
+    const users = range(len).map((it) => ({
+      id: `test-user-${it}`,
+      screenName: `user-${it}`,
+      name: `user-${it}`,
+    }))
+    const r1 = await Promise.all(
+      users.slice((len / 3) * 2).map((it) => db.insert(user).values(it)) as any,
+    )
+    const r2 = (await db.batch(
+      users
+        .slice(len / 3, (len / 3) * 2)
+        .map((it) => db.insert(user).values(it)) as any,
+    )) as D1Result[]
+    const r3 = (await db.batch(
+      safeChunkInsertValues(user, users.slice(0, len / 3)).map((it) =>
+        db.insert(user).values(it),
+      ) as any,
+    )) as D1Result[]
+
+    const time1 = sum(r1.map((it) => it.meta.duration))
+    const time2 = sum(r2.map((it) => it.meta.duration))
+    const time3 = sum(r3.map((it) => it.meta.duration))
+    // console.log(time1, time2, time3)
+    expect(time3).lt(time2).lt(time1)
   })
 })

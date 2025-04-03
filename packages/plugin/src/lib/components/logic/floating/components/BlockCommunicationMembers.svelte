@@ -1,6 +1,6 @@
 <script lang="ts">
   import {
-    CommunityMember,
+    type CommunityMember,
     getCommunityInfo,
     getCommunityMembers,
   } from '$lib/api/twitter'

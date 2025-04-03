@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Label } from '$lib/components/ui/label'
-  import { Slider } from '$lib/components/custom/sllider'
+  import { Slider } from '$lib/components/custom/slider'
   import { t } from '$lib/i18n'
   import { useSettings } from '$lib/settings'
 
@@ -18,17 +18,21 @@
       </span>
     </div>
     <span
-      class="text-sm {$settings.blockSpeed && $settings.blockSpeed > 29
+      class="text-sm {$settings.blockSpeedRange &&
+      $settings.blockSpeedRange[0] > 29
         ? 'text-yellow-500'
         : 'text-green-500'}"
     >
-      {$settings.blockSpeed ?? 0}
+      {$settings.blockSpeedRange
+        ? `${$settings.blockSpeedRange[0]} - ${$settings.blockSpeedRange[1]}`
+        : `0`}
     </span>
   </div>
   <Slider
-    value={$settings.blockSpeed}
+    range={true}
+    value={$settings.blockSpeedRange ?? [0, 0]}
     onValueChange={(value) => {
-      $settings.blockSpeed = value
+      $settings.blockSpeedRange = value
     }}
     min={0}
     max={60}

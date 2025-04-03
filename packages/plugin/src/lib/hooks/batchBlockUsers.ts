@@ -13,6 +13,11 @@ import { fileSelector } from '$lib/util/fileSelector'
 import { parse } from 'csv-parse/browser/esm/sync'
 import { getSettings } from '$lib/settings'
 
+function getRandomCount(blockSpeedRange: [number, number]) {
+  const [min, max] = blockSpeedRange
+  return Math.max(min + Math.floor(Math.random() * (max - min)), 1)
+}
+
 export async function selectImportFile() {
   const files = await fileSelector({
     accept: '.json, .csv',
@@ -216,22 +221,20 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
         }
         // the rate limit is 150 users per 30s
         if (realBlockedCount !== 0) {
-          const blockSpeed = getSettings().blockSpeed
+          const blockSpeedRange = getSettings().blockSpeedRange
 
           // rate limit ref: https://developer.x.com/en/docs/x-api/v1/accounts-and-users/mute-block-report-users/api-reference/post-blocks-create
           // ref: https://devcommunity.x.com/t/what-is-the-rate-limit-on-post-request-and-post-blocks-create/102434/2
-          if (blockSpeed) {
+          if (blockSpeedRange) {
             // If the user sets the maximum number of users to block per minute,
             // then calculate the time to block each user
             // const waitTime = (60 * 1000) / Math.max(blockSpeed, 1)
-            const _waitTime = (60 * 1000) / Math.max(blockSpeed, 1)
-            const waitTime = Math.floor(
-              _waitTime / 2 + Math.random() * _waitTime,
-            )
+            const count = getRandomCount(blockSpeedRange)
+            const waitTime = (60 * 1000) / count
             toast.loading(
               tP('modlists.detail.toast.blockSpeed', {
                 values: {
-                  count: blockSpeed,
+                  count,
                   time: ms(Math.max(1000, waitTime)),
                   current: meta.index,
                   total: allCount,
@@ -248,7 +251,7 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
                 toast.loading(
                   tP('modlists.detail.toast.blockSpeed', {
                     values: {
-                      count: blockSpeed,
+                      count,
                       time: ms(Math.max(1000, waitTime - (Date.now() - now))),
                       current: meta.index,
                       total: allCount,
@@ -300,7 +303,9 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
             toast.loading(
               tP('modlists.detail.toast.rateLimit', {
                 values: {
-                  time: ms(Math.max(1000, waitTime - (Date.now() - Date.now()))),
+                  time: ms(
+                    Math.max(1000, waitTime - (Date.now() - Date.now())),
+                  ),
                 },
               }),
               {

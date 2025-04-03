@@ -14,7 +14,7 @@ export type Settings = {
   hideLanguages: string[]
 
   hideGrok?: boolean
-  blockSpeed?: number
+  blockSpeedRange?: [number, number]
   devMode?: boolean
 }
 

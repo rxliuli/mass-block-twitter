@@ -337,12 +337,14 @@ class PendingCheckUserDAO {
     return createKeyVal({
       dbName: 'mass-db',
       storeName: 'pendingCheckUserIds',
+      expirationTtl: 60 * 60 * 24 * 7, // 1 week
     })
   }
   private get uploadedCheckUserIds() {
     return createKeyVal({
       dbName: 'mass-db',
       storeName: 'uploadedCheckUserIds',
+      expirationTtl: 60 * 60 * 24 * 7, // 1 week
     })
   }
   async record(userIds: string[]): Promise<void> {

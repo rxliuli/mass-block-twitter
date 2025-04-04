@@ -3,7 +3,6 @@
   import { createMutation, useQueryClient } from '@tanstack/svelte-query'
   import type {
     ModListAddTwitterUsersRequest,
-    ModListAddTwitterUsersResponse,
     ModListRemoveTwitterUserRequest,
   } from '@mass-block-twitter/server'
   import { Button } from '$lib/components/ui/button'
@@ -27,6 +26,11 @@
   import { selectImportFile } from '$lib/hooks/batchBlockUsers'
   import { Input } from '$lib/components/ui/input'
   import { cn } from '$lib/utils'
+  import { batchExecute } from '$lib/util/batch'
+  import { useController } from '$lib/stores/controller'
+  import { middleware } from '$lib/util/middleware'
+  import { errorHandler, loadingHandler } from '$lib/util/handlers'
+  import { wait } from '@liuli-util/async'
 
   let {
     owner,
@@ -61,30 +65,52 @@
     }
   })
 
+  const controller = useController()
+  onDestroy(() => controller.abort())
   const innerAddUsersMutation = createMutation({
     mutationFn: async (users: User[]) => {
-      const resp = await crossFetch(`${SERVER_URL}/api/modlists/users`, {
-        method: 'POST',
-        headers: {
-          Authorization: 'Bearer ' + (await getAuthInfo())?.token,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          modListId: route.search?.get('id')!,
-          twitterUsers: users,
-        } satisfies ModListAddTwitterUsersRequest),
-      })
-      if (!resp.ok) {
-        throw new Error('Failed to add user')
+      controller.create()
+      const toastId = toast.loading('Adding users...')
+      try {
+        const result = await batchExecute({
+          controller,
+          getItems: () => chunk(users, 50),
+          total: users.length,
+          execute: async (chunk) => {
+            const resp = await crossFetch(`${SERVER_URL}/api/modlists/users`, {
+              method: 'POST',
+              headers: {
+                Authorization: 'Bearer ' + (await getAuthInfo())?.token,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                modListId: route.search?.get('id')!,
+                twitterUsers: chunk,
+              } satisfies ModListAddTwitterUsersRequest),
+            })
+            if (!resp.ok) {
+              throw new Error('Failed to add user')
+            }
+          },
+          onProcessed: async (context) =>
+            middleware({ context, toastId })
+              .use(
+                errorHandler({
+                  title: 'Add users failed',
+                }),
+              )
+              .use(loadingHandler({ title: 'Adding users...' }))
+              .run(),
+        })
+        toast.success(`Added ${result.success}/${result.total} users`, {
+          duration: 10000,
+        })
+        queryClient.invalidateQueries({
+          queryKey: ['modlistUsers', route.search?.get('id')],
+        })
+      } finally {
+        toast.dismiss(toastId)
       }
-      const data = (await resp.json()) as ModListAddTwitterUsersResponse
-      if (!$query.data) {
-        await $query.refetch()
-        return
-      }
-      queryClient.invalidateQueries({
-        queryKey: ['modlistUsers', route.search?.get('id')],
-      })
     },
   })
 
@@ -93,55 +119,7 @@
     if (!users) {
       return
     }
-    const allCount = users.length
-    const abortController = new AbortController()
-    const toastId = toast.info($t('modlists.detail.users.import.importing'), {
-      action: {
-        label: $t('modlists.detail.users.import.stop'),
-        onClick: () => {
-          abortController.abort()
-        },
-      },
-    })
-    let count = 0
-    try {
-      for (const it of chunk(users, 50)) {
-        if (abortController.signal.aborted) {
-          break
-        }
-        await $innerAddUsersMutation.mutateAsync(it)
-        count += it.length
-        toast.info(
-          $t('modlists.detail.users.import.progress', {
-            values: {
-              count,
-              total: allCount,
-            },
-          }),
-          {
-            id: toastId,
-            action: {
-              label: $t('modlists.detail.users.import.stop'),
-              onClick: () => {
-                abortController.abort()
-              },
-            },
-          },
-        )
-      }
-      toast.dismiss(toastId)
-      toast.success(
-        $t('modlists.detail.users.import.success', {
-          values: {
-            count,
-            total: allCount,
-          },
-        }),
-      )
-    } catch (err) {
-      toast.dismiss(toastId)
-      toast.error($t('modlists.detail.users.import.failed'))
-    }
+    await $innerAddUsersMutation.mutateAsync(users)
   }
 
   ref = {

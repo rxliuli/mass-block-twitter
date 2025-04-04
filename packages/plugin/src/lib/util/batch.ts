@@ -10,6 +10,7 @@ type BatchExecuteOptions<T, R> = {
   total?: number
 }
 type BatchExecuteResult<T, R> = {
+  total: number
   success: number
   failed: number
   results: R[]
@@ -19,6 +20,7 @@ export async function batchExecute<T, R>(
   options: BatchExecuteOptions<T, R>,
 ): Promise<BatchExecuteResult<T, R>> {
   let i = 0
+  let processed = 0
   let failed = 0
   const results: R[] = []
   const startTime = Date.now()
@@ -39,28 +41,39 @@ export async function batchExecute<T, R>(
       context.result = result
       results[i] = result
     } catch (error) {
-      failed++
+      if (Array.isArray(context.item)) {
+        failed += context.item.length
+      } else {
+        failed++
+      }
       context.error = error
     }
-    const averageTime = (Date.now() - startTime) / (i + 1)
-    const total = options.total ?? items.length
+    processed += Array.isArray(context.item) ? context.item.length : 1
+    const total =
+      options.total ??
+      (Array.isArray(context.item) ? items.flat().length : items.length)
+    const successful = processed - failed
+    const averageTime = (Date.now() - startTime) / processed
+    const remainingTime = (total - processed) * averageTime
     context.progress = {
-      processed: i + 1,
+      processed,
       total,
-      successful: i + 1 - failed,
+      successful,
       failed,
       startTime,
       currentTime: Date.now(),
       averageTime,
-      remainingTime: (total - i - 1) * averageTime,
+      remainingTime,
     }
+
     await options.onProcessed(context)
   }
   return {
-    success: i - failed,
+    success: processed - failed,
     failed,
     results,
-  } as BatchExecuteResult<T, R>
+    total: options.total ?? options.getItems().flat().length,
+  } satisfies BatchExecuteResult<T, R>
 }
 
 export type QueryOperationContext<T> = {

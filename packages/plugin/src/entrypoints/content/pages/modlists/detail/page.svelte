@@ -396,7 +396,6 @@
             >
               <Button
                 variant="ghost"
-                class="text-blue-400 flex items-center gap-2"
                 onclick={() => usersRef?.onImportUsers()}
                 disabled={!$metadata.data?.owner}
               >
@@ -405,7 +404,6 @@
               </Button>
               <Button
                 variant="ghost"
-                class="text-blue-400 flex items-center gap-2"
                 onclick={() => usersRef?.onOpenUserAdd()}
                 disabled={!$metadata.data?.owner}
               >
@@ -420,7 +418,6 @@
             >
               <Button
                 variant="ghost"
-                class="text-blue-400 flex items-center gap-2"
                 onclick={() => rulesRef?.onOpenRuleEdit()}
                 disabled={!$metadata.data?.owner}
               >

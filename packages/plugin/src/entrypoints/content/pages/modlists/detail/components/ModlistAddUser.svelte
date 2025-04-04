@@ -189,7 +189,6 @@
           true,
         )
         selected = []
-        toast.success($t('modlists.addUser.toast.addSuccess'))
       },
       (users) => users.map((it) => it.id),
     ),

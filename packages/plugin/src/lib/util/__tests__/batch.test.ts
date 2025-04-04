@@ -23,8 +23,8 @@ describe('batchExecute', () => {
         f(context.progress.processed)
       },
     })
-    expect(result.success).toBe(3)
-    expect(result.failed).toBe(0)
+    expect(result.success).eq(3)
+    expect(result.failed).eq(0)
     expect(result.results).toEqual([1, 2, 3])
     expect(f.mock.calls.map((it) => it[0])).toEqual([1, 2, 3])
   })
@@ -44,8 +44,8 @@ describe('batchExecute', () => {
         f(context.progress.processed)
       },
     })
-    expect(result.success).toBe(2)
-    expect(result.failed).toBe(0)
+    expect(result.success).eq(2)
+    expect(result.failed).eq(0)
     expect(result.results).toEqual([1, 2])
     expect(f.mock.calls.map((it) => it[0])).toEqual([1, 2])
   })
@@ -173,15 +173,16 @@ describe('batchExecute', () => {
     expect(result.results).toEqual(array)
   })
   it('should execute the batch and middleware', async () => {
-    const catchError = vi.fn<MiddlewareHandler<ExecuteOperationContext<number, number>>>(
-      async (c, next) => {
-        if (c.error) {
-          return
-        }
-        await next()
-      },
-    )
-    const logger = vi.fn<MiddlewareHandler<ExecuteOperationContext<number, number>>>()
+    const catchError = vi.fn<
+      MiddlewareHandler<ExecuteOperationContext<number, number>>
+    >(async (c, next) => {
+      if (c.error) {
+        return
+      }
+      await next()
+    })
+    const logger =
+      vi.fn<MiddlewareHandler<ExecuteOperationContext<number, number>>>()
     const result = await batchExecute({
       controller: new AbortController(),
       getItems: () => [1, 2, 3],
@@ -193,8 +194,41 @@ describe('batchExecute', () => {
       },
       onProcessed: (c) => middleware(c).use(catchError).use(logger).run(),
     })
-    expect(catchError.mock.calls.length).toBe(3)
-    expect(logger.mock.calls.length).toBe(2)
+    expect(catchError.mock.calls.length).eq(3)
+    expect(logger.mock.calls.length).eq(2)
+  })
+  it('should execute the batch with array', async () => {
+    const onProcessed = vi
+      .fn<(context: ExecuteOperationContext<number[], void>) => Promise<void>>()
+      .mockImplementation(async (c) => {
+        if (c.error) {
+          c.controller.abort()
+          return
+        }
+      })
+    const result = await batchExecute({
+      controller: new AbortController(),
+      getItems: () => [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+      ],
+      execute: async (item) => {
+        if (item[0] === 4) {
+          throw new Error()
+        }
+      },
+      onProcessed,
+    })
+    expect(result.success).eq(3)
+    expect(result.failed).eq(3)
+    const [a1, a2] = onProcessed.mock.calls.map((it) => it[0])
+    expect(a1.progress.processed).eq(3)
+    expect(a1.progress.successful).eq(3)
+    expect(a1.progress.failed).eq(0)
+    expect(a2.progress.processed).eq(6)
+    expect(a2.progress.successful).eq(3)
+    expect(a2.progress.failed).eq(3)
   })
 })
 

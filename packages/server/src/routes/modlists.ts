@@ -28,7 +28,7 @@ import {
 } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
 import { getTableAliasedColumns } from '../lib/drizzle'
-import { groupBy } from 'es-toolkit'
+import { groupBy, omit } from 'es-toolkit'
 
 const modlists = new Hono<HonoEnv>().use(auth())
 
@@ -166,7 +166,7 @@ export const subscribeParamSchema = z.object({
   modListId: z.string(),
 })
 export const subscribeSchema = z.object({
-  action: z.enum(['block', 'hide']).optional().default('hide'),
+  action: z.enum(['block', 'hide']),
 })
 export type ModListSubscribeRequest = z.infer<typeof subscribeSchema>
 modlists
@@ -200,6 +200,17 @@ modlists
         return c.json({ code: 'modListNotFound' }, 404)
       }
       if (_existingSubscription.length > 0) {
+        await db
+          .update(modListSubscription)
+          .set({
+            action: subscribe.action,
+          })
+          .where(
+            and(
+              eq(modListSubscription.modListId, validated.modListId),
+              eq(modListSubscription.localUserId, tokenInfo.sub),
+            ),
+          )
         return c.json({ code: 'success' })
       }
       await db.batch([
@@ -651,7 +662,7 @@ modlists.delete(
 
 interface CacheItem {
   updatedAt: string
-  data: ModListSubscribedUserAndRulesResponse[number]
+  data: Omit<ModListSubscribedUserAndRulesResponse[number], 'action'>
 }
 
 async function queryModListSubscribedUserAndRulesByCache(
@@ -678,7 +689,10 @@ async function queryModListSubscribedUserAndRulesByCache(
           const cached = JSON.parse(cachedStr) as CacheItem
           if (cached && cached.updatedAt === it.updatedAt) {
             cacheIds.push(it.modListId)
-            return cached.data
+            return {
+              ...cached.data,
+              action: it.action,
+            }
           }
         } catch {}
       }),
@@ -723,8 +737,8 @@ async function queryModListSubscribedUserAndRulesByCache(
           action: modList.action,
           twitterUserIds: modListUsers.map((it) => it.twitterUserId),
           rules: modListRules.map((it) => it.rule),
-        },
-      } satisfies CacheItem
+        } satisfies ModListSubscribedUserAndRulesResponse[number],
+      }
     })
     .filter(
       (it) => it.data.rules.length > 0 || it.data.twitterUserIds.length > 0,
@@ -733,7 +747,10 @@ async function queryModListSubscribedUserAndRulesByCache(
     grouped.map(async (it) => {
       await c.env.MY_KV.put(
         'modlist:' + it.data.modListId,
-        JSON.stringify(it),
+        JSON.stringify({
+          updatedAt: it.updatedAt,
+          data: omit(it.data, ['action']),
+        }),
         {
           // cache 7 days
           expirationTtl: 60 * 60 * 24 * 7,

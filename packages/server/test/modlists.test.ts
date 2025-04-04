@@ -236,6 +236,7 @@ describe('modlists', () => {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${context.token1}` },
     })
+
   const getModList = async (id: string, token?: string) => {
     const headers = token ? { Authorization: token } : undefined
     const resp = await fetch('/api/modlists/get/' + id, { headers })
@@ -318,7 +319,13 @@ describe('modlists', () => {
       expect((await getModList(r1.id)).subscriptionCount).toBe(0)
       const resp2 = await fetch(`/api/modlists/subscribe/${r1.id}`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${context.token2}` },
+        body: JSON.stringify({
+          action: 'hide',
+        } satisfies ModListSubscribeRequest),
+        headers: {
+          Authorization: `Bearer ${context.token2}`,
+          'Content-Type': 'application/json',
+        },
       })
       expect(resp2.ok).true
       expect((await getModList(r1.id)).subscriptionCount).toBe(1)
@@ -343,9 +350,9 @@ describe('modlists', () => {
       expect(resp2.status).toBe(404)
     })
   })
-  const getSubscribedUsers = async () => {
+  const getSubscribedUsers = async (options?: { token?: string }) => {
     const resp1 = await fetch(`/api/modlists/subscribed/users`, {
-      headers: { Authorization: `Bearer ${context.token1}` },
+      headers: { Authorization: `Bearer ${options?.token ?? context.token1}` },
     })
     expect(resp1.ok).true
     return (await resp1.json()) as ModListSubscribedUserAndRulesResponse
@@ -365,12 +372,28 @@ describe('modlists', () => {
       const r1 = (await resp1.json()) as ModListCreateResponse
       modListId = r1.id
     })
+    const subscribeModList = async (optinos?: {
+      modListId?: string
+      token?: string
+      action?: ModListSubscribeRequest['action']
+    }) => {
+      const resp = await fetch(
+        `/api/modlists/subscribe/${optinos?.modListId ?? modListId}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${optinos?.token ?? context.token1}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: optinos?.action ?? 'hide',
+          } satisfies ModListSubscribeRequest),
+        },
+      )
+      expect(resp.ok).true
+    }
     it('should be able to subscribe to a modlist', async () => {
-      const resp2 = await fetch(`/api/modlists/subscribe/${modListId}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${context.token1}` },
-      })
-      expect(resp2.ok).true
+      await subscribeModList()
       const resp3 = await fetch('/api/modlists/subscribed/metadata', {
         headers: { Authorization: `Bearer ${context.token1}` },
       })
@@ -384,22 +407,11 @@ describe('modlists', () => {
       expect((await getModList(modListId)).subscribed).false
     })
     it('should duplicate subscribe to a modlist', async () => {
-      const subscribe = () =>
-        fetch(`/api/modlists/subscribe/${modListId}`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${context.token1}` },
-        })
-      const resp1 = await subscribe()
-      expect(resp1.ok).true
-      const resp2 = await subscribe()
-      expect(resp2.status).toBe(200)
+      await subscribeModList()
+      await subscribeModList()
     })
     it('should be able to get subscribed users', async () => {
-      const resp1 = await fetch(`/api/modlists/subscribe/${modListId}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${context.token1}` },
-      })
-      expect(resp1.ok).true
+      await subscribeModList()
       expect(await getSubscribedUsers()).length(0)
       await addUserToModList(
         {
@@ -455,11 +467,6 @@ describe('modlists', () => {
         },
       ] satisfies ModListSubscribedUserAndRulesResponse)
     })
-    const subscribe = () =>
-      fetch(`/api/modlists/subscribe/${modListId}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${context.token1}` },
-      })
     describe('should be able to subscribe to get modlist uesrs/rules with cache', async () => {
       beforeEach(async () => {
         const users = range(10)
@@ -476,7 +483,7 @@ describe('modlists', () => {
           )
         const db = context.db
         await db.insert(user).values(users)
-        await subscribe()
+        await subscribeModList()
         await db.insert(modListUser).values({
           id: 'modlist-user-1',
           modListId,
@@ -575,6 +582,18 @@ describe('modlists', () => {
         const r4 = await getSubscribedUsers()
         expect(r4).not.toEqual(r3)
         expect(r4).toEqual(r1)
+      })
+      it('should be able to subscribe to get modlist uesrs/rules with cache', async () => {
+        await subscribeModList({
+          token: context.token1,
+          action: 'block',
+        })
+        const r1 = await getSubscribedUsers({ token: context.token1 })
+        console.log(r1[0])
+        expect(r1[0].action).eq('block')
+        await subscribeModList({ token: context.token2, action: 'hide' })
+        const r2 = await getSubscribedUsers({ token: context.token2 })
+        expect(r2[0].action).eq('hide')
       })
     })
   })
@@ -1018,11 +1037,15 @@ describe('modlists', () => {
         body: JSON.stringify({
           action: 'block',
         } satisfies ModListSubscribeRequest),
-        headers: { Authorization: `Bearer ${context.token1}` },
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
       })
       expect(resp2.ok).true
       const r2 = await getSubscribedUsers()
       expect(r2).length(1)
+      expect(r2[0].action).eq('block')
       expect(r2[0].rules).length(1)
       expect(r2[0].rules[0]).toEqual(r1.rule)
     })

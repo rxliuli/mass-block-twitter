@@ -16,26 +16,26 @@
   import { toast } from 'svelte-sonner'
   import type { LoginResponse } from '@mass-block-twitter/server'
 
-  onMount(async () => {
-    if (page.url.searchParams.get('from') !== 'plugin') {
-      return
-    }
-    const authInfo = await getAuthInfo()
-    if (!authInfo) {
-      return
-    }
-    const resp = await fetch(
-      import.meta.env.VITE_API_URL + '/api/accounts/settings',
-      { headers: { Authorization: `Bearer ${authInfo.token}` } },
-    )
-    if (!resp.ok) {
-      clearAuthInfo()
-      // location.reload()
-      return
-    }
-    toast.success('Already logged in, redirecting...')
-    onPluginLoggedIn({ ...authInfo })
-  })
+  // onMount(async () => {
+  //   if (page.url.searchParams.get('from') !== 'plugin') {
+  //     return
+  //   }
+  //   const authInfo = await getAuthInfo()
+  //   if (!authInfo) {
+  //     return
+  //   }
+  //   const resp = await fetch(
+  //     import.meta.env.VITE_API_URL + '/api/accounts/settings',
+  //     { headers: { Authorization: `Bearer ${authInfo.token}` } },
+  //   )
+  //   if (!resp.ok) {
+  //     clearAuthInfo()
+  //     // location.reload()
+  //     return
+  //   }
+  //   toast.success('Already logged in, redirecting...')
+  //   onPluginLoggedIn({ ...authInfo })
+  // })
 
   const mutation = createMutation({
     mutationFn: async (event: SubmitEvent) => {

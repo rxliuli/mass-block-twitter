@@ -1,14 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest'
-import {
-  extractScreenName,
-  maxRequestsHandler,
-  sleepHandler,
-} from '../onExportUsers'
+import { extractScreenName } from '../onExportUsers'
 import { range } from 'es-toolkit'
 import { render } from 'vitest-browser-svelte'
 import { PageTest } from '$lib/components/test'
 import { wait } from '@liuli-util/async'
 import { tick } from 'svelte'
+import { sleepHandler, maxRequestsHandler } from '$lib/util/handlers'
 
 describe('sleepHandler', () => {
   let next: Mock

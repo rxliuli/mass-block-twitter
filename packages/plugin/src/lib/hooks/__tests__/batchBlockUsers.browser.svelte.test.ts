@@ -6,7 +6,7 @@ import { dbApi, User } from '$lib/db'
 import { AuthInfo } from '@mass-block-twitter/server'
 import { BatchBlockUsersProcessedMeta, ExpectedError } from '$lib/api'
 import { range, uniq } from 'es-toolkit'
-import { useSettings } from '$lib/settings'
+import { Settings, useSettings } from '$lib/settings'
 import { PageTest } from '$lib/components/test'
 
 describe('batchBlockUsers', () => {
@@ -36,12 +36,14 @@ describe('batchBlockUsers', () => {
   }
   beforeEach(async () => {
     screen = render(PageTest)
+    localStorage.clear()
     initI18n('en-US')
     await dbApi.clear()
     blockUser = vi.fn()
     onProcessed = vi.fn()
   })
   afterEach(() => {
+    localStorage.clear()
     vi.clearAllMocks()
   })
 
@@ -347,10 +349,13 @@ describe('batchBlockUsers', () => {
     }, 10)
     vi.useFakeTimers()
     const users = range(500).map((i) => genUser(i.toString()))
-    useSettings().update((settings) => ({
-      ...settings,
-      blockSpeed: 1,
-    }))
+    useSettings().update(
+      (settings) =>
+        ({
+          ...settings,
+          blockSpeedRange: [1, 10],
+        } satisfies Settings),
+    )
     await batchBlockUsersMutation({
       controller: new AbortController(),
       users: () => users,
@@ -365,10 +370,13 @@ describe('batchBlockUsers', () => {
   })
   it('should block users with block speed toast', async () => {
     vi.useFakeTimers()
-    useSettings().update((settings) => ({
-      ...settings,
-      blockSpeed: 1,
-    }))
+    useSettings().update(
+      (settings) =>
+        ({
+          ...settings,
+          blockSpeedRange: [1, 10],
+        } satisfies Settings),
+    )
     const r = batchBlockUsersMutation({
       controller: new AbortController(),
       users: () => [genUser('1'), genUser('2')],
@@ -376,22 +384,13 @@ describe('batchBlockUsers', () => {
       onProcessed,
       getAuthInfo,
     })
-    await expect
-      .element(
-        screen.getByText(
-          'Blocking users per minute: 1, progress: 1/2, please wait',
-        ),
-      )
-      .toBeInTheDocument()
+    const progressToast = screen.getByText(
+      new RegExp('Blocking users per minute: \\d, progress: 1/2, please wait'),
+    )
+    await expect.element(progressToast).toBeInTheDocument()
     vi.setSystemTime(new Date().getTime() + 60 * 1000)
     await vi.runAllTimersAsync()
-    await expect
-      .element(
-        screen.getByText(
-          'Blocking users per minute: 1, progress: 1/2, please wait',
-        ),
-      )
-      .not.toBeInTheDocument()
+    await expect.element(progressToast).not.toBeInTheDocument()
     expect(blockUser).toHaveBeenCalledTimes(2)
     expect(onProcessed).toHaveBeenCalledTimes(2)
     vi.useRealTimers()
@@ -406,10 +405,13 @@ describe('batchBlockUsers', () => {
     }, 1)
     vi.useFakeTimers()
     const users = range(10).map((i) => genUser(i.toString()))
-    useSettings().update((settings) => ({
-      ...settings,
-      blockSpeed: 1,
-    }))
+    useSettings().update(
+      (settings) =>
+        ({
+          ...settings,
+          blockSpeedRange: [1, 10],
+        } satisfies Settings),
+    )
     await batchBlockUsersMutation({
       controller: new AbortController(),
       users: () => users,

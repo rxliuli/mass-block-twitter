@@ -29,8 +29,9 @@ import {
   TweetFilter,
   selfFilter,
   grokFilter,
+  adFilter,
 } from '$lib/filter'
-import { getSettings, Settings } from '$lib/settings'
+import { getDefaultSettings, getSettings, Settings } from '$lib/settings'
 import { ulid } from 'ulidx'
 import { blockUser } from '$lib/api/twitter'
 
@@ -120,6 +121,9 @@ function getFilters(settings: Settings) {
   }
   if (settings.hideGrok) {
     filters.push(grokFilter())
+  }
+  if (settings.hideAdvertiser ?? getDefaultSettings().hideAdvertiser) {
+    filters.push(adFilter())
   }
   return filters
 }

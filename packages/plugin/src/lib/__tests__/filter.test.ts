@@ -3,10 +3,12 @@ import {
   filterTweets,
   MUTED_WORD_RULES_KEY,
   ParsedTweet,
+  parseSourceType,
   parseTweets,
 } from '$lib/api'
 import { User } from '$lib/db'
 import {
+  adFilter,
   defaultProfileFilter,
   FilterData,
   flowFilter,
@@ -21,6 +23,7 @@ import {
 import { Rule } from '$lib/rule'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import TweetDetail11 from './assets/TweetDetail11.json'
+import TweetDetail12 from './assets/TweetDetail12.json'
 
 describe('defaultProfileFilter', () => {
   const filter = defaultProfileFilter()
@@ -307,5 +310,29 @@ describe('grokFilter', () => {
     expect(tweets.every((it) => !it.text.toLowerCase().includes('@grok'))).true
     expect(tweets.every((it) => !it.user.screen_name.includes('grok'))).true
     expect(tweets).length(10)
+  })
+})
+
+describe('adFilter', () => {
+  it('should return hide when tweet is advertiser', () => {
+    expect(
+      parseTweets(TweetDetail12).some(
+        (it) => parseSourceType(it.source) === 'advertiser',
+      ),
+    ).true
+    const isShow = flowFilter([adFilter()])
+    const handledJson = filterTweets(
+      TweetDetail12,
+      (it) =>
+        isShow({
+          type: 'tweet',
+          tweet: it,
+        }).value,
+    )
+    expect(
+      parseTweets(handledJson).some(
+        (it) => parseSourceType(it.source) === 'advertiser',
+      ),
+    ).false
   })
 })

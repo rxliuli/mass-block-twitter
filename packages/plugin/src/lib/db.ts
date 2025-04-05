@@ -41,6 +41,7 @@ export interface Tweet {
   created_at: string
   updated_at: string // add to idb time
   lang: string // ISO 639-1
+  source: string
 }
 
 export interface Activity {

@@ -559,6 +559,8 @@ describe('filterNotifications', () => {
               lang: 'en',
               conversation_id_str: '1',
               entities: {},
+              source:
+                '"<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>"',
             },
           },
           users,

@@ -12,6 +12,7 @@ export type Settings = {
   hideMutedWords: boolean
   hideModListAccounts: boolean
   hideLanguages: string[]
+  hideAdvertiser?: boolean
 
   hideGrok?: boolean
   blockSpeedRange?: [number, number]
@@ -26,6 +27,20 @@ function getLocalStorage<T>(key: string, defaultValue: T): T {
   return {
     ...defaultValue,
     ...(JSON.parse(value) as T),
+  }
+}
+
+export function getDefaultSettings(): Settings {
+  return {
+    hideSuspiciousAccounts: true,
+    hideSpamAccounts: true,
+    hideMutedWords: true,
+    hideModListAccounts: true,
+    hideBlueVerifiedAccounts: false,
+    hideLanguages: [],
+    theme: 'system',
+    hideAdvertiser: true,
+    hideGrok: false,
   }
 }
 

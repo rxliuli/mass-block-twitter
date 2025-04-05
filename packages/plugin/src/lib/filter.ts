@@ -1,5 +1,10 @@
 import { ulid } from 'ulidx'
-import { MUTED_WORD_RULES_KEY, MUTED_WORDS_KEY, ParsedTweet } from './api'
+import {
+  MUTED_WORD_RULES_KEY,
+  MUTED_WORDS_KEY,
+  ParsedTweet,
+  parseSourceType,
+} from './api'
 import { User } from './db'
 import { extractCurrentUserId } from './observe'
 import { matchByKeyword } from './util/matchByKeyword'
@@ -272,6 +277,18 @@ export function grokFilter(): TweetFilter {
         return 'hide'
       }
       if (tweet.user.screen_name === 'grok') {
+        return 'hide'
+      }
+      return 'next'
+    },
+  }
+}
+
+export function adFilter(): TweetFilter {
+  return {
+    name: 'ad',
+    tweetCondition: (tweet: ParsedTweet) => {
+      if (parseSourceType(tweet.source) === 'advertiser') {
         return 'hide'
       }
       return 'next'

@@ -15,6 +15,7 @@ exports[`parseTweets > parseTweets for detail 1 1`] = `
       },
     ],
     "quoted_status_id_str": "1882896992017465643",
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "这钱真能给到孩子，那多少钱我也认了。
 你睁眼看看，现在日本给孩子吃的都是什么鸡巴玩意儿。
 什么こども家庭庁年间预算7万亿日元，平摊到一个纳税人身上快10万日元就给孩子喂了屎。
@@ -43,6 +44,7 @@ exports[`parseTweets > parseTweets for detail 1 1`] = `
     "in_reply_to_status_id_str": "1882822506392027415",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "@yuebanzhu 换句话说，只要黑在日本想方设法造个孩子，出于所谓人权考量就不能依法驱逐了，等于变相获得永居权，还要由你这样的纳税大户来间接抚养？这公平吗？",
     "user": {
       "blocking": false,
@@ -69,6 +71,7 @@ exports[`parseTweets > parseTweets for detail 1 1`] = `
     "in_reply_to_status_id_str": "1883173115230134610",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@yuebanzhu 吃这些东西我真怀疑蛋白质摄入够么...生长发育期的能量消耗很大啊...",
     "user": {
       "blocking": false,
@@ -94,6 +97,7 @@ exports[`parseTweets > parseTweets for detail 1 1`] = `
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://g123.jp" rel="nofollow">CTW AMS</a>",
     "text": "培育蜘蛛子來殺時間吧
 
 等級提升太神啦",
@@ -125,6 +129,7 @@ Discord：https://discord.com/invite/5spUnekZQB
     "in_reply_to_status_id_str": "1883173115230134610",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@yuebanzhu 饭菜还能添么？  如果可以自由打菜的话，感觉还行啊",
     "user": {
       "blocking": false,
@@ -150,6 +155,7 @@ Discord：https://discord.com/invite/5spUnekZQB
     "in_reply_to_status_id_str": "1883190629930557596",
     "lang": "ja",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "@nursenika1840 添是不可能了",
     "user": {
       "blocking": false,
@@ -175,6 +181,7 @@ Discord：https://discord.com/invite/5spUnekZQB
     "in_reply_to_status_id_str": "1883173115230134610",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@yuebanzhu 这孩子长大不得营养不良😅",
     "user": {
       "blocking": false,
@@ -201,6 +208,7 @@ Discord：https://discord.com/invite/5spUnekZQB
     "in_reply_to_status_id_str": "1883173115230134610",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@yuebanzhu 少子化是問題，各種抖機靈寄生空手套白狼吃現成的也絕對是問題",
     "user": {
       "blocking": false,
@@ -226,6 +234,7 @@ Discord：https://discord.com/invite/5spUnekZQB
     "in_reply_to_status_id_str": "1883173115230134610",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "@yuebanzhu 比我幼儿园吃的还差。",
     "user": {
       "blocking": false,
@@ -253,6 +262,7 @@ https://www.instagram.com/bocchi1chan/",
     "in_reply_to_status_id_str": "1883173115230134610",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@yuebanzhu 这就是典型的做了婊子还在立牌坊！到现在为止，日本的义务教育的饭钱是收取孩子爹娘的钱！
 穷地方政府不想掏钱，又没办法多收取爹娘的钱，所以就这么忽悠下一代😁
 23区去年才4-50%的区不收饭钱了
@@ -287,6 +297,7 @@ https://www.instagram.com/bocchi1chan/",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@yuebanzhu",
     "user": {
       "blocking": false,
@@ -313,6 +324,7 @@ https://www.instagram.com/bocchi1chan/",
     "in_reply_to_status_id_str": "1883173115230134610",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@yuebanzhu 生育率还是太高了",
     "user": {
       "blocking": false,
@@ -338,6 +350,7 @@ https://www.instagram.com/bocchi1chan/",
     "in_reply_to_status_id_str": "1883173115230134610",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "@yuebanzhu 额……说实话不如几年前在微博看到的某个山区小学的午餐。。。那个不精致但是份量足够。。。",
     "user": {
       "blocking": false,
@@ -368,6 +381,7 @@ exports[`parseTweets > parseTweets for detail 2 1`] = `
     "in_reply_to_status_id_str": undefined,
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "http://textcapture.app v2 is live!
 
 Special v2 launch deal: $0.99 for util 300 users (82 spots left). Would really appreciate you leaving a review on the App Store!
@@ -415,6 +429,7 @@ exports[`parseTweets > parseTweets for detail 3 1`] = `
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "https://t.co/7Q78qGrTKN",
     "user": {
       "blocking": false,
@@ -446,6 +461,7 @@ exports[`parseTweets > parseTweets for detail 3 1`] = `
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@hsn8086",
     "user": {
       "blocking": false,
@@ -481,6 +497,7 @@ exports[`parseTweets > parseTweets for notifications 1`] = `
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "让吾辈试试是否有各位推友说的那么好",
   },
   {
@@ -495,6 +512,7 @@ exports[`parseTweets > parseTweets for notifications 1`] = `
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "去 tmd firefox，9 年前的 bug 还在，网站的 csp 限制和我扩展有什么关系？🙃",
   },
   {
@@ -503,6 +521,7 @@ exports[`parseTweets > parseTweets for notifications 1`] = `
     "in_reply_to_status_id_str": "1891798929433305117",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@_a_wing 开辟险路，奇袭敌军（",
   },
   {
@@ -511,6 +530,7 @@ exports[`parseTweets > parseTweets for notifications 1`] = `
     "in_reply_to_status_id_str": "1892149537017336203",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@rxliuli J.P. Illanes 创建的好久没有维护，被人fork 过去支持mac的吧
 https://github.com/raspu/Highlightr",
   },
@@ -520,6 +540,7 @@ https://github.com/raspu/Highlightr",
     "in_reply_to_status_id_str": "1892241501024817338",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@plusyip 那也许再找个更近的可以步行上下班的位置？🤣",
   },
   {
@@ -528,6 +549,7 @@ https://github.com/raspu/Highlightr",
     "in_reply_to_status_id_str": "1892049891058384992",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@skywind3000 好主意，先 mark 一下，插件后续版本看看能不能支持一下",
   },
   {
@@ -536,6 +558,7 @@ https://github.com/raspu/Highlightr",
     "in_reply_to_status_id_str": "1891795007960645808",
     "lang": "ja",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@Vegetable_Lee 允悲",
   },
   {
@@ -544,6 +567,7 @@ https://github.com/raspu/Highlightr",
     "in_reply_to_status_id_str": "1892132961086050784",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@rxliuli 🤣 GitHub 官方出品，参考参考用的啥代码高亮包😄",
   },
   {
@@ -552,6 +576,7 @@ https://github.com/raspu/Highlightr",
     "in_reply_to_status_id_str": "1892147128807645647",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@jaywcjlove 瞄了一眼，用的是 GitHub 员工创建的一个 Public Repo，然而 0 🌟
 https://github.com/devm33/Highlightr",
   },
@@ -567,6 +592,7 @@ https://github.com/devm33/Highlightr",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "jimp 看起来是一个纯 js 的图像处理库，然而它依赖着 pngjs，这也是一个 js 的 png 图像处理库，但它依赖了 nodejs 的 assert/stream 之类的模块，它使用了 assert polyfill 以在浏览器中使用，而 assert 模块依赖了 get-intrinsic，而它使用了 eval，然后浏览器扩展就原地升天了🤡",
   },
   {
@@ -581,6 +607,7 @@ https://github.com/devm33/Highlightr",
       },
     ],
     "quoted_status_id_str": "1892106682454479166",
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "在推特上发布你拍摄的照片，没有描述",
   },
   {
@@ -589,6 +616,7 @@ https://github.com/devm33/Highlightr",
     "in_reply_to_status_id_str": "1892125875556024831",
     "lang": "ja",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@jaywcjlove 屎上雕花，也不容易😄",
   },
   {
@@ -597,6 +625,7 @@ https://github.com/devm33/Highlightr",
     "in_reply_to_status_id_str": "1892465442415096301",
     "lang": "zh",
     "quoted_status_id_str": "1891798765117288799",
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@Piglei 吾辈最近经常碰到“编译器错误”，不管是 10k+ star 的库，还是久经考验的 Firefox，都遇到了一些奇奇怪怪的 bug
 https://x.com/rxliuli/status/1891798765117288799",
   },
@@ -606,6 +635,7 @@ https://x.com/rxliuli/status/1891798765117288799",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1891047551136092390",
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "发布博客【当吾辈遇上 Firefox 中 9 年的陈年老 Bug】
 https://blog.rxliuli.com/p/23bc670bb5e54e6190d3ecf39cc3efd4/",
   },
@@ -615,6 +645,7 @@ https://blog.rxliuli.com/p/23bc670bb5e54e6190d3ecf39cc3efd4/",
     "in_reply_to_status_id_str": "1892239429982626222",
     "lang": "ja",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@moeyua13 恭喜",
   },
   {
@@ -629,6 +660,7 @@ https://blog.rxliuli.com/p/23bc670bb5e54e6190d3ecf39cc3efd4/",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "New Feature?
 No! New Bugs!",
   },
@@ -638,6 +670,7 @@ No! New Bugs!",
     "in_reply_to_status_id_str": "1891776881659138158",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@_a_wing 身边还没有足够的人这样做过，换句话说，我们大部分人只是刚刚保证温饱没多少年而已。。。例如在零几年吾辈家里那会还吃不上米饭🙂",
   },
   {
@@ -652,6 +685,7 @@ No! New Bugs!",
       },
     ],
     "quoted_status_id_str": "1892115266600874028",
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "在推特上发布你拍摄的照片，没有描述",
   },
   {
@@ -666,6 +700,7 @@ No! New Bugs!",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "谢谢？",
   },
   {
@@ -680,6 +715,7 @@ No! New Bugs!",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "触景伤情，突然想起一句“欲买桂花同载酒，终不似，少年游”",
   },
 ]
@@ -700,6 +736,7 @@ exports[`parseTweets > parseTweets for timeline 1`] = `
       },
     ],
     "quoted_status_id_str": "1883142636820676965",
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "Open-R1: DeepSeek-R1大模型开源复现计划
 
 概述：HuggingFace 发布的完全开放的项目，旨在分三步(知识蒸馏、强化学习、多阶段训练)复现 DeepSeek-R1 的完整训练流程，让更多人能理解和使用这套技术方案
@@ -736,6 +773,7 @@ ex Microsoft MVP (2014-2022)
     "in_reply_to_status_id_str": undefined,
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "We are reproducing the full DeepSeek R1 data and training pipeline so everybody can use their recipe. Instead of doing it in secret we can do it together in the open!
 
 🧪 Step 1: replicate the R1-Distill models by distilling a high-quality reasoning corpus from DeepSeek-R1.
@@ -770,6 +808,7 @@ ex Microsoft MVP (2014-2022)
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://g123.jp" rel="nofollow">CTW AMS</a>",
     "text": "培育蜘蛛子來殺時間吧
 
 等級提升太神啦",
@@ -801,6 +840,7 @@ Discord：https://discord.com/invite/5spUnekZQB
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "我长得好丑😭",
     "user": {
       "blocking": false,
@@ -832,6 +872,7 @@ Discord：https://discord.com/invite/5spUnekZQB
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "https://t.co/PWCCyj8clA",
     "user": {
       "blocking": false,
@@ -864,6 +905,7 @@ Discord：https://discord.com/invite/5spUnekZQB
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "https://t.co/XSxRGe3AmJ",
     "user": {
       "blocking": false,
@@ -895,6 +937,7 @@ Discord：https://discord.com/invite/5spUnekZQB
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "❤️‍🩹❤️‍🩹❤️‍🩹",
     "user": {
       "blocking": false,
@@ -926,6 +969,7 @@ Discord：https://discord.com/invite/5spUnekZQB
     "in_reply_to_status_id_str": undefined,
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://help.twitter.com/en/using-twitter/how-to-tweet#source-labels" rel="nofollow">advertiser-interface</a>",
     "text": "Supercharge your Gmail with AI ✨",
     "user": {
       "blocking": false,
@@ -952,6 +996,7 @@ Discord：https://discord.com/invite/5spUnekZQB
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1882851449991737473",
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "“AMD宣布，已将新的DeepSeek-V3模型集成到Instinct MI300X GPU上，该模型旨在与SGLang一起实现最佳性能。DeepSeek-V3针对Al推理进行了优化。” //可以啊，DeepSeek挺牛逼的，居然被AMD看上了……👀
 
 ref: https://wallstreetcn.com/livenews/2855343",
@@ -983,6 +1028,7 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
     "in_reply_to_status_id_str": undefined,
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://sproutsocial.com" rel="nofollow">Sprout Social</a>",
     "text": "Excited to share that AMD has integrated the new DeepSeek-V3 model on Instinct MI300X GPUs, designed for peak performance with SGLang. DeepSeek-V3 is optimized for AI inferencing. Special thanks to the DeepSeek and SGLang teams for their close collaboration!",
     "user": {
       "blocking": false,
@@ -1009,6 +1055,7 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "😓 为什么我的时间线上一直有一个人持之以恒、锲而不舍地发着帖想要唱衰 deepseek R1
 
 从 “有没有专家来说说是不是真的牛逼？” 到 “希望大家不要把他吹过了”
@@ -1045,6 +1092,7 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "HuggingFace 刚开源了个项目叫 Open-R1, 旨在复现 DeepSeek-R1
 
 地址：https://github.com/huggingface/open-r1",
@@ -1073,6 +1121,7 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "我混的最好的同学就是本科毕业就工作了的
 
 现在都是正科副处，房价暴涨之前上了车，解决了终身大事
@@ -1112,6 +1161,7 @@ BitMsg：BM-GuKfKkQoZEX7Cmmg5ifTwnyhdihc9DnR。",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "✨Hello Live2D Riggers and VTubers!✨
 
 nizima LIVE is the official Live2D Vtuber app. We've invited professional Live2D creator Soulty to introduce the app's features and explain why she uses it. If you're interested, you can download the free trial here! https://nizimalive.com/en/?utm_source=nizimalive&utm_medium=tweet_movie&utm_campaign=nl_Soulty_video",
@@ -1151,6 +1201,7 @@ Discord ➭ http://discord.live2d.app",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "RT @sakura_oriko: 1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨",
     "user": {
       "blocking": false,
@@ -1183,6 +1234,7 @@ Discord ➭ http://discord.live2d.app",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "1月31日発売『かわいい女の子の衣装デザインアイデア帳』の見本誌が届きました！最初から最後までかわいいデザインがたっぷり詰まった創作に役立つ1冊です📚✨",
     "user": {
       "blocking": false,
@@ -1209,6 +1261,7 @@ Discord ➭ http://discord.live2d.app",
     "in_reply_to_status_id_str": undefined,
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "Today I bust my head doing data cleaning using Python string methods.
 
 I could've asked ChatGPT or Cursor to do it for me, but I'm learning Python and wanted to challenge myself.
@@ -1238,6 +1291,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1883022883578171482",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "说明半个小时，Cursor 写出来的应用，拿到国区第一，巧合不可复制",
     "user": {
       "blocking": false,
@@ -1264,6 +1318,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1882944708743467514",
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "OpenAI 招前端工程师，年薪 $245K – $385K + Offers Equity。
 如果 OpenAI 都还在招前端工程师，那说明 AI 替代程序员还早……",
     "user": {
@@ -1291,6 +1346,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1883152254641082413",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "蒸馏这个词确实让人迷惑，感觉是从一份混合液中蒸馏出一种纯净水（从模型A中提取出了A1），实际完全不是这个意思，更应该翻译成“教学”。",
     "user": {
       "blocking": false,
@@ -1317,6 +1373,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1882679738789216456",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "所以我说学界取得这个蒸馏术语，就取得不太好。
 
 外行一听就有自己的小理解了",
@@ -1345,6 +1402,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     "in_reply_to_status_id_str": undefined,
     "lang": "ja",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://help.twitter.com/en/using-twitter/how-to-tweet#source-labels" rel="nofollow">advertiser-interface</a>",
     "text": "3月24日の申請から「#2025年旅券（#パスポート）」の発給が開始！
 偽造・変造対策が強化され、顔写真ページがプラスチック製に変わります。
 #現在お持ちのパスポートは有効期間まで使えます #パスポくん #旅券",
@@ -1380,6 +1438,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "Programming gave me purpose , how about you ?",
     "user": {
       "blocking": false,
@@ -1412,6 +1471,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "来拍个合影
 #复刻字体设计",
     "user": {
@@ -1445,6 +1505,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "#ブルアカ  
 プラナ",
     "user": {
@@ -1484,6 +1545,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://buffer.com" rel="nofollow">Buffer App</a>",
     "text": "好耶是方便面！加了自己烤的脆皮培根卷里脊肉和好多配菜ww
 
 其实方便面还好，之前看到0.7欧一袋顺手买了点，加的肉和菜有3欧了。其实吃起来和中国版没区别qwq",
@@ -1512,6 +1574,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://help.twitter.com/en/using-twitter/how-to-tweet#source-labels" rel="nofollow">advertiser-interface</a>",
     "text": "歷史紀錄片《秦始皇》以史籍文獻、文物遺蹟為依據，追溯秦始皇的一生事蹟，展現周秦之交一段波瀾壯闊的歷史。
 
 整部紀錄片共計12集，每集時長約20分鐘，講述兩千多年前，秦始皇統一六國、建立大一統王朝的輝煌功績。
@@ -1548,6 +1611,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "大早上：拿铁＋摩卡＋文拉法辛
 今天我跟世界必须疯一个",
     "user": {
@@ -1580,6 +1644,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "angel Alya #ロシデレ",
     "user": {
       "blocking": false,
@@ -1612,6 +1677,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "#angelicpretty Melty Berry Princess JSK 🍓
 给大家拜个早年啦~祝各位蛇年大吉！
 📷: @YazawaBunny 
@@ -1646,6 +1712,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "apparently this is not an "acceptable excuse" 🙄",
     "user": {
       "blocking": false,
@@ -1672,6 +1739,7 @@ Am I the only one who makes their projects harder just to learn the skills?",
     "in_reply_to_status_id_str": undefined,
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://help.twitter.com/en/using-twitter/how-to-tweet#source-labels" rel="nofollow">advertiser-interface</a>",
     "text": "Freedom &amp; joy at Phuket Island Rehab top luxury addiction rehab for your addiction recovery journey,
 
 We are ready when you are.  Join us at Phuket Island Rehab in Thailand and reclaim your life.",
@@ -1706,6 +1774,7 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
       },
     ],
     "quoted_status_id_str": "1882896992017465643",
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "这钱真能给到孩子，那多少钱我也认了。
 你睁眼看看，现在日本给孩子吃的都是什么鸡巴玩意儿。
 什么こども家庭庁年间预算7万亿日元，平摊到一个纳税人身上快10万日元就给孩子喂了屎。
@@ -1734,6 +1803,7 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
     "in_reply_to_status_id_str": "1882822506392027415",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "@yuebanzhu 换句话说，只要黑在日本想方设法造个孩子，出于所谓人权考量就不能依法驱逐了，等于变相获得永居权，还要由你这样的纳税大户来间接抚养？这公平吗？",
     "user": {
       "blocking": false,
@@ -1760,6 +1830,7 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
     "in_reply_to_status_id_str": "1883173115230134610",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@yuebanzhu 吃这些东西我真怀疑蛋白质摄入够么...生长发育期的能量消耗很大啊...",
     "user": {
       "blocking": false,
@@ -1791,6 +1862,7 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "😁😁😁好久没发做的饭了。",
     "user": {
       "blocking": false,
@@ -1816,6 +1888,7 @@ We are ready when you are.  Join us at Phuket Island Rehab in Thailand and recla
     "in_reply_to_status_id_str": undefined,
     "lang": "en",
     "quoted_status_id_str": "1882865234765058403",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "This guy thinks deepseek r1, which had pver 100 authors, more then any ive seen on a meta paper and maybe even more than i saw on gpt4 technical report - thinks that they are claiming they are a “small group” of ai engineers?",
     "user": {
       "blocking": false,
@@ -1844,6 +1917,7 @@ HuggingFace: http://huggingface.co/teknium",
     "in_reply_to_status_id_str": undefined,
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "What's more likely? 
 
 1 - small group of AI engineers at @deepseek_ai figures out how to beat all of the top researchers in the world as a side project
@@ -1874,6 +1948,7 @@ HuggingFace: http://huggingface.co/teknium",
     "in_reply_to_status_id_str": "1883109864832127088",
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "@Teknium1 I think they included cooks and bus driver at their company no?",
     "user": {
       "blocking": false,
@@ -1901,6 +1976,7 @@ Let's make AI even cooler.",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://twitter.com" rel="nofollow">Twitter for Advertisers</a>",
     "text": "暴雪VPN
 加速器必备，免费安全，翻墙无压力
 
@@ -1937,6 +2013,7 @@ Let's make AI even cooler.",
     "in_reply_to_status_id_str": undefined,
     "lang": "en",
     "quoted_status_id_str": "1882725553071120594",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "RT @zhanghaili0610: Huge congrats on the launch! 🎉 Thrilled to see Refly enter the open-source world. Powered by @LangChainAI 🦜🕸️ and LangG…",
     "user": {
       "blocking": false,
@@ -1963,6 +2040,7 @@ Let's make AI even cooler.",
     "in_reply_to_status_id_str": undefined,
     "lang": "en",
     "quoted_status_id_str": "1882725553071120594",
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "Huge congrats on the launch! 🎉 Thrilled to see Refly enter the open-source world. Powered by @LangChainAI 🦜🕸️ and LangGraph.js for next-level AI capabilities — the possibilities are endless. Can’t wait to dive in! 🚀🔥🎉",
     "user": {
       "blocking": false,
@@ -1995,6 +2073,7 @@ Let's make AI even cooler.",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "After 7 months of development, 1 month of beta testing, and 77,376 lines of code! ⚡️Refly is now officially open source! 🔥🚀 
 
 Since day one, Refly has aspired to become a world-class open-source project alongside Docker and K8S! Our mission is to create the best AI-native",
@@ -2032,6 +2111,7 @@ Discord: https://discord.gg/bWjffrb89h",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "崩壊:スターレイル / 開拓者 星",
     "user": {
       "blocking": false,
@@ -2064,6 +2144,7 @@ Discord: https://discord.gg/bWjffrb89h",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "百合園セイア
 #ブルアカ #BlueArchive",
     "user": {
@@ -2090,6 +2171,7 @@ Discord: https://discord.gg/bWjffrb89h",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "02年家里人说不养我了，谁能收留我一段时间，我会想办法打工然后卷款跑路，包联系不上的",
     "user": {
       "blocking": false,
@@ -2120,6 +2202,7 @@ exports[`parseTweets > parseTweets for user tweets and replies 1`] = `
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1883346528397590546",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "再评论deepseek要捅马蜂窝了，最后说下：
 
 我理解deepseek提供了了一条更快实现O-1复刻路径。推理端变更便宜，落后的都可以用。但是对行业没有冲击，不涉及训练端
@@ -2149,6 +2232,7 @@ exports[`parseTweets > parseTweets for user tweets and replies 1`] = `
     "in_reply_to_status_id_str": "1883295248136229230",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@JundeMorsenWu 那么，幻方这条路是谁趟出来的呢？
 
 OpenAI不告诉你怎么re-inforce learning，幻方都不知道怎么蒸馏模型。这个路是OpenAI一遍遍试出来的，幻方“拿来用”，成本低不是太正常了么？
@@ -2178,6 +2262,7 @@ OpenAI不告诉你怎么re-inforce learning，幻方都不知道怎么蒸馏模�
     "in_reply_to_status_id_str": "1883347352976843148",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/#!/download/ipad" rel="nofollow">Twitter for iPad</a>",
     "text": "@ShanghaoJin 还是华为一如既往的操作手段
 把自己吹成后来者居上
 直到某天被人掐脖子。。。",
@@ -2205,6 +2290,7 @@ OpenAI不告诉你怎么re-inforce learning，幻方都不知道怎么蒸馏模�
     "in_reply_to_status_id_str": "1883348342622830634",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@syang2045 @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
 https://t.me/ShanghaoJin_alpha/a5",
     "user": {
@@ -2237,6 +2323,7 @@ https://t.me/ShanghaoJin_alpha/a5",
       },
     ],
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@ShanghaoJin",
     "user": {
       "blocking": false,
@@ -2262,6 +2349,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883348486592266476",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@linzhutou404 @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
 https://t.me/ShanghaoJin_alpha/a5",
     "user": {
@@ -2288,6 +2376,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883347352976843148",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@ShanghaoJin 我覺得對行業衝擊很大，AI版Temu",
     "user": {
       "blocking": false,
@@ -2313,6 +2402,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883349407439138839",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@Manchesea @ShanghaoJin 2/  请务必加入我的 Telegram 聊天室，在这里可以分享热门剧目并扫描阿尔法。👇
 https://t.me/ShanghaoJin_alpha/a5",
     "user": {
@@ -2339,6 +2429,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1882679738789216456",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "不要把deepseek拿去跟GPT做比较，是不可同日而语的东西
 
 Hugging face上这种论文、垂直模型多如牛毛。市场关注亮点不过是中国在“没有”算力卡成本很低也能训练出效果差不多的模型。且说中国真没囤H100么？
@@ -2368,6 +2459,7 @@ deepseek是个工程方法，大厂不屑于做，浪费精力做这个模型能
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1882647210359415188",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "你听说过什么叫“蒸馏”么？说个大白话：
 
 就是拿人家算出来的模型参数，跳过所有数据清洗、训练，做最后一程。其实没有任何创新
@@ -2397,6 +2489,7 @@ deepseek是个工程方法，大厂不屑于做，浪费精力做这个模型能
     "in_reply_to_status_id_str": "1883135245148717450",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@ShanghaoJin 已经够nvda 跌的了",
     "user": {
       "blocking": false,
@@ -2422,6 +2515,7 @@ deepseek是个工程方法，大厂不屑于做，浪费精力做这个模型能
     "in_reply_to_status_id_str": "1883136276335145013",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@Charles48717364 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2452,6 +2546,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1877201139436843456",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "ASML放开我觉得影响没那么大
 
 记者们总喜欢搞一个“大新闻”，但是EUV光源是美国军控的不可能对中国开放
@@ -2481,6 +2576,7 @@ DUV中国已经堆积如山多，过度投资多的发毛没人用了。现在�
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "只要不制裁到位，1-2年内中国还会把成熟制程芯片全部卷死",
     "user": {
       "blocking": false,
@@ -2506,6 +2602,7 @@ DUV中国已经堆积如山多，过度投资多的发毛没人用了。现在�
     "in_reply_to_status_id_str": "1882971745344491595",
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@ShanghaoJin Asml er gonna be weak",
     "user": {
       "blocking": false,
@@ -2532,6 +2629,7 @@ I share my trade ideas and opinion free and glad to hear your ideas otherwise sh
     "in_reply_to_status_id_str": "1883065140624683421",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@diyas_1989 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2563,6 +2661,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882971745344491595",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@ShanghaoJin 记者们总搞“大新闻”，EUV是军控，不会开放。DUV堆积如山，过剩得离谱，盘厂申请退税，利息付了就行。",
     "user": {
       "blocking": true,
@@ -2588,6 +2687,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883054680127004972",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@OfficialNewsWin @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2619,6 +2719,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882971745344491595",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@ShanghaoJin 搞一个大新闻，马上让我看到了长者的样子。😂",
     "user": {
       "blocking": false,
@@ -2644,6 +2745,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882972808474701957",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@liangJiao8 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2675,6 +2777,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1882727821178757273",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "解释下文“短期预期太满”
 
 不是盈利预期问题，除了TSLA/AAPL考卷不会太难看，而是云厂需要回答：23-24年CapEx 50%+增加后，毛利如何、25年CapEx如何定调？
@@ -2708,6 +2811,7 @@ C. 考虑毛利，降低ROI增速",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1880077688381272433",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "维持之前观点，1Q再上一层楼不容易
 
 Goog/MSFT/NV/AMZN大概率inline～beat。但是预期太满了，幅度也不一定够
@@ -2739,6 +2843,7 @@ TSLA/AAPL很难及格
     "in_reply_to_status_id_str": "1882847756454351091",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@ShanghaoJin 当初吹过的牛，现在含着泪也要吹完。",
     "user": {
       "blocking": false,
@@ -2764,6 +2869,7 @@ TSLA/AAPL很难及格
     "in_reply_to_status_id_str": "1882853625845928402",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@joedhammer @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2795,6 +2901,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882847756454351091",
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@ShanghaoJin I hope that servers’ demand for ASICs will be cross-verified during Amazon’s Q4 earnings call, even though the current price of $MRVL&amp; $AVGO is not entirely reasonable to me.😂😂",
     "user": {
       "blocking": false,
@@ -2820,6 +2927,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882853067684720830",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@cliupsic @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2851,6 +2959,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882847756454351091",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@ShanghaoJin 短期预期太满：市场对公司未来表现期待过高，可能导致失望。",
     "user": {
       "blocking": true,
@@ -2876,6 +2985,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882884094302019940",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@OfficialNewsWin @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -2907,6 +3017,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": undefined,
     "lang": "zh",
     "quoted_status_id_str": "1882814711823217046",
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "我都不知道该怎么评论这个“deep sick”了
 
 这可不是我发明的哦",
@@ -2934,6 +3045,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882679738789216456",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@ShanghaoJin Open AI都不开源的，你看deep sick完全开源谁抄谁呀？",
     "user": {
       "blocking": false,
@@ -2959,6 +3071,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882983442792755242",
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/#!/download/ipad" rel="nofollow">Twitter for iPad</a>",
     "text": "@ShanghaoJin deep sick fantasy",
     "user": {
       "blocking": false,
@@ -2984,6 +3097,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883079571454808187",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@allaboutgamble @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -3015,6 +3129,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882983442792755242",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@ShanghaoJin 能给我你电报的链接吗？",
     "user": {
       "blocking": false,
@@ -3040,6 +3155,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882987445706494140",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@MangalT44107774 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -3071,6 +3187,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1882983442792755242",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@ShanghaoJin 老中骨子里可太喜欢这种“弯道超车”了，建议信这东西的，先想想你一时抖机灵，能不能跑赢你头顶姥爷三代走草地的积累吧",
     "user": {
       "blocking": false,
@@ -3096,6 +3213,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883004861161275570",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@lyric47749 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -3127,6 +3245,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883135245148717450",
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@ShanghaoJin Have ever heard Ilya just said Pre-training is hitting the wall a few months ago? Data distill from big model is a great strategy to accelerate training especially when your competitors start to focus on reasoning capabilities.",
     "user": {
       "blocking": false,
@@ -3152,6 +3271,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883137237124264367",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@LinQingV @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -3183,6 +3303,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883135245148717450",
     "lang": "en",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@ShanghaoJin There is no point to waste compute resources on pre-training stage of LLM model.",
     "user": {
       "blocking": false,
@@ -3208,6 +3329,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883137909236367734",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@LinQingV @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -3239,6 +3361,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883135245148717450",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>",
     "text": "@ShanghaoJin J35吊打一切地球武器。",
     "user": {
       "blocking": false,
@@ -3264,6 +3387,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": "1883135713052704996",
     "lang": "zh",
     "quoted_status_id_str": undefined,
+    "source": "<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>",
     "text": "@liangJiao8 @ShanghaoJin 我剛在 Telegram 上創建了私人 Analysis 群組。
 
 所有的交易指令和決策會在公開之前先與群組成員分享。
@@ -3295,6 +3419,7 @@ https://t.me/ShanghaoJin_alpha/a5",
     "in_reply_to_status_id_str": undefined,
     "lang": "th",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "RT @R183342664: คืนนี้แตกกับคู่เทพ
 @69fun
 https://lin.ee/vQ2ZGGY https://x.com/i/broadcasts/1MYGNnYZybVGw",
@@ -3322,6 +3447,7 @@ https://lin.ee/vQ2ZGGY https://x.com/i/broadcasts/1MYGNnYZybVGw",
     "in_reply_to_status_id_str": undefined,
     "lang": "th",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "คืนนี้แตกกับคู่เทพ
 @69fun
 https://lin.ee/vQ2ZGGY https://x.com/i/broadcasts/1MYGNnYZybVGw",
@@ -3354,6 +3480,7 @@ exports[`parseTweets > parseTweets for user tweets only 1`] = `
     "in_reply_to_status_id_str": undefined,
     "lang": "th",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "RT @R183342664: คืนนี้แตกกับคู่เทพ
 @69fun
 https://lin.ee/vQ2ZGGY https://x.com/i/broadcasts/1MYGNnYZybVGw",
@@ -3381,6 +3508,7 @@ https://lin.ee/vQ2ZGGY https://x.com/i/broadcasts/1MYGNnYZybVGw",
     "in_reply_to_status_id_str": undefined,
     "lang": "th",
     "quoted_status_id_str": undefined,
+    "source": "<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>",
     "text": "คืนนี้แตกกับคู่เทพ
 @69fun
 https://lin.ee/vQ2ZGGY https://x.com/i/broadcasts/1MYGNnYZybVGw",

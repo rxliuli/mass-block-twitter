@@ -1,9 +1,8 @@
 import { z } from 'zod'
 import { extractObjects } from './util/extractObjects'
-import { dbApi, TweetMediaType, User } from './db'
+import { Tweet, User } from './db'
 import { FilterData } from './filter'
 import { uniqBy } from 'es-toolkit'
-import { wait } from '@liuli-util/async'
 
 export function setRequestHeaders(headers: Headers) {
   const old = getRequestHeaders()
@@ -281,12 +280,13 @@ export const tweetScheam = z.object({
     }),
   }),
   legacy: legacySchema,
+  source: z.string(),
 })
 
 function parseLegacyTweet(
   it: z.infer<typeof legacySchema>,
-): Omit<ParsedTweet, 'user'> {
-  const tweet: Omit<ParsedTweet, 'user'> = {
+): Omit<ParsedTweet, 'user' | 'source' | 'source_type'> {
+  const tweet: Omit<ParsedTweet, 'user' | 'source' | 'source_type'> = {
     id: it.id_str,
     text: it.full_text,
     created_at: new Date(it.created_at).toISOString(),
@@ -319,18 +319,7 @@ function parseLegacyTweet(
   return tweet
 }
 
-export interface ParsedTweet {
-  id: string
-  text: string
-  lang: string // ISO 639-1
-  media?: {
-    url: string
-    type: TweetMediaType
-  }[]
-  created_at: string
-  conversation_id_str: string
-  in_reply_to_status_id_str?: string
-  quoted_status_id_str?: string
+export interface ParsedTweet extends Omit<Tweet, 'updated_at' | 'user_id'> {
   user: User
 }
 
@@ -351,6 +340,7 @@ function parseNotificationTweets(json: any): ParsedTweet[] {
     if (user) {
       result.push({
         ...parseLegacyTweet(tweet),
+        source: tweet.source,
         user: parseNotificationUser(user),
       })
     }
@@ -358,11 +348,43 @@ function parseNotificationTweets(json: any): ParsedTweet[] {
   return result
 }
 
+type SourceType =
+  | 'iphone'
+  | 'ipad'
+  | 'android'
+  | 'web'
+  | 'advertiser'
+  | 'grok'
+  | 'unknown'
+
+export function parseSourceType(source: string): SourceType {
+  if (source.includes('/download/iphone')) {
+    return 'iphone'
+  }
+  if (source.includes('/download/ipad')) {
+    return 'ipad'
+  }
+  if (source.includes('/download/android')) {
+    return 'android'
+  }
+  if (source.toLowerCase().includes('twitter web app')) {
+    return 'web'
+  }
+  if (source.toLowerCase().includes('advertiser')) {
+    return 'advertiser'
+  }
+  if (source.includes('https://x.ai')) {
+    return 'grok'
+  }
+  return 'unknown'
+}
+
 export function parseTweet(it: z.infer<typeof tweetScheam>) {
   const legacyTweet = parseLegacyTweet(it.legacy)
   const tweet: ParsedTweet = {
     ...legacyTweet,
     user: parseTimelineUser(it.core.user_results.result),
+    source: it.source,
   }
   return tweet
 }
@@ -376,7 +398,7 @@ export function parseTweets(json: any): ParsedTweet[] {
       typeof tweetScheam
     >[]
   ).map((it) => {
-    const legacyTweet = parseLegacyTweet(it.legacy)
+    const legacyTweet = parseTweet(it)
     const tweet: ParsedTweet = {
       ...legacyTweet,
       user: parseTimelineUser(it.core.user_results.result),
@@ -453,7 +475,7 @@ const notificationSchema = z.object({
         ]),
       )
       .optional(),
-    tweets: z.record(legacySchema).optional(),
+    tweets: z.record(legacySchema.extend({ source: z.string() })).optional(),
     users: z.record(notifacationUserSchema).optional(),
   }),
   timeline: z.object({
@@ -535,6 +557,7 @@ export function filterNotifications(
       const parsedTweet: ParsedTweet = {
         ...parseLegacyTweet(tweet),
         user: parseNotificationUser(user),
+        source: tweet.source,
       }
       if (!isShow({ type: 'tweet', tweet: parsedTweet })) {
         delete _json.globalObjects.tweets[key]
@@ -573,7 +596,7 @@ function filterEntrie(
     (it) => extendedTweetSchema.safeParse(it).success,
   ) as z.infer<typeof extendedTweetSchema>[]
   const tweets = originalTweets.map((it) => {
-    const legacyTweet = parseLegacyTweet(it.legacy)
+    const legacyTweet = parseTweet(it)
     const tweet: ParsedTweet = {
       ...legacyTweet,
       user: parseTimelineUser(it.core.user_results.result),

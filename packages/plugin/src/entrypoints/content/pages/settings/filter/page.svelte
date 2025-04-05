@@ -3,7 +3,7 @@
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
   import Label from '$lib/components/ui/label/label.svelte'
-  import { useSettings } from '$lib/settings'
+  import { getDefaultSettings, useSettings } from '$lib/settings'
   import { languages } from '$lib/constants/languages'
   import { t } from '$lib/i18n'
 
@@ -103,6 +103,23 @@
       checked={$settings.hideGrok ?? false}
       onCheckedChange={(checked) => {
         $settings.hideGrok = checked
+      }}
+    />
+  </Label>
+  <Label class="flex items-center gap-4 py-4 cursor-pointer">
+    <div class="flex-1">
+      <span class="block text-base font-medium">
+        {$t('settings.filter.hideAdvertiser')}
+      </span>
+      <span class="block mt-1 text-sm text-gray-500">
+        {$t('settings.filter.hideAdvertiser.description')}
+      </span>
+    </div>
+    <Checkbox
+      class="shrink-0"
+      checked={$settings.hideAdvertiser ?? getDefaultSettings().hideAdvertiser}
+      onCheckedChange={(checked) => {
+        $settings.hideAdvertiser = checked
       }}
     />
   </Label>

@@ -598,6 +598,7 @@ function filterEntrie(
   return tweets.every(isShow)
 }
 
+// notification page
 function filterTimelineAddToModule(
   json: any,
   isShow: (tweet: ParsedTweet) => boolean,
@@ -639,6 +640,7 @@ function filterTimelineAddToModule(
   }
 }
 
+// timeline or detail page
 function filterTimelineAddEntries(
   json: any,
   isShow: (tweet: ParsedTweet) => boolean,

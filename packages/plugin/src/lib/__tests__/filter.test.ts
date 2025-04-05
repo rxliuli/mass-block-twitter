@@ -1,5 +1,10 @@
 // @vitest-environment happy-dom
-import { MUTED_WORD_RULES_KEY, ParsedTweet } from '$lib/api'
+import {
+  filterTweets,
+  MUTED_WORD_RULES_KEY,
+  ParsedTweet,
+  parseTweets,
+} from '$lib/api'
 import { User } from '$lib/db'
 import {
   defaultProfileFilter,
@@ -15,6 +20,7 @@ import {
 } from '$lib/filter'
 import { Rule } from '$lib/rule'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import TweetDetail11 from './assets/TweetDetail11.json'
 
 describe('defaultProfileFilter', () => {
   const filter = defaultProfileFilter()
@@ -272,6 +278,9 @@ describe('grokFilter', () => {
       filter.tweetCondition!({ text: '@grok', user: {} } as ParsedTweet),
     ).toBe('hide')
     expect(
+      filter.tweetCondition!({ text: '@Grok', user: {} } as ParsedTweet),
+    ).toBe('hide')
+    expect(
       filter.tweetCondition!({
         text: 'test',
         user: { screen_name: 'grok' },
@@ -283,5 +292,20 @@ describe('grokFilter', () => {
         user: { screen_name: 'test' },
       } as ParsedTweet),
     ).toBe('next')
+  })
+  it('filterTweets', () => {
+    const isShow = flowFilter([grokFilter()])
+    const handledJson = filterTweets(
+      TweetDetail11,
+      (it) =>
+        isShow({
+          type: 'tweet',
+          tweet: it,
+        }).value,
+    )
+    const tweets = parseTweets(handledJson)
+    expect(tweets.every((it) => !it.text.toLowerCase().includes('@grok'))).true
+    expect(tweets.every((it) => !it.user.screen_name.includes('grok'))).true
+    expect(tweets).length(10)
   })
 })

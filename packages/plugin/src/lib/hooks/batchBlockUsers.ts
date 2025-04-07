@@ -52,7 +52,7 @@ export async function selectImportFile() {
     return
   }
   for (const it of users) {
-    if (!(it.id && it.screen_name && it.name && it.profile_image_url)) {
+    if (!(it.id && it.screen_name)) {
       toast.error(tP('modlists.detail.users.import.invalid'))
       return
     }

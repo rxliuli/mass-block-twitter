@@ -104,12 +104,12 @@ export type BatchQueryOptions<T> = {
 }
 
 export async function batchQuery<T>(options: BatchQueryOptions<T>) {
+  const startTime = Date.now()
   for (
     let i = 0, failed = 0;
     !options.controller.signal.aborted && options.hasNext();
     i++
   ) {
-    const startTime = Date.now()
     const context = {
       controller: options.controller,
       index: i,
@@ -121,17 +121,17 @@ export async function batchQuery<T>(options: BatchQueryOptions<T>) {
       context.error = error
     }
     context.items = options.getItems()
-    const averageTime = (Date.now() - startTime) / (i + 1)
+    const averageTime = (Date.now() - startTime) / context.items.length
     context.progress = {
-      processed: i + 1,
-      total: options.total ?? options.getItems().length,
+      processed: context.items.length,
+      total: options.total ?? context.items.length,
       startTime,
       currentTime: Date.now(),
       averageTime,
-      successful: i + 1 - failed,
+      successful: context.items.length,
       failed,
       remainingTime: options.total
-        ? (options.total - i - 1) * averageTime
+        ? (options.total - context.items.length) * averageTime
         : undefined,
     }
     await options.onProcessed(context)

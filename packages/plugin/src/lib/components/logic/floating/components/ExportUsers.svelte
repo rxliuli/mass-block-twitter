@@ -34,10 +34,10 @@
   } = $props()
 
   const { name, queryKey, queryFn, getTotal, downloadFileName, ..._props } =
-    getProps()
+    $derived(getProps())
 
   const query = createInfiniteQuery({
-    queryKey: [queryKey],
+    queryKey: [getProps().queryKey],
     queryFn: ({ pageParam }) => queryFn({ cursor: pageParam }),
     getNextPageParam: (lastPage) => lastPage.cursor,
     initialPageParam: undefined as string | undefined,
@@ -70,7 +70,7 @@
         })
         toast.success('Export success', {
           duration: 1000000,
-          description: `Exported ${getUsers().length} following`,
+          description: `Exported ${getUsers().length} ${name}`,
           action: {
             label: tP('common.actions.download'),
             onClick: () => {

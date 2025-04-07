@@ -8,26 +8,22 @@ import {
 } from '$lib/util/handlers'
 import { middleware } from '$lib/util/middleware'
 
-interface QueryOperationContextWithToastId {
-  context: QueryOperationContext<any>
-  toastId: string | number
-}
-
 export async function onExportUsersProcessed(options: {
   context: QueryOperationContext<User>
   toastId: string | number
   name: string
   maxQueryCount?: number
 }) {
+  const title = `Exporting ${options.name}...`
   await middleware(options)
     .use(errorHandler({ title: 'Export failed' }))
     .use(
       maxRequestsHandler({
-        title: `Exporting ${options.name}...`,
+        title,
         maxRequests: options.maxQueryCount ?? 450,
       }),
     )
-    .use(loadingHandler({ title: 'Exporting followers...' }))
+    .use(loadingHandler({ title }))
     .use(sleepHandler({ time: () => 1000 + Math.random() * 1000 * 2 }))
     .run()
 }

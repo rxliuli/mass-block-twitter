@@ -21,9 +21,10 @@ When you enable certain optional features, some data collection may be necessary
   - Account information (profile details, follower counts, creation date)
   - Recent tweets from the account (content, media, links)
   - Your interactions with the account (blocks, reports)
-- While we do not specifically track who submits each piece of data, the information is not anonymized before transmission
+- We do not specifically track who submits each piece of data.
 - **Important**: You must contribute data to benefit from the community database. Without enabling data contribution, you will not have access to the shared spam detection results
 
+<!-- 
 ### b) AI-based Spam Tweet Detection (Optional)
 
 - Tweet content will be sent to our AI service for analysis
@@ -34,7 +35,7 @@ When you enable certain optional features, some data collection may be necessary
 
 - Basic account information will be stored for sync functionality
 - Synced settings and preferences
-- Sync data is encrypted during transmission and storage
+- Sync data is encrypted during transmission and storage -->
 
 ## 3. Permissions
 

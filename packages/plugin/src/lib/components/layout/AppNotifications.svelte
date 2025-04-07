@@ -6,9 +6,9 @@
     if (localStorage.getItem('privacy-policy-accepted') === 'true') {
       return
     }
-    toast.info('Privacy Policy Update: New Data Collection', {
+    toast.info('Privacy Policy', {
       description:
-        'We now collect additional usage data to improve our service, including interaction patterns and feature usage. Your data is anonymized and never shared with third parties. Click "View" for the full privacy policy.',
+        'By continuing to use this extension, you agree to our privacy policy.',
       action: {
         label: 'View',
         onClick: () => {

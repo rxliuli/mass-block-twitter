@@ -14,6 +14,7 @@
     LegendComponent,
   } from 'echarts/components'
   import { t } from '$lib/i18n'
+  import { getRulesMap } from '../utils/stats'
 
   use([
     SVGRenderer,
@@ -27,22 +28,15 @@
   const { activities }: { activities: Activity[] } = $props()
 
   const data = $derived.by(() => {
-    const ruleMap: Record<Activity['match_filter'], string> = {
-      mutedWords: $t('dashboard.rules.mutedWords'),
-      modList: $t('dashboard.rules.modList'),
-      blueVerified: $t('dashboard.rules.blueVerified'),
-      defaultProfile: $t('dashboard.rules.defaultProfile'),
-      sharedSpam: $t('dashboard.rules.sharedSpam'),
-      language: $t('dashboard.rules.language'),
-      batchSelected: $t('dashboard.rules.batchSelected'),
-    }
+    const ruleMap = getRulesMap()
     const group = groupBy(activities, (it) => it.match_filter)
     return Object.entries(group)
       .map(([key, value]) => ({
-        name: ruleMap[key as Activity['match_filter']] ?? 'Other',
+        name: $t(ruleMap[key as Activity['match_filter']]) ?? 'Other',
         count: value.length,
       }))
       .filter((it) => it.count > 0)
+      .sort((a, b) => a.count - b.count)
   })
 
   const options: EChartsOption = $derived({

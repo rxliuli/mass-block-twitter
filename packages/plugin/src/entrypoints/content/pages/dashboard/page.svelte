@@ -14,7 +14,7 @@
   import { createQuery } from '@tanstack/svelte-query'
   import { type Activity, dbApi } from '$lib/db'
   import { groupBy, sortBy } from 'es-toolkit'
-  import { calcStats, formatStats } from './utils/stats'
+  import { calcStats, formatStats, getRulesMap } from './utils/stats'
   import { RouterLink } from '$lib/components/logic/router'
   import { t } from '$lib/i18n'
 
@@ -34,9 +34,10 @@
   })
   const { now, before } = $derived.by(() => {
     const data = $query.data ?? []
-    const { true: now = [], before = [] } = groupBy(
-      data,
-      (it) => it.created_at >= dateRange.from.toISOString(),
+    const { now = [], before = [] } = groupBy(data, (it) =>
+      it.created_at.localeCompare(dateRange.from.toISOString()) >= 0
+        ? 'now'
+        : 'before',
     )
     return { now, before }
   })
@@ -52,22 +53,14 @@
       tweet: $t('dashboard.recentActivities.tweet'),
       user: $t('dashboard.recentActivities.user'),
     }
-    const ruleMap: Record<Activity['match_filter'], string> = {
-      blueVerified: $t('dashboard.recentActivities.blueVerified'),
-      defaultProfile: $t('dashboard.recentActivities.defaultProfile'),
-      modList: $t('dashboard.recentActivities.modList'),
-      mutedWords: $t('dashboard.recentActivities.mutedWords'),
-      sharedSpam: $t('dashboard.recentActivities.sharedSpam'),
-      language: $t('dashboard.recentActivities.language'),
-      batchSelected: $t('dashboard.recentActivities.batchSelected'),
-    }
-    return sortBy(now, (it) => -new Date(it.created_at).getTime())
+    const ruleMap = getRulesMap()
+    return sortBy(now, [(it) => -new Date(it.created_at).getTime()])
       .slice(0, 4)
       .map((it) => ({
         name: it.user_name,
         username: it.user_screen_name,
         action: actionMap[it.action] + ' ' + matchTypeMap[it.match_type],
-        rule: ruleMap[it.match_filter],
+        rule: $t(ruleMap[it.match_filter]),
         date: dayjs(it.created_at).format('MM-DD HH:mm'),
       }))
   })
@@ -158,7 +151,9 @@
 
         <div class="flex justify-center pt-2">
           <RouterLink href="/dashboard/activities">
-            <Button variant="outline" size="sm">{$t('dashboard.recentActivities.viewAll')}</Button>
+            <Button variant="outline" size="sm"
+              >{$t('dashboard.recentActivities.viewAll')}</Button
+            >
           </RouterLink>
         </div>
       </div>

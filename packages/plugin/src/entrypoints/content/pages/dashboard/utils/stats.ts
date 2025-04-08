@@ -82,3 +82,18 @@ export function formatStats(stats: Stats) {
     period: 'dashboard.stats.period',
   }))
 }
+
+export function getRulesMap() {
+  const ruleMap: Record<Activity['match_filter'], string> = {
+    mutedWords: 'dashboard.rules.mutedWords',
+    modList: 'dashboard.rules.modList',
+    blueVerified: 'dashboard.rules.blueVerified',
+    defaultProfile: 'dashboard.rules.defaultProfile',
+    sharedSpam: 'dashboard.rules.sharedSpam',
+    language: 'dashboard.rules.language',
+    batchSelected: 'dashboard.rules.batchSelected',
+    grok: 'dashboard.rules.grok',
+    ad: 'dashboard.rules.ad',
+  }
+  return ruleMap
+}

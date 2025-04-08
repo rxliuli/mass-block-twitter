@@ -4,6 +4,7 @@
   import dayjs from 'dayjs'
   import * as Avatar from '$lib/components/ui/avatar'
   import { t } from '$lib/i18n'
+  import { getRulesMap } from '../../utils/stats'
 
   const { activity }: { activity: Activity } = $props()
 
@@ -15,19 +16,12 @@
     hide: { label: $t('dashboard.recentActivities.hide'), color: 'secondary' },
   } as const
 
-  const ruleMap: Record<Activity['match_filter'], string> = $derived({
-    mutedWords: $t('dashboard.rules.mutedWords'),
-    modList: $t('dashboard.rules.modList'),
-    blueVerified: $t('dashboard.rules.blueVerified'),
-    defaultProfile: $t('dashboard.rules.defaultProfile'),
-    sharedSpam: $t('dashboard.rules.sharedSpam'),
-    language: $t('dashboard.rules.language'),
-    batchSelected: $t('dashboard.rules.batchSelected'),
-  })
   const triggerMap: Record<Activity['trigger_type'], string> = $derived({
     auto: $t('dashboard.recentActivities.trigger.auto'),
     manual: $t('dashboard.recentActivities.trigger.manual'),
   })
+
+  const ruleMap = getRulesMap()
 </script>
 
 <div class="py-2">
@@ -68,7 +62,7 @@
         >{$t('dashboard.recentActivities.rule.title')}:</span
       >
       <span class="inline-block w-24 truncate"
-        >{ruleMap[activity.match_filter]}</span
+        >{$t(ruleMap[activity.match_filter])}</span
       >
       <span class="text-muted-foreground mx-1">·</span>
       <span class="text-muted-foreground"

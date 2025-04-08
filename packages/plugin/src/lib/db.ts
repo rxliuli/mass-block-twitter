@@ -60,6 +60,8 @@ export interface Activity {
     | 'modList'
     | 'language'
     | 'batchSelected'
+    | 'grok'
+    | 'ad'
   user_id: string
   user_name: string
   user_screen_name: string

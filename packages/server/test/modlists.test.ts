@@ -415,7 +415,7 @@ describe('modlists', () => {
       expect(await getSubscribedUsers()).length(0)
       await addUserToModList(
         {
-          id: 'twitter-user-1',
+          id: '123',
           screen_name: 'test-user-1',
           name: 'test-user-1',
           created_at: new Date().toISOString(),
@@ -428,9 +428,7 @@ describe('modlists', () => {
         modListId,
       )
       expect(await getSubscribedUsers()).length(1)
-      expect((await getSubscribedUsers())[0].twitterUserIds).toEqual([
-        'twitter-user-1',
-      ])
+      expect((await getSubscribedUsers())[0].twitterUserIds).toEqual(['123'])
     })
     it('should be able to subscribe to a modlist with block action', async () => {
       const resp1 = await fetch(`/api/modlists/subscribe/${modListId}`, {
@@ -446,7 +444,7 @@ describe('modlists', () => {
       expect(resp1.ok).true
       await addUserToModList(
         {
-          id: 'twitter-user-1',
+          id: '123',
           screen_name: 'test-user-1',
           name: 'test-user-1',
           created_at: new Date().toISOString(),
@@ -462,7 +460,7 @@ describe('modlists', () => {
         {
           modListId,
           action: 'block',
-          twitterUserIds: ['twitter-user-1'],
+          twitterUserIds: ['123'],
           rules: [],
         },
       ] satisfies ModListSubscribedUserAndRulesResponse)
@@ -474,7 +472,7 @@ describe('modlists', () => {
           .map(
             (it) =>
               ({
-                id: `twitter-user-${it}`,
+                id: `${it}`,
                 screenName: `test-user-${it}`,
                 name: `test-user-${it}`,
                 profileImageUrl: `test-user-${it}`,
@@ -487,7 +485,7 @@ describe('modlists', () => {
         await db.insert(modListUser).values({
           id: 'modlist-user-1',
           modListId,
-          twitterUserId: 'twitter-user-1',
+          twitterUserId: '1',
         })
       })
       it('update modlist updatedAt column', async () => {
@@ -496,7 +494,7 @@ describe('modlists', () => {
         await db.insert(modListUser).values({
           id: 'modlist-user-2',
           modListId,
-          twitterUserId: 'twitter-user-2',
+          twitterUserId: '2',
         })
         const r2 = await getSubscribedUsers()
         expect(r1).toEqual(r2)
@@ -515,7 +513,7 @@ describe('modlists', () => {
         await db.insert(modListUser).values({
           id: 'modlist-user-2',
           modListId,
-          twitterUserId: 'twitter-user-2',
+          twitterUserId: '2',
         })
         const r2 = await getSubscribedUsers()
         expect(r1).toEqual(r2)
@@ -538,7 +536,7 @@ describe('modlists', () => {
         const r1 = await getSubscribedUsers()
         await addUserToModList(
           {
-            id: 'twitter-user-2',
+            id: '2',
             screen_name: 'test-user-2',
             name: 'test-user-2',
           },
@@ -546,7 +544,7 @@ describe('modlists', () => {
         )
         const r2 = await getSubscribedUsers()
         expect(r2).not.toEqual(r1)
-        await removeUserFromModList('twitter-user-2', modListId)
+        await removeUserFromModList('2', modListId)
         const r3 = await getSubscribedUsers()
         expect(r3).not.toEqual(r2)
         expect(r3).toEqual(r1)
@@ -727,7 +725,7 @@ describe('modlists', () => {
     })
     it('should be able to check if a user is in a modlist', async () => {
       const twittrUsers: TwitterUser[] = Array.from({ length: 10 }, (_, i) => ({
-        id: `123-${i}`,
+        id: `${i}`,
         screen_name: `test-${i}`,
         name: `test-${i}`,
         profile_image_url: `test-${i}`,
@@ -775,7 +773,7 @@ describe('modlists', () => {
         { length: 10 },
         (_, i) =>
           ({
-            id: `123-${i}`,
+            id: `${i}`,
             screen_name: `test-${i}`,
             name: `test-${i}`,
             profile_image_url: `test-${i}`,
@@ -814,7 +812,7 @@ describe('modlists', () => {
     it('should not be able to add a user to a modlist twice', async () => {
       await addUserToModList(
         {
-          id: 'twitter-user-1',
+          id: '1',
           screen_name: 'test-user-1',
           name: 'test-user-1',
           created_at: new Date().toISOString(),
@@ -829,7 +827,7 @@ describe('modlists', () => {
       await expect(
         addUserToModList(
           {
-            id: 'twitter-user-1',
+            id: '1',
             screen_name: 'test-user-1',
             name: 'test-user-1',
             created_at: new Date().toISOString(),
@@ -846,7 +844,7 @@ describe('modlists', () => {
     it('should be able to remove a user from a modlist', async () => {
       await addUserToModList(
         {
-          id: 'twitter-user-1',
+          id: '1',
           screen_name: 'test-user-1',
           name: 'test-user-1',
           created_at: new Date().toISOString(),
@@ -863,7 +861,7 @@ describe('modlists', () => {
         method: 'DELETE',
         body: JSON.stringify({
           modListId,
-          twitterUserId: 'twitter-user-1',
+          twitterUserId: '1',
         } satisfies ModListRemoveTwitterUserRequest),
         headers: {
           Authorization: `Bearer ${context.token1}`,
@@ -876,7 +874,7 @@ describe('modlists', () => {
     it('should be able to add multiple users to a modlist', async () => {
       const db = context.db
       await db.insert(user).values({
-        id: 'twitter-user-1',
+        id: '1',
         screenName: 'test-user-1',
         name: 'test-user-1',
         profileImageUrl: 'test-user-1',
@@ -885,7 +883,7 @@ describe('modlists', () => {
       await db.insert(modListUser).values({
         id: 'modlist-user-1',
         modListId,
-        twitterUserId: 'twitter-user-1',
+        twitterUserId: '1',
       })
       const req = async () => {
         const resp1 = await fetch('/api/modlists/users', {
@@ -894,14 +892,14 @@ describe('modlists', () => {
             modListId,
             twitterUsers: [
               {
-                id: 'twitter-user-1',
+                id: '1',
                 screen_name: 'test-user-1',
                 name: 'test-user-1',
                 profile_image_url: 'test-user-1',
                 created_at: new Date().toISOString(),
               },
               {
-                id: 'twitter-user-2',
+                id: '2',
                 screen_name: 'test-user-2',
                 name: 'test-user-2',
                 profile_image_url: 'test-user-2',
@@ -919,17 +917,17 @@ describe('modlists', () => {
       }
       const r1 = await req()
       expect(r1.length).toBe(2)
-      expect(r1[0].id).toBe('twitter-user-1')
-      expect(r1[1].id).toBe('twitter-user-2')
+      expect(r1[0].id).toBe('1')
+      expect(r1[1].id).toBe('2')
       const r2 = await req()
       expect(r2.length).toBe(2)
-      expect(r2[0].id).toBe('twitter-user-1')
-      expect(r2[1].id).toBe('twitter-user-2')
+      expect(r2[0].id).toBe('1')
+      expect(r2[1].id).toBe('2')
     })
     it('should be able to get ids', async () => {
       await addUserToModList(
         {
-          id: 'twitter-user-1',
+          id: '1',
           screen_name: 'test-user-1',
           name: 'test-user-1',
           created_at: new Date().toISOString(),
@@ -945,7 +943,7 @@ describe('modlists', () => {
       expect(resp1.ok).true
       const r1 = (await resp1.json()) as ModListIdsResponse
       expect(r1.twitterUserIds).length(1)
-      expect(r1.twitterUserIds[0]).toBe('twitter-user-1')
+      expect(r1.twitterUserIds[0]).toBe('1')
     })
   })
 
@@ -1287,7 +1285,7 @@ describe('modlists', () => {
       let lastUpdatedAt = modList1.updatedAt
       next()
       await addUserToModList(
-        { ...newModList.twitterUser, id: 'test-user-1' },
+        { ...newModList.twitterUser, id: '1234' },
         modListId,
       )
       const modList2 = await getModList(modListId)

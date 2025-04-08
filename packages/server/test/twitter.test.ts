@@ -143,59 +143,59 @@ describe('report spam', () => {
     */
     const spamReport: TwitterSpamReportRequest = {
       spamUser: {
-        id: 'user-4',
+        id: '10000004',
         screen_name: 'user-4',
         name: 'user-4',
       },
       reportUser: {
-        id: 'user-5',
+        id: '10000005',
         screen_name: 'user-5',
         name: 'user-5',
       },
       context: {
         tweet: {
-          id: 'tweet-4',
+          id: '20000004',
           text: 'tweet-4',
           created_at: new Date().toISOString(),
-          conversation_id_str: 'tweet-1',
-          in_reply_to_status_id_str: 'tweet-2',
-          quoted_status_id_str: 'tweet-3',
+          conversation_id_str: '20000001',
+          in_reply_to_status_id_str: '20000002',
+          quoted_status_id_str: '20000003',
         },
         page_url: 'https://x.com/home',
         page_type: 'timeline',
         relationTweets: [
           {
             tweet: {
-              id: 'tweet-1',
+              id: '20000001',
               text: 'tweet-1',
               created_at: new Date().toISOString(),
             },
             user: {
-              id: 'user-1',
+              id: '10000001',
               screen_name: 'user-1',
               name: 'user-1',
             },
           },
           {
             tweet: {
-              id: 'tweet-2',
+              id: '20000002',
               text: 'tweet-2',
               created_at: new Date().toISOString(),
             },
             user: {
-              id: 'user-2',
+              id: '10000002',
               screen_name: 'user-2',
               name: 'user-2',
             },
           },
           {
             tweet: {
-              id: 'tweet-3',
+              id: '20000003',
               text: 'tweet-3',
               created_at: new Date().toISOString(),
             },
             user: {
-              id: 'user-3',
+              id: '10000003',
               screen_name: 'user-3',
               name: 'user-3',
             },
@@ -213,16 +213,16 @@ describe('report spam', () => {
     expect(resp.ok).true
     const users = await c.db.select().from(user).all()
     expect(users).length(5)
-    const user4 = users.find((it) => it.id === 'user-4')
+    const user4 = users.find((it) => it.id === '10000004')
     assert(user4)
     expect(user4.spamReportCount).eq(1)
     const tweets = await c.db.select().from(tweet).all()
     expect(tweets).length(4)
-    const tweet4 = tweets.find((it) => it.id === 'tweet-4')
+    const tweet4 = tweets.find((it) => it.id === '20000004')
     assert(tweet4)
-    expect(tweet4.conversationId).eq('tweet-1')
-    expect(tweet4.inReplyToStatusId).eq('tweet-2')
-    expect(tweet4.quotedStatusId).eq('tweet-3')
+    expect(tweet4.conversationId).eq('20000001')
+    expect(tweet4.inReplyToStatusId).eq('20000002')
+    expect(tweet4.quotedStatusId).eq('20000003')
     expect(tweet4.spamReportCount).eq(1)
   })
   it('should be able to report spam with location and url', async () => {
@@ -315,8 +315,8 @@ describe('check spam user', () => {
   it('should be able to check spam user', async () => {
     const r1 = await checkSpamUser(
       genCheckSpamUserRequest([
-        { id: 'user-1', tweetIds: ['tweet-1', 'tweet-2'] },
-        { id: 'user-2', tweetIds: ['tweet-3', 'tweet-4'] },
+        { id: '10000001', tweetIds: ['20000001', '20000002'] },
+        { id: '10000002', tweetIds: ['20000003', '20000004'] },
       ]),
     )
     expect(r1).length(0)
@@ -324,14 +324,14 @@ describe('check spam user', () => {
     expect(await c.db.$count(tweet)).eq(4)
     await c.db.insert(userSpamAnalysis).values([
       {
-        userId: 'user-1',
+        userId: '10000001',
         llmSpamRating: 5,
         llmSpamExplanation: 'test',
         isSpamByManualReview: true,
         manualReviewedAt: new Date().toISOString(),
       },
       {
-        userId: 'user-2',
+        userId: '10000002',
         llmSpamRating: 1,
         llmSpamExplanation: '',
         isSpamByManualReview: false,
@@ -340,13 +340,13 @@ describe('check spam user', () => {
     ])
     const r2 = await checkSpamUser(
       genCheckSpamUserRequest([
-        { id: 'user-1', tweetIds: ['tweet-1', 'tweet-2'] },
-        { id: 'user-2', tweetIds: ['tweet-3', 'tweet-4'] },
-        { id: 'user-3', tweetIds: ['tweet-5', 'tweet-6'] },
+        { id: '10000001', tweetIds: ['20000001', '20000002'] },
+        { id: '10000002', tweetIds: ['20000003', '20000004'] },
+        { id: '10000003', tweetIds: ['20000005', '20000006'] },
       ]),
     )
     expect(r2).length(1)
-    expect(r2[0].userId).eq('user-1')
+    expect(r2[0].userId).eq('10000001')
     expect(r2[0].isSpamByManualReview).eq(true)
   })
   it('should be able to disallow check spam user with big batch', async () => {
@@ -363,16 +363,16 @@ describe('check spam user', () => {
   })
   it('should be able to disallow duplicate tweet', async () => {
     const user: CheckSpamUserRequest[number]['user'] = {
-      id: 'user-1',
+      id: '10000001',
       screen_name: 'user-1',
       name: 'user-1',
     }
     const tweets: CheckSpamUserRequest[number]['tweets'] = [
       {
-        id: 'tweet-1',
+        id: '20000001',
         created_at: new Date().toISOString(),
         text: 'test A',
-        user_id: 'user-1',
+        user_id: '10000001',
         conversation_id_str: 'tweet-1',
       },
     ]
@@ -388,16 +388,16 @@ describe('check spam user', () => {
     const request: CheckSpamUserRequest = [
       {
         user: {
-          id: 'user-1',
+          id: '10000001',
           screen_name: 'user-1',
           name: 'user-1',
         },
         tweets: [
           {
-            id: 'tweet-1',
+            id: '20000001',
             created_at: new Date().toISOString(),
             text: 'test B',
-            user_id: 'user-1',
+            user_id: '10000001',
             conversation_id_str: 'tweet-1',
           },
         ],
@@ -405,16 +405,16 @@ describe('check spam user', () => {
     ]
 
     await c.db.insert(user).values({
-      id: 'user-1',
+      id: '10000001',
       screenName: 'user-1',
       name: 'user-1',
     })
     await c.db.insert(tweet).values({
-      id: 'tweet-1',
+      id: '20000001',
       text: 'test A',
-      userId: 'user-1',
-      publishedAt: new Date().toString(),
-      conversationId: 'tweet-1',
+      userId: '10000001',
+      publishedAt: new Date().toISOString(),
+      conversationId: '20000001',
     })
     await checkSpamUser(request)
     const r1 = await c.db.select().from(tweet).all()
@@ -424,20 +424,20 @@ describe('check spam user', () => {
       .set({
         conversationId: null,
       })
-      .where(eq(tweet.id, 'tweet-1'))
+      .where(eq(tweet.id, '20000001'))
     await checkSpamUser(request)
     const r2 = await c.db.select().from(tweet).all()
     expect(r2[0].text).eq('test B')
   })
   it('should be able to prevent duplicate update user and tweet', async () => {
     await c.db.insert(user).values({
-      id: 'user-1',
+      id: '10000001',
       screenName: 'user-1',
       name: 'user-1',
     })
     const request: CheckSpamUserRequest = [
       {
-        user: { id: 'user-1', screen_name: 'user-1', name: 'user-1' },
+        user: { id: '10000001', screen_name: 'user-1', name: 'user-1' },
         tweets: [],
       },
     ]
@@ -463,7 +463,7 @@ describe('check spam user', () => {
   it('fix: D1_ERROR: too many SQL variables at offset 633: SQLITE_ERROR', async () => {
     await checkSpamUser(
       range(10).map((it) => {
-        const userId = `user-${it}`
+        const userId = `1000000${it}`
         return {
           user: {
             id: userId,
@@ -471,7 +471,7 @@ describe('check spam user', () => {
             name: `user-${it}`,
           },
           tweets: range(20).map((it) => ({
-            id: `tweet-${userId}-${it}`,
+            id: `2000000${it}`,
             created_at: new Date().toISOString(),
             text: `test ${it}`,
             user_id: userId,
@@ -487,8 +487,8 @@ describe('check spam user', () => {
   })
   it('D1_ERROR: UNIQUE constraint failed: User.id: SQLITE_CONSTRAINT', async () => {
     const data = genCheckSpamUserRequest([
-      { id: 'user-1', tweetIds: ['tweet-1', 'tweet-2'] },
-      { id: 'user-2', tweetIds: ['tweet-3', 'tweet-4'] },
+      { id: '10000001', tweetIds: ['20000001', '20000002'] },
+      { id: '10000002', tweetIds: ['20000003', '20000004'] },
     ])
     await Promise.all([checkSpamUser(data), checkSpamUser(data)])
   })
@@ -497,12 +497,12 @@ describe('check spam user', () => {
 describe('batch upsert users', () => {
   it('should be able to upsert users', async () => {
     const r1 = await upsertUsers(c.db, [
-      { id: 'user-1', screenName: 'user-1', name: 'user-1' },
+      { id: '10000001', screenName: 'user-1', name: 'user-1' },
     ])
     expect(r1).length(1)
     await c.db.batch(r1 as any)
     const r2 = await upsertUsers(c.db, [
-      { id: 'user-1', screenName: 'user-1', name: 'user-1' },
+      { id: '10000001', screenName: 'user-1', name: 'user-1' },
     ])
     expect(r2).length(0)
   })
@@ -511,15 +511,15 @@ describe('batch upsert users', () => {
 describe('batch upsert tweets', () => {
   it('should be able to upsert tweets', async () => {
     await c.db.insert(user).values({
-      id: 'user-1',
+      id: '10000001',
       screenName: 'user-1',
       name: 'user-1',
     })
     const r1 = await upsertTweets(c.db, [
       {
-        id: 'tweet-1',
+        id: '20000001',
         text: 'test',
-        userId: 'user-1',
+        userId: '10000001',
         publishedAt: new Date().toISOString(),
       },
     ])
@@ -527,9 +527,9 @@ describe('batch upsert tweets', () => {
     await c.db.batch(r1 as any)
     const r2 = await upsertTweets(c.db, [
       {
-        id: 'tweet-1',
+        id: '20000001',
         text: 'test',
-        userId: 'user-1',
+        userId: '10000001',
         publishedAt: new Date().toISOString(),
       },
     ])

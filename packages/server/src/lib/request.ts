@@ -1,7 +1,12 @@
 import { z } from 'zod'
 
 export const userSchema = z.object({
-  id: z.string(),
+  id: z.string().refine(
+    (id) => {
+      return /^[0-9]+$/.test(id)
+    },
+    { message: 'id value is invalid' },
+  ),
   screen_name: z.string(),
   name: z.string(),
   description: z.string().optional(),
@@ -17,7 +22,12 @@ export const userSchema = z.object({
 })
 
 export const tweetSchema = z.object({
-  id: z.string(),
+  id: z.string().refine(
+    (id) => {
+      return /^[0-9]+$/.test(id)
+    },
+    { message: 'id value is invalid' },
+  ),
   text: z.string(),
   created_at: z.string(),
   // TODO: remove optional when new version >0.13.2 is released

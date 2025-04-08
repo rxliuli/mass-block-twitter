@@ -53,34 +53,40 @@ export function getTweetElement(tweetId: string): HTMLElement | undefined {
 
 export function addBlockButton(tweetElement: HTMLElement, tweet: Tweet) {
   const actionBar = tweetElement.querySelector('[role="group"]')
-  if (actionBar) {
-    const customButton = document.createElement('button')
-    customButton.style.height = getComputedStyle(actionBar).height
-    customButton.className = 'mass-block-twitter-button-block'
-    customButton.title = 'Block Spam'
-    customButton.innerHTML = `
+  if (!actionBar) {
+    return
+  }
+  const customButton = document.createElement('button')
+  customButton.style.height = getComputedStyle(actionBar).height
+  customButton.className = 'mass-block-twitter-button-block'
+  customButton.title = 'Block Spam'
+  customButton.style.opacity = '0'
+  customButton.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-ban"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m4.243 5.21 14.39 12.472"/></svg>
     `
-    customButton.addEventListener('click', async () => {
-      const request = await extractSpamReportRequest(tweet)
-      // https://github.com/wxt-dev/wxt/discussions/523#discussioncomment-8666726
-      // console.log('spamReport main content script', request)
-      globalThis.dispatchEvent(
-        new CustomEvent('SpamReportRequest', {
-          detail: request,
-        }),
-      )
-      const user = await dbApi.users.get(tweet.user_id)
-      if (!user) {
-        return
-      }
-      await eventMessage.sendMessage('QuickBlock', {
-        user,
-        tweet,
-      })
+  customButton.addEventListener('click', async () => {
+    const request = await extractSpamReportRequest(tweet)
+    // https://github.com/wxt-dev/wxt/discussions/523#discussioncomment-8666726
+    // console.log('spamReport main content script', request)
+    globalThis.dispatchEvent(
+      new CustomEvent('SpamReportRequest', {
+        detail: request,
+      }),
+    )
+    const user = await dbApi.users.get(tweet.user_id)
+    if (!user) {
+      return
+    }
+    await eventMessage.sendMessage('QuickBlock', {
+      user,
+      tweet,
     })
-    actionBar.appendChild(customButton)
-  }
+  })
+  actionBar.appendChild(customButton)
+  requestAnimationFrame(() => {
+    customButton.style.opacity = '1'
+    customButton.style.transition = 'opacity 0.2s'
+  })
 }
 
 async function extractSpamReportRequest(

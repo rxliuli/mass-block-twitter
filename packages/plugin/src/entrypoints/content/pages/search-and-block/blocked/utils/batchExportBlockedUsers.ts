@@ -89,7 +89,7 @@ const errorHandler: Handler = async ({ context }, next) => {
 }
 const MAX_REQUESTS = 850
 const maxRequestsHandler: Handler = async ({ context, toastId }, next) => {
-  if (context.progress.processed === MAX_REQUESTS) {
+  if (context.index + 1 === MAX_REQUESTS) {
     const r = await confirmToast(tP('blocked-users.toast.export.maxRequests'), {
       id: toastId,
     })

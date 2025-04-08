@@ -42,6 +42,7 @@ export interface Tweet {
   updated_at: string // add to idb time
   lang: string // ISO 639-1
   source: string
+  is_ad?: boolean
 }
 
 export interface Activity {

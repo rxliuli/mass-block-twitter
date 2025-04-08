@@ -250,7 +250,7 @@ describe('batchQuery', () => {
     const f = vi
       .fn<(c: QueryOperationContext<number>) => Promise<void>>()
       .mockImplementation(async (c) => {
-        if (c.progress.processed === 20) {
+        if (c.index === 19) {
           c.controller.abort()
         }
       })

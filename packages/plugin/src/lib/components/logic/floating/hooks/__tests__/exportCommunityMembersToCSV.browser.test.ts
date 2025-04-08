@@ -8,6 +8,7 @@ import ExportCommunityMembersToCSVTest from './exportCommunityMembersToCSV.test.
 import { commands } from '@vitest/browser/context'
 import { parseCSV } from '$lib/util/csv'
 import { User } from '$lib/db'
+import { wait } from '@liuli-util/async'
 
 describe('exportCommunityMembersToCSV', () => {
   function genUser(it: number) {
@@ -81,10 +82,10 @@ describe('exportCommunityMembersToCSV', () => {
       commands.waitForDownload(),
       screen.getByText('Download').click(),
     ])
-    // const r = parseCSV(download.text, {
-    //   fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
-    // })
-    // expect(r).length(220)
+    const r = parseCSV(download.text, {
+      fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
+    })
+    expect(r).length(220)
   })
   it('should export community members to CSV with external abort', async () => {
     let i = 0

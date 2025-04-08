@@ -1,8 +1,9 @@
 import { z } from 'zod'
-import { extractObjects } from './util/extractObjects'
+import { extract, extractObjects } from './util/extractObjects'
 import { Tweet, User } from './db'
 import { FilterData } from './filter'
 import { uniqBy } from 'es-toolkit'
+import { get } from 'es-toolkit/compat'
 
 export function setRequestHeaders(headers: Headers) {
   const old = getRequestHeaders()
@@ -394,14 +395,23 @@ export function parseTweets(json: any): ParsedTweet[] {
     return notificationTweets
   }
   return (
-    extractObjects(json, (it) => tweetScheam.safeParse(it).success) as z.infer<
-      typeof tweetScheam
-    >[]
+    extract(json, (it) => tweetScheam.safeParse(it).success) as {
+      value: z.infer<typeof tweetScheam>
+      path: string[]
+    }[]
   ).map((it) => {
-    const legacyTweet = parseTweet(it)
+    const legacyTweet = parseTweet(it.value)
     const tweet: ParsedTweet = {
       ...legacyTweet,
-      user: parseTimelineUser(it.core.user_results.result),
+      user: parseTimelineUser(it.value.core.user_results.result),
+    }
+    const len = it.path.length
+    if (
+      it.path[len - 1] === 'result' &&
+      it.path[len - 2] === 'tweet_results' &&
+      get(json, it.path.slice(0, len - 2).concat('promotedMetadata'))
+    ) {
+      tweet.is_ad = true
     }
     return tweet
   })

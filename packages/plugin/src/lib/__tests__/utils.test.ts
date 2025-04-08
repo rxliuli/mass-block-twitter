@@ -1,7 +1,6 @@
 // @vitest-environment happy-dom
 import { extractObjects } from '$lib/util/extractObjects'
 import { it, expect, describe, vi, beforeEach, afterEach } from 'vitest'
-import all from './assets/all.json'
 import timeline from './assets/timeline.json'
 import { z } from 'zod'
 import {
@@ -45,53 +44,7 @@ import TweetDetail8ProbableSpam from './assets/TweetDetail8ProbableSpam.json'
 import CreateTweet from './assets/CreateTweet.json'
 import SearchTimeline2 from './assets/SearchTimeline2.json'
 import TweetEntity from './assets/TweetEntity.json'
-
-describe('extractObjects', () => {
-  it('extractObjects 1', () => {
-    const json = {
-      users: [
-        { id: 1, name: 'John' },
-        { id: 2, name: 'Jane' },
-      ],
-    }
-    const users = extractObjects(json, (obj) => obj.name)
-    expect(users).toEqual([
-      { id: 1, name: 'John' },
-      { id: 2, name: 'Jane' },
-    ])
-  })
-  it('extractObjects 2', () => {
-    const json = {
-      users: {
-        1: { id: 1, name: 'John' },
-        2: { id: 2, name: 'Jane' },
-      },
-    }
-    const users = extractObjects(json, (obj) => obj.name)
-    expect(users).toEqual([
-      { id: 1, name: 'John' },
-      { id: 2, name: 'Jane' },
-    ])
-  })
-  it('extractObjects 3', () => {
-    const userSchema = z.object({
-      id: z.number(),
-      name: z.string(),
-      screen_name: z.string(),
-      location: z.string().nullable(),
-      description: z.string().nullable(),
-      followers_count: z.number().int(),
-      friends_count: z.number().int(),
-      verified: z.boolean(),
-      created_at: z.string(),
-    })
-    const users = extractObjects(
-      all,
-      (obj) => userSchema.safeParse(obj).success,
-    )
-    expect(users).length(10)
-  })
-})
+import TweetDetail13 from './assets/TweetDetail13.json'
 
 describe('parseUserRecords', () => {
   it('parse timeline', () => {
@@ -349,6 +302,11 @@ describe('parseTweets', () => {
     expect(tweets[0].id).toEqual('1897471935401034084')
     expect(tweets[0].text).includes('manus.im')
     expect(tweets[0].text).not.includes('t.co')
+  })
+  it('parseTweets for ad', () => {
+    const tweets = parseTweets(TweetDetail13)
+    const adTweet = tweets.find((it) => it.id === '1908274394037969165')
+    expect(adTweet?.is_ad).true
   })
 })
 

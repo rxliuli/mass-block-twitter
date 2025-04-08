@@ -67,7 +67,7 @@ export async function onExportCommunityMembersToCSVProcessed(
       await next()
     })
     .use(async ({ context, toastId }, next) => {
-      if (context.progress.processed === MAX_REQUESTS) {
+      if (context.index + 1 === MAX_REQUESTS) {
         const r = await confirmToast(
           tP('floatingButton.community.exportMembers.toast.stop.confirm', {
             values: {

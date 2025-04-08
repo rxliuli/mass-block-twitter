@@ -196,11 +196,13 @@ async function _onAction(
   }
   await blockUser(user)
   console.log('blockUser', user)
-  new Notification('Blocked user', {
-    body: `${user.name} @${user.screen_name}`,
-  }).onclick = () => {
-    window.open(`https://x.com/${user.screen_name}`, '_blank')
-  }
+  try {
+    new Notification('Blocked user', {
+      body: `${user.name} @${user.screen_name}`,
+    }).onclick = () => {
+      window.open(`https://x.com/${user.screen_name}`, '_blank')
+    }
+  } catch {}
 }
 const onAction = asyncLimiting(_onAction, 1)
 function handleNotifications(): Middleware {

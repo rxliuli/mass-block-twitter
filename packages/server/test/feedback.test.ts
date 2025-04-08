@@ -8,6 +8,7 @@ const c = initCloudflareTest()
 describe('feedback', () => {
   const req: FeedbackRequest = {
     reason: 'missing',
+    email: 'test@test.com',
     context: {
       os: 'windows',
       browser: 'chrome',

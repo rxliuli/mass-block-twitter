@@ -13,9 +13,10 @@
   import { createMutation } from '@tanstack/svelte-query'
   import { toast } from 'svelte-sonner'
   import { getContext } from './utils/getContext'
-  import { getAuthInfo } from '@/components/auth/auth.svelte'
+  import { getAuthInfo, useAuthInfo } from '@/components/auth/auth.svelte'
   import { cn } from '@/utils'
   import { Input } from '@/components/ui/input'
+  import { onMount } from 'svelte'
 
   let formState = $state<{
     reason: FeedbackRequest['reason']
@@ -25,6 +26,10 @@
     reason: 'missing',
     suggestion: '',
     email: '',
+  })
+  onMount(async () => {
+    const authInfo = await getAuthInfo()
+    formState.email = authInfo?.email ?? ''
   })
   const reasons = [
     { value: 'missing', label: 'Missing features' },
@@ -136,7 +141,12 @@
               type="email"
               bind:value={formState.email}
               placeholder="Your email"
+              required
             />
+            <p class="text-sm text-muted-foreground">
+              We need your email to follow up with you if we have any questions
+              about your feedback.
+            </p>
           </div>
 
           <Button type="submit" class="w-full" disabled={$mutation.isPending}>

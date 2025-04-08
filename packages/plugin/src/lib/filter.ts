@@ -288,7 +288,7 @@ export function adFilter(): TweetFilter {
   return {
     name: 'ad',
     tweetCondition: (tweet: ParsedTweet) => {
-      if (parseSourceType(tweet.source) === 'advertiser') {
+      if (tweet.is_ad) {
         return 'hide'
       }
       return 'next'

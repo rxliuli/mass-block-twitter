@@ -380,12 +380,32 @@ export function parseSourceType(source: string): SourceType {
   return 'unknown'
 }
 
-export function parseTweet(it: z.infer<typeof tweetScheam>) {
+export function parseTweet(
+  it: z.infer<typeof tweetScheam>,
+  context?: {
+    json: any
+    path: string[]
+  },
+) {
   const legacyTweet = parseLegacyTweet(it.legacy)
   const tweet: ParsedTweet = {
     ...legacyTweet,
     user: parseTimelineUser(it.core.user_results.result),
     source: it.source,
+  }
+  if (context) {
+    const len = context.path.length
+    if (
+      parseSourceType(tweet.source) === 'advertiser' ||
+      (context.path[len - 1] === 'result' &&
+        context.path[len - 2] === 'tweet_results' &&
+        get(
+          context.json,
+          context.path.slice(0, len - 2).concat('promotedMetadata'),
+        ))
+    ) {
+      tweet.is_ad = true
+    }
   }
   return tweet
 }
@@ -400,18 +420,13 @@ export function parseTweets(json: any): ParsedTweet[] {
       path: string[]
     }[]
   ).map((it) => {
-    const legacyTweet = parseTweet(it.value)
+    const legacyTweet = parseTweet(it.value, {
+      json,
+      path: it.path,
+    })
     const tweet: ParsedTweet = {
       ...legacyTweet,
       user: parseTimelineUser(it.value.core.user_results.result),
-    }
-    const len = it.path.length
-    if (
-      it.path[len - 1] === 'result' &&
-      it.path[len - 2] === 'tweet_results' &&
-      get(json, it.path.slice(0, len - 2).concat('promotedMetadata'))
-    ) {
-      tweet.is_ad = true
     }
     return tweet
   })
@@ -601,15 +616,21 @@ function filterEntrie(
       ])
       .optional(),
   })
-  const originalTweets = extractObjects(
+  const originalTweets = extract(
     entrie,
     (it) => extendedTweetSchema.safeParse(it).success,
-  ) as z.infer<typeof extendedTweetSchema>[]
+  ) as {
+    value: z.infer<typeof extendedTweetSchema>
+    path: string[]
+  }[]
   const tweets = originalTweets.map((it) => {
-    const legacyTweet = parseTweet(it)
+    const legacyTweet = parseTweet(it.value, {
+      json: entrie,
+      path: it.path,
+    })
     const tweet: ParsedTweet = {
       ...legacyTweet,
-      user: parseTimelineUser(it.core.user_results.result),
+      user: parseTimelineUser(it.value.core.user_results.result),
     }
     return tweet
   })
@@ -625,7 +646,7 @@ function filterEntrie(
       return true
     }
     // if quote tweet is not show, but main tweet is show, remove the quote tweet
-    delete originalTweets[0].quoted_status_result
+    delete originalTweets[0].value.quoted_status_result
     return true
   }
   return tweets.every(isShow)

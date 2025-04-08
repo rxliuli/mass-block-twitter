@@ -45,6 +45,7 @@ import CreateTweet from './assets/CreateTweet.json'
 import SearchTimeline2 from './assets/SearchTimeline2.json'
 import TweetEntity from './assets/TweetEntity.json'
 import TweetDetail13 from './assets/TweetDetail13.json'
+import TweetDetail14 from './assets/TweetDetail14.json'
 
 describe('parseUserRecords', () => {
   it('parse timeline', () => {
@@ -304,9 +305,10 @@ describe('parseTweets', () => {
     expect(tweets[0].text).not.includes('t.co')
   })
   it('parseTweets for ad', () => {
-    const tweets = parseTweets(TweetDetail13)
-    const adTweet = tweets.find((it) => it.id === '1908274394037969165')
-    expect(adTweet?.is_ad).true
+    const r1 = parseTweets(TweetDetail13).filter((it) => it.is_ad)
+    expect(r1[0].id).eq('1908274394037969165')
+    const r2 = parseTweets(TweetDetail14).filter((it) => it.is_ad)
+    expect(r2[0].id).eq('1908412325008380091')
   })
 })
 

@@ -24,6 +24,7 @@ import { Rule } from '$lib/rule'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import TweetDetail11 from './assets/TweetDetail11.json'
 import TweetDetail12 from './assets/TweetDetail12.json'
+import TweetDetail13 from './assets/TweetDetail13.json'
 
 describe('defaultProfileFilter', () => {
   const filter = defaultProfileFilter()
@@ -314,7 +315,7 @@ describe('grokFilter', () => {
 })
 
 describe('adFilter', () => {
-  it('should return hide when tweet is advertiser', () => {
+  it('should return hide when tweet is advertiser(with source)', () => {
     expect(
       parseTweets(TweetDetail12).some(
         (it) => parseSourceType(it.source) === 'advertiser',
@@ -333,6 +334,23 @@ describe('adFilter', () => {
       parseTweets(handledJson).some(
         (it) => parseSourceType(it.source) === 'advertiser',
       ),
+    ).false
+  })
+  it('should return hide when tweet is advertiser(with promotedMetadata)', () => {
+    expect(
+      parseTweets(TweetDetail13).some((it) => it.id === '1908274394037969165'),
+    ).true
+    const isShow = flowFilter([adFilter()])
+    const handledJson = filterTweets(
+      TweetDetail13,
+      (it) =>
+        isShow({
+          type: 'tweet',
+          tweet: it,
+        }).value,
+    )
+    expect(
+      parseTweets(handledJson).some((it) => it.id === '1908274394037969165'),
     ).false
   })
 })

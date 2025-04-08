@@ -3,7 +3,7 @@ import { afterEach, assert, beforeEach, vi } from 'vitest'
 import { HonoEnv, TokenInfo } from '../src/lib/bindings'
 import { createExecutionContext, env } from 'cloudflare:test'
 import { generateToken } from '../src/middlewares/auth'
-import { drizzle } from 'drizzle-orm/d1'
+import { drizzle, DrizzleD1Database } from 'drizzle-orm/d1'
 import { localUser } from '../src/db/schema'
 import { sha256 } from '../src/lib/crypto'
 
@@ -13,7 +13,7 @@ export interface CloudflareTestContext {
   token1: string
   token2: string
   env: HonoEnv['Bindings']
-  db: ReturnType<typeof drizzle>
+  db: DrizzleD1Database
 }
 
 export async function createCloudflareTestContext(): Promise<CloudflareTestContext> {

@@ -6,11 +6,9 @@ import type {
 } from '../src/lib'
 import { initCloudflareTest } from './utils'
 import { tweet, user, userSpamAnalysis } from '../src/db/schema'
-import { eq, gt, sql } from 'drizzle-orm'
+import { eq, gt } from 'drizzle-orm'
 import { range } from 'es-toolkit'
-import { drizzle } from 'drizzle-orm/d1'
-import { safeChunkInsertValues } from '../src/lib/drizzle'
-import { convertUserParamsToDBUser } from '../src/routes/twitter'
+import { upsertTweets, upsertUsers } from '../src/routes/twitter'
 
 let c = initCloudflareTest()
 
@@ -493,5 +491,48 @@ describe('check spam user', () => {
       { id: 'user-2', tweetIds: ['tweet-3', 'tweet-4'] },
     ])
     await Promise.all([checkSpamUser(data), checkSpamUser(data)])
+  })
+})
+
+describe('batch upsert users', () => {
+  it('should be able to upsert users', async () => {
+    const r1 = await upsertUsers(c.db, [
+      { id: 'user-1', screenName: 'user-1', name: 'user-1' },
+    ])
+    expect(r1).length(1)
+    await c.db.batch(r1 as any)
+    const r2 = await upsertUsers(c.db, [
+      { id: 'user-1', screenName: 'user-1', name: 'user-1' },
+    ])
+    expect(r2).length(0)
+  })
+})
+
+describe('batch upsert tweets', () => {
+  it('should be able to upsert tweets', async () => {
+    await c.db.insert(user).values({
+      id: 'user-1',
+      screenName: 'user-1',
+      name: 'user-1',
+    })
+    const r1 = await upsertTweets(c.db, [
+      {
+        id: 'tweet-1',
+        text: 'test',
+        userId: 'user-1',
+        publishedAt: new Date().toISOString(),
+      },
+    ])
+    expect(r1).length(1)
+    await c.db.batch(r1 as any)
+    const r2 = await upsertTweets(c.db, [
+      {
+        id: 'tweet-1',
+        text: 'test',
+        userId: 'user-1',
+        publishedAt: new Date().toISOString(),
+      },
+    ])
+    expect(r2).length(0)
   })
 })

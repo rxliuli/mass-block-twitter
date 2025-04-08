@@ -14,14 +14,12 @@ import {
   and,
   desc,
   eq,
-  gt,
   gte,
   inArray,
   InferInsertModel,
   InferSelectModel,
   isNull,
   lt,
-  notInArray,
   or,
   sql,
 } from 'drizzle-orm'
@@ -324,6 +322,115 @@ twitter
     return c.json(res)
   })
 
+export async function upsertUsers(
+  db: DrizzleD1Database,
+  users: InferInsertModel<typeof user>[],
+): Promise<BatchItem<'sqlite'>[]> {
+  const existingUsers = await db
+    .select()
+    .from(user)
+    .where(
+      inArray(
+        user.id,
+        users.map((it) => it.id),
+      ),
+    )
+  const existingUsersMap = existingUsers.reduce((acc, it) => {
+    acc[it.id] = it
+    return acc
+  }, {} as Record<string, InferSelectModel<typeof user>>)
+  const usersToProcessGroupBy = groupBy(users, (it) => {
+    const old = existingUsersMap[it.id]
+    if (!old) {
+      return 'new'
+    }
+    if (
+      typeof it.followersCount !== 'number' ||
+      typeof it.followingCount !== 'number'
+    ) {
+      return 'skip'
+    }
+    if (old.followersCount === null || old.followingCount === null) {
+      return 'update'
+    }
+    if (
+      it.updatedAt &&
+      it.updatedAt < new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString()
+    ) {
+      return 'update'
+    }
+    return 'skip'
+  })
+  const list: BatchItem<'sqlite'>[] = []
+  if (usersToProcessGroupBy['new']) {
+    list.push(
+      ...safeChunkInsertValues(user, usersToProcessGroupBy['new']).map((it) =>
+        db.insert(user).values(it).onConflictDoNothing({
+          target: user.id,
+        }),
+      ),
+    )
+  }
+  if (usersToProcessGroupBy['update']) {
+    list.push(
+      ...usersToProcessGroupBy['update'].map((it) =>
+        db
+          .update(user)
+          .set(omit(it, ['id']))
+          .where(eq(user.id, it.id)),
+      ),
+    )
+  }
+  return list
+}
+export async function upsertTweets(
+  db: DrizzleD1Database,
+  tweets: InferInsertModel<typeof tweet>[],
+) {
+  const existingTweets = (
+    await Promise.all(
+      chunk(
+        tweets.map((it) => it.id),
+        99,
+      ).map((ids) => db.select().from(tweet).where(inArray(tweet.id, ids))),
+    )
+  ).flatMap((it) => it)
+  const tweetsMap = existingTweets.reduce((acc, it) => {
+    acc[it.id] = it
+    return acc
+  }, {} as Record<string, InferSelectModel<typeof tweet>>)
+  const tweetsToProcessGroupBy = groupBy(tweets, (it) => {
+    const old = tweetsMap[it.id]
+    if (!old) {
+      return 'new'
+    }
+    if (!old.conversationId && it.conversationId) {
+      return 'update'
+    }
+    return 'skip'
+  })
+  const list: BatchItem<'sqlite'>[] = []
+  if (tweetsToProcessGroupBy['new']) {
+    list.push(
+      ...safeChunkInsertValues(tweet, tweetsToProcessGroupBy['new']).map((it) =>
+        db.insert(tweet).values(it).onConflictDoNothing({
+          target: tweet.id,
+        }),
+      ),
+    )
+  }
+  if (tweetsToProcessGroupBy['update']) {
+    list.push(
+      ...tweetsToProcessGroupBy['update'].map((it) =>
+        db
+          .update(tweet)
+          .set(omit(it, ['id']))
+          .where(eq(tweet.id, it.id)),
+      ),
+    )
+  }
+  return list
+}
 const checkSpamUserSchema = z
   .array(
     z.object({
@@ -331,6 +438,7 @@ const checkSpamUserSchema = z
       tweets: z.array(tweetSchemaWithUserId),
     }),
   )
+  .min(1)
   .max(99)
 export type CheckSpamUserRequest = z.infer<typeof checkSpamUserSchema>
 export type CheckSpamUserResponse = Pick<
@@ -351,104 +459,13 @@ twitter.post(
         convertTweet({ ...userParam, user_id: it.user.id }),
       ),
     )
-    const existingUsers = await db
-      .select()
-      .from(user)
-      .where(
-        inArray(
-          user.id,
-          usersToProcess.map((it) => it.id),
-        ),
-      )
-    const tweets = (
-      await Promise.all(
-        chunk(
-          tweetsToProcess.map((it) => it.id),
-          99,
-        ).map((ids) => db.select().from(tweet).where(inArray(tweet.id, ids))),
-      )
-    ).flatMap((it) => it)
-    const existingUsersMap = existingUsers.reduce((acc, it) => {
-      acc[it.id] = it
-      return acc
-    }, {} as Record<string, InferSelectModel<typeof user>>)
-    const usersToProcessGroupBy = groupBy(usersToProcess, (it) => {
-      const old = existingUsersMap[it.id]
-      if (!old) {
-        return 'new'
-      }
-      if (
-        typeof it.followersCount !== 'number' ||
-        typeof it.followingCount !== 'number'
-      ) {
-        return 'skip'
-      }
-      if (old.followersCount === null || old.followingCount === null) {
-        return 'update'
-      }
-      if (
-        it.updatedAt &&
-        it.updatedAt < new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString()
-      ) {
-        return 'update'
-      }
-      existingUsersMap[it.id]
-      return 'skip'
-    })
-    const list: BatchItem<'sqlite'>[] = []
-    if (usersToProcessGroupBy['new']) {
-      list.push(
-        ...safeChunkInsertValues(user, usersToProcessGroupBy['new']).map((it) =>
-          db.insert(user).values(it).onConflictDoNothing({
-            target: user.id,
-          }),
-        ),
-      )
-    }
-    if (usersToProcessGroupBy['update']) {
-      list.push(
-        ...usersToProcessGroupBy['update'].map((it) =>
-          db
-            .update(user)
-            .set(omit(it, ['id']))
-            .where(eq(user.id, it.id)),
-        ),
-      )
-    }
-    const tweetsMap = tweets.reduce((acc, it) => {
-      acc[it.id] = it
-      return acc
-    }, {} as Record<string, InferSelectModel<typeof tweet>>)
-    const tweetsToProcessGroupBy = groupBy(tweetsToProcess, (it) => {
-      const old = tweetsMap[it.id]
-      if (!old) {
-        return 'new'
-      }
-      if (!old.conversationId && it.conversationId) {
-        return 'update'
-      }
-      return 'skip'
-    })
-    if (tweetsToProcessGroupBy['new']) {
-      list.push(
-        ...safeChunkInsertValues(tweet, tweetsToProcessGroupBy['new']).map(
-          (it) =>
-            db.insert(tweet).values(it).onConflictDoNothing({
-              target: tweet.id,
-            }),
-        ),
-      )
-    }
-    if (tweetsToProcessGroupBy['update']) {
-      list.push(
-        ...tweetsToProcessGroupBy['update'].map((it) =>
-          db
-            .update(tweet)
-            .set(omit(it, ['id']))
-            .where(eq(tweet.id, it.id)),
-        ),
-      )
-    }
+    const list = (
+      await Promise.all([
+        upsertUsers(db, usersToProcess),
+        upsertTweets(db, tweetsToProcess),
+      ])
+    ).flat()
+
     if (list.length > 0) {
       await db.batch(list as any)
     }

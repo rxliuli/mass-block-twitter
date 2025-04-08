@@ -13,7 +13,7 @@ import {
   modListUser,
   user,
 } from '../db/schema'
-import { convertUserParamsToDBUser, upsertUser } from './twitter'
+import { convertUserParamsToDBUser, upsertUser, upsertUsers } from './twitter'
 import {
   and,
   desc,
@@ -361,6 +361,43 @@ export const addTwitterUsersSchema = z.object({
 export type ModListAddTwitterUsersRequest = z.infer<
   typeof addTwitterUsersSchema
 >
+async function upsertModListUsers(
+  db: DrizzleD1Database,
+  validated: ModListAddTwitterUsersRequest,
+) {
+  const existingUsers = await db
+    .select()
+    .from(modListUser)
+    .where(
+      and(
+        eq(modListUser.modListId, validated.modListId),
+        inArray(
+          modListUser.twitterUserId,
+          validated.twitterUsers.map((it) => it.id),
+        ),
+      ),
+    )
+  const existingUsersMap = existingUsers.reduce((acc, it) => {
+    acc[it.twitterUserId] = it
+    return acc
+  }, {} as Record<string, InferSelectModel<typeof modListUser>>)
+  const usersToProcess = validated.twitterUsers.filter(
+    (it) => !existingUsersMap[it.id],
+  )
+  return usersToProcess.map((it) =>
+    db
+      .insert(modListUser)
+      .values({
+        id: ulid(),
+        modListId: validated.modListId,
+        twitterUserId: it.id,
+      })
+      .onConflictDoNothing({
+        target: [modListUser.modListId, modListUser.twitterUserId],
+      })
+      .returning({ inserted: sql`changes()` }),
+  )
+}
 export type ModListAddTwitterUsersResponse = Pick<
   InferSelectModel<typeof user>,
   'id' | 'screenName' | 'name' | 'profileImageUrl' | 'description'
@@ -382,27 +419,26 @@ modlists.post(
     if (!_modList || _modList.localUserId !== tokenInfo.sub) {
       return c.json({ code: 'modListNotFound' }, 404)
     }
-    const results = (await db.batch([
-      ...validated.twitterUsers.map((it) => _upsertUser(db, it)),
-      ...validated.twitterUsers.map((it) =>
-        db
-          .insert(modListUser)
-          .values({
-            id: ulid(),
-            modListId: validated.modListId,
-            twitterUserId: it.id,
-          })
-          .onConflictDoNothing({
-            target: [modListUser.modListId, modListUser.twitterUserId],
-          })
-          .returning({ inserted: sql`changes()` }),
-      ),
-    ] as any)) as (InferInsertModel<typeof user>[] | { inserted: 0 }[])[]
-    const inserts = results.flat().filter((it) => 'inserted' in it)
-    await db
-      .update(modList)
-      .set({ userCount: sql`userCount + ${inserts.length}` })
-      .where(eq(modList.id, validated.modListId))
+    const usersToProcess = validated.twitterUsers.map((it) =>
+      convertUserParamsToDBUser(it),
+    )
+    const batchItems = (
+      await Promise.all([
+        upsertUsers(db, usersToProcess),
+        upsertModListUsers(db, validated),
+      ])
+    ).flat()
+    if (batchItems.length > 0) {
+      const results = (await db.batch(batchItems as any)) as (
+        | InferInsertModel<typeof user>[]
+        | { inserted: 0 }[]
+      )[]
+      const inserts = results.flat().filter((it) => 'inserted' in it)
+      await db
+        .update(modList)
+        .set({ userCount: sql`userCount + ${inserts.length}` })
+        .where(eq(modList.id, validated.modListId))
+    }
     const list = await db
       .select({
         id: user.id,

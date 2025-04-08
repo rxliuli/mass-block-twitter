@@ -60,7 +60,32 @@ describe('defaultProfileFilter', () => {
           tweet: it,
         }).value,
     )
-    expect(parseTweets(handledJson).some((it) => it.id === '1908877370444132441')).false
+    expect(
+      parseTweets(handledJson).some((it) => it.id === '1908877370444132441'),
+    ).false
+  })
+  it('should match real data not hide warning data', () => {
+    const filter = defaultProfileFilter()
+    expect(
+      filter.userCondition!({
+        id: '1859081969075978240',
+        blocking: false,
+        following: false,
+        screen_name: 'Yinxianglishu',
+        name: 'Yinxianglishu',
+        description: 'test',
+        profile_image_url:
+          'https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png',
+        created_at: '2024-11-20T03:51:18.000Z',
+        updated_at: '2025-04-08T12:04:04.522Z',
+        followers_count: 2368,
+        friends_count: 1502,
+        default_profile: true,
+        default_profile_image: true,
+        is_blue_verified: false,
+        location: 'Jilin, China',
+      }),
+    ).toBe('next')
   })
 })
 

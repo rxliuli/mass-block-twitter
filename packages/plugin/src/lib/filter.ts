@@ -179,13 +179,23 @@ export function defaultProfileFilter(): TweetFilter {
   return {
     name: 'defaultProfile',
     userCondition: (user: User) => {
+      let score = 0
+      if (typeof user.default_profile === 'boolean' && user.default_profile) {
+        score += 1
+      }
       if (
-        ((typeof user.default_profile === 'boolean' && user.default_profile) ||
-          !user.description ||
-          (typeof user.default_profile_image === 'boolean' &&
-            user.default_profile_image)) &&
-        user.followers_count === 0
+        typeof user.default_profile_image === 'boolean' &&
+        user.default_profile_image
       ) {
+        score += 1
+      }
+      if (user.followers_count === 0) {
+        score += 1
+        if (user.friends_count === 0) {
+          score += 1
+        }
+      }
+      if (score >= 2) {
         return 'hide'
       }
       return 'next'

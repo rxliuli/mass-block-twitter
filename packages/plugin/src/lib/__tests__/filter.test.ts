@@ -25,6 +25,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import TweetDetail11 from './assets/TweetDetail11.json'
 import TweetDetail12 from './assets/TweetDetail12.json'
 import TweetDetail13 from './assets/TweetDetail13.json'
+import TweetDetail15 from './assets/TweetDetail15.json'
 
 describe('defaultProfileFilter', () => {
   const filter = defaultProfileFilter()
@@ -41,10 +42,25 @@ describe('defaultProfileFilter', () => {
     expect(
       filter.userCondition!({
         default_profile: true,
-        default_profile_image: true,
+        default_profile_image: false,
         followers_count: 1,
       } as User),
     ).toBe('next')
+  })
+  it('should match real data', () => {
+    expect(
+      parseTweets(TweetDetail15).some((it) => it.id === '1908877370444132441'),
+    ).true
+    const isShow = flowFilter([defaultProfileFilter()])
+    const handledJson = filterTweets(
+      TweetDetail15,
+      (it) =>
+        isShow({
+          type: 'tweet',
+          tweet: it,
+        }).value,
+    )
+    expect(parseTweets(handledJson).some((it) => it.id === '1908877370444132441')).false
   })
 })
 

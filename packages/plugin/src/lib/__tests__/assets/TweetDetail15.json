@@ -1,0 +1,2023 @@
+{
+  "data": {
+      "threaded_conversation_with_injections_v2": {
+          "instructions": [
+              {
+                  "type": "TimelineAddEntries",
+                  "entries": [
+                      {
+                          "entryId": "tweet-1908875852450013695",
+                          "sortIndex": "7314496184404762112",
+                          "content": {
+                              "entryType": "TimelineTimelineItem",
+                              "__typename": "TimelineTimelineItem",
+                              "itemContent": {
+                                  "itemType": "TimelineTweet",
+                                  "__typename": "TimelineTweet",
+                                  "tweet_results": {
+                                      "result": {
+                                          "__typename": "Tweet",
+                                          "rest_id": "1908875852450013695",
+                                          "has_birdwatch_notes": false,
+                                          "core": {
+                                              "user_results": {
+                                                  "result": {
+                                                      "__typename": "User",
+                                                      "id": "VXNlcjozNzc4MjM4MTA=",
+                                                      "rest_id": "377823810",
+                                                      "affiliates_highlighted_label": {},
+                                                      "has_graduated_access": true,
+                                                      "parody_commentary_fan_label": "None",
+                                                      "is_blue_verified": false,
+                                                      "profile_image_shape": "Circle",
+                                                      "legacy": {
+                                                          "following": false,
+                                                          "can_dm": true,
+                                                          "can_media_tag": true,
+                                                          "created_at": "Thu Sep 22 05:07:22 +0000 2011",
+                                                          "default_profile": true,
+                                                          "default_profile_image": false,
+                                                          "description": "想做独立开发者的设计师，做任何事情都只是因为兴趣罢了",
+                                                          "entities": {
+                                                              "description": {
+                                                                  "urls": []
+                                                              },
+                                                              "url": {
+                                                                  "urls": [
+                                                                      {
+                                                                          "display_url": "ftium4.com",
+                                                                          "expanded_url": "http://www.ftium4.com",
+                                                                          "url": "https://t.co/bXVe2gsFck",
+                                                                          "indices": [
+                                                                              0,
+                                                                              23
+                                                                          ]
+                                                                      }
+                                                                  ]
+                                                              }
+                                                          },
+                                                          "fast_followers_count": 0,
+                                                          "favourites_count": 8158,
+                                                          "followers_count": 28824,
+                                                          "friends_count": 1540,
+                                                          "has_custom_timelines": true,
+                                                          "is_translator": false,
+                                                          "listed_count": 269,
+                                                          "location": "",
+                                                          "media_count": 3362,
+                                                          "name": "龙爪槐守望者",
+                                                          "normal_followers_count": 28824,
+                                                          "pinned_tweet_ids_str": [],
+                                                          "possibly_sensitive": false,
+                                                          "profile_banner_url": "https://pbs.twimg.com/profile_banners/377823810/1635403486",
+                                                          "profile_image_url_https": "https://pbs.twimg.com/profile_images/1477903349278453762/0OBeufkj_normal.jpg",
+                                                          "profile_interstitial_type": "",
+                                                          "screen_name": "ftium4",
+                                                          "statuses_count": 6621,
+                                                          "translator_type": "none",
+                                                          "url": "https://t.co/bXVe2gsFck",
+                                                          "verified": false,
+                                                          "want_retweets": false,
+                                                          "withheld_in_countries": []
+                                                      },
+                                                      "tipjar_settings": {}
+                                                  }
+                                              }
+                                          },
+                                          "unmention_data": {},
+                                          "edit_control": {
+                                              "edit_tweet_ids": [
+                                                  "1908875852450013695"
+                                              ],
+                                              "editable_until_msecs": "1743950043000",
+                                              "is_edit_eligible": false,
+                                              "edits_remaining": "5"
+                                          },
+                                          "is_translatable": true,
+                                          "views": {
+                                              "count": "2565",
+                                              "state": "EnabledWithCount"
+                                          },
+                                          "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                          "grok_analysis_button": true,
+                                          "legacy": {
+                                              "bookmark_count": 0,
+                                              "bookmarked": false,
+                                              "created_at": "Sun Apr 06 13:34:03 +0000 2025",
+                                              "conversation_id_str": "1908875852450013695",
+                                              "display_text_range": [
+                                                  0,
+                                                  105
+                                              ],
+                                              "entities": {
+                                                  "hashtags": [],
+                                                  "media": [
+                                                      {
+                                                          "display_url": "pic.x.com/zWy6LmS4LP",
+                                                          "expanded_url": "https://x.com/ftium4/status/1908875852450013695/photo/1",
+                                                          "id_str": "1908875471699554304",
+                                                          "indices": [
+                                                              106,
+                                                              129
+                                                          ],
+                                                          "media_key": "3_1908875471699554304",
+                                                          "media_url_https": "https://pbs.twimg.com/media/Gn2wILsbsAAW7Mx.jpg",
+                                                          "type": "photo",
+                                                          "url": "https://t.co/zWy6LmS4LP",
+                                                          "ext_media_availability": {
+                                                              "status": "Available"
+                                                          },
+                                                          "features": {
+                                                              "large": {
+                                                                  "faces": [
+                                                                      {
+                                                                          "x": 87,
+                                                                          "y": 260,
+                                                                          "h": 297,
+                                                                          "w": 297
+                                                                      }
+                                                                  ]
+                                                              },
+                                                              "medium": {
+                                                                  "faces": [
+                                                                      {
+                                                                          "x": 74,
+                                                                          "y": 222,
+                                                                          "h": 254,
+                                                                          "w": 254
+                                                                      }
+                                                                  ]
+                                                              },
+                                                              "small": {
+                                                                  "faces": [
+                                                                      {
+                                                                          "x": 42,
+                                                                          "y": 126,
+                                                                          "h": 143,
+                                                                          "w": 143
+                                                                      }
+                                                                  ]
+                                                              },
+                                                              "orig": {
+                                                                  "faces": [
+                                                                      {
+                                                                          "x": 87,
+                                                                          "y": 260,
+                                                                          "h": 297,
+                                                                          "w": 297
+                                                                      }
+                                                                  ]
+                                                              }
+                                                          },
+                                                          "sizes": {
+                                                              "large": {
+                                                                  "h": 1402,
+                                                                  "w": 1186,
+                                                                  "resize": "fit"
+                                                              },
+                                                              "medium": {
+                                                                  "h": 1200,
+                                                                  "w": 1015,
+                                                                  "resize": "fit"
+                                                              },
+                                                              "small": {
+                                                                  "h": 680,
+                                                                  "w": 575,
+                                                                  "resize": "fit"
+                                                              },
+                                                              "thumb": {
+                                                                  "h": 150,
+                                                                  "w": 150,
+                                                                  "resize": "crop"
+                                                              }
+                                                          },
+                                                          "original_info": {
+                                                              "height": 1402,
+                                                              "width": 1186,
+                                                              "focus_rects": [
+                                                                  {
+                                                                      "x": 0,
+                                                                      "y": 403,
+                                                                      "w": 1186,
+                                                                      "h": 664
+                                                                  },
+                                                                  {
+                                                                      "x": 0,
+                                                                      "y": 142,
+                                                                      "w": 1186,
+                                                                      "h": 1186
+                                                                  },
+                                                                  {
+                                                                      "x": 0,
+                                                                      "y": 50,
+                                                                      "w": 1186,
+                                                                      "h": 1352
+                                                                  },
+                                                                  {
+                                                                      "x": 0,
+                                                                      "y": 0,
+                                                                      "w": 701,
+                                                                      "h": 1402
+                                                                  },
+                                                                  {
+                                                                      "x": 0,
+                                                                      "y": 0,
+                                                                      "w": 1186,
+                                                                      "h": 1402
+                                                                  }
+                                                              ]
+                                                          },
+                                                          "media_results": {
+                                                              "result": {
+                                                                  "media_key": "3_1908875471699554304"
+                                                              }
+                                                          }
+                                                      }
+                                                  ],
+                                                  "symbols": [],
+                                                  "timestamps": [],
+                                                  "urls": [],
+                                                  "user_mentions": []
+                                              },
+                                              "extended_entities": {
+                                                  "media": [
+                                                      {
+                                                          "display_url": "pic.x.com/zWy6LmS4LP",
+                                                          "expanded_url": "https://x.com/ftium4/status/1908875852450013695/photo/1",
+                                                          "id_str": "1908875471699554304",
+                                                          "indices": [
+                                                              106,
+                                                              129
+                                                          ],
+                                                          "media_key": "3_1908875471699554304",
+                                                          "media_url_https": "https://pbs.twimg.com/media/Gn2wILsbsAAW7Mx.jpg",
+                                                          "type": "photo",
+                                                          "url": "https://t.co/zWy6LmS4LP",
+                                                          "ext_media_availability": {
+                                                              "status": "Available"
+                                                          },
+                                                          "features": {
+                                                              "large": {
+                                                                  "faces": [
+                                                                      {
+                                                                          "x": 87,
+                                                                          "y": 260,
+                                                                          "h": 297,
+                                                                          "w": 297
+                                                                      }
+                                                                  ]
+                                                              },
+                                                              "medium": {
+                                                                  "faces": [
+                                                                      {
+                                                                          "x": 74,
+                                                                          "y": 222,
+                                                                          "h": 254,
+                                                                          "w": 254
+                                                                      }
+                                                                  ]
+                                                              },
+                                                              "small": {
+                                                                  "faces": [
+                                                                      {
+                                                                          "x": 42,
+                                                                          "y": 126,
+                                                                          "h": 143,
+                                                                          "w": 143
+                                                                      }
+                                                                  ]
+                                                              },
+                                                              "orig": {
+                                                                  "faces": [
+                                                                      {
+                                                                          "x": 87,
+                                                                          "y": 260,
+                                                                          "h": 297,
+                                                                          "w": 297
+                                                                      }
+                                                                  ]
+                                                              }
+                                                          },
+                                                          "sizes": {
+                                                              "large": {
+                                                                  "h": 1402,
+                                                                  "w": 1186,
+                                                                  "resize": "fit"
+                                                              },
+                                                              "medium": {
+                                                                  "h": 1200,
+                                                                  "w": 1015,
+                                                                  "resize": "fit"
+                                                              },
+                                                              "small": {
+                                                                  "h": 680,
+                                                                  "w": 575,
+                                                                  "resize": "fit"
+                                                              },
+                                                              "thumb": {
+                                                                  "h": 150,
+                                                                  "w": 150,
+                                                                  "resize": "crop"
+                                                              }
+                                                          },
+                                                          "original_info": {
+                                                              "height": 1402,
+                                                              "width": 1186,
+                                                              "focus_rects": [
+                                                                  {
+                                                                      "x": 0,
+                                                                      "y": 403,
+                                                                      "w": 1186,
+                                                                      "h": 664
+                                                                  },
+                                                                  {
+                                                                      "x": 0,
+                                                                      "y": 142,
+                                                                      "w": 1186,
+                                                                      "h": 1186
+                                                                  },
+                                                                  {
+                                                                      "x": 0,
+                                                                      "y": 50,
+                                                                      "w": 1186,
+                                                                      "h": 1352
+                                                                  },
+                                                                  {
+                                                                      "x": 0,
+                                                                      "y": 0,
+                                                                      "w": 701,
+                                                                      "h": 1402
+                                                                  },
+                                                                  {
+                                                                      "x": 0,
+                                                                      "y": 0,
+                                                                      "w": 1186,
+                                                                      "h": 1402
+                                                                  }
+                                                              ]
+                                                          },
+                                                          "media_results": {
+                                                              "result": {
+                                                                  "media_key": "3_1908875471699554304"
+                                                              }
+                                                          }
+                                                      }
+                                                  ]
+                                              },
+                                              "favorite_count": 1,
+                                              "favorited": false,
+                                              "full_text": "推特这广告就看不懂了，截图说马斯克推荐过GROK coin加密货币，但是事实上我没找到这条。但如果说这是条诈骗广告，点开却是跳转到Grok AI网站。是Grok自己弄点不相关的吸引眼球推AI，还是其他什么原因？ https://t.co/zWy6LmS4LP",
+                                              "is_quote_status": false,
+                                              "lang": "zh",
+                                              "possibly_sensitive": false,
+                                              "possibly_sensitive_editable": true,
+                                              "quote_count": 1,
+                                              "reply_count": 3,
+                                              "retweet_count": 0,
+                                              "retweeted": false,
+                                              "user_id_str": "377823810",
+                                              "id_str": "1908875852450013695"
+                                          },
+                                          "quick_promote_eligibility": {
+                                              "eligibility": "IneligibleNotProfessional"
+                                          }
+                                      }
+                                  },
+                                  "tweetDisplayType": "SelfThread",
+                                  "hasModeratedReplies": false
+                              }
+                          }
+                      },
+                      {
+                          "entryId": "conversationthread-1908908085214863772",
+                          "sortIndex": "7314496184404762102",
+                          "content": {
+                              "entryType": "TimelineTimelineModule",
+                              "__typename": "TimelineTimelineModule",
+                              "items": [
+                                  {
+                                      "entryId": "conversationthread-1908908085214863772-tweet-1908908085214863772",
+                                      "item": {
+                                          "itemContent": {
+                                              "itemType": "TimelineTweet",
+                                              "__typename": "TimelineTweet",
+                                              "tweet_results": {
+                                                  "result": {
+                                                      "__typename": "Tweet",
+                                                      "rest_id": "1908908085214863772",
+                                                      "has_birdwatch_notes": false,
+                                                      "core": {
+                                                          "user_results": {
+                                                              "result": {
+                                                                  "__typename": "User",
+                                                                  "id": "VXNlcjozNzc4MjM4MTA=",
+                                                                  "rest_id": "377823810",
+                                                                  "affiliates_highlighted_label": {},
+                                                                  "has_graduated_access": true,
+                                                                  "parody_commentary_fan_label": "None",
+                                                                  "is_blue_verified": false,
+                                                                  "profile_image_shape": "Circle",
+                                                                  "legacy": {
+                                                                      "following": false,
+                                                                      "can_dm": true,
+                                                                      "can_media_tag": true,
+                                                                      "created_at": "Thu Sep 22 05:07:22 +0000 2011",
+                                                                      "default_profile": true,
+                                                                      "default_profile_image": false,
+                                                                      "description": "想做独立开发者的设计师，做任何事情都只是因为兴趣罢了",
+                                                                      "entities": {
+                                                                          "description": {
+                                                                              "urls": []
+                                                                          },
+                                                                          "url": {
+                                                                              "urls": [
+                                                                                  {
+                                                                                      "display_url": "ftium4.com",
+                                                                                      "expanded_url": "http://www.ftium4.com",
+                                                                                      "url": "https://t.co/bXVe2gsFck",
+                                                                                      "indices": [
+                                                                                          0,
+                                                                                          23
+                                                                                      ]
+                                                                                  }
+                                                                              ]
+                                                                          }
+                                                                      },
+                                                                      "fast_followers_count": 0,
+                                                                      "favourites_count": 8158,
+                                                                      "followers_count": 28824,
+                                                                      "friends_count": 1540,
+                                                                      "has_custom_timelines": true,
+                                                                      "is_translator": false,
+                                                                      "listed_count": 269,
+                                                                      "location": "",
+                                                                      "media_count": 3362,
+                                                                      "name": "龙爪槐守望者",
+                                                                      "normal_followers_count": 28824,
+                                                                      "pinned_tweet_ids_str": [],
+                                                                      "possibly_sensitive": false,
+                                                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/377823810/1635403486",
+                                                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1477903349278453762/0OBeufkj_normal.jpg",
+                                                                      "profile_interstitial_type": "",
+                                                                      "screen_name": "ftium4",
+                                                                      "statuses_count": 6621,
+                                                                      "translator_type": "none",
+                                                                      "url": "https://t.co/bXVe2gsFck",
+                                                                      "verified": false,
+                                                                      "want_retweets": false,
+                                                                      "withheld_in_countries": []
+                                                                  },
+                                                                  "tipjar_settings": {}
+                                                              }
+                                                          }
+                                                      },
+                                                      "unmention_data": {},
+                                                      "edit_control": {
+                                                          "edit_tweet_ids": [
+                                                              "1908908085214863772"
+                                                          ],
+                                                          "editable_until_msecs": "1743957727000",
+                                                          "is_edit_eligible": false,
+                                                          "edits_remaining": "5"
+                                                      },
+                                                      "is_translatable": true,
+                                                      "views": {
+                                                          "count": "1100",
+                                                          "state": "EnabledWithCount"
+                                                      },
+                                                      "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                                      "grok_analysis_button": true,
+                                                      "legacy": {
+                                                          "bookmark_count": 0,
+                                                          "bookmarked": false,
+                                                          "created_at": "Sun Apr 06 15:42:07 +0000 2025",
+                                                          "conversation_id_str": "1908875852450013695",
+                                                          "display_text_range": [
+                                                              0,
+                                                              21
+                                                          ],
+                                                          "entities": {
+                                                              "hashtags": [],
+                                                              "media": [
+                                                                  {
+                                                                      "display_url": "pic.x.com/bqsltk70CC",
+                                                                      "expanded_url": "https://x.com/ftium4/status/1908908085214863772/photo/1",
+                                                                      "id_str": "1908908003199500288",
+                                                                      "indices": [
+                                                                          22,
+                                                                          45
+                                                                      ],
+                                                                      "media_key": "3_1908908003199500288",
+                                                                      "media_url_https": "https://pbs.twimg.com/media/Gn3Ntw-bQAA6_hK.jpg",
+                                                                      "type": "photo",
+                                                                      "url": "https://t.co/bqsltk70CC",
+                                                                      "ext_media_availability": {
+                                                                          "status": "Available"
+                                                                      },
+                                                                      "features": {
+                                                                          "large": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "medium": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "small": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "orig": {
+                                                                              "faces": []
+                                                                          }
+                                                                      },
+                                                                      "sizes": {
+                                                                          "large": {
+                                                                              "h": 1410,
+                                                                              "w": 1188,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "medium": {
+                                                                              "h": 1200,
+                                                                              "w": 1011,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "small": {
+                                                                              "h": 680,
+                                                                              "w": 573,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "thumb": {
+                                                                              "h": 150,
+                                                                              "w": 150,
+                                                                              "resize": "crop"
+                                                                          }
+                                                                      },
+                                                                      "original_info": {
+                                                                          "height": 1410,
+                                                                          "width": 1188,
+                                                                          "focus_rects": [
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1188,
+                                                                                  "h": 665
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1188,
+                                                                                  "h": 1188
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1188,
+                                                                                  "h": 1354
+                                                                              },
+                                                                              {
+                                                                                  "x": 316,
+                                                                                  "y": 0,
+                                                                                  "w": 705,
+                                                                                  "h": 1410
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1188,
+                                                                                  "h": 1410
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "media_results": {
+                                                                          "result": {
+                                                                              "media_key": "3_1908908003199500288"
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ],
+                                                              "symbols": [],
+                                                              "timestamps": [],
+                                                              "urls": [],
+                                                              "user_mentions": []
+                                                          },
+                                                          "extended_entities": {
+                                                              "media": [
+                                                                  {
+                                                                      "display_url": "pic.x.com/bqsltk70CC",
+                                                                      "expanded_url": "https://x.com/ftium4/status/1908908085214863772/photo/1",
+                                                                      "id_str": "1908908003199500288",
+                                                                      "indices": [
+                                                                          22,
+                                                                          45
+                                                                      ],
+                                                                      "media_key": "3_1908908003199500288",
+                                                                      "media_url_https": "https://pbs.twimg.com/media/Gn3Ntw-bQAA6_hK.jpg",
+                                                                      "type": "photo",
+                                                                      "url": "https://t.co/bqsltk70CC",
+                                                                      "ext_media_availability": {
+                                                                          "status": "Available"
+                                                                      },
+                                                                      "features": {
+                                                                          "large": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "medium": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "small": {
+                                                                              "faces": []
+                                                                          },
+                                                                          "orig": {
+                                                                              "faces": []
+                                                                          }
+                                                                      },
+                                                                      "sizes": {
+                                                                          "large": {
+                                                                              "h": 1410,
+                                                                              "w": 1188,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "medium": {
+                                                                              "h": 1200,
+                                                                              "w": 1011,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "small": {
+                                                                              "h": 680,
+                                                                              "w": 573,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "thumb": {
+                                                                              "h": 150,
+                                                                              "w": 150,
+                                                                              "resize": "crop"
+                                                                          }
+                                                                      },
+                                                                      "original_info": {
+                                                                          "height": 1410,
+                                                                          "width": 1188,
+                                                                          "focus_rects": [
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1188,
+                                                                                  "h": 665
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1188,
+                                                                                  "h": 1188
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1188,
+                                                                                  "h": 1354
+                                                                              },
+                                                                              {
+                                                                                  "x": 316,
+                                                                                  "y": 0,
+                                                                                  "w": 705,
+                                                                                  "h": 1410
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1188,
+                                                                                  "h": 1410
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "media_results": {
+                                                                          "result": {
+                                                                              "media_key": "3_1908908003199500288"
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ]
+                                                          },
+                                                          "favorite_count": 0,
+                                                          "favorited": false,
+                                                          "full_text": "没完了是吧，推特广告全是冒充大厂的加密货币 https://t.co/bqsltk70CC",
+                                                          "in_reply_to_screen_name": "ftium4",
+                                                          "in_reply_to_status_id_str": "1908875852450013695",
+                                                          "in_reply_to_user_id_str": "377823810",
+                                                          "is_quote_status": false,
+                                                          "lang": "zh",
+                                                          "possibly_sensitive": false,
+                                                          "possibly_sensitive_editable": true,
+                                                          "quote_count": 0,
+                                                          "reply_count": 3,
+                                                          "retweet_count": 0,
+                                                          "retweeted": false,
+                                                          "user_id_str": "377823810",
+                                                          "id_str": "1908908085214863772"
+                                                      },
+                                                      "quick_promote_eligibility": {
+                                                          "eligibility": "IneligibleNotProfessional"
+                                                      }
+                                                  }
+                                              },
+                                              "tweetDisplayType": "SelfThread"
+                                          },
+                                          "clientEventInfo": {
+                                              "details": {
+                                                  "conversationDetails": {
+                                                      "conversationSection": "HighQuality"
+                                                  },
+                                                  "timelinesDetails": {
+                                                      "controllerData": "DAACDAAEDAABCgABDQACCCBjg5UKAAIAAAAABADACAAAAAA="
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  },
+                                  {
+                                      "entryId": "conversationthread-1908908085214863772-tweet-1909429889993736618",
+                                      "item": {
+                                          "itemContent": {
+                                              "itemType": "TimelineTweet",
+                                              "__typename": "TimelineTweet",
+                                              "tweet_results": {
+                                                  "result": {
+                                                      "__typename": "Tweet",
+                                                      "rest_id": "1909429889993736618",
+                                                      "has_birdwatch_notes": false,
+                                                      "core": {
+                                                          "user_results": {
+                                                              "result": {
+                                                                  "__typename": "User",
+                                                                  "id": "VXNlcjozNzc4MjM4MTA=",
+                                                                  "rest_id": "377823810",
+                                                                  "affiliates_highlighted_label": {},
+                                                                  "has_graduated_access": true,
+                                                                  "parody_commentary_fan_label": "None",
+                                                                  "is_blue_verified": false,
+                                                                  "profile_image_shape": "Circle",
+                                                                  "legacy": {
+                                                                      "following": false,
+                                                                      "can_dm": true,
+                                                                      "can_media_tag": true,
+                                                                      "created_at": "Thu Sep 22 05:07:22 +0000 2011",
+                                                                      "default_profile": true,
+                                                                      "default_profile_image": false,
+                                                                      "description": "想做独立开发者的设计师，做任何事情都只是因为兴趣罢了",
+                                                                      "entities": {
+                                                                          "description": {
+                                                                              "urls": []
+                                                                          },
+                                                                          "url": {
+                                                                              "urls": [
+                                                                                  {
+                                                                                      "display_url": "ftium4.com",
+                                                                                      "expanded_url": "http://www.ftium4.com",
+                                                                                      "url": "https://t.co/bXVe2gsFck",
+                                                                                      "indices": [
+                                                                                          0,
+                                                                                          23
+                                                                                      ]
+                                                                                  }
+                                                                              ]
+                                                                          }
+                                                                      },
+                                                                      "fast_followers_count": 0,
+                                                                      "favourites_count": 8158,
+                                                                      "followers_count": 28824,
+                                                                      "friends_count": 1540,
+                                                                      "has_custom_timelines": true,
+                                                                      "is_translator": false,
+                                                                      "listed_count": 269,
+                                                                      "location": "",
+                                                                      "media_count": 3362,
+                                                                      "name": "龙爪槐守望者",
+                                                                      "normal_followers_count": 28824,
+                                                                      "pinned_tweet_ids_str": [],
+                                                                      "possibly_sensitive": false,
+                                                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/377823810/1635403486",
+                                                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1477903349278453762/0OBeufkj_normal.jpg",
+                                                                      "profile_interstitial_type": "",
+                                                                      "screen_name": "ftium4",
+                                                                      "statuses_count": 6621,
+                                                                      "translator_type": "none",
+                                                                      "url": "https://t.co/bXVe2gsFck",
+                                                                      "verified": false,
+                                                                      "want_retweets": false,
+                                                                      "withheld_in_countries": []
+                                                                  },
+                                                                  "tipjar_settings": {}
+                                                              }
+                                                          }
+                                                      },
+                                                      "unmention_data": {},
+                                                      "edit_control": {
+                                                          "edit_tweet_ids": [
+                                                              "1909429889993736618"
+                                                          ],
+                                                          "editable_until_msecs": "1744082135000",
+                                                          "is_edit_eligible": false,
+                                                          "edits_remaining": "5"
+                                                      },
+                                                      "is_translatable": true,
+                                                      "views": {
+                                                          "count": "670",
+                                                          "state": "EnabledWithCount"
+                                                      },
+                                                      "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                                      "grok_analysis_button": true,
+                                                      "legacy": {
+                                                          "bookmark_count": 0,
+                                                          "bookmarked": false,
+                                                          "created_at": "Tue Apr 08 02:15:35 +0000 2025",
+                                                          "conversation_id_str": "1908875852450013695",
+                                                          "display_text_range": [
+                                                              0,
+                                                              39
+                                                          ],
+                                                          "entities": {
+                                                              "hashtags": [],
+                                                              "media": [
+                                                                  {
+                                                                      "display_url": "pic.x.com/cQeYwTFzl4",
+                                                                      "expanded_url": "https://x.com/ftium4/status/1909429889993736618/photo/1",
+                                                                      "id_str": "1909429742123859974",
+                                                                      "indices": [
+                                                                          40,
+                                                                          63
+                                                                      ],
+                                                                      "media_key": "3_1909429742123859974",
+                                                                      "media_url_https": "https://pbs.twimg.com/media/Gn-oO97bwAYKCrr.jpg",
+                                                                      "type": "photo",
+                                                                      "url": "https://t.co/cQeYwTFzl4",
+                                                                      "ext_media_availability": {
+                                                                          "status": "Available"
+                                                                      },
+                                                                      "features": {
+                                                                          "large": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 345,
+                                                                                      "y": 337,
+                                                                                      "h": 548,
+                                                                                      "w": 548
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "medium": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 287,
+                                                                                      "y": 280,
+                                                                                      "h": 456,
+                                                                                      "w": 456
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "small": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 162,
+                                                                                      "y": 159,
+                                                                                      "h": 258,
+                                                                                      "w": 258
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "orig": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 345,
+                                                                                      "y": 337,
+                                                                                      "h": 548,
+                                                                                      "w": 548
+                                                                                  }
+                                                                              ]
+                                                                          }
+                                                                      },
+                                                                      "sizes": {
+                                                                          "large": {
+                                                                              "h": 1440,
+                                                                              "w": 1192,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "medium": {
+                                                                              "h": 1200,
+                                                                              "w": 993,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "small": {
+                                                                              "h": 680,
+                                                                              "w": 563,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "thumb": {
+                                                                              "h": 150,
+                                                                              "w": 150,
+                                                                              "resize": "crop"
+                                                                          }
+                                                                      },
+                                                                      "original_info": {
+                                                                          "height": 1440,
+                                                                          "width": 1192,
+                                                                          "focus_rects": [
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 709,
+                                                                                  "w": 1192,
+                                                                                  "h": 668
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 248,
+                                                                                  "w": 1192,
+                                                                                  "h": 1192
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 81,
+                                                                                  "w": 1192,
+                                                                                  "h": 1359
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 720,
+                                                                                  "h": 1440
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1192,
+                                                                                  "h": 1440
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "media_results": {
+                                                                          "result": {
+                                                                              "media_key": "3_1909429742123859974"
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ],
+                                                              "symbols": [],
+                                                              "timestamps": [],
+                                                              "urls": [],
+                                                              "user_mentions": []
+                                                          },
+                                                          "extended_entities": {
+                                                              "media": [
+                                                                  {
+                                                                      "display_url": "pic.x.com/cQeYwTFzl4",
+                                                                      "expanded_url": "https://x.com/ftium4/status/1909429889993736618/photo/1",
+                                                                      "id_str": "1909429742123859974",
+                                                                      "indices": [
+                                                                          40,
+                                                                          63
+                                                                      ],
+                                                                      "media_key": "3_1909429742123859974",
+                                                                      "media_url_https": "https://pbs.twimg.com/media/Gn-oO97bwAYKCrr.jpg",
+                                                                      "type": "photo",
+                                                                      "url": "https://t.co/cQeYwTFzl4",
+                                                                      "ext_media_availability": {
+                                                                          "status": "Available"
+                                                                      },
+                                                                      "features": {
+                                                                          "large": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 345,
+                                                                                      "y": 337,
+                                                                                      "h": 548,
+                                                                                      "w": 548
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "medium": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 287,
+                                                                                      "y": 280,
+                                                                                      "h": 456,
+                                                                                      "w": 456
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "small": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 162,
+                                                                                      "y": 159,
+                                                                                      "h": 258,
+                                                                                      "w": 258
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "orig": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 345,
+                                                                                      "y": 337,
+                                                                                      "h": 548,
+                                                                                      "w": 548
+                                                                                  }
+                                                                              ]
+                                                                          }
+                                                                      },
+                                                                      "sizes": {
+                                                                          "large": {
+                                                                              "h": 1440,
+                                                                              "w": 1192,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "medium": {
+                                                                              "h": 1200,
+                                                                              "w": 993,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "small": {
+                                                                              "h": 680,
+                                                                              "w": 563,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "thumb": {
+                                                                              "h": 150,
+                                                                              "w": 150,
+                                                                              "resize": "crop"
+                                                                          }
+                                                                      },
+                                                                      "original_info": {
+                                                                          "height": 1440,
+                                                                          "width": 1192,
+                                                                          "focus_rects": [
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 709,
+                                                                                  "w": 1192,
+                                                                                  "h": 668
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 248,
+                                                                                  "w": 1192,
+                                                                                  "h": 1192
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 81,
+                                                                                  "w": 1192,
+                                                                                  "h": 1359
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 720,
+                                                                                  "h": 1440
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1192,
+                                                                                  "h": 1440
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "media_results": {
+                                                                          "result": {
+                                                                              "media_key": "3_1909429742123859974"
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ]
+                                                          },
+                                                          "favorite_count": 0,
+                                                          "favorited": false,
+                                                          "full_text": "真的佩服推特，居然接的广告允许他们拿着自己老板的名义来骗钱。真·砸自己的锅吃饭 https://t.co/cQeYwTFzl4",
+                                                          "in_reply_to_screen_name": "ftium4",
+                                                          "in_reply_to_status_id_str": "1908908085214863772",
+                                                          "in_reply_to_user_id_str": "377823810",
+                                                          "is_quote_status": false,
+                                                          "lang": "zh",
+                                                          "possibly_sensitive": false,
+                                                          "possibly_sensitive_editable": true,
+                                                          "quote_count": 0,
+                                                          "reply_count": 1,
+                                                          "retweet_count": 0,
+                                                          "retweeted": false,
+                                                          "user_id_str": "377823810",
+                                                          "id_str": "1909429889993736618"
+                                                      },
+                                                      "quick_promote_eligibility": {
+                                                          "eligibility": "IneligibleNotProfessional"
+                                                      }
+                                                  }
+                                              },
+                                              "tweetDisplayType": "SelfThread"
+                                          },
+                                          "clientEventInfo": {
+                                              "details": {
+                                                  "conversationDetails": {
+                                                      "conversationSection": "HighQuality"
+                                                  },
+                                                  "timelinesDetails": {
+                                                      "controllerData": "DAACDAAEDAABCgABDQACECBjg5EKAAIAAAAABADACAAAAAA="
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  },
+                                  {
+                                      "entryId": "conversationthread-1908908085214863772-tweet-1909433549146751034",
+                                      "item": {
+                                          "itemContent": {
+                                              "itemType": "TimelineTweet",
+                                              "__typename": "TimelineTweet",
+                                              "tweet_results": {
+                                                  "result": {
+                                                      "__typename": "Tweet",
+                                                      "rest_id": "1909433549146751034",
+                                                      "has_birdwatch_notes": false,
+                                                      "core": {
+                                                          "user_results": {
+                                                              "result": {
+                                                                  "__typename": "User",
+                                                                  "id": "VXNlcjozNzc4MjM4MTA=",
+                                                                  "rest_id": "377823810",
+                                                                  "affiliates_highlighted_label": {},
+                                                                  "has_graduated_access": true,
+                                                                  "parody_commentary_fan_label": "None",
+                                                                  "is_blue_verified": false,
+                                                                  "profile_image_shape": "Circle",
+                                                                  "legacy": {
+                                                                      "following": false,
+                                                                      "can_dm": true,
+                                                                      "can_media_tag": true,
+                                                                      "created_at": "Thu Sep 22 05:07:22 +0000 2011",
+                                                                      "default_profile": true,
+                                                                      "default_profile_image": false,
+                                                                      "description": "想做独立开发者的设计师，做任何事情都只是因为兴趣罢了",
+                                                                      "entities": {
+                                                                          "description": {
+                                                                              "urls": []
+                                                                          },
+                                                                          "url": {
+                                                                              "urls": [
+                                                                                  {
+                                                                                      "display_url": "ftium4.com",
+                                                                                      "expanded_url": "http://www.ftium4.com",
+                                                                                      "url": "https://t.co/bXVe2gsFck",
+                                                                                      "indices": [
+                                                                                          0,
+                                                                                          23
+                                                                                      ]
+                                                                                  }
+                                                                              ]
+                                                                          }
+                                                                      },
+                                                                      "fast_followers_count": 0,
+                                                                      "favourites_count": 8158,
+                                                                      "followers_count": 28824,
+                                                                      "friends_count": 1540,
+                                                                      "has_custom_timelines": true,
+                                                                      "is_translator": false,
+                                                                      "listed_count": 269,
+                                                                      "location": "",
+                                                                      "media_count": 3362,
+                                                                      "name": "龙爪槐守望者",
+                                                                      "normal_followers_count": 28824,
+                                                                      "pinned_tweet_ids_str": [],
+                                                                      "possibly_sensitive": false,
+                                                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/377823810/1635403486",
+                                                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1477903349278453762/0OBeufkj_normal.jpg",
+                                                                      "profile_interstitial_type": "",
+                                                                      "screen_name": "ftium4",
+                                                                      "statuses_count": 6621,
+                                                                      "translator_type": "none",
+                                                                      "url": "https://t.co/bXVe2gsFck",
+                                                                      "verified": false,
+                                                                      "want_retweets": false,
+                                                                      "withheld_in_countries": []
+                                                                  },
+                                                                  "tipjar_settings": {}
+                                                              }
+                                                          }
+                                                      },
+                                                      "unmention_data": {},
+                                                      "edit_control": {
+                                                          "edit_tweet_ids": [
+                                                              "1909433549146751034"
+                                                          ],
+                                                          "editable_until_msecs": "1744083008000",
+                                                          "is_edit_eligible": false,
+                                                          "edits_remaining": "5"
+                                                      },
+                                                      "is_translatable": true,
+                                                      "views": {
+                                                          "count": "556",
+                                                          "state": "EnabledWithCount"
+                                                      },
+                                                      "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                                      "grok_analysis_button": true,
+                                                      "legacy": {
+                                                          "bookmark_count": 0,
+                                                          "bookmarked": false,
+                                                          "created_at": "Tue Apr 08 02:30:08 +0000 2025",
+                                                          "conversation_id_str": "1908875852450013695",
+                                                          "display_text_range": [
+                                                              0,
+                                                              14
+                                                          ],
+                                                          "entities": {
+                                                              "hashtags": [],
+                                                              "media": [
+                                                                  {
+                                                                      "display_url": "pic.x.com/DRGZzxPbI1",
+                                                                      "expanded_url": "https://x.com/ftium4/status/1909433549146751034/photo/1",
+                                                                      "id_str": "1909433463381671939",
+                                                                      "indices": [
+                                                                          15,
+                                                                          38
+                                                                      ],
+                                                                      "media_key": "3_1909433463381671939",
+                                                                      "media_url_https": "https://pbs.twimg.com/media/Gn-rnksbwAMEoCC.jpg",
+                                                                      "type": "photo",
+                                                                      "url": "https://t.co/DRGZzxPbI1",
+                                                                      "ext_media_availability": {
+                                                                          "status": "Available"
+                                                                      },
+                                                                      "features": {
+                                                                          "large": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 205,
+                                                                                      "y": 722,
+                                                                                      "h": 210,
+                                                                                      "w": 210
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "medium": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 175,
+                                                                                      "y": 616,
+                                                                                      "h": 179,
+                                                                                      "w": 179
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "small": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 99,
+                                                                                      "y": 349,
+                                                                                      "h": 101,
+                                                                                      "w": 101
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "orig": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 205,
+                                                                                      "y": 722,
+                                                                                      "h": 210,
+                                                                                      "w": 210
+                                                                                  }
+                                                                              ]
+                                                                          }
+                                                                      },
+                                                                      "sizes": {
+                                                                          "large": {
+                                                                              "h": 1406,
+                                                                              "w": 1224,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "medium": {
+                                                                              "h": 1200,
+                                                                              "w": 1045,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "small": {
+                                                                              "h": 680,
+                                                                              "w": 592,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "thumb": {
+                                                                              "h": 150,
+                                                                              "w": 150,
+                                                                              "resize": "crop"
+                                                                          }
+                                                                      },
+                                                                      "original_info": {
+                                                                          "height": 1406,
+                                                                          "width": 1224,
+                                                                          "focus_rects": [
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 721,
+                                                                                  "w": 1224,
+                                                                                  "h": 685
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 182,
+                                                                                  "w": 1224,
+                                                                                  "h": 1224
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 11,
+                                                                                  "w": 1224,
+                                                                                  "h": 1395
+                                                                              },
+                                                                              {
+                                                                                  "x": 521,
+                                                                                  "y": 0,
+                                                                                  "w": 703,
+                                                                                  "h": 1406
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1224,
+                                                                                  "h": 1406
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "media_results": {
+                                                                          "result": {
+                                                                              "media_key": "3_1909433463381671939"
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ],
+                                                              "symbols": [],
+                                                              "timestamps": [],
+                                                              "urls": [],
+                                                              "user_mentions": []
+                                                          },
+                                                          "extended_entities": {
+                                                              "media": [
+                                                                  {
+                                                                      "display_url": "pic.x.com/DRGZzxPbI1",
+                                                                      "expanded_url": "https://x.com/ftium4/status/1909433549146751034/photo/1",
+                                                                      "id_str": "1909433463381671939",
+                                                                      "indices": [
+                                                                          15,
+                                                                          38
+                                                                      ],
+                                                                      "media_key": "3_1909433463381671939",
+                                                                      "media_url_https": "https://pbs.twimg.com/media/Gn-rnksbwAMEoCC.jpg",
+                                                                      "type": "photo",
+                                                                      "url": "https://t.co/DRGZzxPbI1",
+                                                                      "ext_media_availability": {
+                                                                          "status": "Available"
+                                                                      },
+                                                                      "features": {
+                                                                          "large": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 205,
+                                                                                      "y": 722,
+                                                                                      "h": 210,
+                                                                                      "w": 210
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "medium": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 175,
+                                                                                      "y": 616,
+                                                                                      "h": 179,
+                                                                                      "w": 179
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "small": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 99,
+                                                                                      "y": 349,
+                                                                                      "h": 101,
+                                                                                      "w": 101
+                                                                                  }
+                                                                              ]
+                                                                          },
+                                                                          "orig": {
+                                                                              "faces": [
+                                                                                  {
+                                                                                      "x": 205,
+                                                                                      "y": 722,
+                                                                                      "h": 210,
+                                                                                      "w": 210
+                                                                                  }
+                                                                              ]
+                                                                          }
+                                                                      },
+                                                                      "sizes": {
+                                                                          "large": {
+                                                                              "h": 1406,
+                                                                              "w": 1224,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "medium": {
+                                                                              "h": 1200,
+                                                                              "w": 1045,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "small": {
+                                                                              "h": 680,
+                                                                              "w": 592,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "thumb": {
+                                                                              "h": 150,
+                                                                              "w": 150,
+                                                                              "resize": "crop"
+                                                                          }
+                                                                      },
+                                                                      "original_info": {
+                                                                          "height": 1406,
+                                                                          "width": 1224,
+                                                                          "focus_rects": [
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 721,
+                                                                                  "w": 1224,
+                                                                                  "h": 685
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 182,
+                                                                                  "w": 1224,
+                                                                                  "h": 1224
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 11,
+                                                                                  "w": 1224,
+                                                                                  "h": 1395
+                                                                              },
+                                                                              {
+                                                                                  "x": 521,
+                                                                                  "y": 0,
+                                                                                  "w": 703,
+                                                                                  "h": 1406
+                                                                              },
+                                                                              {
+                                                                                  "x": 0,
+                                                                                  "y": 0,
+                                                                                  "w": 1224,
+                                                                                  "h": 1406
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "media_results": {
+                                                                          "result": {
+                                                                              "media_key": "3_1909433463381671939"
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ]
+                                                          },
+                                                          "favorite_count": 0,
+                                                          "favorited": false,
+                                                          "full_text": "原来是无差别诈骗，苹果也中招 https://t.co/DRGZzxPbI1",
+                                                          "in_reply_to_screen_name": "ftium4",
+                                                          "in_reply_to_status_id_str": "1909429889993736618",
+                                                          "in_reply_to_user_id_str": "377823810",
+                                                          "is_quote_status": false,
+                                                          "lang": "zh",
+                                                          "possibly_sensitive": false,
+                                                          "possibly_sensitive_editable": true,
+                                                          "quote_count": 1,
+                                                          "reply_count": 0,
+                                                          "retweet_count": 0,
+                                                          "retweeted": false,
+                                                          "user_id_str": "377823810",
+                                                          "id_str": "1909433549146751034"
+                                                      },
+                                                      "quick_promote_eligibility": {
+                                                          "eligibility": "IneligibleNotProfessional"
+                                                      }
+                                                  }
+                                              },
+                                              "tweetDisplayType": "SelfThread"
+                                          },
+                                          "clientEventInfo": {
+                                              "details": {
+                                                  "conversationDetails": {
+                                                      "conversationSection": "HighQuality"
+                                                  },
+                                                  "timelinesDetails": {
+                                                      "controllerData": "DAACDAAEDAABCgABDQACoCBjg4EKAAIAAAAABADACAAAAAA="
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  }
+                              ],
+                              "displayType": "VerticalConversation",
+                              "clientEventInfo": {
+                                  "details": {
+                                      "conversationDetails": {
+                                          "conversationSection": "HighQuality"
+                                      }
+                                  }
+                              }
+                          }
+                      },
+                      {
+                          "entryId": "conversationthread-1908877370444132441",
+                          "sortIndex": "7314496184404762092",
+                          "content": {
+                              "entryType": "TimelineTimelineModule",
+                              "__typename": "TimelineTimelineModule",
+                              "items": [
+                                  {
+                                      "entryId": "conversationthread-1908877370444132441-tweet-1908877370444132441",
+                                      "item": {
+                                          "itemContent": {
+                                              "itemType": "TimelineTweet",
+                                              "__typename": "TimelineTweet",
+                                              "tweet_results": {
+                                                  "result": {
+                                                      "__typename": "Tweet",
+                                                      "rest_id": "1908877370444132441",
+                                                      "has_birdwatch_notes": false,
+                                                      "core": {
+                                                          "user_results": {
+                                                              "result": {
+                                                                  "__typename": "User",
+                                                                  "id": "VXNlcjoxODk2ODEzOTU2NzYyOTQzNDg4",
+                                                                  "rest_id": "1896813956762943488",
+                                                                  "affiliates_highlighted_label": {},
+                                                                  "has_graduated_access": true,
+                                                                  "parody_commentary_fan_label": "None",
+                                                                  "is_blue_verified": false,
+                                                                  "profile_image_shape": "Circle",
+                                                                  "legacy": {
+                                                                      "following": false,
+                                                                      "can_dm": false,
+                                                                      "can_media_tag": true,
+                                                                      "created_at": "Tue Mar 04 06:44:29 +0000 2025",
+                                                                      "default_profile": true,
+                                                                      "default_profile_image": false,
+                                                                      "description": "专业上门服务全国都有资源，无套路，同城安排，联系TG  https://t.co/GrnqL3mn3V 见面付，严控保证，非诚勿扰!",
+                                                                      "entities": {
+                                                                          "description": {
+                                                                              "urls": [
+                                                                                  {
+                                                                                      "display_url": "t.me/zxc6881",
+                                                                                      "expanded_url": "http://t.me/zxc6881",
+                                                                                      "url": "https://t.co/GrnqL3mn3V",
+                                                                                      "indices": [
+                                                                                          28,
+                                                                                          51
+                                                                                      ]
+                                                                                  }
+                                                                              ]
+                                                                          }
+                                                                      },
+                                                                      "fast_followers_count": 0,
+                                                                      "favourites_count": 450,
+                                                                      "followers_count": 0,
+                                                                      "friends_count": 0,
+                                                                      "has_custom_timelines": false,
+                                                                      "is_translator": false,
+                                                                      "listed_count": 0,
+                                                                      "location": " Valparaiso ",
+                                                                      "media_count": 0,
+                                                                      "name": "同城上門",
+                                                                      "normal_followers_count": 0,
+                                                                      "pinned_tweet_ids_str": [],
+                                                                      "possibly_sensitive": false,
+                                                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/1896813956762943488/1741070704",
+                                                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1896814066116489216/vSsw-vQ__normal.jpg",
+                                                                      "profile_interstitial_type": "",
+                                                                      "screen_name": "Dadlgdrrrrrr",
+                                                                      "statuses_count": 161,
+                                                                      "translator_type": "none",
+                                                                      "verified": false,
+                                                                      "want_retweets": false,
+                                                                      "withheld_in_countries": []
+                                                                  },
+                                                                  "tipjar_settings": {}
+                                                              }
+                                                          }
+                                                      },
+                                                      "unmention_data": {},
+                                                      "edit_control": {
+                                                          "edit_tweet_ids": [
+                                                              "1908877370444132441"
+                                                          ],
+                                                          "editable_until_msecs": "1743950404000",
+                                                          "is_edit_eligible": false,
+                                                          "edits_remaining": "5"
+                                                      },
+                                                      "is_translatable": false,
+                                                      "views": {
+                                                          "count": "16",
+                                                          "state": "EnabledWithCount"
+                                                      },
+                                                      "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                                      "grok_analysis_button": true,
+                                                      "legacy": {
+                                                          "bookmark_count": 0,
+                                                          "bookmarked": false,
+                                                          "created_at": "Sun Apr 06 13:40:04 +0000 2025",
+                                                          "conversation_id_str": "1908875852450013695",
+                                                          "display_text_range": [
+                                                              8,
+                                                              39
+                                                          ],
+                                                          "entities": {
+                                                              "hashtags": [],
+                                                              "symbols": [],
+                                                              "timestamps": [],
+                                                              "urls": [],
+                                                              "user_mentions": [
+                                                                  {
+                                                                      "id_str": "377823810",
+                                                                      "name": "龙爪槐守望者",
+                                                                      "screen_name": "ftium4",
+                                                                      "indices": [
+                                                                          0,
+                                                                          7
+                                                                      ]
+                                                                  }
+                                                              ]
+                                                          },
+                                                          "favorite_count": 1,
+                                                          "favorited": false,
+                                                          "full_text": "@ftium4 \uD83E\uDDDB\uD83C\uDFFD‍♂️\uD83D\uDC77\uD83C\uDFFD‍♀️\uD83E\uDD34\uD83C\uDFFF\uD83E\uDD3E\uD83C\uDFFD‍♂️\uD83C\uDFBF☣️\uD83E\uDD37\uD83C\uDFFF‍♀\uD83E\uDDCE\uD83C\uDFFF‍♂️\uD83E\uDD36\uD83C\uDFFE",
+                                                          "in_reply_to_screen_name": "ftium4",
+                                                          "in_reply_to_status_id_str": "1908875852450013695",
+                                                          "in_reply_to_user_id_str": "377823810",
+                                                          "is_quote_status": false,
+                                                          "lang": "qme",
+                                                          "quote_count": 0,
+                                                          "reply_count": 0,
+                                                          "retweet_count": 0,
+                                                          "retweeted": false,
+                                                          "user_id_str": "1896813956762943488",
+                                                          "id_str": "1908877370444132441"
+                                                      },
+                                                      "quick_promote_eligibility": {
+                                                          "eligibility": "IneligibleNotProfessional"
+                                                      }
+                                                  }
+                                              },
+                                              "tweetDisplayType": "Tweet"
+                                          },
+                                          "clientEventInfo": {
+                                              "details": {
+                                                  "conversationDetails": {
+                                                      "conversationSection": "HighQuality"
+                                                  },
+                                                  "timelinesDetails": {
+                                                      "controllerData": "DAACDAAEDAABCgABFIACiGAHgAUKAAIAAAAABwCASAAAAAA="
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  }
+                              ],
+                              "displayType": "VerticalConversation",
+                              "clientEventInfo": {
+                                  "details": {
+                                      "conversationDetails": {
+                                          "conversationSection": "HighQuality"
+                                      }
+                                  }
+                              }
+                          }
+                      },
+                      {
+                          "entryId": "tweetdetailrelatedtweets-1909432347424178310",
+                          "sortIndex": "1",
+                          "content": {
+                              "entryType": "TimelineTimelineModule",
+                              "__typename": "TimelineTimelineModule",
+                              "items": [
+                                  {
+                                      "entryId": "tweetdetailrelatedtweets-1909432347424178310-tweet-1909432347424178310",
+                                      "item": {
+                                          "itemContent": {
+                                              "itemType": "TimelineTweet",
+                                              "__typename": "TimelineTweet",
+                                              "tweet_results": {
+                                                  "result": {
+                                                      "__typename": "Tweet",
+                                                      "rest_id": "1909432347424178310",
+                                                      "has_birdwatch_notes": false,
+                                                      "core": {
+                                                          "user_results": {
+                                                              "result": {
+                                                                  "__typename": "User",
+                                                                  "id": "VXNlcjozNzc4MjM4MTA=",
+                                                                  "rest_id": "377823810",
+                                                                  "affiliates_highlighted_label": {},
+                                                                  "has_graduated_access": true,
+                                                                  "parody_commentary_fan_label": "None",
+                                                                  "is_blue_verified": false,
+                                                                  "profile_image_shape": "Circle",
+                                                                  "legacy": {
+                                                                      "following": false,
+                                                                      "can_dm": true,
+                                                                      "can_media_tag": true,
+                                                                      "created_at": "Thu Sep 22 05:07:22 +0000 2011",
+                                                                      "default_profile": true,
+                                                                      "default_profile_image": false,
+                                                                      "description": "想做独立开发者的设计师，做任何事情都只是因为兴趣罢了",
+                                                                      "entities": {
+                                                                          "description": {
+                                                                              "urls": []
+                                                                          },
+                                                                          "url": {
+                                                                              "urls": [
+                                                                                  {
+                                                                                      "display_url": "ftium4.com",
+                                                                                      "expanded_url": "http://www.ftium4.com",
+                                                                                      "url": "https://t.co/bXVe2gsFck",
+                                                                                      "indices": [
+                                                                                          0,
+                                                                                          23
+                                                                                      ]
+                                                                                  }
+                                                                              ]
+                                                                          }
+                                                                      },
+                                                                      "fast_followers_count": 0,
+                                                                      "favourites_count": 8158,
+                                                                      "followers_count": 28824,
+                                                                      "friends_count": 1540,
+                                                                      "has_custom_timelines": true,
+                                                                      "is_translator": false,
+                                                                      "listed_count": 269,
+                                                                      "location": "",
+                                                                      "media_count": 3362,
+                                                                      "name": "龙爪槐守望者",
+                                                                      "normal_followers_count": 28824,
+                                                                      "pinned_tweet_ids_str": [],
+                                                                      "possibly_sensitive": false,
+                                                                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/377823810/1635403486",
+                                                                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1477903349278453762/0OBeufkj_normal.jpg",
+                                                                      "profile_interstitial_type": "",
+                                                                      "screen_name": "ftium4",
+                                                                      "statuses_count": 6621,
+                                                                      "translator_type": "none",
+                                                                      "url": "https://t.co/bXVe2gsFck",
+                                                                      "verified": false,
+                                                                      "want_retweets": false,
+                                                                      "withheld_in_countries": []
+                                                                  },
+                                                                  "tipjar_settings": {}
+                                                              }
+                                                          }
+                                                      },
+                                                      "unmention_data": {},
+                                                      "edit_control": {
+                                                          "edit_tweet_ids": [
+                                                              "1909432347424178310"
+                                                          ],
+                                                          "editable_until_msecs": "1744082721000",
+                                                          "is_edit_eligible": true,
+                                                          "edits_remaining": "5"
+                                                      },
+                                                      "is_translatable": true,
+                                                      "views": {
+                                                          "count": "596",
+                                                          "state": "EnabledWithCount"
+                                                      },
+                                                      "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                                      "grok_analysis_button": true,
+                                                      "legacy": {
+                                                          "bookmark_count": 0,
+                                                          "bookmarked": false,
+                                                          "created_at": "Tue Apr 08 02:25:21 +0000 2025",
+                                                          "conversation_id_str": "1909432347424178310",
+                                                          "display_text_range": [
+                                                              0,
+                                                              159
+                                                          ],
+                                                          "entities": {
+                                                              "hashtags": [
+                                                                  {
+                                                                      "indices": [
+                                                                          128,
+                                                                          135
+                                                                      ],
+                                                                      "text": "大产品小细节"
+                                                                  }
+                                                              ],
+                                                              "media": [
+                                                                  {
+                                                                      "display_url": "pic.x.com/w8cSVxCVLl",
+                                                                      "expanded_url": "https://x.com/ftium4/status/1909432347424178310/photo/1",
+                                                                      "id_str": "1909432223440551937",
+                                                                      "indices": [
+                                                                          160,
+                                                                          183
+                                                                      ],
+                                                                      "media_key": "16_1909432223440551937",
+                                                                      "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/Gn-qfZjbwAEH88k.jpg",
+                                                                      "type": "animated_gif",
+                                                                      "url": "https://t.co/w8cSVxCVLl",
+                                                                      "ext_media_availability": {
+                                                                          "status": "Available"
+                                                                      },
+                                                                      "sizes": {
+                                                                          "large": {
+                                                                              "h": 480,
+                                                                              "w": 640,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "medium": {
+                                                                              "h": 480,
+                                                                              "w": 640,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "small": {
+                                                                              "h": 480,
+                                                                              "w": 640,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "thumb": {
+                                                                              "h": 150,
+                                                                              "w": 150,
+                                                                              "resize": "crop"
+                                                                          }
+                                                                      },
+                                                                      "original_info": {
+                                                                          "height": 480,
+                                                                          "width": 640,
+                                                                          "focus_rects": []
+                                                                      },
+                                                                      "video_info": {
+                                                                          "aspect_ratio": [
+                                                                              4,
+                                                                              3
+                                                                          ],
+                                                                          "variants": [
+                                                                              {
+                                                                                  "bitrate": 0,
+                                                                                  "content_type": "video/mp4",
+                                                                                  "url": "https://video.twimg.com/tweet_video/Gn-qfZjbwAEH88k.mp4"
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "media_results": {
+                                                                          "result": {
+                                                                              "media_key": "16_1909432223440551937"
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ],
+                                                              "symbols": [],
+                                                              "timestamps": [],
+                                                              "urls": [
+                                                                  {
+                                                                      "display_url": "uisdc.com/hunter/0221617…",
+                                                                      "expanded_url": "https://www.uisdc.com/hunter/0221617760.html",
+                                                                      "url": "https://t.co/CDzSBTjYF2",
+                                                                      "indices": [
+                                                                          136,
+                                                                          159
+                                                                      ]
+                                                                  }
+                                                              ],
+                                                              "user_mentions": []
+                                                          },
+                                                          "extended_entities": {
+                                                              "media": [
+                                                                  {
+                                                                      "display_url": "pic.x.com/w8cSVxCVLl",
+                                                                      "expanded_url": "https://x.com/ftium4/status/1909432347424178310/photo/1",
+                                                                      "id_str": "1909432223440551937",
+                                                                      "indices": [
+                                                                          160,
+                                                                          183
+                                                                      ],
+                                                                      "media_key": "16_1909432223440551937",
+                                                                      "media_url_https": "https://pbs.twimg.com/tweet_video_thumb/Gn-qfZjbwAEH88k.jpg",
+                                                                      "type": "animated_gif",
+                                                                      "url": "https://t.co/w8cSVxCVLl",
+                                                                      "ext_media_availability": {
+                                                                          "status": "Available"
+                                                                      },
+                                                                      "sizes": {
+                                                                          "large": {
+                                                                              "h": 480,
+                                                                              "w": 640,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "medium": {
+                                                                              "h": 480,
+                                                                              "w": 640,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "small": {
+                                                                              "h": 480,
+                                                                              "w": 640,
+                                                                              "resize": "fit"
+                                                                          },
+                                                                          "thumb": {
+                                                                              "h": 150,
+                                                                              "w": 150,
+                                                                              "resize": "crop"
+                                                                          }
+                                                                      },
+                                                                      "original_info": {
+                                                                          "height": 480,
+                                                                          "width": 640,
+                                                                          "focus_rects": []
+                                                                      },
+                                                                      "video_info": {
+                                                                          "aspect_ratio": [
+                                                                              4,
+                                                                              3
+                                                                          ],
+                                                                          "variants": [
+                                                                              {
+                                                                                  "bitrate": 0,
+                                                                                  "content_type": "video/mp4",
+                                                                                  "url": "https://video.twimg.com/tweet_video/Gn-qfZjbwAEH88k.mp4"
+                                                                              }
+                                                                          ]
+                                                                      },
+                                                                      "media_results": {
+                                                                          "result": {
+                                                                              "media_key": "16_1909432223440551937"
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ]
+                                                          },
+                                                          "favorite_count": 1,
+                                                          "favorited": false,
+                                                          "full_text": "Tabbar还能玩出什么花样？你可能早就看腻了那些红点提醒和图标闪烁。\n京东这次搞了个「会呼吸的Tabbar」。当促销消息来临时，消息图标突然变身成商品实物图，像吹气球一样膨胀到原来的3倍大，把旁边四个图标挤开，腾出空间展示促销文案。用动态变化激活注意力\n#大产品小细节\nhttps://t.co/CDzSBTjYF2 https://t.co/w8cSVxCVLl",
+                                                          "is_quote_status": false,
+                                                          "lang": "zh",
+                                                          "possibly_sensitive": false,
+                                                          "possibly_sensitive_editable": true,
+                                                          "quote_count": 0,
+                                                          "reply_count": 0,
+                                                          "retweet_count": 0,
+                                                          "retweeted": false,
+                                                          "user_id_str": "377823810",
+                                                          "id_str": "1909432347424178310"
+                                                      },
+                                                      "quick_promote_eligibility": {
+                                                          "eligibility": "IneligibleNotProfessional"
+                                                      }
+                                                  }
+                                              },
+                                              "tweetDisplayType": "Tweet"
+                                          },
+                                          "clientEventInfo": {
+                                              "component": "related_tweet",
+                                              "details": {
+                                                  "conversationDetails": {
+                                                      "conversationSection": "RelatedTweet"
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  }
+                              ],
+                              "displayType": "Vertical",
+                              "header": {
+                                  "displayType": "Classic",
+                                  "text": "Discover more",
+                                  "socialContext": {
+                                      "type": "TimelineGeneralContext",
+                                      "contextType": "TextOnly",
+                                      "text": "Sourced from across X"
+                                  },
+                                  "sticky": true
+                              },
+                              "clientEventInfo": {
+                                  "component": "related_tweet",
+                                  "details": {
+                                      "conversationDetails": {
+                                          "conversationSection": "RelatedTweet"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  ]
+              },
+              {
+                  "type": "TimelineTerminateTimeline",
+                  "direction": "Top"
+              }
+          ],
+          "metadata": {
+              "reader_mode_config": {
+                  "is_reader_mode_available": true
+              }
+          }
+      }
+  }
+}

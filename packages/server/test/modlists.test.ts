@@ -587,7 +587,6 @@ describe('modlists', () => {
           action: 'block',
         })
         const r1 = await getSubscribedUsers({ token: context.token1 })
-        console.log(r1[0])
         expect(r1[0].action).eq('block')
         await subscribeModList({ token: context.token2, action: 'hide' })
         const r2 = await getSubscribedUsers({ token: context.token2 })

@@ -10,9 +10,8 @@ function formatNumber(now: number, before: number): string {
   if (before === 0) {
     return '+100%'
   }
-  return now > before
-    ? `+${((now - before) / before) * 100}%`
-    : `-${((before - now) / before) * 100}%`
+  const change = Math.floor(((now - before) / before) * 100)
+  return change >= 0 ? `+${change}%` : `${change}%`
 }
 
 type Stats = Record<

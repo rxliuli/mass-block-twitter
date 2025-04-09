@@ -6,7 +6,6 @@ import { drizzle } from 'drizzle-orm/d1'
 import { llmRequestLog, tweet, user, userSpamAnalysis } from '../db/schema'
 import {
   and,
-  count,
   desc,
   eq,
   gte,
@@ -14,12 +13,15 @@ import {
   InferSelectModel,
   isNotNull,
   isNull,
-  notInArray,
+  lt,
+  SQLWrapper,
 } from 'drizzle-orm'
-import { analyzeUser, getPrompt, LLMAnalyzed } from '../lib/llm'
+import { analyzeUser, LLMAnalyzed } from '../lib/llm'
 import { ulid } from 'ulidx'
 import { bearerAuth } from 'hono/bearer-auth'
 import { getTableAliasedColumns } from '../lib/drizzle'
+import { pageRequestSchema, PageResponse } from '../lib/page'
+import { last } from 'es-toolkit'
 
 const analyze = new Hono<HonoEnv>().use(
   bearerAuth({
@@ -88,84 +90,23 @@ analyze.post('/llm', zValidator('json', llmAnalyzeSchema), async (c) => {
       relatedRecordType: 'UserSpamAnalysis',
     })
     return c.json(result)
+  } else {
+    await db.insert(llmRequestLog).values(logData)
   }
-  await db.insert(llmRequestLog).values(logData)
   return c.json({ code: 'error' }, 500)
 })
 
-analyze.post('/scan', async (c) => {
-  const db = drizzle(c.env.DB)
-  const users = await db
-    .select({
-      id: user.id,
-    })
-    .from(user)
-    .leftJoin(userSpamAnalysis, eq(user.id, userSpamAnalysis.userId))
-    .where(isNull(userSpamAnalysis.id))
-    .limit(10)
-  await Promise.all(
-    users.map(async (it) => {
-      const resp = await analyze.request(
-        '/llm',
-        {
-          method: 'POST',
-          headers: {
-            ...c.req.header(),
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId: it.id }),
-        },
-        c.env,
-        c.executionCtx,
-      )
-      if (!resp.ok) {
-        throw resp
-      }
-    }),
-  )
-  return c.json({ code: 'success' })
-})
-
-const reviewSchema = z.object({
-  userId: z.string(),
-  isSpam: z.boolean(),
-  notes: z.string().optional(),
-})
-export type ReviewRequest = z.infer<typeof reviewSchema>
-analyze.post('/review', zValidator('json', reviewSchema), async (c) => {
-  const db = drizzle(c.env.DB)
-  const valid = c.req.valid('json')
-  const user = await db
-    .select()
-    .from(userSpamAnalysis)
-    .where(eq(userSpamAnalysis.userId, valid.userId))
-    .limit(1)
-    .get()
-  if (!user) {
-    return c.json({ code: 'user_not_found' }, 404)
-  }
-  await db
-    .update(userSpamAnalysis)
-    .set({
-      isSpamByManualReview: valid.isSpam,
-      manualReviewNotes: valid.notes,
-      manualReviewedAt: new Date().toISOString(),
-    })
-    .where(eq(userSpamAnalysis.userId, valid.userId))
-  return c.json({ code: 'success' })
-})
-
-export type ReviewUsersResponse = {
+export type ReviewUsersResponse = PageResponse<{
   id: string
   screenName: string
   name: string
   status: 'unanalyzed' | 'unreviewed' | 'reviewed'
-  llmSpamRating: number
-  llmSpamExplanation: string
-  isSpamByManualReview: boolean
-}[]
+  llmSpamRating?: number | null
+  llmSpamExplanation?: string | null
+  isSpamByManualReview?: boolean
+}>
 
-const reviewUsersSchema = z.object({
+const reviewUsersSchema = pageRequestSchema.extend({
   status: z.enum(['unanalyzed', 'unreviewed', 'reviewed']),
 })
 export type ReviewUsersRequest = z.infer<typeof reviewUsersSchema>
@@ -173,32 +114,35 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
   const db = drizzle(c.env.DB)
   const valid = c.req.valid('query')
   if (valid.status === 'unanalyzed') {
+    const conditions: SQLWrapper[] = [
+      isNull(userSpamAnalysis.userId),
+      isNotNull(user.followersCount),
+      isNotNull(user.followingCount),
+      isNotNull(user.blueVerified),
+    ]
+    if (valid.cursor) {
+      conditions.push(lt(user.id, valid.cursor))
+    }
     const users = await db
       .select({
         User: getTableAliasedColumns(user),
       })
       .from(user)
       .leftJoin(userSpamAnalysis, eq(user.id, userSpamAnalysis.userId))
-      .where(
-        and(
-          isNull(userSpamAnalysis.userId),
-          isNotNull(user.followersCount),
-          isNotNull(user.followingCount),
-          isNotNull(user.blueVerified),
-        ),
-      )
-      .limit(100)
-    return c.json(
-      users.map((it) => ({
+      // TODO: 逻辑上错误，但由于没有正确设置索引，所以只能如此😭
+      // TODO: 正确的做法是 .orderBy(sql`CAST(${user.id} AS NUMERIC) DESC`)，但会导致大量行读取
+      .orderBy(desc(user.id))
+      .where(and(...conditions))
+      .limit(valid.count ?? 100)
+    return c.json<ReviewUsersResponse>({
+      data: users.map((it) => ({
         id: it.User.id,
         screenName: it.User.screenName,
         name: it.User.name ?? it.User.screenName,
         status: 'unanalyzed',
-        llmSpamRating: 0,
-        llmSpamExplanation: '',
-        isSpamByManualReview: false,
-      })) satisfies ReviewUsersResponse,
-    )
+      })),
+      cursor: last(users)?.User.id,
+    })
   }
   if (valid.status === 'unreviewed') {
     const users = await db
@@ -216,8 +160,8 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
       )
       .orderBy(userSpamAnalysis.id)
       .limit(100)
-    return c.json(
-      users.map((it) => ({
+    return c.json<ReviewUsersResponse>({
+      data: users.map((it) => ({
         id: it.User.id,
         screenName: it.User.screenName,
         name: it.User.name ?? it.User.screenName,
@@ -225,8 +169,8 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
         llmSpamRating: it.UserSpamAnalysis.llmSpamRating,
         llmSpamExplanation: it.UserSpamAnalysis.llmSpamExplanation,
         isSpamByManualReview: false,
-      })) satisfies ReviewUsersResponse,
-    )
+      })),
+    })
   }
   if (valid.status === 'reviewed') {
     const users = await db
@@ -236,11 +180,11 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
       })
       .from(userSpamAnalysis)
       .innerJoin(user, eq(userSpamAnalysis.userId, user.id))
-      .orderBy(userSpamAnalysis.id)
+      .orderBy(desc(userSpamAnalysis.id))
       .where(isNotNull(userSpamAnalysis.isSpamByManualReview))
       .limit(100)
-    return c.json(
-      users.map((it) => ({
+    return c.json<ReviewUsersResponse>({
+      data: users.map((it) => ({
         id: it.User.id,
         screenName: it.User.screenName,
         name: it.User.name ?? it.User.screenName,
@@ -248,34 +192,39 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
         llmSpamRating: it.UserSpamAnalysis.llmSpamRating,
         llmSpamExplanation: it.UserSpamAnalysis.llmSpamExplanation,
         isSpamByManualReview: !!it.UserSpamAnalysis.isSpamByManualReview,
-      })) satisfies ReviewUsersResponse,
-    )
+      })),
+    })
   }
   return c.json({ code: 'invalid_status' }, 400)
 })
-
-export type UserSpamAnalyze = InferSelectModel<typeof userSpamAnalysis>
-analyze.get(
-  '/get/:userId',
-  zValidator(
-    'param',
-    z.object({
-      userId: z.string(),
-    }),
-  ),
-  async (c) => {
-    const db = drizzle(c.env.DB)
-    const valid = c.req.valid('param')
-    const user = await db
-      .select()
-      .from(userSpamAnalysis)
-      .where(eq(userSpamAnalysis.userId, valid.userId))
-      .get()
-    if (!user) {
-      return c.json({ code: 'user_not_found' }, 404)
-    }
-    return c.json(user)
-  },
-)
+const markSpamSchema = z.object({
+  userIds: z.array(z.string()),
+  isSpamByManualReview: z.boolean(),
+})
+export type MarkSpamRequest = z.infer<typeof markSpamSchema>
+analyze.post('/users/spam', zValidator('json', markSpamSchema), async (c) => {
+  const db = drizzle(c.env.DB)
+  const valid = c.req.valid('json')
+  await db.batch(
+    valid.userIds.map((it) =>
+      db
+        .insert(userSpamAnalysis)
+        .values({
+          id: ulid(),
+          userId: it,
+          isSpamByManualReview: valid.isSpamByManualReview,
+          manualReviewedAt: new Date().toISOString(),
+        })
+        .onConflictDoUpdate({
+          target: userSpamAnalysis.userId,
+          set: {
+            isSpamByManualReview: valid.isSpamByManualReview,
+            manualReviewedAt: new Date().toISOString(),
+          },
+        }),
+    ) as any,
+  )
+  return c.json({ code: 'success' })
+})
 
 export { analyze }

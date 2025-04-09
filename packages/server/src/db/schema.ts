@@ -273,11 +273,9 @@ export const userSpamAnalysis = sqliteTable(
       .notNull()
       .references(() => user.id),
 
-    llmSpamRating: integer('llmSpamRating').notNull(),
-    llmSpamExplanation: text('llmSpamExplanation').notNull(),
-    llmAnalyzedAt: text('llmAnalyzedAt').$defaultFn(() =>
-      new Date().toISOString(),
-    ),
+    llmSpamRating: integer('llmSpamRating'),
+    llmSpamExplanation: text('llmSpamExplanation'),
+    llmAnalyzedAt: text('llmAnalyzedAt'),
 
     isSpamByManualReview: integer('isSpamByManualReview', { mode: 'boolean' }),
     manualReviewNotes: text('manualReviewNotes'),

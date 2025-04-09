@@ -45,7 +45,7 @@ IMPORTANT: Return ONLY a JSON object with the following structure:
                // 3: Uncertain
                // 4: Likely bot/spam
                // 5: Almost certainly bot/spam
-  "explanation": "Brief explanation of key factors that led to this rating"
+  "explanation": "Brief 2-3 sentence explanation of the main factors that led to this rating."
 }
 `
 

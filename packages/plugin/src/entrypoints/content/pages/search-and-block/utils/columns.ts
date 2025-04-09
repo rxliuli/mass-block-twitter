@@ -1,7 +1,7 @@
 import { Column, renderComponent } from '$lib/components/logic/a-data-table'
 import { User } from '$lib/db'
 import AvatarWrapper from '../components/AvatarWrapper.svelte'
-import TextWrapper from '../components/TextWrapper.svelte'
+import { TextWrapper } from '$lib/components/custom/text'
 import BlockingWrapper from '../components/BlockingWrapper.svelte'
 import VerifiedWrapper from '../components/VerifiedWrapper.svelte'
 import ScreenNameWrapper from '../components/ScreenNameWrapper.svelte'

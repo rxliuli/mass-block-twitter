@@ -12,6 +12,7 @@
     UsersIcon,
     CodeIcon,
     UserXIcon,
+    ChartNoAxesGanttIcon,
   } from 'lucide-svelte'
   import {
     goBack,
@@ -33,48 +34,57 @@
     children: Snippet
   } = $props()
 
-  const menuItems: MenuItem[] = $derived([
-    {
-      title: $t('dashboard.title'),
-      url: '/',
-      icon: HomeIcon,
-      to: 'content',
-    },
-    {
-      title: $t('search-and-block.title'),
-      url: '/search-and-block',
-      icon: UserIcon,
-      to: 'content',
-    },
-    {
-      title: $t('modlists.title'),
-      url: '/modlists',
-      icon: UsersIcon,
-      to: 'content',
-    },
-    {
-      title: $t('muted-words.title'),
-      url: '/muted-words',
-      icon: MessageCircleOffIcon,
-      to: 'content',
-    },
-    {
-      title: $t('settings.title'),
-      url: '/settings',
-      icon: SettingsIcon,
-      to: 'footer',
-    },
-    ...(import.meta.env.DEV || getSettings().devMode
-      ? [
-          {
-            title: 'Dev',
-            url: '/dev',
-            icon: CodeIcon,
-            to: 'content',
-          } satisfies MenuItem,
-        ]
-      : []),
-  ])
+  const menuItems = $derived.by(() => {
+    const list: MenuItem[] = [
+      {
+        title: $t('dashboard.title'),
+        url: '/',
+        icon: HomeIcon,
+        to: 'content',
+      },
+      {
+        title: $t('search-and-block.title'),
+        url: '/search-and-block',
+        icon: UserIcon,
+        to: 'content',
+      },
+      {
+        title: $t('modlists.title'),
+        url: '/modlists',
+        icon: UsersIcon,
+        to: 'content',
+      },
+      {
+        title: $t('muted-words.title'),
+        url: '/muted-words',
+        icon: MessageCircleOffIcon,
+        to: 'content',
+      },
+      {
+        title: $t('settings.title'),
+        url: '/settings',
+        icon: SettingsIcon,
+        to: 'footer',
+      },
+    ]
+    if (import.meta.env.DEV || getSettings().devMode) {
+      list.push({
+        title: 'Dev',
+        url: '/dev',
+        icon: CodeIcon,
+        to: 'content',
+      })
+    }
+    if (localStorage.getItem('ADMIN_TOKEN')) {
+      list.push({
+        title: 'Analyze',
+        url: '/analyze',
+        icon: ChartNoAxesGanttIcon,
+        to: 'content',
+      })
+    }
+    return list
+  })
   const autoTitle = $derived(
     menuItems.find((it) => it.url === router.path)?.title ??
       $t('dashboard.title'),

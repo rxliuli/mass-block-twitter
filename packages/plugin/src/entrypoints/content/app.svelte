@@ -31,6 +31,8 @@
   import { useOpen } from '$lib/stores/open.svelte'
   import SettingsBlockPage from './pages/settings/block/page.svelte'
   import DevPage from './pages/dev/page.svelte'
+  import AnalyzePage from './pages/analyze/page.svelte'
+  import SearchTwitterPage from './pages/analyze/search-twitter/page.svelte'
 
   let { initialPath }: { initialPath?: string } = $props()
 
@@ -120,6 +122,14 @@
     {
       path: '/dev',
       component: DevPage,
+    },
+    {
+      path: '/analyze',
+      component: AnalyzePage,
+    },
+    {
+      path: '/analyze/search-twitter',
+      component: SearchTwitterPage,
     },
   ]
 </script>

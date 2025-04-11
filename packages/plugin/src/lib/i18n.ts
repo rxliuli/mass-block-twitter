@@ -37,7 +37,6 @@ export function getLocaleLanguage(): 'en-US' | 'zh-CN' | 'es' {
     return settings.language as 'en-US' | 'zh-CN' | 'es'
   }
   let r = getLocaleFromNavigator()
-  console.log(r)
   if (r && supportLanguages.includes(r)) {
     return r as 'en-US' | 'zh-CN' | 'es'
   }

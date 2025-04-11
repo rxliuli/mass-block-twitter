@@ -1,14 +1,32 @@
 <script lang="ts">
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import { Button } from '$lib/components/ui/button'
-  import { dbApi } from '$lib/db'
   import { Trash2Icon } from 'lucide-svelte'
   import { toast } from 'svelte-sonner'
   import { t } from '$lib/i18n'
+  import { dbApi } from '$lib/db'
 
   async function onClearCache() {
-    await dbApi.clear()
-    toast.success($t('settings.privacy.clearAllCache.success'))
+    // console.log('clear cache')
+    const toastId = toast.loading('Clearing cache...', {
+      duration: 1000000,
+    })
+    try {
+      await dbApi.clear()
+      // await Promise.all([deleteDB('keyval-store'), deleteDB('mass-db')])
+      localStorage.clear()
+      toast.success($t('settings.privacy.clearAllCache.success'), {
+        duration: 3000,
+        onAutoClose: () => {
+          location.reload()
+        },
+        onDismiss: () => {
+          location.reload()
+        },
+      })
+    } finally {
+      toast.dismiss(toastId)
+    }
   }
 </script>
 

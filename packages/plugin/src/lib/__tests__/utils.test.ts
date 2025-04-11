@@ -7,6 +7,7 @@ import {
   filterNotifications,
   filterTweets,
   MUTED_WORD_RULES_KEY,
+  notifacationUserSchema,
   ParsedTweet,
   parseTweets,
   parseUserRecords,
@@ -46,6 +47,7 @@ import SearchTimeline2 from './assets/SearchTimeline2.json'
 import TweetEntity from './assets/TweetEntity.json'
 import TweetDetail13 from './assets/TweetDetail13.json'
 import TweetDetail14 from './assets/TweetDetail14.json'
+import dm from './assets/dm.json'
 
 describe('parseUserRecords', () => {
   it('parse timeline', () => {
@@ -56,7 +58,6 @@ describe('parseUserRecords', () => {
       users.map((it) => omit(it, ['created_at', 'updated_at'])),
     ).toMatchSnapshot()
   })
-
   it('parse all-spam', () => {
     const users = parseUserRecords(allSpam)
     expect(users.map((it) => it.name).some((it) => it.includes('比特币'))).true
@@ -65,7 +66,6 @@ describe('parseUserRecords', () => {
       users.map((it) => omit(it, ['created_at', 'updated_at'])),
     ).toMatchSnapshot()
   })
-
   it('parse notifications-spam', () => {
     const users = parseUserRecords(notificationsSpam)
     expect(users).length(22)
@@ -75,7 +75,6 @@ describe('parseUserRecords', () => {
       users.map((it) => omit(it, ['created_at', 'updated_at'])),
     ).toMatchSnapshot()
   })
-
   it('parse profile', () => {
     const users = parseUserRecords(profile)
     expect(users).length(1)
@@ -85,10 +84,16 @@ describe('parseUserRecords', () => {
       screen_name: 'bitmain_miner',
     })
   })
-
   it('parseUserRecords for detail 9', () => {
     const users = parseUserRecords(TweetDetail9)
     expect(users).length(2)
+  })
+  it('parseUserRecords for dm conversation', () => {
+    const users = parseUserRecords(dm)
+    expect(users).length(190)
+    expect(
+      users.map((it) => omit(it, ['created_at', 'updated_at'])),
+    ).toMatchSnapshot()
   })
 })
 

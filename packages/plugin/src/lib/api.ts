@@ -155,7 +155,7 @@ export function parseTimelineUser(
   return user
 }
 
-const notifacationUserSchema = z.object({
+export const notifacationUserSchema = z.object({
   id_str: z.string(),
   blocking: z.boolean().optional().nullable(),
   following: z.boolean().optional().nullable(),
@@ -168,7 +168,7 @@ const notifacationUserSchema = z.object({
   friends_count: z.number().optional(),
   default_profile: z.boolean().optional(),
   default_profile_image: z.boolean().optional(),
-  ext_is_blue_verified: z.boolean(),
+  ext_is_blue_verified: z.boolean().optional(),
   location: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
   entities: z

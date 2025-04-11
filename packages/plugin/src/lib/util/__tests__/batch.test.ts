@@ -267,3 +267,148 @@ describe('batchQuery', () => {
     expect(last(f.mock.calls)![0].items).toEqual(items.slice(0, 400))
   })
 })
+
+describe('batchExecute concurrency', () => {
+  it('should execute with specified concurrency', async () => {
+    const concurrency = 3
+    const items = range(10)
+    const executing = new Set<number>()
+    const maxConcurrent = { value: 0 }
+
+    const start = Date.now()
+    const result = await batchExecute({
+      controller: new AbortController(),
+      getItems: () => items,
+      concurrency,
+      execute: async (item) => {
+        executing.add(item)
+        maxConcurrent.value = Math.max(maxConcurrent.value, executing.size)
+        await wait(10)
+        executing.delete(item)
+        return item
+      },
+      onProcessed: async () => {},
+    })
+
+    expect(maxConcurrent.value).toBe(concurrency)
+    expect(result.success).toBe(items.length)
+    expect(result.results).toEqual(items)
+    expect(Date.now() - start).toBeLessThan(items.length * 10)
+  })
+
+  it('should maintain order with concurrency', async () => {
+    const concurrency = 3
+    const items = range(10)
+    const executionOrder: number[] = []
+    const completionOrder: number[] = []
+
+    const result = await batchExecute({
+      controller: new AbortController(),
+      getItems: () => items,
+      concurrency,
+      execute: async (item) => {
+        executionOrder.push(item)
+        await wait(Math.random() * 10)
+        completionOrder.push(item)
+        return item
+      },
+      onProcessed: async () => {},
+    })
+
+    expect(executionOrder).toEqual(range(10))
+    expect(completionOrder).not.toEqual(range(10))
+    expect(result.results).toEqual(items)
+  })
+
+  it('should handle dynamic data with concurrency', async () => {
+    const concurrency = 3
+    const array = range(50)
+    const items = array.slice(0, 10)
+    const executing = new Set<number>()
+    const maxConcurrent = { value: 0 }
+
+    const result = await batchExecute({
+      controller: new AbortController(),
+      getItems: () => items,
+      concurrency,
+      execute: async (item) => {
+        executing.add(item)
+        maxConcurrent.value = Math.max(maxConcurrent.value, executing.size)
+        await wait(10)
+        executing.delete(item)
+        return item
+      },
+      onProcessed: async (c) => {
+        const last = c.index === items.length - 1
+        const hasNext = c.index < array.length - 1
+        if (last && hasNext) {
+          items.push(...array.slice(c.index + 1, c.index + 1 + 10))
+        }
+      },
+    })
+
+    expect(maxConcurrent.value).toBe(concurrency)
+    expect(result.success).toBe(array.length)
+    expect(result.results).toEqual(array)
+  })
+
+  it('should handle errors with concurrency', async () => {
+    const concurrency = 3
+    const items = range(10)
+    const executing = new Set<number>()
+    const maxConcurrent = { value: 0 }
+    const errors: number[] = []
+
+    const result = await batchExecute({
+      controller: new AbortController(),
+      getItems: () => items,
+      concurrency,
+      execute: async (item) => {
+        executing.add(item)
+        maxConcurrent.value = Math.max(maxConcurrent.value, executing.size)
+        await wait(10)
+        executing.delete(item)
+        if (item % 2 === 0) {
+          throw new Error(`Error for ${item}`)
+        }
+        return item
+      },
+      onProcessed: async (c) => {
+        if (c.error) {
+          errors.push(c.item as number)
+        }
+      },
+    })
+
+    expect(maxConcurrent.value).toBe(concurrency)
+    expect(result.success).toBe(5)
+    expect(result.failed).toBe(5)
+    expect(errors).toEqual([0, 2, 4, 6, 8])
+  })
+
+  it('should handle abort with concurrency', async () => {
+    const concurrency = 3
+    const items = range(10)
+    const controller = new AbortController()
+    const executed: number[] = []
+
+    const result = await batchExecute({
+      controller,
+      getItems: () => items,
+      concurrency,
+      execute: async (item) => {
+        await wait(10)
+        executed.push(item)
+        if (item === 4) {
+          controller.abort()
+        }
+        return item
+      },
+      onProcessed: async () => {},
+    })
+
+    expect(executed.length).toBeGreaterThanOrEqual(5)
+    expect(executed.length).toBeLessThanOrEqual(7)
+    expect(result.success).toBeLessThanOrEqual(7)
+  })
+})

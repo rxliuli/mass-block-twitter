@@ -8,6 +8,7 @@ type BatchExecuteOptions<T, R> = {
   onProcessed: (c: ExecuteOperationContext<T, R>) => Promise<void>
   execute: (item: T) => Promise<R>
   total?: number
+  concurrency?: number
 }
 type BatchExecuteResult<T, R> = {
   total: number
@@ -19,60 +20,103 @@ type BatchExecuteResult<T, R> = {
 export async function batchExecute<T, R>(
   options: BatchExecuteOptions<T, R>,
 ): Promise<BatchExecuteResult<T, R>> {
-  let i = 0
+  const concurrency = options.concurrency ?? 1
   let processed = 0
   let failed = 0
   const results: R[] = []
   const startTime = Date.now()
-  for (
-    ;
-    !options.controller.signal.aborted && i < options.getItems().length;
-    i++
-  ) {
-    const items = options.getItems()
+  let items = options.getItems()
+
+  // Create a queue to manage concurrent tasks
+  const queue = new Set<Promise<void>>()
+  let currentIndex = 0
+
+  // Add task to queue
+  const addTask = async (index: number) => {
+    if (index >= items.length || options.controller.signal.aborted) return
+
+    // Refresh items before execution to support dynamic data
+    items = options.getItems()
+    if (index >= items.length) return
+
+    const item = items[index]
     const context = {
       controller: options.controller,
-      index: i,
-      items: items,
-      item: items[i],
+      index,
+      items,
+      item,
     } as ExecuteOperationContext<T, R>
-    try {
-      const result = await options.execute(context.item)
-      context.result = result
-      results[i] = result
-    } catch (error) {
-      if (Array.isArray(context.item)) {
-        failed += context.item.length
-      } else {
-        failed++
-      }
-      context.error = error
-    }
-    processed += Array.isArray(context.item) ? context.item.length : 1
-    const total =
-      options.total ??
-      (Array.isArray(context.item) ? items.flat().length : items.length)
-    const successful = processed - failed
-    const averageTime = (Date.now() - startTime) / processed
-    const remainingTime = (total - processed) * averageTime
-    context.progress = {
-      processed,
-      total,
-      successful,
-      failed,
-      startTime,
-      currentTime: Date.now(),
-      averageTime,
-      remainingTime,
-    }
 
-    await options.onProcessed(context)
+    const task = (async () => {
+      const taskStartTime = Date.now()
+      try {
+        const result = await options.execute(item)
+        context.result = result
+        results[index] = result
+      } catch (error) {
+        if (Array.isArray(item)) {
+          failed += item.length
+        } else {
+          failed++
+        }
+        context.error = error
+      }
+
+      // Update progress
+      processed += Array.isArray(item) ? item.length : 1
+      const successful = processed - failed
+      const currentTime = Date.now()
+      const elapsedTime = currentTime - startTime
+      const averageTime = elapsedTime / processed
+      
+      // Recalculate total on each task execution
+      const total = options.total ?? (Array.isArray(items[0]) ? items.flat().length : items.length)
+      
+      // Calculate remaining time based on actual execution time
+      const remainingItems = total - processed
+      const remainingTime = remainingItems * averageTime
+      
+      context.progress = {
+        processed,
+        total,
+        successful,
+        failed,
+        startTime,
+        currentTime,
+        averageTime,
+        remainingTime,
+      }
+
+      await options.onProcessed(context)
+    })()
+
+    queue.add(task)
+    task.then(() => {
+      queue.delete(task)
+      // Add next task if available
+      if (currentIndex < items.length) {
+        addTask(currentIndex++)
+      }
+    })
   }
+
+  // Start initial batch of tasks
+  while (currentIndex < concurrency && currentIndex < items.length) {
+    addTask(currentIndex++)
+  }
+
+  // Wait for all tasks to complete
+  while (queue.size > 0) {
+    await Promise.race(queue)
+  }
+
+  // Calculate final total for return value
+  const finalTotal = options.total ?? (Array.isArray(items[0]) ? items.flat().length : items.length)
   return {
     success: processed - failed,
     failed,
     results,
-    total: options.total ?? options.getItems().flat().length,
+    total: finalTotal,
   } satisfies BatchExecuteResult<T, R>
 }
 

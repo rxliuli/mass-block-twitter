@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { InputSearch } from '..'
 import { get, writable } from 'svelte/store'
 import { userEvent } from '@vitest/browser/context'
+import { wait } from '@liuli-util/async'
 
 describe('InputSearch', () => {
   it('should render', async () => {
@@ -43,6 +44,7 @@ describe('InputSearch', () => {
     })
     const input = screen.getByTitle('test-input')
     await userEvent.type(input, 'hello world')
+    await wait(500)
     expect(onchange).toHaveBeenCalledWith('hello world')
   })
 })

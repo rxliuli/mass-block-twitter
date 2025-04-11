@@ -8,11 +8,13 @@ import {
   and,
   desc,
   eq,
+  gt,
   gte,
   inArray,
   InferSelectModel,
   isNotNull,
   isNull,
+  like,
   lt,
   SQLWrapper,
 } from 'drizzle-orm'
@@ -101,6 +103,7 @@ export type ReviewUsersResponse = PageResponse<{
   screenName: string
   name: string
   status: 'unanalyzed' | 'unreviewed' | 'reviewed'
+  followersCount: number
   llmSpamRating?: number | null
   llmSpamExplanation?: string | null
   isSpamByManualReview?: boolean
@@ -133,18 +136,27 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
       // TODO: 正确的做法是 .orderBy(sql`CAST(${user.id} AS NUMERIC) DESC`)，但会导致大量行读取
       .orderBy(desc(user.id))
       .where(and(...conditions))
-      .limit(valid.count ?? 100)
+      .limit(valid.count ?? 50)
     return c.json<ReviewUsersResponse>({
       data: users.map((it) => ({
         id: it.User.id,
         screenName: it.User.screenName,
         name: it.User.name ?? it.User.screenName,
+        followersCount: it.User.followersCount ?? 0,
         status: 'unanalyzed',
       })),
       cursor: last(users)?.User.id,
     })
   }
   if (valid.status === 'unreviewed') {
+    const conditions: SQLWrapper[] = [
+      isNull(userSpamAnalysis.isSpamByManualReview),
+      gte(userSpamAnalysis.llmSpamRating, 5),
+      lt(user.followersCount, 100),
+    ]
+    if (valid.cursor) {
+      conditions.push(lt(userSpamAnalysis.id, valid.cursor))
+    }
     const users = await db
       .select({
         UserSpamAnalysis: getTableAliasedColumns(userSpamAnalysis),
@@ -152,27 +164,43 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
       })
       .from(userSpamAnalysis)
       .innerJoin(user, eq(userSpamAnalysis.userId, user.id))
-      .where(
-        and(
-          isNull(userSpamAnalysis.isSpamByManualReview),
-          gte(userSpamAnalysis.llmSpamRating, 4),
-        ),
-      )
-      .orderBy(userSpamAnalysis.id)
-      .limit(100)
+      .where(and(...conditions))
+      .orderBy(desc(userSpamAnalysis.id))
+      .limit(valid.count ?? 50)
+    console.log(
+      db
+        .select({
+          UserSpamAnalysis: getTableAliasedColumns(userSpamAnalysis),
+          User: getTableAliasedColumns(user),
+        })
+        .from(userSpamAnalysis)
+        .innerJoin(user, eq(userSpamAnalysis.userId, user.id))
+        .where(and(...conditions))
+        .orderBy(desc(userSpamAnalysis.id))
+        .limit(valid.count ?? 50)
+        .toSQL(),
+    )
     return c.json<ReviewUsersResponse>({
       data: users.map((it) => ({
         id: it.User.id,
         screenName: it.User.screenName,
         name: it.User.name ?? it.User.screenName,
+        followersCount: it.User.followersCount ?? 0,
         status: 'unreviewed',
         llmSpamRating: it.UserSpamAnalysis.llmSpamRating,
         llmSpamExplanation: it.UserSpamAnalysis.llmSpamExplanation,
         isSpamByManualReview: false,
       })),
+      cursor: last(users)?.UserSpamAnalysis.id,
     })
   }
   if (valid.status === 'reviewed') {
+    const conditions: SQLWrapper[] = [
+      isNotNull(userSpamAnalysis.isSpamByManualReview),
+    ]
+    if (valid.cursor) {
+      conditions.push(lt(userSpamAnalysis.id, valid.cursor))
+    }
     const users = await db
       .select({
         UserSpamAnalysis: getTableAliasedColumns(userSpamAnalysis),
@@ -181,18 +209,20 @@ analyze.get('/users', zValidator('query', reviewUsersSchema), async (c) => {
       .from(userSpamAnalysis)
       .innerJoin(user, eq(userSpamAnalysis.userId, user.id))
       .orderBy(desc(userSpamAnalysis.id))
-      .where(isNotNull(userSpamAnalysis.isSpamByManualReview))
-      .limit(100)
+      .where(and(...conditions))
+      .limit(valid.count ?? 50)
     return c.json<ReviewUsersResponse>({
       data: users.map((it) => ({
         id: it.User.id,
         screenName: it.User.screenName,
         name: it.User.name ?? it.User.screenName,
+        followersCount: it.User.followersCount ?? 0,
         status: 'reviewed',
         llmSpamRating: it.UserSpamAnalysis.llmSpamRating,
         llmSpamExplanation: it.UserSpamAnalysis.llmSpamExplanation,
         isSpamByManualReview: !!it.UserSpamAnalysis.isSpamByManualReview,
       })),
+      cursor: last(users)?.UserSpamAnalysis.id,
     })
   }
   return c.json({ code: 'invalid_status' }, 400)

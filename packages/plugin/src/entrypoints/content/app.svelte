@@ -45,7 +45,13 @@
     return removeAllListeners
   })
 
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  })
   const root = document
     .querySelector('mass-block-twitter')
     ?.shadowRoot?.querySelector('body')!

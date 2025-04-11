@@ -12,10 +12,8 @@ import {
 import { router } from '$lib/components/logic/router'
 
 describe('ModListCreator', () => {
-  afterEach(() => {
+  beforeEach(() => {
     localStorage.clear()
-    vi.clearAllMocks()
-    vi.restoreAllMocks()
     vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
       if (new URL(input.toString()).pathname === '/api/modlists/created') {
         return new Response(
@@ -24,6 +22,11 @@ describe('ModListCreator', () => {
       }
       throw new Error()
     })
+  })
+  afterEach(() => {
+    localStorage.clear()
+    vi.clearAllMocks()
+    vi.restoreAllMocks()
   })
   it('should render', async () => {
     const screen = render(PageTest, {

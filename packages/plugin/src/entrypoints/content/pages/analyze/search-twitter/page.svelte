@@ -4,7 +4,11 @@
   import { ADataTable } from '$lib/components/logic/a-data-table'
   import { Button } from '$lib/components/ui/button'
   import { SERVER_URL } from '$lib/constants'
-  import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
+  import {
+    createInfiniteQuery,
+    createMutation,
+    useQueryClient,
+  } from '@tanstack/svelte-query'
   import { toast } from 'svelte-sonner'
   import { userColumns } from '../../search-and-block/utils/columns'
   import { t } from '$lib/i18n'
@@ -99,19 +103,26 @@
           },
         })
         toast.success('Marked successfully')
+        selectedRowKeys = []
       } finally {
         toast.dismiss(toastId)
       }
     },
   })
 
-  const columns = $derived(
-    userColumns.map((column) => ({
+  const columns = $derived.by(() => {
+    const r = userColumns.map((column) => ({
       ...column,
       title: $t(column.title),
-    })),
-  )
+    }))
+    r[3] = {
+      dataIndex: 'followers_count',
+      title: 'Followers',
+    }
+    return r
+  })
 
+  const queryClient = useQueryClient()
   const { onScroll } = useScroll(() => $query)
 </script>
 
@@ -120,7 +131,10 @@
     <InputSearch
       class="flex-1"
       bind:value={term}
-      onchange={() => $query.refetch()}
+      onchange={() => {
+        // $query.refetch()
+        queryClient.resetQueries({ queryKey: ['analyze', 'search-twitter'] })
+      }}
     />
     <Button variant="secondary" onclick={() => $markMutation.mutate(true)}
       >Mark Spam</Button

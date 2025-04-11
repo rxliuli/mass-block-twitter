@@ -8,9 +8,9 @@ import {
   SQL,
   InferInsertModel,
 } from 'drizzle-orm'
+import { customType } from 'drizzle-orm/sqlite-core'
 import { uniq, last } from 'es-toolkit'
 
-// https://github.com/drizzle-team/drizzle-orm/issues/555
 export function getTableAliasedColumns<T extends AnyTable<TableConfig>>(
   table: T,
 ) {
@@ -30,9 +30,8 @@ export function getTableAliasedColumns<T extends AnyTable<TableConfig>>(
   )
 }
 
-// https://developers.cloudflare.com/d1/platform/limits/#:~:text=Maximum%20number%20of%20columns%20per%20table
 const D1_MAX_SQL_VARIABLES = 100
-// https://github.com/drizzle-team/drizzle-orm/issues/2479
+
 export function safeChunkInsertValues<T extends AnyTable<TableConfig>>(
   table: T,
   values: InferInsertModel<T>[],
@@ -62,3 +61,37 @@ export function safeChunkInsertValues<T extends AnyTable<TableConfig>>(
   }
   return chunks
 }
+
+export const safeJson = <TData>(name: string) =>
+  customType<{ data: TData | null; driverData: string | null }>({
+    dataType() {
+      return 'JSONB'
+    },
+    toDriver(value: TData | null): string | null {
+      if (value === null || value === undefined) {
+        return null
+      }
+      try {
+        return JSON.stringify(value)
+      } catch (error) {
+        console.error('Error stringifying JSON for DB:', error)
+        return null
+      }
+    },
+    fromDriver(value: string | null): TData | null {
+      if (value === null || value === '') {
+        return null
+      }
+      try {
+        return JSON.parse(value) as TData
+      } catch (error) {
+        console.warn(
+          `Failed to parse JSON from DB column "${name}". Value:`,
+          value,
+          'Error:',
+          error,
+        )
+        return null
+      }
+    },
+  })(name)

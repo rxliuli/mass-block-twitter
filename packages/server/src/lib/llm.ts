@@ -197,6 +197,7 @@ export async function analyzeUser(
           error: OpenAI.ErrorObject
         }
   } catch (error) {
+    console.error('LLM error', error)
     return {
       logData: {
         userId: data.user.id,

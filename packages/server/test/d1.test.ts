@@ -25,8 +25,10 @@ import {
 import {
   getTableAliasedColumns,
   safeChunkInsertValues,
+  safeJson,
 } from '../src/lib/drizzle'
 import { last, omit, range, sum, uniq } from 'es-toolkit'
+import { sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 const context = initCloudflareTest()
 
@@ -69,6 +71,56 @@ describe('drizzle', () => {
     ).rejects.toThrowError()
     const result = await db.select().from(user).all()
     expect(result).length(0)
+  })
+  it('should be able to detect empty json text field', async () => {
+    const db = context.db
+    await db.insert(user).values({
+      id: '1',
+      screenName: 'test',
+      name: 'test',
+    })
+    const stmt = db
+      .insert(tweet)
+      .values({
+        id: '1',
+        userId: '1',
+        text: '',
+        media: [],
+        publishedAt: new Date().toISOString(),
+      })
+      .toSQL()
+    stmt.params[2] = ''
+    await context.env.DB.prepare(stmt.sql)
+      .bind(...stmt.params)
+      .run()
+    await expect(db.select().from(tweet).all()).rejects.toThrowError()
+  })
+  it('should be able to support empty json text field', async () => {
+    const db = context.db
+    await db.run(`
+      CREATE TABLE "test" (
+        "id" TEXT PRIMARY KEY,
+        "media" JSONB
+      );
+      INSERT INTO "test" ("id", "media") VALUES ('1', '');
+      `)
+    const test1 = sqliteTable('test', {
+      id: text('id').primaryKey(),
+      media: text('media', { mode: 'json' }),
+    })
+    const test2 = sqliteTable('test', {
+      id: text('id').primaryKey(),
+      media:
+        safeJson<{ url: string; type: 'photo' | 'video' | 'animated_gif' }[]>(
+          'media',
+        ),
+    })
+    await expect(db.select().from(test1).all()).rejects.toThrowError()
+    expect<InferInsertModel<typeof test2>>({
+      id: '2',
+      media: [{ url: 'https://example.com', type: 'photo' }],
+    })
+    await expect(db.select().from(test2).all()).resolves.not.toThrowError()
   })
 })
 

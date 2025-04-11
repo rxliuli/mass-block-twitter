@@ -37,27 +37,31 @@ export const user = sqliteTable('User', {
 })
 
 // Tweet table
-export const tweet = sqliteTable('Tweet', {
-  id: text('id').primaryKey(),
-  text: text('text'),
-  media: text('media', { mode: 'json' }),
-  publishedAt: text('publishedAt').notNull(),
-  userId: text('userId')
-    .references(() => user.id)
-    .notNull(),
-  conversationId: text('conversationId'),
-  inReplyToStatusId: text('inReplyToStatusId'),
-  quotedStatusId: text('quotedStatusId'),
-  lang: text('lang').default('en'),
-  createdAt: text('createdAt')
-    .notNull()
-    .$defaultFn(() => new Date().toISOString()),
-  updatedAt: text('updatedAt')
-    .notNull()
-    .$defaultFn(() => new Date().toISOString())
-    .$onUpdateFn(() => new Date().toISOString()),
-  spamReportCount: integer('spamReportCount').default(0),
-})
+export const tweet = sqliteTable(
+  'Tweet',
+  {
+    id: text('id').primaryKey(),
+    text: text('text'),
+    media: text('media', { mode: 'json' }),
+    publishedAt: text('publishedAt').notNull(),
+    userId: text('userId')
+      .references(() => user.id)
+      .notNull(),
+    conversationId: text('conversationId'),
+    inReplyToStatusId: text('inReplyToStatusId'),
+    quotedStatusId: text('quotedStatusId'),
+    lang: text('lang').default('en'),
+    createdAt: text('createdAt')
+      .notNull()
+      .$defaultFn(() => new Date().toISOString()),
+    updatedAt: text('updatedAt')
+      .notNull()
+      .$defaultFn(() => new Date().toISOString())
+      .$onUpdateFn(() => new Date().toISOString()),
+    spamReportCount: integer('spamReportCount').default(0),
+  },
+  (table) => [index('tweet_userId_idx').on(table.userId)],
+)
 
 // SpamReport table
 export const spamReport = sqliteTable(

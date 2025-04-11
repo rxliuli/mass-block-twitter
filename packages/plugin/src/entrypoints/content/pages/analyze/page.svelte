@@ -10,7 +10,11 @@
     ReviewUsersRequest,
     ReviewUsersResponse,
   } from '@mass-block-twitter/server'
-  import { createInfiniteQuery, createMutation } from '@tanstack/svelte-query'
+  import {
+    createInfiniteQuery,
+    createMutation,
+    useQueryClient,
+  } from '@tanstack/svelte-query'
   import { TextWrapper } from '$lib/components/custom/text'
   import AnalyzeAction from './components/AnalyzeAction.svelte'
   import { toast } from 'svelte-sonner'
@@ -24,6 +28,7 @@
   import { useController } from '$lib/stores/controller'
   import { errorHandler, loadingHandler } from '$lib/util/handlers'
   import { useScroll } from '$lib/components/logic/query'
+  import ScreenNameWrapper from '../search-and-block/components/ScreenNameWrapper.svelte'
 
   let status = $state<ReviewUsersRequest['status']>('unanalyzed')
   const query = createInfiniteQuery({
@@ -116,13 +121,16 @@
 
   const autoAnalyzeMutation = createMutation({
     mutationFn: async () => {
-      const toastId = toast.loading('Analyzing...')
+      const toastId = toast.loading('Analyzing...', {
+        duration: 1000000,
+      })
       controller.create()
       const getUsrIds = () =>
         $query.data?.pages.flatMap((it) => it.data).map((it) => it.id) ?? []
       try {
         await batchExecute({
           controller,
+          concurrency: 10,
           getItems: getUsrIds,
           execute: async (userId) => {
             const resp = await fetch(`${SERVER_URL}/api/analyze/llm`, {
@@ -150,7 +158,7 @@
               .use(errorHandler({ title: 'Failed to analyze' }))
               .use(loadingHandler({ title: 'Analyzing...' }))
               .use(async ({ context }) => {
-                if (context.index + 1 === context.items.length) {
+                if (context.index % 50 === 0) {
                   await $query.fetchNextPage()
                 }
               })
@@ -164,6 +172,8 @@
       }
     },
   })
+
+  const queryClient = useQueryClient()
 </script>
 
 <div class="h-full">
@@ -185,11 +195,15 @@
       ]}
       bind:value={status}
       onChange={() => {
-        $query.refetch()
+        queryClient.resetQueries({ queryKey: ['analyze'] })
       }}
       class="w-40"
     />
-    <Button variant="secondary" onclick={() => $query.refetch()}>Refresh</Button
+    <Button
+      variant="secondary"
+      onclick={() => {
+        queryClient.resetQueries({ queryKey: ['analyze'] })
+      }}>Refresh</Button
     >
 
     <DropdownMenu.Root>
@@ -237,22 +251,36 @@
         {
           title: 'Screen Name',
           dataIndex: 'screenName',
+          render: (value) =>
+            renderComponent(ScreenNameWrapper, {
+              children: value,
+              class: 'text-sm truncate',
+            }),
         },
         {
           title: 'Name',
           dataIndex: 'name',
+          render: (value) =>
+            renderComponent(TextWrapper, {
+              children: value,
+              class: 'text-sm truncate',
+            }),
         },
         {
-          title: 'Spam By Manual Review',
+          title: 'Followers',
+          dataIndex: 'followersCount',
+        },
+        {
+          title: 'Spam',
           dataIndex: 'isSpamByManualReview',
           render: (value) => (value ? 'Yes' : 'No'),
         },
         {
-          title: 'Spam Rating',
+          title: 'Rating',
           dataIndex: 'llmSpamRating',
         },
         {
-          title: 'Spam Explanation',
+          title: 'Explanation',
           dataIndex: 'llmSpamExplanation',
           render: (value) =>
             renderComponent(TextWrapper, {

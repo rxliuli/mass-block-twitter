@@ -7,7 +7,7 @@ import {
   parseUserRecords,
   setRequestHeaders,
 } from '$lib/api'
-import { Activity, dbApi, User } from '$lib/db'
+import { Activity, dbApi, initDB, User } from '$lib/db'
 import { omit, throttle } from 'es-toolkit'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { asyncLimiting, wait } from '@liuli-util/async'
@@ -36,11 +36,13 @@ import { ulid } from 'ulidx'
 import { blockUser } from '$lib/api/twitter'
 
 function blockClientEvent(): Middleware {
-  const pattern = new URLPattern(
-    'https://x.com/i/api/1.1/jot/client_event.json',
-  )
   return async (c, next) => {
-    if (pattern.test(c.req.url)) {
+    if (
+      [
+        'https://x.com/i/api/1.1/jot/client_event.json',
+        'https://x.com/i/api/1.1/keyregistry/register',
+      ].includes(c.req.url)
+    ) {
       c.res = new Response(
         JSON.stringify({
           success: true,
@@ -75,16 +77,18 @@ function loggerUsers(): Middleware {
       if (users.length === 0) {
         return
       }
-      // console.log('loggerUsers', c.req.url, users)
+      console.debug('loggerUsers', c.req.url, users)
       await dbApi.users.record(users)
-      if (getSettings().hideSpamAccounts) {
-        await dbApi.pendingCheckUsers.record(users.map((it) => it.id))
-      }
-      await Promise.all([
-        refreshSpamUsers(users.map((it) => it.id)),
-        refreshSubscribedModLists(),
-      ])
-      handleUsers(users)
+      requestAnimationFrame(async () => {
+        if (getSettings().hideSpamAccounts) {
+          await dbApi.pendingCheckUsers.record(users.map((it) => it.id))
+        }
+        await Promise.all([
+          refreshSpamUsers(users.map((it) => it.id)),
+          // refreshSubscribedModLists(),
+        ])
+        handleUsers(users)
+      })
     }
   }
 }
@@ -137,6 +141,7 @@ function loggerTweets(): Middleware {
       if (tweets.length === 0) {
         return
       }
+      console.debug('loggerTweets', c.req.url, tweets)
       await dbApi.tweets.record(
         tweets.map((it) => ({
           ...omit(it, ['user']),
@@ -194,8 +199,12 @@ async function _onAction(
   if (user.blocking || result !== 'block') {
     return
   }
+  if (await dbApi.users.isBlocking(user.id)) {
+    return
+  }
   await blockUser(user)
-  console.log('blockUser', user)
+  console.log('blockUser', user, await dbApi.users.isBlocking(user.id))
+  await dbApi.users.block(user)
   try {
     new Notification('Blocked user', {
       body: `${user.name} @${user.screen_name}`,
@@ -261,7 +270,7 @@ function handleTweets(): Middleware {
         return result.value
       })
       if (hideTweets.length > 0) {
-        console.log('hideTweets', hideTweets)
+        console.debug('hideTweets', hideTweets)
       }
       c.res = new Response(JSON.stringify(filteredTweets), c.res)
     } catch (err) {
@@ -325,6 +334,7 @@ export default defineContentScript({
   world: 'MAIN',
   async main() {
     initXTransactionId()
+    await initDB()
     new Vista()
       .use(blockClientEvent())
       .use(loggerRequestHeaders())
@@ -336,6 +346,7 @@ export default defineContentScript({
     await wait(() => !!document.body)
     observe()
 
+    await refreshSubscribedModLists()
     document.addEventListener('RefreshModListSubscribedUsers', async () => {
       await refreshSubscribedModLists()
     })

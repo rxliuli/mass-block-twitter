@@ -8,15 +8,11 @@ import {
   refreshModListSubscribedUsers,
   spamReport,
 } from '$lib/content'
-import { blockUser, initXTransactionId } from '$lib/api'
+import { initXTransactionId } from '$lib/api'
 import { getLocaleLanguage, initI18n } from '$lib/i18n'
 import { wait } from '@liuli-util/async'
-import { dbApi } from '$lib/db'
-import { ulid } from 'ulidx'
-import { getTweetElement, removeTweets } from '$lib/observe'
-import { toast } from 'svelte-sonner'
-import { ShieldBanIcon, ShieldCheckIcon } from 'lucide-svelte'
 import { eventMessage } from '$lib/shared'
+import { initDB } from '$lib/db'
 
 export default defineContentScript({
   matches: ['https://x.com/**'],
@@ -25,6 +21,8 @@ export default defineContentScript({
   cssInjectionMode: 'ui',
   async main(ctx) {
     initXTransactionId()
+
+    await initDB()
 
     refreshModListSubscribedUsers()
     refreshAuthInfo()

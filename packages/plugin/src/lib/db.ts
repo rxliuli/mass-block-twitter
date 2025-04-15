@@ -1,7 +1,10 @@
 import { DBSchema, deleteDB, IDBPDatabase, openDB } from 'idb'
-import { pickBy, sortBy } from 'es-toolkit'
+import { chunk, difference, pickBy, sortBy } from 'es-toolkit'
 import { ulid } from 'ulidx'
 import { createKeyVal, KeyValItem } from './util/keyval'
+import { AsyncArray, asyncLimiting } from '@liuli-util/async'
+import { once } from './util/once'
+import pLimit, { limitFunction } from 'p-limit'
 
 export const dbStore: DBStore = {} as any
 
@@ -132,8 +135,8 @@ export type DBStore = {
   idb: IDBPDatabase<MyDB>
 }
 
-export async function initDB() {
-  dbStore.idb = await openDB<MyDB>('mass-db', 17, {
+export const initDB = once(async () => {
+  dbStore.idb = await openDB<MyDB>('mass-db', 23, {
     async upgrade(db, oldVersion, newVersion, transaction) {
       if (db.objectStoreNames.length === 0) {
         // init users store
@@ -162,7 +165,7 @@ export async function initDB() {
       }
     },
   })
-}
+})
 
 export class UserDAO {
   // 获取所有用户
@@ -192,17 +195,35 @@ export class UserDAO {
   }
   // 记录查询过的用户
   async record(users: User[]): Promise<void> {
+    if (users.length === 0) {
+      return
+    }
+    const db = dbStore.idb
+    const tx = db.transaction('users', 'readwrite')
+    const store = tx.objectStore('users')
+
+    console.debug('record', users.length)
     await Promise.all([
-      ...users.map(async (it) => {
-        const u = await dbStore.idb.get('users', it.id)
-        const value = {
-          ...u,
-          ...(pickBy(it, (it) => it !== undefined && it !== null) as User),
-        }
-        await dbStore.idb.put('users', value, it.id)
-      }),
+      ...users.map(
+        limitFunction(
+          async (it) => {
+            const u = await store.get(it.id)
+            const value = {
+              ...u,
+              ...(pickBy(it, (it) => it !== undefined && it !== null) as User),
+
+              updated_at: u?.updated_at ?? new Date().toISOString(),
+            }
+            await store.put(value, it.id)
+          },
+          { concurrency: 100 },
+        ),
+      ),
+      tx.done,
     ])
+    console.debug('record done')
   }
+
   // block 特定用户
   async block(user: User): Promise<void> {
     await dbStore.idb.put(
@@ -264,34 +285,18 @@ export class UserDAO {
 
 class TweetDAO {
   async record(tweets: Tweet[]): Promise<void> {
+    const tx = dbStore.idb.transaction('tweets', 'readwrite')
+    const store = tx.objectStore('tweets')
     await Promise.all(
       tweets.map(async (it) => {
-        await dbStore.idb.put('tweets', it, it.id)
+        await store.put(it, it.id)
       }),
     )
+    await tx.done
   }
   async get(id: string): Promise<Tweet | undefined> {
     return dbStore.idb.get('tweets', id)
   }
-}
-
-function wrap<T extends object>(obj: T): T {
-  return new Proxy<T>({} as any, {
-    get(_, p) {
-      if (!(p in obj)) {
-        return
-      }
-      if (typeof obj[p as keyof T] !== 'function') {
-        return
-      }
-      return async (...args: any[]) => {
-        if (!dbStore.idb) {
-          await initDB()
-        }
-        return (obj[p as keyof T] as any)(...args)
-      }
-    },
-  })
 }
 
 class ActivityDAO {
@@ -352,69 +357,87 @@ class PendingCheckUserDAO {
     })
   }
   async record(userIds: string[]): Promise<void> {
-    await Promise.all(
-      userIds.map(async (it) => {
-        if (await this.uploadedCheckUserIds.get(it)) {
-          return
-        }
-        await this.pendingCheckUserIds.set(it, true)
-      }),
+    const uploaded = await this.uploadedCheckUserIds.getMany(userIds)
+    const list = difference(
+      userIds,
+      uploaded.filter((it) => it.value).map((it) => it.key),
+    )
+    await this.pendingCheckUserIds.setMany(
+      list.map((it) => ({
+        key: it,
+        value: true,
+      })),
     )
   }
-  async list(): Promise<
+  async *keys(): AsyncGenerator<
     {
       user: User
       tweets: Tweet[]
     }[]
   > {
-    const userIds = await this.pendingCheckUserIds.keys()
-    const list = await Promise.all(
-      userIds.map(async (userId) => {
-        if (await this.uploadedCheckUserIds.get(userId)) {
-          await this.pendingCheckUserIds.del(userId)
-          return
-        }
-        const user = await dbStore.idb.get('users', userId)
-        if (
-          !user ||
-          user.followers_count === undefined ||
-          user.friends_count === undefined ||
-          user.is_blue_verified === undefined
-        ) {
-          await this.pendingCheckUserIds.del(userId)
-          return
-        }
-        const tweets = sortBy(
-          await dbStore.idb.getAllFromIndex('tweets', 'user_id_index', userId),
-          [(it) => -new Date(it.created_at).getTime()],
-        ).slice(0, 10)
-        return {
-          user,
-          tweets,
-        }
-      }),
+    let userIds = await this.pendingCheckUserIds.keys()
+    const uploaded = (await this.uploadedCheckUserIds.getMany(userIds)).filter(
+      (it) => it.value,
     )
-    return list.filter((it) => it !== undefined)
+    await this.pendingCheckUserIds.delMany(uploaded.map((it) => it.key))
+    userIds = difference(
+      userIds,
+      uploaded.map((it) => it.key),
+    ).filter((it) => it)
+    for (const chunks of chunk(userIds, 50)) {
+      const delKeys: string[] = []
+      const list = await Promise.all(
+        chunks.map(async (userId) => {
+          const user = await dbStore.idb.get('users', userId)
+          if (
+            !user ||
+            user.followers_count === undefined ||
+            user.friends_count === undefined ||
+            user.is_blue_verified === undefined
+          ) {
+            delKeys.push(userId)
+            return
+          }
+          const tweets = sortBy(
+            await dbStore.idb.getAllFromIndex(
+              'tweets',
+              'user_id_index',
+              userId,
+            ),
+            [(it) => -new Date(it.created_at).getTime()],
+          ).slice(0, 10)
+          return {
+            user,
+            tweets,
+          }
+        }),
+      )
+      await this.pendingCheckUserIds.delMany(delKeys)
+      yield list.filter((it) => it !== undefined)
+    }
   }
 
   async uploaded(userIds: string[], ttl?: number): Promise<void> {
-    await Promise.all(
-      userIds.map(async (userId) => {
-        await this.pendingCheckUserIds.del(userId)
-        await this.uploadedCheckUserIds.set(userId, true, {
+    await this.uploadedCheckUserIds.setMany(
+      userIds.map((userId) => ({
+        key: userId,
+        value: true,
+        options: {
           expirationTtl: ttl,
-        })
-      }),
+        },
+      })),
     )
+    await this.pendingCheckUserIds.delMany(userIds)
   }
 }
 
 class SpamUserDAO {
   async record(userIds: string[]): Promise<void> {
+    const tx = dbStore.idb.transaction('spamUsers', 'readwrite')
+    const store = tx.objectStore('spamUsers')
     await Promise.all(
       userIds.map(async (userId) => {
-        await dbStore.idb.put(
-          'spamUsers',
+        await store.put(
           {
             id: userId,
             created_at: new Date().toISOString(),
@@ -424,6 +447,7 @@ class SpamUserDAO {
         )
       }),
     )
+    await tx.done
   }
   async has(userId: string): Promise<boolean> {
     return !!(await dbStore.idb.getKey('spamUsers', userId))
@@ -431,11 +455,11 @@ class SpamUserDAO {
 }
 
 export const dbApi = {
-  users: wrap(new UserDAO()),
-  tweets: wrap(new TweetDAO()),
-  activitys: wrap(new ActivityDAO()),
-  pendingCheckUsers: wrap(new PendingCheckUserDAO()),
-  spamUsers: wrap(new SpamUserDAO()),
+  users: new UserDAO(),
+  tweets: new TweetDAO(),
+  activitys: new ActivityDAO(),
+  pendingCheckUsers: new PendingCheckUserDAO(),
+  spamUsers: new SpamUserDAO(),
   clear: async () => {
     if (!dbStore.idb) {
       await initDB()

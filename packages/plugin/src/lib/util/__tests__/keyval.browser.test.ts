@@ -1,5 +1,5 @@
 import { createKeyVal } from '$lib/util/keyval'
-import { clear, createStore, keys, set } from 'idb-keyval'
+import { wait } from '@liuli-util/async'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 describe('keyval', () => {
@@ -74,5 +74,42 @@ describe('keyval', () => {
       expirationTtl: 3,
     })
     expect(await kv2.get('test')).eq('test')
+  })
+  it('should be able to get many values', async () => {
+    const keyval = createKeyVal({ dbName: 'test', storeName: 'test' })
+    await keyval.set('test', 'test')
+    await keyval.set('test2', 'test2', { expirationTtl: 1 })
+    expect(await keyval.getMany(['test', 'test2'])).toEqual([
+      { key: 'test', value: 'test' },
+      { key: 'test2', value: 'test2' },
+    ])
+    vi.setSystemTime(Date.now() + 1000)
+    expect(await keyval.getMany(['test', 'test2'])).toEqual([
+      { key: 'test', value: 'test' },
+      { key: 'test2' },
+    ])
+  })
+  it('should be able to set many values', async () => {
+    const keyval = createKeyVal({ dbName: 'test', storeName: 'test' })
+    await keyval.setMany([
+      { key: 'test', value: 'test' },
+      { key: 'test2', value: 'test2', options: { expirationTtl: 1 } },
+    ])
+    expect(await keyval.getMany(['test', 'test2'])).toEqual([
+      { key: 'test', value: 'test' },
+      { key: 'test2', value: 'test2' },
+    ])
+    vi.setSystemTime(Date.now() + 1000)
+    expect(await keyval.getMany(['test', 'test2'])).toEqual([
+      { key: 'test', value: 'test' },
+      { key: 'test2' },
+    ])
+  })
+  it('should be able to clear', async () => {
+    const keyval = createKeyVal({ dbName: 'test', storeName: 'test' })
+    await keyval.set('test', 'test')
+    await keyval.set('test2', 'test2', { expirationTtl: 1 })
+    await keyval.clear()
+    expect(await keyval.keys()).length(0)
   })
 })

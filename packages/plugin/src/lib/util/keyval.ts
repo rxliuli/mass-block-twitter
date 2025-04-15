@@ -1,4 +1,14 @@
-import { get, set, createStore, del, clear, keys } from 'idb-keyval'
+import {
+  get,
+  set,
+  createStore,
+  del,
+  clear,
+  keys,
+  setMany,
+  getMany,
+  delMany,
+} from 'idb-keyval'
 
 interface SetOptions {
   expirationTtl?: number // living seconds
@@ -16,6 +26,11 @@ interface KeyVal {
   del<T>(key: string): Promise<void>
   clear(): Promise<void>
   keys(): Promise<string[]>
+  setMany(
+    items: { key: string; value: any; options?: SetOptions }[],
+  ): Promise<void>
+  getMany(keys: string[]): Promise<{ key: string; value?: any }[]>
+  delMany(keys: string[]): Promise<void>
 }
 
 interface CreateKeyValOptions {
@@ -55,8 +70,60 @@ export function createKeyVal(config: CreateKeyValOptions): KeyVal {
         store,
       )
     },
+    setMany: async (
+      items: { key: string; value: any; options?: SetOptions }[],
+    ) => {
+      await setMany(
+        items.map((it) => [
+          it.key,
+          {
+            value: it.value,
+            createdAt: Date.now(),
+            expirationTtl: it.options?.expirationTtl,
+          },
+        ]),
+        store,
+      )
+    },
+    getMany: async (keys: string[]) => {
+      const list = await getMany(keys, store)
+      const delKeys: string[] = []
+      const r = list.map((item, index) => {
+        const key = keys[index]
+        if (!item) {
+          return {
+            key,
+          }
+        }
+        const ttl = item?.expirationTtl ?? config.expirationTtl
+        if (!ttl || !item.createdAt) {
+          return {
+            key,
+            value: item.value,
+          }
+        }
+        const now = Date.now()
+        if (now >= item.createdAt + ttl * 1000) {
+          delKeys.push(key)
+          return {
+            key,
+          }
+        }
+        return {
+          key,
+          value: item.value,
+        }
+      })
+      if (delKeys.length > 0) {
+        await delMany(delKeys, store)
+      }
+      return r
+    },
     del: async (key: string) => {
       await del(key, store)
+    },
+    delMany: async (keys: string[]) => {
+      await delMany(keys, store)
     },
     clear: async () => {
       await clear(store)

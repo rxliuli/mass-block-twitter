@@ -112,13 +112,11 @@ export async function refreshAuthInfo() {
 
 export async function autoCheckPendingUsers() {
   const interval = setInterval(async () => {
-    const _pendingUsers = await dbApi.pendingCheckUsers.list()
-    // console.log('autoCheckPendingUsers', _pendingUsers)
-    if (_pendingUsers.length === 0) {
-      return
-    }
-    const list = chunk(_pendingUsers, 50)
-    for (const pendingUsers of list) {
+    for await (const pendingUsers of dbApi.pendingCheckUsers.keys()) {
+      if (pendingUsers.length === 0) {
+        continue
+      }
+      console.debug('autoCheckPendingUsers', pendingUsers)
       const resp = await fetch(SERVER_URL + '/api/twitter/spam-users/check', {
         method: 'POST',
         headers: {

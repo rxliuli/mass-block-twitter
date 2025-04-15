@@ -10,6 +10,7 @@
     getUserFollowers,
     getUserFollowing,
     getUserBlueVerifiedFollowers,
+    getUserByScreenName,
   } from '$lib/api/twitter'
   import { Button } from '$lib/components/ui/button'
   import { Badge } from '$lib/components/ui/badge'
@@ -73,6 +74,10 @@
     {
       name: 'getUserFollowing',
       fn: () => getUserFollowing({ userId: '736267842681602048' }),
+    },
+    {
+      name: 'getUserByScreenName',
+      fn: () => getUserByScreenName('rxliuli'),
     },
   ]
 

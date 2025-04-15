@@ -147,6 +147,18 @@ export async function unblockUser(userId: string) {
   }
 }
 
+export async function getUserByScreenName(
+  screenName: string,
+): Promise<User | undefined> {
+  const json = await graphqlQuery({
+    operationName: 'UserByScreenName',
+    variables: {
+      screen_name: screenName,
+    },
+  })
+  return parseUserRecords(json)[0]
+}
+
 export async function graphqlQuery(options: {
   operationName: Parameters<typeof extractGQLArgsByName>[0]
   variables: Record<string, any>

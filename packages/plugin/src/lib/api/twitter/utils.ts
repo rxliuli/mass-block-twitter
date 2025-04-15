@@ -63,7 +63,8 @@ async function _extractGQLArgsByName(
     | 'SearchTimeline'
     | 'Followers'
     | 'Following'
-    | 'BlueVerifiedFollowers',
+    | 'BlueVerifiedFollowers'
+    | 'UserByScreenName',
 ): Promise<
   | {
       queryId: string

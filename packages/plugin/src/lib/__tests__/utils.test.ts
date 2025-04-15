@@ -48,6 +48,7 @@ import TweetEntity from './assets/TweetEntity.json'
 import TweetDetail13 from './assets/TweetDetail13.json'
 import TweetDetail14 from './assets/TweetDetail14.json'
 import dm from './assets/dm.json'
+import UserByScreenName from './assets/UserByScreenName.json'
 
 describe('parseUserRecords', () => {
   it('parse timeline', () => {
@@ -94,6 +95,12 @@ describe('parseUserRecords', () => {
     expect(
       users.map((it) => omit(it, ['created_at', 'updated_at'])),
     ).toMatchSnapshot()
+  })
+  it('parseUserRecords for user by screen name', () => {
+    const user = parseUserRecords(UserByScreenName)
+    expect(user).length(1)
+    expect(user[0].id).toEqual('1652220971497947136')
+    expect(user[0].blocking).true
   })
 })
 

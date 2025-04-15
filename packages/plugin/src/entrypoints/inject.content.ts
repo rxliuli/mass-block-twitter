@@ -33,7 +33,7 @@ import {
 } from '$lib/filter'
 import { getDefaultSettings, getSettings, Settings } from '$lib/settings'
 import { ulid } from 'ulidx'
-import { blockUser } from '$lib/api/twitter'
+import { blockUser, getUserByScreenName } from '$lib/api/twitter'
 
 function blockClientEvent(): Middleware {
   return async (c, next) => {
@@ -171,39 +171,41 @@ async function _onAction(
   } as Activity
   if (filterData.type === 'user') {
     user = filterData.user
-    activity = {
-      ...activity,
-      user_id: user.id,
-      user_name: user.name,
-      user_screen_name: user.screen_name,
-      user_profile_image_url: user.profile_image_url,
-    }
   } else {
     user = filterData.tweet.user
     activity = {
       ...activity,
-      user_id: user.id,
-      user_name: user.name,
-      user_screen_name: user.screen_name,
-      user_profile_image_url: user.profile_image_url,
       tweet_id: filterData.tweet.id,
       tweet_content: filterData.tweet.text,
     }
+  }
+  activity = {
+    ...activity,
+    user_id: user.id,
+    user_name: user.name,
+    user_screen_name: user.screen_name,
+    user_profile_image_url: user.profile_image_url,
   }
   if (queue.some((it) => it.id === user.id)) {
     return
   }
   queue.unshift(user)
   queue.length = 100
+  if (result !== 'block') {
+    return
+  }
+  const userByScreenName = await getUserByScreenName(user.screen_name)
+  console.debug('userByScreenName', userByScreenName)
+  if (
+    !userByScreenName ||
+    userByScreenName.following ||
+    userByScreenName.blocking
+  ) {
+    return
+  }
   dbApi.activitys.record([activity])
-  if (user.blocking || result !== 'block') {
-    return
-  }
-  if (await dbApi.users.isBlocking(user.id)) {
-    return
-  }
   await blockUser(user)
-  console.log('blockUser', user, await dbApi.users.isBlocking(user.id))
+  console.debug('blockUser', user, await dbApi.users.isBlocking(user.id))
   await dbApi.users.block(user)
   try {
     new Notification('Blocked user', {

@@ -47,6 +47,7 @@ import SearchTimeline2 from './assets/SearchTimeline2.json'
 import TweetEntity from './assets/TweetEntity.json'
 import TweetDetail13 from './assets/TweetDetail13.json'
 import TweetDetail14 from './assets/TweetDetail14.json'
+import TweetDetail16 from './assets/TweetDetail16.json'
 import dm from './assets/dm.json'
 import UserByScreenName from './assets/UserByScreenName.json'
 
@@ -321,6 +322,10 @@ describe('parseTweets', () => {
     expect(r1[0].id).eq('1908274394037969165')
     const r2 = parseTweets(TweetDetail14).filter((it) => it.is_ad)
     expect(r2[0].id).eq('1908412325008380091')
+  })
+  it('parseTweets for ad(1868231216325148881)', () => {
+    const tweets = parseTweets(TweetDetail16)
+    expect(tweets.find((it) => it.id === '1868231216325148881')?.is_ad).true
   })
 })
 

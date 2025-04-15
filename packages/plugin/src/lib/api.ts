@@ -356,6 +356,7 @@ type SourceType =
   | 'web'
   | 'advertiser'
   | 'grok'
+  | 'simpleads-ui'
   | 'unknown'
 
 export function parseSourceType(source: string): SourceType {
@@ -377,6 +378,9 @@ export function parseSourceType(source: string): SourceType {
   if (source.includes('https://x.ai')) {
     return 'grok'
   }
+  if (source.includes('simpleads-ui')) {
+    return 'simpleads-ui'
+  }
   return 'unknown'
 }
 
@@ -394,21 +398,35 @@ export function parseTweet(
     source: it.source,
   }
   if (context) {
-    const len = context.path.length
-    if (
-      parseSourceType(tweet.source) === 'advertiser' ||
-      (context.path[len - 1] === 'result' &&
-        context.path[len - 2] === 'tweet_results' &&
-        get(
-          context.json,
-          context.path.slice(0, len - 2).concat('promotedMetadata'),
-        ))
-    ) {
+    if (isAd(tweet, context)) {
       tweet.is_ad = true
     }
   }
   return tweet
 }
+
+function isAd(
+  tweet: ParsedTweet,
+  context: { path: string[]; json: any },
+): boolean {
+  const tweetType = parseSourceType(tweet.source)
+  if (tweetType === 'advertiser' || tweetType === 'simpleads-ui') {
+    return true
+  }
+  const index = context.path.indexOf('tweet_results')
+  if (index === -1) {
+    return false
+  }
+  const promotedMetadata = get(
+    context.json,
+    context.path.slice(0, index).concat('promotedMetadata'),
+  )
+  if (promotedMetadata) {
+    return true
+  }
+  return false
+}
+
 export function parseTweets(json: any): ParsedTweet[] {
   const notificationTweets = parseNotificationTweets(json)
   if (notificationTweets.length > 0) {

@@ -110,34 +110,64 @@ export async function refreshAuthInfo() {
   })
 }
 
+type ValueType<T extends any[]> = T extends (infer U)[] ? U : never
 export async function autoCheckPendingUsers() {
+  let isRunning = false
   const interval = setInterval(async () => {
-    for await (const pendingUsers of dbApi.pendingCheckUsers.keys()) {
-      if (pendingUsers.length === 0) {
-        continue
-      }
-      console.debug('autoCheckPendingUsers', pendingUsers)
-      const resp = await fetch(SERVER_URL + '/api/twitter/spam-users/check', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(pendingUsers satisfies CheckSpamUserRequest),
-      })
-      if (!resp.ok) {
+    if (isRunning) {
+      return
+    }
+    isRunning = true
+    let spamUsers: (ValueType<CheckSpamUserResponse> & {
+      user: User
+    })[] = []
+    try {
+      for await (const pendingUsers of dbApi.pendingCheckUsers.keys()) {
+        if (pendingUsers.length === 0) {
+          continue
+        }
+        console.debug('autoCheckPendingUsers', pendingUsers)
+        const resp = await fetch(SERVER_URL + '/api/twitter/spam-users/check', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(pendingUsers satisfies CheckSpamUserRequest),
+        })
+        if (!resp.ok) {
+          await dbApi.pendingCheckUsers.uploaded(
+            pendingUsers.map((it) => it.user.id),
+            60 * 60 * 1, // 1 hour
+          )
+          return
+        }
+        const data = (await resp.json()) as CheckSpamUserResponse
         await dbApi.pendingCheckUsers.uploaded(
           pendingUsers.map((it) => it.user.id),
-          60 * 60 * 1, // 1 hour
         )
-        return
+        await dbApi.spamUsers.record(
+          data.filter((it) => it.isSpamByManualReview).map((it) => it.userId),
+        )
+        spamUsers.push(
+          ...data
+            .filter((it) => it.isSpamByManualReview)
+            .map((spamUser) => ({
+              ...spamUser,
+              user: pendingUsers.find((it) => it.user.id === spamUser.userId)
+                ?.user!,
+            }))
+            .filter((it) => it.user),
+        )
       }
-      const data = (await resp.json()) as CheckSpamUserResponse
-      await dbApi.pendingCheckUsers.uploaded(
-        pendingUsers.map((it) => it.user.id),
-      )
-      await dbApi.spamUsers.record(
-        data.filter((it) => it.isSpamByManualReview).map((it) => it.userId),
-      )
+      for (const spamUser of spamUsers.slice(0, 10)) {
+        if (spamUser.user.blocking || spamUser.user.following) {
+          continue
+        }
+        await blockUser({ id: spamUser.userId })
+        await dbApi.users.block(spamUser.user)
+      }
+    } finally {
+      isRunning = false
     }
   }, 1000 * 10)
   return () => clearInterval(interval)

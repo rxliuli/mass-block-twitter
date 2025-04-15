@@ -201,7 +201,6 @@ describe('spam user', () => {
   })
   it('should be able to record', async () => {
     await dbApi.spamUsers.record(['1'])
-    expect(await dbApi.spamUsers.has('1')).true
-    expect(await dbApi.spamUsers.has('2')).false
+    expect(await dbApi.spamUsers.isSpam(['1', '2'])).toEqual(['1'])
   })
 })

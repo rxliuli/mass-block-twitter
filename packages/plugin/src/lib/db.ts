@@ -449,8 +449,17 @@ class SpamUserDAO {
     )
     await tx.done
   }
-  async has(userId: string): Promise<boolean> {
-    return !!(await dbStore.idb.getKey('spamUsers', userId))
+  async isSpam(userIds: string[]): Promise<string[]> {
+    const tx = dbStore.idb.transaction('spamUsers', 'readonly')
+    const store = tx.objectStore('spamUsers')
+    const spamUserIds = await Promise.all(
+      userIds.map(async (userId) => {
+        const exists = await store.getKey(userId)
+        return exists ? userId : undefined
+      }),
+    )
+    await tx.done
+    return spamUserIds.filter((id): id is string => id !== undefined)
   }
 }
 

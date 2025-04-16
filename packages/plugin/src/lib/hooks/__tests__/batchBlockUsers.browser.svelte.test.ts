@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest'
 import { render, RenderResult } from 'vitest-browser-svelte'
 import { batchBlockUsersMutation } from '../batchBlockUsers'
 import { initI18n } from '$lib/i18n'
-import { dbApi, User } from '$lib/db'
+import { dbApi, initDB, User } from '$lib/db'
 import { AuthInfo } from '@mass-block-twitter/server'
 import { BatchBlockUsersProcessedMeta, ExpectedError } from '$lib/api'
 import { range, uniq } from 'es-toolkit'
@@ -38,6 +38,7 @@ describe('batchBlockUsers', () => {
     screen = render(PageTest)
     localStorage.clear()
     initI18n('en-US')
+    await initDB()
     await dbApi.clear()
     blockUser = vi.fn()
     onProcessed = vi.fn()

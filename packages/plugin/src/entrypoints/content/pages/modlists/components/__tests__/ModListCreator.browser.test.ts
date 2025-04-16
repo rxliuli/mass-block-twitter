@@ -4,7 +4,7 @@ import ModListCreator from '../ModListCreator.svelte'
 import { PageTest } from '$lib/components/test'
 import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
 import { tick } from 'svelte'
-import { dbApi } from '$lib/db'
+import { dbApi, initDB } from '$lib/db'
 import {
   ModListCreateRequest,
   ModListGetCreatedResponse,
@@ -12,7 +12,7 @@ import {
 import { router } from '$lib/components/logic/router'
 
 describe('ModListCreator', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     localStorage.clear()
     vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
       if (new URL(input.toString()).pathname === '/api/modlists/created') {
@@ -22,6 +22,7 @@ describe('ModListCreator', () => {
       }
       throw new Error()
     })
+    await initDB()
   })
   afterEach(() => {
     localStorage.clear()

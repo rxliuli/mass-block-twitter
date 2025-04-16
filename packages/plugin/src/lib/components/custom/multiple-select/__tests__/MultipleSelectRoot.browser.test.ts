@@ -1,18 +1,17 @@
 import { describe, expect, it } from 'vitest'
 import MultipleSelectRootTest from './MultipleSelectRoot.test.svelte'
 import { render } from 'vitest-browser-svelte'
-import { get, writable } from 'svelte/store'
+import { get, Writable, writable } from 'svelte/store'
 import { tick } from 'svelte'
 
 describe('MultipleSelect', () => {
   it('should be select', async () => {
-    const selected = writable([])
+    const selected = writable<string[]>([])
     const screen = render(MultipleSelectRootTest, {
       props: {
         selected,
         keys: ['1', '2', '3'],
       },
-      target: document.body,
     })
     await screen.getByTitle('1').click()
     expect(get(selected)).toEqual(['1'])
@@ -30,7 +29,6 @@ describe('MultipleSelect', () => {
         selected,
         keys: ['1', '2', '3', '4', '5'],
       },
-      target: document.body,
     })
     await screen.getByTitle('1').click()
     screen.container.dispatchEvent(
@@ -59,7 +57,6 @@ describe('MultipleSelect', () => {
         selected,
         keys: ['1', '2', '3', '4', '5'],
       },
-      target: document.body,
     })
     await screen.getByTitle('1').click()
     expect(get(selected)).toEqual(['1'])
@@ -77,7 +74,6 @@ describe('MultipleSelect', () => {
         selected,
         keys: ['1', '2', '3', '4', '5'],
       },
-      target: document.body,
     })
     await screen.getByTitle('1').click()
     screen.container.dispatchEvent(
@@ -99,7 +95,6 @@ describe('MultipleSelect', () => {
         selected,
         keys: ['1', '2', '3', '4', '5'],
       },
-      target: document.body,
     })
     await expect
       .element(screen.getByTitle('selectAllLabel'))
@@ -130,7 +125,6 @@ describe('MultipleSelect', () => {
         selected,
         keys: [],
       },
-      target: document.body,
     })
     await tick()
     await screen.rerender({
@@ -138,5 +132,23 @@ describe('MultipleSelect', () => {
     })
     await screen.getByTitle('1').click()
     expect(get(selected)).toEqual(['1'])
+  })
+  it('should be auto update selected in all selected and not bind to selected', async () => {
+    const selected = writable<string[]>([])
+    const screen = render(MultipleSelectRootTest, {
+      props: {
+        selected: writable(get(selected)),
+        onChange: (newVal: string[]) => {
+          selected.set(newVal)
+        },
+        keys: ['1', '2'],
+      },
+    })
+    await screen.getByTitle('selectAllCheckbox').click()
+    expect(get(selected)).toEqual(['1', '2'])
+    await screen.rerender({
+      keys: ['1', '2', '3', '4', '5'],
+    })
+    expect(get(selected)).toEqual(['1', '2', '3', '4', '5'])
   })
 })

@@ -18,13 +18,16 @@
 
   let selector = $state(new Selector(keys))
   $effect(() => {
+    // when props keys change, update selector's keys
     if (JSON.stringify(keys) === JSON.stringify(selector.getKeys())) {
       return
     }
     selector.setKeys(keys)
     selected = selector.selected
+    onChange?.(selected)
   })
   $effect(() => {
+    // when props selected change, update selector's selected
     selector.setSelected(selected)
   })
   onMount(() => {

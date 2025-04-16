@@ -7,13 +7,15 @@
   let {
     selected,
     keys,
+    onChange,
   }: {
     selected: Writable<string[]>
     keys: string[]
+    onChange?: (newVal: string[]) => void
   } = $props()
 </script>
 
-<MultipleSelectRoot bind:selected={$selected} {keys}>
+<MultipleSelectRoot bind:selected={$selected} {keys} {onChange}>
   <MultipleSelectAll>
     {#snippet child({ mode, onclick })}
       <div>

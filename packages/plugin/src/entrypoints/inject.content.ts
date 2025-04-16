@@ -330,7 +330,7 @@ function observe() {
 }
 
 export default defineContentScript({
-  matches: ['https://x.com/**'],
+  matches: ['https://x.com/**', 'https://mobile.x.com/**'],
   allFrames: true,
   runAt: 'document_start',
   world: 'MAIN',

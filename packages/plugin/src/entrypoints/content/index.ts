@@ -15,7 +15,7 @@ import { eventMessage } from '$lib/shared'
 import { initDB } from '$lib/db'
 
 export default defineContentScript({
-  matches: ['https://x.com/**'],
+  matches: ['https://x.com/**', 'https://mobile.x.com/**'],
   allFrames: true,
   runAt: 'document_start',
   cssInjectionMode: 'ui',

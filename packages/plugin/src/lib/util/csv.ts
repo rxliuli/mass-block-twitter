@@ -1,4 +1,4 @@
-import { Parser } from '@json2csv/plainjs'
+import { stringify } from 'csv-stringify/browser/esm/sync'
 import { parse } from 'csv-parse/browser/esm/sync'
 
 export function generateCSV<T>(
@@ -7,10 +7,12 @@ export function generateCSV<T>(
     fields: (keyof T & string)[]
   },
 ) {
-  const parser = new Parser({
-    fields: options.fields,
+  return stringify(data, {
+    columns: options.fields,
+    header: true,
+    quoted_string: true,
+    bom: true,
   })
-  return parser.parse(data)
 }
 
 export function parseCSV<T>(
@@ -19,7 +21,16 @@ export function parseCSV<T>(
 ) {
   const data = parse(csv, {
     columns: options.fields,
-    skip_empty_lines: true,
+    skipEmptyLines: true,
+    skipRecordsWithEmptyValues: true,
+    fromLine: 2,
+    bom: true,
+    cast: (value, context) => {
+      if (value === '' && !context.quoting) {
+        return
+      }
+      return value
+    },
   })
-  return data.slice(1)
+  return data
 }

@@ -10,8 +10,8 @@ import { toast } from 'svelte-sonner'
 import { ulid } from 'ulidx'
 import { AuthInfo } from '@mass-block-twitter/server'
 import { fileSelector } from '$lib/util/fileSelector'
-import { parse } from 'csv-parse/browser/esm/sync'
 import { getSettings } from '$lib/settings'
+import { parseCSV } from '$lib/util/csv'
 
 function getRandomCount(blockSpeedRange: [number, number]) {
   const [min, max] = blockSpeedRange
@@ -31,22 +31,21 @@ export async function selectImportFile() {
     users = JSON.parse(str) as User[]
   } else {
     try {
-      users = (
-        parse(str, {
-          columns: [
-            'id',
-            'screen_name',
-            'name',
-            'description',
-            'profile_image_url',
-          ],
-        }) as User[]
-      ).slice(1)
+      users = parseCSV(str, {
+        fields: [
+          'id',
+          'screen_name',
+          'name',
+          'description',
+          'profile_image_url',
+        ],
+      }) as User[]
     } catch (err) {
       toast.error(tP('modlists.detail.users.import.invalid'))
       return
     }
   }
+  console.debug('import users', users)
   if (users.length === 0) {
     toast.error(tP('modlists.detail.users.import.empty'))
     return

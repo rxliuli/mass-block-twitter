@@ -58,6 +58,8 @@ Moderation lists are powerful community content management tools that allow user
 
 ### Adding Users to a List
 
+Moderation lists allow you to add users to the list, and subscribers will automatically hide or block when matching these users.
+
 1. Click the **Add Users** button
 2. Search for Twitter users to add
 3. Check relevant users (multiple selection supported)
@@ -72,7 +74,9 @@ Moderation lists are powerful community content management tools that allow user
 
 <iframe class="horizontal-video" src="https://www.youtube.com/embed/zqd9Hjg0JiA?si=dqowzG4FXEoUy844" title="Mass Block Twitter: Import Users from JSON/CSV in Moderation List" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-### Adding Rules to a List
+#### Adding Rules to a List
+
+Moderation lists also allow you to add flexible matching rules, such as matching based on username, description, tweet content, etc. When a matching rule is met, the content will be hidden or blocked automatically.
 
 1. On the moderation list details page, click the Rules tab
 2. Click the **Add rule** button
@@ -80,7 +84,9 @@ Moderation lists are powerful community content management tools that allow user
 4. Set matching conditions and application scope
 5. Save the rule to the list
 
-### Subscribing to Others' Moderation Lists
+![add rule to moderation list](/docs/modlist-add-rule.png)
+
+### Subscribing to Moderation Lists
 
 1. Browse public moderation lists in **Moderation Lists**
 2. Click on an interesting list to view details

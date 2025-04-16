@@ -6,6 +6,7 @@ export default defineBackground(() => {
       id: 'scan',
       title: 'Scan and Block',
       contexts: ['page'],
+      documentUrlPatterns: ['https://x.com/*', 'https://mobile.x.com/*'],
     })
   })
   browser.runtime.setUninstallURL(

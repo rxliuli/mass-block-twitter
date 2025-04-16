@@ -20,7 +20,6 @@
   } from 'lucide-svelte'
   import { toast } from 'svelte-sonner'
   import saveAs from 'file-saver'
-  import { Parser } from '@json2csv/plainjs'
   import { serializeError } from 'serialize-error'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import { shadcnConfig } from '$lib/components/logic/config'
@@ -36,6 +35,7 @@
   import { searchPeople } from '$lib/api/twitter'
   import { ExpectedError } from '$lib/api'
   import { useScroll } from '$lib/components/logic/query'
+  import { downloadUsersToCSV } from '$lib/util/downloadUsersToCSV'
 
   let term = $state('')
   const query = createInfiniteQuery({
@@ -190,11 +190,10 @@
       toast.info($t('search-and-block.toast.exportEmpty'))
       return
     }
-    const parser = new Parser({
-      fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
-    })
-    const csv = parser.parse(selectedRows)
-    saveAs(new Blob([csv]), `block_list_${new Date().toISOString()}.csv`)
+    downloadUsersToCSV(
+      selectedRows,
+      `selected_list_${new Date().toISOString()}.csv`,
+    )
     toast.success(
       $t('search-and-block.toast.exportSuccess', {
         values: {

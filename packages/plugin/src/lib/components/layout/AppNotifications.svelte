@@ -2,8 +2,17 @@
   import { onMount } from 'svelte'
   import { toast } from 'svelte-sonner'
 
-  function showPrivacyPolicy() {
+  async function showPrivacyPolicy() {
+    const local = browser.storage.local
+    // TODO: 兼容旧的 localStorage
     if (localStorage.getItem('privacy-policy-accepted') === 'true') {
+      await local.set({
+        privacyPolicyAccepted: true,
+      })
+      return
+    }
+    const { privacyPolicyAccepted } = await local.get('privacyPolicyAccepted')
+    if (privacyPolicyAccepted) {
       return
     }
     toast.info('Privacy Policy', {
@@ -16,12 +25,16 @@
             'https://mass-block-twitter.rxliuli.com/docs/privacy',
             '_blank',
           )
-          localStorage.setItem('privacy-policy-accepted', 'true')
+          local.set({
+            privacyPolicyAccepted: true,
+          })
         },
       },
       duration: 1000000,
       onDismiss: () => {
-        localStorage.setItem('privacy-policy-accepted', 'true')
+        local.set({
+          privacyPolicyAccepted: true,
+        })
       },
     })
   }

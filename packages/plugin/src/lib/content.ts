@@ -220,6 +220,14 @@ export function quickBlock(options: {
     },
   })
   const timer = setTimeout(async () => {
+    if (!isDismissed) {
+      toast.info('User blocked', {
+        id: toastId,
+        icon: ShieldBanIcon,
+        duration: 3000,
+        cancel: undefined,
+      })
+    }
     if (options.blockUser) {
       await options.blockUser(user)
     } else {
@@ -242,12 +250,5 @@ export function quickBlock(options: {
         updated_at: new Date().toISOString(),
       },
     ])
-    if (!isDismissed) {
-      toast.info('User blocked', {
-        id: toastId,
-        icon: ShieldBanIcon,
-        duration: 3000,
-      })
-    }
   }, 3000)
 }

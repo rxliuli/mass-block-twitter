@@ -1,7 +1,12 @@
 import { get } from 'idb-keyval'
 import { spamContext } from './filter'
-import { ModListSubscribedUserAndRulesResponse } from '@mass-block-twitter/server'
+import {
+  ModListSubscribedUserAndRulesResponse,
+  TwitterSpamReportRequest,
+} from '@mass-block-twitter/server'
 import { dbApi, Tweet, User } from './db'
+// don't working
+// import { defineCustomEventMessaging } from '@webext-core/messaging/page'
 import { defineCustomEventMessage } from './util/CustomEventMessage'
 
 export async function refreshSpamUsers(userIds: string[]): Promise<void> {
@@ -21,4 +26,5 @@ export async function refreshSubscribedModLists(): Promise<void> {
 
 export const eventMessage = defineCustomEventMessage<{
   QuickBlock: (data: { user: User; tweet: Tweet }) => void
+  SpamReportRequest: (data: TwitterSpamReportRequest) => void
 }>()

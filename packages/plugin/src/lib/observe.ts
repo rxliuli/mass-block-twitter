@@ -68,16 +68,12 @@ export function addBlockButton(tweetElement: HTMLElement, tweet: Tweet) {
     const request = await extractSpamReportRequest(tweet)
     // https://github.com/wxt-dev/wxt/discussions/523#discussioncomment-8666726
     // console.log('spamReport main content script', request)
-    globalThis.dispatchEvent(
-      new CustomEvent('SpamReportRequest', {
-        detail: request,
-      }),
-    )
+    eventMessage.sendMessage('SpamReportRequest', request)
     const user = await dbApi.users.get(tweet.user_id)
     if (!user) {
       return
     }
-    await eventMessage.sendMessage('QuickBlock', {
+    eventMessage.sendMessage('QuickBlock', {
       user,
       tweet,
     })
@@ -160,8 +156,4 @@ function extractPageType(): 'timeline' | 'tweetDetail' | 'other' {
     return 'tweetDetail'
   }
   return 'other'
-}
-
-export function alertWarning(tweetElement: HTMLElement, tweet: Tweet) {
-  tweetElement.style.backgroundColor = '#ffeb3b40'
 }

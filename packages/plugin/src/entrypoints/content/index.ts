@@ -63,12 +63,9 @@ export default defineContentScript({
     })
     ui.mount()
 
-    window.addEventListener('SpamReportRequest', (event) => {
-      const request = (event as CustomEvent).detail
-      // console.log('spamReport isolation content script', request)
-      spamReport(request)
-    })
-
+    eventMessage.onMessage('SpamReportRequest', (request) =>
+      spamReport(request),
+    )
     eventMessage.onMessage('QuickBlock', quickBlock)
   },
 })

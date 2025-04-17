@@ -8,6 +8,7 @@ import { dbApi, Tweet, User } from './db'
 // don't working
 // import { defineCustomEventMessaging } from '@webext-core/messaging/page'
 import { defineCustomEventMessage } from './util/CustomEventMessage'
+import { ExternalToast, ToastOptions } from 'svelte-sonner'
 
 export async function refreshSpamUsers(userIds: string[]): Promise<void> {
   const spamUserIds = await dbApi.spamUsers.isSpam(userIds)
@@ -27,4 +28,9 @@ export async function refreshSubscribedModLists(): Promise<void> {
 export const eventMessage = defineCustomEventMessage<{
   QuickBlock: (data: { user: User; tweet: Tweet }) => void
   SpamReportRequest: (data: TwitterSpamReportRequest) => void
+  Toast: (data: {
+    type: 'success' | 'error' | 'warning' | 'info'
+    message: string
+    options?: ExternalToast 
+  } ) => void
 }>()

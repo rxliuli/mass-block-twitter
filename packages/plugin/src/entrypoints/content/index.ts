@@ -13,6 +13,7 @@ import { getLocaleLanguage, initI18n } from '$lib/i18n'
 import { wait } from '@liuli-util/async'
 import { eventMessage } from '$lib/shared'
 import { initDB } from '$lib/db'
+import { toast } from 'svelte-sonner'
 
 export default defineContentScript({
   matches: ['https://x.com/**', 'https://mobile.x.com/**'],
@@ -67,5 +68,8 @@ export default defineContentScript({
       spamReport(request),
     )
     eventMessage.onMessage('QuickBlock', quickBlock)
+    eventMessage.onMessage('Toast', (data) =>
+      toast[data.type](data.message, data.options),
+    )
   },
 })

@@ -1,6 +1,8 @@
 import { dbApi, Tweet } from './db'
 import type { TwitterSpamReportRequest } from '@mass-block-twitter/server'
 import { eventMessage } from './shared'
+import { blockUser, getUserByScreenName } from './api/twitter'
+import { ulid } from 'ulidx'
 
 export function extractCurrentUserId(): string | undefined {
   return /"id_str":"(\d*)"/.exec(document.body.innerHTML)?.[1]
@@ -51,7 +53,7 @@ export function getTweetElement(tweetId: string): HTMLElement | undefined {
   })
 }
 
-export function addBlockButton(tweetElement: HTMLElement, tweet: Tweet) {
+export function addBlockButtonInTweet(tweetElement: HTMLElement, tweet: Tweet) {
   const actionBar = tweetElement.querySelector('[role="group"]')
   if (!actionBar) {
     return
@@ -82,6 +84,60 @@ export function addBlockButton(tweetElement: HTMLElement, tweet: Tweet) {
   requestAnimationFrame(() => {
     customButton.style.opacity = '1'
     customButton.style.transition = 'opacity 0.2s'
+  })
+}
+
+export function addBlockButtonInUser(
+  userElement: HTMLElement,
+  screen_name: string,
+) {
+  const followButton = userElement.querySelector(
+    'button[data-testid$="-follow"], button[data-testid$="-unfollow"]',
+  ) as HTMLElement
+  if (!followButton) {
+    return
+  }
+  const blockButton = followButton.cloneNode() as HTMLButtonElement
+  blockButton.textContent = 'Block'
+  blockButton.style.marginLeft = 'auto'
+  blockButton.style.marginRight = '0.5rem'
+  const height = getComputedStyle(followButton).height
+  blockButton.style.height = height
+  blockButton.style.lineHeight = height
+  blockButton.style.backgroundColor = 'rgb(244, 33, 46)'
+  blockButton.style.color = 'rgb(255, 255, 255)'
+  blockButton.style.fontWeight = 'bold'
+  const container = followButton.parentElement?.parentElement
+  if (!container) {
+    return
+  }
+  container.insertBefore(blockButton, followButton.parentElement)
+  blockButton.addEventListener('click', async () => {
+    const user = await getUserByScreenName(screen_name)
+    if (!user) {
+      return
+    }
+    eventMessage.sendMessage('Toast', {
+      type: 'success',
+      message: `@${user.screen_name} blocked`,
+    })
+    blockButton.remove()
+    await blockUser(user)
+    await dbApi.activitys.record([
+      {
+        id: ulid(),
+        action: 'block',
+        trigger_type: 'manual',
+        match_filter: 'batchSelected',
+        match_type: 'user',
+        user_id: user.id,
+        user_name: user.name,
+        user_screen_name: user.screen_name,
+        user_profile_image_url: user.profile_image_url,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+    ])
   })
 }
 

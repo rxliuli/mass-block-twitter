@@ -11,7 +11,11 @@ import { Activity, dbApi, initDB, User } from '$lib/db'
 import { omit, throttle } from 'es-toolkit'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { asyncLimiting, wait } from '@liuli-util/async'
-import { addBlockButton, extractTweet } from '$lib/observe'
+import {
+  addBlockButtonInTweet,
+  addBlockButtonInUser,
+  extractTweet,
+} from '$lib/observe'
 import css from './style.css?inline'
 import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'
@@ -295,7 +299,7 @@ async function processTweetElement(tweetElement: HTMLElement) {
     )
     return
   }
-  addBlockButton(tweetElement, tweet)
+  addBlockButtonInTweet(tweetElement, tweet)
 }
 
 function eachTweetElements() {
@@ -305,9 +309,43 @@ function eachTweetElements() {
   elements.forEach(processTweetElement)
 }
 
+async function processUserElement(userElement: HTMLElement) {
+  const userLink = userElement.querySelector<HTMLAnchorElement>(
+    'a[href^="/"][role="link"]',
+  )
+  const screen_name = userLink?.href.split('/').pop()
+  if (!screen_name) {
+    return
+  }
+  addBlockButtonInUser(userElement, screen_name)
+}
+
 function observe() {
   injectCSS(css)
   const observer = new MutationObserver((mutations) => {
+    if (
+      new RegExp('/i/communities/\\d+/(members|moderators)').test(
+        location.pathname,
+      )
+    ) {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (
+            node.nodeType === 1 &&
+            node instanceof HTMLElement &&
+            node.getAttribute('data-testid') === 'cellInnerDiv' &&
+            node.querySelector('[data-testid="UserCell"]') !== null &&
+            node.querySelector(
+              'button[data-testid$="-follow"], button[data-testid$="-unfollow"]',
+            ) !== null
+          ) {
+            processUserElement(node)
+          }
+          // throttle(eachTweetElements, 100)
+        })
+      })
+      return
+    }
     mutations.forEach((mutation) => {
       mutation.addedNodes.forEach((node) => {
         if (

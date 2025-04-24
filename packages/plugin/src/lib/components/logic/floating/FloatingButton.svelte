@@ -20,7 +20,7 @@
 
   let top = $state(0)
   onMount(() => {
-    top = document.documentElement.clientHeight / 2 - 40
+    top = document.documentElement.clientHeight / 2 - 100
   })
 
   const settings = useSettings()

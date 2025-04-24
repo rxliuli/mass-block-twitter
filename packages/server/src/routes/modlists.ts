@@ -49,6 +49,45 @@ export const createSchema = z.object({
   twitterUser: userSchema,
   visibility: z.enum(['public', 'protected']).optional(),
 })
+
+function datauriToBuffer(datauri: string) {
+  const match = datauri.match(/^data:(.+?);base64,(.+)$/)
+  if (!match) {
+    throw new Error('Invalid Data URI format')
+  }
+  const mimeType = match[1]
+  const base64Data = match[2]
+
+  const binaryString = atob(base64Data)
+  const len = binaryString.length
+  const bytes = new Uint8Array(len)
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i)
+  }
+  const arrayBuffer = bytes.buffer
+  return {
+    buffer: arrayBuffer,
+    mimeType,
+  }
+}
+
+export async function uploadAvatar(c: Context, datauri: string) {
+  const id = 'modlist-' + ulid() + '.png'
+  const { buffer, mimeType } = datauriToBuffer(datauri)
+  const avatar = await c.env.MY_BUCKET.put(id, buffer, {
+    httpMetadata: {
+      contentType: mimeType,
+    },
+  })
+  if (avatar === null) {
+    throw new Error('Failed to upload avatar')
+  }
+  const protocol =
+    c.env.APP_ENV === 'development'
+      ? 'http://localhost:8787'
+      : 'https://mass-block-twitter-server.rxliuli.com'
+  return `${protocol}/api/image/get/${id}`
+}
 export type ModListCreateRequest = z.infer<typeof createSchema>
 export type ModListCreateResponse = InferSelectModel<typeof modList>
 modlists.post('/create', zValidator('json', createSchema), async (c) => {
@@ -56,6 +95,9 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
   const db = drizzle(c.env.DB)
   const tokenInfo = c.get('jwtPayload')
   const modListId = ulid()
+  if (validated.avatar) {
+    validated.avatar = await uploadAvatar(c, validated.avatar)
+  }
   const [, [r]] = await db.batch([
     _upsertUser(db, validated.twitterUser),
     db
@@ -94,6 +136,9 @@ modlists.put('/update/:id', zValidator('json', updateSchema), async (c) => {
     .limit(1)
   if (_modList.length === 0) {
     return c.json({ code: 'modListNotFound' }, 404)
+  }
+  if (validated.avatar && validated.avatar.startsWith('data:')) {
+    validated.avatar = await uploadAvatar(c, validated.avatar)
   }
   await db
     .update(modList)

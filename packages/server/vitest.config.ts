@@ -20,7 +20,7 @@ export default defineWorkersConfig(async () => {
       include: ['./test/**/*.test.ts'],
       poolOptions: {
         workers: {
-          wrangler: { configPath: './wrangler.toml' },
+          wrangler: { configPath: './wrangler.jsonc' },
           miniflare: {
             bindings: {
               APP_ENV: 'development',

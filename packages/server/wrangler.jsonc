@@ -1,0 +1,45 @@
+{
+  "name": "mass-block-twitter-server",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-01-24",
+
+  // compatibility_flags = [ "nodejs_compat" ]
+
+  "vars": {
+    "APP_ENV": "production"
+  },
+
+  "kv_namespaces": [
+    {
+      "binding": "MY_KV",
+      "id": "fdb2b670b220487f8f946be9ccdae4d2",
+      // preview_id = "797dd25df5064fafb449877cfbbc49c6"
+      "preview_id": "fdb2b670b220487f8f946be9ccdae4d2"
+    }
+  ],
+
+  "r2_buckets": [
+    {
+      "binding": "MY_BUCKET",
+      "bucket_name": "mass-block-twitter",
+      "preview_bucket_name": "mass-block-twitter"
+    }
+  ],
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mass-block-twitter",
+      "database_id": "30a33a44-9313-407c-a2c6-6dd1e1f598c4",
+      "migrations_dir": "drizzle"
+    }
+  ],
+
+  // [ai]
+  // binding = "AI"
+
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}

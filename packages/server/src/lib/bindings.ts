@@ -1,6 +1,7 @@
 export type Bindings = {
   MY_KV: KVNamespace
   DB: D1Database
+  MY_BUCKET: R2Bucket
 
   APP_ENV?: 'development' | 'production'
   PADDEL_API_URL: string

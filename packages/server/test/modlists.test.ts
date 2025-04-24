@@ -164,6 +164,52 @@ describe('modlists', () => {
       expect(r4.length).toBe(1)
       expect(r4[0].id).toBe(r1.id)
     })
+    it('should be able to upload avatar', async () => {
+      const resp1 = await fetch('/api/modlists/create', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...newModList,
+          avatar: 'data:image/jpeg;base64,/test1',
+        } satisfies ModListCreateRequest),
+      })
+      expect(resp1.ok).true
+      const r1 = (await resp1.json()) as ModListCreateResponse
+      expect(r1.avatar).not.undefined
+      expect(r1.avatar?.startsWith('http://')).true
+      const resp2 = await fetch(`/api/modlists/update/${r1.id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...newModList,
+          avatar: r1.avatar,
+        } satisfies ModListCreateRequest),
+      })
+      expect(resp2.ok).true
+      const r2 = await getModList(r1.id)
+      expect(r2.avatar).toBe(r1.avatar)
+      const resp3 = await fetch(`/api/modlists/update/${r1.id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...newModList,
+          avatar: 'data:image/jpeg;base64,/test2',
+        } satisfies ModListCreateRequest),
+      })
+      expect(resp3.ok).true
+      const r3 = await getModList(r1.id)
+      expect(r3.avatar?.startsWith('http://')).true
+      expect(r3.avatar).not.eq(r1.avatar)
+    })
   })
   describe('update', () => {
     let modListId: string

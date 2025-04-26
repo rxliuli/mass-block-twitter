@@ -13,7 +13,6 @@ import { ModListSubscribedUserAndRulesResponse } from '@mass-block-twitter/serve
 import { matchRule, Rule, RuleData } from './rule'
 import { Lru } from 'toad-cache'
 import { memoize, MemoizeCache } from 'es-toolkit'
-import { tweet } from 'node_modules/@mass-block-twitter/server/src/db/schema'
 
 export type FilterResult = 'show' | 'hide' | 'next' | 'block'
 export type FilterData =
@@ -288,7 +287,12 @@ export function grokFilter(): TweetFilter {
   return {
     name: 'grok',
     tweetCondition: (tweet: ParsedTweet) => {
-      if (tweet.text.toLowerCase().includes('@grok')) {
+      const text = tweet.text.toLowerCase()
+      if (
+        text.includes('@grok') ||
+        // Sometimes people make typos and write @gork instead of @grok
+        text.includes('@gork')
+      ) {
         return 'hide'
       }
       if (tweet.user.screen_name === 'grok') {

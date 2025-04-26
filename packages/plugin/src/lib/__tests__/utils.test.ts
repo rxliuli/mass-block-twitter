@@ -48,6 +48,7 @@ import TweetEntity from './assets/TweetEntity.json'
 import TweetDetail13 from './assets/TweetDetail13.json'
 import TweetDetail14 from './assets/TweetDetail14.json'
 import TweetDetail16 from './assets/TweetDetail16.json'
+import TweetDetail17 from './assets/TweetDetail17.json'
 import dm from './assets/dm.json'
 import UserByScreenName from './assets/UserByScreenName.json'
 
@@ -427,6 +428,20 @@ describe('filterTweets', () => {
     )
     const tweets = parseTweets(json)
     expect(tweets.some((it) => it.text.includes('grok'))).false
+  })
+  it('filterTweets for grok(new)', () => {
+    const isShow = flowFilter([grokFilter()])
+    const json = filterTweets(
+      TweetDetail17,
+      (it) =>
+        isShow({
+          type: 'tweet',
+          tweet: it,
+        }).value,
+    )
+    expect(JSON.stringify(json).includes('@grok')).false
+    expect(JSON.stringify(json).includes('@gork')).false
+    expect(JSON.stringify(json).includes('1915714875671691420')).false
   })
 })
 

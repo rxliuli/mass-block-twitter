@@ -81,6 +81,7 @@ export function addBlockButtonInTweet(tweetElement: HTMLElement, tweet: Tweet) {
     })
   })
   actionBar.appendChild(customButton)
+  tweetElement.dataset.spamScanned = 'true'
   requestAnimationFrame(() => {
     customButton.style.opacity = '1'
     customButton.style.transition = 'opacity 0.2s'
@@ -91,6 +92,9 @@ export function addBlockButtonInUser(
   userElement: HTMLElement,
   screen_name: string,
 ) {
+  if (userElement.dataset.quickBlockAdded === 'true') {
+    return
+  }
   const followButton = userElement.querySelector(
     'button[data-testid$="-follow"], button[data-testid$="-unfollow"]',
   ) as HTMLElement
@@ -112,6 +116,7 @@ export function addBlockButtonInUser(
     return
   }
   container.insertBefore(blockButton, followButton.parentElement)
+  userElement.dataset.quickBlockAdded = 'true'
   blockButton.addEventListener('click', async () => {
     const user = await getUserByScreenName(screen_name)
     if (!user) {

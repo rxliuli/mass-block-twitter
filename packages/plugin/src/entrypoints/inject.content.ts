@@ -320,13 +320,25 @@ async function processUserElement(userElement: HTMLElement) {
   addBlockButtonInUser(userElement, screen_name)
 }
 
+function eachUserElements() {
+  const elements = document.querySelectorAll(
+    '[data-testid="cellInnerDiv"]:has([data-testid="UserCell"]):not([data-spam-scanned="true"]):not([data-quick-block-added="true"])',
+  ) as NodeListOf<HTMLElement>
+  elements.forEach(processUserElement)
+}
+
+const eachUserElementsThrottle = throttle(eachUserElements, 100)
+
 function observe() {
   injectCSS(css)
   const observer = new MutationObserver((mutations) => {
     if (
-      new RegExp('/i/communities/\\d+/(members|moderators)').test(
-        location.pathname,
-      )
+      location.pathname.endsWith('/members') ||
+      location.pathname.endsWith('/moderators') ||
+      location.pathname.endsWith('/retweets') ||
+      location.pathname.endsWith('/verified_followers') ||
+      location.pathname.endsWith('/following') ||
+      location.pathname.endsWith('/followers')
     ) {
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
@@ -341,7 +353,7 @@ function observe() {
           ) {
             processUserElement(node)
           }
-          // throttle(eachTweetElements, 100)
+          eachUserElementsThrottle()
         })
       })
       return

@@ -67,7 +67,7 @@ export function renderMarkdown(root: Root, highlighter: Highlighter): string {
     if (href?.startsWith('http')) {
       link.properties.target = '_blank'
     }
-    if (href?.endsWith('.csv')) {
+    if (href?.endsWith('.csv') || href?.endsWith('.json')) {
       link.properties.download = path.basename(href)
     }
   })

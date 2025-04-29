@@ -285,29 +285,14 @@ function handleTweets(): Middleware {
   }
 }
 
-async function processTweetElement(tweetElement: HTMLElement) {
-  if (tweetElement.dataset.spamScanned === 'true') {
-    return
-  }
-  const { tweetId } = extractTweet(tweetElement)
-  const tweet = await dbApi.tweets.get(tweetId)
-  if (!tweet) {
-    console.error(
-      'tweet not found',
-      tweetId,
-      `https://x.com/test/status/${tweetId}`,
-    )
-    return
-  }
-  addBlockButtonInTweet(tweetElement, tweet)
-}
-
 function eachTweetElements() {
   const elements = document.querySelectorAll(
-    '[data-testid="cellInnerDiv"]:has([data-testid="reply"]):not([data-spam-scanned="true"])',
+    '[data-testid="cellInnerDiv"]:has([data-testid="reply"]):not([data-quick-block-added="true"])',
   ) as NodeListOf<HTMLElement>
-  elements.forEach(processTweetElement)
+  elements.forEach(addBlockButtonInTweet)
 }
+
+const eachTweetElementsThrottle = throttle(eachTweetElements, 100)
 
 async function processUserElement(userElement: HTMLElement) {
   const userLink = userElement.querySelector<HTMLAnchorElement>(
@@ -322,7 +307,7 @@ async function processUserElement(userElement: HTMLElement) {
 
 function eachUserElements() {
   const elements = document.querySelectorAll(
-    '[data-testid="cellInnerDiv"]:has([data-testid="UserCell"]):not([data-spam-scanned="true"]):not([data-quick-block-added="true"])',
+    '[data-testid="cellInnerDiv"]:has([data-testid="UserCell"]):not([data-quick-block-added="true"])',
   ) as NodeListOf<HTMLElement>
   elements.forEach(processUserElement)
 }
@@ -366,9 +351,9 @@ function observe() {
           node.getAttribute('data-testid') === 'cellInnerDiv' &&
           node.querySelector('[data-testid="reply"]')
         ) {
-          processTweetElement(node)
+          addBlockButtonInTweet(node)
         }
-        throttle(eachTweetElements, 100)
+        eachTweetElementsThrottle()
       })
     })
   })

@@ -1,7 +1,6 @@
 import {
   ExpectedError,
   getRequestHeaders,
-  getXTransactionId,
   parseUserRecords,
   xClientTransaction,
 } from '$lib/api'

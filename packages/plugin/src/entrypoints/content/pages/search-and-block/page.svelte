@@ -13,13 +13,11 @@
   import {
     DownloadIcon,
     EyeIcon,
-    ImportIcon,
     MenuIcon,
     ShieldBanIcon,
     ShieldCheckIcon,
   } from 'lucide-svelte'
   import { toast } from 'svelte-sonner'
-  import saveAs from 'file-saver'
   import { serializeError } from 'serialize-error'
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
   import { shadcnConfig } from '$lib/components/logic/config'
@@ -27,15 +25,14 @@
   import { navigate } from '$lib/components/logic/router'
   import { userColumns } from './utils/columns'
   import { t } from '$lib/i18n'
-  import {
-    batchBlockUsersMutation,
-    selectImportFile,
-  } from '$lib/hooks/batchBlockUsers'
+  import { batchBlockUsersMutation } from '$lib/hooks/batchBlockUsers'
   import { useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
   import { searchPeople } from '$lib/api/twitter'
   import { ExpectedError } from '$lib/api'
   import { useScroll } from '$lib/components/logic/query'
   import { downloadUsersToCSV } from '$lib/util/downloadUsersToCSV'
+  import { useController } from '$lib/stores/controller'
+  import { wait } from '@liuli-util/async'
 
   let term = $state('')
   const query = createInfiniteQuery({
@@ -204,36 +201,30 @@
     )
   }
 
-  let controller = $state(new AbortController())
-  onDestroy(() => {
-    controller.abort()
-  })
-  async function onBlock(users: User[]) {
-    controller.abort()
-    controller = new AbortController()
-    await batchBlockUsersMutation({
-      controller,
-      users: () => users,
-      blockUser,
-      getAuthInfo: async () => authInfo.value!,
-      onProcessed: async () => {},
-    })
-  }
+  let controller = useController()
+  onDestroy(() => controller.abort())
 
   const authInfo = useAuthInfo()
 
   const blockMutation = createMutation({
     mutationFn: async () => {
-      const users = selectedRows.filter((it) => !it.blocking)
-      const grouped = groupBy(users, (it) => String(it.following))
-      let blockList: User[] = users
-      if ((grouped.true ?? []).length > 0) {
-        const confirmed = confirm($t('search-and-block.confirm.blockFollowing'))
-        if (!confirmed) {
-          blockList = grouped.false ?? []
-        }
-      }
-      await onBlock(blockList)
+      controller.create()
+      await batchBlockUsersMutation({
+        controller,
+        users: () => selectedRows,
+        blockUser,
+        getAuthInfo: async () => authInfo.value!,
+        onProcessed: async (_, meta) => {
+          if (
+            meta.index === meta.total - 1 &&
+            selectedRowKeys.length === filteredData.length
+          ) {
+            if ($query.hasNextPage) {
+              await $query.fetchNextPage()
+            }
+          }
+        },
+      })
       await $query.refetch()
     },
   })

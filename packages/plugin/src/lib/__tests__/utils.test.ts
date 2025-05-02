@@ -51,6 +51,7 @@ import TweetDetail16 from './assets/TweetDetail16.json'
 import TweetDetail17 from './assets/TweetDetail17.json'
 import dm from './assets/dm.json'
 import UserByScreenName from './assets/UserByScreenName.json'
+import TweetDetail18 from './assets/TweetDetail18.json'
 
 describe('parseUserRecords', () => {
   it('parse timeline', () => {
@@ -327,6 +328,10 @@ describe('parseTweets', () => {
   it('parseTweets for ad(1868231216325148881)', () => {
     const tweets = parseTweets(TweetDetail16)
     expect(tweets.find((it) => it.id === '1868231216325148881')?.is_ad).true
+  })
+  it('parseTweets for detail 18', () => {
+    const tweets = parseTweets(TweetDetail18)
+    expect(tweets).length(2)
   })
 })
 

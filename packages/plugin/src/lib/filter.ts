@@ -3,7 +3,6 @@ import {
   MUTED_WORD_RULES_KEY,
   MUTED_WORDS_KEY,
   ParsedTweet,
-  parseSourceType,
 } from './api'
 import { User } from './db'
 import { extractCurrentUserId } from './observe'

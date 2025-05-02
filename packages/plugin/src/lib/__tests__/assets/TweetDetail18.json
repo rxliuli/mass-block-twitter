@@ -1,0 +1,484 @@
+{
+  "data": {
+    "threaded_conversation_with_injections_v2": {
+      "instructions": [
+        {
+          "type": "TimelineClearCache"
+        },
+        {
+          "type": "TimelineAddEntries",
+          "entries": [
+            {
+              "entryId": "tweet-1918192062505357329",
+              "sortIndex": "1918209559537647616",
+              "content": {
+                "entryType": "TimelineTimelineItem",
+                "__typename": "TimelineTimelineItem",
+                "itemContent": {
+                  "itemType": "TimelineTweet",
+                  "__typename": "TimelineTweet",
+                  "tweet_results": {
+                    "result": {
+                      "__typename": "Tweet",
+                      "rest_id": "1918192062505357329",
+                      "has_birdwatch_notes": false,
+                      "core": {
+                        "user_results": {
+                          "result": {
+                            "__typename": "User",
+                            "id": "VXNlcjoxMDcyMTA5NDE3MjAwNDE0NzIw",
+                            "rest_id": "1072109417200414720",
+                            "affiliates_highlighted_label": {},
+                            "has_graduated_access": true,
+                            "is_blue_verified": true,
+                            "legacy": {
+                              "following": false,
+                              "can_dm": true,
+                              "can_media_tag": true,
+                              "created_at": "Mon Dec 10 12:42:58 +0000 2018",
+                              "default_profile": false,
+                              "default_profile_image": false,
+                              "description": "调查记者，主持人。油管频道地址：https://t.co/WfO3vZ0ygY?amp=1，Facebook地址：https://t.co/QO4mprdzUL，TikTok地址：https://t.co/chl5sh7Cfa",
+                              "entities": {
+                                "description": {
+                                  "urls": []
+                                },
+                                "url": {
+                                  "urls": [
+                                    {
+                                      "url": "https://t.co/DrbI80kqkz",
+                                      "indices": [
+                                        0,
+                                        23
+                                      ]
+                                    }
+                                  ]
+                                }
+                              },
+                              "fast_followers_count": 0,
+                              "favourites_count": 379,
+                              "followers_count": 1387984,
+                              "friends_count": 643,
+                              "has_custom_timelines": true,
+                              "is_translator": false,
+                              "listed_count": 3720,
+                              "location": "",
+                              "media_count": 4269,
+                              "name": "王局志安",
+                              "normal_followers_count": 1387984,
+                              "pinned_tweet_ids_str": [
+                                "1876486307205251482"
+                              ],
+                              "possibly_sensitive": false,
+                              "profile_banner_url": "https://pbs.twimg.com/profile_banners/1072109417200414720/1544452109",
+                              "profile_image_url_https": "https://pbs.twimg.com/profile_images/1527433965824802816/PgXCsVL6_normal.jpg",
+                              "profile_interstitial_type": "",
+                              "screen_name": "wangzhian8848",
+                              "statuses_count": 15788,
+                              "translator_type": "none",
+                              "url": "https://t.co/DrbI80kqkz",
+                              "verified": false,
+                              "want_retweets": false,
+                              "withheld_in_countries": []
+                            },
+                            "parody_commentary_fan_label": "None",
+                            "profile_image_shape": "Circle",
+                            "tipjar_settings": {
+                              "is_enabled": true
+                            },
+                            "super_follow_eligible": true
+                          }
+                        }
+                      },
+                      "unmention_data": {},
+                      "edit_control": {
+                        "edit_tweet_ids": [
+                          "1918192062505357329"
+                        ],
+                        "editable_until_msecs": "1746171200000",
+                        "is_edit_eligible": true,
+                        "edits_remaining": "5"
+                      },
+                      "is_translatable": true,
+                      "views": {
+                        "count": "18536",
+                        "state": "EnabledWithCount"
+                      },
+                      "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                      "grok_analysis_button": true,
+                      "legacy": {
+                        "bookmark_count": 11,
+                        "bookmarked": false,
+                        "created_at": "Fri May 02 06:33:20 +0000 2025",
+                        "conversation_id_str": "1918192062505357329",
+                        "display_text_range": [
+                          0,
+                          147
+                        ],
+                        "entities": {
+                          "hashtags": [],
+                          "media": [
+                            {
+                              "display_url": "pic.x.com/3xoCRMpQxU",
+                              "expanded_url": "https://x.com/wangzhian8848/status/1918192062505357329/video/1",
+                              "id_str": "1918191997397200896",
+                              "indices": [
+                                148,
+                                171
+                              ],
+                              "media_key": "13_1918191997397200896",
+                              "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1918191997397200896/img/448AZr749dy1W_iD.jpg",
+                              "type": "video",
+                              "url": "https://t.co/3xoCRMpQxU",
+                              "additional_media_info": {
+                                "monetizable": false
+                              },
+                              "ext_media_availability": {
+                                "status": "Available"
+                              },
+                              "sizes": {
+                                "large": {
+                                  "h": 480,
+                                  "w": 848,
+                                  "resize": "fit"
+                                },
+                                "medium": {
+                                  "h": 480,
+                                  "w": 848,
+                                  "resize": "fit"
+                                },
+                                "small": {
+                                  "h": 385,
+                                  "w": 680,
+                                  "resize": "fit"
+                                },
+                                "thumb": {
+                                  "h": 150,
+                                  "w": 150,
+                                  "resize": "crop"
+                                }
+                              },
+                              "original_info": {
+                                "height": 480,
+                                "width": 848,
+                                "focus_rects": []
+                              },
+                              "allow_download_status": {
+                                "allow_download": true
+                              },
+                              "video_info": {
+                                "aspect_ratio": [
+                                  53,
+                                  30
+                                ],
+                                "duration_millis": 106509,
+                                "variants": [
+                                  {
+                                    "content_type": "application/x-mpegURL",
+                                    "url": "https://video.twimg.com/amplify_video/1918191997397200896/pl/ADAou1WlSab3Kxan.m3u8?tag=16&v=ad5"
+                                  },
+                                  {
+                                    "bitrate": 288000,
+                                    "content_type": "video/mp4",
+                                    "url": "https://video.twimg.com/amplify_video/1918191997397200896/vid/avc1/476x270/DvOpWlnGfnwhRK0h.mp4?tag=16"
+                                  },
+                                  {
+                                    "bitrate": 832000,
+                                    "content_type": "video/mp4",
+                                    "url": "https://video.twimg.com/amplify_video/1918191997397200896/vid/avc1/636x360/gzlVFI87JpHKSNkU.mp4?tag=16"
+                                  },
+                                  {
+                                    "bitrate": 2176000,
+                                    "content_type": "video/mp4",
+                                    "url": "https://video.twimg.com/amplify_video/1918191997397200896/vid/avc1/848x480/BxAfK_eynMc4l6HD.mp4?tag=16"
+                                  }
+                                ]
+                              },
+                              "media_results": {
+                                "result": {
+                                  "media_key": "13_1918191997397200896"
+                                }
+                              }
+                            }
+                          ],
+                          "symbols": [],
+                          "timestamps": [],
+                          "urls": [],
+                          "user_mentions": []
+                        },
+                        "extended_entities": {
+                          "media": [
+                            {
+                              "display_url": "pic.x.com/3xoCRMpQxU",
+                              "expanded_url": "https://x.com/wangzhian8848/status/1918192062505357329/video/1",
+                              "id_str": "1918191997397200896",
+                              "indices": [
+                                148,
+                                171
+                              ],
+                              "media_key": "13_1918191997397200896",
+                              "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/1918191997397200896/img/448AZr749dy1W_iD.jpg",
+                              "type": "video",
+                              "url": "https://t.co/3xoCRMpQxU",
+                              "additional_media_info": {
+                                "monetizable": false
+                              },
+                              "ext_media_availability": {
+                                "status": "Available"
+                              },
+                              "sizes": {
+                                "large": {
+                                  "h": 480,
+                                  "w": 848,
+                                  "resize": "fit"
+                                },
+                                "medium": {
+                                  "h": 480,
+                                  "w": 848,
+                                  "resize": "fit"
+                                },
+                                "small": {
+                                  "h": 385,
+                                  "w": 680,
+                                  "resize": "fit"
+                                },
+                                "thumb": {
+                                  "h": 150,
+                                  "w": 150,
+                                  "resize": "crop"
+                                }
+                              },
+                              "original_info": {
+                                "height": 480,
+                                "width": 848,
+                                "focus_rects": []
+                              },
+                              "allow_download_status": {
+                                "allow_download": true
+                              },
+                              "video_info": {
+                                "aspect_ratio": [
+                                  53,
+                                  30
+                                ],
+                                "duration_millis": 106509,
+                                "variants": [
+                                  {
+                                    "content_type": "application/x-mpegURL",
+                                    "url": "https://video.twimg.com/amplify_video/1918191997397200896/pl/ADAou1WlSab3Kxan.m3u8?tag=16&v=ad5"
+                                  },
+                                  {
+                                    "bitrate": 288000,
+                                    "content_type": "video/mp4",
+                                    "url": "https://video.twimg.com/amplify_video/1918191997397200896/vid/avc1/476x270/DvOpWlnGfnwhRK0h.mp4?tag=16"
+                                  },
+                                  {
+                                    "bitrate": 832000,
+                                    "content_type": "video/mp4",
+                                    "url": "https://video.twimg.com/amplify_video/1918191997397200896/vid/avc1/636x360/gzlVFI87JpHKSNkU.mp4?tag=16"
+                                  },
+                                  {
+                                    "bitrate": 2176000,
+                                    "content_type": "video/mp4",
+                                    "url": "https://video.twimg.com/amplify_video/1918191997397200896/vid/avc1/848x480/BxAfK_eynMc4l6HD.mp4?tag=16"
+                                  }
+                                ]
+                              },
+                              "media_results": {
+                                "result": {
+                                  "media_key": "13_1918191997397200896"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "favorite_count": 35,
+                        "favorited": false,
+                        "full_text": "5月1日，特朗普发帖称：“我刚抵达阿拉巴马，将在阿拉巴马大学发表毕业典礼演讲。演说继续保持特朗普自信自吹的风格，强调第一届“不待见自己”的科技界大佬们现在都“kissing my ass”。鼓励学生突破体制相信直觉，说自己是唯一能当总统的商人，“把做商人的直觉用到政治上”，所以能看到这些成就。 https://t.co/3xoCRMpQxU",
+                        "is_quote_status": false,
+                        "lang": "zh",
+                        "possibly_sensitive": false,
+                        "possibly_sensitive_editable": true,
+                        "quote_count": 2,
+                        "reply_count": 18,
+                        "retweet_count": 5,
+                        "retweeted": false,
+                        "user_id_str": "1072109417200414720",
+                        "id_str": "1918192062505357329"
+                      },
+                      "quick_promote_eligibility": {
+                        "eligibility": "IneligibleNotProfessional"
+                      }
+                    }
+                  },
+                  "tweetDisplayType": "Tweet"
+                },
+                "clientEventInfo": {
+                  "component": "tweet",
+                  "element": "tweet"
+                }
+              }
+            },
+            {
+              "entryId": "tweet-1918196486539755905",
+              "sortIndex": "1918209559537647606",
+              "content": {
+                "entryType": "TimelineTimelineItem",
+                "__typename": "TimelineTimelineItem",
+                "itemContent": {
+                  "itemType": "TimelineTweet",
+                  "__typename": "TimelineTweet",
+                  "tweet_results": {
+                    "result": {
+                      "__typename": "Tweet",
+                      "rest_id": "1918196486539755905",
+                      "has_birdwatch_notes": false,
+                      "core": {
+                        "user_results": {
+                          "result": {
+                            "__typename": "User",
+                            "id": "VXNlcjo4MjQ1ODYzMjE1NDkwNzAzMzY=",
+                            "rest_id": "824586321549070336",
+                            "affiliates_highlighted_label": {},
+                            "has_graduated_access": true,
+                            "is_blue_verified": false,
+                            "legacy": {
+                              "following": false,
+                              "can_dm": true,
+                              "can_media_tag": true,
+                              "created_at": "Thu Jan 26 11:54:33 +0000 2017",
+                              "default_profile": true,
+                              "default_profile_image": false,
+                              "description": "没什么好说的，什么都不想说。",
+                              "entities": {
+                                "description": {
+                                  "urls": []
+                                }
+                              },
+                              "fast_followers_count": 0,
+                              "favourites_count": 10150,
+                              "followers_count": 731,
+                              "friends_count": 55,
+                              "has_custom_timelines": false,
+                              "is_translator": false,
+                              "listed_count": 6,
+                              "location": "Bangkok",
+                              "media_count": 226,
+                              "name": "白天不懂夜的黑",
+                              "normal_followers_count": 731,
+                              "pinned_tweet_ids_str": [],
+                              "possibly_sensitive": false,
+                              "profile_image_url_https": "https://pbs.twimg.com/profile_images/1693406472234024960/e2bejTb-_normal.jpg",
+                              "profile_interstitial_type": "",
+                              "screen_name": "zymz22334455",
+                              "statuses_count": 15760,
+                              "translator_type": "none",
+                              "verified": false,
+                              "want_retweets": false,
+                              "withheld_in_countries": []
+                            },
+                            "parody_commentary_fan_label": "Parody",
+                            "profile_image_shape": "Circle",
+                            "tipjar_settings": {}
+                          }
+                        }
+                      },
+                      "unmention_data": {},
+                      "edit_control": {
+                        "edit_tweet_ids": [
+                          "1918196486539755905"
+                        ],
+                        "editable_until_msecs": "1746172255000",
+                        "is_edit_eligible": false,
+                        "edits_remaining": "5"
+                      },
+                      "is_translatable": true,
+                      "views": {
+                        "count": "333",
+                        "state": "EnabledWithCount"
+                      },
+                      "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+                      "grok_analysis_button": true,
+                      "legacy": {
+                        "bookmark_count": 0,
+                        "bookmarked": false,
+                        "created_at": "Fri May 02 06:50:55 +0000 2025",
+                        "conversation_id_str": "1918192062505357329",
+                        "display_text_range": [
+                          15,
+                          35
+                        ],
+                        "entities": {
+                          "hashtags": [],
+                          "symbols": [],
+                          "timestamps": [],
+                          "urls": [],
+                          "user_mentions": [
+                            {
+                              "id_str": "1072109417200414720",
+                              "name": "王局志安",
+                              "screen_name": "wangzhian8848",
+                              "indices": [
+                                0,
+                                14
+                              ]
+                            }
+                          ]
+                        },
+                        "favorite_count": 0,
+                        "favorited": false,
+                        "full_text": "@wangzhian8848 CIA发布中文视频招募中国官员，好夸张。",
+                        "in_reply_to_screen_name": "wangzhian8848",
+                        "in_reply_to_status_id_str": "1918192062505357329",
+                        "in_reply_to_user_id_str": "1072109417200414720",
+                        "is_quote_status": false,
+                        "lang": "zh",
+                        "quote_count": 0,
+                        "reply_count": 0,
+                        "retweet_count": 0,
+                        "retweeted": false,
+                        "user_id_str": "824586321549070336",
+                        "id_str": "1918196486539755905"
+                      },
+                      "quick_promote_eligibility": {
+                        "eligibility": "IneligibleNotProfessional"
+                      }
+                    }
+                  },
+                  "tweetDisplayType": "Tweet"
+                },
+                "clientEventInfo": {
+                  "component": "tweet",
+                  "element": "tweet"
+                }
+              }
+            },
+            {
+              "entryId": "cursor-bottom-1918209559537647605",
+              "sortIndex": "1918209559537647605",
+              "content": {
+                "entryType": "TimelineTimelineCursor",
+                "__typename": "TimelineTimelineCursor",
+                "value": "DAAFCgABGp7Zbmj___MLAAIAAAAwRW1QQzZ3QUFBZlEvZ0dKTjB2R3AvQUFBQUFJYW5zMktuWnJCZ1JxZXlZU1FteEFSCAADAAAAAgAA",
+                "cursorType": "Bottom"
+              }
+            }
+          ]
+        },
+        {
+          "type": "TimelineTerminateTimeline",
+          "direction": "Top"
+        },
+        {
+          "type": "TimelineTerminateTimeline",
+          "direction": "Bottom"
+        }
+      ],
+      "metadata": {
+        "scribeConfig": {
+          "page": "ranked_replies"
+        }
+      }
+    }
+  }
+}

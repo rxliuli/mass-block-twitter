@@ -83,8 +83,8 @@ export async function batchBlockUsers<T extends User>(
 }
 
 const urlSchema = z.object({
-  display_url: z.string(),
-  expanded_url: z.string(),
+  display_url: z.string().optional(),
+  expanded_url: z.string().optional(),
   url: z.string(),
 })
 
@@ -142,7 +142,9 @@ export function parseTimelineUser(
     twitterUser.legacy.entities?.description?.urls
   ) {
     twitterUser.legacy.entities.description.urls.forEach((url) => {
-      user.description = user.description?.replace(url.url, url.expanded_url)
+      if (url.expanded_url) {
+        user.description = user.description?.replace(url.url, url.expanded_url)
+      }
     })
   }
   if (twitterUser.legacy.url && twitterUser.legacy.entities?.url?.urls) {
@@ -203,7 +205,9 @@ function parseNotificationUser(
   }
   if (twitterUser.description && twitterUser.entities?.description.urls) {
     twitterUser.entities.description.urls.forEach((url) => {
-      user.description = user.description?.replace(url.url, url.expanded_url)
+      if (url.expanded_url) {
+        user.description = user.description?.replace(url.url, url.expanded_url)
+      }
     })
   }
   if (twitterUser.url && twitterUser.entities?.url?.urls) {
@@ -299,7 +303,9 @@ function parseLegacyTweet(
   }
   if (it.entities.urls) {
     it.entities.urls.forEach((url) => {
-      tweet.text = tweet.text.replace(url.url, url.expanded_url)
+      if (url.expanded_url) {
+        tweet.text = tweet.text.replace(url.url, url.expanded_url)
+      }
     })
   }
   if (it.entities.media) {

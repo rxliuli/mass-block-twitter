@@ -12,13 +12,24 @@ import { SERVER_URL } from './constants'
 import { ModListSubscribedUsersKey } from './shared'
 import { crossFetch } from './query'
 import { dbApi, Tweet, User } from './db'
-import { chunk } from 'es-toolkit'
 import * as localModlistSubscriptions from '$lib/localModlistSubscriptions'
 import { getTweetElement } from './observe'
 import { ShieldBanIcon, ShieldCheckIcon } from 'lucide-svelte'
 import { toast } from 'svelte-sonner'
 import { ulid } from 'ulidx'
-import { blockUser } from './api/twitter'
+import {
+  blockUser,
+  getBlockedUsers,
+  getCommunityInfo,
+  getCommunityMembers,
+  getUserBlueVerifiedFollowers,
+  getUserByScreenName,
+  getUserFollowers,
+  getUserFollowing,
+  searchPeople,
+  unblockUser,
+} from './api/twitter'
+import { xClientTransaction } from './api'
 
 export async function refreshModListSubscribedUsers(
   force?: boolean,
@@ -171,6 +182,126 @@ export async function autoCheckPendingUsers() {
     }
   }, 1000 * 10)
   return () => clearInterval(interval)
+}
+
+interface Task {
+  name: string
+  fn: () => Promise<any>
+  status: 'idle' | 'running' | 'success' | 'error'
+  collapsibled: boolean
+  result?: any
+  error?: Error
+}
+
+export const tasks: Pick<Task, 'name' | 'fn'>[] = [
+  {
+    name: 'getXTransactionId',
+    fn: () =>
+      xClientTransaction.generateTransactionId(
+        'POST',
+        'https://x.com/i/api/1.1/blocks/create.json',
+      ),
+  },
+  {
+    name: 'getBlockedUsers',
+    fn: () => getBlockedUsers({ count: 10 }),
+  },
+  {
+    name: 'blockUser',
+    fn: () => blockUser({ id: '25073877' }),
+  },
+  {
+    name: 'unblockUser',
+    fn: () => unblockUser('25073877'),
+  },
+  {
+    name: 'searchPeople',
+    fn: () =>
+      searchPeople({
+        term: 'trump',
+        count: 10,
+      }),
+  },
+  {
+    name: 'getCommunityInfo',
+    fn: () => getCommunityInfo({ communityId: '1900366536683987325' }),
+  },
+  {
+    name: 'getCommunityMembers',
+    fn: () => getCommunityMembers({ communityId: '1900366536683987325' }),
+  },
+  {
+    name: 'getUserBlueVerifiedFollowers',
+    fn: () => getUserBlueVerifiedFollowers({ userId: '736267842681602048' }),
+  },
+  {
+    name: 'getUserFollowers',
+    fn: () => getUserFollowers({ userId: '736267842681602048' }),
+  },
+  {
+    name: 'getUserFollowing',
+    fn: () => getUserFollowing({ userId: '736267842681602048' }),
+  },
+  {
+    name: 'getUserByScreenName',
+    fn: () => getUserByScreenName('rxliuli'),
+  },
+]
+
+async function runTasks() {
+  const r: Task[] = []
+  for (let i = 0; i < tasks.length; i++) {
+    const task = tasks[i]
+    try {
+      const result = await task.fn()
+      r.push({
+        name: task.name,
+        fn: task.fn,
+        status: 'success',
+        result,
+        collapsibled: true,
+      })
+    } catch (error) {
+      r.push({
+        name: task.name,
+        fn: task.fn,
+        status: 'error',
+        error: error as Error,
+        collapsibled: true,
+      })
+    }
+  }
+  return r
+}
+
+export async function autoCheckTwitterAPI() {
+  if (!localStorage.getItem('CheckTwitterAPI')) {
+    return
+  }
+  setTimeout(async () => {
+    const lastCheck = localStorage.getItem('lastCheckTwitterAPI')
+    if (lastCheck) {
+      const lastCheckDate = new Date(lastCheck)
+      const now = new Date()
+      const diff = now.getTime() - lastCheckDate.getTime()
+      if (diff < 1000 * 60 * 60 * 24) {
+        return
+      }
+    }
+    const r = await runTasks()
+    const errorTasks = r.filter((it) => it.status === 'error')
+    if (errorTasks.length > 0) {
+      console.error('errorTasks', errorTasks)
+      toast.error(
+        `Failed to check twitter api, ${errorTasks.length} tasks failed`,
+        {
+          description: errorTasks.map((it) => it.name).join('\n'),
+          duration: 100000,
+        },
+      )
+    }
+    localStorage.setItem('lastCheckTwitterAPI', new Date().toISOString())
+  }, 1000 * 3)
 }
 
 export async function spamReport(request: TwitterSpamReportRequest) {

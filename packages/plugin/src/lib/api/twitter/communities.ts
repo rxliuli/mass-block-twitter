@@ -8,6 +8,7 @@ import { extractObjects } from '$lib/util/extractObjects'
 import { once } from '@liuli-util/async'
 import { get } from 'es-toolkit/compat'
 import { z } from 'zod'
+import { fetchAsset } from './utils'
 
 export type CommunityMember = User & {
   community_role: 'Member' | 'Moderator' | 'Admin'
@@ -70,7 +71,7 @@ export function extractParamsData(scriptContent: string) {
 export async function extractCommunityGraphqlId(
   name: 'membersSliceTimeline_Query' | 'CommunityQuery',
 ): Promise<string | undefined> {
-  const swStr = await (await fetch('https://x.com/sw.js')).text()
+  const swStr = await fetchAsset('https://x.com/sw.js')
   const communitiesRegex = new RegExp(
     '"(https://abs.twimg.com/responsive-web/client-web/bundle.Communities-\\w+?.\\w+?.js)"',
     'g',
@@ -80,7 +81,7 @@ export async function extractCommunityGraphqlId(
     scriptUrls.push(it[1])
   })
   for (const url of scriptUrls) {
-    const scriptStr = await (await fetch(url)).text()
+    const scriptStr = await fetchAsset(url)
     const r = extractParamsData(scriptStr)
     if (r?.name === name) {
       return r.id

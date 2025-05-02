@@ -1,8 +1,15 @@
 import { memoize } from 'es-toolkit'
 
+export const fetchAsset = memoize(async (url: string) => {
+  const resp = await fetch(url)
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch asset ${url}`)
+  }
+  return resp.text()
+})
+
 export async function extractAllFlags() {
-  const resp = await fetch('https://x.com/home')
-  const text = await resp.text()
+  const text = await fetchAsset('https://x.com/home')
   const regex = /"([^"]+)":\s*{\s*"value"\s*:\s*([^,}]+)\s*}/g
   let match
   const res: Record<string, string | boolean | number> = {}
@@ -53,7 +60,7 @@ export async function extractMainScript(): Promise<string> {
       'link[href^="https://abs.twimg.com/responsive-web/client-web/main."] is required',
     )
   }
-  const text = await (await fetch(linkEl.href)).text()
+  const text = await fetchAsset(linkEl.href)
   return text
 }
 

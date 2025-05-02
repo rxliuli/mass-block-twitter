@@ -16,6 +16,7 @@
   import { Badge } from '$lib/components/ui/badge'
   import { Loader2, ChevronDown } from 'lucide-svelte'
   import { cn } from '$lib/utils'
+  import { tasks as _tasks } from '$lib/content'
 
   interface Task {
     name: string
@@ -25,61 +26,6 @@
     result?: any
     error?: Error
   }
-
-  const _tasks: Pick<Task, 'name' | 'fn'>[] = [
-    {
-      name: 'getXTransactionId',
-      fn: () =>
-        xClientTransaction.generateTransactionId(
-          'POST',
-          'https://x.com/i/api/1.1/blocks/create.json',
-        ),
-    },
-    {
-      name: 'getBlockedUsers',
-      fn: () => getBlockedUsers({ count: 10 }),
-    },
-    {
-      name: 'blockUser',
-      fn: () => blockUser({ id: '25073877' }),
-    },
-    {
-      name: 'unblockUser',
-      fn: () => unblockUser('25073877'),
-    },
-    {
-      name: 'searchPeople',
-      fn: () =>
-        searchPeople({
-          term: 'trump',
-          count: 10,
-        }),
-    },
-    {
-      name: 'getCommunityInfo',
-      fn: () => getCommunityInfo({ communityId: '1900366536683987325' }),
-    },
-    {
-      name: 'getCommunityMembers',
-      fn: () => getCommunityMembers({ communityId: '1900366536683987325' }),
-    },
-    {
-      name: 'getUserBlueVerifiedFollowers',
-      fn: () => getUserBlueVerifiedFollowers({ userId: '736267842681602048' }),
-    },
-    {
-      name: 'getUserFollowers',
-      fn: () => getUserFollowers({ userId: '736267842681602048' }),
-    },
-    {
-      name: 'getUserFollowing',
-      fn: () => getUserFollowing({ userId: '736267842681602048' }),
-    },
-    {
-      name: 'getUserByScreenName',
-      fn: () => getUserByScreenName('rxliuli'),
-    },
-  ]
 
   const tasks: Task[] = $state(
     _tasks.map((task) => ({ ...task, status: 'idle', collapsibled: true })),

@@ -3,6 +3,7 @@ import App from './app.svelte'
 import './app.css'
 import {
   autoCheckPendingUsers,
+  autoCheckTwitterAPI,
   quickBlock,
   refreshAuthInfo,
   refreshModListSubscribedUsers,
@@ -25,6 +26,7 @@ export default defineContentScript({
     refreshModListSubscribedUsers()
     refreshAuthInfo()
     autoCheckPendingUsers()
+    autoCheckTwitterAPI()
 
     await wait(() => !!document.body)
 

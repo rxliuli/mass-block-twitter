@@ -1,5 +1,6 @@
 // Copy from https://github.com/iSarabjitDhiman/XClientTransaction/blob/master/x_client_transaction/transaction.py
 import { once } from '$lib/util/once'
+import { fetchAsset } from '../twitter/utils'
 import { Cubic } from './cubic'
 import { interpolate } from './interpolate'
 import { convertRotationToMatrix } from './rotation'
@@ -17,7 +18,7 @@ export class ClientTransaction {
   private animationKey!: string
 
   async initResponse() {
-    const html = await (await fetch('https://x.com/home')).text()
+    const html = await fetchAsset('https://x.com/home')
     this.homePageResponse = new DOMParser().parseFromString(html, 'text/html')
   }
 
@@ -49,12 +50,7 @@ export class ClientTransaction {
       const onDemandFileUrl = `https://abs.twimg.com/responsive-web/client-web/ondemand.s.${match[1]}a.js`
 
       try {
-        const fetchResponse = await fetch(onDemandFileUrl)
-        if (!fetchResponse.ok) {
-          throw new Error(`HTTP error: ${fetchResponse.status}`)
-        }
-
-        const scriptContent = await fetchResponse.text()
+        const scriptContent = await fetchAsset(onDemandFileUrl)
         const indicesRegex = /\(\w{1}\[(\d{1,2})\],\s*16\)/gm
         let indicesMatch
 

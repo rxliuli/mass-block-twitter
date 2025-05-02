@@ -75,11 +75,22 @@
     if (range && activeThumb) {
       const currentValue = value as [number, number]
       const newRangeValue: [number, number] = [...currentValue]
+
+      // Update the active thumb's value
       if (activeThumb === 'start') {
-        newRangeValue[0] = Math.min(clampedValue, currentValue[1])
+        newRangeValue[0] = clampedValue
       } else {
-        newRangeValue[1] = Math.max(clampedValue, currentValue[0])
+        newRangeValue[1] = clampedValue
       }
+
+      // If the values are swapped, swap them and switch active thumb
+      if (newRangeValue[0] > newRangeValue[1]) {
+        const temp = newRangeValue[0]
+        newRangeValue[0] = newRangeValue[1]
+        newRangeValue[1] = temp
+        activeThumb = activeThumb === 'start' ? 'end' : 'start'
+      }
+
       if (JSON.stringify(newRangeValue) !== JSON.stringify(value)) {
         value = newRangeValue
         ;(onValueChange as (value: [number, number]) => void)?.(newRangeValue)

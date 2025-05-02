@@ -1,13 +1,11 @@
 import {
   getRequestHeaders,
-  getXTransactionId,
   parseUserRecords,
+  xClientTransaction,
 } from '$lib/api'
 import { User } from '$lib/db'
 import { extractCurrentUserId } from '$lib/observe'
-import { z } from 'zod'
 import { extractGQLArgsByName } from './utils'
-import { extractObjects } from '$lib/util/extractObjects'
 import { parseTimelineUserNextCursor } from './user'
 
 // https://x.com/i/api/1.1/strato/column/User/<userId>/search/searchSafetyReadonly
@@ -91,7 +89,10 @@ export async function searchPeople(options: {
   url.searchParams.set('features', JSON.stringify(args.flags))
 
   const headers = getRequestHeaders()
-  const xTransactionId = await getXTransactionId()(url.pathname, 'GET')
+  const xTransactionId = await xClientTransaction.generateTransactionId(
+    'GET',
+    url.pathname,
+  )
   const r = await fetch(url, {
     headers: {
       authorization: headers.get('authorization')!,

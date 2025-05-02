@@ -1,7 +1,6 @@
 import {
   filterNotifications,
   filterTweets,
-  initXTransactionId,
   ParsedTweet,
   parseTweets,
   parseUserRecords,
@@ -370,7 +369,6 @@ export default defineContentScript({
   runAt: 'document_start',
   world: 'MAIN',
   async main() {
-    initXTransactionId()
     await initDB()
     new Vista()
       .use(blockClientEvent())

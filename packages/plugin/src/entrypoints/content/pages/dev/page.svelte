@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getXTransactionId } from '$lib/api'
+  import { xClientTransaction } from '$lib/api'
   import {
     searchPeople,
     getBlockedUsers,
@@ -30,9 +30,9 @@
     {
       name: 'getXTransactionId',
       fn: () =>
-        getXTransactionId()(
-          'https://x.com/i/api/1.1/blocks/create.json',
+        xClientTransaction.generateTransactionId(
           'POST',
+          'https://x.com/i/api/1.1/blocks/create.json',
         ),
     },
     {

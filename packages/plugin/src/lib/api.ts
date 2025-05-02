@@ -4,6 +4,7 @@ import { Tweet, User } from './db'
 import { FilterData } from './filter'
 import { uniqBy } from 'es-toolkit'
 import { get } from 'es-toolkit/compat'
+import { ClientTransaction } from './api/x-client-transaction'
 
 export function setRequestHeaders(headers: Headers) {
   const old = getRequestHeaders()
@@ -766,159 +767,161 @@ export function filterTweets(
 
 // ref: https://antibot.blog/posts/1741552163416
 // ref: https://blog.nest.moe/posts/twitter-header-part-4
-let _2DArray: number[][]
-export function getXTransactionId() {
-  function encode(n: number[]) {
-    return btoa(
-      Array.from(n)
-        ['map']((n) => String['fromCharCode'](n))
-        ['join'](''),
-    )['replace'](/=/g, '')
-  }
-  function getKey() {
-    // <meta name="twitter-site-verification" content="mentUHYU4+1yPz30fM6/IcNS+stghA1baFhBkGzE7075BPd15lUcDqC/RaF4jR+b"/>
-    const n = document
-      .querySelectorAll('[name^=tw]')[0]
-      .getAttribute('content')!
-    return new Uint8Array(
-      atob(n)
-        ['split']('')
-        ['map']((n) => n['charCodeAt'](0)),
-    )
-  }
-  function get2DArray(name: string, KEY: Uint8Array<ArrayBuffer>) {
-    if (_2DArray) {
-      return _2DArray
-    }
-    // loading-x-anim-0, loading-x-anim-1, etc. to 3
-    _2DArray = [
-      ...document.querySelectorAll('[id^=loading-x-anim-]>g>path:nth-child(2)'),
-    ]
-      .map((node) => node.getAttribute('d'))[0]!
-      ['substring'](9)
-      ['split']('C')
-      ['map']((n) =>
-        n['replace'](/[^\d]+/g, ' ')
-          ['trim']()
-          ['split'](' ')
-          ['map'](Number),
-      )
-    return _2DArray
-  }
-  function toHex(n: number) {
-    return (n < 16 ? '0' : '') + n['toString'](16)
-  }
-  function getElements(n: NodeListOf<Element> | HTMLDivElement[]) {
-    return Array.from(n)['map']((n) => {
-      var W
-      return null != (W = n['parentElement']) && W['removeChild'](n), n
-    })
-  }
-  function createDiv() {
-    const n = document['createElement']('div')
-    return document['body']['append'](n), [n, () => getElements([n])]
-  }
-  function doAnimation(
-    newDiv: HTMLElement,
-    numArr: number[],
-    frameTime: number,
-  ) {
-    if (!newDiv['animate']) return
-    const r = newDiv['animate'](
-      {
-        color: [
-          '#' + toHex(numArr[0]) + toHex(numArr[1]) + toHex(numArr[2]),
-          '#' + toHex(numArr[3]) + toHex(numArr[4]) + toHex(numArr[5]),
-        ],
-        transform: [
-          'rotate(0deg)',
-          'rotate(' + _r(numArr[6], 60, 360, !0) + 'deg)',
-        ],
-        easing:
-          'cubic-bezier(' +
-          Array.from(numArr['slice'](7))
-            ['map']((n, W) => _r(n, W % 2 ? -1 : 0, 1))
-            ['join']() +
-          ')',
-      },
-      4096,
-    )
-    r['pause']()
-    r['currentTime'] = Math.round(frameTime / 10) * 10
-  }
-  const XOR = (n: number, W: number, t: Uint8Array<ArrayBuffer>) =>
-    W ? n ^ t[0] : n
-  const _r = (n: number, W: number, t: number, r?: boolean) => {
-    const o = (n * (t - W)) / 255 + W
-    return r ? Math.floor(o) : o['toFixed'](2)
-  }
-  let animationStr: string
-  const setAnimationStr = (KEY: Uint8Array<ArrayBuffer>) => {
-    const [index, frameTime] = [
-        KEY[2] % 16,
-        (KEY[12] % 16) * (KEY[14] % 16) * (KEY[7] % 16),
-      ],
-      arr = get2DArray('.r-32hy0', KEY)
-    const [newDiv, deleteDiv] = createDiv()
-    // @ts-ignore
-    doAnimation(newDiv, arr[index], frameTime)
-    // @ts-ignore
-    const style = getComputedStyle(newDiv)
-    animationStr = Array.from(
-      ('' + style['color'] + style['transform'])['matchAll'](/([\d.-]+)/g),
-    )
-      ['map']((n) => Number(Number(n[0])['toFixed'](2))['toString'](16))
-      ['join']('')
-      ['replace'](/[.-]/g, '')
-    // @ts-ignore
-    deleteDiv()
-  }
-  function getTextEncoder(text: string) {
-    return typeof text == 'string' ? new TextEncoder()['encode'](text) : text
-  }
-  function sha256(textEncoder: Uint8Array<ArrayBuffer>) {
-    return crypto.subtle['digest']('sha-256', textEncoder)
-  }
-  return async (path: string, method: string) => {
-    const time = Math.floor((Date['now']() - 1682924400 * 1e3) / 1e3),
-      timeBuffer = new Uint8Array(new Uint32Array([time])['buffer']),
-      KEY = getKey()
-    if (!animationStr) {
-      setAnimationStr(KEY)
-    }
-    let XOR_BYTE = [Math.random() * 256]
-    let sha256Hash = await sha256(
-      // @ts-ignore
-      getTextEncoder([method, path, time]['join']('!') + 'bird' + animationStr),
-    )
-    let shaBytes = Array.from(new Uint8Array(sha256Hash))
-    return encode(
-      // @ts-ignore
-      new Uint8Array(
-        XOR_BYTE['concat'](
-          Array.from(KEY),
-          Array.from(timeBuffer),
-          shaBytes.slice(0, 16),
-          [1],
-        ),
-      )['map'](XOR),
-    )
-  }
-}
+// let _2DArray: number[][]
+// export function getXTransactionId() {
+//   function encode(n: number[]) {
+//     return btoa(
+//       Array.from(n)
+//         ['map']((n) => String['fromCharCode'](n))
+//         ['join'](''),
+//     )['replace'](/=/g, '')
+//   }
+//   function getKey() {
+//     // <meta name="twitter-site-verification" content="mentUHYU4+1yPz30fM6/IcNS+stghA1baFhBkGzE7075BPd15lUcDqC/RaF4jR+b"/>
+//     const n = document
+//       .querySelectorAll('[name^=tw]')[0]
+//       .getAttribute('content')!
+//     return new Uint8Array(
+//       atob(n)
+//         ['split']('')
+//         ['map']((n) => n['charCodeAt'](0)),
+//     )
+//   }
+//   function get2DArray(name: string, KEY: Uint8Array<ArrayBuffer>) {
+//     if (_2DArray) {
+//       return _2DArray
+//     }
+//     // loading-x-anim-0, loading-x-anim-1, etc. to 3
+//     _2DArray = [
+//       ...document.querySelectorAll('[id^=loading-x-anim-]>g>path:nth-child(2)'),
+//     ]
+//       .map((node) => node.getAttribute('d'))[0]!
+//       ['substring'](9)
+//       ['split']('C')
+//       ['map']((n) =>
+//         n['replace'](/[^\d]+/g, ' ')
+//           ['trim']()
+//           ['split'](' ')
+//           ['map'](Number),
+//       )
+//     return _2DArray
+//   }
+//   function toHex(n: number) {
+//     return (n < 16 ? '0' : '') + n['toString'](16)
+//   }
+//   function getElements(n: NodeListOf<Element> | HTMLDivElement[]) {
+//     return Array.from(n)['map']((n) => {
+//       var W
+//       return null != (W = n['parentElement']) && W['removeChild'](n), n
+//     })
+//   }
+//   function createDiv() {
+//     const n = document['createElement']('div')
+//     return document['body']['append'](n), [n, () => getElements([n])]
+//   }
+//   function doAnimation(
+//     newDiv: HTMLElement,
+//     numArr: number[],
+//     frameTime: number,
+//   ) {
+//     if (!newDiv['animate']) return
+//     const r = newDiv['animate'](
+//       {
+//         color: [
+//           '#' + toHex(numArr[0]) + toHex(numArr[1]) + toHex(numArr[2]),
+//           '#' + toHex(numArr[3]) + toHex(numArr[4]) + toHex(numArr[5]),
+//         ],
+//         transform: [
+//           'rotate(0deg)',
+//           'rotate(' + _r(numArr[6], 60, 360, !0) + 'deg)',
+//         ],
+//         easing:
+//           'cubic-bezier(' +
+//           Array.from(numArr['slice'](7))
+//             ['map']((n, W) => _r(n, W % 2 ? -1 : 0, 1))
+//             ['join']() +
+//           ')',
+//       },
+//       4096,
+//     )
+//     r['pause']()
+//     r['currentTime'] = Math.round(frameTime / 10) * 10
+//   }
+//   const XOR = (n: number, W: number, t: Uint8Array<ArrayBuffer>) =>
+//     W ? n ^ t[0] : n
+//   const _r = (n: number, W: number, t: number, r?: boolean) => {
+//     const o = (n * (t - W)) / 255 + W
+//     return r ? Math.floor(o) : o['toFixed'](2)
+//   }
+//   let animationStr: string
+//   const setAnimationStr = (KEY: Uint8Array<ArrayBuffer>) => {
+//     const [index, frameTime] = [
+//         KEY[6] % 16,
+//         (KEY[16] % 16) * (KEY[14] % 16) * (KEY[7] % 16),
+//       ],
+//       arr = get2DArray('.r-32hy0', KEY)
+//     const [newDiv, deleteDiv] = createDiv()
+//     // @ts-ignore
+//     doAnimation(newDiv, arr[index], frameTime)
+//     // @ts-ignore
+//     const style = getComputedStyle(newDiv)
+//     animationStr = Array.from(
+//       ('' + style['color'] + style['transform'])['matchAll'](/([\d.-]+)/g),
+//     )
+//       ['map']((n) => Number(Number(n[0])['toFixed'](2))['toString'](16))
+//       ['join']('')
+//       ['replace'](/[.-]/g, '')
+//     // @ts-ignore
+//     deleteDiv()
+//   }
+//   function getTextEncoder(text: string) {
+//     return typeof text == 'string' ? new TextEncoder()['encode'](text) : text
+//   }
+//   function sha256(textEncoder: Uint8Array<ArrayBuffer>) {
+//     return crypto.subtle['digest']('sha-256', textEncoder)
+//   }
+//   return async (path: string, method: string) => {
+//     const time = Math.floor((Date['now']() - 1682924400 * 1e3) / 1e3),
+//       timeBuffer = new Uint8Array(new Uint32Array([time])['buffer']),
+//       KEY = getKey()
+//     if (!animationStr) {
+//       setAnimationStr(KEY)
+//     }
+//     let XOR_BYTE = [Math.random() * 256]
+//     let sha256Hash = await sha256(
+//       // @ts-ignore
+//       getTextEncoder([method, path, time]['join']('!') + 'bird' + animationStr),
+//     )
+//     let shaBytes = Array.from(new Uint8Array(sha256Hash))
+//     return encode(
+//       // @ts-ignore
+//       new Uint8Array(
+//         XOR_BYTE['concat'](
+//           Array.from(KEY),
+//           Array.from(timeBuffer),
+//           shaBytes.slice(0, 16),
+//           [1],
+//         ),
+//       )['map'](XOR),
+//     )
+//   }
+// }
 
-export function initXTransactionId() {
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach((node) => {
-        if (node instanceof SVGElement && node.id === 'loading-x-anim-0') {
-          getXTransactionId()('/i/api/1.1/blocks/create.json', 'POST')
-          observer.disconnect()
-        }
-      })
-    })
-  })
-  observer.observe(document, {
-    childList: true,
-    subtree: true,
-  })
-}
+// export function initXTransactionId() {
+//   const observer = new MutationObserver((mutations) => {
+//     mutations.forEach((mutation) => {
+//       mutation.addedNodes.forEach((node) => {
+//         if (node instanceof SVGElement && node.id === 'loading-x-anim-0') {
+//           getXTransactionId()('/i/api/1.1/blocks/create.json', 'POST')
+//           observer.disconnect()
+//         }
+//       })
+//     })
+//   })
+//   observer.observe(document, {
+//     childList: true,
+//     subtree: true,
+//   })
+// }
+
+export const xClientTransaction = new ClientTransaction()

@@ -1,7 +1,7 @@
 import {
   getRequestHeaders,
-  getXTransactionId,
   timelineUserSchema,
+  xClientTransaction,
 } from '$lib/api'
 import { User } from '$lib/db'
 import { extractObjects } from '$lib/util/extractObjects'
@@ -122,7 +122,10 @@ export async function getCommunityMembers(options: {
     }),
   )
   const headers = getRequestHeaders()
-  const xTransactionId = await getXTransactionId()(url.toString(), 'GET')
+  const xTransactionId = await xClientTransaction.generateTransactionId(
+    'GET',
+    url.pathname,
+  )
   const resp = await fetch(url, {
     headers: {
       accept: '*/*',
@@ -198,7 +201,10 @@ export async function getCommunityInfo(options: { communityId: string }) {
       c9s_superc9s_indication_enabled: false,
     }),
   )
-  const xTransactionId = await getXTransactionId()(url.toString(), 'GET')
+  const xTransactionId = await xClientTransaction.generateTransactionId(
+    'GET',
+    url.toString(),
+  )
   const headers = getRequestHeaders()
   const resp = await fetch(url, {
     headers: {

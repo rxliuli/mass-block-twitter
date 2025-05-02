@@ -8,7 +8,6 @@ import {
   refreshModListSubscribedUsers,
   spamReport,
 } from '$lib/content'
-import { initXTransactionId } from '$lib/api'
 import { getLocaleLanguage, initI18n } from '$lib/i18n'
 import { wait } from '@liuli-util/async'
 import { eventMessage } from '$lib/shared'
@@ -21,8 +20,6 @@ export default defineContentScript({
   runAt: 'document_start',
   cssInjectionMode: 'ui',
   async main(ctx) {
-    initXTransactionId()
-
     await initDB()
 
     refreshModListSubscribedUsers()

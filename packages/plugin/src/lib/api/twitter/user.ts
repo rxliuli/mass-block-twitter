@@ -3,6 +3,7 @@ import {
   getRequestHeaders,
   getXTransactionId,
   parseUserRecords,
+  xClientTransaction,
 } from '$lib/api'
 import { User } from '$lib/db'
 import { extractObjects } from '$lib/util/extractObjects'
@@ -61,9 +62,9 @@ export async function blockUser(user: Pick<User, 'id'>) {
     throw new Error('userId is required')
   }
   const headers = getRequestHeaders()
-  const xTransactionId = await getXTransactionId()(
-    '/i/api/1.1/blocks/create.json',
+  const xTransactionId = await xClientTransaction.generateTransactionId(
     'POST',
+    '/i/api/1.1/blocks/create.json',
   )
   const r = await fetch('https://x.com/i/api/1.1/blocks/create.json', {
     headers: new Headers({
@@ -116,9 +117,9 @@ export async function unblockUser(userId: string) {
     throw new Error('userId is required')
   }
   const headers = getRequestHeaders()
-  const xTransactionId = await getXTransactionId()(
-    '/i/api/1.1/blocks/destroy.json',
+  const xTransactionId = await xClientTransaction.generateTransactionId(
     'POST',
+    '/i/api/1.1/blocks/destroy.json',
   )
   const r = await fetch('https://x.com/i/api/1.1/blocks/destroy.json', {
     headers: new Headers({
@@ -175,7 +176,10 @@ export async function graphqlQuery(options: {
   url.searchParams.set('features', JSON.stringify(args.flags))
   url.searchParams.set('features', JSON.stringify(args.flags))
   const headers = getRequestHeaders()
-  const xTransactionId = await getXTransactionId()(url.pathname, 'GET')
+  const xTransactionId = await xClientTransaction.generateTransactionId(
+    'GET',
+    url.pathname,
+  )
   const resp = await fetch(url, {
     headers: {
       'content-type': 'application/json',

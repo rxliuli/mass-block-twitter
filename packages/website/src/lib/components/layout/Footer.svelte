@@ -56,6 +56,11 @@
       <div class="flex flex-col space-y-2">
         <h3 class="text-sm font-semibold">Social</h3>
         <a
+          href="https://discord.gg/gFhKUthc88"
+          target="_blank"
+          class="text-sm text-muted-foreground hover:underline">Discord</a
+        >
+        <a
           href="https://x.com/rxliuli"
           target="_blank"
           class="text-sm text-muted-foreground hover:underline">Twitter</a

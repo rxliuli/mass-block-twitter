@@ -61,7 +61,7 @@ export type RuleData = z.infer<typeof ruleDataSchema>
 
 type StringCondition = {
   field: string
-  operator: 'eq' | 'neq' | 'cont' | 'notCont'
+  operator: 'eq' | 'neq' | 'cont' | 'notCont' | 'regex'
   value: string
 }
 type NumberCondition = {
@@ -175,6 +175,7 @@ export function getRuleFileds(): RuleField[] {
           { value: 'neq', label: 'Not Equal' },
           { value: 'cont', label: 'Contains' },
           { value: 'notCont', label: 'Not Contains' },
+          { value: 'regex', label: 'Regex' },
         ],
       })
       return
@@ -227,6 +228,13 @@ function matchCondition(cond: Condition, data: any) {
       return fieldValue < value
     case 'lte':
       return fieldValue <= value
+    case 'regex':
+      if (typeof value === 'string') {
+        return new RegExp(value).test(fieldValue)
+      }
+      return false
+    default:
+      console.error(`Unknown operator: ${operator}`)
   }
   return false
 }

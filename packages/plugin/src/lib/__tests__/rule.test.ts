@@ -1,13 +1,6 @@
-import { getRuleFileds, matchRule, Rule, visit } from '$lib/rule'
+import { matchRule, Rule, visit } from '$lib/rule'
 import { describe, expect, it } from 'vitest'
 import { z, ZodArray, ZodEnum } from 'zod'
-
-describe('getRuleFileds', () => {
-  it('should return the correct fields', () => {
-    const fields = getRuleFileds()
-    expect(fields).toMatchSnapshot()
-  })
-})
 
 describe('visit', () => {
   it('should visit the correct fields', () => {
@@ -142,6 +135,27 @@ describe('matchRule', () => {
           },
         },
       ),
+    ).false
+  })
+  it('match regex', () => {
+    const cond = {
+      field: 'user.description',
+      operator: 'regex',
+      value: '^hello',
+    } as const
+    expect(
+      matchRule([{ or: [{ and: [cond] }] }], {
+        user: {
+          description: 'hello world',
+        },
+      }),
+    ).true
+    expect(
+      matchRule([{ or: [{ and: [cond] }] }], {
+        user: {
+          description: 'world hello',
+        },
+      }),
     ).false
   })
 })

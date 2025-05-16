@@ -1,9 +1,5 @@
 import { ulid } from 'ulidx'
-import {
-  MUTED_WORD_RULES_KEY,
-  MUTED_WORDS_KEY,
-  ParsedTweet,
-} from './api'
+import { MUTED_WORD_RULES_KEY, MUTED_WORDS_KEY, ParsedTweet } from './api'
 import { User } from './db'
 import { extractCurrentUserId } from './observe'
 import { matchByKeyword } from './util/matchByKeyword'
@@ -12,6 +8,7 @@ import { ModListSubscribedUserAndRulesResponse } from '@mass-block-twitter/serve
 import { matchRule, Rule, RuleData } from './rule'
 import { Lru } from 'toad-cache'
 import { memoize, MemoizeCache } from 'es-toolkit'
+import { Settings } from './settings'
 
 export type FilterResult = 'show' | 'hide' | 'next' | 'block'
 export type FilterData =
@@ -206,11 +203,16 @@ export function defaultProfileFilter(): TweetFilter {
   }
 }
 
-export function blueVerifiedFilter(): TweetFilter {
+export function blueVerifiedFilter(
+  hideBlueVerified: Settings['hideBlueVerified'],
+): TweetFilter {
   return {
     name: 'blueVerified',
     userCondition: (user: User) => {
-      if (user.is_blue_verified) {
+      if (user.is_blue_verified && hideBlueVerified === 'only-blue') {
+        return 'hide'
+      }
+      if (!user.is_blue_verified && hideBlueVerified === 'only-non-blue') {
         return 'hide'
       }
       return 'next'

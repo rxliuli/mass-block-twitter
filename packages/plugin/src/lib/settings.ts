@@ -8,7 +8,7 @@ export type Settings = {
 
   hideSuspiciousAccounts: boolean
   hideSpamAccounts: boolean
-  hideBlueVerifiedAccounts: boolean
+  hideBlueVerified?: 'none' | 'only-blue' | 'only-non-blue'
   hideMutedWords: boolean
   hideModListAccounts: boolean
   hideLanguages: string[]
@@ -36,7 +36,6 @@ export function getDefaultSettings(): Settings {
     hideSpamAccounts: true,
     hideMutedWords: true,
     hideModListAccounts: true,
-    hideBlueVerifiedAccounts: false,
     hideLanguages: [],
     theme: 'system',
     hideAdvertiser: true,

@@ -120,8 +120,8 @@ function getFilters(settings: Settings) {
   if (settings.hideSpamAccounts) {
     filters.push(sharedSpamFilter())
   }
-  if (settings.hideBlueVerifiedAccounts) {
-    filters.push(blueVerifiedFilter())
+  if (settings.hideBlueVerified && settings.hideBlueVerified !== 'none') {
+    filters.push(blueVerifiedFilter(settings.hideBlueVerified))
   }
   if (settings.hideLanguages.length > 0) {
     filters.push(languageFilter(settings.hideLanguages))

@@ -3,9 +3,7 @@
   "search-and-block.title": "Search and Block",
   "modlists.title": "Moderation Lists",
   "muted-words.title": "Muted Words",
-
   "select.default": "Select a value",
-
   "dashboard.stats.total": "Total",
   "dashboard.stats.auto": "Auto Blocked",
   "dashboard.stats.manual": "Manual Blocked",
@@ -36,7 +34,6 @@
   "dashboard.recentActivities.details.performed": "Performed an action",
   "dashboard.recentActivities.tweet": "Tweet",
   "dashboard.recentActivities.user": "User",
-
   "account.login.title": "Login",
   "account.login.success": "Login successful",
   "account.profile.title": "Profile",
@@ -46,7 +43,6 @@
   "account.logout.failed": "Logout failed",
   "account.upgrade.title": "Upgrade",
   "account.login.toast.subscribeLocal.failed": "Failed to subscribe to previously locally subscribed modlist {modlistId}",
-
   "settings.title": "Settings",
   "settings.appearance.title": "Appearance",
   "settings.filter.title": "Filter Control",
@@ -67,8 +63,12 @@
   "settings.filter.hideMutedWords.description": "Hide/Block tweets that contain muted words.",
   "settings.filter.hideModListAccounts": "Hide/Block Moderation Lists",
   "settings.filter.hideModListAccounts.description": "Hide/Block tweets from accounts that are subscribed to a Moderation Lists.",
-  "settings.filter.hideBlueVerifiedAccounts": "Hide Blue Verified Accounts",
-  "settings.filter.hideBlueVerifiedAccounts.description": "Hide tweets from blue verified accounts, except those you follow.",
+  "settings.filter.hideBlueVerified": "Blue Verified Accounts Filter",
+  "settings.filter.hideBlueVerified.description": "Filter tweets based on blue verification status.",
+  "settings.filter.hideBlueVerified.placeholder": "Select filter option...",
+  "settings.filter.hideBlueVerified.none": "No filtering",
+  "settings.filter.hideBlueVerified.only-blue": "Hide only Blue Verified Accounts",
+  "settings.filter.hideBlueVerified.only-non-blue": "Hide only Non-Blue Verified Accounts",
   "settings.filter.hideLanguages": "Hide Languages",
   "settings.filter.hideLanguages.description": "Hide tweets from specific languages.",
   "settings.filter.hideLanguages.placeholder": "Select languages...",
@@ -83,9 +83,7 @@
   "settings.block.title": "Block Control",
   "settings.block.blockSpeed.title": "Block Speed",
   "settings.block.blockSpeed.description": "The number of users blocked per minute, 0 (default) means no limit.",
-
   "common.error": "Error",
-
   "search-and-block.columns.avatar": "Avatar",
   "search-and-block.columns.screenName": "Screen Name",
   "search-and-block.columns.name": "Name",
@@ -119,7 +117,6 @@
   "search-and-block.toast.importSuccess": "Imported {new} users, ignored {ignored} users",
   "search-and-block.confirm.blockFollowing": "You are trying to block following users, do you want to include them?",
   "search-and-block.error.rateLimit": "Rate limit exceeded, please try again later",
-
   "blocked-users.title": "Blocked Users",
   "blocked-users.actions.unblock": "Unblock Selected",
   "blocked-users.actions.export": "Export All",
@@ -141,7 +138,6 @@
   "blocked-users.toast.wait": "Estimated time remaining: {time}",
   "blocked-users.toast.unblockingFailed": "Unblocking {name} failed ({current}/{total})",
   "blocked-users.toast.unblockingSuccess": "{success} users unblocked, {failed} failed",
-
   "muted-words.description": "Add keyword rules to hide posts or automatically block users. Rules apply to usernames, display names, bios, and tweet content.",
   "muted-words.actions.add": "Add Keyword",
   "muted-words.actions.edit": "Edit",
@@ -153,7 +149,6 @@
   "muted-words.toast.limit.title": "Free version has 100-keyword limit",
   "muted-words.toast.limit.description": "please upgrade to Pro to add more keyword rules",
   "muted-words.toast.limit.action": "Upgrade Now",
-
   "muted-words.form.keyword.label": "Keyword",
   "muted-words.form.type.label": "Type",
   "muted-words.form.type.hide": "Hide",
@@ -167,7 +162,6 @@
   "muted-words.form.actions.save": "Save",
   "muted-words.form.actions.saving": "Saving...",
   "muted-words.form.actions.cancel": "Cancel",
-
   "modlists.nav.created": "Created",
   "modlists.nav.subscribed": "Subscribed",
   "modlists.toast.login.created": "Please login to view your created modlists",
@@ -181,7 +175,6 @@
   "modlists.creator.toast.error": "Failed to create modlist",
   "modlists.creator.error.userId": "Twitter User ID not found, please login again.",
   "modlists.creator.error.userNotFound": "User not found, please login again.",
-
   "modlists.detail.title": "Moderation Lists Detail",
   "modlists.detail.actions.unblock": "Unblock",
   "modlists.detail.actions.unmute": "Unmute",
@@ -310,7 +303,6 @@
   "modlists.addUser.error.searchFailed": "Failed to search users",
   "modlists.created.title": "My Moderation Lists",
   "modlists.subscribed.title": "Subscribed Moderation Lists",
-
   "floatingButton.openDashboard": "Open Plugin Dashboard",
   "floatingButton.close": "Close Floating Button",
   "floatingButton.close.confirm.title": "Are you sure you want to close the floating button?",
@@ -329,7 +321,6 @@
   "floatingButton.community.exportMembers.toast.failed": "Export failed",
   "floatingButton.community.exportMembers.toast.failed.description": "Export failed, {error}",
   "floatingButton.community.exportMembers.toast.download": "Download",
-
   "common.actions.stop": "Stop",
   "common.actions.continue": "Continue",
   "common.actions.cancel": "Cancel",

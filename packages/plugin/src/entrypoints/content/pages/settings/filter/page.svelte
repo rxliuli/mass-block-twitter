@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FancyMultiSelect } from '$lib/components/custom/select'
+  import { FancyMultiSelect, SelectGroup } from '$lib/components/custom/select'
   import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
   import Label from '$lib/components/ui/label/label.svelte'
@@ -60,19 +60,34 @@
     </div>
     <Checkbox class="shrink-0" bind:checked={$settings.hideModListAccounts} />
   </Label>
-  <Label class="flex items-center gap-4 py-4 cursor-pointer">
-    <div class="flex-1">
+  <Label class="py-4 block">
+    <div class="mb-2">
       <span class="block text-base font-medium">
-        {$t('settings.filter.hideBlueVerifiedAccounts')}
+        {$t('settings.filter.hideBlueVerified')}
       </span>
       <span class="block mt-1 text-sm text-gray-500">
-        {$t('settings.filter.hideBlueVerifiedAccounts.description')}
+        {$t('settings.filter.hideBlueVerified.description')}
       </span>
     </div>
-    <Checkbox
-      class="shrink-0"
-      bind:checked={$settings.hideBlueVerifiedAccounts}
-    />
+    <SelectGroup
+      bind:value={$settings.hideBlueVerified}
+      class="w-full"
+      placeholder={$t('settings.filter.hideBlueVerified.placeholder')}
+      options={[
+        {
+          value: 'none',
+          label: $t('settings.filter.hideBlueVerified.none'),
+        },
+        {
+          value: 'only-blue',
+          label: $t('settings.filter.hideBlueVerified.only-blue'),
+        },
+        {
+          value: 'only-non-blue',
+          label: $t('settings.filter.hideBlueVerified.only-non-blue'),
+        },
+      ]}
+    ></SelectGroup>
   </Label>
   <Label class="py-4 block">
     <div class="mb-2">

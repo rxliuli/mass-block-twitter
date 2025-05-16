@@ -64,8 +64,12 @@
   "settings.filter.hideMutedWords.description": "隐藏/屏蔽包含关键词的推文。",
   "settings.filter.hideModListAccounts": "隐藏/屏蔽审核列表",
   "settings.filter.hideModListAccounts.description": "隐藏/屏蔽订阅审核列表的账户。",
-  "settings.filter.hideBlueVerifiedAccounts": "隐藏蓝标账户",
-  "settings.filter.hideBlueVerifiedAccounts.description": "隐藏蓝标账户，但保留你关注的账户。",
+  "settings.filter.hideBlueVerified": "蓝标账户过滤",
+  "settings.filter.hideBlueVerified.description": "根据蓝标状态过滤推文。",
+  "settings.filter.hideBlueVerified.placeholder": "选择过滤选项...",
+  "settings.filter.hideBlueVerified.none": "不过滤",
+  "settings.filter.hideBlueVerified.only-blue": "仅隐藏蓝标账户",
+  "settings.filter.hideBlueVerified.only-non-blue": "仅隐藏非蓝标账户",
   "settings.filter.hideLanguages": "隐藏语言",
   "settings.filter.hideLanguages.description": "隐藏特定语言的推文。",
   "settings.filter.hideLanguages.placeholder": "选择语言...",
@@ -75,9 +79,7 @@
   "settings.privacy.clearAllCache.success": "缓存已清除",
   "settings.languages.title": "语言",
   "settings.languages.description": "选择扩展程序的界面语言。",
-
   "common.error": "错误",
-
   "search-and-block.columns.avatar": "头像",
   "search-and-block.columns.screenName": "用户名",
   "search-and-block.columns.name": "名称",
@@ -110,7 +112,6 @@
   "search-and-block.toast.importSuccess": "已导入{new}个用户，忽略{ignored}个用户",
   "search-and-block.confirm.blockFollowing": "你正在尝试屏蔽已关注的用户，是否包含他们？",
   "search-and-block.error.rateLimit": "已达到速率限制，请稍后再试",
-
   "blocked-users.title": "已屏蔽用户",
   "blocked-users.actions.unblock": "取消屏蔽",
   "blocked-users.toast.noSelection": "未选择用户",
@@ -119,7 +120,6 @@
   "blocked-users.toast.blockingProgress": "[{current}/{total}] 正在{action}{name}...",
   "blocked-users.toast.blockingFailed": "[{current}/{total}] {action}{name}失败",
   "blocked-users.toast.blockingSuccess": "{success}个用户{action}，{failed}个失败",
-
   "muted-words.description": "添加关键词规则以隐藏推文或自动屏蔽用户。规则适用于用户名、显示名称、个人简介和推文内容。",
   "muted-words.actions.add": "添加关键词",
   "muted-words.actions.edit": "编辑",
@@ -131,7 +131,6 @@
   "muted-words.toast.limit.title": "免费版本限制100个关键词",
   "muted-words.toast.limit.description": "请升级到专业版以添加更多关键词规则",
   "muted-words.toast.limit.action": "立即升级",
-
   "muted-words.form.keyword.label": "关键词",
   "muted-words.form.type.label": "类型",
   "muted-words.form.type.hide": "隐藏",
@@ -145,13 +144,11 @@
   "muted-words.form.actions.save": "保存",
   "muted-words.form.actions.saving": "保存中...",
   "muted-words.form.actions.cancel": "取消",
-
   "modlists.nav.created": "已创建",
   "modlists.nav.subscribed": "已订阅",
   "modlists.toast.login.created": "请登录以查看你创建的审核列表",
   "modlists.creator.error.userId": "未找到 Twitter 用户 ID，请重新登录。",
   "modlists.creator.error.userNotFound": "未找到用户，请重新登录。",
-
   "modlists.detail.title": "审核列表详情",
   "modlists.detail.actions.unblock": "取消屏蔽",
   "modlists.detail.actions.unmute": "取消隐藏",
@@ -278,7 +275,6 @@
   "modlists.addUser.error.searchFailed": "搜索用户失败",
   "modlists.created.title": "我的审核列表",
   "modlists.subscribed.title": "已订阅的审核列表",
-
   "floatingButton.close.confirm.title": "确定要关闭悬浮球吗？",
   "floatingButton.openDashboard": "打开插件仪表盘",
   "floatingButton.close": "关闭悬浮球",

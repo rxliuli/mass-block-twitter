@@ -53,28 +53,30 @@
           },
         },
       )
-      if (resp.ok) {
-        const data = (await resp.json()) as LoginResponse
-        if (data.code === 'verify-email') {
-          const params = new URLSearchParams([
-            ...page.url.searchParams,
-            ['email', email as string],
-          ])
-          goto('/accounts/email-verify?' + params.toString())
-          return
-        }
-        await setAuthInfo(data.data)
-        toast.success('Login successful, redirecting...')
-        if (page.url.searchParams.get('from') === 'plugin') {
-          onPluginLoggedIn(data.data)
-          return
-        }
-        setTimeout(() => {
-          location.href = page.url.searchParams.get('redirect') ?? '/'
-        }, 1000)
-      } else {
+      if (!resp.ok) {
         toast.error('Login failed, please check your email and password')
+        return
       }
+      const data = (await resp.json()) as LoginResponse
+      if (data.code === 'verify-email') {
+        const params = new URLSearchParams([
+          ...page.url.searchParams,
+          ['email', email as string],
+        ])
+        goto('/accounts/email-verify?' + params.toString())
+        return
+      }
+      await setAuthInfo(data.data)
+      toast.success('Login successful, redirecting...')
+      if (page.url.searchParams.get('from') === 'plugin') {
+        console.log('onPluginLoggedIn', data.data)
+        onPluginLoggedIn(data.data)
+        return
+      }
+      console.log('onWebLoggedIn', data.data)
+      setTimeout(() => {
+        location.href = page.url.searchParams.get('redirect') ?? '/'
+      }, 1000)
     },
   })
 </script>

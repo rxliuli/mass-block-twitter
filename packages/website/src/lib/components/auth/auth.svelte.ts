@@ -82,6 +82,7 @@ export function onPluginLoggedIn(authInfo: AuthInfo) {
     }),
   )
   setTimeout(() => {
+    console.log('onPluginLoggedIn and close window')
     window.close()
   }, 1000)
 }

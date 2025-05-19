@@ -37,10 +37,10 @@
   //   onPluginLoggedIn({ ...authInfo })
   // })
 
+  const isPlugin = new URL(page.url).searchParams.get('from') === 'plugin'
   const mutation = createMutation({
     mutationFn: async (event: SubmitEvent) => {
       event.preventDefault()
-      const isPlugin = page.url.searchParams.get('from') === 'plugin'
       const formData = new FormData(event.target as HTMLFormElement)
       const email = formData.get('email')
       const password = formData.get('password')

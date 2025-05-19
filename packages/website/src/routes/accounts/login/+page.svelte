@@ -40,6 +40,7 @@
   const mutation = createMutation({
     mutationFn: async (event: SubmitEvent) => {
       event.preventDefault()
+      const isPlugin = page.url.searchParams.get('from') === 'plugin'
       const formData = new FormData(event.target as HTMLFormElement)
       const email = formData.get('email')
       const password = formData.get('password')
@@ -68,12 +69,12 @@
       }
       await setAuthInfo(data.data)
       toast.success('Login successful, redirecting...')
-      if (page.url.searchParams.get('from') === 'plugin') {
-        console.log('onPluginLoggedIn', data.data)
+      if (isPlugin) {
+        console.log('onPluginLoggedIn')
         onPluginLoggedIn(data.data)
         return
       }
-      console.log('onWebLoggedIn', data.data)
+      console.log('onWebLoggedIn')
       setTimeout(() => {
         location.href = page.url.searchParams.get('redirect') ?? '/'
       }, 1000)

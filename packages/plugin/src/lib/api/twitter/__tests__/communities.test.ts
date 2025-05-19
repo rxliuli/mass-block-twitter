@@ -77,6 +77,19 @@ describe('extractCommunityMembersGraphqlId', () => {
       )
       expect(extractParamsData(str)).undefined
     })
+    it('match membersSliceTimeline_Query 2', async () => {
+      const str = await readFile(
+        path.resolve(
+          __dirname,
+          './assets/bundle.Communities-59468b1d.c13c666a.js',
+        ),
+        'utf-8',
+      )
+      expect(extractParamsData(str)).toEqual({
+        id: 'D5_l6jsKx4k9hr5T8mn-vQ',
+        name: 'membersSliceTimeline_Query',
+      })
+    })
   })
 
   it('extractCommunityMembersGraphqlId', async () => {

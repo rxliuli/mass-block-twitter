@@ -58,7 +58,8 @@ export function parseCommunityMembers(json: any): {
 
 export function extractParamsData(scriptContent: string) {
   // params:{id:"V7OdnMvujMPsCctT_daznQ",metadata:{features:["responsive_web_graphql_timeline_navigation_enabled"],sliceInfoPath:["communityResults","result","members_slice","slice_info"]},name:"membersSliceTimeline_Query"
-  const paramsRegex = /params:{id:"([\w_]+)",[\s\S]*?name:"([^"]+)"/
+  //params:{id:"D5_l6jsKx4k9hr5T8mn-vQ",metadata:{features:["responsive_web_graphql_timeline_navigation_enabled"],sliceInfoPath:["communityResults","result","members_slice","slice_info"]},name:"membersSliceTimeline_Query",operationKind:"query",text:null}};
+  const paramsRegex = /params:{id:"([\w\W_]+?)",[\s\S]*?name:"([^"]+)"/
   const match = scriptContent.match(paramsRegex)
   if (!match) {
     return

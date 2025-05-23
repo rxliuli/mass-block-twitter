@@ -2,7 +2,7 @@
   "name": "@mass-block-twitter/plugin",
   "description": "Mass Block Twitter Spam Users",
   "private": true,
-  "version": "0.22.5",
+  "version": "0.22.6",
   "type": "module",
   "scripts": {
     "dev": "wxt",

@@ -52,6 +52,7 @@ import TweetDetail17 from './assets/TweetDetail17.json'
 import dm from './assets/dm.json'
 import UserByScreenName from './assets/UserByScreenName.json'
 import TweetDetail18 from './assets/TweetDetail18.json'
+import HomeTimeline2 from './assets/HomeTimeline2.json'
 
 describe('parseUserRecords', () => {
   it('parse timeline', () => {
@@ -333,6 +334,11 @@ describe('parseTweets', () => {
     const tweets = parseTweets(TweetDetail18)
     expect(tweets).length(2)
   })
+  it('parseTweets for HomeTimeline2', () => {
+    const tweets = parseTweets(HomeTimeline2)
+    expect(tweets).length(50)
+    expect(tweets.every((it) => it.user.screen_name && it.user.name)).true
+  })
 })
 
 describe('filterTweets', () => {
@@ -360,7 +366,7 @@ describe('filterTweets', () => {
     expect(tweets.every((it) => it.lang !== 'zh')).true
   })
   it('filterTweets for quote', () => {
-    const isShow = flowFilter([blueVerifiedFilter()])
+    const isShow = flowFilter([blueVerifiedFilter('only-blue')])
     const handledJson = filterTweets(
       TweetDetail6,
       (it) =>

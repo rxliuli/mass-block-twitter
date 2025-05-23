@@ -92,11 +92,20 @@ export const timelineUserSchema = z.object({
   __typename: z.literal('User'),
   rest_id: z.string(),
   is_blue_verified: z.boolean(),
+  core: z
+    .object({
+      // Twitter API breaking change
+      screen_name: z.string().optional().nullable(),
+      name: z.string().optional().nullable(),
+    })
+    .optional(),
   legacy: z.object({
     blocking: z.boolean().optional().nullable(),
     following: z.boolean().optional().nullable(),
-    screen_name: z.string(),
-    name: z.string(),
+    // Twitter API breaking change, new API return screen_name/name in core
+    screen_name: z.string().optional().nullable(),
+    name: z.string().optional().nullable(),
+
     description: z.string().optional().nullable(),
     profile_image_url_https: z.string().optional().nullable(),
     created_at: z.string().optional(),
@@ -122,8 +131,9 @@ export function parseTimelineUser(
     id: twitterUser.rest_id,
     blocking: twitterUser.legacy.blocking ?? false,
     following: twitterUser.legacy.following ?? false,
-    screen_name: twitterUser.legacy.screen_name,
-    name: twitterUser.legacy.name,
+    screen_name: (twitterUser.core?.screen_name ??
+      twitterUser.legacy.screen_name)!,
+    name: (twitterUser.core?.name ?? twitterUser.legacy.name)!,
     description: twitterUser.legacy.description ?? undefined,
     profile_image_url: twitterUser.legacy.profile_image_url_https ?? undefined,
     created_at: twitterUser.legacy.created_at

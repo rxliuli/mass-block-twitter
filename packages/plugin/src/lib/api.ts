@@ -98,6 +98,7 @@ export const timelineUserSchema = z.object({
       // Twitter API breaking change
       screen_name: z.string().optional().nullable(),
       name: z.string().optional().nullable(),
+      created_at: z.string().optional().nullable(),
     })
     .optional(),
   legacy: z.object({
@@ -128,6 +129,8 @@ export const timelineUserSchema = z.object({
 export function parseTimelineUser(
   twitterUser: z.infer<typeof timelineUserSchema>,
 ): User {
+  const created_at =
+    twitterUser.core?.created_at ?? twitterUser.legacy.created_at
   const user: User = {
     id: twitterUser.rest_id,
     blocking: twitterUser.legacy.blocking ?? false,
@@ -137,9 +140,7 @@ export function parseTimelineUser(
     name: (twitterUser.core?.name ?? twitterUser.legacy.name)!,
     description: twitterUser.legacy.description ?? undefined,
     profile_image_url: twitterUser.legacy.profile_image_url_https ?? undefined,
-    created_at: twitterUser.legacy.created_at
-      ? new Date(twitterUser.legacy.created_at).toISOString()
-      : undefined,
+    created_at: created_at ? new Date(created_at).toISOString() : undefined,
     updated_at: new Date().toISOString(),
     followers_count: twitterUser.legacy.followers_count,
     friends_count: twitterUser.legacy.friends_count,

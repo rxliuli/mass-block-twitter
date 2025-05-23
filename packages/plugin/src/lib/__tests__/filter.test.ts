@@ -12,12 +12,10 @@ import {
   defaultProfileFilter,
   FilterData,
   flowFilter,
-  flowFilterCacheMap,
   grokFilter,
   modListFilter,
   MutedWordRule,
   mutedWordsFilter,
-  spamContext,
   TweetFilter,
 } from '$lib/filter'
 import { Rule } from '$lib/rule'
@@ -26,6 +24,7 @@ import TweetDetail11 from './assets/TweetDetail11.json'
 import TweetDetail12 from './assets/TweetDetail12.json'
 import TweetDetail13 from './assets/TweetDetail13.json'
 import TweetDetail15 from './assets/TweetDetail15.json'
+import { flowFilterCacheMap, spamContext } from '$lib/shared'
 
 describe('defaultProfileFilter', () => {
   const filter = defaultProfileFilter()

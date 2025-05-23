@@ -29,7 +29,6 @@ import TweetDetail10 from './assets/TweetDetail10.json'
 import UserTweetsAndReplies from './assets/UserTweetsAndReplies.json'
 import UserTweets from './assets/UserTweets.json'
 import SearchTimeline from './assets/SearchTimeline.json'
-import HomeLatestTimeline from './assets/HomeLatestTimeline.json'
 import notifications1 from './assets/notifications1.json'
 import notifications2 from './assets/notifications2.json'
 import notifications3 from './assets/notifications3.json'
@@ -38,7 +37,6 @@ import {
   flowFilter,
   mutedWordsFilter,
   MutedWordRule,
-  flowFilterCacheMap,
   grokFilter,
 } from '$lib/filter'
 import TweetDetail8ProbableSpam from './assets/TweetDetail8ProbableSpam.json'
@@ -53,6 +51,9 @@ import dm from './assets/dm.json'
 import UserByScreenName from './assets/UserByScreenName.json'
 import TweetDetail18 from './assets/TweetDetail18.json'
 import HomeTimeline2 from './assets/HomeTimeline2.json'
+import TweetDetail19 from './assets/TweetDetail19.json'
+import TweetDetail20 from './assets/TweetDetail20.json'
+import { flowFilterCacheMap } from '$lib/shared'
 
 describe('parseUserRecords', () => {
   it('parse timeline', () => {
@@ -360,7 +361,7 @@ describe('filterTweets', () => {
     expect(tweets.some((it) => spamTweetIds.includes(it.id))).false
   })
   it('filterTweets for language', () => {
-    const json = filterTweets(HomeLatestTimeline, (it) => it.lang !== 'zh')
+    const json = filterTweets(TweetDetail20, (it) => it.lang !== 'zh')
     const tweets = parseTweets(json)
     expect(JSON.stringify(json)).not.includes('挂号')
     expect(tweets.every((it) => it.lang !== 'zh')).true
@@ -376,7 +377,7 @@ describe('filterTweets', () => {
         }).value,
     )
     const tweets = parseTweets(handledJson)
-    expect(tweets).length(2)
+    expect(tweets).length(3)
   })
   it('filterTweets for TimelineAddToModule', () => {
     const r1 = parseTweets(TweetDetail7)
@@ -453,6 +454,28 @@ describe('filterTweets', () => {
     expect(JSON.stringify(json).includes('@grok')).false
     expect(JSON.stringify(json).includes('@gork')).false
     expect(JSON.stringify(json).includes('1915714875671691420')).false
+  })
+  it('filterTweets for quote hide tweet', () => {
+    const hideQuoteTweetId = '1925307171253715147'
+    const isShow = flowFilter([
+      {
+        name: 'test',
+        tweetCondition: (tweet) =>
+          tweet.id === hideQuoteTweetId ? 'hide' : 'next',
+      },
+    ])
+    const original = parseTweets(TweetDetail19)
+    expect(original.some((it) => it.id === hideQuoteTweetId)).true
+    const json = filterTweets(
+      TweetDetail19,
+      (it) =>
+        isShow({
+          type: 'tweet',
+          tweet: it,
+        }).value,
+    )
+    const tweets = parseTweets(json)
+    expect(tweets.some((it) => it.id === hideQuoteTweetId)).true
   })
 })
 

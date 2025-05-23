@@ -37,8 +37,8 @@ export function parseCommunityMembers(json: any): {
     (it) =>
       ({
         id: it.rest_id,
-        screen_name: it.legacy.screen_name,
-        name: it.legacy.name,
+        screen_name: (it.core?.screen_name ?? it.legacy.screen_name)!,
+        name: (it.core?.name ?? it.legacy.name)!,
         profile_image_url: it.legacy.profile_image_url_https ?? undefined,
         updated_at: new Date().toISOString(),
         blocking: it.legacy.blocking ?? false,

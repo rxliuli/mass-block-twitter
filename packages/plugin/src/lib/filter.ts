@@ -4,11 +4,10 @@ import { User } from './db'
 import { extractCurrentUserId } from './observe'
 import { matchByKeyword } from './util/matchByKeyword'
 import { pick } from 'es-toolkit'
-import { ModListSubscribedUserAndRulesResponse } from '@mass-block-twitter/server'
 import { matchRule, Rule, RuleData } from './rule'
-import { Lru } from 'toad-cache'
 import { memoize, MemoizeCache } from 'es-toolkit'
 import { Settings } from './settings'
+import { flowFilterCacheMap, spamContext } from './shared'
 
 export type FilterResult = 'show' | 'hide' | 'next' | 'block'
 export type FilterData =
@@ -20,10 +19,6 @@ export interface TweetFilter {
   tweetCondition?: (tweet: ParsedTweet) => FilterResult
   userCondition?: (user: User) => FilterResult
 }
-
-export const flowFilterCacheMap = new Lru<{ value: boolean; reason?: string }>(
-  1000,
-)
 
 export function flowFilter(
   filters: TweetFilter[],
@@ -218,13 +213,6 @@ export function blueVerifiedFilter(
       return 'next'
     },
   }
-}
-export let spamContext: {
-  spamUsers: Set<string>
-  modlists: ModListSubscribedUserAndRulesResponse
-} = {
-  spamUsers: new Set(),
-  modlists: [],
 }
 
 export function sharedSpamFilter(): TweetFilter {

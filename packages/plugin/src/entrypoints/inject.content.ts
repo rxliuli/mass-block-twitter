@@ -10,11 +10,7 @@ import { Activity, dbApi, initDB, User } from '$lib/db'
 import { omit, throttle } from 'es-toolkit'
 import { Vista, Middleware } from '@rxliuli/vista'
 import { asyncLimiting, wait } from '@liuli-util/async'
-import {
-  addBlockButtonInTweet,
-  addBlockButtonInUser,
-  extractTweet,
-} from '$lib/observe'
+import { addBlockButtonInTweet, addBlockButtonInUser } from '$lib/observe'
 import css from './style.css?inline'
 import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'

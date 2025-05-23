@@ -1,10 +1,11 @@
 import { z } from 'zod'
 import { extract, extractObjects } from './util/extractObjects'
 import { Tweet, User } from './db'
-import { FilterData } from './filter'
+import type { FilterData } from './filter'
 import { uniqBy } from 'es-toolkit'
 import { get } from 'es-toolkit/compat'
 import { ClientTransaction } from './api/x-client-transaction'
+import { flowFilterCacheMap } from './shared'
 
 export function setRequestHeaders(headers: Headers) {
   const old = getRequestHeaders()
@@ -681,7 +682,9 @@ function filterEntrie(
       return true
     }
     // if quote tweet is not show, but main tweet is show, remove the quote tweet
-    delete originalTweets[0].value.quoted_status_result
+    // delete originalTweets[0].value.quoted_status_result
+    flowFilterCacheMap.set('tweet:' + tweets[1].id, { value: true })
+    flowFilterCacheMap.set('user:' + tweets[1].user.id, { value: true })
     return true
   }
   return tweets.every(isShow)

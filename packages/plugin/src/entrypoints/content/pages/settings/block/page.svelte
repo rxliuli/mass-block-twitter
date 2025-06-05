@@ -3,9 +3,12 @@
   import { Slider } from '$lib/components/custom/slider'
   import { t } from '$lib/i18n'
   import { useSettings } from '$lib/settings'
+  import LayoutNav from '$lib/components/layout/LayoutNav.svelte'
 
   const settings = useSettings()
 </script>
+
+<LayoutNav title={$t('settings.block.title')} />
 
 <Label class="py-4 block">
   <div class="flex items-center justify-between gap-2">

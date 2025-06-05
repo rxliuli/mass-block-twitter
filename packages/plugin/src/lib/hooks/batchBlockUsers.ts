@@ -224,7 +224,7 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
 
           // rate limit ref: https://developer.x.com/en/docs/x-api/v1/accounts-and-users/mute-block-report-users/api-reference/post-blocks-create
           // ref: https://devcommunity.x.com/t/what-is-the-rate-limit-on-post-request-and-post-blocks-create/102434/2
-          if (blockSpeedRange) {
+          if (blockSpeedRange && blockSpeedRange[1] > 0) {
             // If the user sets the maximum number of users to block per minute,
             // then calculate the time to block each user
             // const waitTime = (60 * 1000) / Math.max(blockSpeed, 1)

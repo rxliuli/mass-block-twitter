@@ -89,10 +89,34 @@ const urlSchema = z.object({
   url: z.string(),
 })
 
+// Convert _normal suffix to original size image, but keep the extension, and support multiple image formats .jpg .png .gif .webp
+// https://pbs.twimg.com/profile_images/1892248257516224513/SzZdRSkx_normal.png
+// https://pbs.twimg.com/profile_images/924810703369674752/RIAinmZL_normal.jpg
+export function parseProfileImageUrl(url?: string | null): string | undefined {
+  if (!url) {
+    return
+  }
+  const i = url.lastIndexOf('.')
+  if (i === -1) {
+    return url
+  }
+  const name = url.slice(0, i)
+  if (name.endsWith('_normal')) {
+    return name.slice(0, -7) + url.slice(i)
+  }
+  return url
+}
+
 export const timelineUserSchema = z.object({
   __typename: z.literal('User'),
   rest_id: z.string(),
   is_blue_verified: z.boolean(),
+  // TODO Twitter API breaking change 2025-06-05
+  avatar: z
+    .object({
+      image_url: z.string().optional(),
+    })
+    .optional(),
   core: z
     .object({
       // Twitter API breaking change
@@ -139,7 +163,10 @@ export function parseTimelineUser(
       twitterUser.legacy.screen_name)!,
     name: (twitterUser.core?.name ?? twitterUser.legacy.name)!,
     description: twitterUser.legacy.description ?? undefined,
-    profile_image_url: twitterUser.legacy.profile_image_url_https ?? undefined,
+    profile_image_url: parseProfileImageUrl(
+      twitterUser.avatar?.image_url ??
+        twitterUser.legacy.profile_image_url_https,
+    ),
     created_at: created_at ? new Date(created_at).toISOString() : undefined,
     updated_at: new Date().toISOString(),
     followers_count: twitterUser.legacy.followers_count,
@@ -185,7 +212,7 @@ export const notifacationUserSchema = z.object({
   default_profile_image: z.boolean().optional(),
   ext_is_blue_verified: z.boolean().optional(),
   location: z.string().optional().nullable(),
-  url: z.string().optional().nullable(),
+  url: z.string().nullable(),
   entities: z
     .object({
       description: z.object({ urls: z.array(urlSchema) }),
@@ -204,7 +231,9 @@ function parseNotificationUser(
     following: twitterUser.following ?? false,
     name: twitterUser.name,
     description: twitterUser.description ?? undefined,
-    profile_image_url: twitterUser.profile_image_url_https ?? undefined,
+    profile_image_url: parseProfileImageUrl(
+      twitterUser.profile_image_url_https,
+    ),
     created_at: twitterUser.created_at
       ? new Date(twitterUser.created_at).toISOString()
       : undefined,

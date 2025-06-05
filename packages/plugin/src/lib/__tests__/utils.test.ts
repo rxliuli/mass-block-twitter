@@ -9,8 +9,10 @@ import {
   MUTED_WORD_RULES_KEY,
   notifacationUserSchema,
   ParsedTweet,
+  parseProfileImageUrl,
   parseTweets,
   parseUserRecords,
+  timelineUserSchema,
 } from '../api'
 import allSpam from './assets/all-spam.json'
 import { omit, pick } from 'es-toolkit'
@@ -54,6 +56,7 @@ import HomeTimeline2 from './assets/HomeTimeline2.json'
 import TweetDetail19 from './assets/TweetDetail19.json'
 import TweetDetail20 from './assets/TweetDetail20.json'
 import { flowFilterCacheMap } from '$lib/shared'
+import HomeTimeline3 from './assets/Homeline3.json'
 
 describe('parseUserRecords', () => {
   it('parse timeline', () => {
@@ -106,6 +109,39 @@ describe('parseUserRecords', () => {
     expect(user).length(1)
     expect(user[0].id).toEqual('1652220971497947136')
     expect(user[0].blocking).true
+  })
+  it('parseUserRecords for HomeTimeline3', () => {
+    const users = parseUserRecords(HomeTimeline3)
+    expect(users.filter((it) => it.id === '1409161387230650377')).empty
+    expect(users.filter((it) => !it.profile_image_url)).empty
+    expect(users.filter((it) => it.profile_image_url!.includes('_normal.')))
+      .empty
+  })
+})
+
+describe('parseProfileImageUrl', () => {
+  it('parseProfileImageUrl', () => {
+    expect(
+      parseProfileImageUrl(
+        'https://pbs.twimg.com/profile_images/1892248257516224513/SzZdRSkx_normal.png',
+      ),
+    ).toEqual(
+      'https://pbs.twimg.com/profile_images/1892248257516224513/SzZdRSkx.png',
+    )
+    expect(
+      parseProfileImageUrl(
+        'https://pbs.twimg.com/profile_images/924810703369674752/RIAinmZL_normal.jpg',
+      ),
+    ).toEqual(
+      'https://pbs.twimg.com/profile_images/924810703369674752/RIAinmZL.jpg',
+    )
+    expect(
+      parseProfileImageUrl(
+        'https://pbs.twimg.com/profile_images/477264018881511424/sL9Ik8oe_normal.jpeg',
+      ),
+    ).toEqual(
+      'https://pbs.twimg.com/profile_images/477264018881511424/sL9Ik8oe.jpeg',
+    )
   })
 })
 
@@ -492,12 +528,14 @@ describe('filterNotifications', () => {
       name: 'user-1',
       screen_name: 'user-1',
       ext_is_blue_verified: true,
+      url: null,
     },
     'user-2': {
       id_str: 'user-2',
       name: 'user-2',
       screen_name: 'user-2',
       ext_is_blue_verified: true,
+      url: null,
     },
   }
   it('filterNotifications for like', () => {

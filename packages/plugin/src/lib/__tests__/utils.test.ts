@@ -57,6 +57,7 @@ import TweetDetail19 from './assets/TweetDetail19.json'
 import TweetDetail20 from './assets/TweetDetail20.json'
 import { flowFilterCacheMap } from '$lib/shared'
 import HomeTimeline3 from './assets/Homeline3.json'
+import UserByScreenName2 from './assets/UserByScreenName2.json'
 
 describe('parseUserRecords', () => {
   it('parse timeline', () => {
@@ -116,6 +117,14 @@ describe('parseUserRecords', () => {
     expect(users.filter((it) => !it.profile_image_url)).empty
     expect(users.filter((it) => it.profile_image_url!.includes('_normal.')))
       .empty
+  })
+  it('parseUserRecords for UserByScreenName2', () => {
+    const users = parseUserRecords(UserByScreenName2)
+    const user = users.find((it) => it.id === '1903966634915840000')
+    expect(user?.blocking).true
+    expect(user?.following).false
+    expect(user?.is_blue_verified).false
+    expect(user?.location).empty
   })
 })
 

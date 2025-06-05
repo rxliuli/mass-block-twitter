@@ -126,10 +126,13 @@ export const timelineUserSchema = z.object({
     })
     .optional(),
   legacy: z.object({
+    // TODO deprecated Twitter API breaking change 2025-06-05, use relationship_perspectives.blocking instead
     blocking: z.boolean().optional().nullable(),
+    // TODO deprecated Twitter API breaking change 2025-06-05, use relationship_perspectives.following instead
     following: z.boolean().optional().nullable(),
-    // Twitter API breaking change, new API return screen_name/name in core
+    // TODO deprecated Twitter API breaking change, new API return screen_name/name in core
     screen_name: z.string().optional().nullable(),
+    // TODO deprecated Twitter API breaking change, new API return screen_name/name in core
     name: z.string().optional().nullable(),
 
     description: z.string().optional().nullable(),
@@ -139,6 +142,7 @@ export const timelineUserSchema = z.object({
     friends_count: z.number().optional(),
     default_profile: z.boolean().optional(),
     default_profile_image: z.boolean().optional(),
+    // TODO deprecated Twitter API breaking change 2025-06-05, use location.location instead
     location: z.string().optional().nullable(),
     url: z.string().optional().nullable(),
     entities: z
@@ -148,6 +152,19 @@ export const timelineUserSchema = z.object({
       })
       .optional(),
   }),
+  // TODO new Twitter API breaking change 2025-06-05
+  location: z
+    .object({
+      location: z.string(),
+    })
+    .optional(),
+  // TODO new Twitter API breaking change 2025-06-05
+  relationship_perspectives: z
+    .object({
+      blocking: z.boolean().optional(),
+      following: z.boolean(),
+    })
+    .optional(),
 })
 
 export function parseTimelineUser(
@@ -157,8 +174,14 @@ export function parseTimelineUser(
     twitterUser.core?.created_at ?? twitterUser.legacy.created_at
   const user: User = {
     id: twitterUser.rest_id,
-    blocking: twitterUser.legacy.blocking ?? false,
-    following: twitterUser.legacy.following ?? false,
+    blocking:
+      twitterUser.relationship_perspectives?.blocking ??
+      twitterUser.legacy.blocking ??
+      false,
+    following:
+      twitterUser.relationship_perspectives?.following ??
+      twitterUser.legacy.following ??
+      false,
     screen_name: (twitterUser.core?.screen_name ??
       twitterUser.legacy.screen_name)!,
     name: (twitterUser.core?.name ?? twitterUser.legacy.name)!,
@@ -174,7 +197,10 @@ export function parseTimelineUser(
     default_profile: twitterUser.legacy.default_profile,
     default_profile_image: twitterUser.legacy.default_profile_image,
     is_blue_verified: twitterUser.is_blue_verified,
-    location: twitterUser.legacy.location ?? undefined,
+    location:
+      twitterUser.location?.location ??
+      twitterUser.legacy.location ??
+      undefined,
   }
   if (
     twitterUser.legacy.description &&

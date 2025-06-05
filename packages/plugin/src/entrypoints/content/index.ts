@@ -2,6 +2,7 @@ import { mount, unmount } from 'svelte'
 import App from './app.svelte'
 import './app.css'
 import {
+  autoAlertBlocked,
   autoCheckPendingUsers,
   autoCheckTwitterAPI,
   quickBlock,
@@ -27,6 +28,7 @@ export default defineContentScript({
     refreshAuthInfo()
     autoCheckPendingUsers()
     autoCheckTwitterAPI()
+    autoAlertBlocked()
 
     await wait(() => !!document.body)
 

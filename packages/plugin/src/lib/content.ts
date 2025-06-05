@@ -30,6 +30,9 @@ import {
   unblockUser,
 } from './api/twitter'
 import { xClientTransaction } from './api'
+import dayjs from 'dayjs'
+import { navigate } from './components/logic/router'
+import { useOpen } from './stores/open.svelte'
 
 export async function refreshModListSubscribedUsers(
   force?: boolean,
@@ -382,4 +385,43 @@ export function quickBlock(options: {
       },
     ])
   }, 3000)
+}
+
+export function autoAlertBlocked() {
+  setTimeout(async () => {
+    const lastAlert = localStorage.getItem('LAST_ALERT_BLOCKED')
+    if (lastAlert) {
+      const now = dayjs()
+      if (now.diff(dayjs(lastAlert), 'day') === 0) {
+        return
+      }
+    }
+    localStorage.setItem('LAST_ALERT_BLOCKED', new Date().toISOString())
+    const before = dayjs().subtract(0, 'day')
+    const blockedUsers = (
+      await dbApi.activitys.getByRange(
+        before.startOf('day').toDate(),
+        before.endOf('day').toDate(),
+      )
+    ).sort((a, b) => b.created_at.localeCompare(a.created_at))
+    if (blockedUsers.length === 0) {
+      return
+    }
+    toast.info(`${blockedUsers.length} users were blocked yesterday`, {
+      duration: 10000,
+      description:
+        blockedUsers
+          .slice(0, 3)
+          .map((it) => it.user_name)
+          .join(',') +
+        (blockedUsers.length > 3 ? ` and ${blockedUsers.length - 3} more` : ''),
+      action: {
+        label: 'View',
+        onClick: () => {
+          navigate('/dashboard/activities')
+          useOpen().openModal()
+        },
+      },
+    })
+  }, 1000 * 10)
 }

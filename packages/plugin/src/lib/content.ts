@@ -397,7 +397,7 @@ export function autoAlertBlocked() {
       }
     }
     localStorage.setItem('LAST_ALERT_BLOCKED', new Date().toISOString())
-    const before = dayjs().subtract(0, 'day')
+    const before = dayjs().subtract(1, 'day')
     const blockedUsers = (
       await dbApi.activitys.getByRange(
         before.startOf('day').toDate(),

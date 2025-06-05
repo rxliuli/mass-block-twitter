@@ -269,6 +269,7 @@ modlists
           .update(modList)
           .set({
             subscriptionCount: sql`subscriptionCount + 1`,
+            updatedAt: sql`updatedAt`, // don't update updatedAt
           })
           .where(eq(modList.id, validated.modListId)),
       ])
@@ -308,6 +309,7 @@ modlists
           .update(modList)
           .set({
             subscriptionCount: sql`subscriptionCount - 1`,
+            updatedAt: sql`updatedAt`, // don't update updatedAt
           })
           .where(eq(modList.id, validated.modListId)),
       ])

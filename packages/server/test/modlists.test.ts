@@ -511,6 +511,16 @@ describe('modlists', () => {
         },
       ] satisfies ModListSubscribedUserAndRulesResponse)
     })
+    it('subscribe modlist should not update modlist updatedAt', async () => {
+      const r1 = await getModList(modListId)
+      expect(r1.updatedAt).not.empty
+      await subscribeModList()
+      const r2 = await getModList(modListId)
+      expect(r2.updatedAt).toEqual(r1.updatedAt)
+      await unsubscribe(modListId)
+      const r3 = await getModList(modListId)
+      expect(r3.updatedAt).toEqual(r1.updatedAt)
+    })
     describe('should be able to subscribe to get modlist uesrs/rules with cache', async () => {
       beforeEach(async () => {
         const users = range(10)

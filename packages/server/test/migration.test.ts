@@ -57,7 +57,7 @@ describe('migration', () => {
         if (done || !value) {
           break
         }
-        r.push(value)
+        r.push(value.trim())
       }
       return r
     }

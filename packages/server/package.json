@@ -7,8 +7,8 @@
     ".": "./src/lib.d.ts"
   },
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
+    "dev": "pnpm -F @mass-block-twitter/website build && wrangler dev",
+    "deploy": "pnpm -F @mass-block-twitter/website build && wrangler deploy --minify",
     "test": "vitest run",
     "admin": "tsx src/admin/bin.ts"
   },

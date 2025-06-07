@@ -23,7 +23,7 @@
         return
       }
       const resp = await fetch(
-        import.meta.env.VITE_API_URL + '/api/auth/reset-password',
+         '/api/auth/reset-password',
         {
           method: 'POST',
           body: JSON.stringify({
@@ -67,7 +67,7 @@
         return
       }
       const resp = await fetch(
-        import.meta.env.VITE_API_URL + '/api/auth/forgot-password',
+         '/api/auth/forgot-password',
         {
           method: 'POST',
           body: JSON.stringify({ email: formState.email }),

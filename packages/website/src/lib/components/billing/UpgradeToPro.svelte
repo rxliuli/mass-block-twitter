@@ -26,7 +26,7 @@
       return
     }
     const resp = await fetch(
-      import.meta.env.VITE_API_URL + '/api/accounts/settings',
+       '/api/accounts/settings',
       {
         headers: {
           Authorization: `Bearer ${authInfo.token}`,
@@ -51,7 +51,7 @@
         if (event.name === 'checkout.completed' && event.data) {
           paddle?.Checkout.close()
           const resp = await fetch(
-            import.meta.env.VITE_API_URL + '/api/billing/checkout/complete',
+             '/api/billing/checkout/complete',
             {
               method: 'POST',
               headers: {

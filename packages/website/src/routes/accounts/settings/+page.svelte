@@ -12,7 +12,7 @@
     retry: false,
     queryFn: async () => {
       const resp = await fetch(
-        import.meta.env.VITE_API_URL + '/api/accounts/settings',
+         '/api/accounts/settings',
         {
           headers: {
             Authorization: 'Bearer ' + (await getAuthInfo())?.token!,

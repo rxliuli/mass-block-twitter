@@ -28,4 +28,20 @@ app
   .route('/api/billing', billing)
   .route('/api/modlists', modlists)
 
+// @ts-expect-error
+import svelteKitWorker from '../../website/.svelte-kit/cloudflare/_worker.js'
+
+app.get('/.well-known/appspecific/*', (c) => c.body(null, 204))
+app.all('*', async (c) => {
+  if (c.env.APP_ENV === 'development') {
+    const url = c.req.url.replace(
+      'http://localhost:8787',
+      'http://localhost:5173',
+    )
+    return fetch(new Request(url, c.req))
+  }
+  const response = await svelteKitWorker.fetch(c.req.raw, c.env, c.executionCtx)
+  return response
+})
+
 export default app

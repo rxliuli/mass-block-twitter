@@ -42,12 +42,9 @@ export function useAuthInfo(): Partial<AuthInfo> {
     initialized = true
     await getAuthInfo()
     if (userState.authInfo?.token) {
-      const resp = await fetch(
-        import.meta.env.VITE_API_URL + '/api/accounts/settings',
-        {
-          headers: { Authorization: `Bearer ${userState.authInfo.token}` },
-        },
-      )
+      const resp = await fetch('/api/accounts/settings', {
+        headers: { Authorization: `Bearer ${userState.authInfo.token}` },
+      })
       if (!resp.ok) {
         clearAuthInfo()
         return

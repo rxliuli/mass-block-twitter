@@ -23,7 +23,7 @@
         throw new Error('Email is required')
       }
       const resp = await fetch(
-        import.meta.env.VITE_API_URL + '/api/auth/send-verify-email',
+         '/api/auth/send-verify-email',
         {
           method: 'POST',
           body: JSON.stringify({ email } satisfies SendVerifyEmailRequest),
@@ -54,7 +54,7 @@
         throw new Error('Email is required')
       }
       const resp = await fetch(
-        import.meta.env.VITE_API_URL + '/api/auth/verify-email',
+         '/api/auth/verify-email',
         {
           method: 'POST',
           body: JSON.stringify({

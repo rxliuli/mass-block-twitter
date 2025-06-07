@@ -42,7 +42,7 @@
   const mutation = createMutation({
     mutationFn: async () => {
       const resp = await fetch(
-        import.meta.env.VITE_API_URL + '/api/feedback/submit',
+         '/api/feedback/submit',
         {
           method: 'POST',
           body: JSON.stringify({

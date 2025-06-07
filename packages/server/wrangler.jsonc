@@ -8,7 +8,9 @@
   "vars": {
     "APP_ENV": "production"
   },
-
+  "assets": {
+    "directory": "../website/.svelte-kit/cloudflare"
+  },
   "kv_namespaces": [
     {
       "binding": "MY_KV",

@@ -25,7 +25,7 @@
   //     return
   //   }
   //   const resp = await fetch(
-  //     import.meta.env.VITE_API_URL + '/api/accounts/settings',
+  //      '/api/accounts/settings',
   //     { headers: { Authorization: `Bearer ${authInfo.token}` } },
   //   )
   //   if (!resp.ok) {
@@ -45,7 +45,7 @@
       const email = formData.get('email')
       const password = formData.get('password')
       const resp = await fetch(
-        import.meta.env.VITE_API_URL + '/api/auth/login',
+         '/api/auth/login',
         {
           method: 'POST',
           body: JSON.stringify({ email, password }),

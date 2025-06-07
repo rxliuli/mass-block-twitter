@@ -11,4 +11,12 @@ export default defineConfig({
   preview: {
     allowedHosts: ['test-node.rxliuli.com'],
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8787',
+        changeOrigin: true,
+      },
+    },
+  },
 })

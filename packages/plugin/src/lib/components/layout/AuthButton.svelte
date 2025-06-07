@@ -18,7 +18,7 @@
 
   let interval = $state<number>()
   const webUrl =
-    import.meta.env.VITE_WEB_URL ?? 'https://mass-block-twitter.rxliuli.com'
+    import.meta.env.VITE_API_URL ?? 'https://mass-block-twitter.rxliuli.com'
   const queryClient = useQueryClient()
   const loginMutation = createMutation({
     mutationFn: async () => {

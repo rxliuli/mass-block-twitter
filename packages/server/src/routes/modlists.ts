@@ -85,7 +85,7 @@ export async function uploadAvatar(c: Context, datauri: string) {
   const protocol =
     c.env.APP_ENV === 'development'
       ? 'http://localhost:8787'
-      : 'https://mass-block-twitter-server.rxliuli.com'
+      : 'https://mass-block-twitter.rxliuli.com'
   return `${protocol}/api/image/get/${id}`
 }
 export type ModListCreateRequest = z.infer<typeof createSchema>

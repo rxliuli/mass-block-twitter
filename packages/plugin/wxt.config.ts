@@ -24,7 +24,6 @@ export default defineConfig({
       },
       host_permissions: [
         'https://x.com/**',
-        'https://mass-block-twitter-server.rxliuli.com/**',
         'https://mass-block-twitter.rxliuli.com/**',
       ],
     }

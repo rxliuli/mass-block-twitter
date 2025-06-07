@@ -1,14 +1,6 @@
 import { sendMessage } from '$lib/messaging'
 
 export default defineBackground(() => {
-  browser.runtime.onInstalled.addListener(() => {
-    browser.contextMenus.create({
-      id: 'scan',
-      title: 'Scan and Block',
-      contexts: ['page'],
-      documentUrlPatterns: ['https://x.com/*', 'https://mobile.x.com/*'],
-    })
-  })
   browser.runtime.setUninstallURL(
     'https://mass-block-twitter.rxliuli.com/feedback',
   )
@@ -31,12 +23,6 @@ export default defineBackground(() => {
     await sendMessage('show', undefined, tabId)
   }
 
-  browser.contextMenus.onClicked.addListener(async (info, tab) => {
-    if (info.menuItemId === 'scan') {
-      onShow(tab?.id)
-      return
-    }
-  })
   browser.action.onClicked.addListener(async (tab) => {
     onShow(tab?.id)
   })

@@ -20,7 +20,6 @@ When you enable certain optional features, some data collection may be necessary
 - The data collected includes:
   - Account information (profile details, follower counts, creation date)
   - Recent tweets from the account (content, media, links)
-  - Your interactions with the account (blocks, reports)
 - We do not specifically track who submits each piece of data.
 - **Important**: You must contribute data to benefit from the community database. Without enabling data contribution, you will not have access to the shared spam detection results
 

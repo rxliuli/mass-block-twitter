@@ -167,4 +167,4 @@
 
 <ModeWatcher />
 <Toaster richColors closeButton expand />
-<AppNotifications />
+<!-- <AppNotifications /> -->

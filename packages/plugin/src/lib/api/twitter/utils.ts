@@ -76,6 +76,7 @@ async function _extractGQLArgsByName(
   | {
       queryId: string
       flags: Record<string, boolean | number | string>
+      fieldToggles: Record<string, boolean> | undefined
     }
   | undefined
 > {
@@ -84,13 +85,11 @@ async function _extractGQLArgsByName(
     extractAllFlags(),
   ])
   const args = extractGQLArgsFromString(text)
-  const blockedAccountsAll = args.find(
-    (it) => it.operationName === operationName,
-  )
-  if (!blockedAccountsAll) {
+  const arg = args.find((it) => it.operationName === operationName)
+  if (!arg) {
     return undefined
   }
-  const flags = blockedAccountsAll.metadata.featureSwitches.reduce(
+  const flags = arg.metadata.featureSwitches.reduce(
     (c, k) => ({
       ...c,
       [k]: allFlags[k],
@@ -100,9 +99,20 @@ async function _extractGQLArgsByName(
   if (!flags) {
     return undefined
   }
+  let fieldToggles: Record<string, boolean> | undefined = undefined
+  if (arg.metadata.fieldToggles.length > 0) {
+    fieldToggles = arg.metadata.fieldToggles.reduce(
+      (c, k) => ({
+        ...c,
+        [k]: true,
+      }),
+      {} as Record<string, boolean>,
+    )
+  }
   return {
-    queryId: blockedAccountsAll.queryId,
+    queryId: arg.queryId,
     flags,
+    fieldToggles,
   }
 }
 export const extractGQLArgsByName = memoize(_extractGQLArgsByName)

@@ -155,6 +155,9 @@ export async function getUserByScreenName(
     variables: {
       screen_name: screenName,
     },
+    flags: {
+      responsive_web_grok_bio_auto_translation_is_enabled: true,
+    },
   })
   return parseUserRecords(json)[0]
 }
@@ -163,6 +166,7 @@ export async function graphqlQuery(options: {
   operationName: Parameters<typeof extractGQLArgsByName>[0]
   variables: Record<string, any>
   referer?: string
+  flags?: Record<string, boolean>
 }) {
   const args = await extractGQLArgsByName(options.operationName)
   if (!args) {
@@ -172,8 +176,16 @@ export async function graphqlQuery(options: {
     `https://x.com/i/api/graphql/${args.queryId}/${options.operationName}`,
   )
   url.searchParams.set('variables', JSON.stringify(options.variables))
-  url.searchParams.set('features', JSON.stringify(args.flags))
-  url.searchParams.set('features', JSON.stringify(args.flags))
+  url.searchParams.set(
+    'features',
+    JSON.stringify({
+      ...args.flags,
+      ...options.flags,
+    }),
+  )
+  if (args.fieldToggles) {
+    url.searchParams.set('fieldToggles', JSON.stringify(args.fieldToggles))
+  }
   const headers = getRequestHeaders()
   const xTransactionId = await xClientTransaction.generateTransactionId(
     'GET',

@@ -56,8 +56,11 @@
           data: twitterPage.data,
         }
       } catch (err) {
-        if (err instanceof ExpectedError && err.code === 'rateLimit') {
+        console.error('searchPeople error', err)
+        if (err instanceof Response && err.status === 429) {
           toast.error($t('search-and-block.error.rateLimit'))
+        } else {
+          toast.error('Load error')
         }
         throw err
       }

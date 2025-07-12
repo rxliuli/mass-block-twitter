@@ -92,7 +92,7 @@ async function _extractGQLArgsByName(
   const flags = arg.metadata.featureSwitches.reduce(
     (c, k) => ({
       ...c,
-      [k]: allFlags[k],
+      [k]: allFlags[k] ?? false,
     }),
     {} as Record<string, boolean | number | string>,
   )

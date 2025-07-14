@@ -8,7 +8,6 @@ import {
 } from '../lib/request'
 import { HonoEnv } from '../lib/bindings'
 import { z } from 'zod'
-import { drizzle, DrizzleD1Database } from 'drizzle-orm/d1'
 import { spamReport, tweet, user, userSpamAnalysis } from '../db/schema'
 import {
   and,
@@ -25,13 +24,13 @@ import {
 } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
 import { chunk, groupBy, omit, uniqBy } from 'es-toolkit'
-import { SQLiteUpdateSetSource } from 'drizzle-orm/sqlite-core'
 import { safeChunkInsertValues } from '../lib/drizzle'
+import { PgUpdateSetSource } from 'drizzle-orm/pg-core'
+import { useDB } from '../lib/drizzle'
+import { NodePgDatabase } from 'drizzle-orm/node-postgres'
 
 export function upsertTweet(
-  db: DrizzleD1Database<Record<string, never>> & {
-    $client: D1Database
-  },
+  db: NodePgDatabase,
   _tweet: InferInsertModel<typeof tweet>,
 ) {
   return db
@@ -42,17 +41,15 @@ export function upsertTweet(
       set: omit(_tweet, ['id']),
       setWhere: and(
         isNull(tweet.conversationId),
-        sql`${_tweet.conversationId ?? null} IS NOT NULL`,
+        _tweet.conversationId ?? null ? sql`true` : sql`false`,
       ),
     })
 }
 
 export function upsertUser(
-  db: DrizzleD1Database<Record<string, never>> & {
-    $client: D1Database
-  },
+  db: NodePgDatabase,
   _user: InferInsertModel<typeof user>,
-  _updated?: SQLiteUpdateSetSource<typeof user>,
+  _updated?: PgUpdateSetSource<typeof user>,
 ) {
   return db
     .insert(user)
@@ -70,8 +67,8 @@ export function upsertUser(
             new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
           ),
         ),
-        sql`${_user.followersCount ?? null} IS NOT NULL`,
-        sql`${_user.followingCount ?? null} IS NOT NULL`,
+        _user.followersCount ?? null ? sql`true` : sql`false`,
+        _user.followingCount ?? null ? sql`true` : sql`false`,
       ),
     })
 }
@@ -118,7 +115,7 @@ function convertTweet(
   }
 }
 
-const twitter = new Hono<HonoEnv>()
+const twitter = new Hono<HonoEnv>().use(useDB())
 
 export type TwitterSpamReportRequest = z.infer<typeof spamReportRequestSchema>
 
@@ -143,140 +140,141 @@ twitter
     zValidator('json', spamReportRequestSchema),
     async (c) => {
       const validated = c.req.valid('json')
-      const db = drizzle(c.env.DB)
-      const isReportThisUser =
-        (
-          await db
-            .select()
-            .from(spamReport)
-            .where(
-              and(
-                eq(spamReport.spamUserId, validated.spamUser.id),
-                eq(spamReport.reportUserId, validated.reportUser.id),
-              ),
-            )
-            .limit(1)
-        ).length > 0
-      function createOrUpdateUser(
-        userParams: z.infer<typeof userSchema>,
-        isSpam: boolean,
-      ) {
-        const twitterUser = convertUserParamsToDBUser(userParams)
-        return db
-          .insert(user)
-          .values({
-            ...twitterUser,
-            spamReportCount: isSpam ? 1 : 0,
-          })
-          .onConflictDoUpdate({
-            target: user.id,
-            set: {
-              ...omit(twitterUser, ['id']),
-              spamReportCount: sql`${user.spamReportCount} + ${
-                isSpam && !isReportThisUser ? 1 : 0
-              }`,
-            },
-          })
-      }
-      // TODO: update tweet must have userId
-      function convertTweet(
-        tweetParams: ReportSpamContextTweet,
-      ): InferInsertModel<typeof tweet> {
-        return {
-          id: tweetParams.id,
-          text: tweetParams.text,
-          publishedAt: new Date(tweetParams.created_at).toISOString(),
-          userId: validated.spamUser.id,
-          media: tweetParams.media,
-          conversationId: tweetParams.conversation_id_str,
-          inReplyToStatusId: tweetParams.in_reply_to_status_id_str,
-          quotedStatusId: tweetParams.quoted_status_id_str,
-          lang: tweetParams.lang,
+      const db = c.get('db')
+      await db.transaction(async (tx) => {
+        const isReportThisUser =
+          (
+            await tx
+              .select()
+              .from(spamReport)
+              .where(
+                and(
+                  eq(spamReport.spamUserId, validated.spamUser.id),
+                  eq(spamReport.reportUserId, validated.reportUser.id),
+                ),
+              )
+              .limit(1)
+          ).length > 0
+        function createOrUpdateUser(
+          userParams: z.infer<typeof userSchema>,
+          isSpam: boolean,
+        ) {
+          const twitterUser = convertUserParamsToDBUser(userParams)
+          return tx
+            .insert(user)
+            .values({
+              ...twitterUser,
+              spamReportCount: isSpam ? 1 : 0,
+            })
+            .onConflictDoUpdate({
+              target: user.id,
+              set: {
+                ...omit(twitterUser, ['id']),
+                spamReportCount: sql`${user.spamReportCount} + ${
+                  isSpam && !isReportThisUser ? 1 : 0
+                }`,
+              },
+            })
         }
-      }
-      function createOrUpdateTweet(tweetParams: typeof tweetSchema._type) {
-        const _tweet = convertTweet(tweetParams)
-        return db
-          .insert(tweet)
-          .values({
-            ..._tweet,
-            spamReportCount: 1,
+        // TODO: update tweet must have userId
+        function convertTweet(
+          tweetParams: ReportSpamContextTweet,
+        ): InferInsertModel<typeof tweet> {
+          return {
+            id: tweetParams.id,
+            text: tweetParams.text,
+            publishedAt: new Date(tweetParams.created_at).toISOString(),
+            userId: validated.spamUser.id,
+            media: tweetParams.media,
+            conversationId: tweetParams.conversation_id_str,
+            inReplyToStatusId: tweetParams.in_reply_to_status_id_str,
+            quotedStatusId: tweetParams.quoted_status_id_str,
+            lang: tweetParams.lang,
+          }
+        }
+        function createOrUpdateTweet(tweetParams: typeof tweetSchema._type) {
+          const _tweet = convertTweet(tweetParams)
+          return tx
+            .insert(tweet)
+            .values({
+              ..._tweet,
+              spamReportCount: 1,
+            })
+            .onConflictDoUpdate({
+              target: tweet.id,
+              set: {
+                ...omit(_tweet, ['id']),
+                spamReportCount: sql`${tweet.spamReportCount} + 1`,
+              },
+            })
+        }
+        const [_spamReport] = await tx
+          .select({
+            id: spamReport.id,
           })
-          .onConflictDoUpdate({
-            target: tweet.id,
-            set: {
-              ...omit(_tweet, ['id']),
-              spamReportCount: sql`${tweet.spamReportCount} + 1`,
-            },
+          .from(spamReport)
+          .where(
+            and(
+              eq(spamReport.spamUserId, validated.spamUser.id),
+              eq(spamReport.reportUserId, validated.reportUser.id),
+              eq(spamReport.spamTweetId, validated.context.tweet.id),
+            ),
+          )
+          .limit(1)
+        function createSpamReport(
+          validated: typeof spamReportRequestSchema._type,
+        ) {
+          return tx.insert(spamReport).values({
+            spamUserId: validated.spamUser.id,
+            reportUserId: validated.reportUser.id,
+            spamTweetId: validated.context.tweet.id,
+            pageType: validated.context.page_type,
+            pageUrl: validated.context.page_url,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           })
-      }
-      const _spamReport = await db
-        .select({
-          id: spamReport.id,
-        })
-        .from(spamReport)
-        .where(
-          and(
-            eq(spamReport.spamUserId, validated.spamUser.id),
-            eq(spamReport.reportUserId, validated.reportUser.id),
-            eq(spamReport.spamTweetId, validated.context.tweet.id),
-          ),
-        )
-        .limit(1)
-        .get()
-      function createSpamReport(
-        validated: typeof spamReportRequestSchema._type,
-      ) {
-        return db.insert(spamReport).values({
-          spamUserId: validated.spamUser.id,
-          reportUserId: validated.reportUser.id,
-          spamTweetId: validated.context.tweet.id,
-          pageType: validated.context.page_type,
-          pageUrl: validated.context.page_url,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        })
-      }
-      function createRelationTweetsAndUsers(
-        relationTweets: NonNullable<
-          TwitterSpamReportRequest['context']['relationTweets']
-        >,
-      ) {
-        const users = uniqBy(
-          relationTweets.map((it) => it.user),
-          (it) => it.id,
-        )
-        const tweets = uniqBy(
-          relationTweets.map((it) => it.tweet),
-          (it) => it.id,
-        )
-        return [
-          ...users.map((it) => createOrUpdateUser(it, false)),
-          ...tweets.map((it) =>
-            db
-              .insert(tweet)
-              .values(convertTweet(it))
-              .onConflictDoUpdate({
-                target: tweet.id,
-                set: omit(convertTweet(it), ['id']),
-              }),
-          ),
+        }
+        function createRelationTweetsAndUsers(
+          relationTweets: NonNullable<
+            TwitterSpamReportRequest['context']['relationTweets']
+          >,
+        ) {
+          const users = uniqBy(
+            relationTweets.map((it) => it.user),
+            (it) => it.id,
+          )
+          const tweets = uniqBy(
+            relationTweets.map((it) => it.tweet),
+            (it) => it.id,
+          )
+          return [
+            ...users.map((it) => createOrUpdateUser(it, false)),
+            ...tweets.map((it) =>
+              tx
+                .insert(tweet)
+                .values(convertTweet(it))
+                .onConflictDoUpdate({
+                  target: tweet.id,
+                  set: omit(convertTweet(it), ['id']),
+                }),
+            ),
+          ]
+        }
+        const list: BatchItem<'pg'>[] = [
+          createOrUpdateUser(validated.spamUser, true),
+          createOrUpdateUser(validated.reportUser, false),
+          createOrUpdateTweet(validated.context.tweet),
         ]
-      }
-      const list: BatchItem<'sqlite'>[] = [
-        createOrUpdateUser(validated.spamUser, true),
-        createOrUpdateUser(validated.reportUser, false),
-        createOrUpdateTweet(validated.context.tweet),
-      ]
-      if (!_spamReport) {
-        list.push(createSpamReport(validated))
-      }
-      if (validated.context.relationTweets) {
-        list.push(
-          ...createRelationTweetsAndUsers(validated.context.relationTweets),
-        )
-      }
-      await db.batch(list as any)
+        if (!_spamReport) {
+          list.push(createSpamReport(validated))
+        }
+        if (validated.context.relationTweets) {
+          list.push(
+            ...createRelationTweetsAndUsers(validated.context.relationTweets),
+          )
+        }
+        await Promise.all(list)
+      })
       return c.json({ success: true })
     },
   )
@@ -294,7 +292,7 @@ twitter
         }
       }
     }
-    const db = drizzle(c.env.DB)
+    const db = c.get('db')
     const spamReportCounts = await db
       .select({
         id: user.id,
@@ -304,7 +302,6 @@ twitter
       .where(gte(user.spamReportCount, 1))
       .orderBy(desc(user.spamReportCount))
       .limit(1000)
-      .all()
     const res = spamReportCounts.reduce((acc, it) => {
       acc[it.id] = it.spamReportCount > 10 ? 'spam' : 'report'
       return acc
@@ -323,9 +320,9 @@ twitter
   })
 
 export async function upsertUsers(
-  db: DrizzleD1Database,
+  db: NodePgDatabase,
   users: InferInsertModel<typeof user>[],
-): Promise<BatchItem<'sqlite'>[]> {
+): Promise<BatchItem<'pg'>[]> {
   const existingUsers = await db
     .select()
     .from(user)
@@ -361,7 +358,7 @@ export async function upsertUsers(
     }
     return 'skip'
   })
-  const list: BatchItem<'sqlite'>[] = []
+  const list: BatchItem<'pg'>[] = []
   if (usersToProcessGroupBy['new']) {
     list.push(
       ...safeChunkInsertValues(user, usersToProcessGroupBy['new']).map((it) =>
@@ -384,7 +381,7 @@ export async function upsertUsers(
   return list
 }
 export async function upsertTweets(
-  db: DrizzleD1Database,
+  db: NodePgDatabase,
   tweets: InferInsertModel<typeof tweet>[],
 ) {
   const existingTweets = (
@@ -409,7 +406,7 @@ export async function upsertTweets(
     }
     return 'skip'
   })
-  const list: BatchItem<'sqlite'>[] = []
+  const list: BatchItem<'pg'>[] = []
   if (tweetsToProcessGroupBy['new']) {
     list.push(
       ...safeChunkInsertValues(tweet, tweetsToProcessGroupBy['new']).map((it) =>
@@ -450,7 +447,7 @@ twitter.post(
   zValidator('json', checkSpamUserSchema),
   async (c) => {
     const validated = c.req.valid('json')
-    const db = drizzle(c.env.DB)
+    const db = c.get('db')
     const usersToProcess = validated.map((it) =>
       convertUserParamsToDBUser(it.user),
     )
@@ -467,7 +464,7 @@ twitter.post(
     ).flat()
 
     if (list.length > 0) {
-      await db.batch(list as any)
+      await Promise.all(list)
     }
 
     // for (const item of chunk(validated, 100)) {

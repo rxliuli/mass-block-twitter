@@ -15,6 +15,9 @@ user.sql
 tweet.sql
 d1/
 __snapshots__/
+header.csv
+d1-pgsql.ts
+import_tweets.sh
 
 # deps
 node_modules/

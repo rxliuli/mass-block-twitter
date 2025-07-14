@@ -56,7 +56,7 @@ describe('modlists', () => {
   describe('create', () => {
     it('should be able to create a modlist', async () => {
       const db = context.db
-      expect(await db.select().from(modListSubscription).all()).length(0)
+      expect(await db.select().from(modListSubscription)).length(0)
       const resp1 = await fetch('/api/modlists/create', {
         method: 'POST',
         body: JSON.stringify(newModList),
@@ -94,7 +94,7 @@ describe('modlists', () => {
         } satisfies ModListCreateRequest),
       })
       expect(resp1.ok).true
-      const users = await context.db.select().from(user).all()
+      const users = await context.db.select().from(user)
       expect(users).length(1)
       expect(users[0].blueVerified).toBe(true)
       expect(users[0].followersCount).toBe(100)

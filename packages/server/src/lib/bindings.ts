@@ -1,7 +1,10 @@
+import { NodePgDatabase } from 'drizzle-orm/node-postgres'
+
 export type Bindings = {
   MY_KV: KVNamespace
   DB: D1Database
   MY_BUCKET: R2Bucket
+  HYPERDRIVE: Hyperdrive
 
   APP_ENV?: 'development' | 'production'
   PADDEL_API_URL: string
@@ -31,5 +34,7 @@ export type HonoEnv = {
     tokenInfo: TokenInfo
 
     jwtPayload: JwtPayload
+
+    db: NodePgDatabase
   }
 }

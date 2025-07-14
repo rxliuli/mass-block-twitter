@@ -5,7 +5,7 @@ import type {
   TwitterSpamReportRequest,
 } from '../src/lib'
 import { initCloudflareTest } from './utils'
-import { tweet, user, userSpamAnalysis } from '../src/db/schema'
+import { spamReport, tweet, user, userSpamAnalysis } from '../src/db/schema'
 import { eq, gt } from 'drizzle-orm'
 import { range } from 'es-toolkit'
 import { upsertTweets, upsertUsers } from '../src/routes/twitter'
@@ -100,10 +100,14 @@ describe('report spam', () => {
   })
   it('should be able to report spam with update new fields', async () => {
     expect((await add('1', '2', '1')).ok).true
-    const tweets = await c.db.select().from(tweet).all()
+    const tweets = await c.db.select().from(tweet)
     expect(tweets).length(1)
     expect(tweets[0].conversationId).toEqual('1')
-    let user1 = await c.db.select().from(user).where(eq(user.id, '1')).get()
+    let [user1] = await c.db
+      .select()
+      .from(user)
+      .where(eq(user.id, '1'))
+      .limit(1)
     assert(user1)
     expect(user1.blueVerified).eq(false)
     expect(user1.followersCount).eq(0)
@@ -121,7 +125,7 @@ describe('report spam', () => {
       },
     })
     expect(r2.ok).true
-    user1 = await c.db.select().from(user).where(eq(user.id, '1')).get()
+    user1 = (await c.db.select().from(user).where(eq(user.id, '1')).limit(1))[0]
     assert(user1)
     expect(user1.blueVerified).eq(true)
     expect(user1.followersCount).eq(100)
@@ -211,12 +215,12 @@ describe('report spam', () => {
       },
     })
     expect(resp.ok).true
-    const users = await c.db.select().from(user).all()
+    const users = await c.db.select().from(user)
     expect(users).length(5)
     const user4 = users.find((it) => it.id === '10000004')
     assert(user4)
     expect(user4.spamReportCount).eq(1)
-    const tweets = await c.db.select().from(tweet).all()
+    const tweets = await c.db.select().from(tweet)
     expect(tweets).length(4)
     const tweet4 = tweets.find((it) => it.id === '20000004')
     assert(tweet4)
@@ -236,9 +240,9 @@ describe('report spam', () => {
         'Content-Type': 'application/json',
       },
     })
-    const r = (await c.db.select().from(user).get({
-      id: '1',
-    }))!
+    const r = (
+      await c.db.select().from(user).where(eq(user.id, '1')).limit(1)
+    )[0]
     expect(r.location).eq('test')
     expect(r.url).eq('test')
   })
@@ -377,11 +381,11 @@ describe('check spam user', () => {
       },
     ]
     await checkSpamUser([{ user, tweets }])
-    const r1 = await c.db.select().from(tweet).all()
+    const r1 = await c.db.select().from(tweet)
     expect(r1[0].text).eq('test A')
     tweets[0].text = 'test B'
     await checkSpamUser([{ user, tweets }])
-    const r2 = await c.db.select().from(tweet).all()
+    const r2 = await c.db.select().from(tweet)
     expect(r2[0].text).eq('test A')
   })
   it('should be able to allow duplicate tweet with not complete', async () => {
@@ -417,7 +421,7 @@ describe('check spam user', () => {
       conversationId: '20000001',
     })
     await checkSpamUser(request)
-    const r1 = await c.db.select().from(tweet).all()
+    const r1 = await c.db.select().from(tweet)
     expect(r1[0].text).eq('test A')
     await c.db
       .update(tweet)
@@ -426,7 +430,7 @@ describe('check spam user', () => {
       })
       .where(eq(tweet.id, '20000001'))
     await checkSpamUser(request)
-    const r2 = await c.db.select().from(tweet).all()
+    const r2 = await c.db.select().from(tweet)
     expect(r2[0].text).eq('test B')
   })
   it('should be able to prevent duplicate update user and tweet', async () => {
@@ -442,22 +446,22 @@ describe('check spam user', () => {
       },
     ]
     await checkSpamUser(request)
-    const r1 = await c.db.select().from(user).all()
+    const r1 = await c.db.select().from(user)
     expect(r1[0].screenName).eq('user-1')
     request[0].user.name = 'user-2'
     await checkSpamUser(request)
-    const r2 = await c.db.select().from(user).all()
+    const r2 = await c.db.select().from(user)
     expect(r2[0].name).eq('user-1')
     request[0].user.followers_count = 100
     request[0].user.friends_count = 100
     await checkSpamUser(request)
-    const r3 = await c.db.select().from(user).all()
+    const r3 = await c.db.select().from(user)
     expect(r3[0].name).eq('user-2')
     expect(r3[0].followersCount).eq(100)
     expect(r3[0].followingCount).eq(100)
     request[0].user.name = 'user-3'
     await checkSpamUser(request)
-    const r4 = await c.db.select().from(user).all()
+    const r4 = await c.db.select().from(user)
     expect(r4[0].name).eq('user-2')
   })
   it('fix: D1_ERROR: too many SQL variables at offset 633: SQLITE_ERROR', async () => {
@@ -496,11 +500,13 @@ describe('check spam user', () => {
 
 describe('batch upsert users', () => {
   it('should be able to upsert users', async () => {
-    const r1 = await upsertUsers(c.db, [
-      { id: '10000001', screenName: 'user-1', name: 'user-1' },
-    ])
-    expect(r1).length(1)
-    await c.db.batch(r1 as any)
+    await c.db.transaction(async (tx) => {
+      const r1 = await upsertUsers(tx, [
+        { id: '10000001', screenName: 'user-1', name: 'user-1' },
+      ])
+      expect(r1).length(1)
+      await Promise.all(r1)
+    })
     const r2 = await upsertUsers(c.db, [
       { id: '10000001', screenName: 'user-1', name: 'user-1' },
     ])
@@ -515,16 +521,18 @@ describe('batch upsert tweets', () => {
       screenName: 'user-1',
       name: 'user-1',
     })
-    const r1 = await upsertTweets(c.db, [
-      {
-        id: '20000001',
-        text: 'test',
-        userId: '10000001',
-        publishedAt: new Date().toISOString(),
-      },
-    ])
-    expect(r1).length(1)
-    await c.db.batch(r1 as any)
+    await c.db.transaction(async (tx) => {
+      const r1 = await upsertTweets(tx, [
+        {
+          id: '20000001',
+          text: 'test',
+          userId: '10000001',
+          publishedAt: new Date().toISOString(),
+        },
+      ])
+      expect(r1).length(1)
+      await Promise.all(r1)
+    })
     const r2 = await upsertTweets(c.db, [
       {
         id: '20000001',

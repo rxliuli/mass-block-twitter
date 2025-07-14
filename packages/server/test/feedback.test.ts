@@ -28,7 +28,7 @@ describe('feedback', () => {
       },
     })
     expect(resp.ok).true
-    const feedbacks = await c.db.select().from(feedback).all()
+    const feedbacks = await c.db.select().from(feedback)
     expect(feedbacks).length(1)
     expect(feedbacks[0].reason).toBe('missing')
     expect(feedbacks[0].suggestion).toBeNull()
@@ -44,7 +44,7 @@ describe('feedback', () => {
       },
     })
     expect(resp.ok).true
-    const feedbacks = await c.db.select().from(feedback).all()
+    const feedbacks = await c.db.select().from(feedback)
     expect(feedbacks).length(1)
     expect(feedbacks[0].localUserId).eq('test-user-1')
   })
@@ -62,7 +62,7 @@ describe('feedback', () => {
       },
     })
     expect(resp.ok).true
-    const feedbacks = await c.db.select().from(feedback).all()
+    const feedbacks = await c.db.select().from(feedback)
     expect(feedbacks).length(1)
     expect(feedbacks[0].reason).toBe('broken')
     expect(feedbacks[0].suggestion).toBe('test')

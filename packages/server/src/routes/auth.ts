@@ -4,9 +4,9 @@ import { z } from 'zod'
 import { HonoEnv } from '../lib/bindings'
 import { generateSecureCode, sha256 } from '../lib/crypto'
 import { generateToken, getTokenInfo } from '../middlewares/auth'
-import { drizzle } from 'drizzle-orm/d1'
 import { localUser } from '../db/schema'
 import { eq } from 'drizzle-orm'
+import { useDB } from '../lib/drizzle'
 
 type CreateEmailOptions = {
   from: string
@@ -101,58 +101,63 @@ export type LoginResponse =
 export type LoginErrorResponse = {
   code: 'invalid-password' | 'failed-to-send-email'
 }
-auth.post('/login', zValidator('json', loginRequestSchema), async (c) => {
-  const validated = c.req.valid('json')
-  const encryptedPassword = await sha256(validated.password)
-  if (!encryptedPassword) {
-    return c.json({ code: 'invalid-password' }, 401)
-  }
-  const db = drizzle(c.env.DB)
-  const user = await db
-    .select()
-    .from(localUser)
-    .where(eq(localUser.email, validated.email))
-    .limit(1)
-    .get()
-  async function redirectVerifyEmail(email: string) {
-    const resp = await sendVerifyEmail(c, email)
-    if (!resp.ok) {
-      return c.json({ code: 'failed-to-send-email' }, 500)
+auth.post(
+  '/login',
+  zValidator('json', loginRequestSchema),
+  useDB(),
+  async (c) => {
+    const validated = c.req.valid('json')
+    const encryptedPassword = await sha256(validated.password)
+    if (!encryptedPassword) {
+      return c.json({ code: 'invalid-password' }, 401)
     }
-    return c.json({ code: 'verify-email' })
-  }
-  if (!user) {
-    await db.insert(localUser).values({
-      email: validated.email,
-      password: encryptedPassword,
+    async function redirectVerifyEmail(email: string) {
+      const resp = await sendVerifyEmail(c, email)
+      if (!resp.ok) {
+        return c.json({ code: 'failed-to-send-email' }, 500)
+      }
+      return c.json({ code: 'verify-email' })
+    }
+    const db = c.get('db')
+    const [user] = await db
+      .select()
+      .from(localUser)
+      .where(eq(localUser.email, validated.email))
+      .limit(1)
+
+    if (!user) {
+      await db.insert(localUser).values({
+        email: validated.email,
+        password: encryptedPassword,
+      })
+      return await redirectVerifyEmail(validated.email)
+    }
+    if (!user.emailVerified) {
+      return await redirectVerifyEmail(validated.email)
+    }
+    if (encryptedPassword !== user.password) {
+      return c.json({ code: 'invalid-password' }, 401)
+    }
+    await db
+      .update(localUser)
+      .set({
+        lastLogin: new Date().toISOString(),
+      })
+      .where(eq(localUser.id, user.id))
+    const token = await generateToken(c.env, {
+      sub: user.id,
     })
-    return await redirectVerifyEmail(validated.email)
-  }
-  if (!user.emailVerified) {
-    return await redirectVerifyEmail(validated.email)
-  }
-  if (encryptedPassword !== user.password) {
-    return c.json({ code: 'invalid-password' }, 401)
-  }
-  await db
-    .update(localUser)
-    .set({
-      lastLogin: new Date().toISOString(),
+    return c.json<LoginResponse>({
+      code: 'success',
+      data: {
+        id: user.id,
+        email: user.email!,
+        token,
+        isPro: user.isPro!,
+      } satisfies AuthInfo,
     })
-    .where(eq(localUser.id, user.id))
-  const token = await generateToken(c.env, {
-    sub: user.id,
-  })
-  return c.json<LoginResponse>({
-    code: 'success',
-    data: {
-      id: user.id,
-      email: user.email!,
-      token,
-      isPro: user.isPro!,
-    } satisfies AuthInfo,
-  })
-})
+  },
+)
 
 const verifyEmailRequestSchema = z.object({
   email: z.string().email(),
@@ -162,15 +167,15 @@ export type VerifyEmailRequest = z.infer<typeof verifyEmailRequestSchema>
 auth.post(
   '/verify-email',
   zValidator('json', verifyEmailRequestSchema),
+  useDB(),
   async (c) => {
     const validated = c.req.valid('json')
-    const db = drizzle(c.env.DB)
-    const user = await db
+    const db = c.get('db')
+    const [user] = await db
       .select()
       .from(localUser)
       .where(eq(localUser.email, validated.email))
       .limit(1)
-      .get()
     if (!user) {
       return c.json({ message: 'User not found' }, 404)
     }
@@ -201,6 +206,7 @@ auth.post(
     })
   },
 )
+
 auth
   .post('/logout', async (c) => {
     const token = c.req.header('Authorization')?.replace('Bearer ', '')
@@ -219,18 +225,18 @@ auth
   .post(
     '/forgot-password',
     zValidator('json', forgotPasswordRequestSchema),
+    useDB(),
     async (c) => {
       const validated = c.req.valid('json')
-      const db = drizzle(c.env.DB)
+      const db = c.get('db')
       if (await c.env.MY_KV.get('reset-password-' + validated.email)) {
         return c.json({ message: 'Email already requested' })
       }
-      const user = await db
+      const [user] = await db
         .select()
         .from(localUser)
         .where(eq(localUser.email, validated.email))
         .limit(1)
-        .get()
       if (!user) {
         // If you use this email, we will send you a reset password email.
         return c.json({ message: 'success' })
@@ -244,8 +250,8 @@ auth
         to: validated.email,
         subject: 'Reset Password',
         html: `<p>Reset Password</p>
-        <p>Your code is ${code}</p>
-        <p>This code will expire in 10 minutes</p>`,
+          <p>Your code is ${code}</p>
+          <p>This code will expire in 10 minutes</p>`,
         text: `Reset Password\nYour code is ${code}\nThis code will expire in 10 minutes`,
       })
       if (sendResult.error) {
@@ -265,18 +271,19 @@ const resetPasswordRequestSchema = z.object({
   password: z.string(),
 })
 export type ResetPasswordRequest = z.infer<typeof resetPasswordRequestSchema>
+
 auth.post(
   '/reset-password',
   zValidator('json', resetPasswordRequestSchema),
+  useDB(),
   async (c) => {
     const validated = c.req.valid('json')
-    const db = drizzle(c.env.DB)
-    const user = await db
+    const db = c.get('db')
+    const [user] = await db
       .select()
       .from(localUser)
       .where(eq(localUser.email, validated.email))
       .limit(1)
-      .get()
     if (!user) {
       return c.json({ message: 'User not found' }, 404)
     }

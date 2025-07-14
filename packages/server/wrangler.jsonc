@@ -3,7 +3,7 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-01-24",
 
-  // compatibility_flags = [ "nodejs_compat" ]
+  "compatibility_flags": [ "nodejs_compat" ],
 
   "vars": {
     "APP_ENV": "production"
@@ -28,14 +28,14 @@
     }
   ],
 
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "mass-block-twitter",
-      "database_id": "30a33a44-9313-407c-a2c6-6dd1e1f598c4",
-      "migrations_dir": "drizzle"
-    }
-  ],
+  // "d1_databases": [
+  //   {
+  //     "binding": "DB",
+  //     "database_name": "mass-block-twitter",
+  //     "database_id": "30a33a44-9313-407c-a2c6-6dd1e1f598c4",
+  //     "migrations_dir": "drizzle"
+  //   }
+  // ],
 
   // [ai]
   // binding = "AI"
@@ -43,5 +43,12 @@
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1
-  }
+  },
+
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "818dcb00aa5648b3b360140063b8d98a"
+    }
+  ]
 }

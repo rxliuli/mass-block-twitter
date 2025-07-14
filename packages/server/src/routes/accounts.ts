@@ -1,11 +1,11 @@
 import { Hono } from 'hono'
 import { HonoEnv } from '../lib/bindings'
 import { localUser } from '../db/schema'
-import { drizzle } from 'drizzle-orm/d1'
 import { eq, InferSelectModel } from 'drizzle-orm'
 import { auth, generateToken, JWT_EXPIRE_TIME } from '../middlewares/auth'
+import { useDB } from '../lib/drizzle'
 
-const accounts = new Hono<HonoEnv>().use(auth())
+const accounts = new Hono<HonoEnv>().use(auth()).use(useDB())
 
 type LocalUser = InferSelectModel<typeof localUser>
 export type AccountSettingsResponse = Pick<
@@ -17,10 +17,11 @@ export type AccountSettingsResponse = Pick<
 export type AccountSettingsError = {
   code: 'UserNotFound'
 }
+
 accounts.get('/settings', async (c) => {
   const tokenInfo = c.get('jwtPayload')
-  const db = drizzle(c.env.DB)
-  const _user = await db
+  const db = c.get('db')
+  const [_user] = await db
     .select({
       id: localUser.id,
       email: localUser.email,
@@ -31,7 +32,6 @@ accounts.get('/settings', async (c) => {
     })
     .from(localUser)
     .where(eq(localUser.id, tokenInfo.sub))
-    .get()
   if (!_user) {
     return c.json<AccountSettingsError>({ code: 'UserNotFound' }, 404)
   }

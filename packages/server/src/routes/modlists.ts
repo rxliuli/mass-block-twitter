@@ -5,7 +5,6 @@ import { z } from 'zod'
 import { ulid } from 'ulidx'
 import { userSchema } from '../lib/request'
 import { auth, getTokenInfo } from '../middlewares/auth'
-import { drizzle, DrizzleD1Database } from 'drizzle-orm/d1'
 import {
   modList,
   modListRule,
@@ -18,6 +17,7 @@ import {
   and,
   desc,
   eq,
+  ilike,
   inArray,
   InferInsertModel,
   InferSelectModel,
@@ -27,15 +27,14 @@ import {
   sql,
 } from 'drizzle-orm'
 import { zodStringNumber } from '../lib/utils/zod'
-import { getTableAliasedColumns } from '../lib/drizzle'
+import { getTableAliasedColumns, useDB } from '../lib/drizzle'
 import { groupBy, omit } from 'es-toolkit'
+import { NodePgDatabase } from 'drizzle-orm/node-postgres'
 
-const modlists = new Hono<HonoEnv>().use(auth())
+const modlists = new Hono<HonoEnv>().use(auth()).use(useDB())
 
 function _upsertUser(
-  db: DrizzleD1Database<Record<string, never>> & {
-    $client: D1Database
-  },
+  db: NodePgDatabase,
   userParams: z.infer<typeof userSchema>,
 ) {
   const twitterUser = convertUserParamsToDBUser(userParams)
@@ -92,28 +91,30 @@ export type ModListCreateRequest = z.infer<typeof createSchema>
 export type ModListCreateResponse = InferSelectModel<typeof modList>
 modlists.post('/create', zValidator('json', createSchema), async (c) => {
   const validated = c.req.valid('json')
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   const tokenInfo = c.get('jwtPayload')
   const modListId = ulid()
   if (validated.avatar) {
     validated.avatar = await uploadAvatar(c, validated.avatar)
   }
-  const [, [r]] = await db.batch([
-    _upsertUser(db, validated.twitterUser),
-    db
-      .insert(modList)
-      .values({
-        id: modListId,
-        name: validated.name,
-        description: validated.description,
-        avatar: validated.avatar,
-        localUserId: tokenInfo.sub,
-        twitterUserId: validated.twitterUser.id,
-        visibility: validated.visibility,
-        subscriptionCount: 0,
-      })
-      .returning(),
-  ])
+  const [, [r]] = await db.transaction((tx) =>
+    Promise.all([
+      _upsertUser(db, validated.twitterUser),
+      db
+        .insert(modList)
+        .values({
+          id: modListId,
+          name: validated.name,
+          description: validated.description,
+          avatar: validated.avatar,
+          localUserId: tokenInfo.sub,
+          twitterUserId: validated.twitterUser.id,
+          visibility: validated.visibility,
+          subscriptionCount: 0,
+        })
+        .returning(),
+    ]),
+  )
   return c.json(r)
 })
 
@@ -127,7 +128,7 @@ export type ModListUpdateRequest = z.infer<typeof updateSchema>
 modlists.put('/update/:id', zValidator('json', updateSchema), async (c) => {
   const validated = c.req.valid('json')
   const id = c.req.param('id')
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   const tokenInfo = c.get('jwtPayload')
   const _modList = await db
     .select()
@@ -156,48 +157,52 @@ export type ModListRemoveErrorResponse = {
 }
 modlists.delete('/remove/:id', zValidator('param', removeSchema), async (c) => {
   const validated = c.req.valid('param')
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   const tokenInfo = c.get('jwtPayload')
-  const [_modList, modListSubscriptions] = await db.batch([
-    db
-      .select()
-      .from(modList)
-      .where(
-        and(
-          eq(modList.id, validated.id),
-          eq(modList.localUserId, tokenInfo.sub),
-        ),
-      )
-      .limit(1),
-    db
-      .select()
-      .from(modListSubscription)
-      .where(eq(modListSubscription.modListId, validated.id)),
-  ])
+  const [_modList, modListSubscriptions] = await db.transaction((tx) =>
+    Promise.all([
+      tx
+        .select()
+        .from(modList)
+        .where(
+          and(
+            eq(modList.id, validated.id),
+            eq(modList.localUserId, tokenInfo.sub),
+          ),
+        )
+        .limit(1),
+      tx
+        .select()
+        .from(modListSubscription)
+        .where(eq(modListSubscription.modListId, validated.id)),
+    ]),
+  )
   if (_modList.length === 0) {
     return c.json({ code: 'modListNotFound' }, 404)
   }
   if (modListSubscriptions.length > 0) {
     return c.json({ code: 'modListHasSubscriptions' }, 400)
   }
-  await db.batch([
-    db.delete(modListUser).where(eq(modListUser.modListId, validated.id)),
-    db.delete(modListRule).where(eq(modListRule.modListId, validated.id)),
-    db
-      .delete(modList)
-      .where(
-        and(
-          eq(modList.id, validated.id),
-          eq(modList.localUserId, tokenInfo.sub),
+  await db.transaction((tx) =>
+    Promise.all([
+      tx.delete(modListUser).where(eq(modListUser.modListId, validated.id)),
+      tx.delete(modListRule).where(eq(modListRule.modListId, validated.id)),
+      tx
+        .delete(modList)
+        .where(
+          and(
+            eq(modList.id, validated.id),
+            eq(modList.localUserId, tokenInfo.sub),
+          ),
         ),
-      ),
-  ])
+    ]),
+  )
   return c.json({ code: 'success' })
 })
 
 export type ModListGetCreatedResponse = InferSelectModel<typeof modList>[]
 modlists.get('/created', async (c) => {
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   const tokenInfo = c.get('jwtPayload')
   const modLists = await db
     .select()
@@ -222,25 +227,27 @@ modlists
     async (c) => {
       const validated = c.req.valid('param')
       const subscribe = c.req.valid('json')
-      const db = drizzle(c.env.DB)
+      const db = c.get('db')
       const tokenInfo = c.get('jwtPayload')
-      const [_modList, _existingSubscription] = await db.batch([
-        db
-          .select()
-          .from(modList)
-          .where(eq(modList.id, validated.modListId))
-          .limit(1),
-        db
-          .select()
-          .from(modListSubscription)
-          .where(
-            and(
-              eq(modListSubscription.modListId, validated.modListId),
-              eq(modListSubscription.localUserId, tokenInfo.sub),
-            ),
-          )
-          .limit(1),
-      ])
+      const [_modList, _existingSubscription] = await db.transaction((tx) =>
+        Promise.all([
+          tx
+            .select()
+            .from(modList)
+            .where(eq(modList.id, validated.modListId))
+            .limit(1),
+          tx
+            .select()
+            .from(modListSubscription)
+            .where(
+              and(
+                eq(modListSubscription.modListId, validated.modListId),
+                eq(modListSubscription.localUserId, tokenInfo.sub),
+              ),
+            )
+            .limit(1),
+        ]),
+      )
       if (_modList.length === 0) {
         return c.json({ code: 'modListNotFound' }, 404)
       }
@@ -258,21 +265,23 @@ modlists
           )
         return c.json({ code: 'success' })
       }
-      await db.batch([
-        db.insert(modListSubscription).values({
-          id: ulid(),
-          modListId: validated.modListId,
-          localUserId: tokenInfo.sub,
-          action: subscribe.action,
-        }),
-        db
-          .update(modList)
-          .set({
-            subscriptionCount: sql`subscriptionCount + 1`,
-            updatedAt: sql`updatedAt`, // don't update updatedAt
-          })
-          .where(eq(modList.id, validated.modListId)),
-      ])
+      await db.transaction((tx) =>
+        Promise.all([
+          tx.insert(modListSubscription).values({
+            id: ulid(),
+            modListId: validated.modListId,
+            localUserId: tokenInfo.sub,
+            action: subscribe.action,
+          }),
+          tx
+            .update(modList)
+            .set({
+              subscriptionCount: sql`${modList.subscriptionCount} + 1`,
+              updatedAt: sql`${modList.updatedAt}`, // don't update updatedAt
+            })
+            .where(eq(modList.id, validated.modListId)),
+        ]),
+      )
       return c.json({ code: 'success' })
     },
   )
@@ -281,45 +290,49 @@ modlists
     zValidator('param', subscribeParamSchema),
     async (c) => {
       const validated = c.req.valid('param')
-      const db = drizzle(c.env.DB)
+      const db = c.get('db')
       const tokenInfo = c.get('jwtPayload')
-      const [_modList, _existingSubscription] = await db.batch([
-        db.select().from(modList).where(eq(modList.id, validated.modListId)),
-        db
-          .select()
-          .from(modListSubscription)
-          .where(
-            and(
-              eq(modListSubscription.modListId, validated.modListId),
-              eq(modListSubscription.localUserId, tokenInfo.sub),
+      const [_modList, _existingSubscription] = await db.transaction((tx) =>
+        Promise.all([
+          tx.select().from(modList).where(eq(modList.id, validated.modListId)),
+          tx
+            .select()
+            .from(modListSubscription)
+            .where(
+              and(
+                eq(modListSubscription.modListId, validated.modListId),
+                eq(modListSubscription.localUserId, tokenInfo.sub),
+              ),
             ),
-          ),
-      ])
+        ]),
+      )
       if (_modList.length === 0) {
         return c.json({ code: 'modListNotFound' }, 404)
       }
       if (_existingSubscription.length === 0) {
         return c.json({ code: 'notSubscribed' }, 400)
       }
-      await db.batch([
-        db
-          .delete(modListSubscription)
-          .where(eq(modListSubscription.id, _existingSubscription[0].id)),
-        db
-          .update(modList)
-          .set({
-            subscriptionCount: sql`subscriptionCount - 1`,
-            updatedAt: sql`updatedAt`, // don't update updatedAt
-          })
-          .where(eq(modList.id, validated.modListId)),
-      ])
+      await db.transaction((tx) =>
+        Promise.all([
+          tx
+            .delete(modListSubscription)
+            .where(eq(modListSubscription.id, _existingSubscription[0].id)),
+          db
+            .update(modList)
+            .set({
+              subscriptionCount: sql`${modList.subscriptionCount} - 1`,
+              updatedAt: sql`${modList.updatedAt}`, // don't update updatedAt
+            })
+            .where(eq(modList.id, validated.modListId)),
+        ]),
+      )
       return c.json({ code: 'success' })
     },
   )
 
 export type ModListSubscribeResponse = InferSelectModel<typeof modList>[]
 modlists.get('/subscribed/metadata', async (c) => {
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   const tokenInfo = c.get('jwtPayload')
   const _modList = await db
     .select()
@@ -330,7 +343,7 @@ modlists.get('/subscribed/metadata', async (c) => {
 })
 // TODO @deprecated v0.15.1
 modlists.get('/subscribed', async (c) => {
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   const tokenInfo = c.get('jwtPayload')
   const _modList = await db
     .select()
@@ -350,26 +363,23 @@ export type ModListAddTwitterUserResponse = InferSelectModel<typeof user>
 // @deprecated v0.17.3
 modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
   const validated = c.req.valid('json')
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   const tokenInfo = c.get('jwtPayload')
 
-  const [modListExists, userAlreadyInList] = await db.batch([
-    db
-      .select({
-        localUserId: modList.localUserId,
-      })
-      .from(modList)
-      .where(eq(modList.id, validated.modListId)),
-    db
-      .select()
-      .from(modListUser)
-      .where(
-        and(
-          eq(modListUser.modListId, validated.modListId),
-          eq(modListUser.twitterUserId, validated.twitterUser.id),
+  const [modListExists, userAlreadyInList] = await db.transaction(async (tx) =>
+    Promise.all([
+      tx.select().from(modList).where(eq(modList.id, validated.modListId)),
+      tx
+        .select()
+        .from(modListUser)
+        .where(
+          and(
+            eq(modListUser.modListId, validated.modListId),
+            eq(modListUser.twitterUserId, validated.twitterUser.id),
+          ),
         ),
-      ),
-  ])
+    ]),
+  )
   if (
     modListExists.length === 0 ||
     modListExists[0].localUserId !== tokenInfo.sub
@@ -379,23 +389,25 @@ modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
   if (userAlreadyInList.length > 0) {
     return c.json({ code: 'userAlreadyInModList' }, 400)
   }
-  await db.batch([
-    _upsertUser(db, validated.twitterUser),
-    db.insert(modListUser).values({
-      id: ulid(),
-      modListId: validated.modListId,
-      twitterUserId: validated.twitterUser.id,
-    }),
-    db
-      .update(modList)
-      .set({ userCount: sql`userCount + 1` })
-      .where(eq(modList.id, validated.modListId)),
-  ])
-  const result = await db
+  await db.transaction(async (tx) =>
+    Promise.all([
+      _upsertUser(tx, validated.twitterUser),
+      tx.insert(modListUser).values({
+        id: ulid(),
+        modListId: validated.modListId,
+        twitterUserId: validated.twitterUser.id,
+      }),
+      db
+        .update(modList)
+        .set({ userCount: sql`${modList.userCount} + 1` })
+        .where(eq(modList.id, validated.modListId)),
+    ]),
+  )
+  const [result] = await db
     .select()
     .from(user)
     .where(eq(user.id, validated.twitterUser.id))
-    .get()
+    .limit(1)
   if (!result) {
     return c.json({ code: 'userNotFound' }, 404)
   }
@@ -409,7 +421,7 @@ export type ModListAddTwitterUsersRequest = z.infer<
   typeof addTwitterUsersSchema
 >
 async function upsertModListUsers(
-  db: DrizzleD1Database,
+  db: NodePgDatabase,
   validated: ModListAddTwitterUsersRequest,
 ) {
   const existingUsers = await db
@@ -442,7 +454,7 @@ async function upsertModListUsers(
       .onConflictDoNothing({
         target: [modListUser.modListId, modListUser.twitterUserId],
       })
-      .returning({ inserted: sql`changes()` }),
+      .returning({ id: modListUser.id }),
   )
 }
 export type ModListAddTwitterUsersResponse = Pick<
@@ -454,15 +466,14 @@ modlists.post(
   zValidator('json', addTwitterUsersSchema),
   async (c) => {
     const validated = c.req.valid('json')
-    const db = drizzle(c.env.DB)
+    const db = c.get('db')
     const tokenInfo = c.get('jwtPayload')
-    const _modList = await db
+    const [_modList] = await db
       .select({
         localUserId: modList.localUserId,
       })
       .from(modList)
       .where(eq(modList.id, validated.modListId))
-      .get()
     if (!_modList || _modList.localUserId !== tokenInfo.sub) {
       return c.json({ code: 'modListNotFound' }, 404)
     }
@@ -476,14 +487,14 @@ modlists.post(
       ])
     ).flat()
     if (batchItems.length > 0) {
-      const results = (await db.batch(batchItems as any)) as (
+      const results = (await Promise.all(batchItems)) as (
         | InferInsertModel<typeof user>[]
         | { inserted: 0 }[]
       )[]
-      const inserts = results.flat().filter((it) => 'inserted' in it)
+      const inserts = results.flat().filter((it) => 'id' in it)
       await db
         .update(modList)
-        .set({ userCount: sql`userCount + ${inserts.length}` })
+        .set({ userCount: sql`${modList.userCount} + ${inserts.length}` })
         .where(eq(modList.id, validated.modListId))
     }
     const list = await db
@@ -517,41 +528,45 @@ modlists.delete(
   zValidator('json', removeTwitterUserSchema),
   async (c) => {
     const validated = c.req.valid('json')
-    const db = drizzle(c.env.DB)
+    const db = c.get('db')
     const tokenInfo = c.get('jwtPayload')
-    const [_modList, _modListUser] = await db.batch([
-      db
-        .select()
-        .from(modList)
-        .where(
-          and(
-            eq(modList.id, validated.modListId),
-            eq(modList.localUserId, tokenInfo.sub),
+    const [_modList, _modListUser] = await db.transaction((tx) =>
+      Promise.all([
+        tx
+          .select()
+          .from(modList)
+          .where(
+            and(
+              eq(modList.id, validated.modListId),
+              eq(modList.localUserId, tokenInfo.sub),
+            ),
           ),
-        ),
-      db
-        .select()
-        .from(modListUser)
-        .where(
-          and(
-            eq(modListUser.modListId, validated.modListId),
-            eq(modListUser.twitterUserId, validated.twitterUserId),
+        tx
+          .select()
+          .from(modListUser)
+          .where(
+            and(
+              eq(modListUser.modListId, validated.modListId),
+              eq(modListUser.twitterUserId, validated.twitterUserId),
+            ),
           ),
-        ),
-    ])
+      ]),
+    )
     if (_modList.length === 0) {
       return c.json({ code: 'modListNotFound' }, 404)
     }
     if (_modListUser.length === 0) {
       return c.json({ code: 'modListUserNotFound' }, 404)
     }
-    await db.batch([
-      db.delete(modListUser).where(eq(modListUser.id, _modListUser[0].id)),
-      db
-        .update(modList)
-        .set({ userCount: sql`userCount - 1` })
-        .where(eq(modList.id, validated.modListId)),
-    ])
+    await db.transaction((tx) =>
+      Promise.all([
+        tx.delete(modListUser).where(eq(modListUser.id, _modListUser[0].id)),
+        tx
+          .update(modList)
+          .set({ userCount: sql`${modList.userCount} - 1` })
+          .where(eq(modList.id, validated.modListId)),
+      ]),
+    )
     return c.json({ code: 'success' })
   },
 )
@@ -573,11 +588,14 @@ const checkUserSchema = z.object({
 })
 export type ModListUserCheckRequest = z.infer<typeof checkUserSchema>
 export type ModListUserCheckResponse = Record<string, boolean>
-async function checkUsers(c: Context, validated: ModListUserCheckPostRequest) {
-  const db = drizzle(c.env.DB)
+async function checkUsers(
+  c: Context<HonoEnv>,
+  validated: ModListUserCheckPostRequest,
+) {
+  const db = c.get('db')
   if (validated.users.length > 0) {
     // async upsert users, avoid blocking
-    db.batch([...validated.users.map((it) => _upsertUser(db, it))] as any)
+    await Promise.all(validated.users.map((it) => _upsertUser(db, it)))
   }
   const subscriptions = await db
     .select({ twitterUserId: modListUser.twitterUserId })
@@ -634,24 +652,26 @@ export type ModListAddRuleRequest = z.infer<typeof addRuleSchema>
 export type ModListAddRuleResponse = InferSelectModel<typeof modListRule>
 modlists.post('/rule', zValidator('json', addRuleSchema), async (c) => {
   const validated = c.req.valid('json')
-  const db = drizzle(c.env.DB)
-  const [[r]] = await db.batch([
-    db
-      .insert(modListRule)
-      .values({
-        id: ulid(),
-        name: validated.name,
-        modListId: validated.modListId,
-        rule: validated.rule,
-      })
-      .returning(),
-    db
-      .update(modList)
-      .set({
-        updatedAt: new Date().toISOString(),
-      })
-      .where(eq(modList.id, validated.modListId)),
-  ])
+  const db = c.get('db')
+  const [[r]] = await db.transaction((tx) =>
+    Promise.all([
+      tx
+        .insert(modListRule)
+        .values({
+          id: ulid(),
+          name: validated.name,
+          modListId: validated.modListId,
+          rule: validated.rule,
+        })
+        .returning(),
+      tx
+        .update(modList)
+        .set({
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(modList.id, validated.modListId)),
+    ]),
+  )
   return c.json<ModListAddRuleResponse>(r)
 })
 
@@ -668,9 +688,9 @@ modlists.put(
   async (c) => {
     const validated = c.req.valid('param')
     const validatedJson = c.req.valid('json')
-    const db = drizzle(c.env.DB)
+    const db = c.get('db')
     const tokenInfo = c.get('jwtPayload')
-    const _modListRule = await db
+    const [_modListRule] = await db
       .select()
       .from(modListRule)
       .innerJoin(modList, eq(modListRule.modListId, modList.id))
@@ -680,26 +700,27 @@ modlists.put(
           eq(modList.localUserId, tokenInfo.sub),
         ),
       )
-      .get()
     if (!_modListRule) {
       return c.json({ code: 'modListRuleNotFound' }, 404)
     }
-    const [[r]] = await db.batch([
-      db
-        .update(modListRule)
-        .set({
-          name: validatedJson.name,
-          rule: validatedJson.rule,
-        })
-        .where(eq(modListRule.id, validated.id))
-        .returning(),
-      db
-        .update(modList)
-        .set({
-          updatedAt: new Date().toISOString(),
-        })
-        .where(eq(modList.id, _modListRule.ModList.id)),
-    ])
+    const [[r]] = await db.transaction((tx) =>
+      Promise.all([
+        tx
+          .update(modListRule)
+          .set({
+            name: validatedJson.name,
+            rule: validatedJson.rule,
+          })
+          .where(eq(modListRule.id, validated.id))
+          .returning(),
+        tx
+          .update(modList)
+          .set({
+            updatedAt: new Date().toISOString(),
+          })
+          .where(eq(modList.id, _modListRule.ModList.id)),
+      ]),
+    )
     return c.json<ModListUpdateRuleResponse>(r)
   },
 )
@@ -714,9 +735,9 @@ modlists.delete(
   zValidator('param', removeRuleSchema),
   async (c) => {
     const validated = c.req.valid('param')
-    const db = drizzle(c.env.DB)
+    const db = c.get('db')
     const tokenInfo = c.get('jwtPayload')
-    const _modListRule = await db
+    const [_modListRule] = await db
       .select()
       .from(modListRule)
       .innerJoin(modList, eq(modListRule.modListId, modList.id))
@@ -726,19 +747,20 @@ modlists.delete(
           eq(modList.localUserId, tokenInfo.sub),
         ),
       )
-      .get()
     if (!_modListRule) {
       return c.json({ code: 'modListRuleNotFound' }, 404)
     }
-    await db.batch([
-      db.delete(modListRule).where(eq(modListRule.id, validated.id)),
-      db
-        .update(modList)
-        .set({
-          updatedAt: new Date().toISOString(),
-        })
-        .where(eq(modList.id, _modListRule.ModList.id)),
-    ])
+    await db.transaction((tx) =>
+      Promise.all([
+        tx.delete(modListRule).where(eq(modListRule.id, validated.id)),
+        tx
+          .update(modList)
+          .set({
+            updatedAt: new Date().toISOString(),
+          })
+          .where(eq(modList.id, _modListRule.ModList.id)),
+      ]),
+    )
     return c.json({ code: 'success' })
   },
 )
@@ -749,7 +771,7 @@ interface CacheItem {
 }
 
 async function queryModListSubscribedUserAndRulesByCache(
-  c: Context,
+  c: Context<HonoEnv>,
   _modListIds: {
     modListId: string
     updatedAt: string
@@ -758,7 +780,7 @@ async function queryModListSubscribedUserAndRulesByCache(
 ): Promise<ModListSubscribedUserAndRulesResponse> {
   const modListGrouped = groupBy(_modListIds, (it) => it.modListId)
 
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   let cacheIds: string[] = []
 
   const cached = (
@@ -852,7 +874,7 @@ export type ModListSubscribedUserAndRulesResponse = {
 }[]
 modlists.get('/subscribed/users', async (c) => {
   const tokenInfo = c.get('jwtPayload')
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   const _modListIds = await db
     .select({
       modListId: modListSubscription.modListId,
@@ -881,11 +903,11 @@ const searchSchema = z.object({
 
 export type ModListSearchResponse = InferSelectModel<typeof modList>[]
 
-const search = new Hono<HonoEnv>()
+const search = new Hono<HonoEnv>().use(useDB())
 
 search.get('/search', zValidator('query', searchSchema), async (c) => {
   // const _validated = c.req.valid('query')
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   const modLists = await db
     .select()
     .from(modList)
@@ -908,39 +930,41 @@ search
   // get modlist metadata by id
   .get('/get/:id', async (c) => {
     const id = c.req.param('id')
-    const db = drizzle(c.env.DB)
+    const db = c.get('db')
     const tokenInfo = await getTokenInfo(c)
-    const [_modList, ruleCount, _subscribed] = await db.batch([
-      db
-        .select({
-          modList: getTableAliasedColumns(modList),
-          user: getTableAliasedColumns(user),
-        })
-        .from(modList)
-        .innerJoin(user, eq(modList.twitterUserId, user.id))
-        .where(eq(modList.id, id))
-        .limit(1),
-      db
-        .select({
-          ruleCount: sql<number>`count(${modListRule.id})`,
-        })
-        .from(modListRule)
-        .where(eq(modListRule.modListId, id)),
-      ...(tokenInfo
-        ? [
-            db
-              .select()
-              .from(modListSubscription)
-              .where(
-                and(
-                  eq(modListSubscription.modListId, id),
-                  eq(modListSubscription.localUserId, tokenInfo.sub),
-                ),
-              )
-              .limit(1),
-          ]
-        : []),
-    ])
+    const [_modList, ruleCount, _subscribed] = await db.transaction((tx) =>
+      Promise.all([
+        tx
+          .select({
+            modList: getTableAliasedColumns(modList),
+            user: getTableAliasedColumns(user),
+          })
+          .from(modList)
+          .innerJoin(user, eq(modList.twitterUserId, user.id))
+          .where(eq(modList.id, id))
+          .limit(1),
+        tx
+          .select({
+            ruleCount: sql<number>`count(${modListRule.id})`,
+          })
+          .from(modListRule)
+          .where(eq(modListRule.modListId, id)),
+        ...(tokenInfo
+          ? [
+              tx
+                .select()
+                .from(modListSubscription)
+                .where(
+                  and(
+                    eq(modListSubscription.modListId, id),
+                    eq(modListSubscription.localUserId, tokenInfo.sub),
+                  ),
+                )
+                .limit(1),
+            ]
+          : []),
+      ]),
+    )
     if (_modList.length === 0) {
       return c.json<ModListGetErrorResponse>({ code: 'modListNotFound' }, 404)
     }
@@ -977,7 +1001,7 @@ search
   // get modlist users by modlist id
   .get('/users', zValidator('query', usersSchema), async (c) => {
     const validated = c.req.valid('query')
-    const db = drizzle(c.env.DB)
+    const db = c.get('db')
     const conditions = [eq(modListUser.modListId, validated.modListId)]
     if (validated.cursor) {
       conditions.push(lt(modListUser.id, validated.cursor))
@@ -985,9 +1009,9 @@ search
     if (validated.query) {
       conditions.push(
         or(
-          like(user.screenName, `%${validated.query}%`),
-          like(user.name, `%${validated.query}%`),
-          like(user.description, `%${validated.query}%`),
+          ilike(user.screenName, `%${validated.query}%`),
+          ilike(user.name, `%${validated.query}%`),
+          ilike(user.description, `%${validated.query}%`),
         )!,
       )
     }
@@ -1024,7 +1048,7 @@ export type ModListRulesPageResponse = {
 }
 search.get('/rules', zValidator('query', rulesSchema), async (c) => {
   const validated = c.req.valid('query')
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   const conditions = [eq(modListRule.modListId, validated.modListId)]
   if (validated.cursor) {
     conditions.push(lt(modListRule.id, validated.cursor))
@@ -1050,7 +1074,7 @@ search.get(
   zValidator('param', z.object({ id: z.string() })),
   async (c) => {
     const id = c.req.param('id')
-    const db = drizzle(c.env.DB)
+    const db = c.get('db')
 
     const _modList = await db
       .select({
@@ -1058,7 +1082,7 @@ search.get(
         updatedAt: modList.updatedAt,
         action: sql<
           InferSelectModel<typeof modListSubscription>['action']
-        >`"hide"`,
+        >`'hide'`,
       })
       .from(modList)
       .where(eq(modList.id, id))

@@ -4,6 +4,7 @@ import { initCloudflareTest } from './utils'
 import { localUser } from '../src/db/schema'
 import { pick } from 'es-toolkit'
 import { JWT_EXPIRE_TIME } from '../src/middlewares/auth'
+import { eq } from 'drizzle-orm'
 
 const c = initCloudflareTest()
 
@@ -17,10 +18,10 @@ describe('accounts', () => {
       })
       expect(resp.ok).true
       const data = (await resp.json()) as AccountSettingsResponse
-      const expected = await c.db
+      const [expected] = await c.db
         .select()
         .from(localUser)
-        .get({ id: 'test-user-1' })
+        .where(eq(localUser.id, 'test-user-1'))
       expect<string>(data.createdAt)
       expect<string>(data.updatedAt)
       expect<string>(data.lastLogin)

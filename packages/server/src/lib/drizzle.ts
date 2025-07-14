@@ -8,8 +8,13 @@ import {
   SQL,
   InferInsertModel,
 } from 'drizzle-orm'
+import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres'
 import { customType } from 'drizzle-orm/sqlite-core'
 import { uniq, last } from 'es-toolkit'
+import { Client } from 'pg'
+import { HonoEnv } from './bindings'
+import { Context } from 'hono'
+import { createMiddleware } from 'hono/factory'
 
 export function getTableAliasedColumns<T extends AnyTable<TableConfig>>(
   table: T,
@@ -95,3 +100,45 @@ export const safeJson = <TData>(name: string) =>
       }
     },
   })(name)
+
+export async function withDB<T>(
+  c: Context<HonoEnv>,
+  cb: (db: NodePgDatabase) => Promise<T>,
+): Promise<T> {
+  const sql = new Client({
+    connectionString: c.env.HYPERDRIVE.connectionString,
+  })
+  await sql.connect()
+  const db = drizzle(sql)
+  try {
+    return await cb(db)
+  } finally {
+    c.executionCtx.waitUntil(sql.end())
+  }
+}
+
+export function useDB() {
+  return createMiddleware<{
+    Bindings: {
+      HYPERDRIVE: Hyperdrive
+    }
+    Variables: {
+      db: NodePgDatabase
+    }
+  }>(async (c, next) => {
+    if (c.get('db')) {
+      return await next()
+    }
+    const sql = new Client({
+      connectionString: c.env.HYPERDRIVE.connectionString,
+    })
+    await sql.connect()
+    const db = drizzle(sql)
+    c.set('db', db)
+    try {
+      await next()
+    } finally {
+      c.executionCtx.waitUntil(sql.end())
+    }
+  })
+}

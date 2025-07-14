@@ -2,7 +2,7 @@ import { assert, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CloudflareTestContext, createCloudflareTestContext } from './utils'
 import { CheckoutCompleteRequest } from '../src/lib'
 import { PaddleTransaction } from '../src/routes/billing'
-import { localUser, modList, payment } from '../src/db/schema'
+import { localUser, payment } from '../src/db/schema'
 import { eq } from 'drizzle-orm'
 
 describe('billing', () => {
@@ -33,17 +33,17 @@ describe('billing', () => {
       },
     })
     expect(resp.status).toBe(200)
-    const _payment = await context.db
+    const [_payment] = await context.db
       .select()
       .from(payment)
       .where(eq(payment.id, 'test-transaction-id'))
-      .get()
+      .limit(1)
     expect(_payment?.id).eq('test-transaction-id')
-    const user = await context.db
+    const [user] = await context.db
       .select()
       .from(localUser)
       .where(eq(localUser.id, 'test-user-1'))
-      .get()
+      .limit(1)
     assert(user)
     expect(user.isPro).true
   })

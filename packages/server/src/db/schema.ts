@@ -1,16 +1,18 @@
 import {
-  sqliteTable,
+  pgTable,
   text,
   integer,
   real,
   uniqueIndex,
   index,
-} from 'drizzle-orm/sqlite-core'
+  boolean,
+  jsonb,
+} from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 import { ulid } from 'ulidx'
 
 // User table
-export const user = sqliteTable('User', {
+export const user = pgTable('User', {
   id: text('id').primaryKey(),
   screenName: text('screenName').notNull(),
   name: text('name'),
@@ -27,22 +29,19 @@ export const user = sqliteTable('User', {
     .$onUpdateFn(() => new Date().toISOString()),
   followersCount: integer('followersCount'),
   followingCount: integer('followingCount'),
-  blueVerified: integer('blueVerified', { mode: 'boolean' }),
-  defaultProfile: integer('defaultProfile', { mode: 'boolean' }),
-  defaultProfileImage: integer('defaultProfileImage', {
-    mode: 'boolean',
-  }),
+  blueVerified: boolean('blueVerified'),
+  defaultProfile: boolean('defaultProfile'),
+  defaultProfileImage: boolean('defaultProfileImage'),
   location: text('location'),
   url: text('url'),
 })
 
 // Tweet table
-export const tweet = sqliteTable(
-  'Tweet',
+export const tweet = pgTable('Tweet',
   {
     id: text('id').primaryKey(),
     text: text('text'),
-    media: text('media', { mode: 'json' }),
+    media: jsonb('media'),
     publishedAt: text('publishedAt').notNull(),
     userId: text('userId')
       .references(() => user.id)
@@ -64,8 +63,7 @@ export const tweet = sqliteTable(
 )
 
 // SpamReport table
-export const spamReport = sqliteTable(
-  'SpamReport',
+export const spamReport = pgTable('SpamReport',
   {
     id: text('id').primaryKey().$defaultFn(ulid),
     spamUserId: text('spamUserId')
@@ -105,7 +103,7 @@ export const spamReport = sqliteTable(
 )
 
 // Payment table
-export const payment = sqliteTable('Payment', {
+export const payment = pgTable('Payment', {
   id: text('id').primaryKey(),
   localUserId: text('localUserId')
     .references(() => localUser.id)
@@ -123,7 +121,7 @@ export const payment = sqliteTable('Payment', {
 })
 
 // LocalUser table
-export const localUser = sqliteTable('LocalUser', {
+export const localUser = pgTable('LocalUser', {
   id: text('id').primaryKey().$defaultFn(ulid),
   email: text('email').unique().notNull(),
   password: text('password').notNull(),
@@ -136,17 +134,16 @@ export const localUser = sqliteTable('LocalUser', {
   lastLogin: text('lastLogin')
     .notNull()
     .$defaultFn(() => new Date().toISOString()),
-  isPro: integer('isPro', { mode: 'boolean' })
+  isPro: boolean('isPro')
     .notNull()
     .$defaultFn(() => false),
-  emailVerified: integer('emailVerified', { mode: 'boolean' })
+  emailVerified: boolean('emailVerified')
     .notNull()
     .$defaultFn(() => false),
 })
 
 // ModList table
-export const modList = sqliteTable(
-  'ModList',
+export const modList = pgTable('ModList',
   {
     id: text('id').primaryKey(),
     name: text('name').notNull(),
@@ -182,8 +179,7 @@ export const modList = sqliteTable(
 )
 
 // ModListUser table
-export const modListUser = sqliteTable(
-  'ModListUser',
+export const modListUser = pgTable('ModListUser',
   {
     id: text('id').primaryKey().$defaultFn(ulid),
     modListId: text('modListId')
@@ -213,23 +209,18 @@ export type ModListConditionItem = {
   operator: string
   value: string | number | boolean
 }
-export const modListRule = sqliteTable(
-  'ModListRule',
+export const modListRule = pgTable('ModListRule',
   {
     id: text('id').primaryKey(),
     name: text('name').notNull(),
     modListId: text('modListId')
       .references(() => modList.id)
       .notNull(),
-    rule: text('rule', {
-      mode: 'json',
-    })
-      .notNull()
-      .$type<{
-        or: {
-          and: ModListConditionItem[]
-        }[]
-      }>(),
+    rule: jsonb('rule').notNull().$type<{
+      or: {
+        and: ModListConditionItem[]
+      }[]
+    }>(),
     createdAt: text('createdAt')
       .notNull()
       .$defaultFn(() => new Date().toISOString()),
@@ -241,8 +232,7 @@ export const modListRule = sqliteTable(
 )
 
 // ModListSubscription table
-export const modListSubscription = sqliteTable(
-  'ModListSubscription',
+export const modListSubscription = pgTable('ModListSubscription',
   {
     id: text('id').primaryKey(),
     modListId: text('modListId')
@@ -269,8 +259,7 @@ export const modListSubscription = sqliteTable(
   ],
 )
 
-export const userSpamAnalysis = sqliteTable(
-  'UserSpamAnalysis',
+export const userSpamAnalysis = pgTable('UserSpamAnalysis',
   {
     id: text('id').primaryKey().$defaultFn(ulid),
     userId: text('userId')
@@ -281,7 +270,7 @@ export const userSpamAnalysis = sqliteTable(
     llmSpamExplanation: text('llmSpamExplanation'),
     llmAnalyzedAt: text('llmAnalyzedAt'),
 
-    isSpamByManualReview: integer('isSpamByManualReview', { mode: 'boolean' }),
+    isSpamByManualReview: boolean('isSpamByManualReview'),
     manualReviewNotes: text('manualReviewNotes'),
     manualReviewedAt: text('manualReviewedAt'),
 
@@ -296,8 +285,7 @@ export const userSpamAnalysis = sqliteTable(
   (table) => [uniqueIndex('UserSpamAnalysis_userId_key').on(table.userId)],
 )
 
-export const llmRequestLog = sqliteTable(
-  'LLMRequestLog',
+export const llmRequestLog = pgTable('LLMRequestLog',
   {
     id: text('id').primaryKey().$defaultFn(ulid),
 
@@ -334,13 +322,13 @@ export const llmRequestLog = sqliteTable(
   ],
 )
 
-export const feedback = sqliteTable('Feedback', {
+export const feedback = pgTable('Feedback', {
   id: text('id').primaryKey().$defaultFn(ulid),
   localUserId: text('localUserId').references(() => localUser.id),
   reason: text('reason').notNull(),
   suggestion: text('suggestion'),
   email: text('email'),
-  context: text('context', { mode: 'json' }),
+  context: jsonb('context'),
   createdAt: text('createdAt')
     .notNull()
     .$defaultFn(() => new Date().toISOString()),

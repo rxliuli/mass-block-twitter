@@ -1,11 +1,16 @@
 import app from '../src'
 import { afterEach, assert, beforeEach, vi } from 'vitest'
 import { HonoEnv, TokenInfo } from '../src/lib/bindings'
-import { createExecutionContext, env } from 'cloudflare:test'
+import {
+  createExecutionContext,
+  env,
+  waitOnExecutionContext,
+} from 'cloudflare:test'
 import { generateToken } from '../src/middlewares/auth'
-import { drizzle, DrizzleD1Database } from 'drizzle-orm/d1'
 import { localUser } from '../src/db/schema'
 import { sha256 } from '../src/lib/crypto'
+import { Client } from 'pg'
+import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres'
 
 export interface CloudflareTestContext {
   ctx: ExecutionContext
@@ -13,7 +18,8 @@ export interface CloudflareTestContext {
   token1: string
   token2: string
   env: HonoEnv['Bindings']
-  db: DrizzleD1Database
+  db: NodePgDatabase
+  sql: Client
 }
 
 export async function createCloudflareTestContext(): Promise<CloudflareTestContext> {
@@ -36,24 +42,28 @@ export async function createCloudflareTestContext(): Promise<CloudflareTestConte
       sub: 'test-user-2',
     } satisfies TokenInfo),
   )
-  await _env.DB.prepare(_env.TEST_INIT_SQL).run()
-  const db = drizzle(_env.DB)
+  const sql = new Client({
+    connectionString: _env.HYPERDRIVE.connectionString,
+  })
+  await sql.connect()
+  const db = drizzle(sql)
+  await db.execute(_env.TEST_INIT_SQL)
   const encryptedPassword = await sha256('test')
   assert(encryptedPassword)
-  await db.batch([
-    db.insert(localUser).values({
+  await db.transaction(async (tx) => {
+    await tx.insert(localUser).values({
       id: 'test-user-1',
       email: '1@test.com',
       password: encryptedPassword,
       emailVerified: true,
-    }),
-    db.insert(localUser).values({
+    })
+    await tx.insert(localUser).values({
       id: 'test-user-2',
       email: '2@test.com',
       password: encryptedPassword,
       emailVerified: true,
-    }),
-  ])
+    })
+  })
   const ctx = createExecutionContext()
   const fetch = ((url: string, options: RequestInit) =>
     app.request(url, options, env, ctx)) as typeof app.request
@@ -64,6 +74,7 @@ export async function createCloudflareTestContext(): Promise<CloudflareTestConte
     token2,
     env: _env,
     db,
+    sql,
   }
 }
 
@@ -73,7 +84,10 @@ export function initCloudflareTest(): CloudflareTestContext {
     context = await createCloudflareTestContext()
     vi.spyOn(globalThis, 'fetch').mockImplementation(context.fetch as any)
   })
-  afterEach(() => {
+  afterEach(async () => {
+    await waitOnExecutionContext(context.ctx)
+    await context.sql.end()
+    vi.useRealTimers()
     vi.restoreAllMocks()
   })
 
@@ -95,6 +109,9 @@ export function initCloudflareTest(): CloudflareTestContext {
     },
     get db() {
       return context.db
+    },
+    get sql() {
+      return context.sql
     },
   }
 }

@@ -2,12 +2,12 @@ import { Hono } from 'hono'
 import { HonoEnv } from '../lib/bindings'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
-import { drizzle } from 'drizzle-orm/d1'
 import { payment, localUser } from '../db/schema'
 import { eq } from 'drizzle-orm'
 import { auth } from '../middlewares/auth'
+import { useDB } from '../lib/drizzle'
 
-const billing = new Hono<HonoEnv>().use(auth())
+const billing = new Hono<HonoEnv>().use(auth()).use(useDB())
 
 const checkoutCompleteRequestSchema = z.object({
   transactionId: z.string(),
@@ -46,22 +46,24 @@ billing.post(
       console.error('Failed to create payment', await resp.json())
       return c.json({ message: 'Failed to create payment' }, 500)
     }
-    const db = drizzle(c.env.DB)
+    const db = c.get('db')
     const transaction = (await resp.json()) as PaddleTransaction
-    await db.batch([
-      db.insert(payment).values({
-        id: transaction.data.id,
-        type: 'subscription',
-        amount: transaction.data.details.totals.total / 100,
-        status: 'success',
-        localUserId: tokenInfo.sub,
-        countryCode,
-      }),
-      db
-        .update(localUser)
-        .set({ isPro: true })
-        .where(eq(localUser.id, tokenInfo.sub)),
-    ])
+    await db.transaction(async (tx) => {
+      await Promise.all([
+        tx.insert(payment).values({
+          id: transaction.data.id,
+          type: 'subscription',
+          amount: transaction.data.details.totals.total / 100,
+          status: 'success',
+          localUserId: tokenInfo.sub,
+          countryCode,
+        }),
+        tx
+          .update(localUser)
+          .set({ isPro: true })
+          .where(eq(localUser.id, tokenInfo.sub)),
+      ])
+    })
     return c.json({ code: 'success' })
   },
 )

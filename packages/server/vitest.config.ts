@@ -1,17 +1,17 @@
 import { defineWorkersConfig } from '@cloudflare/vitest-pool-workers/config'
-import { readdir, readFile } from 'node:fs/promises'
-import path from 'node:path'
+import { readFile } from 'node:fs/promises'
 
 async function getInitSql() {
-  const dirName = path.resolve(__dirname, 'drizzle')
-  const list = (await readdir(dirName))
-    .filter((it) => it.endsWith('.sql'))
-    .sort((a, b) => a.localeCompare(b))
-  return (
-    await Promise.all(
-      list.map((name) => readFile(path.resolve(dirName, name), 'utf-8')),
-    )
-  ).join('\n')
+  // const dirName = path.resolve(__dirname, 'drizzle')
+  // const list = (await readdir(dirName))
+  //   .filter((it) => it.endsWith('.sql'))
+  //   .sort((a, b) => a.localeCompare(b))
+  // return (
+  //   await Promise.all(
+  //     list.map((name) => readFile(path.resolve(dirName, name), 'utf-8')),
+  //   )
+  // ).join('\n')
+  return await readFile('./d1/pg-schema.sql', 'utf-8')
 }
 
 export default defineWorkersConfig(async () => {
@@ -20,6 +20,7 @@ export default defineWorkersConfig(async () => {
       include: ['./test/**/*.test.ts'],
       poolOptions: {
         workers: {
+          singleWorker: true,
           wrangler: { configPath: './wrangler.jsonc' },
           miniflare: {
             bindings: {

@@ -2,11 +2,11 @@ import { Hono } from 'hono'
 import { HonoEnv } from '../lib/bindings'
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
-import { drizzle } from 'drizzle-orm/d1'
 import { feedback } from '../db/schema'
 import { getTokenInfo } from '../middlewares/auth'
+import { useDB } from '../lib/drizzle'
 
-const feedbackRoute = new Hono<HonoEnv>()
+const feedbackRoute = new Hono<HonoEnv>().use(useDB())
 
 const feedbackSchema = z.object({
   reason: z.enum(['missing', 'broken', 'confused', 'alternative', 'other']),
@@ -28,7 +28,7 @@ const feedbackSchema = z.object({
 export type FeedbackRequest = z.infer<typeof feedbackSchema>
 
 feedbackRoute.post('/submit', zValidator('json', feedbackSchema), async (c) => {
-  const db = drizzle(c.env.DB)
+  const db = c.get('db')
   const validated = await c.req.json()
   const tokenInfo = await getTokenInfo(c)
   await db.insert(feedback).values({

@@ -10,7 +10,6 @@ import { errorHandler } from './middlewares/error'
 import { analyze } from './routes/analyze'
 import { feedback } from './routes/feedback'
 import { image } from './routes/image'
-import { migration } from './routes/migration'
 
 const app = new Hono<HonoEnv>()
 
@@ -23,7 +22,6 @@ app
   .route('/api/feedback', feedback)
   .route('/api/modlists', modlistSearch)
   .route('/api/analyze', analyze)
-  .route('/api/migration', migration)
   .route('/api/accounts', accounts)
   .route('/api/billing', billing)
   .route('/api/modlists', modlists)

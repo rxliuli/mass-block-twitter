@@ -3,7 +3,7 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-01-24",
 
-  "compatibility_flags": [ "nodejs_compat" ],
+  "compatibility_flags": ["nodejs_compat"],
 
   "vars": {
     "APP_ENV": "production"
@@ -49,6 +49,12 @@
     {
       "binding": "HYPERDRIVE",
       "id": "818dcb00aa5648b3b360140063b8d98a"
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "mass-block-twitter.rxliuli.com",
+      "custom_domain": true
     }
   ]
 }

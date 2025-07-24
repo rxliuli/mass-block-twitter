@@ -1,1 +1,0 @@
-CREATE INDEX `tweet_userId_idx` ON `Tweet` (`userId`);

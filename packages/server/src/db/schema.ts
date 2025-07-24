@@ -37,7 +37,8 @@ export const user = pgTable('User', {
 })
 
 // Tweet table
-export const tweet = pgTable('Tweet',
+export const tweet = pgTable(
+  'Tweet',
   {
     id: text('id').primaryKey(),
     text: text('text'),
@@ -63,7 +64,8 @@ export const tweet = pgTable('Tweet',
 )
 
 // SpamReport table
-export const spamReport = pgTable('SpamReport',
+export const spamReport = pgTable(
+  'SpamReport',
   {
     id: text('id').primaryKey().$defaultFn(ulid),
     spamUserId: text('spamUserId')
@@ -143,7 +145,8 @@ export const localUser = pgTable('LocalUser', {
 })
 
 // ModList table
-export const modList = pgTable('ModList',
+export const modList = pgTable(
+  'ModList',
   {
     id: text('id').primaryKey(),
     name: text('name').notNull(),
@@ -179,7 +182,8 @@ export const modList = pgTable('ModList',
 )
 
 // ModListUser table
-export const modListUser = pgTable('ModListUser',
+export const modListUser = pgTable(
+  'ModListUser',
   {
     id: text('id').primaryKey().$defaultFn(ulid),
     modListId: text('modListId')
@@ -209,7 +213,8 @@ export type ModListConditionItem = {
   operator: string
   value: string | number | boolean
 }
-export const modListRule = pgTable('ModListRule',
+export const modListRule = pgTable(
+  'ModListRule',
   {
     id: text('id').primaryKey(),
     name: text('name').notNull(),
@@ -232,7 +237,8 @@ export const modListRule = pgTable('ModListRule',
 )
 
 // ModListSubscription table
-export const modListSubscription = pgTable('ModListSubscription',
+export const modListSubscription = pgTable(
+  'ModListSubscription',
   {
     id: text('id').primaryKey(),
     modListId: text('modListId')
@@ -247,9 +253,9 @@ export const modListSubscription = pgTable('ModListSubscription',
     updatedAt: text('updatedAt')
       .notNull()
       .$defaultFn(() => new Date().toISOString()),
-    action: text('action', { enum: ['block', 'hide'] }).$defaultFn(
-      () => 'hide',
-    ),
+    action: text('action', { enum: ['block', 'hide'] })
+      .notNull()
+      .$defaultFn(() => 'hide'),
   },
   (table) => [
     uniqueIndex('ModListSubscription_modListId_localUserId_key').on(
@@ -259,7 +265,8 @@ export const modListSubscription = pgTable('ModListSubscription',
   ],
 )
 
-export const userSpamAnalysis = pgTable('UserSpamAnalysis',
+export const userSpamAnalysis = pgTable(
+  'UserSpamAnalysis',
   {
     id: text('id').primaryKey().$defaultFn(ulid),
     userId: text('userId')
@@ -285,7 +292,8 @@ export const userSpamAnalysis = pgTable('UserSpamAnalysis',
   (table) => [uniqueIndex('UserSpamAnalysis_userId_key').on(table.userId)],
 )
 
-export const llmRequestLog = pgTable('LLMRequestLog',
+export const llmRequestLog = pgTable(
+  'LLMRequestLog',
   {
     id: text('id').primaryKey().$defaultFn(ulid),
 

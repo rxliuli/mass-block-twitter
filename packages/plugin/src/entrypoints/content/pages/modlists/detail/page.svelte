@@ -222,6 +222,9 @@
   })
   const deleteMutation = createMutation({
     mutationFn: async () => {
+      if (!confirm('Are you sure you want to delete this list?')) {
+        return
+      }
       const authInfo = await getAuthInfo()
       const resp = await crossFetch(
         `${SERVER_URL}/api/modlists/remove/${route.search?.get('id')}`,
@@ -235,8 +238,6 @@
       if (!resp.ok) {
         throw resp
       }
-    },
-    onSuccess: async () => {
       toast.success($t('modlists.detail.toast.delete.success'))
       goBack()
     },

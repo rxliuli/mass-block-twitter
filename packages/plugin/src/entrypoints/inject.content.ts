@@ -14,7 +14,11 @@ import { addBlockButtonInTweet, addBlockButtonInUser } from '$lib/observe'
 import css from './style.css?inline'
 import { injectCSS } from '$lib/injectCSS'
 import { URLPattern } from 'urlpattern-polyfill'
-import { refreshSpamUsers, refreshSubscribedModLists } from '$lib/shared'
+import {
+  eventMessage,
+  refreshSpamUsers,
+  refreshSubscribedModLists,
+} from '$lib/shared'
 import {
   blueVerifiedFilter,
   defaultProfileFilter,
@@ -206,13 +210,10 @@ async function _onAction(
   await blockUser(user)
   console.debug('blockUser', user, await dbApi.users.isBlocking(user.id))
   await dbApi.users.block(user)
-  try {
-    new Notification('Blocked user', {
-      body: `${user.name} @${user.screen_name}`,
-    }).onclick = () => {
-      window.open(`https://x.com/${user.screen_name}`, '_blank')
-    }
-  } catch {}
+  eventMessage.sendMessage('showBlockUserToast', {
+    name: user.name,
+    screen_name: user.screen_name,
+  })
 }
 const onAction = asyncLimiting(_onAction, 1)
 function handleNotifications(): Middleware {

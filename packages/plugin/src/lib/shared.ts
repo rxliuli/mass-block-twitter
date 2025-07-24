@@ -46,4 +46,6 @@ export const eventMessage = defineCustomEventMessage<{
     message: string
     options?: ExternalToast
   }) => void
+
+  showBlockUserToast: (user: Pick<User, 'name' | 'screen_name'>) => void
 }>()

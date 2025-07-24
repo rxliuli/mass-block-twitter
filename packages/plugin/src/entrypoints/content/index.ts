@@ -72,5 +72,16 @@ export default defineContentScript({
     eventMessage.onMessage('Toast', (data) =>
       toast[data.type](data.message, data.options),
     )
+    eventMessage.onMessage('showBlockUserToast', (data) => {
+      const { name, screen_name } = data
+      toast.info(`Blocked user @${screen_name} ${name}`, {
+        action: {
+          label: 'Open',
+          onClick: () => {
+            window.open(`https://x.com/${screen_name}`, '_blank')
+          },
+        },
+      })
+    })
   },
 })

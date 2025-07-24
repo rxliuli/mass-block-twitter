@@ -331,8 +331,9 @@ export function quickBlock(options: {
     tweetElement.style.display = 'none'
   }
   let isDismissed = false
-  const toastId = toast.info('User blocked', {
-    duration: 6000,
+  const title = `Blocked user @${user.screen_name} ${user.name}`
+  toast.info(title, {
+    duration: 3000,
     icon: ShieldBanIcon,
     cancel: {
       label: 'Undo',
@@ -341,7 +342,6 @@ export function quickBlock(options: {
           tweetElement.style.display = 'block'
         }
         toast.info('Block undone.', {
-          id: toastId,
           icon: ShieldCheckIcon,
           duration: 3000,
           cancel: undefined,
@@ -354,14 +354,6 @@ export function quickBlock(options: {
     },
   })
   const timer = setTimeout(async () => {
-    if (!isDismissed) {
-      toast.info('User blocked', {
-        id: toastId,
-        icon: ShieldBanIcon,
-        duration: 3000,
-        cancel: undefined,
-      })
-    }
     if (options.blockUser) {
       await options.blockUser(user)
     } else {

@@ -74,7 +74,9 @@
         throw resp
       }
       const r = (await resp.json()) as ModListCreateResponse
-      toast.success($t('modlists.creator.toast.success'))
+      toast.success($t('modlists.creator.toast.success'), {
+        description: $t('modlists.creator.toast.success.description'),
+      })
       navigate(`/modlists/detail?id=${r.id}`)
     },
     onSuccess: async () => {},

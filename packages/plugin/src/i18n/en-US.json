@@ -172,6 +172,7 @@
   "modlists.creator.toast.limit.action": "Upgrade Now",
   "modlists.creator.toast.login": "Please login to create a Moderation List!",
   "modlists.creator.toast.success": "Modlist created",
+  "modlists.creator.toast.success.description": "You need to subscribe to this list now to make it effective.",
   "modlists.creator.toast.error": "Failed to create modlist",
   "modlists.creator.error.userId": "Twitter User ID not found, please login again.",
   "modlists.creator.error.userNotFound": "User not found, please login again.",

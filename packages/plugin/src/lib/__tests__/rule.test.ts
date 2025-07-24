@@ -83,6 +83,12 @@ describe('matchRule', () => {
     expect(matchRule([rule], { a: 'ab' })).true
     expect(matchRule([rule], { a: 'ac' })).false
   })
+  it('match string case insensitive', () => {
+    const rule: Rule = {
+      or: [{ and: [{ field: 'a', operator: 'eq', value: 'a' }] }],
+    }
+    expect(matchRule([rule], { a: 'A' })).true
+  })
   it('real match', () => {
     expect(
       matchRule(
@@ -157,5 +163,18 @@ describe('matchRule', () => {
         },
       }),
     ).false
+  })
+  it('match regex case insensitive', () => {
+    const cond = {
+      field: 'user.description',
+      operator: 'regex',
+      value: '^hello',
+    } as const
+    const r = matchRule([{ or: [{ and: [cond] }] }], {
+      user: {
+        description: 'HELLO world',
+      },
+    })
+    expect(r).true
   })
 })

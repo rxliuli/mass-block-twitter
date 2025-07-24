@@ -205,6 +205,10 @@ export function getRuleFileds(): RuleField[] {
   return fields
 }
 
+function lowerCase(value: string | number | boolean) {
+  return String(value).toLowerCase()
+}
+
 function matchCondition(cond: Condition, data: any) {
   const { field, operator, value } = cond
   const fieldValue = get(data, field)
@@ -213,13 +217,13 @@ function matchCondition(cond: Condition, data: any) {
   }
   switch (operator) {
     case 'eq':
-      return fieldValue === value
+      return lowerCase(fieldValue) === lowerCase(value)
     case 'neq':
-      return fieldValue !== value
+      return lowerCase(fieldValue) !== lowerCase(value)
     case 'cont':
-      return fieldValue.includes(value)
+      return lowerCase(fieldValue).includes(lowerCase(value))
     case 'notCont':
-      return !fieldValue.includes(value)
+      return !lowerCase(fieldValue).includes(lowerCase(value))
     case 'gt':
       return fieldValue > value
     case 'gte':
@@ -230,7 +234,7 @@ function matchCondition(cond: Condition, data: any) {
       return fieldValue <= value
     case 'regex':
       if (typeof value === 'string') {
-        return new RegExp(value).test(fieldValue)
+        return new RegExp(value, 'i').test(fieldValue)
       }
       return false
     default:

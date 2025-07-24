@@ -969,13 +969,14 @@ search
       return c.json<ModListGetErrorResponse>({ code: 'modListNotFound' }, 404)
     }
     const subscribed = _subscribed?.length > 0
+    const action = _subscribed[0]?.action ?? 'hide'
     const owner = _modList[0].modList.localUserId === tokenInfo?.sub
     return c.json<ModListGetResponse>({
       ..._modList[0].modList,
       subscribed,
       owner,
       twitterUser: _modList[0].user,
-      action: subscribed ? 'block' : 'hide',
+      action,
       ruleCount: ruleCount[0].ruleCount,
     })
   })

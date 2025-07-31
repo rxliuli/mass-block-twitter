@@ -37,10 +37,6 @@
     )
     location.href = 'https://x.com/home'
   }
-
-  onMount(() => {
-    openExtension()
-  })
 </script>
 
 <div class="container mx-auto py-8">

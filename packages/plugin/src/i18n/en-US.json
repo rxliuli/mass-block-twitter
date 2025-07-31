@@ -249,6 +249,8 @@
   "modlists.detail.rule.form.condition.operator.label": "Operator",
   "modlists.detail.rule.form.condition.value.label": "Value",
   "modlists.detail.desc.by": "Moderation list by",
+  "modlists.detail.stats.users": "users",
+  "modlists.detail.stats.rules": "rules",
   "modlists.detail.users.import.importing": "Importing users...",
   "modlists.detail.users.import.progress": "Imported {count}/{total} users...",
   "modlists.detail.users.import.success": "Imported {count}/{total} users successfully",

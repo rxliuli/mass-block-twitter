@@ -221,6 +221,8 @@
   "modlists.detail.rule.form.condition.operator.label": "操作符",
   "modlists.detail.rule.form.condition.value.label": "值",
   "modlists.detail.desc.by": "审核列表作者：",
+  "modlists.detail.stats.users": "用户",
+  "modlists.detail.stats.rules": "规则",
   "modlists.detail.users.import.importing": "正在导入用户...",
   "modlists.detail.users.import.progress": "已导入 {count}/{total} 个用户...",
   "modlists.detail.users.import.success": "成功导入 {count}/{total} 个用户",

@@ -12,29 +12,37 @@ import { relations } from 'drizzle-orm'
 import { ulid } from 'ulidx'
 
 // User table
-export const user = pgTable('User', {
-  id: text('id').primaryKey(),
-  screenName: text('screenName').notNull(),
-  name: text('name'),
-  description: text('description'),
-  profileImageUrl: text('profileImageUrl'),
-  accountCreatedAt: text('accountCreatedAt'),
-  spamReportCount: integer('spamReportCount').default(0).notNull(),
-  createdAt: text('createdAt')
-    .notNull()
-    .$defaultFn(() => new Date().toISOString()),
-  updatedAt: text('updatedAt')
-    .notNull()
-    .$defaultFn(() => new Date().toISOString())
-    .$onUpdateFn(() => new Date().toISOString()),
-  followersCount: integer('followersCount'),
-  followingCount: integer('followingCount'),
-  blueVerified: boolean('blueVerified'),
-  defaultProfile: boolean('defaultProfile'),
-  defaultProfileImage: boolean('defaultProfileImage'),
-  location: text('location'),
-  url: text('url'),
-})
+export const user = pgTable(
+  'User',
+  {
+    id: text('id').primaryKey(),
+    screenName: text('screenName').notNull(),
+    name: text('name'),
+    description: text('description'),
+    profileImageUrl: text('profileImageUrl'),
+    accountCreatedAt: text('accountCreatedAt'),
+    spamReportCount: integer('spamReportCount').default(0).notNull(),
+    createdAt: text('createdAt')
+      .notNull()
+      .$defaultFn(() => new Date().toISOString()),
+    updatedAt: text('updatedAt')
+      .notNull()
+      .$defaultFn(() => new Date().toISOString())
+      .$onUpdateFn(() => new Date().toISOString()),
+    followersCount: integer('followersCount'),
+    followingCount: integer('followingCount'),
+    blueVerified: boolean('blueVerified'),
+    defaultProfile: boolean('defaultProfile'),
+    defaultProfileImage: boolean('defaultProfileImage'),
+    location: text('location'),
+    url: text('url'),
+  },
+  (table) => [
+    index('User_screenName_gin_idx').on(table.screenName),
+    index('User_name_gin_idx').on(table.name),
+    index('User_description_gin_idx').on(table.description),
+  ],
+)
 
 // Tweet table
 export const tweet = pgTable(

@@ -76,6 +76,7 @@
           onCheckedChange={(checked) => {
             condition.caseSensitive = checked
           }}
+          title="Case Sensitive"
           class="ml-2"
           disabled={!condition.operator}
         />

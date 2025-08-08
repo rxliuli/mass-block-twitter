@@ -21,7 +21,7 @@
     },
     {
       name: 'Pro',
-      price: '$9.99',
+      price: '$19.99',
       period: 'one-time payment',
       description: 'Everything you need for advanced spam control',
       features: [

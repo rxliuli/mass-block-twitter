@@ -1,4 +1,4 @@
-import { matchRule, Rule, visit } from '$lib/rule'
+import { Condition, matchRule, Rule, visit } from '$lib/rule'
 import { describe, expect, it } from 'vitest'
 import { z, ZodArray, ZodEnum } from 'zod'
 
@@ -85,7 +85,13 @@ describe('matchRule', () => {
   })
   it('match string case insensitive', () => {
     const rule: Rule = {
-      or: [{ and: [{ field: 'a', operator: 'eq', value: 'a' }] }],
+      or: [
+        {
+          and: [
+            { field: 'a', operator: 'eq', value: 'a', caseSensitive: true },
+          ],
+        },
+      ],
     }
     expect(matchRule([rule], { a: 'A' })).true
   })
@@ -144,11 +150,11 @@ describe('matchRule', () => {
     ).false
   })
   it('match regex', () => {
-    const cond = {
+    const cond: Condition = {
       field: 'user.description',
       operator: 'regex',
       value: '^hello',
-    } as const
+    }
     expect(
       matchRule([{ or: [{ and: [cond] }] }], {
         user: {
@@ -165,11 +171,12 @@ describe('matchRule', () => {
     ).false
   })
   it('match regex case insensitive', () => {
-    const cond = {
+    const cond: Condition = {
       field: 'user.description',
       operator: 'regex',
       value: '^hello',
-    } as const
+      caseSensitive: true,
+    }
     const r = matchRule([{ or: [{ and: [cond] }] }], {
       user: {
         description: 'HELLO world',

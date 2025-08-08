@@ -30,6 +30,7 @@ const ruleDataSchema = z.object({
       default_profile: z.boolean().optional(),
       default_profile_image: z.boolean().optional(),
     })
+    .describe('User')
     .optional(),
   tweet: z
     .object({
@@ -55,13 +56,15 @@ const ruleDataSchema = z.object({
       in_reply_to_status_id_str: z.string().optional(),
       quoted_status_id_str: z.string().optional(),
     })
+    .describe('Tweet')
     .optional(),
 })
 export type RuleData = z.infer<typeof ruleDataSchema>
 
-type StringCondition = {
+export type StringCondition = {
   field: string
   operator: 'eq' | 'neq' | 'cont' | 'notCont' | 'regex'
+  caseSensitive?: boolean
   value: string
 }
 type NumberCondition = {
@@ -74,7 +77,7 @@ type BooleanCondition = {
   operator: 'eq'
   value: boolean
 }
-type Condition = StringCondition | NumberCondition | BooleanCondition
+export type Condition = StringCondition | NumberCondition | BooleanCondition
 export interface Rule {
   or: {
     and: Condition[]
@@ -87,6 +90,7 @@ type RuleField =
       type: 'string'
       operator: {
         value: StringCondition['operator']
+        caseSensitive?: boolean
         label: string
       }[]
       enum?: {
@@ -217,13 +221,25 @@ function matchCondition(cond: Condition, data: any) {
   }
   switch (operator) {
     case 'eq':
-      return lowerCase(fieldValue) === lowerCase(value)
+      if ('caseSensitive' in cond && cond.caseSensitive) {
+        return lowerCase(fieldValue) === lowerCase(value)
+      }
+      return fieldValue === value
     case 'neq':
-      return lowerCase(fieldValue) !== lowerCase(value)
+      if ('caseSensitive' in cond && cond.caseSensitive) {
+        return lowerCase(fieldValue) !== lowerCase(value)
+      }
+      return fieldValue !== value
     case 'cont':
-      return lowerCase(fieldValue).includes(lowerCase(value))
+      if ('caseSensitive' in cond && cond.caseSensitive) {
+        return lowerCase(fieldValue).includes(lowerCase(value))
+      }
+      return fieldValue.includes(value)
     case 'notCont':
-      return !lowerCase(fieldValue).includes(lowerCase(value))
+      if ('caseSensitive' in cond && cond.caseSensitive) {
+        return !lowerCase(fieldValue).includes(lowerCase(value))
+      }
+      return !fieldValue.includes(value)
     case 'gt':
       return fieldValue > value
     case 'gte':
@@ -234,7 +250,10 @@ function matchCondition(cond: Condition, data: any) {
       return fieldValue <= value
     case 'regex':
       if (typeof value === 'string') {
-        return new RegExp(value, 'i').test(fieldValue)
+        if ('caseSensitive' in cond && cond.caseSensitive) {
+          return new RegExp(value, 'i').test(fieldValue)
+        }
+        return new RegExp(value).test(fieldValue)
       }
       return false
     default:

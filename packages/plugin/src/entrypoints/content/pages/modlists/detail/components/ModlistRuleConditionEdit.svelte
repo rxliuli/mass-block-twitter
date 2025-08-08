@@ -2,13 +2,14 @@
   import SelectGroup from '$lib/components/custom/select/SelectGroup.svelte'
   import { Input } from '$lib/components/ui/input'
   import { Label } from '$lib/components/ui/label'
-  import { getRuleFileds } from '$lib/rule'
+  import { getRuleFileds, StringCondition } from '$lib/rule'
   import { cn } from '$lib/utils'
   import type { ModListConditionItem } from '@mass-block-twitter/server'
   import type { Snippet } from 'svelte'
   import { capitalCase } from 'change-case'
   import { Switch } from '$lib/components/ui/switch'
   import { t } from '$lib/i18n'
+  import { Checkbox } from '$lib/components/ui/checkbox'
 
   let {
     value: condition = $bindable(),
@@ -57,17 +58,29 @@
       required
     />
   </div>
-  <div class="w-full md:w-36 px-1">
+  <div class="w-full md:w-48 px-1">
     <Label for={`${name}.operator`} class={cn({ 'md:hidden': !first })}>
       {$t('modlists.detail.rule.form.condition.operator.label')}
     </Label>
-    <SelectGroup
-      name={`${name}.operator`}
-      bind:value={condition.operator}
-      options={field?.operator ?? []}
-      disabled={!field}
-      required
-    />
+    <div class="flex items-center gap-2">
+      <SelectGroup
+        name={`${name}.operator`}
+        bind:value={condition.operator}
+        options={field?.operator ?? []}
+        disabled={!field}
+        required
+      />
+      {#if field?.type === 'string'}
+        <Checkbox
+          checked={condition.caseSensitive ?? false}
+          onCheckedChange={(checked) => {
+            condition.caseSensitive = checked
+          }}
+          class="ml-2"
+          disabled={!condition.operator}
+        />
+      {/if}
+    </div>
   </div>
   <div class="w-full md:flex-1 px-1">
     <Label for={`${name}.value`} class={cn({ 'md:hidden': !first })}>

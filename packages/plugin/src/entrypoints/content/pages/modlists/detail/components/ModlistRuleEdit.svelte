@@ -51,12 +51,15 @@
       </Dialog.Title>
     </Dialog.Header>
     <form bind:this={formRef} class="h-[60dvh] px-4 overflow-y-auto">
-      <div>
+      <div class="mb-2">
         <Label for="name">{$t('modlists.detail.rule.form.name.label')}</Label>
-        <Input id="name" name="name" bind:value={rule.name} required />
-        <p class="text-sm text-muted-foreground">
-          {$t('modlists.detail.rule.form.name.description')}
-        </p>
+        <Input
+          id="name"
+          name="name"
+          bind:value={rule.name}
+          required
+          placeholder={$t('modlists.detail.rule.form.name.description')}
+        />
       </div>
       {#each rule.rule.or as or, orIndex (orIndex)}
         {#each or.and as _, andIndex (andIndex)}

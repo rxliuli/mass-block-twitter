@@ -219,6 +219,7 @@ export const modListUser = pgTable(
 export type ModListConditionItem = {
   field: string
   operator: string
+  caseSensitive?: boolean
   value: string | number | boolean
 }
 export const modListRule = pgTable(

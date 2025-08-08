@@ -637,6 +637,7 @@ const ruleSchema = z.object({
         z.object({
           field: z.string(),
           operator: z.string(),
+          caseSensitive: z.boolean().optional(),
           value: z.union([z.string(), z.number(), z.boolean()]),
         }),
       ),

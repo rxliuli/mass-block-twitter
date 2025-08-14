@@ -2,7 +2,7 @@
   import SelectGroup from '$lib/components/custom/select/SelectGroup.svelte'
   import { Input } from '$lib/components/ui/input'
   import { Label } from '$lib/components/ui/label'
-  import { getRuleFileds, StringCondition } from '$lib/rule'
+  import { getRuleFileds } from '$lib/rule'
   import { cn } from '$lib/utils'
   import type { ModListConditionItem } from '@mass-block-twitter/server'
   import type { Snippet } from 'svelte'

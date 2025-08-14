@@ -1,5 +1,9 @@
+const matches = ['https://mass-block-twitter.rxliuli.com/*']
+if (import.meta.env.DEV) {
+  matches.push('http://localhost/*')
+}
 export default defineContentScript({
-  matches: ['https://mass-block-twitter.rxliuli.com/*', 'http://localhost/*'],
+  matches,
   main: () => {
     const meta = document.createElement('meta')
     meta.name = 'mass-block-twitter'

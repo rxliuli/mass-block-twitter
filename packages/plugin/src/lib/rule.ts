@@ -167,7 +167,10 @@ export function getRuleFileds(): RuleField[] {
         fields.push({
           field: path.join('.'),
           type: 'string',
-          operator: [{ value: 'eq', label: 'Equal' }],
+          operator: [
+            { value: 'eq', label: 'Equal' },
+            { value: 'neq', label: 'Not Equal' },
+          ],
           enum: (it.options as string[]).map((value) => ({
             value,
             label: value,
@@ -223,7 +226,9 @@ function matchCondition(cond: Condition, data: any) {
   const { field, operator, value } = cond
   const fieldValue = get(data, field)
   if (fieldValue === undefined || fieldValue === null) {
-    return false
+    if (field !== 'user.verification_verified_type') {
+      return false
+    }
   }
   switch (operator) {
     case 'eq':

@@ -64,12 +64,6 @@ importers:
       change-case:
         specifier: ^5.4.4
         version: 5.4.4
-      csv-parse:
-        specifier: ^5.6.0
-        version: 5.6.0
-      csv-stringify:
-        specifier: ^6.5.2
-        version: 6.5.2
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
@@ -97,6 +91,9 @@ importers:
       p-limit:
         specifier: ^6.2.0
         version: 6.2.0
+      papaparse:
+        specifier: ^5.5.3
+        version: 5.5.3
       serialize-error:
         specifier: ^11.0.3
         version: 11.0.3
@@ -128,6 +125,9 @@ importers:
       '@types/ms':
         specifier: ^2.1.0
         version: 2.1.0
+      '@types/papaparse':
+        specifier: ^5.3.16
+        version: 5.3.16
       '@vitest/browser':
         specifier: ^3.0.7
         version: 3.0.7(@types/node@22.10.2)(playwright@1.50.1)(typescript@5.7.2)(vite@6.2.0(@types/node@22.10.2)(jiti@1.21.7)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0))(vitest@3.0.7)
@@ -1368,6 +1368,7 @@ packages:
   '@faker-js/faker@9.5.0':
     resolution: {integrity: sha512-3qbjLv+fzuuCg3umxc9/7YjrEXNaKwHgmig949nfyaTx8eL4FAsvFbu+1JcFUj1YAXofhaDn6JdEUBTYuk0Ssw==}
     engines: {node: '>=18.0.0', npm: '>=9.0.0'}
+    deprecated: Please update to a newer version
 
   '@fast-csv/format@5.0.2':
     resolution: {integrity: sha512-fRYcWvI8vs0Zxa/8fXd/QlmQYWWkJqKZPAXM+vksnplb3owQFKTPPh9JqOtD0L3flQw/AZjjXdPkD7Kp/uHm8g==}
@@ -2144,6 +2145,9 @@ packages:
   '@types/node@22.10.2':
     resolution: {integrity: sha512-Xxr6BBRCAOQixvonOye19wnzyDiUtTeqldOOmj3CkeblonbccA12PFwlufvRdrpjXxqnmUaeiU5EOA+7s5diUQ==}
 
+  '@types/papaparse@5.3.16':
+    resolution: {integrity: sha512-T3VuKMC2H0lgsjI9buTB3uuKj3EMD2eap1MOuEQuBQ44EnDx/IkGhU6EwiTf9zG3za4SKlmwKAImdDKdNnCsXg==}
+
   '@types/pegjs@0.10.6':
     resolution: {integrity: sha512-eLYXDbZWXh2uxf+w8sXS8d6KSoXTswfps6fvCUuVAGN8eRpfe7h9eSRydxiSJvo9Bf+GzifsDOr9TMQlmJdmkw==}
 
@@ -2792,12 +2796,6 @@ packages:
 
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
-
-  csv-parse@5.6.0:
-    resolution: {integrity: sha512-l3nz3euub2QMg5ouu5U09Ew9Wf6/wQ8I++ch1loQ0ljmzhmfZYrH9fflS22i/PQEvsPvxCwxgz5q7UB8K1JO4Q==}
-
-  csv-stringify@6.5.2:
-    resolution: {integrity: sha512-RFPahj0sXcmUyjrObAK+DOWtMvMIFV328n4qZJhgX3x2RqkQgOTU2mCUmiFR0CzM6AzChlRSUErjiJeEt8BaQA==}
 
   d@1.0.2:
     resolution: {integrity: sha512-MOqHvMWF9/9MX6nza0KgvFH4HpMU0EF5uUDXqX/BtxtU8NfB0QzRtJ8Oe/6SuS4kbhyzVJwjd97EA4PKrzJ8bw==}
@@ -4494,6 +4492,9 @@ packages:
 
   pako@1.0.11:
     resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
+
+  papaparse@5.5.3:
+    resolution: {integrity: sha512-5QvjGxYVjxO59MGU2lHVYpRWBBtKHnlIAcSe1uNFCkkptUh63NFRj0FJQm7nR67puEruUci/ZkjmEFrjCAyP4A==}
 
   parse-json@7.1.1:
     resolution: {integrity: sha512-SgOTCX/EZXtZxBE5eJ97P4yGM5n37BwRU+YMsH4vNzFqJV/oWFXXCmwFlgWUM4PrakybVOueJJ6pwHqSVhTFDw==}
@@ -7250,6 +7251,10 @@ snapshots:
     dependencies:
       undici-types: 6.20.0
 
+  '@types/papaparse@5.3.16':
+    dependencies:
+      '@types/node': 22.10.2
+
   '@types/pegjs@0.10.6': {}
 
   '@types/pg@8.15.4':
@@ -7967,10 +7972,6 @@ snapshots:
     optional: true
 
   csstype@3.1.3: {}
-
-  csv-parse@5.6.0: {}
-
-  csv-stringify@6.5.2: {}
 
   d@1.0.2:
     dependencies:
@@ -9934,6 +9935,8 @@ snapshots:
   package-manager-detector@0.2.9: {}
 
   pako@1.0.11: {}
+
+  papaparse@5.5.3: {}
 
   parse-json@7.1.1:
     dependencies:

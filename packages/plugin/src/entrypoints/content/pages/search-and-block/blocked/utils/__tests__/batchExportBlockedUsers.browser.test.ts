@@ -30,9 +30,7 @@ describe('batchExportBlockedUsers', () => {
       commands.waitForDownload(),
       screen.getByText('Download').click(),
     ])
-    const r = parseCSV(download.text, {
-      fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
-    })
+    const r = parseCSV(download.text)
     return r as User[]
   }
 

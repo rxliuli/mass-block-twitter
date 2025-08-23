@@ -7,32 +7,42 @@ describe('generateCSV', () => {
     const csv = generateCSV([{ id: 1, name: 'test' }], {
       fields: ['id', 'name'],
     })
-    expect(csv[0]).toBe('\uFEFF')
-    expect(csv.slice(1)).toBe('"id","name"\n1,"test"\n')
+    expect(csv).eq('id,name\r\n1,test')
+    expect(parseCSV(csv)).toEqual([{ id: '1', name: 'test' }])
   })
   it('should generate csv with break line', () => {
     const csv = generateCSV([{ id: 1, name: 'test\ntest' }], {
       fields: ['id', 'name'],
     })
-    expect(csv.slice(1)).toBe('"id","name"\n1,"test\ntest"\n')
+    expect(csv).eq('id,name\r\n1,"test\ntest"')
+    expect(parseCSV(csv)).toEqual([{ id: '1', name: 'test\ntest' }])
   })
   it('should generate csv with undefined', () => {
     const csv = generateCSV([{ id: 1, name: undefined, description: 'test' }], {
       fields: ['id', 'name', 'description'],
     })
-    expect(csv.slice(1)).toBe('"id","name","description"\n1,,"test"\n')
+    expect(csv).toBe('id,name,description\r\n1,,test')
+    expect(parseCSV(csv)).toEqual([
+      { id: '1', name: undefined, description: 'test' },
+    ])
   })
   it('should generate csv with null', () => {
     const csv = generateCSV([{ id: 1, name: null, description: 'test' }], {
       fields: ['id', 'name', 'description'],
     })
-    expect(csv.slice(1)).toBe('"id","name","description"\n1,,"test"\n')
+    expect(csv).toBe('id,name,description\r\n1,,test')
+    expect(parseCSV(csv)).toEqual([
+      { id: '1', name: undefined, description: 'test' },
+    ])
   })
   it('should generate csv with empty string', () => {
     const csv = generateCSV([{ id: 1, name: '', description: 'test' }], {
       fields: ['id', 'name', 'description'],
     })
-    expect(csv.slice(1)).toBe('"id","name","description"\n1,"","test"\n')
+    expect(csv).toBe('id,name,description\r\n1,,test')
+    expect(parseCSV(csv)).toEqual([
+      { id: '1', name: undefined, description: 'test' },
+    ])
   })
   it('should generate csv with array', () => {
     const data = [
@@ -54,12 +64,10 @@ describe('generateCSV', () => {
     const csv = generateCSV(data, {
       fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
     })
-    expect(csv.slice(1)).toBe(
-      '"id","screen_name","name","description","profile_image_url"\n"1601169426530844677","Chrisflxco","︎︎︎︎︎︎ ︎︎︎︎︎︎\uD83C\uDDE8\uD83C\uDDF2",,"https://pbs.twimg.com/profile_images/1708894994222743552/qXf4aNbH_normal.jpg"\n"3008307598","evest03","hasSten",,"https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png"\n',
+    expect(csv).toBe(
+      `id,screen_name,name,description,profile_image_url\r\n1601169426530844677,Chrisflxco,\uFE0E\uFE0E\uFE0E\uFE0E\uFE0E\uFE0E \uFE0E\uFE0E\uFE0E\uFE0E\uFE0E\uFE0E🇨🇲,,https://pbs.twimg.com/profile_images/1708894994222743552/qXf4aNbH_normal.jpg\r\n3008307598,evest03,hasSten,,https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png`,
     )
-    const parsed = parseCSV(csv, {
-      fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
-    })
+    const parsed = parseCSV(csv)
     expect(parsed).toEqual(data)
   })
 })

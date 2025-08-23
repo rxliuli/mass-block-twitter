@@ -53,10 +53,6 @@ export default defineConfig({
     disabled: true,
   },
   vite: () => ({
-    build: {
-      minify: false,
-      sourcemap: true,
-    },
     resolve: {
       alias: {
         $lib: path.resolve('./src/lib'),

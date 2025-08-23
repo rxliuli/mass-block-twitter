@@ -30,6 +30,9 @@
         cursor: pageParam,
         count: 20,
       })
+      if (r.data.length == 0) {
+        r.cursor = undefined
+      }
       hasNextPage = !!r.cursor
       return r
     },
@@ -38,9 +41,11 @@
   })
 
   onMount(async () => {
-    let first = true
-    while (getUsers().length < 40 && (first || hasNextPage)) {
-      first = false
+    for (
+      let i = 0;
+      i < 3 && getUsers().length < 40 && $query.hasNextPage;
+      i++
+    ) {
       await $query.fetchNextPage()
     }
   })

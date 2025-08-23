@@ -12,6 +12,7 @@ import { AuthInfo } from '@mass-block-twitter/server'
 import { fileSelector } from '$lib/util/fileSelector'
 import { getSettings } from '$lib/settings'
 import { parseCSV } from '$lib/util/csv'
+import { omit, pick } from 'es-toolkit'
 
 function getRandomCount(blockSpeedRange: [number, number]) {
   const [min, max] = blockSpeedRange
@@ -31,15 +32,17 @@ export async function selectImportFile() {
     users = JSON.parse(str) as User[]
   } else {
     try {
-      users = parseCSV(str, {
-        fields: [
-          'id',
-          'screen_name',
-          'name',
-          'description',
-          'profile_image_url',
-        ],
-      }) as User[]
+      users = (parseCSV(str) as User[]).map(
+        (it) =>
+          pick(it, [
+            'id',
+            'screen_name',
+            'name',
+            'description',
+            'profile_image_url',
+            'created_at',
+          ]) as User,
+      )
     } catch (err) {
       toast.error(tP('modlists.detail.users.import.invalid'))
       return

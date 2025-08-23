@@ -8,7 +8,6 @@ import ExportCommunityMembersToCSVTest from './exportCommunityMembersToCSV.test.
 import { commands } from '@vitest/browser/context'
 import { parseCSV } from '$lib/util/csv'
 import { User } from '$lib/db'
-import { wait } from '@liuli-util/async'
 
 describe('exportCommunityMembersToCSV', () => {
   function genUser(it: number) {
@@ -30,9 +29,7 @@ describe('exportCommunityMembersToCSV', () => {
       commands.waitForDownload(),
       screen.getByText('Download').click(),
     ])
-    const r = parseCSV(download.text, {
-      fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
-    })
+    const r = parseCSV(download.text)
     return r
   }
   it('should export community members to CSV', async () => {
@@ -53,9 +50,7 @@ describe('exportCommunityMembersToCSV', () => {
       screen.getByText('Download').click(),
     ])
     expect(download.suggestedFilename.startsWith('community_123_')).true
-    const r = parseCSV<User>(download.text, {
-      fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
-    })
+    const r = parseCSV<User>(download.text)
     expect(r).toEqual(data.map((it) => omit(it, ['community_role'])))
   })
   it('should export community members to CSV with click stop button', async () => {
@@ -82,9 +77,7 @@ describe('exportCommunityMembersToCSV', () => {
       commands.waitForDownload(),
       screen.getByText('Download').click(),
     ])
-    const r = parseCSV(download.text, {
-      fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
-    })
+    const r = parseCSV(download.text)
     expect(r).length(220)
   })
   it('should export community members to CSV with external abort', async () => {
@@ -112,9 +105,7 @@ describe('exportCommunityMembersToCSV', () => {
       commands.waitForDownload(),
       screen.getByText('Download').click(),
     ])
-    const r = parseCSV(download.text, {
-      fields: ['id', 'screen_name', 'name', 'description', 'profile_image_url'],
-    })
+    const r = parseCSV(download.text)
     expect(r).length(200)
   })
   it('should export community members to CSV with gt 850 requests(continue)', async () => {

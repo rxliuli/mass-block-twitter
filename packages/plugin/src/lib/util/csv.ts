@@ -1,36 +1,36 @@
-import { stringify } from 'csv-stringify/browser/esm/sync'
-import { parse } from 'csv-parse/browser/esm/sync'
+import { parse, unparse } from 'papaparse'
 
-export function generateCSV<T>(
+export function generateCSV<T extends object>(
   data: T[],
   options: {
     fields: (keyof T & string)[]
   },
-) {
-  return stringify(data, {
+): string {
+  return unparse(data, {
     columns: options.fields,
     header: true,
-    quoted_string: true,
-    bom: true,
+    newline: '\r\n',
   })
 }
 
-export function parseCSV<T>(
-  csv: string,
-  options: { fields: (keyof T & string)[] },
-) {
-  const data = parse(csv, {
-    columns: options.fields,
+export function parseCSV<T extends object>(csv: string): T[] {
+  const normalized = csv.replaceAll('\r\n', '\n').replaceAll('\r', '\n')
+  const data = parse<T>(normalized, {
+    header: true,
     skipEmptyLines: true,
-    skipRecordsWithEmptyValues: true,
-    fromLine: 2,
-    bom: true,
-    cast: (value, context) => {
-      if (value === '' && !context.quoting) {
+    newline: '\n',
+    transform(value) {
+      if (value === '') {
         return
       }
       return value
     },
   })
-  return data
+  return data.data.map((it) => {
+    if ('avatar_image_url' in it) {
+      Reflect.set(it, 'profile_image_url', it['avatar_image_url'])
+      delete it['avatar_image_url']
+    }
+    return it
+  })
 }

@@ -20,7 +20,7 @@
   import ModlistRuleEdit from './ModlistRuleEdit.svelte'
   import { toast } from 'svelte-sonner'
   import { Button } from '$lib/components/ui/button'
-  import { PencilIcon, Proportions, Trash2Icon } from 'lucide-svelte'
+  import { PencilIcon, Trash2Icon } from 'lucide-svelte'
   import { cn } from '$lib/utils'
   import ModlistRulePreview from './ModlistRulePreview.svelte'
   import { t } from '$lib/i18n'

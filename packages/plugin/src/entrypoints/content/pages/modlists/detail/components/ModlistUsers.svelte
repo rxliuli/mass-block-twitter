@@ -31,6 +31,7 @@
   import { middleware } from '$lib/util/middleware'
   import { errorHandler, loadingHandler } from '$lib/util/handlers'
   import { wait } from '@liuli-util/async'
+  import { refreshModListSubscribedUsers } from '$lib/content'
 
   let {
     owner,
@@ -163,6 +164,9 @@
     ),
     onSuccess: () => {
       toast.success($t('modlists.detail.users.remove.success'))
+      if (subscribed) {
+        refreshModListSubscribedUsers(true)
+      }
     },
     onError: () => {
       toast.error($t('modlists.detail.users.remove.failed'))

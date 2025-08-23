@@ -70,7 +70,7 @@
         disabled={!field}
         required
       />
-      {#if field?.type === 'string'}
+      {#if field?.type === 'string' && !field.enum}
         <Checkbox
           checked={condition.caseSensitive ?? false}
           onCheckedChange={(checked) => {

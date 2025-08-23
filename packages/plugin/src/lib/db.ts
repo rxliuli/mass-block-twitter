@@ -24,6 +24,11 @@ export interface User {
   location?: string
   url?: string // profile url
 
+  verification_verified?: boolean
+  // Government https://x.com/realDonaldTrump
+  // Business https://x.com/Limportant_fr
+  verification_verified_type?: 'Government' | 'Business'
+
   blocking: boolean // local only
   following?: boolean // local only
 }

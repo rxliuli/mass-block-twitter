@@ -29,6 +29,7 @@ const ruleDataSchema = z.object({
       friends_count: z.number().optional(),
       default_profile: z.boolean().optional(),
       default_profile_image: z.boolean().optional(),
+      verification_verified_type: z.enum(['Government', 'Business']).optional(),
     })
     .describe('User')
     .optional(),
@@ -43,11 +44,7 @@ const ruleDataSchema = z.object({
       media: z
         .array(
           z.object({
-            type: z.union([
-              z.literal('photo'),
-              z.literal('video'),
-              z.literal('animated_gif'),
-            ]),
+            type: z.enum(['photo', 'video', 'animated_gif']),
             url: z.string(),
           }),
         )
@@ -159,15 +156,24 @@ export function getRuleFileds(): RuleField[] {
       return false
     }
     if (it instanceof ZodEnum) {
-      if (path.join('.') !== 'tweet.lang') {
-        throw new Error('Enum field must be tweet.lang')
+      if (path.join('.') === 'tweet.lang') {
+        fields.push({
+          field: path.join('.'),
+          type: 'string',
+          operator: [{ value: 'eq', label: 'Equal' }],
+          enum: languages,
+        })
+      } else {
+        fields.push({
+          field: path.join('.'),
+          type: 'string',
+          operator: [{ value: 'eq', label: 'Equal' }],
+          enum: (it.options as string[]).map((value) => ({
+            value,
+            label: value,
+          })),
+        })
       }
-      fields.push({
-        field: path.join('.'),
-        type: 'string',
-        operator: [{ value: 'eq', label: 'Equal' }],
-        enum: languages,
-      })
       return false
     }
     if (it instanceof ZodString) {

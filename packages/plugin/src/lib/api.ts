@@ -165,6 +165,12 @@ export const timelineUserSchema = z.object({
       following: z.boolean(),
     })
     .optional(),
+  verification: z
+    .object({
+      verified: z.boolean().optional(),
+      verified_type: z.enum(['Government', 'Business']).optional(),
+    })
+    .optional(),
 })
 
 export function parseTimelineUser(
@@ -201,6 +207,8 @@ export function parseTimelineUser(
       twitterUser.location?.location ??
       twitterUser.legacy.location ??
       undefined,
+    verification_verified: twitterUser.verification?.verified,
+    verification_verified_type: twitterUser.verification?.verified_type,
   }
   if (
     twitterUser.legacy.description &&
@@ -245,6 +253,12 @@ export const notifacationUserSchema = z.object({
       url: z.object({ urls: z.array(urlSchema) }).optional(),
     })
     .optional(),
+  verification: z
+    .object({
+      verified: z.boolean().optional(),
+      verified_type: z.enum(['Government', 'Business']).optional(),
+    })
+    .optional(),
 })
 
 function parseNotificationUser(
@@ -269,6 +283,8 @@ function parseNotificationUser(
     default_profile: twitterUser.default_profile,
     default_profile_image: twitterUser.default_profile_image,
     is_blue_verified: twitterUser.ext_is_blue_verified,
+    verification_verified: twitterUser.verification?.verified,
+    verification_verified_type: twitterUser.verification?.verified_type,
   }
   if (twitterUser.description && twitterUser.entities?.description.urls) {
     twitterUser.entities.description.urls.forEach((url) => {

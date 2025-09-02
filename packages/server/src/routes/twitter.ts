@@ -13,64 +13,56 @@ import {
   and,
   desc,
   eq,
+  getTableColumns,
   gte,
   inArray,
   InferInsertModel,
   InferSelectModel,
-  isNull,
-  lt,
-  or,
   sql,
 } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
 import { chunk, groupBy, omit, uniqBy } from 'es-toolkit'
 import { safeChunkInsertValues } from '../lib/drizzle'
-import { PgUpdateSetSource } from 'drizzle-orm/pg-core'
 import { useDB } from '../lib/drizzle'
 import { NodePgDatabase } from 'drizzle-orm/node-postgres'
 
-export function upsertTweet(
+export async function batchUpsertUsers(
   db: NodePgDatabase,
-  _tweet: InferInsertModel<typeof tweet>,
+  users: InferInsertModel<typeof user>[],
 ) {
-  return db
-    .insert(tweet)
-    .values(_tweet)
-    .onConflictDoUpdate({
-      target: tweet.id,
-      set: omit(_tweet, ['id']),
-      setWhere: and(
-        isNull(tweet.conversationId),
-        _tweet.conversationId ?? null ? sql`true` : sql`false`,
-      ),
-    })
-}
+  if (users.length === 0) return []
 
-export function upsertUser(
-  db: NodePgDatabase,
-  _user: InferInsertModel<typeof user>,
-  _updated?: PgUpdateSetSource<typeof user>,
-) {
+  const { id, createdAt, ...updateColumns } = getTableColumns(user)
+
   return db
     .insert(user)
-    .values(_user)
+    .values(users)
     .onConflictDoUpdate({
       target: user.id,
-      set: _updated ? omit(_updated, ['id']) : omit(_user, ['id']),
-      setWhere: and(
-        or(
-          isNull(user.followersCount),
-          isNull(user.followingCount),
-          // 24 hours ago
-          lt(
-            user.updatedAt,
-            new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-          ),
-        ),
-        _user.followersCount ?? null ? sql`true` : sql`false`,
-        _user.followingCount ?? null ? sql`true` : sql`false`,
-      ),
+      set: {
+        ...updateColumns, // 自动包含所有非主键字段
+        // 覆盖特定字段的更新逻辑
+        followersCount: sql`
+          CASE
+            WHEN "User"."followersCount" IS NULL 
+              OR "User"."updatedAt"::timestamp < NOW() - INTERVAL '24 hours'
+              OR EXCLUDED."followersCount" IS NOT NULL
+            THEN COALESCE(EXCLUDED."followersCount", "User"."followersCount")
+            ELSE "User"."followersCount"
+          END
+        `,
+        followingCount: sql`
+          CASE
+            WHEN "User"."followingCount" IS NULL 
+              OR "User"."updatedAt"::timestamp < NOW() - INTERVAL '24 hours'
+              OR EXCLUDED."followingCount" IS NOT NULL
+            THEN COALESCE(EXCLUDED."followingCount", "User"."followingCount")
+            ELSE "User"."followingCount"
+          END
+        `,
+      },
     })
+    .returning()
 }
 
 export function convertUserParamsToDBUser(

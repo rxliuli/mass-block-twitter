@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type {
   ModListUserCheckResponse,
-  ModListAddTwitterUserRequest,
   ModListCreateRequest,
   ModListGetResponse,
   ModListUpdateRequest,
@@ -293,12 +292,12 @@ describe('modlists', () => {
     twitterUser: TwitterUser,
     modListId: string,
   ) => {
-    const resp1 = await fetch('/api/modlists/user', {
+    const resp1 = await fetch('/api/modlists/users', {
       method: 'POST',
       body: JSON.stringify({
         modListId,
-        twitterUser,
-      } satisfies ModListAddTwitterUserRequest),
+        twitterUsers: [twitterUser],
+      } satisfies ModListAddTwitterUsersRequest),
       headers: {
         Authorization: `Bearer ${context.token1}`,
         'Content-Type': 'application/json',
@@ -588,7 +587,6 @@ describe('modlists', () => {
         expect(r1).not.toEqual(r3)
       })
       it('should be able to clear cache when add or remove modlistUsers', async () => {
-        const db = context.db
         const r1 = await getSubscribedUsers()
         await addUserToModList(
           {
@@ -673,39 +671,12 @@ describe('modlists', () => {
     it('should be able to add a user to a modlist', async () => {
       expect((await getModList(modListId)).userCount).toBe(0)
       expect((await getModListUsers(modListId)).data.length).toBe(0)
-      const resp1 = await fetch('/api/modlists/user', {
+      const resp1 = await fetch('/api/modlists/users', {
         method: 'POST',
         body: JSON.stringify({
           modListId,
-          twitterUser: {
-            id: '123',
-            screen_name: 'test',
-            name: 'test',
-            profile_image_url: 'test',
-            created_at: new Date().toISOString(),
-            is_blue_verified: false,
-            followers_count: 100,
-            friends_count: 100,
-            default_profile: false,
-            default_profile_image: false,
-          },
-        } satisfies ModListAddTwitterUserRequest),
-        headers: {
-          Authorization: `Bearer ${context.token1}`,
-          'Content-Type': 'application/json',
-        },
-      })
-      expect(resp1.ok).true
-      expect((await getModList(modListId)).userCount).toBe(1)
-      expect((await getModListUsers(modListId)).data.length).toBe(1)
-    })
-    it('should not be able to add a user to a modlist twice', async () => {
-      const add = () =>
-        fetch('/api/modlists/user', {
-          method: 'POST',
-          body: JSON.stringify({
-            modListId,
-            twitterUser: {
+          twitterUsers: [
+            {
               id: '123',
               screen_name: 'test',
               name: 'test',
@@ -717,27 +688,24 @@ describe('modlists', () => {
               default_profile: false,
               default_profile_image: false,
             },
-          } satisfies ModListAddTwitterUserRequest),
-          headers: {
-            Authorization: `Bearer ${context.token1}`,
-            'Content-Type': 'application/json',
-          },
-        })
-      const resp1 = await add()
+          ],
+        } satisfies ModListAddTwitterUsersRequest),
+        headers: {
+          Authorization: `Bearer ${context.token1}`,
+          'Content-Type': 'application/json',
+        },
+      })
       expect(resp1.ok).true
-      const resp2 = await add()
-      expect(resp2.status).toBe(400)
+      expect((await getModList(modListId)).userCount).toBe(1)
+      expect((await getModListUsers(modListId)).data.length).toBe(1)
     })
-    it('should not be able to add a user to a modlist that does not exist', async () => {
-      const resp1 = await fetch('/api/modlists/user', {
-        method: 'POST',
-        body: JSON.stringify({
-          modListId: '123',
-          twitterUser: {
-            id: '123',
-            screen_name: 'test',
-            name: 'test',
-            profile_image_url: 'test',
+    it('should not be able to add a user to a modlist twice', async () => {
+      const add = () =>
+        addUserToModList(
+          {
+            id: '1',
+            screen_name: 'test-user-1',
+            name: 'test-user-1',
             created_at: new Date().toISOString(),
             is_blue_verified: false,
             followers_count: 100,
@@ -745,7 +713,34 @@ describe('modlists', () => {
             default_profile: false,
             default_profile_image: false,
           },
-        } satisfies ModListAddTwitterUserRequest),
+          modListId,
+        )
+      await add()
+      const db = context.db
+      expect(await db.select().from(modListUser)).length(1)
+      await add()
+      expect(await db.select().from(modListUser)).length(1)
+    })
+    it('should not be able to add a user to a modlist that does not exist', async () => {
+      const resp1 = await fetch('/api/modlists/users', {
+        method: 'POST',
+        body: JSON.stringify({
+          modListId: '123',
+          twitterUsers: [
+            {
+              id: '123',
+              screen_name: 'test',
+              name: 'test',
+              profile_image_url: 'test',
+              created_at: new Date().toISOString(),
+              is_blue_verified: false,
+              followers_count: 100,
+              friends_count: 100,
+              default_profile: false,
+              default_profile_image: false,
+            },
+          ],
+        } satisfies ModListAddTwitterUsersRequest),
         headers: {
           Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
@@ -754,23 +749,25 @@ describe('modlists', () => {
       expect(resp1.status).toBe(404)
     })
     it('should not be able to add a user to a modlist that is not created by the user', async () => {
-      const resp1 = await fetch('/api/modlists/user', {
+      const resp1 = await fetch('/api/modlists/users', {
         method: 'POST',
         body: JSON.stringify({
           modListId: '123',
-          twitterUser: {
-            id: '123',
-            screen_name: 'test',
-            name: 'test',
-            profile_image_url: 'test',
-            created_at: new Date().toISOString(),
-            is_blue_verified: false,
-            followers_count: 100,
-            friends_count: 100,
-            default_profile: false,
-            default_profile_image: false,
-          },
-        } satisfies ModListAddTwitterUserRequest),
+          twitterUsers: [
+            {
+              id: '123',
+              screen_name: 'test',
+              name: 'test',
+              profile_image_url: 'test',
+              created_at: new Date().toISOString(),
+              is_blue_verified: false,
+              followers_count: 100,
+              friends_count: 100,
+              default_profile: false,
+              default_profile_image: false,
+            },
+          ],
+        } satisfies ModListAddTwitterUsersRequest),
         headers: {
           Authorization: `Bearer ${context.token2}`,
           'Content-Type': 'application/json',
@@ -808,12 +805,12 @@ describe('modlists', () => {
       }
       const r1 = await getCheck()
       expect(Object.values(r1).every((it) => it === false)).true
-      const resp2 = await fetch('/api/modlists/user', {
+      const resp2 = await fetch('/api/modlists/users', {
         method: 'POST',
         body: JSON.stringify({
           modListId,
-          twitterUser: twittrUsers[0],
-        } satisfies ModListAddTwitterUserRequest),
+          twitterUsers: [twittrUsers[0]],
+        } satisfies ModListAddTwitterUsersRequest),
         headers: {
           Authorization: `Bearer ${context.token1}`,
           'Content-Type': 'application/json',
@@ -864,38 +861,7 @@ describe('modlists', () => {
       })
       expect(r3.data).length(0)
     })
-    it('should not be able to add a user to a modlist twice', async () => {
-      await addUserToModList(
-        {
-          id: '1',
-          screen_name: 'test-user-1',
-          name: 'test-user-1',
-          created_at: new Date().toISOString(),
-          is_blue_verified: false,
-          followers_count: 100,
-          friends_count: 100,
-          default_profile: false,
-          default_profile_image: false,
-        },
-        modListId,
-      )
-      await expect(
-        addUserToModList(
-          {
-            id: '1',
-            screen_name: 'test-user-1',
-            name: 'test-user-1',
-            created_at: new Date().toISOString(),
-            is_blue_verified: false,
-            followers_count: 100,
-            friends_count: 100,
-            default_profile: false,
-            default_profile_image: false,
-          },
-          modListId,
-        ),
-      ).rejects.toThrow()
-    })
+
     it('should be able to remove a user from a modlist', async () => {
       await addUserToModList(
         {

@@ -12,7 +12,11 @@ import {
   modListUser,
   user,
 } from '../db/schema'
-import { convertUserParamsToDBUser, upsertUser, upsertUsers } from './twitter'
+import {
+  batchUpsertUsers,
+  convertUserParamsToDBUser,
+  upsertUsers,
+} from './twitter'
 import {
   and,
   desc,
@@ -32,14 +36,6 @@ import { groupBy, omit } from 'es-toolkit'
 import { NodePgDatabase } from 'drizzle-orm/node-postgres'
 
 const modlists = new Hono<HonoEnv>().use(auth()).use(useDB())
-
-function _upsertUser(
-  db: NodePgDatabase,
-  userParams: z.infer<typeof userSchema>,
-) {
-  const twitterUser = convertUserParamsToDBUser(userParams)
-  return upsertUser(db, twitterUser)
-}
 
 export const createSchema = z.object({
   name: z.string().max(100),
@@ -99,7 +95,7 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
   }
   const [, [r]] = await db.transaction((tx) =>
     Promise.all([
-      _upsertUser(db, validated.twitterUser),
+      batchUpsertUsers(tx, [convertUserParamsToDBUser(validated.twitterUser)]),
       db
         .insert(modList)
         .values({
@@ -358,61 +354,6 @@ export const addTwitterUserSchema = z.object({
   twitterUser: userSchema,
 })
 
-export type ModListAddTwitterUserRequest = z.infer<typeof addTwitterUserSchema>
-export type ModListAddTwitterUserResponse = InferSelectModel<typeof user>
-// @deprecated v0.17.3
-modlists.post('/user', zValidator('json', addTwitterUserSchema), async (c) => {
-  const validated = c.req.valid('json')
-  const db = c.get('db')
-  const tokenInfo = c.get('jwtPayload')
-
-  const [modListExists, userAlreadyInList] = await db.transaction(async (tx) =>
-    Promise.all([
-      tx.select().from(modList).where(eq(modList.id, validated.modListId)),
-      tx
-        .select()
-        .from(modListUser)
-        .where(
-          and(
-            eq(modListUser.modListId, validated.modListId),
-            eq(modListUser.twitterUserId, validated.twitterUser.id),
-          ),
-        ),
-    ]),
-  )
-  if (
-    modListExists.length === 0 ||
-    modListExists[0].localUserId !== tokenInfo.sub
-  ) {
-    return c.json({ code: 'modListNotFound' }, 404)
-  }
-  if (userAlreadyInList.length > 0) {
-    return c.json({ code: 'userAlreadyInModList' }, 400)
-  }
-  await db.transaction(async (tx) =>
-    Promise.all([
-      _upsertUser(tx, validated.twitterUser),
-      tx.insert(modListUser).values({
-        id: ulid(),
-        modListId: validated.modListId,
-        twitterUserId: validated.twitterUser.id,
-      }),
-      db
-        .update(modList)
-        .set({ userCount: sql`${modList.userCount} + 1` })
-        .where(eq(modList.id, validated.modListId)),
-    ]),
-  )
-  const [result] = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, validated.twitterUser.id))
-    .limit(1)
-  if (!result) {
-    return c.json({ code: 'userNotFound' }, 404)
-  }
-  return c.json<ModListAddTwitterUserResponse>(result)
-})
 export const addTwitterUsersSchema = z.object({
   modListId: z.string(),
   twitterUsers: z.array(userSchema).min(1).max(99),
@@ -595,7 +536,10 @@ async function checkUsers(
   const db = c.get('db')
   if (validated.users.length > 0) {
     // async upsert users, avoid blocking
-    await Promise.all(validated.users.map((it) => _upsertUser(db, it)))
+    await batchUpsertUsers(
+      db,
+      validated.users.map((it) => convertUserParamsToDBUser(it)),
+    )
   }
   const subscriptions = await db
     .select({ twitterUserId: modListUser.twitterUserId })

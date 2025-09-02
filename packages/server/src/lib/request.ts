@@ -8,7 +8,7 @@ export const userSchema = z.object({
     { message: 'id value is invalid' },
   ),
   screen_name: z.string(),
-  name: z.string(),
+  name: z.string().optional(),
   description: z.string().optional(),
   profile_image_url: z.string().optional(),
   created_at: z.string().optional(),

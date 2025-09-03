@@ -13,7 +13,6 @@ import {
   and,
   desc,
   eq,
-  exists,
   isNull,
   getTableColumns,
   gte,
@@ -23,8 +22,7 @@ import {
   sql,
 } from 'drizzle-orm'
 import { BatchItem } from 'drizzle-orm/batch'
-import { chunk, groupBy, omit, uniqBy } from 'es-toolkit'
-import { safeChunkInsertValues } from '../lib/drizzle'
+import { omit, uniqBy } from 'es-toolkit'
 import { useDB } from '../lib/drizzle'
 import { NodePgDatabase } from 'drizzle-orm/node-postgres'
 
@@ -36,14 +34,13 @@ export async function batchUpsertUsers(
 
   const { id, createdAt, ...updateColumns } = getTableColumns(user)
 
-  return db
+  await db
     .insert(user)
     .values(users)
     .onConflictDoUpdate({
       target: user.id,
       set: createUpsertSet(updateColumns),
     })
-    .returning()
 }
 
 function createUpsertSet(columns: Record<string, any>) {
@@ -61,7 +58,7 @@ export async function batchUpsertTweets(
   if (data.length === 0) return []
 
   const { id, createdAt, ...updateColumns } = getTableColumns(tweet)
-  return db
+  await db
     .insert(tweet)
     .values(data)
     .onConflictDoUpdate({
@@ -69,7 +66,6 @@ export async function batchUpsertTweets(
       set: createUpsertSet(updateColumns),
       setWhere: isNull(tweet.conversationId),
     })
-    .returning()
 }
 
 export function convertUserParamsToDBUser(
@@ -347,10 +343,8 @@ twitter.post(
       ),
     )
 
-    await Promise.all([
-      batchUpsertUsers(db, usersToProcess),
-      batchUpsertTweets(db, tweetsToProcess),
-    ])
+    await batchUpsertUsers(db, usersToProcess)
+    await batchUpsertTweets(db, tweetsToProcess)
 
     const spamAnalysis = await db
       .select({

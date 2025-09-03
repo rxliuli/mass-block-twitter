@@ -8,10 +8,7 @@ import { initCloudflareTest } from './utils'
 import { tweet, user, userSpamAnalysis } from '../src/db/schema'
 import { eq, gt } from 'drizzle-orm'
 import { range } from 'es-toolkit'
-import {
-  batchUpsertTweets,
-  batchUpsertUsers,
-} from '../src/routes/twitter'
+import { batchUpsertTweets, batchUpsertUsers } from '../src/routes/twitter'
 
 let c = initCloudflareTest()
 
@@ -503,11 +500,11 @@ describe('check spam user', () => {
 
 describe('batch upsert users', () => {
   it('should be able to upsert users', async () => {
-    const r1 = await batchUpsertUsers(c.db, [
+    await batchUpsertUsers(c.db, [
       { id: '10000001', screenName: 'user-1', name: 'user-1' },
     ])
     expect(await c.db.select().from(user)).length(1)
-    const r2 = await batchUpsertUsers(c.db, [
+    await batchUpsertUsers(c.db, [
       { id: '10000001', screenName: 'user-1', name: 'user-1' },
     ])
     expect(await c.db.select().from(user)).length(1)

@@ -87,24 +87,20 @@ modlists.post('/create', zValidator('json', createSchema), async (c) => {
   if (validated.avatar) {
     validated.avatar = await uploadAvatar(c, validated.avatar)
   }
-  const [, [r]] = await db.transaction((tx) =>
-    Promise.all([
-      batchUpsertUsers(tx, [convertUserParamsToDBUser(validated.twitterUser)]),
-      db
-        .insert(modList)
-        .values({
-          id: modListId,
-          name: validated.name,
-          description: validated.description,
-          avatar: validated.avatar,
-          localUserId: tokenInfo.sub,
-          twitterUserId: validated.twitterUser.id,
-          visibility: validated.visibility,
-          subscriptionCount: 0,
-        })
-        .returning(),
-    ]),
-  )
+  await batchUpsertUsers(db, [convertUserParamsToDBUser(validated.twitterUser)])
+  const [r] = await db
+    .insert(modList)
+    .values({
+      id: modListId,
+      name: validated.name,
+      description: validated.description,
+      avatar: validated.avatar,
+      localUserId: tokenInfo.sub,
+      twitterUserId: validated.twitterUser.id,
+      visibility: validated.visibility,
+      subscriptionCount: 0,
+    })
+    .returning()
   return c.json(r)
 })
 
@@ -149,44 +145,35 @@ modlists.delete('/remove/:id', zValidator('param', removeSchema), async (c) => {
   const validated = c.req.valid('param')
   const db = c.get('db')
   const tokenInfo = c.get('jwtPayload')
-  const [_modList, modListSubscriptions] = await db.transaction((tx) =>
-    Promise.all([
-      tx
-        .select()
-        .from(modList)
-        .where(
-          and(
-            eq(modList.id, validated.id),
-            eq(modList.localUserId, tokenInfo.sub),
-          ),
-        )
-        .limit(1),
-      tx
-        .select()
-        .from(modListSubscription)
-        .where(eq(modListSubscription.modListId, validated.id)),
-    ]),
-  )
+  const _modList = await db
+    .select()
+    .from(modList)
+    .where(
+      and(eq(modList.id, validated.id), eq(modList.localUserId, tokenInfo.sub)),
+    )
+    .limit(1)
+  const modListSubscriptions = await db
+    .select()
+    .from(modListSubscription)
+    .where(eq(modListSubscription.modListId, validated.id))
   if (_modList.length === 0) {
     return c.json({ code: 'modListNotFound' }, 404)
   }
   if (modListSubscriptions.length > 0) {
     return c.json({ code: 'modListHasSubscriptions' }, 400)
   }
-  await db.transaction((tx) =>
-    Promise.all([
-      tx.delete(modListUser).where(eq(modListUser.modListId, validated.id)),
-      tx.delete(modListRule).where(eq(modListRule.modListId, validated.id)),
-      tx
-        .delete(modList)
-        .where(
-          and(
-            eq(modList.id, validated.id),
-            eq(modList.localUserId, tokenInfo.sub),
-          ),
+  await db.transaction(async (tx) => {
+    await tx.delete(modListUser).where(eq(modListUser.modListId, validated.id))
+    await tx.delete(modListRule).where(eq(modListRule.modListId, validated.id))
+    await tx
+      .delete(modList)
+      .where(
+        and(
+          eq(modList.id, validated.id),
+          eq(modList.localUserId, tokenInfo.sub),
         ),
-    ]),
-  )
+      )
+  })
   return c.json({ code: 'success' })
 })
 
@@ -219,25 +206,21 @@ modlists
       const subscribe = c.req.valid('json')
       const db = c.get('db')
       const tokenInfo = c.get('jwtPayload')
-      const [_modList, _existingSubscription] = await db.transaction((tx) =>
-        Promise.all([
-          tx
-            .select()
-            .from(modList)
-            .where(eq(modList.id, validated.modListId))
-            .limit(1),
-          tx
-            .select()
-            .from(modListSubscription)
-            .where(
-              and(
-                eq(modListSubscription.modListId, validated.modListId),
-                eq(modListSubscription.localUserId, tokenInfo.sub),
-              ),
-            )
-            .limit(1),
-        ]),
-      )
+      const _modList = await db
+        .select()
+        .from(modList)
+        .where(eq(modList.id, validated.modListId))
+        .limit(1)
+      const _existingSubscription = await db
+        .select()
+        .from(modListSubscription)
+        .where(
+          and(
+            eq(modListSubscription.modListId, validated.modListId),
+            eq(modListSubscription.localUserId, tokenInfo.sub),
+          ),
+        )
+        .limit(1)
       if (_modList.length === 0) {
         return c.json({ code: 'modListNotFound' }, 404)
       }
@@ -282,40 +265,37 @@ modlists
       const validated = c.req.valid('param')
       const db = c.get('db')
       const tokenInfo = c.get('jwtPayload')
-      const [_modList, _existingSubscription] = await db.transaction((tx) =>
-        Promise.all([
-          tx.select().from(modList).where(eq(modList.id, validated.modListId)),
-          tx
-            .select()
-            .from(modListSubscription)
-            .where(
-              and(
-                eq(modListSubscription.modListId, validated.modListId),
-                eq(modListSubscription.localUserId, tokenInfo.sub),
-              ),
-            ),
-        ]),
-      )
+      const _modList = await db
+        .select()
+        .from(modList)
+        .where(eq(modList.id, validated.modListId))
+      const _existingSubscription = await db
+        .select()
+        .from(modListSubscription)
+        .where(
+          and(
+            eq(modListSubscription.modListId, validated.modListId),
+            eq(modListSubscription.localUserId, tokenInfo.sub),
+          ),
+        )
       if (_modList.length === 0) {
         return c.json({ code: 'modListNotFound' }, 404)
       }
       if (_existingSubscription.length === 0) {
         return c.json({ code: 'notSubscribed' }, 400)
       }
-      await db.transaction((tx) =>
-        Promise.all([
-          tx
-            .delete(modListSubscription)
-            .where(eq(modListSubscription.id, _existingSubscription[0].id)),
-          db
-            .update(modList)
-            .set({
-              subscriptionCount: sql`${modList.subscriptionCount} - 1`,
-              updatedAt: sql`${modList.updatedAt}`, // don't update updatedAt
-            })
-            .where(eq(modList.id, validated.modListId)),
-        ]),
-      )
+      await db.transaction(async (tx) => {
+        await tx
+          .delete(modListSubscription)
+          .where(eq(modListSubscription.id, _existingSubscription[0].id))
+        await tx
+          .update(modList)
+          .set({
+            subscriptionCount: sql`${modList.subscriptionCount} - 1`,
+            updatedAt: sql`${modList.updatedAt}`, // don't update updatedAt
+          })
+          .where(eq(modList.id, validated.modListId))
+      })
       return c.json({ code: 'success' })
     },
   )
@@ -470,43 +450,37 @@ modlists.delete(
     const validated = c.req.valid('json')
     const db = c.get('db')
     const tokenInfo = c.get('jwtPayload')
-    const [_modList, _modListUser] = await db.transaction((tx) =>
-      Promise.all([
-        tx
-          .select()
-          .from(modList)
-          .where(
-            and(
-              eq(modList.id, validated.modListId),
-              eq(modList.localUserId, tokenInfo.sub),
-            ),
-          ),
-        tx
-          .select()
-          .from(modListUser)
-          .where(
-            and(
-              eq(modListUser.modListId, validated.modListId),
-              eq(modListUser.twitterUserId, validated.twitterUserId),
-            ),
-          ),
-      ]),
-    )
+    const _modList = await db
+      .select()
+      .from(modList)
+      .where(
+        and(
+          eq(modList.id, validated.modListId),
+          eq(modList.localUserId, tokenInfo.sub),
+        ),
+      )
+    const _modListUser = await db
+      .select()
+      .from(modListUser)
+      .where(
+        and(
+          eq(modListUser.modListId, validated.modListId),
+          eq(modListUser.twitterUserId, validated.twitterUserId),
+        ),
+      )
     if (_modList.length === 0) {
       return c.json({ code: 'modListNotFound' }, 404)
     }
     if (_modListUser.length === 0) {
       return c.json({ code: 'modListUserNotFound' }, 404)
     }
-    await db.transaction((tx) =>
-      Promise.all([
-        tx.delete(modListUser).where(eq(modListUser.id, _modListUser[0].id)),
-        tx
-          .update(modList)
-          .set({ userCount: sql`${modList.userCount} - 1` })
-          .where(eq(modList.id, validated.modListId)),
-      ]),
-    )
+    await db.transaction(async (tx) => {
+      await tx.delete(modListUser).where(eq(modListUser.id, _modListUser[0].id))
+      await tx
+        .update(modList)
+        .set({ userCount: sql`${modList.userCount} - 1` })
+        .where(eq(modList.id, validated.modListId))
+    })
     return c.json({ code: 'success' })
   },
 )
@@ -597,25 +571,24 @@ export type ModListAddRuleResponse = InferSelectModel<typeof modListRule>
 modlists.post('/rule', zValidator('json', addRuleSchema), async (c) => {
   const validated = c.req.valid('json')
   const db = c.get('db')
-  const [[r]] = await db.transaction((tx) =>
-    Promise.all([
-      tx
-        .insert(modListRule)
-        .values({
-          id: ulid(),
-          name: validated.name,
-          modListId: validated.modListId,
-          rule: validated.rule,
-        })
-        .returning(),
-      tx
-        .update(modList)
-        .set({
-          updatedAt: new Date().toISOString(),
-        })
-        .where(eq(modList.id, validated.modListId)),
-    ]),
-  )
+  const r = await db.transaction(async (tx) => {
+    const [r] = await tx
+      .insert(modListRule)
+      .values({
+        id: ulid(),
+        name: validated.name,
+        modListId: validated.modListId,
+        rule: validated.rule,
+      })
+      .returning()
+    await tx
+      .update(modList)
+      .set({
+        updatedAt: new Date().toISOString(),
+      })
+      .where(eq(modList.id, validated.modListId))
+    return r
+  })
   return c.json<ModListAddRuleResponse>(r)
 })
 
@@ -647,24 +620,23 @@ modlists.put(
     if (!_modListRule) {
       return c.json({ code: 'modListRuleNotFound' }, 404)
     }
-    const [[r]] = await db.transaction((tx) =>
-      Promise.all([
-        tx
-          .update(modListRule)
-          .set({
-            name: validatedJson.name,
-            rule: validatedJson.rule,
-          })
-          .where(eq(modListRule.id, validated.id))
-          .returning(),
-        tx
-          .update(modList)
-          .set({
-            updatedAt: new Date().toISOString(),
-          })
-          .where(eq(modList.id, _modListRule.ModList.id)),
-      ]),
-    )
+    const r = await db.transaction(async (tx) => {
+      const [r] = await tx
+        .update(modListRule)
+        .set({
+          name: validatedJson.name,
+          rule: validatedJson.rule,
+        })
+        .where(eq(modListRule.id, validated.id))
+        .returning()
+      await tx
+        .update(modList)
+        .set({
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(modList.id, _modListRule.ModList.id))
+      return r
+    })
     return c.json<ModListUpdateRuleResponse>(r)
   },
 )
@@ -694,17 +666,15 @@ modlists.delete(
     if (!_modListRule) {
       return c.json({ code: 'modListRuleNotFound' }, 404)
     }
-    await db.transaction((tx) =>
-      Promise.all([
-        tx.delete(modListRule).where(eq(modListRule.id, validated.id)),
-        tx
-          .update(modList)
-          .set({
-            updatedAt: new Date().toISOString(),
-          })
-          .where(eq(modList.id, _modListRule.ModList.id)),
-      ]),
-    )
+    await db.transaction(async (tx) => {
+      await tx.delete(modListRule).where(eq(modListRule.id, validated.id))
+      await tx
+        .update(modList)
+        .set({
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(modList.id, _modListRule.ModList.id))
+    })
     return c.json({ code: 'success' })
   },
 )
@@ -876,39 +846,33 @@ search
     const id = c.req.param('id')
     const db = c.get('db')
     const tokenInfo = await getTokenInfo(c)
-    const [_modList, ruleCount, _subscribed] = await db.transaction((tx) =>
-      Promise.all([
-        tx
-          .select({
-            modList: getTableAliasedColumns(modList),
-            user: getTableAliasedColumns(user),
-          })
-          .from(modList)
-          .innerJoin(user, eq(modList.twitterUserId, user.id))
-          .where(eq(modList.id, id))
-          .limit(1),
-        tx
-          .select({
-            ruleCount: sql<number>`count(${modListRule.id})`,
-          })
-          .from(modListRule)
-          .where(eq(modListRule.modListId, id)),
-        ...(tokenInfo
-          ? [
-              tx
-                .select()
-                .from(modListSubscription)
-                .where(
-                  and(
-                    eq(modListSubscription.modListId, id),
-                    eq(modListSubscription.localUserId, tokenInfo.sub),
-                  ),
-                )
-                .limit(1),
-            ]
-          : []),
-      ]),
-    )
+    const _modList = await db
+      .select({
+        modList: getTableAliasedColumns(modList),
+        user: getTableAliasedColumns(user),
+      })
+      .from(modList)
+      .innerJoin(user, eq(modList.twitterUserId, user.id))
+      .where(eq(modList.id, id))
+      .limit(1)
+    const ruleCount = await db
+      .select({
+        ruleCount: sql<number>`count(${modListRule.id})`,
+      })
+      .from(modListRule)
+      .where(eq(modListRule.modListId, id))
+    const _subscribed = tokenInfo
+      ? await db
+          .select()
+          .from(modListSubscription)
+          .where(
+            and(
+              eq(modListSubscription.modListId, id),
+              eq(modListSubscription.localUserId, tokenInfo.sub),
+            ),
+          )
+          .limit(1)
+      : []
     if (_modList.length === 0) {
       return c.json<ModListGetErrorResponse>({ code: 'modListNotFound' }, 404)
     }

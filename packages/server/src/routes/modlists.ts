@@ -386,15 +386,19 @@ modlists.post(
   '/users',
   zValidator('json', addTwitterUsersSchema),
   async (c) => {
+    console.log(`Starting request`)
     const validated = c.req.valid('json')
     const db = c.get('db')
     const tokenInfo = c.get('jwtPayload')
+    console.log(`Fetching modList`)
     const [_modList] = await db
       .select({
         localUserId: modList.localUserId,
       })
       .from(modList)
       .where(eq(modList.id, validated.modListId))
+    console.log(`ModList fetched`)
+
     if (!_modList || _modList.localUserId !== tokenInfo.sub) {
       return c.json({ code: 'modListNotFound' }, 404)
     }
@@ -403,20 +407,25 @@ modlists.post(
       convertUserParamsToDBUser(it),
     )
 
+    console.log(`Upserting users`)
     await batchUpsertUsers(db, usersToProcess)
+    console.log(`Users upserted`)
 
     const modListUserResults = await upsertModListUsers(db, validated)
     const modListUserInsertCount = modListUserResults.length
 
     if (modListUserInsertCount > 0) {
+      console.log(`Updating modList userCount`)
       await db
         .update(modList)
         .set({
           userCount: sql`${modList.userCount} + ${modListUserInsertCount}`,
         })
         .where(eq(modList.id, validated.modListId))
+      console.log(`ModList userCount updated`)
     }
 
+    console.log(`Fetching and returning users`)
     const list = await db
       .select({
         id: user.id,
@@ -432,6 +441,7 @@ modlists.post(
           validated.twitterUsers.map((it) => it.id),
         ),
       )
+    console.log(`Users fetched and returning`)
     return c.json<ModListAddTwitterUsersResponse>(list)
   },
 )

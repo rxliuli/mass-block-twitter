@@ -1282,7 +1282,7 @@ describe('modlists', () => {
       expect(searchResp.ok).true
       const searchResults =
         (await searchResp.json()) as ModListUsersPageResponse
-      expect(searchResults.data.length).toBe(1)
+      expect(searchResults.data).length(2)
     })
     it('should filter modlist sorted by updated', async () => {
       vi.useFakeTimers()

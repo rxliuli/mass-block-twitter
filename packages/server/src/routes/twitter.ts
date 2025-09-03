@@ -13,6 +13,8 @@ import {
   and,
   desc,
   eq,
+  exists,
+  isNull,
   getTableColumns,
   gte,
   inArray,
@@ -39,28 +41,33 @@ export async function batchUpsertUsers(
     .values(users)
     .onConflictDoUpdate({
       target: user.id,
-      set: {
-        ...updateColumns, // 自动包含所有非主键字段
-        // 覆盖特定字段的更新逻辑
-        followersCount: sql`
-          CASE
-            WHEN "User"."followersCount" IS NULL 
-              OR "User"."updatedAt"::timestamp < NOW() - INTERVAL '24 hours'
-              OR EXCLUDED."followersCount" IS NOT NULL
-            THEN COALESCE(EXCLUDED."followersCount", "User"."followersCount")
-            ELSE "User"."followersCount"
-          END
-        `,
-        followingCount: sql`
-          CASE
-            WHEN "User"."followingCount" IS NULL 
-              OR "User"."updatedAt"::timestamp < NOW() - INTERVAL '24 hours'
-              OR EXCLUDED."followingCount" IS NOT NULL
-            THEN COALESCE(EXCLUDED."followingCount", "User"."followingCount")
-            ELSE "User"."followingCount"
-          END
-        `,
-      },
+      set: createUpsertSet(updateColumns),
+    })
+    .returning()
+}
+
+function createUpsertSet(columns: Record<string, any>) {
+  return Object.keys(columns).reduce((acc, key) => {
+    acc[key] = sql.raw(`excluded."${key}"`)
+    return acc
+  }, {} as Record<string, any>)
+}
+
+export async function batchUpsertTweets(
+  db: NodePgDatabase,
+  tweets: InferInsertModel<typeof tweet>[],
+) {
+  const data = uniqBy(tweets, (it) => it.id)
+  if (data.length === 0) return []
+
+  const { id, createdAt, ...updateColumns } = getTableColumns(tweet)
+  return db
+    .insert(tweet)
+    .values(data)
+    .onConflictDoUpdate({
+      target: tweet.id,
+      set: createUpsertSet(updateColumns),
+      setWhere: isNull(tweet.conversationId),
     })
     .returning()
 }
@@ -311,115 +318,6 @@ twitter
     return c.json(res)
   })
 
-export async function upsertUsers(
-  db: NodePgDatabase,
-  users: InferInsertModel<typeof user>[],
-): Promise<BatchItem<'pg'>[]> {
-  const existingUsers = await db
-    .select()
-    .from(user)
-    .where(
-      inArray(
-        user.id,
-        users.map((it) => it.id),
-      ),
-    )
-  const existingUsersMap = existingUsers.reduce((acc, it) => {
-    acc[it.id] = it
-    return acc
-  }, {} as Record<string, InferSelectModel<typeof user>>)
-  const usersToProcessGroupBy = groupBy(users, (it) => {
-    const old = existingUsersMap[it.id]
-    if (!old) {
-      return 'new'
-    }
-    if (
-      typeof it.followersCount !== 'number' ||
-      typeof it.followingCount !== 'number'
-    ) {
-      return 'skip'
-    }
-    if (old.followersCount === null || old.followingCount === null) {
-      return 'update'
-    }
-    if (
-      it.updatedAt &&
-      it.updatedAt < new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString()
-    ) {
-      return 'update'
-    }
-    return 'skip'
-  })
-  const list: BatchItem<'pg'>[] = []
-  if (usersToProcessGroupBy['new']) {
-    list.push(
-      ...safeChunkInsertValues(user, usersToProcessGroupBy['new']).map((it) =>
-        db.insert(user).values(it).onConflictDoNothing({
-          target: user.id,
-        }),
-      ),
-    )
-  }
-  if (usersToProcessGroupBy['update']) {
-    list.push(
-      ...usersToProcessGroupBy['update'].map((it) =>
-        db
-          .update(user)
-          .set(omit(it, ['id']))
-          .where(eq(user.id, it.id)),
-      ),
-    )
-  }
-  return list
-}
-export async function upsertTweets(
-  db: NodePgDatabase,
-  tweets: InferInsertModel<typeof tweet>[],
-) {
-  const existingTweets = (
-    await Promise.all(
-      chunk(
-        tweets.map((it) => it.id),
-        99,
-      ).map((ids) => db.select().from(tweet).where(inArray(tweet.id, ids))),
-    )
-  ).flatMap((it) => it)
-  const tweetsMap = existingTweets.reduce((acc, it) => {
-    acc[it.id] = it
-    return acc
-  }, {} as Record<string, InferSelectModel<typeof tweet>>)
-  const tweetsToProcessGroupBy = groupBy(tweets, (it) => {
-    const old = tweetsMap[it.id]
-    if (!old) {
-      return 'new'
-    }
-    if (!old.conversationId && it.conversationId) {
-      return 'update'
-    }
-    return 'skip'
-  })
-  const list: BatchItem<'pg'>[] = []
-  if (tweetsToProcessGroupBy['new']) {
-    list.push(
-      ...safeChunkInsertValues(tweet, tweetsToProcessGroupBy['new']).map((it) =>
-        db.insert(tweet).values(it).onConflictDoNothing({
-          target: tweet.id,
-        }),
-      ),
-    )
-  }
-  if (tweetsToProcessGroupBy['update']) {
-    list.push(
-      ...tweetsToProcessGroupBy['update'].map((it) =>
-        db
-          .update(tweet)
-          .set(omit(it, ['id']))
-          .where(eq(tweet.id, it.id)),
-      ),
-    )
-  }
-  return list
-}
 const checkSpamUserSchema = z
   .array(
     z.object({
@@ -448,34 +346,11 @@ twitter.post(
         convertTweet({ ...userParam, user_id: it.user.id }),
       ),
     )
-    const list = (
-      await Promise.all([
-        upsertUsers(db, usersToProcess),
-        upsertTweets(db, tweetsToProcess),
-      ])
-    ).flat()
 
-    if (list.length > 0) {
-      await Promise.all(list)
-    }
-
-    // for (const item of chunk(validated, 100)) {
-    //   await db.batch([
-    //     ...item.map((it) => {
-    //       const _user = convertUserParamsToDBUser(it.user)
-    //       return upsertUser(db, _user)
-    //     }),
-    //     ...item.flatMap((userParam) =>
-    //       userParam.tweets.map((it) => {
-    //         const _tweet = convertTweet({
-    //           ...it,
-    //           user_id: userParam.user.id,
-    //         })
-    //         return upsertTweet(db, _tweet)
-    //       }),
-    //     ),
-    //   ] as any)
-    // }
+    await Promise.all([
+      batchUpsertUsers(db, usersToProcess),
+      batchUpsertTweets(db, tweetsToProcess),
+    ])
 
     const spamAnalysis = await db
       .select({

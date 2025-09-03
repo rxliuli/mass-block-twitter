@@ -5,10 +5,13 @@ import type {
   TwitterSpamReportRequest,
 } from '../src/lib'
 import { initCloudflareTest } from './utils'
-import { spamReport, tweet, user, userSpamAnalysis } from '../src/db/schema'
+import { tweet, user, userSpamAnalysis } from '../src/db/schema'
 import { eq, gt } from 'drizzle-orm'
 import { range } from 'es-toolkit'
-import { upsertTweets, upsertUsers } from '../src/routes/twitter'
+import {
+  batchUpsertTweets,
+  batchUpsertUsers,
+} from '../src/routes/twitter'
 
 let c = initCloudflareTest()
 
@@ -451,7 +454,7 @@ describe('check spam user', () => {
     request[0].user.name = 'user-2'
     await checkSpamUser(request)
     const r2 = await c.db.select().from(user)
-    expect(r2[0].name).eq('user-1')
+    expect(r2[0].name).eq('user-2')
     request[0].user.followers_count = 100
     request[0].user.friends_count = 100
     await checkSpamUser(request)
@@ -462,7 +465,7 @@ describe('check spam user', () => {
     request[0].user.name = 'user-3'
     await checkSpamUser(request)
     const r4 = await c.db.select().from(user)
-    expect(r4[0].name).eq('user-2')
+    expect(r4[0].name).eq('user-3')
   })
   it('fix: D1_ERROR: too many SQL variables at offset 633: SQLITE_ERROR', async () => {
     await checkSpamUser(
@@ -500,17 +503,14 @@ describe('check spam user', () => {
 
 describe('batch upsert users', () => {
   it('should be able to upsert users', async () => {
-    await c.db.transaction(async (tx) => {
-      const r1 = await upsertUsers(tx, [
-        { id: '10000001', screenName: 'user-1', name: 'user-1' },
-      ])
-      expect(r1).length(1)
-      await Promise.all(r1)
-    })
-    const r2 = await upsertUsers(c.db, [
+    const r1 = await batchUpsertUsers(c.db, [
       { id: '10000001', screenName: 'user-1', name: 'user-1' },
     ])
-    expect(r2).length(0)
+    expect(await c.db.select().from(user)).length(1)
+    const r2 = await batchUpsertUsers(c.db, [
+      { id: '10000001', screenName: 'user-1', name: 'user-1' },
+    ])
+    expect(await c.db.select().from(user)).length(1)
   })
 })
 
@@ -521,19 +521,7 @@ describe('batch upsert tweets', () => {
       screenName: 'user-1',
       name: 'user-1',
     })
-    await c.db.transaction(async (tx) => {
-      const r1 = await upsertTweets(tx, [
-        {
-          id: '20000001',
-          text: 'test',
-          userId: '10000001',
-          publishedAt: new Date().toISOString(),
-        },
-      ])
-      expect(r1).length(1)
-      await Promise.all(r1)
-    })
-    const r2 = await upsertTweets(c.db, [
+    await batchUpsertTweets(c.db, [
       {
         id: '20000001',
         text: 'test',
@@ -541,6 +529,15 @@ describe('batch upsert tweets', () => {
         publishedAt: new Date().toISOString(),
       },
     ])
-    expect(r2).length(0)
+    expect(await c.db.select().from(tweet)).length(1)
+    await batchUpsertTweets(c.db, [
+      {
+        id: '20000001',
+        text: 'test',
+        userId: '10000001',
+        publishedAt: new Date().toISOString(),
+      },
+    ])
+    expect(await c.db.select().from(tweet)).length(1)
   })
 })

@@ -12,20 +12,14 @@ import {
   modListUser,
   user,
 } from '../db/schema'
-import {
-  batchUpsertUsers,
-  convertUserParamsToDBUser,
-  upsertUsers,
-} from './twitter'
+import { batchUpsertUsers, convertUserParamsToDBUser } from './twitter'
 import {
   and,
   desc,
   eq,
   ilike,
   inArray,
-  InferInsertModel,
   InferSelectModel,
-  like,
   lt,
   or,
   sql,
@@ -384,19 +378,25 @@ async function upsertModListUsers(
   const usersToProcess = validated.twitterUsers.filter(
     (it) => !existingUsersMap[it.id],
   )
-  return usersToProcess.map((it) =>
-    db
-      .insert(modListUser)
-      .values({
+
+  if (usersToProcess.length === 0) {
+    return []
+  }
+
+  // 批量插入，而不是为每个用户创建单独的查询
+  return await db
+    .insert(modListUser)
+    .values(
+      usersToProcess.map((it) => ({
         id: ulid(),
         modListId: validated.modListId,
         twitterUserId: it.id,
-      })
-      .onConflictDoNothing({
-        target: [modListUser.modListId, modListUser.twitterUserId],
-      })
-      .returning({ id: modListUser.id }),
-  )
+      })),
+    )
+    .onConflictDoNothing({
+      target: [modListUser.modListId, modListUser.twitterUserId],
+    })
+    .returning({ id: modListUser.id })
 }
 export type ModListAddTwitterUsersResponse = Pick<
   InferSelectModel<typeof user>,
@@ -418,26 +418,25 @@ modlists.post(
     if (!_modList || _modList.localUserId !== tokenInfo.sub) {
       return c.json({ code: 'modListNotFound' }, 404)
     }
+
     const usersToProcess = validated.twitterUsers.map((it) =>
       convertUserParamsToDBUser(it),
     )
-    const batchItems = (
-      await Promise.all([
-        upsertUsers(db, usersToProcess),
-        upsertModListUsers(db, validated),
-      ])
-    ).flat()
-    if (batchItems.length > 0) {
-      const results = (await Promise.all(batchItems)) as (
-        | InferInsertModel<typeof user>[]
-        | { inserted: 0 }[]
-      )[]
-      const inserts = results.flat().filter((it) => 'id' in it)
+
+    await batchUpsertUsers(db, usersToProcess)
+
+    const modListUserResults = await upsertModListUsers(db, validated)
+    const modListUserInsertCount = modListUserResults.length
+
+    if (modListUserInsertCount > 0) {
       await db
         .update(modList)
-        .set({ userCount: sql`${modList.userCount} + ${inserts.length}` })
+        .set({
+          userCount: sql`${modList.userCount} + ${modListUserInsertCount}`,
+        })
         .where(eq(modList.id, validated.modListId))
     }
+
     const list = await db
       .select({
         id: user.id,

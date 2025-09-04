@@ -30,8 +30,8 @@
   import { useController } from '$lib/stores/controller'
   import { middleware } from '$lib/util/middleware'
   import { errorHandler, loadingHandler } from '$lib/util/handlers'
-  import { wait } from '@liuli-util/async'
   import { refreshModListSubscribedUsers } from '$lib/content'
+  import pRetry from 'p-retry'
 
   let {
     owner,
@@ -78,20 +78,36 @@
           getItems: () => chunk(users, 50),
           total: users.length,
           execute: async (chunk) => {
-            const resp = await crossFetch(`${SERVER_URL}/api/modlists/users`, {
-              method: 'POST',
-              headers: {
-                Authorization: 'Bearer ' + (await getAuthInfo())?.token,
-                'Content-Type': 'application/json',
+            const resp = await pRetry(
+              async () => {
+                const resp = await crossFetch(
+                  `${SERVER_URL}/api/modlists/users`,
+                  {
+                    method: 'POST',
+                    headers: {
+                      Authorization: 'Bearer ' + (await getAuthInfo())?.token,
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      modListId: route.search?.get('id')!,
+                      twitterUsers: chunk,
+                    } satisfies ModListAddTwitterUsersRequest),
+                  },
+                )
+                if (!resp.ok) {
+                  console.error(
+                    `Failed to add users, status: ${resp.status}, statusText: ${
+                      resp.statusText
+                    }`,
+                  )
+                  throw new Error('Failed to add user')
+                }
+                return resp
               },
-              body: JSON.stringify({
-                modListId: route.search?.get('id')!,
-                twitterUsers: chunk,
-              } satisfies ModListAddTwitterUsersRequest),
-            })
-            if (!resp.ok) {
-              throw new Error('Failed to add user')
-            }
+              {
+                signal: controller.signal,
+              },
+            )
           },
           onProcessed: async (context) =>
             middleware({ context, toastId })

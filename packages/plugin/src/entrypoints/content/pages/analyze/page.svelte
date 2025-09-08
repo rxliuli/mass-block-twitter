@@ -122,7 +122,7 @@
   const autoAnalyzeMutation = createMutation({
     mutationFn: async () => {
       const toastId = toast.loading('Analyzing...', {
-        duration: 1000000,
+        duration: Number.POSITIVE_INFINITY,
       })
       controller.create()
       const getUsrIds = () =>

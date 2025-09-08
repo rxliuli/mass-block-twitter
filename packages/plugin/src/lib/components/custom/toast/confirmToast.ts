@@ -12,7 +12,7 @@ export async function confirmToast(
     toast.info(title, {
       id: options?.id,
       description: options?.description,
-      duration: 1000000,
+      duration: Number.POSITIVE_INFINITY,
       cancel: {
         label: tP('common.actions.stop'),
         onClick: () => {

@@ -106,7 +106,7 @@ const progressHandler: Handler = async ({ context, toastId }, next) => {
     description: tP('blocked-users.toast.export.progress.description', {
       values: { count: context.items.length },
     }),
-    duration: 1000000,
+    duration: Number.POSITIVE_INFINITY,
     cancel: {
       label: tP('common.actions.stop'),
       onClick: () => {
@@ -129,7 +129,7 @@ const notProLimitHandler: Handler = async ({ context }, next) => {
         values: { count: NOT_PRO_LIMIT },
       }),
       {
-        duration: 1000000,
+        duration: Number.POSITIVE_INFINITY,
         action: {
           label: tP('common.actions.upgrade'),
           onClick: () => {
@@ -174,7 +174,7 @@ export async function batchExportBlockedUsers(
       onProcessed: (context) => onExportBlockedUsersProcessed(context, toastId),
     })
     toast.success(tP('blocked-users.toast.export.success'), {
-      duration: 1000000,
+      duration: Number.POSITIVE_INFINITY,
       description: tP('blocked-users.toast.export.success.description', {
         values: { count: options.getItems().length },
       }),

@@ -9,7 +9,7 @@
   async function onClearCache() {
     // console.log('clear cache')
     const toastId = toast.loading('Clearing cache...', {
-      duration: 1000000,
+      duration: Number.POSITIVE_INFINITY,
     })
     try {
       await dbApi.clear()

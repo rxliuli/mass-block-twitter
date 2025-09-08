@@ -18,7 +18,7 @@ export function errorHandler<
       if (context.error instanceof Response) {
         if (context.error.status === 429) {
           toast.error(options.title, {
-            duration: 1000000,
+            duration: Number.POSITIVE_INFINITY,
             description:
               'Rate limit exceeded, please wait a few minutes before retrying',
           })
@@ -27,7 +27,7 @@ export function errorHandler<
         }
       }
       toast.error(options.title, {
-        duration: 1000000,
+        duration: Number.POSITIVE_INFINITY,
         description:
           context.error instanceof Error
             ? context.error.message
@@ -82,7 +82,7 @@ export function loadingHandler<
   return async ({ context, toastId }, next) => {
     toast.loading(options.title, {
       id: toastId,
-      duration: 1000000,
+      duration: Number.POSITIVE_INFINITY,
       description: `Please wait ${
         context.progress.remainingTime
           ? ms(context.progress.remainingTime)

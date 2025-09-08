@@ -24,7 +24,7 @@ export async function onExportCommunityMembersToCSVProcessed(
     .use(async ({ context }, next) => {
       if (context.error) {
         toast.error(tP('floatingButton.community.exportMembers.toast.failed'), {
-          duration: 1000000,
+          duration: Number.POSITIVE_INFINITY,
           description: tP(
             'floatingButton.community.exportMembers.toast.failed.description',
             {
@@ -45,7 +45,7 @@ export async function onExportCommunityMembersToCSVProcessed(
     .use(async ({ context, toastId }, next) => {
       toast.loading(tP('floatingButton.community.exportMembers.toast.title'), {
         id: toastId,
-        duration: 1000000,
+        duration: Number.POSITIVE_INFINITY,
         // TODO calculate the time
         description: tP(
           'floatingButton.community.exportMembers.toast.description',
@@ -115,7 +115,7 @@ export async function exportCommunityMembersToCSV(
       },
     })
     toast.success(tP('floatingButton.community.exportMembers.toast.success'), {
-      duration: 1000000,
+      duration: Number.POSITIVE_INFINITY,
       description: tP(
         'floatingButton.community.exportMembers.toast.success.description',
         { values: { count: options.getItems().length } },

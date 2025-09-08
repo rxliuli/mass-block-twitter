@@ -69,7 +69,7 @@
             }),
         })
         toast.success('Export success', {
-          duration: 1000000,
+          duration: Number.POSITIVE_INFINITY,
           description: `Exported ${getUsers().length} ${name}`,
           action: {
             label: tP('common.actions.download'),

@@ -30,7 +30,7 @@
           })
         },
       },
-      duration: 1000000,
+      duration: Number.POSITIVE_INFINITY,
       onDismiss: () => {
         local.set({
           privacyPolicyAccepted: true,

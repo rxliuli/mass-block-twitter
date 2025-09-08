@@ -27,7 +27,7 @@
 
   function onCloseFloatingButton() {
     const toastId = toast(CloseFloatingButtonToast as any, {
-      duration: 1000000,
+      duration: Number.POSITIVE_INFINITY,
       position: 'top-center',
       action: {
         label: 'Close',

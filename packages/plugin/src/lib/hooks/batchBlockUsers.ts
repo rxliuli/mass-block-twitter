@@ -149,7 +149,7 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
             }
             if (meta.error.code === 'forbidden') {
               toast.error(tP('modlists.detail.toast.forbidden'), {
-                duration: 1000000,
+                duration: Number.POSITIVE_INFINITY,
                 action: {
                   label: tP('modlists.detail.toast.refresh'),
                   onClick: () => {
@@ -162,7 +162,7 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
             }
             if (meta.error.code === 'unauthorized') {
               toast.error(tP('modlists.detail.toast.unauthorized'), {
-                duration: 1000000,
+                duration: Number.POSITIVE_INFINITY,
                 action: {
                   label: tP('modlists.detail.toast.refresh'),
                   onClick: () => {
@@ -280,7 +280,7 @@ export const batchBlockUsersMutation = async <T extends User>(options: {
             const r = await new Promise<'stop' | 'continue'>((resolve) => {
               toast.info(tP('modlists.detail.toast.approachingLimit'), {
                 id: toastId,
-                duration: 1000000,
+                duration: Number.POSITIVE_INFINITY,
                 description: tP('modlists.detail.toast.approachingLimitDesc'),
                 cancel: {
                   label: tP('modlists.detail.toast.stop'),

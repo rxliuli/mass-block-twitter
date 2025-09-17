@@ -8,7 +8,7 @@ import { extractObjects } from '$lib/util/extractObjects'
 import { once } from '@liuli-util/async'
 import { get } from 'es-toolkit/compat'
 import { z } from 'zod'
-import { fetchAsset } from './utils'
+import { extractAllFlags, fetchAsset } from './utils'
 
 export type CommunityMember = User & {
   community_role: 'Member' | 'Moderator' | 'Admin'
@@ -69,33 +69,67 @@ export function extractParamsData(scriptContent: string) {
     name: match[2],
   }
 }
-export async function extractCommunityGraphqlId(
-  name: 'membersSliceTimeline_Query' | 'CommunityQuery',
-): Promise<string | undefined> {
+
+function extractCommunityGQLArgs(scriptContent: string) {
+  // params:{id:"V7OdnMvujMPsCctT_daznQ",metadata:{features:["responsive_web_graphql_timeline_navigation_enabled"],sliceInfoPath:["communityResults","result","members_slice","slice_info"]},name:"membersSliceTimeline_Query"
+  //params:{id:"D5_l6jsKx4k9hr5T8mn-vQ",metadata:{features:["responsive_web_graphql_timeline_navigation_enabled"],sliceInfoPath:["communityResults","result","members_slice","slice_info"]},name:"membersSliceTimeline_Query",operationKind:"query",text:null}};
+  const matches = [
+    ...scriptContent.matchAll(
+      /params:\{id:"([^"]+)",metadata:(\{.*?\}),name:"([^"]+)"/g,
+    ),
+  ]
+  return matches.map((it) => {
+    const queryId = it[1]
+    const metadataStr = it[2]
+    const featuresMatch = metadataStr.match(/features:(\[[^\]]*\])/)
+    const features = (
+      featuresMatch ? JSON.parse(featuresMatch[1]) : []
+    ) as string[]
+    const operationName = it[3]
+    return {
+      operationName,
+      queryId,
+      features,
+    }
+  })
+}
+
+export async function extractCommunityGraphqlId(name: string): Promise<
+  | {
+      operationName: string
+      queryId: string
+      features: Record<string, any>
+    }
+  | undefined
+> {
   const swStr = await fetchAsset('https://x.com/sw.js')
-  const communitiesRegex = new RegExp(
-    '"(https://abs.twimg.com/responsive-web/client-web/bundle.Communities-\\w+?.\\w+?.js)"',
+  const allFlags = await extractAllFlags()
+  const jsRegex = new RegExp(
+    '"(https://abs.twimg.com/responsive-web/client-web/bundle\\..+?.js)"',
     'g',
   )
   const scriptUrls: string[] = []
-  swStr.matchAll(communitiesRegex).forEach((it) => {
+  swStr.matchAll(jsRegex).forEach((it) => {
     scriptUrls.push(it[1])
   })
   for (const url of scriptUrls) {
     const scriptStr = await fetchAsset(url)
-    const r = extractParamsData(scriptStr)
-    if (r?.name === name) {
-      return r.id
+    const args = extractCommunityGQLArgs(scriptStr)
+    const r = args.find((it) => it.operationName === name)
+    if (r?.queryId) {
+      const features = r.features.reduce((acc, feature) => {
+        acc[feature] = allFlags[feature] ?? false
+        return acc
+      }, {} as Record<string, any>)
+      return {
+        operationName: r.operationName,
+        queryId: r.queryId,
+        features,
+      }
     }
   }
 }
 
-export const extractMembersSliceTimelineGraphqlId = once(() =>
-  extractCommunityGraphqlId('membersSliceTimeline_Query'),
-)
-export const extractCommunityQueryGraphqlId = once(() =>
-  extractCommunityGraphqlId('CommunityQuery'),
-)
 export async function getCommunityMembers(options: {
   communityId: string
   cursor?: string
@@ -103,12 +137,12 @@ export async function getCommunityMembers(options: {
   data: CommunityMember[]
   cursor: string
 }> {
-  const queryId = await extractMembersSliceTimelineGraphqlId()
-  if (!queryId) {
+  const arg = await extractCommunityGraphqlId('membersSliceTimeline_Query')
+  if (!arg) {
     throw new Error('queryId not found')
   }
   const url = new URL(
-    `https://x.com/i/api/graphql/${queryId}/membersSliceTimeline_Query`,
+    `https://x.com/i/api/graphql/${arg.queryId}/membersSliceTimeline_Query`,
   )
   url.searchParams.set(
     'variables',
@@ -187,11 +221,11 @@ export function parseCommunityInfo(json: any): CommunityInfo {
 }
 
 export async function getCommunityInfo(options: { communityId: string }) {
-  const queryId = await extractCommunityQueryGraphqlId()
-  if (!queryId) {
+  const arg = await extractCommunityGraphqlId('CommunityQuery')
+  if (!arg) {
     throw new Error('queryId not found')
   }
-  const url = new URL(`https://x.com/i/api/graphql/${queryId}/CommunityQuery`)
+  const url = new URL(`https://x.com/i/api/graphql/${arg.queryId}/CommunityQuery`)
   url.searchParams.set(
     'variables',
     JSON.stringify({ communityId: options.communityId }),

@@ -1011,7 +1011,7 @@ search.get(
     }
     const resp = await queryModListSubscribedUserAndRulesByCache(c, _modList)
     return c.json<ModListIdsResponse>(
-      { twitterUserIds: resp[0].twitterUserIds },
+      { twitterUserIds: resp[0]?.twitterUserIds ?? [] },
       { headers: { 'Cache-Control': 'public, max-age=86400' } },
     )
   },

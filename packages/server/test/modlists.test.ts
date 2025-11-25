@@ -966,6 +966,12 @@ describe('modlists', () => {
       expect(r1.twitterUserIds).length(1)
       expect(r1.twitterUserIds[0]).toBe('1')
     })
+    it('should be able to get ids from an empty modlist', async () => {
+      const resp1 = await fetch(`/api/modlists/ids/${modListId}`)
+      expect(resp1.ok).true
+      const r1 = (await resp1.json()) as ModListIdsResponse
+      expect(r1.twitterUserIds).length(0)
+    })
   })
 
   async function addRule(

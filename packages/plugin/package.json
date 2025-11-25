@@ -54,6 +54,7 @@
     "@webext-core/messaging": "^2.1.0",
     "change-case": "^5.4.4",
     "dayjs": "^1.11.13",
+    "devaluex": "^0.1.1",
     "echarts": "^5.6.0",
     "es-toolkit": "^1.32.0",
     "file-saver": "^2.0.5",

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMessage, removeAllListeners } from '$lib/messaging'
+  import { messager } from '$lib/messaging'
   import SearchBlockPage from './pages/search-and-block/page.svelte'
   import BlockedUsersPage from './pages/search-and-block/blocked/page.svelte'
   import ModListsPage from './pages/modlists/page.svelte'
@@ -39,10 +39,10 @@
   let openState = useOpen(!!initialPath)
 
   onMount(() => {
-    onMessage('show', () => {
+    messager.onMessage('show', () => {
       openState.openModal()
     })
-    return removeAllListeners
+    return messager.removeAllListeners
   })
 
   const queryClient = new QueryClient({

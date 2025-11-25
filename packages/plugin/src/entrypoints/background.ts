@@ -1,4 +1,5 @@
-import { sendMessage } from '$lib/messaging'
+import { messager } from '$lib/messaging'
+import { parse, stringifyAsync } from '$lib/serializer'
 
 export default defineBackground(() => {
   browser.runtime.setUninstallURL(
@@ -20,8 +21,16 @@ export default defineBackground(() => {
         return
       }
     }
-    await sendMessage('show', undefined, tabId)
+    await messager.sendMessage('show', undefined, tabId)
   }
+
+  messager.onMessage('fetch', async (ev) => {
+    const req = parse(ev.data) as Parameters<typeof fetch>
+    // console.log('Background fetch request', req)
+    const r = await stringifyAsync(await fetch(...req))
+    // console.log('Background fetch response', r)
+    return r
+  })
 
   browser.action.onClicked.addListener(async (tab) => {
     onShow(tab?.id)

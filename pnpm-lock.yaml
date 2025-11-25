@@ -67,6 +67,9 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
+      devaluex:
+        specifier: ^0.1.1
+        version: 0.1.1
       echarts:
         specifier: ^5.6.0
         version: 5.6.0
@@ -2940,6 +2943,9 @@ packages:
   devalue@5.1.1:
     resolution: {integrity: sha512-maua5KUiapvEwiEAe+XnlZ3Rh0GD+qI1J/nb9vrJc3muPXvcF/8gXYTWF76+5DAqHyDUtOIImEuo0YKE9mshVw==}
 
+  devaluex@0.1.1:
+    resolution: {integrity: sha512-r6odazVNCy94RKv8e7vgLhKbyDQ4SI8Zf+fIfJx11ENjZqMxRKHbGpM9h4P5cvOkIN/fYezpCsyy+PpSxE2CyA==}
+
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
 
@@ -4967,6 +4973,10 @@ packages:
   serialize-error@11.0.3:
     resolution: {integrity: sha512-2G2y++21dhj2R7iHAdd0FIzjGwuKZld+7Pl/bTU6YIkrC2ZMbVUjm+luj6A6V34Rv9XfKJDKpTWu9W4Gse1D9g==}
     engines: {node: '>=14.16'}
+
+  serialize-error@12.0.0:
+    resolution: {integrity: sha512-ZYkZLAvKTKQXWuh5XpBw7CdbSzagarX39WyZ2H07CDLC5/KfsRGlIXV8d4+tfqX1M7916mRqR1QfNHSij+c9Pw==}
+    engines: {node: '>=18'}
 
   set-cookie-parser@2.7.1:
     resolution: {integrity: sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ==}
@@ -8086,6 +8096,11 @@ snapshots:
 
   devalue@5.1.1: {}
 
+  devaluex@0.1.1:
+    dependencies:
+      devalue: 5.1.1
+      serialize-error: 12.0.0
+
   devlop@1.1.0:
     dependencies:
       dequal: 2.0.3
@@ -10466,6 +10481,10 @@ snapshots:
   serialize-error@11.0.3:
     dependencies:
       type-fest: 2.19.0
+
+  serialize-error@12.0.0:
+    dependencies:
+      type-fest: 4.34.1
 
   set-cookie-parser@2.7.1: {}
 

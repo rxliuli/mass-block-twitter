@@ -1,9 +1,10 @@
 import { SETTINGS_KEY } from './constants'
+import type { SupportLanguage } from './i18n'
 import { localStorageAdapter, localStore } from './util/localStore'
 
 export type Settings = {
   theme?: 'system' | 'light' | 'dark'
-  language?: 'en-US' | 'zh-CN' | 'es' | 'fa-IR'
+  language?: SupportLanguage
   showFloatingButton?: boolean
 
   hideSuspiciousAccounts: boolean

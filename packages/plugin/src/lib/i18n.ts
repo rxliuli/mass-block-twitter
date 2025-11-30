@@ -32,19 +32,24 @@ export const t = format
 type UnwrapStore<T> = T extends Readable<infer U> ? U : T
 export const tP: UnwrapStore<typeof format> = (...args) => get(format)(...args)
 
-const supportLanguages = ['en-US', 'zh-CN', 'es', 'fa-IR']
-export function getLocaleLanguage(): 'en-US' | 'zh-CN' | 'es' | 'fa-IR' {
+export type SupportLanguage = 'en-US' | 'zh-CN' | 'es' | 'fa-IR'
+
+const supportLanguages: SupportLanguage[] = ['en-US', 'zh-CN', 'es', 'fa-IR']
+
+export function getLocaleLanguage(): SupportLanguage {
   const settings = getSettings()
   if (settings.language && supportLanguages.includes(settings.language)) {
-    return settings.language as 'en-US' | 'zh-CN' | 'es' | 'fa-IR'
+    return settings.language as SupportLanguage
   }
   let r = getLocaleFromNavigator()
-  if (r && supportLanguages.includes(r)) {
-    return r as 'en-US' | 'zh-CN' | 'es' | 'fa-IR'
+  if (r && supportLanguages.includes(r as SupportLanguage)) {
+    return r as SupportLanguage
   }
   r = r?.match(/\b([a-z]{2})\b/)?.[1] || null
-  if (r && supportLanguages.map(l => l.split('-')[0]).includes(r)) {
-    return supportLanguages.find(l => l.split('-')[0] === r) as 'en-US' | 'zh-CN' | 'es' | 'fa-IR'
+  if (r && supportLanguages.map((l) => l.split('-')[0]).includes(r)) {
+    return supportLanguages.find(
+      (l) => l.split('-')[0] === r,
+    ) as SupportLanguage
   }
   return 'en-US'
 }

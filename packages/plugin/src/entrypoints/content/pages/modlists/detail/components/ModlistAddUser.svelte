@@ -37,7 +37,7 @@
   import { Input } from '$lib/components/ui/input'
   import { ThreeCheckbox } from '$lib/components/custom/checkbox'
   import { untrack } from 'svelte'
-  import { t } from '$lib/i18n'
+  import { t, tP } from '$lib/i18n'
   import { refreshModListSubscribedUsers } from '$lib/content'
 
   let {
@@ -80,7 +80,9 @@
         })
       } catch (err) {
         if (err instanceof Response && err.status === 429) {
-          toast.error($t('modlists.addUser.error.rateLimit'))
+          const rateLimitReset = err.headers.get('x-rate-limit-reset');
+          const resetTime = rateLimitReset ? new Date(parseInt(rateLimitReset, 10) * 1000).toLocaleTimeString() : null;
+          toast.error(tP(`modlists.addUser.error.${resetTime ? 'rateLimitTime' : 'rateLimit'}`, { values: { resetTime } }))
         }
         throw err
       }

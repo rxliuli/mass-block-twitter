@@ -303,6 +303,7 @@
   "modlists.addUser.toast.addFailed": "افزودن به فهرست ناموفق بود",
   "modlists.addUser.toast.removeFailed": "حذف کاربر ناموفق بود",
   "modlists.addUser.error.rateLimit": "محدودیت نرخ تجاوز کرد، لطفاً بعداً دوباره تلاش کنید",
+  "modlists.addUser.error.rateLimitTime": "محدودیت نرخ تجاوز کرد، لطفاً بعد {resetTime} دوباره تلاش کنید",
   "modlists.addUser.error.searchFailed": "جستجوی کاربران ناموفق بود",
   "modlists.created.title": "فهرست‌های تعدیل من",
   "modlists.subscribed.title": "فهرست‌های تعدیل مشترک شده",

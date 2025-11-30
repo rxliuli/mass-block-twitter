@@ -291,6 +291,7 @@
   "modlists.addUser.toast.addFailed": "Error al agregar a la lista",
   "modlists.addUser.toast.removeFailed": "Error al eliminar usuario",
   "modlists.addUser.error.rateLimit": "Límite de tasa excedido, intentá más tarde",
+  "modlists.addUser.error.rateLimitTime": "Límite de tasa excedido, intentá de nuevo después de {resetTime}",
   "modlists.addUser.error.searchFailed": "Error al buscar usuarios",
   "modlists.created.title": "Mis Listas de Moderación",
   "modlists.subscribed.title": "Listas de Moderación Suscritas",

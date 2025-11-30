@@ -303,6 +303,7 @@
   "modlists.addUser.toast.addFailed": "Add to list failed",
   "modlists.addUser.toast.removeFailed": "Failed to remove user",
   "modlists.addUser.error.rateLimit": "Rate limit exceeded, please try again later",
+  "modlists.addUser.error.rateLimitTime": "Rate limit exceeded, try again after {resetTime}",
   "modlists.addUser.error.searchFailed": "Failed to search users",
   "modlists.created.title": "My Moderation Lists",
   "modlists.subscribed.title": "Subscribed Moderation Lists",

@@ -3,7 +3,7 @@ import { localStorageAdapter, localStore } from './util/localStore'
 
 export type Settings = {
   theme?: 'system' | 'light' | 'dark'
-  language?: 'en-US' | 'zh-CN' | 'es'
+  language?: 'en-US' | 'zh-CN' | 'es' | 'fa-IR'
   showFloatingButton?: boolean
 
   hideSuspiciousAccounts: boolean

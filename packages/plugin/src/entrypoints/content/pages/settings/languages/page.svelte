@@ -41,6 +41,7 @@
         { label: 'English', value: 'en-US' },
         { label: '简体中文 - Simplified Chinese', value: 'zh-CN' },
         { label: 'Español - Spanish', value: 'es' },
+        { label: 'فارسی - Farsi', value: 'fa-IR' },
       ]}
     />
   </Label>

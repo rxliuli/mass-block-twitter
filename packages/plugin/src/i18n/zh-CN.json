@@ -274,6 +274,7 @@
   "modlists.addUser.toast.addFailed": "添加到列表失败",
   "modlists.addUser.toast.removeFailed": "移除用户失败",
   "modlists.addUser.error.rateLimit": "已达到速率限制，请稍后再试",
+  "modlists.addUser.error.rateLimitTime": "已达到速率限制，请在 {resetTime} 后再试",
   "modlists.addUser.error.searchFailed": "搜索用户失败",
   "modlists.created.title": "我的审核列表",
   "modlists.subscribed.title": "已订阅的审核列表",

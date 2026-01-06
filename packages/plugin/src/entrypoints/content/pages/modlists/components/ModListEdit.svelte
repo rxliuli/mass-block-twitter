@@ -7,6 +7,7 @@
   import { Label } from '$lib/components/ui/label'
   import { Textarea } from '$lib/components/ui/textarea'
   import { FileReader } from '$lib/util/FileReader'
+  import { fileSelector } from '$lib/util/fileSelector'
   import type { ModListCreateRequest } from '@mass-block-twitter/server'
   import { createMutation } from '@tanstack/svelte-query'
   import { UserRoundIcon } from 'lucide-svelte'
@@ -60,17 +61,20 @@
     open = false
   }
 
-  let fileInput = $state<HTMLInputElement>()
-  function onUploadImage() {
-    fileInput?.click()
-  }
-
-  async function onFileChange(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0]
-    if (file) {
-      const reader = new FileReader(file)
-      formState.avatar = await reader.readAsDataURL()
+  async function onUploadImage() {
+    const files = await fileSelector({
+      accept: 'image/png,image/jpeg,image/jpg',
+      multiple: false,
+    })
+    
+    if (!files || files.length === 0) {
+      return
     }
+    
+    const file = files[0]
+    const reader = new FileReader(file)
+    const dataURL = await reader.readAsDataURL()
+    formState.avatar = dataURL
   }
 </script>
 
@@ -92,20 +96,13 @@
           >{$t('modlists.edit.form.avatar.label')}</Label
         >
         <Avatar.Root onclick={onUploadImage} class="w-24 h-24 cursor-pointer">
-          <Avatar.Image src={formState.avatar} />
+          {#if formState.avatar}
+            <Avatar.Image src={formState.avatar} />
+          {/if}
           <Avatar.Fallback>
             <UserRoundIcon />
           </Avatar.Fallback>
         </Avatar.Root>
-        <input
-          bind:this={fileInput}
-          onchange={onFileChange}
-          id="avatar"
-          name="avatar"
-          type="file"
-          accept="image/png,image/jpeg,image/jpg"
-          class="hidden"
-        />
       </div>
       <div>
         <Label for="name" class="block mb-2"

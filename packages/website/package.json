@@ -18,7 +18,6 @@
     "@lucide/svelte": "^0.483.0",
     "@mass-block-twitter/server": "workspace:*",
     "@playwright/test": "^1.49.1",
-    "@rxliuli/vista": "^0.2.0",
     "@sveltejs/adapter-cloudflare": "^5.0.1",
     "@sveltejs/adapter-static": "^3.0.8",
     "@sveltejs/kit": "^2.16.0",

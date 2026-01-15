@@ -1,10 +1,14 @@
-import { DBSchema, deleteDB, IDBPDatabase, openDB } from 'idb'
+import { DBSchema, IDBPDatabase, openDB } from 'idb'
 import { chunk, difference, pickBy, sortBy } from 'es-toolkit'
 import { ulid } from 'ulidx'
-import { createKeyVal, KeyValItem } from './util/keyval'
-import { AsyncArray, asyncLimiting } from '@liuli-util/async'
 import { once } from './util/once'
-import pLimit, { limitFunction } from 'p-limit'
+import { limitFunction } from 'p-limit'
+
+export interface KeyValItem {
+  value: any
+  createdAt?: number // ms timestamp
+  expirationTtl?: number // living seconds
+}
 
 export const dbStore: DBStore = {} as any
 
@@ -346,21 +350,136 @@ class ActivityDAO {
   }
 }
 
+interface KeyValSetOptions {
+  expirationTtl?: number // living seconds
+}
+
+class InternalKeyVal {
+  constructor(
+    private storeName: 'pendingCheckUserIds' | 'uploadedCheckUserIds',
+    private defaultExpirationTtl?: number,
+  ) {}
+
+  private isExpired(item: KeyValItem): boolean {
+    const ttl = item.expirationTtl ?? this.defaultExpirationTtl
+    if (!ttl || !item.createdAt) {
+      return false
+    }
+    return Date.now() >= item.createdAt + ttl * 1000
+  }
+
+  async get(key: string): Promise<any | null> {
+    const item = await dbStore.idb.get(this.storeName, key)
+    if (!item) {
+      return null
+    }
+    if (this.isExpired(item)) {
+      await dbStore.idb.delete(this.storeName, key)
+      return null
+    }
+    return item.value
+  }
+
+  async set(key: string, value: any, options?: KeyValSetOptions): Promise<void> {
+    await dbStore.idb.put(
+      this.storeName,
+      {
+        value,
+        createdAt: Date.now(),
+        expirationTtl: options?.expirationTtl,
+      },
+      key,
+    )
+  }
+
+  async setMany(
+    items: { key: string; value: any; options?: KeyValSetOptions }[],
+  ): Promise<void> {
+    const tx = dbStore.idb.transaction(this.storeName, 'readwrite')
+    const store = tx.objectStore(this.storeName)
+    await Promise.all([
+      ...items.map((it) =>
+        store.put(
+          {
+            value: it.value,
+            createdAt: Date.now(),
+            expirationTtl: it.options?.expirationTtl,
+          },
+          it.key,
+        ),
+      ),
+      tx.done,
+    ])
+  }
+
+  async getMany(keys: string[]): Promise<{ key: string; value?: any }[]> {
+    const tx = dbStore.idb.transaction(this.storeName, 'readwrite')
+    const store = tx.objectStore(this.storeName)
+    const items = await Promise.all(keys.map((key) => store.get(key)))
+    const delKeys: string[] = []
+    const result = items.map((item, index) => {
+      const key = keys[index]
+      if (!item) {
+        return { key }
+      }
+      if (this.isExpired(item)) {
+        delKeys.push(key)
+        return { key }
+      }
+      return { key, value: item.value }
+    })
+    if (delKeys.length > 0) {
+      await Promise.all(delKeys.map((key) => store.delete(key)))
+    }
+    await tx.done
+    return result
+  }
+
+  async del(key: string): Promise<void> {
+    await dbStore.idb.delete(this.storeName, key)
+  }
+
+  async delMany(keys: string[]): Promise<void> {
+    const tx = dbStore.idb.transaction(this.storeName, 'readwrite')
+    const store = tx.objectStore(this.storeName)
+    await Promise.all([...keys.map((key) => store.delete(key)), tx.done])
+  }
+
+  async keys(): Promise<string[]> {
+    const tx = dbStore.idb.transaction(this.storeName, 'readwrite')
+    const store = tx.objectStore(this.storeName)
+    const allKeys = await store.getAllKeys()
+    const validKeys: string[] = []
+    const delKeys: string[] = []
+    for (const key of allKeys) {
+      const item = await store.get(key)
+      if (!item) {
+        continue
+      }
+      if (this.isExpired(item)) {
+        delKeys.push(key)
+        continue
+      }
+      validKeys.push(key)
+    }
+    if (delKeys.length > 0) {
+      await Promise.all(delKeys.map((key) => store.delete(key)))
+    }
+    await tx.done
+    return validKeys
+  }
+}
+
 class PendingCheckUserDAO {
-  private get pendingCheckUserIds() {
-    return createKeyVal({
-      dbName: 'mass-db',
-      storeName: 'pendingCheckUserIds',
-      expirationTtl: 60 * 60 * 24 * 7, // 1 week
-    })
-  }
-  private get uploadedCheckUserIds() {
-    return createKeyVal({
-      dbName: 'mass-db',
-      storeName: 'uploadedCheckUserIds',
-      expirationTtl: 60 * 60 * 24 * 7, // 1 week
-    })
-  }
+  private pendingCheckUserIds = new InternalKeyVal(
+    'pendingCheckUserIds',
+    60 * 60 * 24 * 7, // 1 week
+  )
+  private uploadedCheckUserIds = new InternalKeyVal(
+    'uploadedCheckUserIds',
+    60 * 60 * 24 * 7, // 1 week
+  )
+
   async record(userIds: string[]): Promise<void> {
     const uploaded = await this.uploadedCheckUserIds.getMany(userIds)
     const list = difference(
@@ -374,6 +493,7 @@ class PendingCheckUserDAO {
       })),
     )
   }
+
   async *keys(): AsyncGenerator<
     {
       user: User

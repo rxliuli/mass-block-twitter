@@ -8,7 +8,12 @@ import {
 } from '$lib/api'
 import { Activity, dbApi, initDB, User } from '$lib/db'
 import { omit, throttle } from 'es-toolkit'
-import { Vista, Middleware } from '@rxliuli/vista'
+import {
+  Vista,
+  FetchMiddleware,
+  interceptFetch,
+  interceptXHR,
+} from '@rxliuli/vista'
 import { asyncLimiting, wait } from '@liuli-util/async'
 import { addBlockButtonInTweet, addBlockButtonInUser } from '$lib/observe'
 import css from './style.css?inline'
@@ -38,7 +43,7 @@ import { getDefaultSettings, getSettings, Settings } from '$lib/settings'
 import { ulid } from 'ulidx'
 import { blockUser, getUserByScreenName } from '$lib/api/twitter'
 
-function blockClientEvent(): Middleware {
+function blockClientEvent(): FetchMiddleware {
   return async (c, next) => {
     if (
       [
@@ -62,7 +67,7 @@ function blockClientEvent(): Middleware {
   }
 }
 
-function loggerRequestHeaders(): Middleware {
+function loggerRequestHeaders(): FetchMiddleware {
   return async (c, next) => {
     if (c.req.headers.get('authorization')) {
       setRequestHeaders(c.req.headers)
@@ -71,7 +76,7 @@ function loggerRequestHeaders(): Middleware {
   }
 }
 
-function loggerUsers(): Middleware {
+function loggerUsers(): FetchMiddleware {
   return async (c, next) => {
     await next()
     if (c.res.headers.get('content-type')?.includes('application/json')) {
@@ -135,7 +140,7 @@ function getFilters(settings: Settings) {
   return filters
 }
 
-function loggerTweets(): Middleware {
+function loggerTweets(): FetchMiddleware {
   return async (c, next) => {
     await next()
     if (c.res.headers.get('content-type')?.includes('application/json')) {
@@ -216,7 +221,7 @@ async function _onAction(
   })
 }
 const onAction = asyncLimiting(_onAction, 1)
-function handleNotifications(): Middleware {
+function handleNotifications(): FetchMiddleware {
   return async (c, next) => {
     await next()
     if (
@@ -247,7 +252,7 @@ function handleNotifications(): Middleware {
   }
 }
 
-function handleTweets(): Middleware {
+function handleTweets(): FetchMiddleware {
   return async (c, next) => {
     await next()
     if (
@@ -367,7 +372,7 @@ export default defineContentScript({
   world: 'MAIN',
   async main() {
     await initDB()
-    new Vista()
+    new Vista([interceptFetch, interceptXHR])
       .use(blockClientEvent())
       .use(loggerRequestHeaders())
       .use(handleNotifications())

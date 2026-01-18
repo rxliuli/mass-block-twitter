@@ -47,8 +47,8 @@ importers:
         specifier: workspace:^
         version: link:../svelte-window
       '@rxliuli/vista':
-        specifier: ^0.4.8
-        version: 0.4.8
+        specifier: ^0.4.9
+        version: 0.4.9
       '@tailwindcss/forms':
         specifier: ^0.5.9
         version: 0.5.9(tailwindcss@3.4.17)
@@ -1966,8 +1966,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rxliuli/vista@0.4.8':
-    resolution: {integrity: sha512-YFSc1sit693UBPTB16LHXDMSs/AhhhX4bCzogDqn1puV7U8GetaG7mFagF/JN5aHXDHd8jEY1vyGf0cBVaQNUA==}
+  '@rxliuli/vista@0.4.9':
+    resolution: {integrity: sha512-YlkeXrxQCinZlRxExFvVfOT1dBL9ON9jg1awsL+vCZi3Ikg6N3Zd5u/qGYDpajq48ExKjbINQ/cabBZA1sOR1A==}
 
   '@shikijs/core@3.1.0':
     resolution: {integrity: sha512-1ppAOyg3F18N8Ge9DmJjGqRVswihN33rOgPovR6gUHW17Hw1L4RlRhnmVQcsacSHh0A8IO1FIgNbtTxUFwodmg==}
@@ -7025,7 +7025,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.34.9':
     optional: true
 
-  '@rxliuli/vista@0.4.8': {}
+  '@rxliuli/vista@0.4.9': {}
 
   '@shikijs/core@3.1.0':
     dependencies:

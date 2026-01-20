@@ -183,7 +183,7 @@ export async function batchExportBlockedUsers(
         label: tP('common.actions.download'),
         onClick: () => {
           const users = options.getItems()
-          downloadUsersToCSV(users, 'blocked_users')
+          downloadUsersToCSV(users, 'blocked_users.csv')
         },
       },
     })

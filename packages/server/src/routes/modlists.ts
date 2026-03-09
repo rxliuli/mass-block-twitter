@@ -710,7 +710,8 @@ async function queryModListSubscribedUserAndRulesByCache(
   const cached = (
     await Promise.all(
       _modListIds.map(async (it) => {
-        const cachedStr = await c.env.MY_KV.get('modlist:' + it.modListId)
+        const cachedObj = await c.env.MY_BUCKET.get('modlist-cache:' + it.modListId)
+        const cachedStr = cachedObj ? await cachedObj.text() : null
         if (!cachedStr) {
           return
         }
@@ -774,16 +775,12 @@ async function queryModListSubscribedUserAndRulesByCache(
     )
   await Promise.all(
     grouped.map(async (it) => {
-      await c.env.MY_KV.put(
-        'modlist:' + it.data.modListId,
+      await c.env.MY_BUCKET.put(
+        'modlist-cache:' + it.data.modListId,
         JSON.stringify({
           updatedAt: it.updatedAt,
           data: omit(it.data, ['action']),
         }),
-        {
-          // cache 7 days
-          expirationTtl: 60 * 60 * 24 * 7,
-        },
       )
     }),
   )

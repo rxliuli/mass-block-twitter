@@ -42,23 +42,29 @@ export class ClientTransaction {
     const response = homePageResponse || this.homePageResponse
 
     const html = response.documentElement.outerHTML
-    const onDemandFileRegex =
-      /['|"]{1}ondemand\.s['|"]{1}:\s*['|"]{1}([\w]*)['|"]{1}/gm
-    const match = onDemandFileRegex.exec(html)
+    // Step 1: find the numeric index for ondemand.s in the webpack chunk map
+    const onDemandIndexRegex = /,(\d+):["']ondemand\.s["']/
+    const indexMatch = onDemandIndexRegex.exec(html)
 
-    if (match) {
-      const onDemandFileUrl = `https://abs.twimg.com/responsive-web/client-web/ondemand.s.${match[1]}a.js`
+    if (indexMatch) {
+      // Step 2: use that index to find the actual hash
+      const hashRegex = new RegExp(`,${indexMatch[1]}:"([0-9a-f]+)"`)
+      const hashMatch = hashRegex.exec(html)
 
-      try {
-        const scriptContent = await fetchAsset(onDemandFileUrl)
-        const indicesRegex = /\(\w{1}\[(\d{1,2})\],\s*16\)/gm
-        let indicesMatch
+      if (hashMatch) {
+        const onDemandFileUrl = `https://abs.twimg.com/responsive-web/client-web/ondemand.s.${hashMatch[1]}a.js`
 
-        while ((indicesMatch = indicesRegex.exec(scriptContent)) !== null) {
-          keyByteIndices.push(parseInt(indicesMatch[1], 10))
+        try {
+          const scriptContent = await fetchAsset(onDemandFileUrl)
+          const indicesRegex = /\(\w{1}\[(\d{1,2})\],\s*16\)/gm
+          let indicesMatch
+
+          while ((indicesMatch = indicesRegex.exec(scriptContent)) !== null) {
+            keyByteIndices.push(parseInt(indicesMatch[1], 10))
+          }
+        } catch (error) {
+          console.error('Error fetching ondemand file:', error)
         }
-      } catch (error) {
-        console.error('Error fetching ondemand file:', error)
       }
     }
 

@@ -57,18 +57,21 @@ export function addBlockButtonInTweet(tweetElement: HTMLElement) {
   if (tweetElement.dataset.quickBlockAdded === 'true') {
     return
   }
-  const actionBar = tweetElement.querySelector('[role="group"]')
+  const actionBar = tweetElement.querySelector('div:has(>button[aria-label*="Grok"])')
   if (!actionBar) {
     return
   }
   const customButton = document.createElement('button')
-  customButton.style.height = getComputedStyle(actionBar).height
   customButton.className = 'mass-block-twitter-button-block'
   customButton.title = 'Quick Block'
   customButton.style.opacity = '0'
   customButton.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-ban"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m4.243 5.21 14.39 12.472"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-ban"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m4.243 5.21 14.39 12.472"/></svg>
     `
+  const grokSvg = tweetElement.querySelector('button[aria-label*="Grok"] svg')
+  if (grokSvg) {
+    customButton.style.stroke = getComputedStyle(grokSvg).color
+  }
   customButton.addEventListener('click', async () => {
     const { tweetId } = extractTweet(tweetElement)
     const tweet = await dbApi.tweets.get(tweetId)
@@ -97,7 +100,7 @@ export function addBlockButtonInTweet(tweetElement: HTMLElement) {
       tweet,
     })
   })
-  actionBar.appendChild(customButton)
+  actionBar.after(customButton)
   tweetElement.dataset.quickBlockAdded = 'true'
   requestAnimationFrame(() => {
     customButton.style.opacity = '1'

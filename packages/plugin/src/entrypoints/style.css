@@ -12,18 +12,27 @@
   appearance: none;
 
   box-sizing: border-box;
-  width: 38.5px;
-  height: 38.5px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.mass-block-twitter-button-block:hover {
+.mass-block-twitter-button-block:hover::before{
+  opacity: 1;
+}
+.mass-block-twitter-button-block::before{
+  content: '';
+  position: absolute;
+  width: 35px;
+  height: 35px;
   background-color: rgba(249, 24, 128, 0.1);
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 .mass-block-twitter-button-block svg {
-  stroke: rgb(113, 118, 123);
+  stroke: inherit;
 }
 .mass-block-twitter-button-block:hover svg {
   stroke: rgb(249, 24, 128);

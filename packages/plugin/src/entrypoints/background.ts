@@ -3,7 +3,7 @@ import { parse, stringifyAsync } from '$lib/serializer'
 
 export default defineBackground(() => {
   browser.runtime.setUninstallURL(
-    'https://mass-block-twitter.rxliuli.com/feedback',
+    'https://forms.gle/nALz2gP2MwfxYUpT9',
   )
 
   async function onShow(tabId?: number) {

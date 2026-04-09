@@ -1,4 +1,4 @@
-import { dbApi, Tweet } from './db'
+import { dbApi, Tweet, User } from './db'
 import type { TwitterSpamReportRequest } from '@mass-block-twitter/server'
 import { eventMessage } from './shared'
 import { blockUser, getUserByScreenName } from './api/twitter'
@@ -6,6 +6,21 @@ import { ulid } from 'ulidx'
 
 export function extractCurrentUserId(): string | undefined {
   return /"id_str":"(\d*)"/.exec(document.body.innerHTML)?.[1]
+}
+
+export function getCurrentUser(): User {
+  const match = document.documentElement.innerHTML.match(
+    /"name":"(.*?)","screen_name":"(.*?)","id_str":"(\d+?)"/,
+  )
+  if (!match) {
+    throw new Error('Failed to extract user information')
+  }
+  const [, name, screen_name, id] = match
+  return {
+    id,
+    name,
+    screen_name,
+  } as User
 }
 
 export function extractTweet(tweetElement: HTMLElement): {
@@ -57,7 +72,9 @@ export function addBlockButtonInTweet(tweetElement: HTMLElement) {
   if (tweetElement.dataset.quickBlockAdded === 'true') {
     return
   }
-  const moreBar = tweetElement.querySelector('div:has(>div>div>button[data-testid="caret"])')
+  const moreBar = tweetElement.querySelector(
+    'div:has(>div>div>button[data-testid="caret"])',
+  )
   if (!moreBar) {
     return
   }

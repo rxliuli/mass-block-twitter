@@ -3,7 +3,7 @@
   import ModListEdit from './ModListEdit.svelte'
   import { createMutation } from '@tanstack/svelte-query'
   import { getAuthInfo, useAuthInfo } from '$lib/hooks/useAuthInfo.svelte'
-  import { extractCurrentUserId } from '$lib/observe'
+  import { extractCurrentUserId, getCurrentUser } from '$lib/observe'
   import { dbApi } from '$lib/db'
   import { crossFetch } from '$lib/query'
   import { toast } from 'svelte-sonner'
@@ -53,14 +53,11 @@
         throw new Error($t('modlists.creator.error.userId'))
       }
       const twitterUser = await dbApi.users.get(userId)
-      if (!twitterUser) {
-        throw new Error($t('modlists.creator.error.userNotFound'))
-      }
       const resp = await crossFetch(`${SERVER_URL}/api/modlists/create`, {
         method: 'POST',
         body: JSON.stringify({
           ...modList,
-          twitterUser,
+          twitterUser: twitterUser ?? getCurrentUser(),
         } satisfies ModListCreateRequest),
         headers: {
           'Content-Type': 'application/json',

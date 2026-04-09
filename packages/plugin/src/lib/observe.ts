@@ -57,8 +57,8 @@ export function addBlockButtonInTweet(tweetElement: HTMLElement) {
   if (tweetElement.dataset.quickBlockAdded === 'true') {
     return
   }
-  const actionBar = tweetElement.querySelector('div:has(>button[aria-label*="Grok"])')
-  if (!actionBar) {
+  const moreBar = tweetElement.querySelector('div:has(>div>div>button[data-testid="caret"])')
+  if (!moreBar) {
     return
   }
   const customButton = document.createElement('button')
@@ -100,7 +100,7 @@ export function addBlockButtonInTweet(tweetElement: HTMLElement) {
       tweet,
     })
   })
-  actionBar.after(customButton)
+  moreBar.before(customButton)
   tweetElement.dataset.quickBlockAdded = 'true'
   requestAnimationFrame(() => {
     customButton.style.opacity = '1'

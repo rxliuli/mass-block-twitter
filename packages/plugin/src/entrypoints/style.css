@@ -33,7 +33,7 @@
   transition: opacity 0.2s;
 }
 .mass-block-twitter-button-block svg {
-  stroke: inherit;
+  stroke: rgb(113, 118, 123);
 }
 .mass-block-twitter-button-block:hover svg {
   stroke: rgb(249, 24, 128);

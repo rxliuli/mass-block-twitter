@@ -72,11 +72,18 @@ export function addBlockButtonInTweet(tweetElement: HTMLElement) {
   if (tweetElement.dataset.quickBlockAdded === 'true') {
     return
   }
-  const moreBar = tweetElement.querySelector(
-    'div:has(>button [d="M12.745 20.54l10.97-8.19c.539-.4 1.307-.244 1.564.38 1.349 3.288.746 7.241-1.938 9.955-2.683 2.714-6.417 3.31-9.83 1.954l-3.728 1.745c5.347 3.697 11.84 2.782 15.898-1.324 3.219-3.255 4.216-7.692 3.284-11.693l.008.009c-1.351-5.878.332-8.227 3.782-13.031L33 0l-4.54 4.59v-.014L12.743 20.544m-2.263 1.987c-3.837-3.707-3.175-9.446.1-12.755 2.42-2.449 6.388-3.448 9.852-1.979l3.72-1.737c-.67-.49-1.53-1.017-2.515-1.387-4.455-1.854-9.789-.931-13.41 2.728-3.483 3.523-4.579 8.94-2.697 13.561 1.405 3.454-.899 5.898-3.22 8.364C1.49 30.2.666 31.074 0 32l10.478-9.466"])',
-  )
+  const grokButton = tweetElement.querySelector('button[aria-label*="Grok"]')
+  const moreBar =
+    grokButton?.parentElement ??
+    tweetElement.querySelector('div:has(>div>button[data-testid="caret"])')
   if (!moreBar) {
     return
+  }
+  const parent = moreBar.parentElement
+  if (parent && getComputedStyle(parent).display !== 'flex') {
+    parent.style.display = 'flex'
+    parent.style.flexDirection = 'row'
+    parent.style.gap = '4px'
   }
   const customButton = document.createElement('button')
   customButton.className = 'mass-block-twitter-button-block'
@@ -85,9 +92,11 @@ export function addBlockButtonInTweet(tweetElement: HTMLElement) {
   customButton.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-ban"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m4.243 5.21 14.39 12.472"/></svg>
     `
-  const grokSvg = tweetElement.querySelector('button[aria-label*="Grok"] svg')
-  if (grokSvg) {
-    customButton.style.stroke = getComputedStyle(grokSvg).color
+  const refSvg =
+    grokButton?.querySelector('svg') ??
+    moreBar.querySelector('button[data-testid="caret"] svg')
+  if (refSvg) {
+    customButton.style.stroke = getComputedStyle(refSvg).color
   }
   customButton.addEventListener('click', async () => {
     const { tweetId } = extractTweet(tweetElement)

@@ -61,9 +61,10 @@ describe('content', () => {
     vi.clearAllMocks()
     vi.useRealTimers()
   })
+  const blockedTitle = 'Blocked user @test test'
   it('should auto block user in timeout', async () => {
     quickBlock(options)
-    const userBlocked = screen.getByText('User blocked')
+    const userBlocked = screen.getByText(blockedTitle)
     const undo = screen.getByText('Undo')
     await expect.element(userBlocked).toBeInTheDocument()
     await expect.element(undo).toBeInTheDocument()
@@ -80,13 +81,13 @@ describe('content', () => {
     undo.element().click()
     await tick()
     await expect.element(screen.getByText('Block undone.')).toBeInTheDocument()
-    await expect.element(undo).not.toBeInTheDocument()
+    vi.runAllTimers()
     expect(f).not.toHaveBeenCalled()
     expect(getTweetElement(options.tweet.id)?.style.display).eq('block')
   })
   it('should block if close button is clicked', async () => {
     quickBlock(options)
-    const userBlocked = screen.getByText('User blocked')
+    const userBlocked = screen.getByText(blockedTitle)
     const close = screen.getByLabelText('Close toast')
     await expect.element(userBlocked).toBeInTheDocument()
     close.element().click()

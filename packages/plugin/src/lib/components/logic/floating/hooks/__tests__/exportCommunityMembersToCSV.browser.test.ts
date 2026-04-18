@@ -15,8 +15,6 @@ describe('exportCommunityMembersToCSV', () => {
       id: it.toString(),
       screen_name: `screen_name-${it}`,
       name: `name-${it}`,
-      description: '',
-      profile_image_url: '',
       community_role: 'Member',
     } as CommunityMember
   }

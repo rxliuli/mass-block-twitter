@@ -94,20 +94,23 @@ describe('extractCommunityMembersGraphqlId', () => {
 
   it('extractCommunityMembersGraphqlId', async () => {
     vi.spyOn(global, 'fetch').mockImplementation(async (url) => {
-      const fsPath = path.resolve(
-        __dirname,
-        './assets/' + path.basename(url.toString()),
-      )
-      if (existsSync(fsPath)) {
-        return new Response(await readFile(fsPath, 'utf-8'), {
-          headers: {
-            'Content-Type': 'application/javascript',
-          },
-        })
+      const base = path.basename(url.toString())
+      const candidates = [base, base + '.html']
+      for (const c of candidates) {
+        const fsPath = path.resolve(__dirname, './assets/' + c)
+        if (existsSync(fsPath)) {
+          return new Response(await readFile(fsPath, 'utf-8'), {
+            headers: {
+              'Content-Type': 'application/javascript',
+            },
+          })
+        }
       }
-      throw new Error('test')
+      return new Response('', {
+        headers: { 'Content-Type': 'application/javascript' },
+      })
     })
-    const id = await extractCommunityGraphqlId('membersSliceTimeline_Query')
-    expect(id).eq('V7OdnMvujMPsCctT_daznQ')
+    const r = await extractCommunityGraphqlId('membersSliceTimeline_Query')
+    expect(r?.queryId).eq('V7OdnMvujMPsCctT_daznQ')
   })
 })

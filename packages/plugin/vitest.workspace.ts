@@ -27,6 +27,7 @@ export default defineWorkspace([
       // you don't have to follow it
       include: browserIncludes,
       name: 'browser',
+      setupFiles: ['./src/lib/test/setup.browser.ts'],
       browser: {
         enabled: true,
         name: 'chromium',

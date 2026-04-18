@@ -147,7 +147,9 @@ export const timelineUserSchema = z.object({
     url: z.string().optional().nullable(),
     entities: z
       .object({
-        description: z.object({ urls: z.array(urlSchema) }),
+        description: z
+          .object({ urls: z.array(urlSchema).optional() })
+          .optional(),
         url: z.object({ urls: z.array(urlSchema) }).optional(),
       })
       .optional(),

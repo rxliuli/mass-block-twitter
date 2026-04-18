@@ -55,6 +55,7 @@ import TweetDetail18 from './assets/TweetDetail18.json'
 import HomeTimeline2 from './assets/HomeTimeline2.json'
 import TweetDetail19 from './assets/TweetDetail19.json'
 import TweetDetail20 from './assets/TweetDetail20.json'
+import TweetDetail21 from './assets/TweetDetail21.json'
 import { flowFilterCacheMap } from '$lib/shared'
 import HomeTimeline3 from './assets/Homeline3.json'
 import UserByScreenName2 from './assets/UserByScreenName2.json'
@@ -384,6 +385,16 @@ describe('parseTweets', () => {
     const tweets = parseTweets(HomeTimeline2)
     expect(tweets).length(50)
     expect(tweets.every((it) => it.user.screen_name && it.user.name)).true
+  })
+  // Regression: when the tweet author has no URLs in their bio, X returns
+  // `legacy.entities.description` as `{}` (missing `urls`). The timelineUserSchema
+  // must accept that shape so these tweets aren't silently dropped.
+  it('parseTweets for detail 21 (empty description.entities)', () => {
+    const tweets = parseTweets(TweetDetail21)
+    expect(tweets).length(13)
+    expect(
+      tweets.some((it) => it.text === '@maimaiRC_ 蹲个单男弟弟'),
+    ).true
   })
 })
 

@@ -73,6 +73,9 @@ export function addBlockButtonInTweet(tweetElement: HTMLElement) {
     return
   }
   const grokButton = tweetElement.querySelector('button[aria-label*="Grok"]')
+  if (!grokButton && window.innerWidth >= 500) {
+    return
+  }
   const moreBar =
     grokButton?.parentElement ??
     tweetElement.querySelector('div:has(>div>button[data-testid="caret"])')

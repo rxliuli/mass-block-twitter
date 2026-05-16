@@ -162,6 +162,24 @@
 <Toaster richColors closeButton expand />
 
 <QueryClientProvider client={queryClient}>
+  <div
+    class="bg-amber-100 dark:bg-amber-900/40 border-b border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-100 px-4 py-2 text-sm text-center"
+  >
+    Mass Block Twitter is now in maintenance mode. We've rebuilt it as two focused, cross-platform extensions —
+    <a
+      href="https://store.rxliuli.com/extensions/twitter-blocker"
+      class="underline font-semibold">Twitter Blocker</a
+    >
+    +
+    <a
+      href="https://store.rxliuli.com/extensions/twitter-filter"
+      class="underline font-semibold">Twitter Filter</a
+    >, now with iOS Safari support.
+    <a
+      href="https://store.rxliuli.com/blog/mass-block-twitter-vs-twitter-blocker-filter"
+      class="underline">See what's new →</a
+    >
+  </div>
   <Header />
   {@render props.children()}
   <Footer />

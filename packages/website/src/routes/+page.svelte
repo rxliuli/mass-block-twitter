@@ -1,5 +1,5 @@
 <script lang="ts">
-  import UpgradeToPro from '@/components/billing/UpgradeToPro.svelte'
+  import { Button } from '$lib/components/ui/button'
 
   const features = [
     {
@@ -91,6 +91,72 @@
     </div>
   </section>
 
+  <!-- Migration Callout -->
+  <section
+    class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 border-y border-blue-200 dark:border-blue-900 py-12"
+  >
+    <div class="container mx-auto px-4 max-w-4xl text-center">
+      <div
+        class="inline-block px-3 py-1 bg-blue-600 text-white text-sm font-semibold rounded-full mb-4"
+      >
+        What's next
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold mb-4">
+        Looking for the next version?
+      </h2>
+      <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">
+        Mass Block Twitter has been rebuilt as two focused extensions with full
+        cross-platform support, including iOS Safari.
+      </p>
+      <div class="grid md:grid-cols-2 gap-4 mb-6 text-left">
+        <div
+          class="bg-white dark:bg-gray-800 p-5 rounded-lg border border-gray-200 dark:border-gray-700"
+        >
+          <h3 class="font-bold text-lg mb-2">Twitter Blocker</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+            True-background batch blocking that runs for days or weeks without
+            keeping a tab open, breaking past the 500-per-day limit MBT hit.
+            Plus a one-click block button in many surfaces — no multi-step
+            confirmation popups.
+          </p>
+          <a
+            href="https://store.rxliuli.com/extensions/twitter-blocker"
+            class="text-blue-600 dark:text-blue-400 underline">Learn more →</a
+          >
+        </div>
+        <div
+          class="bg-white dark:bg-gray-800 p-5 rounded-lg border border-gray-200 dark:border-gray-700"
+        >
+          <h3 class="font-bold text-lg mb-2">
+            Twitter Filter
+            <span class="text-sm font-normal text-green-600 dark:text-green-400"
+              >(free)</span
+            >
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+            The home for Moderation Lists and keyword filtering (rebuilt as
+            expression-based rules with no limits). Rules can mark, hide, or
+            dynamically block matching accounts in your timeline. All
+            previously-public moderation lists have been migrated as published
+            community rules — your existing subscriptions have direct
+            equivalents.
+          </p>
+          <a
+            href="https://store.rxliuli.com/extensions/twitter-filter"
+            class="text-blue-600 dark:text-blue-400 underline">Learn more →</a
+          >
+        </div>
+      </div>
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        Already paid for MBT Pro?
+        <a
+          href="https://store.rxliuli.com/support"
+          class="underline font-semibold">Contact support</a
+        > with your receipt for a 100% upgrade coupon.
+      </p>
+    </div>
+  </section>
+
   <!-- Features Section -->
   <section class="bg-gray-50 dark:bg-gray-900 py-20">
     <div class="container mx-auto px-4">
@@ -124,7 +190,25 @@
           {/each}
         </div>
         <div class="text-center">
-          <UpgradeToPro size="lg" />
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="https://store.rxliuli.com/extensions/twitter-blocker">
+              <Button size="lg">Twitter Blocker — $19.99</Button>
+            </a>
+            <a href="https://store.rxliuli.com/extensions/twitter-filter">
+              <Button size="lg" variant="outline">Twitter Filter — Free</Button>
+            </a>
+          </div>
+          <p class="text-sm text-muted-foreground mt-3 max-w-2xl mx-auto">
+            These Pro features are now split: <strong>Unlimited batch blocking</strong>
+            lives in Twitter Blocker (with true background processing); <strong
+              >Moderation Lists</strong
+            >
+            and <strong>unlimited keyword filtering</strong> live in Twitter Filter.
+            Already a Pro user?
+            <a href="https://store.rxliuli.com/support" class="underline"
+              >Contact support</a
+            > for a free upgrade coupon.
+          </p>
         </div>
       </div>
     </div>

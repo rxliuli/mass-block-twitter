@@ -43,7 +43,7 @@
     "@tanstack/svelte-query": "^5.62.9",
     "@vitest/browser": "^3.0.8",
     "mdsvex": "^0.12.3",
-    "playwright": "^1.49.1",
+    "playwright": "^1.60.0",
     "publint": "^0.3.2",
     "svelte": "^5.0.0",
     "svelte-check": "^4.0.0",

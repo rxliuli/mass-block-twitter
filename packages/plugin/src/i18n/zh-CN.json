@@ -283,5 +283,10 @@
   "floatingButton.close": "关闭悬浮球",
   "floatingButton.close.confirm.description.before": "你可以在",
   "floatingButton.close.confirm.description.after": "中重新打开",
-  "floatingButton.blockCommunicationMembers": "屏蔽社区成员"
+  "floatingButton.blockCommunicationMembers": "屏蔽社区成员",
+  "deprecation.title": "Mass Block Twitter 已进入维护模式",
+  "deprecation.description.before": "我们已将其重构为两个专注的扩展 —",
+  "deprecation.description.after": "，现已支持 iOS Safari。",
+  "deprecation.learnMore": "了解更多 →",
+  "deprecation.dismiss": "关闭"
 }

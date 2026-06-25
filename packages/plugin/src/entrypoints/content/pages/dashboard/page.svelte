@@ -17,6 +17,7 @@
   import { calcStats, formatStats, getRulesMap } from './utils/stats'
   import { RouterLink } from '$lib/components/logic/router'
   import { t } from '$lib/i18n'
+  import DeprecationBanner from '$lib/components/layout/DeprecationBanner.svelte'
 
   let dateRange = {
     from: dayjs().subtract(1, 'month'),
@@ -65,6 +66,8 @@
       }))
   })
 </script>
+
+<DeprecationBanner class="mb-4" />
 
 <div class="grid gap-4 mb-8 md:grid-cols-2 lg:grid-cols-4">
   {#each stats as stat}

@@ -332,5 +332,10 @@
   "common.actions.close": "بستن",
   "common.actions.delete": "حذف",
   "common.actions.download": "دانلود",
-  "common.actions.upgrade": "اکنون ارتقا دهید"
+  "common.actions.upgrade": "اکنون ارتقا دهید",
+  "deprecation.title": "Mass Block Twitter اکنون در حالت نگهداری است",
+  "deprecation.description.before": "ما آن را به دو افزونه متمرکز بازسازی کرده‌ایم —",
+  "deprecation.description.after": "، اکنون با پشتیبانی از iOS Safari.",
+  "deprecation.learnMore": "بیشتر بدانید ←",
+  "deprecation.dismiss": "بستن"
 }

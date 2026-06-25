@@ -332,5 +332,10 @@
   "common.actions.close": "Close",
   "common.actions.delete": "Delete",
   "common.actions.download": "Download",
-  "common.actions.upgrade": "Upgrade Now"
+  "common.actions.upgrade": "Upgrade Now",
+  "deprecation.title": "Mass Block Twitter is now in maintenance mode",
+  "deprecation.description.before": "We've rebuilt it as two focused extensions —",
+  "deprecation.description.after": ", now with iOS Safari support.",
+  "deprecation.learnMore": "Learn more →",
+  "deprecation.dismiss": "Dismiss"
 }

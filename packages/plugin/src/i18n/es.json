@@ -301,5 +301,10 @@
   "floatingButton.close.confirm.title": "¿Estás seguro de que querés cerrar el botón flotante?",
   "floatingButton.close.confirm.description.before": "Podés reabrirlo en",
   "floatingButton.close.confirm.description.after": " ",
-  "floatingButton.blockCommunicationMembers": "Bloquear Miembros de Comunicación"
+  "floatingButton.blockCommunicationMembers": "Bloquear Miembros de Comunicación",
+  "deprecation.title": "Mass Block Twitter está en modo de mantenimiento",
+  "deprecation.description.before": "Lo reconstruimos como dos extensiones enfocadas —",
+  "deprecation.description.after": ", ahora con soporte para iOS Safari.",
+  "deprecation.learnMore": "Más información →",
+  "deprecation.dismiss": "Cerrar"
 }

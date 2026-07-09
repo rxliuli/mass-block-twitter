@@ -3,12 +3,8 @@ import App from './app.svelte'
 import './app.css'
 import {
   autoAlertBlocked,
-  autoCheckPendingUsers,
   autoCheckTwitterAPI,
   quickBlock,
-  refreshAuthInfo,
-  refreshModListSubscribedUsers,
-  spamReport,
 } from '$lib/content'
 import { getLocaleLanguage, initI18n } from '$lib/i18n'
 import { wait } from '@liuli-util/async'
@@ -24,9 +20,6 @@ export default defineContentScript({
   async main(ctx) {
     await initDB()
 
-    refreshModListSubscribedUsers()
-    refreshAuthInfo()
-    autoCheckPendingUsers()
     autoCheckTwitterAPI()
     autoAlertBlocked()
 
@@ -65,9 +58,6 @@ export default defineContentScript({
     })
     ui.mount()
 
-    eventMessage.onMessage('SpamReportRequest', (request) =>
-      spamReport(request),
-    )
     eventMessage.onMessage('QuickBlock', quickBlock)
     eventMessage.onMessage('Toast', (data) =>
       toast[data.type](data.message, data.options),

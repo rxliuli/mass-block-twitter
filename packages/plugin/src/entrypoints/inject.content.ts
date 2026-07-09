@@ -88,13 +88,7 @@ function loggerUsers(): FetchMiddleware {
       console.debug('loggerUsers', c.req.url, users)
       await dbApi.users.record(users)
       requestAnimationFrame(async () => {
-        if (getSettings().hideSpamAccounts) {
-          await dbApi.pendingCheckUsers.record(users.map((it) => it.id))
-        }
-        await Promise.all([
-          refreshSpamUsers(users.map((it) => it.id)),
-          // refreshSubscribedModLists(),
-        ])
+        await refreshSpamUsers(users.map((it) => it.id))
         handleUsers(users)
       })
     }

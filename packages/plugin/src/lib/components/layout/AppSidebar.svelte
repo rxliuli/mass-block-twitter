@@ -4,7 +4,6 @@
   import { Button } from '$lib/components/ui/button/index.js'
   import type { MenuItem } from './types'
   import { PanelLeftIcon } from 'lucide-svelte'
-  import AuthButton from './AuthButton.svelte'
 
   const {
     items,
@@ -113,8 +112,6 @@
           {/snippet}
         </Sidebar.MenuButton>
       </Sidebar.MenuItem>
-      <AuthButton />
-
       {#each footer as item (item.title)}
         <Sidebar.MenuItem>
           <Sidebar.MenuButton onclick={() => onClickMenuUrl('/settings')}>

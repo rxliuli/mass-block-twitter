@@ -332,36 +332,7 @@ twitter.post(
   '/spam-users/check',
   zValidator('json', checkSpamUserSchema),
   async (c) => {
-    const validated = c.req.valid('json')
-    const db = c.get('db')
-    const usersToProcess = validated.map((it) =>
-      convertUserParamsToDBUser(it.user),
-    )
-    const tweetsToProcess = validated.flatMap((it) =>
-      it.tweets.map((userParam) =>
-        convertTweet({ ...userParam, user_id: it.user.id }),
-      ),
-    )
-
-    await batchUpsertUsers(db, usersToProcess)
-    await batchUpsertTweets(db, tweetsToProcess)
-
-    const spamAnalysis = await db
-      .select({
-        userId: userSpamAnalysis.userId,
-        isSpamByManualReview: userSpamAnalysis.isSpamByManualReview,
-      })
-      .from(userSpamAnalysis)
-      .where(
-        and(
-          inArray(
-            userSpamAnalysis.userId,
-            validated.map((it) => it.user.id),
-          ),
-          eq(userSpamAnalysis.isSpamByManualReview, true),
-        ),
-      )
-    return c.json(spamAnalysis satisfies CheckSpamUserResponse)
+    return c.json([] satisfies CheckSpamUserResponse)
   },
 )
 

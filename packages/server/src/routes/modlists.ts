@@ -517,13 +517,13 @@ async function checkUsers(
   validated: ModListUserCheckPostRequest,
 ) {
   const db = c.get('db')
-  if (validated.users.length > 0) {
-    // async upsert users, avoid blocking
-    await batchUpsertUsers(
-      db,
-      validated.users.map((it) => convertUserParamsToDBUser(it)),
-    )
-  }
+  // if (validated.users.length > 0) {
+  //   // async upsert users, avoid blocking
+  //   await batchUpsertUsers(
+  //     db,
+  //     validated.users.map((it) => convertUserParamsToDBUser(it)),
+  //   )
+  // }
   const subscriptions = await db
     .select({ twitterUserId: modListUser.twitterUserId })
     .from(modListUser)

@@ -49,12 +49,6 @@
         to: 'content',
       },
       {
-        title: $t('modlists.title'),
-        url: '/modlists',
-        icon: UsersIcon,
-        to: 'content',
-      },
-      {
         title: $t('muted-words.title'),
         url: '/muted-words',
         icon: MessageCircleOffIcon,

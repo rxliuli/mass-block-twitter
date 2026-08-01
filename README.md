@@ -1,3 +1,13 @@
+> [!IMPORTANT]
+> **Mass Block Twitter is now in maintenance mode.** It has been rebuilt as two focused extensions with full cross-platform support, including iOS Safari:
+>
+> - **[Twitter Blocker](https://store.rxliuli.com/extensions/twitter-blocker)** — True-background batch blocking that runs for days or weeks without keeping a tab open, breaking past the 500-per-day limit MBT hit. Plus a one-click block button in many surfaces, no multi-step confirmation popups.
+> - **[Twitter Filter](https://store.rxliuli.com/extensions/twitter-filter)** (free) — The new home for Moderation Lists and keyword filtering, rebuilt as expression-based rules with no limits. All previously-public moderation lists have been migrated as published community rules.
+>
+> Already paid for MBT Pro? [Contact support](https://store.rxliuli.com/support) with your receipt for a **100% off coupon** to upgrade for free.
+>
+> [Learn more: Mass Block Twitter vs Twitter Blocker & Filter →](https://store.rxliuli.com/blog/mass-block-twitter-vs-twitter-blocker-filter)
+
 # Mass Block Twitter
 
 [![Available from Chrome Webstore](./packages/website/static/chrome.png)](https://chromewebstore.google.com/detail/mass-block-twitter/eaghpebepefbcadjdppjjopoagckdhej) [![Available from Firefox Add-ons](./packages/website/static/firefox.png)](https://addons.mozilla.org/firefox/addon/mass-block-twitter/) [![Available from Edge Add-ons](./packages/website/static/edge.png)](https://microsoftedge.microsoft.com/addons/detail/jfmhejlgepjmbgeceljmdeimmdolfadf)
